@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/breadcrumb/index.ts"],"names":[],"mappings":";;;;AAAA,OAAO,EAAE,mBAAmB,EAAE,MAAM,yBAAyB,CAAC","sourcesContent":["export { AppBreadcrumbModule } from './app-breadcrumb.module';\n"]}

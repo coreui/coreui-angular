@@ -1,0 +1,6 @@
+.DS_Store
+package-lock.json
+tsconfig.json
+
+# Folders to ignore
+node_modules
