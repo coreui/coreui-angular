@@ -1,4 +1,4 @@
-# Contributing to CoreUI
+# Contributing to CoreUI for Angular
 
 Looking to contribute something to CoreUI? **Here's how you can help.**
 
