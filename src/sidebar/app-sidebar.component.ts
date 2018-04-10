@@ -7,7 +7,7 @@ import { sidebarCssClasses } from './../shared';
 })
 export class AppSidebarComponent implements OnInit {
   @Input() compact: boolean;
-  @Input() display: string;
+  @Input() display: any;
   @Input() fixed: boolean;
   @Input() minimized: boolean;
   @Input() offCanvas: boolean;
@@ -44,9 +44,11 @@ export class AppSidebarComponent implements OnInit {
     if (this.fixed) { document.querySelector('body').classList.add('sidebar-fixed'); }
   }
 
-  displayBreakpoint(display: string): void {
-    let cssClass;
-    this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
-    document.querySelector('body').classList.add(cssClass);
+  displayBreakpoint(display: any): void {
+    if (this.display !== false ) {
+      let cssClass;
+      this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
+      document.querySelector('body').classList.add(cssClass);
+    }
   }
 }

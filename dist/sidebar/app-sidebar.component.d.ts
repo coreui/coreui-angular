@@ -1,7 +1,7 @@
 import { OnInit } from '@angular/core';
 export declare class AppSidebarComponent implements OnInit {
     compact: boolean;
-    display: string;
+    display: any;
     fixed: boolean;
     minimized: boolean;
     offCanvas: boolean;
@@ -13,5 +13,5 @@ export declare class AppSidebarComponent implements OnInit {
     isMinimized(minimized: boolean): void;
     isOffCanvas(offCanvas: boolean): void;
     fixedPosition(fixed: boolean): void;
-    displayBreakpoint(display: string): void;
+    displayBreakpoint(display: any): void;
 }

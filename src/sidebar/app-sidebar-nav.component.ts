@@ -172,7 +172,8 @@ export class AppSidebarNavLinkComponent implements OnInit {
         <app-sidebar-nav-item [item]='child'></app-sidebar-nav-item>
       </ng-template>
     </ul>
-  `
+  `,
+  styles: ['.nav-dropdown-toggle { cursor: pointer; }']
 })
 export class AppSidebarNavDropdownComponent implements OnInit {
   @Input() link: any;

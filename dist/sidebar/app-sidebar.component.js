@@ -94,9 +94,11 @@ var AppSidebarComponent = /** @class */ (function () {
      * @return {?}
      */
     function (display) {
-        var /** @type {?} */ cssClass;
-        this.display ? cssClass = "sidebar-" + this.display + "-show" : cssClass = sidebarCssClasses[0];
-        document.querySelector('body').classList.add(cssClass);
+        if (this.display !== false) {
+            var /** @type {?} */ cssClass = void 0;
+            this.display ? cssClass = "sidebar-" + this.display + "-show" : cssClass = sidebarCssClasses[0];
+            document.querySelector('body').classList.add(cssClass);
+        }
     };
     AppSidebarComponent.decorators = [
         { type: Component, args: [{

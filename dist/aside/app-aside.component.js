@@ -2,10 +2,11 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-import { Component, Input } from '@angular/core';
-import { asideMenuCssClasses } from './../shared';
+import { Component, ElementRef, Input } from '@angular/core';
+import { asideMenuCssClasses, Replace } from './../shared';
 var AppAsideComponent = /** @class */ (function () {
-    function AppAsideComponent() {
+    function AppAsideComponent(el) {
+        this.el = el;
     }
     /**
      * @return {?}
@@ -14,6 +15,7 @@ var AppAsideComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        Replace(this.el);
         this.isFixed(this.fixed);
         this.displayBreakpoint(this.display);
     };
@@ -52,9 +54,11 @@ var AppAsideComponent = /** @class */ (function () {
      * @return {?}
      */
     function (display) {
-        var /** @type {?} */ cssClass;
-        this.display ? cssClass = "aside-menu-" + this.display + "-show" : cssClass = asideMenuCssClasses[0];
-        document.querySelector('body').classList.add(cssClass);
+        if (this.display !== false) {
+            var /** @type {?} */ cssClass = void 0;
+            this.display ? cssClass = "aside-menu-" + this.display + "-show" : cssClass = asideMenuCssClasses[0];
+            document.querySelector('body').classList.add(cssClass);
+        }
     };
     AppAsideComponent.decorators = [
         { type: Component, args: [{
@@ -63,7 +67,9 @@ var AppAsideComponent = /** @class */ (function () {
                 },] },
     ];
     /** @nocollapse */
-    AppAsideComponent.ctorParameters = function () { return []; };
+    AppAsideComponent.ctorParameters = function () { return [
+        { type: ElementRef, },
+    ]; };
     AppAsideComponent.propDecorators = {
         "display": [{ type: Input },],
         "fixed": [{ type: Input },],
@@ -88,5 +94,7 @@ function AppAsideComponent_tsickle_Closure_declarations() {
     AppAsideComponent.prototype.fixed;
     /** @type {?} */
     AppAsideComponent.prototype.offCanvas;
+    /** @type {?} */
+    AppAsideComponent.prototype.el;
 }
 //# sourceMappingURL=app-aside.component.js.map

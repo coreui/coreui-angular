@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { asideMenuCssClasses } from './../shared';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { asideMenuCssClasses, Replace } from './../shared';
 
 @Component({
   selector: 'app-aside',
@@ -10,13 +10,14 @@ import { asideMenuCssClasses } from './../shared';
   `
 })
 export class AppAsideComponent implements OnInit {
-  @Input() display: string;
+  @Input() display: any;
   @Input() fixed: boolean;
   @Input() offCanvas: boolean;
 
-  constructor() { }
+  constructor(private el: ElementRef) {}
 
   ngOnInit() {
+    Replace(this.el);
     this.isFixed(this.fixed);
     this.displayBreakpoint(this.display);
   }
@@ -29,9 +30,11 @@ export class AppAsideComponent implements OnInit {
     if (this.offCanvas) { document.querySelector('body').classList.add('aside-menu-off-canvas'); }
   }
 
-  displayBreakpoint(display: string): void {
-    let cssClass;
-    this.display ? cssClass = `aside-menu-${this.display}-show` : cssClass = asideMenuCssClasses[0];
-    document.querySelector('body').classList.add(cssClass);
+  displayBreakpoint(display: any): void {
+    if (this.display !== false ) {
+      let cssClass;
+      this.display ? cssClass = `aside-menu-${this.display}-show` : cssClass = asideMenuCssClasses[0];
+      document.querySelector('body').classList.add(cssClass);
+    }
   }
 }
