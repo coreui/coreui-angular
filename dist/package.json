@@ -1,6 +1,9 @@
 {
   "name": "@coreui/angular",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-beta.0",
+  "dependencies": {
+    "@coreui/coreui": "^2.0.0-beta.4"
+  },
   "peerDependencies": {
     "@angular/common": "*",
     "@angular/compiler": "*",
