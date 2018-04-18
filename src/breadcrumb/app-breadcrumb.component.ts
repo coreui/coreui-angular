@@ -5,7 +5,7 @@ import { AppBreadcrumbService } from './app-breadcrumb.service';
 @Component({
   selector: 'app-breadcrumb',
   template: `
-    <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs" let-last = last>
+    <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
       <li class="breadcrumb-item"
           *ngIf="breadcrumb.label.title&&breadcrumb.url.substring(breadcrumb.url.length-1) == '/'||breadcrumb.label.title&&last"
           [ngClass]="{active: last}">
@@ -25,9 +25,6 @@ export class AppBreadcrumbComponent implements OnInit {
     Replace(this.el);
     this.isFixed(this.fixed);
     this.breadcrumbs = this.service.breadcrumbs;
-    // const s = this.service.crumbs$.subscribe((x) => {
-    //   this.crumbs = x;
-    // });
   }
 
   isFixed(fixed: boolean): void {

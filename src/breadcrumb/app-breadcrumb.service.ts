@@ -1,16 +1,23 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import 'rxjs/add/operator/filter';
 
 @Injectable()
 export class AppBreadcrumbService {
 
-  public breadcrumbs: Array<Object>;
+  breadcrumbs: Observable<Array<Object>>;
+
+  private _breadcrumbs: BehaviorSubject<Array<Object>>;
 
   constructor(private router: Router, private route: ActivatedRoute) {
 
+    this._breadcrumbs = new BehaviorSubject<Object[]>(new Array<Object>());
+
+    this.breadcrumbs = this._breadcrumbs.asObservable();
+
     this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event) => {
-      this.breadcrumbs = [];
+      const breadcrumbs = [];
       let currentRoute = this.route.root,
       url = '';
       do {
@@ -21,7 +28,7 @@ export class AppBreadcrumbService {
           if (route.outlet === 'primary') {
             const routeSnapshot = route.snapshot;
             url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
-            this.breadcrumbs.push({
+            breadcrumbs.push({
               label: route.snapshot.data,
               url:   url
             });
@@ -29,7 +36,10 @@ export class AppBreadcrumbService {
           }
         });
       } while (currentRoute);
-      return this.breadcrumbs;
+
+      this._breadcrumbs.next(Object.assign([], breadcrumbs));
+
+      return breadcrumbs;
     });
   }
 }
