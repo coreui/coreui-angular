@@ -23,7 +23,7 @@
     "zone.js": "0.8.20"
   },
   "scripts": {
-    "compile": "node_modules/.bin/ngc -p src/tsconfig.json",
+    "compile": "node_modules/.bin/ngc -p tsconfig.json",
     "dist": "npm run compile && npm run lint && npm run htmlcopy && npm run jsoncopy",
     "htmlcopy": "copyfiles -u 1 src/**/*.html dist",
     "jsoncopy": "copyfiles -u 1 src/package.json dist",
