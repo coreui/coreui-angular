@@ -1,36 +1,18 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 import { Directive, HostListener, Input } from '@angular/core';
 import { sidebarCssClasses, asideMenuCssClasses } from './../classes';
 import { ToggleClasses } from './../toggle-classes';
 /**
- * Allows the sidebar to be toggled via click.
- */
+* Allows the sidebar to be toggled via click.
+*/
 var SidebarToggleDirective = /** @class */ (function () {
     function SidebarToggleDirective() {
     }
-    /**
-     * @return {?}
-     */
-    SidebarToggleDirective.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    SidebarToggleDirective.prototype.ngOnInit = function () {
         this.bp = this.breakpoint;
     };
-    /**
-     * @param {?} $event
-     * @return {?}
-     */
-    SidebarToggleDirective.prototype.toggleOpen = /**
-     * @param {?} $event
-     * @return {?}
-     */
-    function ($event) {
+    SidebarToggleDirective.prototype.toggleOpen = function ($event) {
         $event.preventDefault();
-        var /** @type {?} */ cssClass;
+        var cssClass;
         this.bp ? cssClass = "sidebar-" + this.bp + "-show" : cssClass = sidebarCssClasses[0];
         ToggleClasses(cssClass, sidebarCssClasses);
     };
@@ -48,33 +30,10 @@ var SidebarToggleDirective = /** @class */ (function () {
     return SidebarToggleDirective;
 }());
 export { SidebarToggleDirective };
-function SidebarToggleDirective_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    SidebarToggleDirective.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    SidebarToggleDirective.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    SidebarToggleDirective.propDecorators;
-    /** @type {?} */
-    SidebarToggleDirective.prototype.breakpoint;
-    /** @type {?} */
-    SidebarToggleDirective.prototype.bp;
-}
 var SidebarMinimizeDirective = /** @class */ (function () {
     function SidebarMinimizeDirective() {
     }
-    /**
-     * @param {?} $event
-     * @return {?}
-     */
-    SidebarMinimizeDirective.prototype.toggleOpen = /**
-     * @param {?} $event
-     * @return {?}
-     */
-    function ($event) {
+    SidebarMinimizeDirective.prototype.toggleOpen = function ($event) {
         $event.preventDefault();
         document.querySelector('body').classList.toggle('sidebar-minimized');
     };
@@ -91,42 +50,17 @@ var SidebarMinimizeDirective = /** @class */ (function () {
     return SidebarMinimizeDirective;
 }());
 export { SidebarMinimizeDirective };
-function SidebarMinimizeDirective_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    SidebarMinimizeDirective.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    SidebarMinimizeDirective.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    SidebarMinimizeDirective.propDecorators;
-}
 var MobileSidebarToggleDirective = /** @class */ (function () {
     function MobileSidebarToggleDirective() {
     }
-    /**
-     * @param {?} target
-     * @param {?} elementClassName
-     * @return {?}
-     */
-    MobileSidebarToggleDirective.prototype.hasClass = /**
-     * @param {?} target
-     * @param {?} elementClassName
-     * @return {?}
-     */
+    // Check if element has class
+    // Check if element has class
+    MobileSidebarToggleDirective.prototype.hasClass = 
+    // Check if element has class
     function (target, elementClassName) {
         return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
     };
-    /**
-     * @param {?} $event
-     * @return {?}
-     */
-    MobileSidebarToggleDirective.prototype.toggleOpen = /**
-     * @param {?} $event
-     * @return {?}
-     */
-    function ($event) {
+    MobileSidebarToggleDirective.prototype.toggleOpen = function ($event) {
         $event.preventDefault();
         document.querySelector('body').classList.toggle('sidebar-mobile-show');
     };
@@ -143,48 +77,25 @@ var MobileSidebarToggleDirective = /** @class */ (function () {
     return MobileSidebarToggleDirective;
 }());
 export { MobileSidebarToggleDirective };
-function MobileSidebarToggleDirective_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    MobileSidebarToggleDirective.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    MobileSidebarToggleDirective.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    MobileSidebarToggleDirective.propDecorators;
-}
 /**
- * Allows the off-canvas sidebar to be closed via click.
- */
+* Allows the off-canvas sidebar to be closed via click.
+*/
 var SidebarOffCanvasCloseDirective = /** @class */ (function () {
     function SidebarOffCanvasCloseDirective() {
     }
-    /**
-     * @param {?} target
-     * @param {?} elementClassName
-     * @return {?}
-     */
-    SidebarOffCanvasCloseDirective.prototype.hasClass = /**
-     * @param {?} target
-     * @param {?} elementClassName
-     * @return {?}
-     */
+    // Check if element has class
+    // Check if element has class
+    SidebarOffCanvasCloseDirective.prototype.hasClass = 
+    // Check if element has class
     function (target, elementClassName) {
         return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
     };
-    /**
-     * @param {?} elem
-     * @param {?} elementClassName
-     * @return {?}
-     */
-    SidebarOffCanvasCloseDirective.prototype.toggleClass = /**
-     * @param {?} elem
-     * @param {?} elementClassName
-     * @return {?}
-     */
+    // Toggle element class
+    // Toggle element class
+    SidebarOffCanvasCloseDirective.prototype.toggleClass = 
+    // Toggle element class
     function (elem, elementClassName) {
-        var /** @type {?} */ newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
+        var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
         if (this.hasClass(elem, elementClassName)) {
             while (newClass.indexOf(' ' + elementClassName + ' ') >= 0) {
                 newClass = newClass.replace(' ' + elementClassName + ' ', ' ');
@@ -195,15 +106,7 @@ var SidebarOffCanvasCloseDirective = /** @class */ (function () {
             elem.className += ' ' + elementClassName;
         }
     };
-    /**
-     * @param {?} $event
-     * @return {?}
-     */
-    SidebarOffCanvasCloseDirective.prototype.toggleOpen = /**
-     * @param {?} $event
-     * @return {?}
-     */
-    function ($event) {
+    SidebarOffCanvasCloseDirective.prototype.toggleOpen = function ($event) {
         $event.preventDefault();
         if (this.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
             this.toggleClass(document.querySelector('body'), 'sidebar-opened');
@@ -222,29 +125,10 @@ var SidebarOffCanvasCloseDirective = /** @class */ (function () {
     return SidebarOffCanvasCloseDirective;
 }());
 export { SidebarOffCanvasCloseDirective };
-function SidebarOffCanvasCloseDirective_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    SidebarOffCanvasCloseDirective.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    SidebarOffCanvasCloseDirective.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    SidebarOffCanvasCloseDirective.propDecorators;
-}
 var BrandMinimizeDirective = /** @class */ (function () {
     function BrandMinimizeDirective() {
     }
-    /**
-     * @param {?} $event
-     * @return {?}
-     */
-    BrandMinimizeDirective.prototype.toggleOpen = /**
-     * @param {?} $event
-     * @return {?}
-     */
-    function ($event) {
+    BrandMinimizeDirective.prototype.toggleOpen = function ($event) {
         $event.preventDefault();
         document.querySelector('body').classList.toggle('brand-minimized');
     };
@@ -261,43 +145,18 @@ var BrandMinimizeDirective = /** @class */ (function () {
     return BrandMinimizeDirective;
 }());
 export { BrandMinimizeDirective };
-function BrandMinimizeDirective_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    BrandMinimizeDirective.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    BrandMinimizeDirective.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    BrandMinimizeDirective.propDecorators;
-}
 /**
- * Allows the aside to be toggled via click.
- */
+* Allows the aside to be toggled via click.
+*/
 var AsideToggleDirective = /** @class */ (function () {
     function AsideToggleDirective() {
     }
-    /**
-     * @return {?}
-     */
-    AsideToggleDirective.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    AsideToggleDirective.prototype.ngOnInit = function () {
         this.bp = this.breakpoint;
     };
-    /**
-     * @param {?} $event
-     * @return {?}
-     */
-    AsideToggleDirective.prototype.toggleOpen = /**
-     * @param {?} $event
-     * @return {?}
-     */
-    function ($event) {
+    AsideToggleDirective.prototype.toggleOpen = function ($event) {
         $event.preventDefault();
-        var /** @type {?} */ cssClass;
+        var cssClass;
         this.bp ? cssClass = "aside-menu-" + this.bp + "-show" : cssClass = asideMenuCssClasses[0];
         ToggleClasses(cssClass, asideMenuCssClasses);
     };
@@ -315,19 +174,4 @@ var AsideToggleDirective = /** @class */ (function () {
     return AsideToggleDirective;
 }());
 export { AsideToggleDirective };
-function AsideToggleDirective_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AsideToggleDirective.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AsideToggleDirective.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AsideToggleDirective.propDecorators;
-    /** @type {?} */
-    AsideToggleDirective.prototype.breakpoint;
-    /** @type {?} */
-    AsideToggleDirective.prototype.bp;
-}
 //# sourceMappingURL=layout.directive.js.map

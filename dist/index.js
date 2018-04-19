@@ -1,7 +1,3 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 export { AppAsideModule } from './aside';
 export { AppBreadcrumbModule } from './breadcrumb';
 export { AppFooterModule } from './footer';

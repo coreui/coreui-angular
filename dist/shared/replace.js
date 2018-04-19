@@ -1,14 +1,7 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @param {?} el
- * @return {?}
- */
 export function Replace(el) {
-    var /** @type {?} */ nativeElement = el.nativeElement;
-    var /** @type {?} */ parentElement = nativeElement.parentElement;
+    var nativeElement = el.nativeElement;
+    var parentElement = nativeElement.parentElement;
+    // move all children out of the element
     // move all children out of the element
     while (nativeElement.firstChild) {
         parentElement.insertBefore(nativeElement.firstChild, nativeElement);

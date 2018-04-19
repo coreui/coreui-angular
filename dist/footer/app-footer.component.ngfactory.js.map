@@ -1,0 +1,1 @@
+{"version":3,"file":"app-footer.component.ngfactory.js","sourceRoot":"","sources":["../../src/footer/app-footer.component.ngfactory.ts"],"names":[],"mappings":"","sourcesContent":["import * as i0 from '@angular/core';\ni0.ComponentFactory;\n"]}

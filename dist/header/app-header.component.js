@@ -1,89 +1,31 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 import { Component, ElementRef, Input } from '@angular/core';
 import { Replace } from './../shared';
 var AppHeaderComponent = /** @class */ (function () {
     function AppHeaderComponent(el) {
         this.el = el;
     }
-    /**
-     * @return {?}
-     */
-    AppHeaderComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    AppHeaderComponent.prototype.ngOnInit = function () {
         Replace(this.el);
         this.isFixed(this.fixed);
     };
-    /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    AppHeaderComponent.prototype.isFixed = /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    function (fixed) {
+    AppHeaderComponent.prototype.isFixed = function (fixed) {
         if (this.fixed) {
             document.querySelector('body').classList.add('header-fixed');
         }
     };
-    /**
-     * @param {?} brand
-     * @return {?}
-     */
-    AppHeaderComponent.prototype.imgSrc = /**
-     * @param {?} brand
-     * @return {?}
-     */
-    function (brand) {
+    AppHeaderComponent.prototype.imgSrc = function (brand) {
         return brand.src ? brand.src : '';
     };
-    /**
-     * @param {?} brand
-     * @return {?}
-     */
-    AppHeaderComponent.prototype.imgWidth = /**
-     * @param {?} brand
-     * @return {?}
-     */
-    function (brand) {
+    AppHeaderComponent.prototype.imgWidth = function (brand) {
         return brand.width ? brand.width : 'auto';
     };
-    /**
-     * @param {?} brand
-     * @return {?}
-     */
-    AppHeaderComponent.prototype.imgHeight = /**
-     * @param {?} brand
-     * @return {?}
-     */
-    function (brand) {
+    AppHeaderComponent.prototype.imgHeight = function (brand) {
         return brand.height ? brand.height : 'auto';
     };
-    /**
-     * @param {?} brand
-     * @return {?}
-     */
-    AppHeaderComponent.prototype.imgAlt = /**
-     * @param {?} brand
-     * @return {?}
-     */
-    function (brand) {
+    AppHeaderComponent.prototype.imgAlt = function (brand) {
         return brand.alt ? brand.alt : '';
     };
-    /**
-     * @param {?} breakpoint
-     * @return {?}
-     */
-    AppHeaderComponent.prototype.breakpoint = /**
-     * @param {?} breakpoint
-     * @return {?}
-     */
-    function (breakpoint) {
+    AppHeaderComponent.prototype.breakpoint = function (breakpoint) {
         console.log(breakpoint);
         return breakpoint ? breakpoint : '';
     };
@@ -110,33 +52,4 @@ var AppHeaderComponent = /** @class */ (function () {
     return AppHeaderComponent;
 }());
 export { AppHeaderComponent };
-function AppHeaderComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppHeaderComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppHeaderComponent.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AppHeaderComponent.propDecorators;
-    /** @type {?} */
-    AppHeaderComponent.prototype.fixed;
-    /** @type {?} */
-    AppHeaderComponent.prototype.navbarBrand;
-    /** @type {?} */
-    AppHeaderComponent.prototype.navbarBrandFull;
-    /** @type {?} */
-    AppHeaderComponent.prototype.navbarBrandMinimized;
-    /** @type {?} */
-    AppHeaderComponent.prototype.sidebarToggler;
-    /** @type {?} */
-    AppHeaderComponent.prototype.mobileSidebarToggler;
-    /** @type {?} */
-    AppHeaderComponent.prototype.asideMenuToggler;
-    /** @type {?} */
-    AppHeaderComponent.prototype.mobileAsideMenuToggler;
-    /** @type {?} */
-    AppHeaderComponent.prototype.el;
-}
 //# sourceMappingURL=app-header.component.js.map

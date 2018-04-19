@@ -1,20 +1,10 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 import { Component, ElementRef } from '@angular/core';
 import { Replace } from './../shared';
 var AppSidebarFooterComponent = /** @class */ (function () {
     function AppSidebarFooterComponent(el) {
         this.el = el;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarFooterComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarFooterComponent.prototype.ngOnInit = function () {
         Replace(this.el);
     };
     AppSidebarFooterComponent.decorators = [
@@ -30,15 +20,4 @@ var AppSidebarFooterComponent = /** @class */ (function () {
     return AppSidebarFooterComponent;
 }());
 export { AppSidebarFooterComponent };
-function AppSidebarFooterComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppSidebarFooterComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppSidebarFooterComponent.ctorParameters;
-    /** @type {?} */
-    AppSidebarFooterComponent.prototype.el;
-}
 //# sourceMappingURL=app-sidebar-footer.component.js.map

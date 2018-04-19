@@ -1,7 +1,3 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { LayoutModule } from './../shared';
@@ -24,18 +20,7 @@ var AppAsideModule = /** @class */ (function () {
                     ]
                 },] },
     ];
-    /** @nocollapse */
-    AppAsideModule.ctorParameters = function () { return []; };
     return AppAsideModule;
 }());
 export { AppAsideModule };
-function AppAsideModule_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppAsideModule.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppAsideModule.ctorParameters;
-}
 //# sourceMappingURL=app-aside.module.js.map

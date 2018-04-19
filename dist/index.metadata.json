@@ -1,0 +1,1 @@
+[{"__symbolic":"module","version":4,"metadata":{},"exports":[{"from":"./aside","export":["AppAsideModule"]},{"from":"./breadcrumb","export":["AppBreadcrumbModule"]},{"from":"./footer","export":["AppFooterModule"]},{"from":"./header","export":["AppHeaderModule"]},{"from":"./sidebar","export":["AppSidebarModule"]},{"from":"./shared","export":["LayoutModule"]}]}]

@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/sidebar/index.ts"],"names":[],"mappings":";;;;AAAA,OAAO,EAAE,gBAAgB,EAAE,MAAM,sBAAsB,CAAC","sourcesContent":["export { AppSidebarModule } from './app-sidebar.module';\n"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/sidebar/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,gBAAgB,EAAE,MAAM,sBAAsB,CAAC","sourcesContent":["export { AppSidebarModule } from './app-sidebar.module';\n"]}

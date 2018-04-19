@@ -1,20 +1,10 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 import { Component, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2 } from '@angular/core';
 import { Replace } from './../shared';
 var NavDropdownDirective = /** @class */ (function () {
     function NavDropdownDirective(el) {
         this.el = el;
     }
-    /**
-     * @return {?}
-     */
-    NavDropdownDirective.prototype.toggle = /**
-     * @return {?}
-     */
-    function () {
+    NavDropdownDirective.prototype.toggle = function () {
         this.el.nativeElement.classList.toggle('open');
     };
     NavDropdownDirective.decorators = [
@@ -29,33 +19,14 @@ var NavDropdownDirective = /** @class */ (function () {
     return NavDropdownDirective;
 }());
 export { NavDropdownDirective };
-function NavDropdownDirective_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    NavDropdownDirective.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    NavDropdownDirective.ctorParameters;
-    /** @type {?} */
-    NavDropdownDirective.prototype.el;
-}
 /**
- * Allows the dropdown to be toggled via click.
- */
+* Allows the dropdown to be toggled via click.
+*/
 var NavDropdownToggleDirective = /** @class */ (function () {
     function NavDropdownToggleDirective(dropdown) {
         this.dropdown = dropdown;
     }
-    /**
-     * @param {?} $event
-     * @return {?}
-     */
-    NavDropdownToggleDirective.prototype.toggleOpen = /**
-     * @param {?} $event
-     * @return {?}
-     */
-    function ($event) {
+    NavDropdownToggleDirective.prototype.toggleOpen = function ($event) {
         $event.preventDefault();
         this.dropdown.toggle();
     };
@@ -74,43 +45,14 @@ var NavDropdownToggleDirective = /** @class */ (function () {
     return NavDropdownToggleDirective;
 }());
 export { NavDropdownToggleDirective };
-function NavDropdownToggleDirective_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    NavDropdownToggleDirective.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    NavDropdownToggleDirective.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    NavDropdownToggleDirective.propDecorators;
-    /** @type {?} */
-    NavDropdownToggleDirective.prototype.dropdown;
-}
 var AppSidebarNavComponent = /** @class */ (function () {
     function AppSidebarNavComponent() {
         this.role = 'nav';
     }
-    /**
-     * @param {?} item
-     * @return {?}
-     */
-    AppSidebarNavComponent.prototype.isDivider = /**
-     * @param {?} item
-     * @return {?}
-     */
-    function (item) {
+    AppSidebarNavComponent.prototype.isDivider = function (item) {
         return item.divider ? true : false;
     };
-    /**
-     * @param {?} item
-     * @return {?}
-     */
-    AppSidebarNavComponent.prototype.isTitle = /**
-     * @param {?} item
-     * @return {?}
-     */
-    function (item) {
+    AppSidebarNavComponent.prototype.isTitle = function (item) {
         return item.title ? true : false;
     };
     AppSidebarNavComponent.decorators = [
@@ -129,72 +71,25 @@ var AppSidebarNavComponent = /** @class */ (function () {
     return AppSidebarNavComponent;
 }());
 export { AppSidebarNavComponent };
-function AppSidebarNavComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppSidebarNavComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppSidebarNavComponent.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AppSidebarNavComponent.propDecorators;
-    /** @type {?} */
-    AppSidebarNavComponent.prototype.navItems;
-    /** @type {?} */
-    AppSidebarNavComponent.prototype.true;
-    /** @type {?} */
-    AppSidebarNavComponent.prototype.role;
-}
 import { Router } from '@angular/router';
 var AppSidebarNavItemComponent = /** @class */ (function () {
     function AppSidebarNavItemComponent(router, el) {
         this.router = router;
         this.el = el;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarNavItemComponent.prototype.hasClass = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavItemComponent.prototype.hasClass = function () {
         return this.item.class ? true : false;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavItemComponent.prototype.isDropdown = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavItemComponent.prototype.isDropdown = function () {
         return this.item.children ? true : false;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavItemComponent.prototype.thisUrl = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavItemComponent.prototype.thisUrl = function () {
         return this.item.url;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavItemComponent.prototype.isActive = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavItemComponent.prototype.isActive = function () {
         return this.router.isActive(this.thisUrl(), false);
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavItemComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavItemComponent.prototype.ngOnInit = function () {
         Replace(this.el);
     };
     AppSidebarNavItemComponent.decorators = [
@@ -214,82 +109,29 @@ var AppSidebarNavItemComponent = /** @class */ (function () {
     return AppSidebarNavItemComponent;
 }());
 export { AppSidebarNavItemComponent };
-function AppSidebarNavItemComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppSidebarNavItemComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppSidebarNavItemComponent.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AppSidebarNavItemComponent.propDecorators;
-    /** @type {?} */
-    AppSidebarNavItemComponent.prototype.item;
-    /** @type {?} */
-    AppSidebarNavItemComponent.prototype.router;
-    /** @type {?} */
-    AppSidebarNavItemComponent.prototype.el;
-}
 var AppSidebarNavLinkComponent = /** @class */ (function () {
     function AppSidebarNavLinkComponent(router, el) {
         this.router = router;
         this.el = el;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarNavLinkComponent.prototype.hasVariant = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavLinkComponent.prototype.hasVariant = function () {
         return this.link.variant ? true : false;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavLinkComponent.prototype.isBadge = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavLinkComponent.prototype.isBadge = function () {
         return this.link.badge ? true : false;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavLinkComponent.prototype.isExternalLink = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavLinkComponent.prototype.isExternalLink = function () {
         return this.link.url.substring(0, 4) === 'http' ? true : false;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavLinkComponent.prototype.isIcon = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavLinkComponent.prototype.isIcon = function () {
         return this.link.icon ? true : false;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavLinkComponent.prototype.hideMobile = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavLinkComponent.prototype.hideMobile = function () {
         if (document.body.classList.contains('sidebar-mobile-show')) {
             document.body.classList.toggle('sidebar-mobile-show');
         }
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavLinkComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavLinkComponent.prototype.ngOnInit = function () {
         Replace(this.el);
     };
     AppSidebarNavLinkComponent.decorators = [
@@ -309,53 +151,18 @@ var AppSidebarNavLinkComponent = /** @class */ (function () {
     return AppSidebarNavLinkComponent;
 }());
 export { AppSidebarNavLinkComponent };
-function AppSidebarNavLinkComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppSidebarNavLinkComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppSidebarNavLinkComponent.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AppSidebarNavLinkComponent.propDecorators;
-    /** @type {?} */
-    AppSidebarNavLinkComponent.prototype.link;
-    /** @type {?} */
-    AppSidebarNavLinkComponent.prototype.router;
-    /** @type {?} */
-    AppSidebarNavLinkComponent.prototype.el;
-}
 var AppSidebarNavDropdownComponent = /** @class */ (function () {
     function AppSidebarNavDropdownComponent(router, el) {
         this.router = router;
         this.el = el;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarNavDropdownComponent.prototype.isBadge = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavDropdownComponent.prototype.isBadge = function () {
         return this.link.badge ? true : false;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavDropdownComponent.prototype.isIcon = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavDropdownComponent.prototype.isIcon = function () {
         return this.link.icon ? true : false;
     };
-    /**
-     * @return {?}
-     */
-    AppSidebarNavDropdownComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarNavDropdownComponent.prototype.ngOnInit = function () {
         Replace(this.el);
     };
     AppSidebarNavDropdownComponent.decorators = [
@@ -376,45 +183,22 @@ var AppSidebarNavDropdownComponent = /** @class */ (function () {
     return AppSidebarNavDropdownComponent;
 }());
 export { AppSidebarNavDropdownComponent };
-function AppSidebarNavDropdownComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppSidebarNavDropdownComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppSidebarNavDropdownComponent.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AppSidebarNavDropdownComponent.propDecorators;
-    /** @type {?} */
-    AppSidebarNavDropdownComponent.prototype.link;
-    /** @type {?} */
-    AppSidebarNavDropdownComponent.prototype.router;
-    /** @type {?} */
-    AppSidebarNavDropdownComponent.prototype.el;
-}
 var AppSidebarNavTitleComponent = /** @class */ (function () {
     function AppSidebarNavTitleComponent(el, renderer) {
         this.el = el;
         this.renderer = renderer;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarNavTitleComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
-        var /** @type {?} */ nativeElement = this.el.nativeElement;
-        var /** @type {?} */ li = this.renderer.createElement('li');
-        var /** @type {?} */ name = this.renderer.createText(this.title.name);
+    AppSidebarNavTitleComponent.prototype.ngOnInit = function () {
+        var nativeElement = this.el.nativeElement;
+        var li = this.renderer.createElement('li');
+        var name = this.renderer.createText(this.title.name);
         this.renderer.addClass(li, 'nav-title');
         if (this.title.class) {
-            var /** @type {?} */ classes = this.title.class;
+            var classes = this.title.class;
             this.renderer.addClass(li, classes);
         }
         if (this.title.wrapper) {
-            var /** @type {?} */ wrapper = this.renderer.createElement(this.title.wrapper.element);
+            var wrapper = this.renderer.createElement(this.title.wrapper.element);
             this.renderer.appendChild(wrapper, name);
             this.renderer.appendChild(li, wrapper);
         }
@@ -441,21 +225,4 @@ var AppSidebarNavTitleComponent = /** @class */ (function () {
     return AppSidebarNavTitleComponent;
 }());
 export { AppSidebarNavTitleComponent };
-function AppSidebarNavTitleComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppSidebarNavTitleComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppSidebarNavTitleComponent.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AppSidebarNavTitleComponent.propDecorators;
-    /** @type {?} */
-    AppSidebarNavTitleComponent.prototype.title;
-    /** @type {?} */
-    AppSidebarNavTitleComponent.prototype.el;
-    /** @type {?} */
-    AppSidebarNavTitleComponent.prototype.renderer;
-}
 //# sourceMappingURL=app-sidebar-nav.component.js.map

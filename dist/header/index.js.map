@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/header/index.ts"],"names":[],"mappings":";;;;AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,qBAAqB,CAAC","sourcesContent":["export { AppHeaderModule } from './app-header.module';\n"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/header/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,qBAAqB,CAAC","sourcesContent":["export { AppHeaderModule } from './app-header.module';\n"]}

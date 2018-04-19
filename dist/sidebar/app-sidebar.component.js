@@ -1,101 +1,43 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 import { Component, Input, HostBinding } from '@angular/core';
 import { sidebarCssClasses } from './../shared';
 var AppSidebarComponent = /** @class */ (function () {
     function AppSidebarComponent() {
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    AppSidebarComponent.prototype.ngOnInit = function () {
         this.displayBreakpoint(this.display);
         this.isCompact(this.compact);
         this.isFixed(this.fixed);
         this.isMinimized(this.minimized);
         this.isOffCanvas(this.offCanvas);
     };
-    /**
-     * @param {?} compact
-     * @return {?}
-     */
-    AppSidebarComponent.prototype.isCompact = /**
-     * @param {?} compact
-     * @return {?}
-     */
-    function (compact) {
+    AppSidebarComponent.prototype.isCompact = function (compact) {
         if (this.compact) {
             document.querySelector('body').classList.add('sidebar-compact');
         }
     };
-    /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    AppSidebarComponent.prototype.isFixed = /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    function (fixed) {
+    AppSidebarComponent.prototype.isFixed = function (fixed) {
         if (this.fixed) {
             document.querySelector('body').classList.add('sidebar-fixed');
         }
     };
-    /**
-     * @param {?} minimized
-     * @return {?}
-     */
-    AppSidebarComponent.prototype.isMinimized = /**
-     * @param {?} minimized
-     * @return {?}
-     */
-    function (minimized) {
+    AppSidebarComponent.prototype.isMinimized = function (minimized) {
         if (this.minimized) {
             document.querySelector('body').classList.add('sidebar-minimized');
         }
     };
-    /**
-     * @param {?} offCanvas
-     * @return {?}
-     */
-    AppSidebarComponent.prototype.isOffCanvas = /**
-     * @param {?} offCanvas
-     * @return {?}
-     */
-    function (offCanvas) {
+    AppSidebarComponent.prototype.isOffCanvas = function (offCanvas) {
         if (this.offCanvas) {
             document.querySelector('body').classList.add('sidebar-off-canvas');
         }
     };
-    /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    AppSidebarComponent.prototype.fixedPosition = /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    function (fixed) {
+    AppSidebarComponent.prototype.fixedPosition = function (fixed) {
         if (this.fixed) {
             document.querySelector('body').classList.add('sidebar-fixed');
         }
     };
-    /**
-     * @param {?} display
-     * @return {?}
-     */
-    AppSidebarComponent.prototype.displayBreakpoint = /**
-     * @param {?} display
-     * @return {?}
-     */
-    function (display) {
+    AppSidebarComponent.prototype.displayBreakpoint = function (display) {
         if (this.display !== false) {
-            var /** @type {?} */ cssClass = void 0;
+            var cssClass = void 0;
             this.display ? cssClass = "sidebar-" + this.display + "-show" : cssClass = sidebarCssClasses[0];
             document.querySelector('body').classList.add(cssClass);
         }
@@ -119,27 +61,4 @@ var AppSidebarComponent = /** @class */ (function () {
     return AppSidebarComponent;
 }());
 export { AppSidebarComponent };
-function AppSidebarComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppSidebarComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppSidebarComponent.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AppSidebarComponent.propDecorators;
-    /** @type {?} */
-    AppSidebarComponent.prototype.compact;
-    /** @type {?} */
-    AppSidebarComponent.prototype.display;
-    /** @type {?} */
-    AppSidebarComponent.prototype.fixed;
-    /** @type {?} */
-    AppSidebarComponent.prototype.minimized;
-    /** @type {?} */
-    AppSidebarComponent.prototype.offCanvas;
-    /** @type {?} */
-    AppSidebarComponent.prototype.true;
-}
 //# sourceMappingURL=app-sidebar.component.js.map

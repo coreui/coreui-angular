@@ -1,32 +1,14 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 import { Component, ElementRef, Input } from '@angular/core';
 import { Replace } from './../shared';
 var AppFooterComponent = /** @class */ (function () {
     function AppFooterComponent(el) {
         this.el = el;
     }
-    /**
-     * @return {?}
-     */
-    AppFooterComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
+    AppFooterComponent.prototype.ngOnInit = function () {
         Replace(this.el);
         this.isFixed(this.fixed);
     };
-    /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    AppFooterComponent.prototype.isFixed = /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    function (fixed) {
+    AppFooterComponent.prototype.isFixed = function (fixed) {
         if (this.fixed) {
             document.querySelector('body').classList.add('footer-fixed');
         }
@@ -47,19 +29,4 @@ var AppFooterComponent = /** @class */ (function () {
     return AppFooterComponent;
 }());
 export { AppFooterComponent };
-function AppFooterComponent_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppFooterComponent.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppFooterComponent.ctorParameters;
-    /** @type {!Object<string,!Array<{type: !Function, args: (undefined|!Array<?>)}>>} */
-    AppFooterComponent.propDecorators;
-    /** @type {?} */
-    AppFooterComponent.prototype.fixed;
-    /** @type {?} */
-    AppFooterComponent.prototype.el;
-}
 //# sourceMappingURL=app-footer.component.js.map

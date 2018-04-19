@@ -1,11 +1,8 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from './../shared';
+// App Sidebar Component
 import { AppSidebarFooterComponent } from './app-sidebar-footer.component';
 import { AppSidebarFormComponent } from './app-sidebar-form.component';
 import { AppSidebarHeaderComponent } from './app-sidebar-header.component';
@@ -54,18 +51,7 @@ var AppSidebarModule = /** @class */ (function () {
                     ]
                 },] },
     ];
-    /** @nocollapse */
-    AppSidebarModule.ctorParameters = function () { return []; };
     return AppSidebarModule;
 }());
 export { AppSidebarModule };
-function AppSidebarModule_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppSidebarModule.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppSidebarModule.ctorParameters;
-}
 //# sourceMappingURL=app-sidebar.module.js.map
