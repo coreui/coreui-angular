@@ -1,20 +1,38 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./temp/out-tsc",
-    "sourceMap": true,
-    "declaration": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "target": "es5",
+    "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
-    "module": "es6",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es6",
-      "dom"
+    "sourceMap": true,
+    "inlineSources": true,
+    "noEmitHelpers": false,
+    "noImplicitAny": false,
+    "declaration": true,
+    "skipLibCheck": false,
+    "stripInternal": true,
+    "strictNullChecks": false,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "lib": ["dom", "es6"],
+    "types": [
+      "jasmine"
     ]
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "./scripts/typings.d.ts",
+    "./src/index.ts",
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "fullTemplateTypeCheck": true
   }
 }
