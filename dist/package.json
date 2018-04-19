@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "dependencies": {
     "@coreui/coreui": "^2.0.0-beta.10"
   },
