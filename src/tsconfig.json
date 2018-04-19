@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "outDir": "../dist",
+    "rootDir": ".",
     "target": "es5",
     "module": "es2015",
     "moduleResolution": "node",
@@ -27,8 +27,8 @@
     "node_modules"
   ],
   "files": [
-    "./scripts/typings.d.ts",
-    "./src/index.ts",
+    "../scripts/typings.d.ts",
+    "./index.ts",
   ],
   "angularCompilerOptions": {
     "strictMetadataEmit": true,

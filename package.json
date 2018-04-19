@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "devDependencies": {
     "@angular/common": "5.2.6",
     "@angular/compiler": "^5.2.6",
@@ -23,7 +23,7 @@
     "zone.js": "0.8.20"
   },
   "scripts": {
-    "compile": "node_modules/.bin/ngc -p tsconfig.json",
+    "compile": "node_modules/.bin/ngc -p src/tsconfig.json",
     "dist": "npm run compile && npm run lint && npm run htmlcopy && npm run jsoncopy",
     "htmlcopy": "copyfiles -u 1 src/**/*.html dist",
     "jsoncopy": "copyfiles -u 1 src/package.json dist",
