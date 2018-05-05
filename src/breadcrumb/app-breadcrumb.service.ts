@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import 'rxjs/add/operator/filter';
+import { BehaviorSubject, Observable } from 'rxjs/index';
+import { filter } from 'rxjs/operators';
 
 @Injectable()
 export class AppBreadcrumbService {
@@ -16,7 +16,7 @@ export class AppBreadcrumbService {
 
     this.breadcrumbs = this._breadcrumbs.asObservable();
 
-    this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event) => {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
       const breadcrumbs = [];
       let currentRoute = this.route.root,
       url = '';

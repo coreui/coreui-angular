@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from './../shared';
-// App Sidebar Component
 import { AppSidebarFooterComponent } from './app-sidebar-footer.component';
 import { AppSidebarFormComponent } from './app-sidebar-form.component';
 import { AppSidebarHeaderComponent } from './app-sidebar-header.component';
