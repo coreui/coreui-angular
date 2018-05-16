@@ -1,0 +1,15 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/*
+ * Public API Surface of @coreui/angular
+ */
+export { AppAsideModule } from './lib/aside';
+export { AppBreadcrumbModule } from './lib/breadcrumb';
+export { AppFooterModule } from './lib/footer';
+export { AppHeaderModule } from './lib/header';
+export { AppSidebarModule } from './lib/sidebar';
+export { LayoutModule } from './lib/shared';
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljX2FwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0Bjb3JldWkvYW5ndWxhci8iLCJzb3VyY2VzIjpbInB1YmxpY19hcGkudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7OztBQUlBLE9BQU8sRUFBRSxjQUFjLEVBQUUsTUFBTSxhQUFhLENBQUM7QUFDN0MsT0FBTyxFQUFFLG1CQUFtQixFQUFFLE1BQU0sa0JBQWtCLENBQUM7QUFDdkQsT0FBTyxFQUFFLGVBQWUsRUFBRSxNQUFNLGNBQWMsQ0FBQztBQUMvQyxPQUFPLEVBQUUsZUFBZSxFQUFFLE1BQU0sY0FBYyxDQUFDO0FBQy9DLE9BQU8sRUFBRSxnQkFBZ0IsRUFBRSxNQUFNLGVBQWUsQ0FBQztBQUNqRCxPQUFPLEVBQUUsWUFBWSxFQUFFLE1BQU0sY0FBYyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLypcbiAqIFB1YmxpYyBBUEkgU3VyZmFjZSBvZiBAY29yZXVpL2FuZ3VsYXJcbiAqL1xuXG5leHBvcnQgeyBBcHBBc2lkZU1vZHVsZSB9IGZyb20gJy4vbGliL2FzaWRlJztcbmV4cG9ydCB7IEFwcEJyZWFkY3J1bWJNb2R1bGUgfSBmcm9tICcuL2xpYi9icmVhZGNydW1iJztcbmV4cG9ydCB7IEFwcEZvb3Rlck1vZHVsZSB9IGZyb20gJy4vbGliL2Zvb3Rlcic7XG5leHBvcnQgeyBBcHBIZWFkZXJNb2R1bGUgfSBmcm9tICcuL2xpYi9oZWFkZXInO1xuZXhwb3J0IHsgQXBwU2lkZWJhck1vZHVsZSB9IGZyb20gJy4vbGliL3NpZGViYXInO1xuZXhwb3J0IHsgTGF5b3V0TW9kdWxlIH0gZnJvbSAnLi9saWIvc2hhcmVkJztcbiJdfQ==

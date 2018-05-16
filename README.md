@@ -55,12 +55,6 @@ $ npm install @coreui/angular --save
 $ yarn add @coreui/angular@2.0.0
 ```
 
-### Composer
-
-``` bash
-$ composer require coreui/coreui-angular:2.0.0
-```
-
 ## Usage
 
 ### CSS
