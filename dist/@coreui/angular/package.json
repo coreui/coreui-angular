@@ -1,9 +1,23 @@
 {
   "name": "@coreui/angular",
   "version": "2.0.0-beta.5",
+  "license": "MIT",
+  "author": {
+    "name": "Łukasz Holeczek",
+    "url": "http://holeczek.pl",
+    "github": "https://github.com/mrholek",
+    "twitter": "https://twitter.com/lukaszholeczek"
+  },
+  "contributors": [
+    {
+      "name": "Andrzej Kopański",
+      "url": "https://github.com/xidedix"
+    }
+  ],
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+    "@angular/common": "^6.0.0",
+    "@angular/core": "^6.0.0",
+    "@coreui/coreui": "^2.0.0"
   },
   "main": "bundles/coreui-angular.umd.js",
   "module": "fesm5/coreui-angular.js",
