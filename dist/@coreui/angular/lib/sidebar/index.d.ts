@@ -1,1 +1,1 @@
-export { AppSidebarModule } from './app-sidebar.module';
+export * from './app-sidebar.module';

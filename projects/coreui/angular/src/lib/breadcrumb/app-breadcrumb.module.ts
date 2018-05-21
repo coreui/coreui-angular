@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { AppBreadcrumbService } from './app-breadcrumb.service';
 import { AppBreadcrumbComponent } from './app-breadcrumb.component';
 
+// @dynamic
 @NgModule({
   imports: [ CommonModule, RouterModule ],
   exports: [ AppBreadcrumbComponent ],

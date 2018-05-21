@@ -1,3 +1,3 @@
 export * from './classes';
-export { LayoutModule } from './layout';
-export { Replace } from './replace';
+export * from './layout/index';
+export * from './replace';

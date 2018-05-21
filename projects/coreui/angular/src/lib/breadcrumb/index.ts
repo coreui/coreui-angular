@@ -1,1 +1,1 @@
-export { AppBreadcrumbModule } from './app-breadcrumb.module';
+export * from './app-breadcrumb.module';

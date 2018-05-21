@@ -2,9 +2,9 @@
  * Public API Surface of @coreui/angular
  */
 
-export { AppAsideModule } from './lib/aside';
-export { AppBreadcrumbModule } from './lib/breadcrumb';
-export { AppFooterModule } from './lib/footer';
-export { AppHeaderModule } from './lib/header';
-export { AppSidebarModule } from './lib/sidebar';
-export { LayoutModule } from './lib/shared';
+export * from './lib/aside/index';
+export * from './lib/breadcrumb/index';
+export * from './lib/footer/index';
+export * from './lib/header/index';
+export * from './lib/sidebar/index';
+// export * from './lib/shared/index';

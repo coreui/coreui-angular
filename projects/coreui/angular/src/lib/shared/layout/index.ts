@@ -1,1 +1,1 @@
-export { LayoutModule } from './layout.module';
+export * from './layout.module';
