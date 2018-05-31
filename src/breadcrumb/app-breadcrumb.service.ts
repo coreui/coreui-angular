@@ -28,10 +28,12 @@ export class AppBreadcrumbService {
           if (route.outlet === 'primary') {
             const routeSnapshot = route.snapshot;
             url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
-            breadcrumbs.push({
-              label: route.snapshot.data,
-              url:   url
-            });
+            if (route.routeConfig.data && route.routeConfig.data.title) {
+              breadcrumbs.push({
+                label: route.snapshot.data,
+                url:   url
+              });
+            }
             currentRoute = route;
           }
         });
