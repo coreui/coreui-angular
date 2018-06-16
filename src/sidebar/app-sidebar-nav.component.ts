@@ -1,4 +1,7 @@
-import { Component, Directive, ElementRef, HostBinding, HostListener, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
+import {
+  Component, Directive, ElementRef, HostBinding, HostListener, Input,
+  OnInit, Renderer2
+} from '@angular/core';
 import { Replace } from './../shared';
 
 @Directive({
@@ -20,7 +23,7 @@ export class NavDropdownDirective {
   selector: '[appNavDropdownToggle]'
 })
 export class NavDropdownToggleDirective {
-  constructor(private dropdown: NavDropdownDirective) {}
+  constructor(private dropdown: NavDropdownDirective) { }
 
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
@@ -34,17 +37,20 @@ export class NavDropdownToggleDirective {
   template: `
     <ul class="nav">
       <ng-template ngFor let-navitem [ngForOf]="navItems">
-        <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
+        <ng-template [ngIf]="isDivider(navitem)">
+          <app-sidebar-nav-divider [divider]="navitem"></app-sidebar-nav-divider>
+        </ng-template>
         <ng-template [ngIf]="isTitle(navitem)">
           <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>
         </ng-template>
-        <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)">
+        <ng-template [ngIf]="isNavItem(navitem)">
           <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>
         </ng-template>
       </ng-template>
     </ul>`
 })
 export class AppSidebarNavComponent {
+
   @Input() navItems: any;
 
   @HostBinding('class.sidebar-nav') true;
@@ -58,6 +64,20 @@ export class AppSidebarNavComponent {
     return item.title ? true : false;
   }
 
+  public isNavItem(item) {
+    return !this.isDivider(item) && !this.isTitle(item);
+  }
+
+  constructor() { }
+}
+
+@Component({
+  selector: 'app-sidebar-nav-divider',
+  template: `<li class="nav-divider"></li>`
+})
+export class AppSidebarNavDividerComponent {
+  @Input() divider: any;
+
   constructor() { }
 }
 
@@ -66,17 +86,15 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-sidebar-nav-item',
   template: `
-    <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.class : 'nav-item'">
+    <li *ngIf="!isDropdown()" [ngClass]="hasClass() ? 'nav-item ' + item.class : 'nav-item'">
       <app-sidebar-nav-link [link]='item'></app-sidebar-nav-link>
     </li>
-    <ng-template #dropdown>
-      <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'"
-          [class.open]="isActive()"
-          routerLinkActive="open"
-          appNavDropdown>
-        <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>
-      </li>
-    </ng-template>
+    <li *ngIf="isDropdown()" [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'"
+        [class.open]="isActive()"
+        routerLinkActive="open"
+        appNavDropdown>
+      <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>
+    </li>
     `
 })
 export class AppSidebarNavItemComponent implements OnInit {
@@ -98,10 +116,10 @@ export class AppSidebarNavItemComponent implements OnInit {
     return this.router.isActive(this.thisUrl(), false);
   }
 
-  constructor( private router: Router, private el: ElementRef ) { }
+  constructor(private router: Router, private el: ElementRef) { }
 
   ngOnInit() {
-    Replace(this.el);
+    // Replace(this.el);
   }
 
 }
@@ -152,10 +170,10 @@ export class AppSidebarNavLinkComponent implements OnInit {
     }
   }
 
-  constructor( private router: Router, private el: ElementRef ) { }
+  constructor(private el: ElementRef) { }
 
   ngOnInit() {
-    Replace(this.el);
+    // Replace(this.el);
   }
 }
 
@@ -163,9 +181,9 @@ export class AppSidebarNavLinkComponent implements OnInit {
   selector: 'app-sidebar-nav-dropdown',
   template: `
     <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle>
-      <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
+      <i *ngIf="hasIcon()" class="nav-icon {{ link.icon }}"></i>
       {{ link.name }}
-      <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
+      <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
     </a>
     <ul class="nav-dropdown-items">
       <ng-template ngFor let-child [ngForOf]="link.children">
@@ -178,29 +196,35 @@ export class AppSidebarNavLinkComponent implements OnInit {
 export class AppSidebarNavDropdownComponent implements OnInit {
   @Input() link: any;
 
-  public isBadge() {
+  public hasBadge() {
     return this.link.badge ? true : false;
   }
 
-  public isIcon() {
+  public hasIcon() {
     return this.link.icon ? true : false;
   }
 
-  constructor( private router: Router, private el: ElementRef ) { }
+  constructor(private el: ElementRef) { }
 
   ngOnInit() {
+    console.log(this.el);
     Replace(this.el);
   }
 }
 
 @Component({
   selector: 'app-sidebar-nav-title',
+  // template: '<li [ngClass]="hasClass() ? 'nav-title ' + title.class : 'nav-title'">{{title.name}}</li>'
   template: ''
 })
 export class AppSidebarNavTitleComponent implements OnInit {
   @Input() title: any;
 
   constructor(private el: ElementRef, private renderer: Renderer2) { }
+
+  hasClass() {
+    return this.title.class ? true : false;
+  }
 
   ngOnInit() {
     const nativeElement: HTMLElement = this.el.nativeElement;
@@ -209,12 +233,12 @@ export class AppSidebarNavTitleComponent implements OnInit {
 
     this.renderer.addClass(li, 'nav-title');
 
-    if ( this.title.class ) {
+    if (this.hasClass()) {
       const classes = this.title.class;
       this.renderer.addClass(li, classes);
     }
 
-    if ( this.title.wrapper ) {
+    if (this.title.wrapper) {
       const wrapper = this.renderer.createElement(this.title.wrapper.element);
 
       this.renderer.appendChild(wrapper, name);
@@ -223,6 +247,6 @@ export class AppSidebarNavTitleComponent implements OnInit {
       this.renderer.appendChild(li, name);
     }
     this.renderer.appendChild(nativeElement, li);
-    Replace(this.el);
+    // Replace(this.el);
   }
 }

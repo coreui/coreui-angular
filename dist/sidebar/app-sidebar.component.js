@@ -7,6 +7,7 @@ var AppSidebarComponent = /** @class */ (function () {
         this.displayBreakpoint(this.display);
         this.isCompact(this.compact);
         this.isFixed(this.fixed);
+        this.isFloat(this.float);
         this.isMinimized(this.minimized);
         this.isOffCanvas(this.offCanvas);
     };
@@ -18,6 +19,11 @@ var AppSidebarComponent = /** @class */ (function () {
     AppSidebarComponent.prototype.isFixed = function (fixed) {
         if (this.fixed) {
             document.querySelector('body').classList.add('sidebar-fixed');
+        }
+    };
+    AppSidebarComponent.prototype.isFloat = function (float) {
+        if (this.float) {
+            document.querySelector('body').classList.add('sidebar-float');
         }
     };
     AppSidebarComponent.prototype.isMinimized = function (minimized) {
@@ -54,6 +60,7 @@ var AppSidebarComponent = /** @class */ (function () {
         "compact": [{ type: Input },],
         "display": [{ type: Input },],
         "fixed": [{ type: Input },],
+        "float": [{ type: Input },],
         "minimized": [{ type: Input },],
         "offCanvas": [{ type: Input },],
         "true": [{ type: HostBinding, args: ['class.sidebar',] },],

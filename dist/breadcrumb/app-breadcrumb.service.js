@@ -20,10 +20,12 @@ var AppBreadcrumbService = /** @class */ (function () {
                     if (route.outlet === 'primary') {
                         var routeSnapshot = route.snapshot;
                         url += '/' + routeSnapshot.url.map(function (segment) { return segment.path; }).join('/');
-                        breadcrumbs.push({
-                            label: route.snapshot.data,
-                            url: url
-                        });
+                        if (route.routeConfig.data && route.routeConfig.data.title) {
+                            breadcrumbs.push({
+                                label: route.snapshot.data,
+                                url: url
+                            });
+                        }
                         currentRoute = route;
                     }
                 });

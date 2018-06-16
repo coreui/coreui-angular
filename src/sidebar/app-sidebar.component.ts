@@ -9,17 +9,19 @@ export class AppSidebarComponent implements OnInit {
   @Input() compact: boolean;
   @Input() display: any;
   @Input() fixed: boolean;
+  @Input() float: boolean;
   @Input() minimized: boolean;
   @Input() offCanvas: boolean;
 
   @HostBinding('class.sidebar') true;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     this.displayBreakpoint(this.display);
     this.isCompact(this.compact);
     this.isFixed(this.fixed);
+    this.isFloat(this.float);
     this.isMinimized(this.minimized);
     this.isOffCanvas(this.offCanvas);
   }
@@ -30,6 +32,10 @@ export class AppSidebarComponent implements OnInit {
 
   isFixed(fixed: boolean): void {
     if (this.fixed) { document.querySelector('body').classList.add('sidebar-fixed'); }
+  }
+
+  isFloat(float: boolean): void {
+    if (this.float) { document.querySelector('body').classList.add('sidebar-float'); }
   }
 
   isMinimized(minimized: boolean): void {
@@ -45,7 +51,7 @@ export class AppSidebarComponent implements OnInit {
   }
 
   displayBreakpoint(display: any): void {
-    if (this.display !== false ) {
+    if (this.display !== false) {
       let cssClass;
       this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
       document.querySelector('body').classList.add(cssClass);

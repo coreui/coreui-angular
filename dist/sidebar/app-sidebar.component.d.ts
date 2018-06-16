@@ -3,6 +3,7 @@ export declare class AppSidebarComponent implements OnInit {
     compact: boolean;
     display: any;
     fixed: boolean;
+    float: boolean;
     minimized: boolean;
     offCanvas: boolean;
     true: any;
@@ -10,6 +11,7 @@ export declare class AppSidebarComponent implements OnInit {
     ngOnInit(): void;
     isCompact(compact: boolean): void;
     isFixed(fixed: boolean): void;
+    isFloat(float: boolean): void;
     isMinimized(minimized: boolean): void;
     isOffCanvas(offCanvas: boolean): void;
     fixedPosition(fixed: boolean): void;

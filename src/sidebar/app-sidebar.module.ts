@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from './../shared';
@@ -13,6 +13,7 @@ import { AppSidebarComponent } from './app-sidebar.component';
 import {
   AppSidebarNavComponent,
   AppSidebarNavDropdownComponent,
+  AppSidebarNavDividerComponent,
   AppSidebarNavItemComponent,
   AppSidebarNavLinkComponent,
   AppSidebarNavTitleComponent,
@@ -35,6 +36,7 @@ import {
     AppSidebarNavComponent,
     AppSidebarNavDropdownComponent,
     AppSidebarNavItemComponent,
+    AppSidebarNavDividerComponent,
     AppSidebarNavLinkComponent,
     AppSidebarNavTitleComponent,
     NavDropdownDirective,
@@ -50,6 +52,7 @@ import {
     AppSidebarComponent,
     AppSidebarNavComponent,
     AppSidebarNavDropdownComponent,
+    AppSidebarNavDividerComponent,
     AppSidebarNavItemComponent,
     AppSidebarNavLinkComponent,
     AppSidebarNavTitleComponent,

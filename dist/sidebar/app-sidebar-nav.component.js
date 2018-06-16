@@ -55,10 +55,13 @@ var AppSidebarNavComponent = /** @class */ (function () {
     AppSidebarNavComponent.prototype.isTitle = function (item) {
         return item.title ? true : false;
     };
+    AppSidebarNavComponent.prototype.isNavItem = function (item) {
+        return !this.isDivider(item) && !this.isTitle(item);
+    };
     AppSidebarNavComponent.decorators = [
         { type: Component, args: [{
                     selector: 'app-sidebar-nav',
-                    template: "\n    <ul class=\"nav\">\n      <ng-template ngFor let-navitem [ngForOf]=\"navItems\">\n        <li *ngIf=\"isDivider(navitem)\" class=\"nav-divider\"></li>\n        <ng-template [ngIf]=\"isTitle(navitem)\">\n          <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>\n        </ng-template>\n        <ng-template [ngIf]=\"!isDivider(navitem)&&!isTitle(navitem)\">\n          <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>\n        </ng-template>\n      </ng-template>\n    </ul>"
+                    template: "\n    <ul class=\"nav\">\n      <ng-template ngFor let-navitem [ngForOf]=\"navItems\">\n        <ng-template [ngIf]=\"isDivider(navitem)\">\n          <app-sidebar-nav-divider [divider]=\"navitem\"></app-sidebar-nav-divider>\n        </ng-template>\n        <ng-template [ngIf]=\"isTitle(navitem)\">\n          <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>\n        </ng-template>\n        <ng-template [ngIf]=\"isNavItem(navitem)\">\n          <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>\n        </ng-template>\n      </ng-template>\n    </ul>"
                 },] },
     ];
     /** @nocollapse */
@@ -71,6 +74,23 @@ var AppSidebarNavComponent = /** @class */ (function () {
     return AppSidebarNavComponent;
 }());
 export { AppSidebarNavComponent };
+var AppSidebarNavDividerComponent = /** @class */ (function () {
+    function AppSidebarNavDividerComponent() {
+    }
+    AppSidebarNavDividerComponent.decorators = [
+        { type: Component, args: [{
+                    selector: 'app-sidebar-nav-divider',
+                    template: "<li class=\"nav-divider\"></li>"
+                },] },
+    ];
+    /** @nocollapse */
+    AppSidebarNavDividerComponent.ctorParameters = function () { return []; };
+    AppSidebarNavDividerComponent.propDecorators = {
+        "divider": [{ type: Input },],
+    };
+    return AppSidebarNavDividerComponent;
+}());
+export { AppSidebarNavDividerComponent };
 import { Router } from '@angular/router';
 var AppSidebarNavItemComponent = /** @class */ (function () {
     function AppSidebarNavItemComponent(router, el) {
@@ -90,12 +110,12 @@ var AppSidebarNavItemComponent = /** @class */ (function () {
         return this.router.isActive(this.thisUrl(), false);
     };
     AppSidebarNavItemComponent.prototype.ngOnInit = function () {
-        Replace(this.el);
+        // Replace(this.el);
     };
     AppSidebarNavItemComponent.decorators = [
         { type: Component, args: [{
                     selector: 'app-sidebar-nav-item',
-                    template: "\n    <li *ngIf=\"!isDropdown(); else dropdown\" [ngClass]=\"hasClass() ? 'nav-item ' + item.class : 'nav-item'\">\n      <app-sidebar-nav-link [link]='item'></app-sidebar-nav-link>\n    </li>\n    <ng-template #dropdown>\n      <li [ngClass]=\"hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'\"\n          [class.open]=\"isActive()\"\n          routerLinkActive=\"open\"\n          appNavDropdown>\n        <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>\n      </li>\n    </ng-template>\n    "
+                    template: "\n    <li *ngIf=\"!isDropdown()\" [ngClass]=\"hasClass() ? 'nav-item ' + item.class : 'nav-item'\">\n      <app-sidebar-nav-link [link]='item'></app-sidebar-nav-link>\n    </li>\n    <li *ngIf=\"isDropdown()\" [ngClass]=\"hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'\"\n        [class.open]=\"isActive()\"\n        routerLinkActive=\"open\"\n        appNavDropdown>\n      <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>\n    </li>\n    "
                 },] },
     ];
     /** @nocollapse */
@@ -110,8 +130,7 @@ var AppSidebarNavItemComponent = /** @class */ (function () {
 }());
 export { AppSidebarNavItemComponent };
 var AppSidebarNavLinkComponent = /** @class */ (function () {
-    function AppSidebarNavLinkComponent(router, el) {
-        this.router = router;
+    function AppSidebarNavLinkComponent(el) {
         this.el = el;
     }
     AppSidebarNavLinkComponent.prototype.hasVariant = function () {
@@ -132,7 +151,7 @@ var AppSidebarNavLinkComponent = /** @class */ (function () {
         }
     };
     AppSidebarNavLinkComponent.prototype.ngOnInit = function () {
-        Replace(this.el);
+        // Replace(this.el);
     };
     AppSidebarNavLinkComponent.decorators = [
         { type: Component, args: [{
@@ -142,7 +161,6 @@ var AppSidebarNavLinkComponent = /** @class */ (function () {
     ];
     /** @nocollapse */
     AppSidebarNavLinkComponent.ctorParameters = function () { return [
-        { type: Router, },
         { type: ElementRef, },
     ]; };
     AppSidebarNavLinkComponent.propDecorators = {
@@ -152,29 +170,28 @@ var AppSidebarNavLinkComponent = /** @class */ (function () {
 }());
 export { AppSidebarNavLinkComponent };
 var AppSidebarNavDropdownComponent = /** @class */ (function () {
-    function AppSidebarNavDropdownComponent(router, el) {
-        this.router = router;
+    function AppSidebarNavDropdownComponent(el) {
         this.el = el;
     }
-    AppSidebarNavDropdownComponent.prototype.isBadge = function () {
+    AppSidebarNavDropdownComponent.prototype.hasBadge = function () {
         return this.link.badge ? true : false;
     };
-    AppSidebarNavDropdownComponent.prototype.isIcon = function () {
+    AppSidebarNavDropdownComponent.prototype.hasIcon = function () {
         return this.link.icon ? true : false;
     };
     AppSidebarNavDropdownComponent.prototype.ngOnInit = function () {
+        console.log(this.el);
         Replace(this.el);
     };
     AppSidebarNavDropdownComponent.decorators = [
         { type: Component, args: [{
                     selector: 'app-sidebar-nav-dropdown',
-                    template: "\n    <a class=\"nav-link nav-dropdown-toggle\" appNavDropdownToggle>\n      <i *ngIf=\"isIcon()\" class=\"nav-icon {{ link.icon }}\"></i>\n      {{ link.name }}\n      <span *ngIf=\"isBadge()\" [ngClass]=\"'badge badge-' + link.badge.variant\">{{ link.badge.text }}</span>\n    </a>\n    <ul class=\"nav-dropdown-items\">\n      <ng-template ngFor let-child [ngForOf]=\"link.children\">\n        <app-sidebar-nav-item [item]='child'></app-sidebar-nav-item>\n      </ng-template>\n    </ul>\n  ",
+                    template: "\n    <a class=\"nav-link nav-dropdown-toggle\" appNavDropdownToggle>\n      <i *ngIf=\"hasIcon()\" class=\"nav-icon {{ link.icon }}\"></i>\n      {{ link.name }}\n      <span *ngIf=\"hasBadge()\" [ngClass]=\"'badge badge-' + link.badge.variant\">{{ link.badge.text }}</span>\n    </a>\n    <ul class=\"nav-dropdown-items\">\n      <ng-template ngFor let-child [ngForOf]=\"link.children\">\n        <app-sidebar-nav-item [item]='child'></app-sidebar-nav-item>\n      </ng-template>\n    </ul>\n  ",
                     styles: ['.nav-dropdown-toggle { cursor: pointer; }']
                 },] },
     ];
     /** @nocollapse */
     AppSidebarNavDropdownComponent.ctorParameters = function () { return [
-        { type: Router, },
         { type: ElementRef, },
     ]; };
     AppSidebarNavDropdownComponent.propDecorators = {
@@ -188,12 +205,15 @@ var AppSidebarNavTitleComponent = /** @class */ (function () {
         this.el = el;
         this.renderer = renderer;
     }
+    AppSidebarNavTitleComponent.prototype.hasClass = function () {
+        return this.title.class ? true : false;
+    };
     AppSidebarNavTitleComponent.prototype.ngOnInit = function () {
         var nativeElement = this.el.nativeElement;
         var li = this.renderer.createElement('li');
         var name = this.renderer.createText(this.title.name);
         this.renderer.addClass(li, 'nav-title');
-        if (this.title.class) {
+        if (this.hasClass()) {
             var classes = this.title.class;
             this.renderer.addClass(li, classes);
         }
@@ -206,11 +226,12 @@ var AppSidebarNavTitleComponent = /** @class */ (function () {
             this.renderer.appendChild(li, name);
         }
         this.renderer.appendChild(nativeElement, li);
-        Replace(this.el);
+        // Replace(this.el);
     };
     AppSidebarNavTitleComponent.decorators = [
         { type: Component, args: [{
                     selector: 'app-sidebar-nav-title',
+                    // template: '<li [ngClass]="hasClass() ? 'nav-title ' + title.class : 'nav-title'">{{title.name}}</li>'
                     template: ''
                 },] },
     ];

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-// App Breadcrumb Component
 import { AppBreadcrumbService } from './app-breadcrumb.service';
 import { AppBreadcrumbComponent } from './app-breadcrumb.component';
 var AppBreadcrumbModule = /** @class */ (function () {
