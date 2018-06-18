@@ -147,8 +147,8 @@ export class AppSidebarNavLinkComponent implements OnInit {
   }
 
   public hideMobile() {
-    if (document.body.classList.contains('sidebar-mobile-show')) {
-      document.body.classList.toggle('sidebar-mobile-show');
+    if (document.body.classList.contains('sidebar-show')) {
+      document.body.classList.toggle('sidebar-show');
     }
   }
 
