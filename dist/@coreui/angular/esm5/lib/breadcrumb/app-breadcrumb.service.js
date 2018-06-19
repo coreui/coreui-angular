@@ -42,20 +42,13 @@ var AppBreadcrumbService = /** @class */ (function () {
     ];
     /** @nocollapse */
     AppBreadcrumbService.ctorParameters = function () { return [
-        { type: Router, },
-        { type: ActivatedRoute, },
+        { type: Router },
+        { type: ActivatedRoute }
     ]; };
     return AppBreadcrumbService;
 }());
 export { AppBreadcrumbService };
 function AppBreadcrumbService_tsickle_Closure_declarations() {
-    /** @type {!Array<{type: !Function, args: (undefined|!Array<?>)}>} */
-    AppBreadcrumbService.decorators;
-    /**
-     * @nocollapse
-     * @type {function(): !Array<(null|{type: ?, decorators: (undefined|!Array<{type: !Function, args: (undefined|!Array<?>)}>)})>}
-     */
-    AppBreadcrumbService.ctorParameters;
     /** @type {?} */
     AppBreadcrumbService.prototype.breadcrumbs;
     /** @type {?} */
