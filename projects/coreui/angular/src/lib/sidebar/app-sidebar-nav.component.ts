@@ -113,6 +113,8 @@ export class AppSidebarNavItemComponent implements OnInit {
       [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
       routerLinkActive="active"
       [routerLink]="[link.url]"
+      [queryParams]=getQueryParams()
+      [routerLinkActiveOptions]=getActiveOptions()
       (click)="hideMobile()">
       <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
       {{ link.name }}
@@ -132,6 +134,14 @@ export class AppSidebarNavLinkComponent implements OnInit {
 
   public hasVariant() {
     return this.link.variant ? true : false;
+  }
+
+  public getQueryParams() {
+    return this.link.queryParams ? this.link.queryParams : {};
+  }
+
+  public getActiveOptions() {
+    return this.link.activeOptions ? this.link.activeOptions : '';
   }
 
   public isBadge() {
