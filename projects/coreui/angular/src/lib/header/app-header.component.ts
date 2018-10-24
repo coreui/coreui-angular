@@ -96,4 +96,8 @@ export class AppHeaderComponent implements OnInit {
     console.log(breakpoint);
     return breakpoint ? breakpoint : '';
   }
+  
+  ngOnDestroy() {
+    document.querySelector('body').classList.remove('header-fixed');
+  }
 }

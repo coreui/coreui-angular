@@ -51,4 +51,15 @@ export class AppSidebarComponent implements OnInit {
       document.querySelector('body').classList.add(cssClass);
     }
   }
+  
+  ngOnDestroy() {
+    document.querySelector('body').classList.remove('sidebar-compact');
+    document.querySelector('body').classList.remove('sidebar-fixed');
+    document.querySelector('body').classList.remove('sidebar-minimized');
+    document.querySelector('body').classList.remove('sidebar-off-canvas');
+    document.querySelector('body').classList.remove('sidebar-fixed');
+	let cssClass;
+    this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
+    document.querySelector('body').classList.remove(cssClass);
+  }
 }

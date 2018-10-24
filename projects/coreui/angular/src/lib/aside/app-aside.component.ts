@@ -37,4 +37,13 @@ export class AppAsideComponent implements OnInit {
       document.querySelector('body').classList.add(cssClass);
     }
   }
+  
+  ngOnDestroy() {
+    document.querySelector('body').classList.remove('aside-menu-fixed');
+    document.querySelector('body').classList.remove('aside-menu-off-canvas');
+
+    let cssClass;
+    this.display ? cssClass = `aside-menu-${this.display}-show` : cssClass = asideMenuCssClasses[0];
+    document.querySelector('body').classList.remove(cssClass);
+  }
 }
