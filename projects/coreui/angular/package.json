@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0",
   "license": "MIT",
   "author": {
     "name": "Łukasz Holeczek",
@@ -15,8 +15,8 @@
     }
   ],
   "peerDependencies": {
-    "@angular/common": "^6.0.0",
-    "@angular/core": "^6.0.0",
-    "@coreui/coreui": "^2.0.0"
+    "@angular/common": "^6.1.10",
+    "@angular/core": "^6.1.10",
+    "@coreui/coreui": "^2.0.21"
   }
 }
