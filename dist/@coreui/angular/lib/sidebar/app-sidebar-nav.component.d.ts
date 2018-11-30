@@ -12,6 +12,18 @@ export declare class NavDropdownToggleDirective {
     constructor(dropdown: NavDropdownDirective);
     toggleOpen($event: any): void;
 }
+export declare class LinkAttributesDirective implements OnInit {
+    private renderer;
+    private el;
+    appLinkAttributes: {
+        [key: string]: string;
+    };
+    constructor(renderer: Renderer2, el: ElementRef);
+    ngOnInit(): void;
+    private setStyle;
+    private addClass;
+    private setAttrib;
+}
 export declare class AppSidebarNavComponent {
     navItems: any;
     true: any;
@@ -36,8 +48,15 @@ export declare class AppSidebarNavLinkComponent implements OnInit {
     private router;
     private el;
     link: any;
+    getClasses(): {
+        'nav-link': boolean;
+        'disabled': boolean;
+        'btn-link': boolean;
+    };
+    getLinkType(): "" | "disabled" | "external";
     hasVariant(): boolean;
     isBadge(): boolean;
+    isDisabled(): boolean;
     isExternalLink(): boolean;
     isIcon(): boolean;
     hideMobile(): void;

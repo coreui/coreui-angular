@@ -59,7 +59,7 @@ $ npm install @coreui/angular --save
 ### Yarn
 
 ``` bash
-$ yarn add @coreui/angular@2.0.0
+$ yarn add @coreui/angular@2.1.0
 ```
 
 ## Usage
