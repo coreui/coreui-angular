@@ -1,4 +1,4 @@
-import { Component, Directive, ElementRef, HostBinding, HostListener, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
+import { Component, Directive, ElementRef, Inject, Injectable, HostBinding, HostListener, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 import { Replace } from './../shared';
 
 @Directive({
@@ -26,6 +26,46 @@ export class NavDropdownToggleDirective {
   toggleOpen($event: any) {
     $event.preventDefault();
     this.dropdown.toggle();
+  }
+}
+
+@Directive({
+  selector: '[appLinkAttributes]'
+})
+export class LinkAttributesDirective implements OnInit {
+  @Input() appLinkAttributes: {[key: string]: string };
+  constructor(private renderer: Renderer2, private el: ElementRef) {}
+
+  ngOnInit() {
+    const attribs = this.appLinkAttributes
+    for (let attr in attribs) {
+      if (attr==='style' && typeof(attribs[attr])==='object' ) {
+        this.setStyle(attribs[attr]);
+      } else if (attr==='class') {
+        this.addClass(attribs[attr]);
+      } else {
+        this.setAttrib(attr, attribs[attr]);
+      }
+    }
+  }
+
+  private setStyle(styles) {
+    for (let style in styles) {
+      this.renderer.setStyle(this.el.nativeElement, style, styles[style] );
+    }
+  }
+
+  private addClass(classes) {
+    let classArray = Array.isArray(classes) ? classes : classes.split(" ")
+    classArray.forEach(element => {
+      this.renderer.addClass(this.el.nativeElement, element );      
+    });
+  }
+
+  private setAttrib(key, value) {
+    let newAttr = document.createAttribute(key);
+    newAttr.value = value;
+    this.renderer.setAttribute(this.el.nativeElement, key, value );
   }
 }
 
@@ -103,32 +143,60 @@ export class AppSidebarNavItemComponent implements OnInit {
   ngOnInit() {
     Replace(this.el);
   }
-
 }
 
 @Component({
   selector: 'app-sidebar-nav-link',
   template: `
-    <a *ngIf="!isExternalLink(); else external"
-      [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
-      routerLinkActive="active"
-      [routerLink]="[link.url]"
-      (click)="hideMobile()">
-      <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-      {{ link.name }}
-      <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-    </a>
-    <ng-template #external>
-      <a [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'" href="{{link.url}}">
+    <ng-container [ngSwitch]="getLinkType()">
+      <a *ngSwitchCase="'disabled'"
+      [attr.disabled]="true"
+      [appLinkAttributes]="link.attributes"
+      href=""
+      [ngClass]="getClasses()"
+      >
+        <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
+          {{ link.name }}
+          <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
+        </a>
+      <a *ngSwitchCase="'external'" [ngClass]="getClasses()" href="{{link.url}}" [appLinkAttributes]="link.attributes">
         <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
         {{ link.name }}
         <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
       </a>
-    </ng-template>
+      <a *ngSwitchDefault
+        [ngClass]="getClasses()"
+        [appLinkAttributes]="link.attributes"
+        routerLinkActive="active"
+        [routerLink]="[link.url]"
+        (click)="hideMobile()">
+        <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
+        {{ link.name }}
+        <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
+      </a>
+    </ng-container>
   `
 })
 export class AppSidebarNavLinkComponent implements OnInit {
   @Input() link: any;
+
+  public getClasses() {
+    const disabled = this.isDisabled()
+    const classes = {
+      'nav-link': true,
+      'disabled': disabled,
+      'btn-link': disabled
+    }
+    if (this.hasVariant()) {
+      const variant = `nav-link-${this.link.variant}`;
+      classes[variant] = true; 
+    }
+    return classes
+  }
+
+  public getLinkType() {
+    return this.isDisabled() ? 'disabled' : this.isExternalLink() ? 'external' : ''
+  }
 
   public hasVariant() {
     return this.link.variant ? true : false;
@@ -136,6 +204,10 @@ export class AppSidebarNavLinkComponent implements OnInit {
 
   public isBadge() {
     return this.link.badge ? true : false;
+  }
+
+  public isDisabled() {
+    return this.link.attributes && this.link.attributes.disabled ? true : false;
   }
 
   public isExternalLink() {
