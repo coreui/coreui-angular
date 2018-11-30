@@ -15,7 +15,7 @@ export declare class SidebarMinimizeDirective {
 }
 export declare class MobileSidebarToggleDirective {
     constructor();
-    private hasClass(target, elementClassName);
+    private hasClass;
     toggleOpen($event: any): void;
 }
 /**
@@ -23,8 +23,8 @@ export declare class MobileSidebarToggleDirective {
 */
 export declare class SidebarOffCanvasCloseDirective {
     constructor();
-    private hasClass(target, elementClassName);
-    private toggleClass(elem, elementClassName);
+    private hasClass;
+    private toggleClass;
     toggleOpen($event: any): void;
 }
 export declare class BrandMinimizeDirective {
