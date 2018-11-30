@@ -1,5 +1,5 @@
-import { Component, Directive, ElementRef, Inject, Injectable, HostBinding, HostListener, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
-import { Replace } from './../shared';
+import { Component, Directive, ElementRef, HostBinding, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+import { Replace } from '../shared';
 
 @Directive({
   selector: '[appNavDropdown]'
@@ -37,11 +37,11 @@ export class LinkAttributesDirective implements OnInit {
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 
   ngOnInit() {
-    const attribs = this.appLinkAttributes
-    for (let attr in attribs) {
-      if (attr==='style' && typeof(attribs[attr])==='object' ) {
+    const attribs = this.appLinkAttributes;
+    for (const attr in attribs) {
+      if (attr === 'style' && typeof(attribs[attr]) === 'object' ) {
         this.setStyle(attribs[attr]);
-      } else if (attr==='class') {
+      } else if (attr === 'class') {
         this.addClass(attribs[attr]);
       } else {
         this.setAttrib(attr, attribs[attr]);
@@ -50,20 +50,20 @@ export class LinkAttributesDirective implements OnInit {
   }
 
   private setStyle(styles) {
-    for (let style in styles) {
+    for (const style in styles) {
       this.renderer.setStyle(this.el.nativeElement, style, styles[style] );
     }
   }
 
   private addClass(classes) {
-    let classArray = Array.isArray(classes) ? classes : classes.split(" ")
+    const classArray = Array.isArray(classes) ? classes : classes.split(' ');
     classArray.forEach(element => {
-      this.renderer.addClass(this.el.nativeElement, element );      
+      this.renderer.addClass(this.el.nativeElement, element );
     });
   }
 
   private setAttrib(key, value) {
-    let newAttr = document.createAttribute(key);
+    const newAttr = document.createAttribute(key);
     newAttr.value = value;
     this.renderer.setAttribute(this.el.nativeElement, key, value );
   }
@@ -181,21 +181,21 @@ export class AppSidebarNavLinkComponent implements OnInit {
   @Input() link: any;
 
   public getClasses() {
-    const disabled = this.isDisabled()
+    const disabled = this.isDisabled();
     const classes = {
       'nav-link': true,
       'disabled': disabled,
       'btn-link': disabled
-    }
+    };
     if (this.hasVariant()) {
       const variant = `nav-link-${this.link.variant}`;
-      classes[variant] = true; 
+      classes[variant] = true;
     }
-    return classes
+    return classes;
   }
 
   public getLinkType() {
-    return this.isDisabled() ? 'disabled' : this.isExternalLink() ? 'external' : ''
+    return this.isDisabled() ? 'disabled' : this.isExternalLink() ? 'external' : '';
   }
 
   public hasVariant() {
