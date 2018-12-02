@@ -17,7 +17,8 @@ import {
   AppSidebarNavLinkComponent,
   AppSidebarNavTitleComponent,
   NavDropdownDirective,
-  NavDropdownToggleDirective
+  NavDropdownToggleDirective,
+  LinkAttributesDirective
 } from './app-sidebar-nav.component';
 
 @NgModule({
@@ -39,6 +40,7 @@ import {
     AppSidebarNavTitleComponent,
     NavDropdownDirective,
     NavDropdownToggleDirective,
+    LinkAttributesDirective,
     LayoutModule
   ],
   declarations: [
@@ -54,7 +56,8 @@ import {
     AppSidebarNavLinkComponent,
     AppSidebarNavTitleComponent,
     NavDropdownDirective,
-    NavDropdownToggleDirective
+    NavDropdownToggleDirective,
+    LinkAttributesDirective
   ]
 })
 export class AppSidebarModule { }

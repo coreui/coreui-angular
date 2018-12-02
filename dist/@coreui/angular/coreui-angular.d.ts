@@ -13,5 +13,5 @@ export { AppSidebarFooterComponent as ɵm } from './lib/sidebar/app-sidebar-foot
 export { AppSidebarFormComponent as ɵn } from './lib/sidebar/app-sidebar-form.component';
 export { AppSidebarHeaderComponent as ɵo } from './lib/sidebar/app-sidebar-header.component';
 export { AppSidebarMinimizerComponent as ɵp } from './lib/sidebar/app-sidebar-minimizer.component';
-export { AppSidebarNavComponent as ɵt, AppSidebarNavDropdownComponent as ɵw, AppSidebarNavItemComponent as ɵu, AppSidebarNavLinkComponent as ɵv, AppSidebarNavTitleComponent as ɵx, NavDropdownDirective as ɵr, NavDropdownToggleDirective as ɵs } from './lib/sidebar/app-sidebar-nav.component';
+export { AppSidebarNavComponent as ɵu, AppSidebarNavDropdownComponent as ɵx, AppSidebarNavItemComponent as ɵv, AppSidebarNavLinkComponent as ɵw, AppSidebarNavTitleComponent as ɵy, LinkAttributesDirective as ɵt, NavDropdownDirective as ɵr, NavDropdownToggleDirective as ɵs } from './lib/sidebar/app-sidebar-nav.component';
 export { AppSidebarComponent as ɵq } from './lib/sidebar/app-sidebar.component';
