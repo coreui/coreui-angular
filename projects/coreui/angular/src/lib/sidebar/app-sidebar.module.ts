@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule} from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from './../shared/layout/layout.module';
 
 // App Sidebar Component
