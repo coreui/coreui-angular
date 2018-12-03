@@ -18,7 +18,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-lib": "ng build @coreui/angular --prod",
+    "build-lib": "ng build @coreui/angular",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
