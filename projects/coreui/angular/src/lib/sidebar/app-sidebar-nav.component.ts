@@ -153,12 +153,11 @@ export class AppSidebarNavItemComponent implements OnInit {
       [attr.disabled]="true"
       [appLinkAttributes]="link.attributes"
       href=""
-      [ngClass]="getClasses()"
-      >
+      [ngClass]="getClasses()">
         <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-          {{ link.name }}
-          <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-        </a>
+        {{ link.name }}
+        <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
+      </a>
       <a *ngSwitchCase="'external'" [ngClass]="getClasses()" href="{{link.url}}" [appLinkAttributes]="link.attributes">
         <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
         {{ link.name }}

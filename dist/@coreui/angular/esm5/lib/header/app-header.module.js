@@ -22,7 +22,7 @@ var AppHeaderModule = /** @class */ (function () {
                     declarations: [
                         AppHeaderComponent
                     ]
-                },] },
+                },] }
     ];
     return AppHeaderModule;
 }());

@@ -29,7 +29,7 @@ var LayoutModule = /** @class */ (function () {
                         SidebarMinimizeDirective,
                         SidebarOffCanvasCloseDirective
                     ]
-                },] },
+                },] }
     ];
     return LayoutModule;
 }());

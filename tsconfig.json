@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "importHelpers": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -22,6 +23,9 @@
       ],
       "angular": [
         "dist/angular"
+      ],
+      "angular/*": [
+        "dist/angular/*"
       ]
     }
   }

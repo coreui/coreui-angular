@@ -13,7 +13,7 @@ var AppFooterModule = /** @class */ (function () {
                     imports: [CommonModule],
                     exports: [AppFooterComponent],
                     declarations: [AppFooterComponent]
-                },] },
+                },] }
     ];
     return AppFooterModule;
 }());

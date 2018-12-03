@@ -53,7 +53,7 @@ export declare class AppSidebarNavLinkComponent implements OnInit {
         'disabled': boolean;
         'btn-link': boolean;
     };
-    getLinkType(): "" | "disabled" | "external";
+    getLinkType(): "disabled" | "" | "external";
     hasVariant(): boolean;
     isBadge(): boolean;
     isDisabled(): boolean;
