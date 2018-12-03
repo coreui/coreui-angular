@@ -22,7 +22,7 @@ var AppAsideModule = /** @class */ (function () {
                     declarations: [
                         AppAsideComponent
                     ]
-                },] },
+                },] }
     ];
     return AppAsideModule;
 }());
