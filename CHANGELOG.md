@@ -1,5 +1,16 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.2.1`
+- fix: remove `-fixed` class on layout components destroy
+- chore: commit `package-lock.json`
+- chore: add [README](./projects/coreui/angular/README.md) 
+- update: `core-js` to `2.6.0`
+- update: `@angular-devkit/build-angular` to `0.11.1`
+- update: `@angular-devkit/build-ng-packagr` to `0.11.1`
+- update: `@angular/cli` to `7.1.1`
+- update: `@types/jasmine` to `3.3.1`
+- update: `@types/node` to `10.12.12`
+
 ##### `v2.2.0`
 - chore: build with Angular 7 
 - chore: update Angular to `^7.1.0` see: https://update.angular.io/

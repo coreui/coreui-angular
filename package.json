@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "license": "MIT",
   "author": {
     "name": "Łukasz Holeczek",
@@ -18,11 +18,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-lib": "ng build @coreui/angular",
+    "build-lib": "ng build @coreui/angular --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "publish": "cd dist/@coreui/angular/ && npm publish",
+    "link": "cd dist/@coreui/angular/ && npm link",
     "release-version": "node build/change-version.js"
   },
   "private": true,
