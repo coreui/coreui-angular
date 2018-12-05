@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit  } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 import { Replace } from './../shared';
 import { AppBreadcrumbService } from './app-breadcrumb.service';
 
@@ -15,7 +15,7 @@ import { AppBreadcrumbService } from './app-breadcrumb.service';
     </ng-template>
   `
 })
-export class AppBreadcrumbComponent implements OnInit {
+export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed: boolean;
   public breadcrumbs;
 
@@ -25,6 +25,10 @@ export class AppBreadcrumbComponent implements OnInit {
     Replace(this.el);
     this.isFixed(this.fixed);
     this.breadcrumbs = this.service.breadcrumbs;
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('breadcrumb-fixed');
   }
 
   isFixed(fixed: boolean): void {

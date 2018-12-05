@@ -1,5 +1,5 @@
-import { OnInit } from '@angular/core';
-export declare class AppSidebarComponent implements OnInit {
+import { OnInit, OnDestroy } from '@angular/core';
+export declare class AppSidebarComponent implements OnInit, OnDestroy {
     compact: boolean;
     display: any;
     fixed: boolean;
@@ -8,6 +8,7 @@ export declare class AppSidebarComponent implements OnInit {
     true: any;
     constructor();
     ngOnInit(): void;
+    ngOnDestroy(): void;
     isCompact(compact: boolean): void;
     isFixed(fixed: boolean): void;
     isMinimized(minimized: boolean): void;

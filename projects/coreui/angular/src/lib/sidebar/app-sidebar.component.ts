@@ -1,11 +1,11 @@
-import { Component, Input, HostBinding, OnInit } from '@angular/core';
+import { Component, Input, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { sidebarCssClasses } from './../shared';
 
 @Component({
   selector: 'app-sidebar',
   template: `<ng-content></ng-content>`
 })
-export class AppSidebarComponent implements OnInit {
+export class AppSidebarComponent implements OnInit, OnDestroy {
   @Input() compact: boolean;
   @Input() display: any;
   @Input() fixed: boolean;
@@ -16,12 +16,16 @@ export class AppSidebarComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.displayBreakpoint(this.display);
     this.isCompact(this.compact);
     this.isFixed(this.fixed);
     this.isMinimized(this.minimized);
     this.isOffCanvas(this.offCanvas);
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('sidebar-fixed');
   }
 
   isCompact(compact: boolean): void {
@@ -41,6 +45,7 @@ export class AppSidebarComponent implements OnInit {
   }
 
   fixedPosition(fixed: boolean): void {
+    console.warn('fixedPosition() is deprecated, use isFixed() instead')
     if (this.fixed) { document.querySelector('body').classList.add('sidebar-fixed'); }
   }
 

@@ -1,5 +1,5 @@
-import { ElementRef, OnInit } from '@angular/core';
-export declare class AppHeaderComponent implements OnInit {
+import { ElementRef, OnInit, OnDestroy } from '@angular/core';
+export declare class AppHeaderComponent implements OnInit, OnDestroy {
     private el;
     fixed: boolean;
     navbarBrand: any;
@@ -11,6 +11,7 @@ export declare class AppHeaderComponent implements OnInit {
     mobileAsideMenuToggler: any;
     constructor(el: ElementRef);
     ngOnInit(): void;
+    ngOnDestroy(): void;
     isFixed(fixed: boolean): void;
     imgSrc(brand: any): void;
     imgWidth(brand: any): void;
