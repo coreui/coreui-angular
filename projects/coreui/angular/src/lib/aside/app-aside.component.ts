@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 import { asideMenuCssClasses, Replace } from './../shared/index';
 
 @Component({
@@ -9,17 +9,22 @@ import { asideMenuCssClasses, Replace } from './../shared/index';
     </aside>
   `
 })
-export class AppAsideComponent implements OnInit {
+export class AppAsideComponent implements OnInit, OnDestroy {
   @Input() display: any;
   @Input() fixed: boolean;
   @Input() offCanvas: boolean;
 
   constructor(private el: ElementRef) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     Replace(this.el);
     this.isFixed(this.fixed);
+    this.isOffCanvas(this.offCanvas);
     this.displayBreakpoint(this.display);
+  }
+
+  ngOnDestroy(): void {
+      document.body.classList.remove('aside-menu-fixed');
   }
 
   isFixed(fixed: boolean): void {

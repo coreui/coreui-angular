@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 import { Replace } from './../shared';
 
 @Component({
@@ -51,7 +51,7 @@ import { Replace } from './../shared';
     </header>
   `
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
 
   @Input() fixed: boolean;
 
@@ -67,9 +67,13 @@ export class AppHeaderComponent implements OnInit {
 
   constructor(private el: ElementRef) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     Replace(this.el);
     this.isFixed(this.fixed);
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('header-fixed');
   }
 
   isFixed(fixed: boolean): void {
