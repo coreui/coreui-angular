@@ -401,7 +401,17 @@ var AppAsideComponent = /** @class */ (function () {
     function () {
         Replace(this.el);
         this.isFixed(this.fixed);
+        this.isOffCanvas(this.offCanvas);
         this.displayBreakpoint(this.display);
+    };
+    /**
+     * @return {?}
+     */
+    AppAsideComponent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        document.body.classList.remove('aside-menu-fixed');
     };
     /**
      * @param {?} fixed
@@ -565,6 +575,15 @@ var AppBreadcrumbComponent = /** @class */ (function () {
         this.breadcrumbs = this.service.breadcrumbs;
     };
     /**
+     * @return {?}
+     */
+    AppBreadcrumbComponent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        document.body.classList.remove('breadcrumb-fixed');
+    };
+    /**
      * @param {?} fixed
      * @return {?}
      */
@@ -652,6 +671,15 @@ var AppFooterComponent = /** @class */ (function () {
         this.isFixed(this.fixed);
     };
     /**
+     * @return {?}
+     */
+    AppFooterComponent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        document.body.classList.remove('footer-fixed');
+    };
+    /**
      * @param {?} fixed
      * @return {?}
      */
@@ -719,6 +747,15 @@ var AppHeaderComponent = /** @class */ (function () {
     function () {
         Replace(this.el);
         this.isFixed(this.fixed);
+    };
+    /**
+     * @return {?}
+     */
+    AppHeaderComponent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        document.body.classList.remove('header-fixed');
     };
     /**
      * @param {?} fixed
@@ -983,6 +1020,15 @@ var AppSidebarComponent = /** @class */ (function () {
         this.isOffCanvas(this.offCanvas);
     };
     /**
+     * @return {?}
+     */
+    AppSidebarComponent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        document.body.classList.remove('sidebar-fixed');
+    };
+    /**
      * @param {?} compact
      * @return {?}
      */
@@ -1043,6 +1089,7 @@ var AppSidebarComponent = /** @class */ (function () {
      * @return {?}
      */
     function (fixed) {
+        console.warn('fixedPosition() is deprecated, use isFixed() instead');
         if (this.fixed) {
             document.querySelector('body').classList.add('sidebar-fixed');
         }

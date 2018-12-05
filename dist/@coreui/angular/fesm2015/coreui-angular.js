@@ -329,7 +329,14 @@ class AppAsideComponent {
     ngOnInit() {
         Replace(this.el);
         this.isFixed(this.fixed);
+        this.isOffCanvas(this.offCanvas);
         this.displayBreakpoint(this.display);
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        document.body.classList.remove('aside-menu-fixed');
     }
     /**
      * @param {?} fixed
@@ -484,6 +491,12 @@ class AppBreadcrumbComponent {
         this.breadcrumbs = this.service.breadcrumbs;
     }
     /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        document.body.classList.remove('breadcrumb-fixed');
+    }
+    /**
      * @param {?} fixed
      * @return {?}
      */
@@ -568,6 +581,12 @@ class AppFooterComponent {
         this.isFixed(this.fixed);
     }
     /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        document.body.classList.remove('footer-fixed');
+    }
+    /**
      * @param {?} fixed
      * @return {?}
      */
@@ -631,6 +650,12 @@ class AppHeaderComponent {
     ngOnInit() {
         Replace(this.el);
         this.isFixed(this.fixed);
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        document.body.classList.remove('header-fixed');
     }
     /**
      * @param {?} fixed
@@ -918,6 +943,12 @@ class AppSidebarComponent {
         this.isOffCanvas(this.offCanvas);
     }
     /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        document.body.classList.remove('sidebar-fixed');
+    }
+    /**
      * @param {?} compact
      * @return {?}
      */
@@ -958,6 +989,7 @@ class AppSidebarComponent {
      * @return {?}
      */
     fixedPosition(fixed) {
+        console.warn('fixedPosition() is deprecated, use isFixed() instead');
         if (this.fixed) {
             document.querySelector('body').classList.add('sidebar-fixed');
         }
