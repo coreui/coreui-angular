@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit  } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 import { Replace } from './../shared';
 
 @Component({
@@ -9,14 +9,18 @@ import { Replace } from './../shared';
     </footer>
   `
 })
-export class AppFooterComponent implements OnInit {
+export class AppFooterComponent implements OnInit, OnDestroy {
   @Input() fixed: boolean;
 
   constructor(private el: ElementRef) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     Replace(this.el);
     this.isFixed(this.fixed);
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('footer-fixed');
   }
 
   isFixed(fixed: boolean): void {
