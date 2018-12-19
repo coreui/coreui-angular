@@ -45,7 +45,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   }
 
   fixedPosition(fixed: boolean): void {
-    console.warn('fixedPosition() is deprecated, use isFixed() instead')
+    console.warn('deprecated fixedPosition(), use isFixed() instead');
     if (this.fixed) { document.querySelector('body').classList.add('sidebar-fixed'); }
   }
 
