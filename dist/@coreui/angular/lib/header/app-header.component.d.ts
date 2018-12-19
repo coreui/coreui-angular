@@ -5,10 +5,13 @@ export declare class AppHeaderComponent implements OnInit, OnDestroy {
     navbarBrand: any;
     navbarBrandFull: any;
     navbarBrandMinimized: any;
+    navbarBrandText: any;
+    navbarBrandHref: any;
     sidebarToggler: any;
     mobileSidebarToggler: any;
     asideMenuToggler: any;
     mobileAsideMenuToggler: any;
+    navbarBrandImg: boolean;
     constructor(el: ElementRef);
     ngOnInit(): void;
     ngOnDestroy(): void;

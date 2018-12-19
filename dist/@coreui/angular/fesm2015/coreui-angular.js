@@ -643,6 +643,8 @@ class AppHeaderComponent {
      */
     constructor(el) {
         this.el = el;
+        this.navbarBrandText = { icon: '🅲', text: '🅲 CoreUI' };
+        this.navbarBrandHref = '';
     }
     /**
      * @return {?}
@@ -650,6 +652,7 @@ class AppHeaderComponent {
     ngOnInit() {
         Replace(this.el);
         this.isFixed(this.fixed);
+        this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
     }
     /**
      * @return {?}
@@ -713,8 +716,8 @@ AppHeaderComponent.decorators = [
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
-      <ng-template [ngIf]="navbarBrand || navbarBrandFull || navbarBrandMinimized">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" [href]="navbarBrandHref">
+          <ng-template [ngIf]="navbarBrandImg">
           <img *ngIf="navbarBrand"
                [src]="imgSrc(navbarBrand)"
                [attr.width]="imgWidth(navbarBrand)"
@@ -733,8 +736,12 @@ AppHeaderComponent.decorators = [
                [attr.height]="imgHeight(navbarBrandMinimized)"
                [attr.alt]="imgAlt(navbarBrandMinimized)"
                class="navbar-brand-minimized">
+          </ng-template>
+          <ng-template [ngIf]="!navbarBrandImg">
+            <div class="navbar-brand-full" [innerHTML]="navbarBrandText.text"></div>
+            <div class="navbar-brand-minimized" [innerHTML]="navbarBrandText.icon"></div>
+          </ng-template>
         </a>
-      </ng-template>
       <ng-template [ngIf]="sidebarToggler != false">
         <button class="navbar-toggler d-md-down-none" type="button" [appSidebarToggler]="sidebarToggler">
           <span class="navbar-toggler-icon"></span>
@@ -764,6 +771,8 @@ AppHeaderComponent.propDecorators = {
     navbarBrand: [{ type: Input }],
     navbarBrandFull: [{ type: Input }],
     navbarBrandMinimized: [{ type: Input }],
+    navbarBrandText: [{ type: Input }],
+    navbarBrandHref: [{ type: Input }],
     sidebarToggler: [{ type: Input }],
     mobileSidebarToggler: [{ type: Input }],
     asideMenuToggler: [{ type: Input }],
@@ -989,7 +998,7 @@ class AppSidebarComponent {
      * @return {?}
      */
     fixedPosition(fixed) {
-        console.warn('fixedPosition() is deprecated, use isFixed() instead');
+        console.warn('deprecated fixedPosition(), use isFixed() instead');
         if (this.fixed) {
             document.querySelector('body').classList.add('sidebar-fixed');
         }

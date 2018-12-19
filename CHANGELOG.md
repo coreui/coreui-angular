@@ -1,5 +1,31 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.2.2`
+- refactor(app-header): new prop `navbarBrandText` = {icon: 'C', text: 'CoreUI'} render as innerHTML
+- refactor(app-header): new prop `navbarBrandHref` = ''
+- refactor(app-header): `navbarBrandImg`: Boolean
+- fix(app-sidebar): missing semicolon
+- fix(angular.json): missing css path
+- update: `@angular/animations` to `7.1.4`
+- update: `@angular/common` to `7.1.4`
+- update: `@angular/compiler` to `7.1.4`
+- update: `@angular/core` to `7.1.4`
+- update: `@angular/forms` to `7.1.4`
+- update: `@angular/http` to `7.1.4`
+- update: `@angular/platform-browser` to `7.1.4`
+- update: `@angular/platform-browser-dynamic` to `7.1.4`
+- update: `@angular/router` to `7.1.4`
+- update: `core-js` to `2.6.1`
+- update: `@angular-devkit/build-angular` to `0.11.3`
+- update: `@angular-devkit/build-ng-packagr` to `0.11.3`
+- update: `@angular/cli` to `7.1.3`
+- update: `@angular/compiler-cli` to `7.1.4`
+- update: `@angular/language-service` to `7.1.4`
+- update: `@types/jasmine` to `3.3.4`
+- update: `@types/node` to `10.12.17`
+- update: `karma` to `3.1.4`
+- update: `tslint` to `5.12.0`
+
 ##### `v2.2.1`
 - fix: remove `-fixed` class on layout components destroy
 - chore: commit `package-lock.json`

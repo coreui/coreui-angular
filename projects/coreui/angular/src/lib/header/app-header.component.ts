@@ -10,8 +10,8 @@ import { Replace } from './../shared';
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
-      <ng-template [ngIf]="navbarBrand || navbarBrandFull || navbarBrandMinimized">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" [href]="navbarBrandHref">
+          <ng-template [ngIf]="navbarBrandImg">
           <img *ngIf="navbarBrand"
                [src]="imgSrc(navbarBrand)"
                [attr.width]="imgWidth(navbarBrand)"
@@ -30,8 +30,12 @@ import { Replace } from './../shared';
                [attr.height]="imgHeight(navbarBrandMinimized)"
                [attr.alt]="imgAlt(navbarBrandMinimized)"
                class="navbar-brand-minimized">
+          </ng-template>
+          <ng-template [ngIf]="!navbarBrandImg">
+            <div class="navbar-brand-full" [innerHTML]="navbarBrandText.text"></div>
+            <div class="navbar-brand-minimized" [innerHTML]="navbarBrandText.icon"></div>
+          </ng-template>
         </a>
-      </ng-template>
       <ng-template [ngIf]="sidebarToggler != false">
         <button class="navbar-toggler d-md-down-none" type="button" [appSidebarToggler]="sidebarToggler">
           <span class="navbar-toggler-icon"></span>
@@ -58,6 +62,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   @Input() navbarBrand: any;
   @Input() navbarBrandFull: any;
   @Input() navbarBrandMinimized: any;
+  @Input() navbarBrandText: any = {icon: '🅲', text: '🅲 CoreUI'};
+  @Input() navbarBrandHref: any = '';
 
   @Input() sidebarToggler: any;
   @Input() mobileSidebarToggler: any;
@@ -65,11 +71,14 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   @Input() asideMenuToggler: any;
   @Input() mobileAsideMenuToggler: any;
 
+  navbarBrandImg: boolean;
+
   constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
     Replace(this.el);
     this.isFixed(this.fixed);
+    this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
   }
 
   ngOnDestroy(): void {
