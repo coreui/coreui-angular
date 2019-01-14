@@ -1184,6 +1184,13 @@ class AppSidebarNavComponent {
     isTitle(item) {
         return item.title ? true : false;
     }
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
+    ngOnChanges(changes) {
+        this.navItemsArray = JSON.parse(JSON.stringify(this.navItems));
+    }
 }
 AppSidebarNavComponent.decorators = [
     { type: Component, args: [{

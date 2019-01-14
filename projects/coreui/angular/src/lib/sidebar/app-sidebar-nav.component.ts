@@ -1,4 +1,15 @@
-import { Component, Directive, ElementRef, HostBinding, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+import {
+  Component,
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Renderer2,
+  SimpleChanges
+} from '@angular/core';
 import { Replace } from '../shared';
 
 @Directive({
@@ -84,11 +95,13 @@ export class LinkAttributesDirective implements OnInit {
       </ng-template>
     </ul>`
 })
-export class AppSidebarNavComponent {
-  @Input() navItems: any;
+export class AppSidebarNavComponent implements OnChanges {
+  @Input() navItems: Array<any>;
 
   @HostBinding('class.sidebar-nav') true;
   @HostBinding('attr.role') role = 'nav';
+
+  public navItemsArray: Array<any>;
 
   public isDivider(item) {
     return item.divider ? true : false;
@@ -96,6 +109,10 @@ export class AppSidebarNavComponent {
 
   public isTitle(item) {
     return item.title ? true : false;
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    this.navItemsArray = JSON.parse(JSON.stringify(this.navItems));
   }
 
   constructor() { }

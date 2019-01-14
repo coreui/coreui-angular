@@ -1,5 +1,26 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.2.3`
+- refactor(app-sidebar-nav): minor changes
+- update: `@angular/animations` to `^7.2.0`
+- update: `@angular/common` to `^7.2.0`
+- update: `@angular/compiler` to `^7.2.0`
+- update: `@angular/core` to `^7.2.0`
+- update: `@angular/forms` to `^7.2.0`
+- update: `@angular/http` to `^7.2.0`
+- update: `@angular/platform-browser` to `^7.2.0`
+- update: `@angular/platform-browser-dynamic` to `^7.2.0`
+- update: `@angular/router` to `^7.2.0`
+- update: `core-js` to `^2.6.2`
+- update: `zone.js` to `^0.8.27`
+- update: `@angular-devkit/build-angular` to `^0.12.1`
+- update: `@angular-devkit/build-ng-packagr` to `^0.12.1`
+- update: `@angular/cli` to `^7.2.1`
+- update: `@angular/compiler-cli` to `^7.2.0`
+- update: `@angular/language-service` to `^7.2.0`
+- update: `@types/jasmine` to `^3.3.5`
+- update: `@types/node` to `^10.12.18`
+
 ##### `v2.2.2`
 - refactor(app-header): new prop `navbarBrandText` = {icon: 'C', text: 'CoreUI'} render as innerHTML
 - refactor(app-header): new prop `navbarBrandHref` = ''

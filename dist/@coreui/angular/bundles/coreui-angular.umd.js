@@ -1337,6 +1337,17 @@
             function (item) {
                 return item.title ? true : false;
             };
+        /**
+         * @param {?} changes
+         * @return {?}
+         */
+        AppSidebarNavComponent.prototype.ngOnChanges = /**
+         * @param {?} changes
+         * @return {?}
+         */
+            function (changes) {
+                this.navItemsArray = JSON.parse(JSON.stringify(this.navItems));
+            };
         AppSidebarNavComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-nav',
