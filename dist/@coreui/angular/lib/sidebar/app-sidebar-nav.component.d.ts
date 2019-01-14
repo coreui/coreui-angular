@@ -1,4 +1,4 @@
-import { ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { ElementRef, OnChanges, OnInit, Renderer2, SimpleChanges } from '@angular/core';
 export declare class NavDropdownDirective {
     private el;
     constructor(el: ElementRef);
@@ -24,12 +24,14 @@ export declare class LinkAttributesDirective implements OnInit {
     private addClass;
     private setAttrib;
 }
-export declare class AppSidebarNavComponent {
-    navItems: any;
+export declare class AppSidebarNavComponent implements OnChanges {
+    navItems: Array<any>;
     true: any;
     role: string;
+    navItemsArray: Array<any>;
     isDivider(item: any): boolean;
     isTitle(item: any): boolean;
+    ngOnChanges(changes: SimpleChanges): void;
     constructor();
 }
 import { Router } from '@angular/router';
