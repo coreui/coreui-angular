@@ -1,7 +1,28 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.2.4`
+- update: `typescript` to `~3.2.4`
+- update: `@angular/animations` to `^7.2.1`
+- update: `@angular/common` to `^7.2.1`
+- update: `@angular/compiler` to `^7.2.1`
+- update: `@angular/core` to `^7.2.1`
+- update: `@angular/forms` to `^7.2.1`
+- update: `@angular/http` to `^7.2.1`
+- update: `@angular/platform-browser` to `^7.2.1`
+- update: `@angular/platform-browser-dynamic` to `^7.2.1`
+- update: `@angular/router` to `^7.2.1`
+- update: `zone.js` to `^0.8.28`
+- update: `@angular-devkit/build-angular` to `^0.12.2`
+- update: `@angular-devkit/build-ng-packagr` to `^0.12.2`
+- update: `@angular/cli` to `^7.2.2`
+- update: `@angular/compiler-cli` to `^7.2.1`
+- update: `@angular/language-service` to `^7.2.1`
+- update: `@types/jasmine` to `^3.3.6`
+- update: `ng-packagr` to `^4.6.0`
+
 ##### `v2.2.3`
 - refactor(app-sidebar-nav): minor changes
+- update: `@coreui/coreui` to `^2.1.6`
 - update: `@angular/animations` to `^7.2.0`
 - update: `@angular/common` to `^7.2.0`
 - update: `@angular/compiler` to `^7.2.0`
