@@ -1,5 +1,29 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.2.5`
+- refactor: use Renderer2 instead of direct DOM manipulation
+- refactor: use DOCUMENT dependency injection 
+- update: `@angular/animations` to `^7.2.3`
+- update: `@angular/common` to `^7.2.3`
+- update: `@angular/compiler` to `^7.2.3`
+- update: `@angular/core` to `^7.2.3`
+- update: `@angular/forms` to `^7.2.3`
+- update: `@angular/http` to `^7.2.3`
+- update: `@angular/platform-browser` to `^7.2.3`
+- update: `@angular/platform-browser-dynamic` to `^7.2.3`
+- update: `@angular/router` to `^7.2.3`
+- update: `core-js` to `^2.6.3`
+- update: `rxjs` to `^6.4.0`
+- update: `zone.js` to `^0.8.29`
+- update: `@angular-devkit/build-angular` to `^0.12.4`
+- update: `@angular-devkit/build-ng-packagr` to `^0.12.4`
+- update: `@angular/cli` to `^7.3.0`
+- update: `@angular/compiler-cli` to `^7.2.3`
+- update: `@angular/language-service` to `^7.2.3`
+- update: `@types/jasmine` to `^3.3.8`
+- update: `@types/node` to `^10.12.20`
+- update: `ng-packagr` to `^4.7.0`
+
 ##### `v2.2.4`
 - update: `typescript` to `~3.2.4`
 - update: `@angular/animations` to `^7.2.1`
