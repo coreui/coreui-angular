@@ -1,9 +1,12 @@
-import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
-import { Replace } from './../shared';
+import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+
+import {Replace} from '../shared';
 
 @Component({
   selector: 'app-footer',
   template: `
+    <ng-container class="app-footer"></ng-container>
     <footer class="app-footer">
       <ng-content></ng-content>
     </footer>
@@ -12,7 +15,11 @@ import { Replace } from './../shared';
 export class AppFooterComponent implements OnInit, OnDestroy {
   @Input() fixed: boolean;
 
-  constructor(private el: ElementRef) {}
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
+    private el: ElementRef
+  ) {}
 
   ngOnInit(): void {
     Replace(this.el);
@@ -20,10 +27,12 @@ export class AppFooterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    document.body.classList.remove('footer-fixed');
+    this.renderer.removeClass(this.document.body, 'footer-fixed');
   }
 
-  isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('footer-fixed'); }
+  isFixed(fixed: boolean = this.fixed): void {
+    if (fixed) {
+      this.renderer.addClass(this.document.body, 'footer-fixed');
+    }
   }
 }

@@ -1,5 +1,7 @@
-import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
-import { asideMenuCssClasses, Replace } from './../shared/index';
+import {Component, ElementRef, Input, OnInit, OnDestroy, Inject, Renderer2} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+
+import { asideMenuCssClasses, Replace } from '../shared';
 
 @Component({
   selector: 'app-aside',
@@ -14,7 +16,11 @@ export class AppAsideComponent implements OnInit, OnDestroy {
   @Input() fixed: boolean;
   @Input() offCanvas: boolean;
 
-  constructor(private el: ElementRef) {}
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
+    private el: ElementRef
+  ) {}
 
   ngOnInit(): void {
     Replace(this.el);
@@ -24,22 +30,25 @@ export class AppAsideComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      document.body.classList.remove('aside-menu-fixed');
+    this.renderer.removeClass(this.document.body, 'aside-menu-fixed');
   }
 
-  isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('aside-menu-fixed'); }
+  isFixed(fixed: boolean = this.fixed): void {
+    if (fixed) {
+      this.renderer.addClass(this.document.body, 'aside-menu-fixed');
+    }
   }
 
-  isOffCanvas(offCanvas: boolean): void {
-    if (this.offCanvas) { document.querySelector('body').classList.add('aside-menu-off-canvas'); }
+  isOffCanvas(offCanvas: boolean = this.offCanvas): void {
+    if (offCanvas) {
+      this.renderer.addClass(this.document.body, 'aside-menu-off-canvas');
+    }
   }
 
-  displayBreakpoint(display: any): void {
-    if (this.display !== false ) {
-      let cssClass;
-      this.display ? cssClass = `aside-menu-${this.display}-show` : cssClass = asideMenuCssClasses[0];
-      document.querySelector('body').classList.add(cssClass);
+  displayBreakpoint(display: any = this.display): void {
+    if (display !== false ) {
+      const cssClass = this.display ? `aside-menu-${this.display}-show` : asideMenuCssClasses[0];
+      this.renderer.addClass(this.document.body, cssClass);
     }
   }
 }

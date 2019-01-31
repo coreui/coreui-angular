@@ -1,5 +1,7 @@
-import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
-import { Replace } from './../shared';
+import { Component, ElementRef, Input, OnInit, OnDestroy, Inject, Renderer2 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+
+import { Replace } from '../shared';
 
 @Component({
   selector: 'app-header',
@@ -73,7 +75,11 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   navbarBrandImg: boolean;
 
-  constructor(private el: ElementRef) {}
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
+    private el: ElementRef
+  ) {}
 
   ngOnInit(): void {
     Replace(this.el);
@@ -82,11 +88,13 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    document.body.classList.remove('header-fixed');
+    this.renderer.removeClass(this.document.body, 'header-fixed');
   }
 
-  isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('header-fixed'); }
+  isFixed(fixed: boolean = this.fixed): void {
+    if (fixed) {
+      this.renderer.addClass(this.document.body, 'header-fixed');
+    }
   }
 
   imgSrc(brand: any): void {

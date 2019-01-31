@@ -3,13 +3,17 @@ import {
   Directive,
   ElementRef,
   HostBinding,
-  HostListener,
+  HostListener, Inject,
   Input,
   OnChanges,
   OnInit,
   Renderer2,
   SimpleChanges
 } from '@angular/core';
+
+import {DOCUMENT} from '@angular/common';
+import { Router } from '@angular/router';
+
 import { Replace } from '../shared';
 
 @Directive({
@@ -45,7 +49,12 @@ export class NavDropdownToggleDirective {
 })
 export class LinkAttributesDirective implements OnInit {
   @Input() appLinkAttributes: {[key: string]: string };
-  constructor(private renderer: Renderer2, private el: ElementRef) {}
+
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
+    private el: ElementRef
+  ) {}
 
   ngOnInit() {
     const attribs = this.appLinkAttributes;
@@ -74,7 +83,7 @@ export class LinkAttributesDirective implements OnInit {
   }
 
   private setAttrib(key, value) {
-    const newAttr = document.createAttribute(key);
+    const newAttr = this.document.createAttribute(key);
     newAttr.value = value;
     this.renderer.setAttribute(this.el.nativeElement, key, value );
   }
@@ -118,8 +127,6 @@ export class AppSidebarNavComponent implements OnChanges {
   constructor() { }
 }
 
-import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-sidebar-nav-item',
   template: `
@@ -139,6 +146,8 @@ import { Router } from '@angular/router';
 export class AppSidebarNavItemComponent implements OnInit {
   @Input() item: any;
 
+  constructor( private router: Router, private el: ElementRef ) { }
+
   public hasClass() {
     return this.item.class ? true : false;
   }
@@ -154,8 +163,6 @@ export class AppSidebarNavItemComponent implements OnInit {
   public isActive() {
     return this.router.isActive(this.thisUrl(), false);
   }
-
-  constructor( private router: Router, private el: ElementRef ) { }
 
   ngOnInit() {
     Replace(this.el);
@@ -196,6 +203,13 @@ export class AppSidebarNavItemComponent implements OnInit {
 export class AppSidebarNavLinkComponent implements OnInit {
   @Input() link: any;
 
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
+    private router: Router,
+    private el: ElementRef
+  ) { }
+
   public getClasses() {
     const disabled = this.isDisabled();
     const classes = {
@@ -235,12 +249,10 @@ export class AppSidebarNavLinkComponent implements OnInit {
   }
 
   public hideMobile() {
-    if (document.body.classList.contains('sidebar-show')) {
-      document.body.classList.toggle('sidebar-show');
+    if (this.document.body.classList.contains('sidebar-show')) {
+      this.renderer.removeClass(this.document.body, 'sidebar-show');
     }
   }
-
-  constructor( private router: Router, private el: ElementRef ) { }
 
   ngOnInit() {
     Replace(this.el);
