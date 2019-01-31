@@ -1,6 +1,8 @@
-import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
-import { Replace } from './../shared';
-import { AppBreadcrumbService } from './app-breadcrumb.service';
+import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+
+import {AppBreadcrumbService} from './app-breadcrumb.service';
+import {Replace} from '../shared';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -19,7 +21,12 @@ export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed: boolean;
   public breadcrumbs;
 
-  constructor(public service: AppBreadcrumbService, public el: ElementRef) { }
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
+    public service: AppBreadcrumbService,
+    public el: ElementRef
+  ) { }
 
   public ngOnInit(): void {
     Replace(this.el);
@@ -28,10 +35,12 @@ export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    document.body.classList.remove('breadcrumb-fixed');
+    this.renderer.removeClass(this.document.body, 'breadcrumb-fixed');
   }
 
-  isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('breadcrumb-fixed'); }
+  isFixed(fixed: boolean = this.fixed): void {
+    if (fixed) {
+      this.renderer.addClass(this.document.body, 'breadcrumb-fixed');
+    }
   }
 }

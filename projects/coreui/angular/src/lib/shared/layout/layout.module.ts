@@ -8,6 +8,7 @@ import {
   SidebarMinimizeDirective,
   SidebarOffCanvasCloseDirective
 } from './layout.directive';
+import { ClassToggler } from '../toggle-classes';
 
 @NgModule({
   imports: [
@@ -28,6 +29,9 @@ import {
     SidebarToggleDirective,
     SidebarMinimizeDirective,
     SidebarOffCanvasCloseDirective
+  ],
+  providers: [
+    ClassToggler
   ]
 })
 export class LayoutModule { }

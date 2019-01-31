@@ -1,5 +1,7 @@
-import { Component, Input, HostBinding, OnInit, OnDestroy } from '@angular/core';
-import { sidebarCssClasses } from './../shared';
+import { Component, Input, Inject, HostBinding, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+
+import { sidebarCssClasses } from '../shared';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +16,10 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
 
   @HostBinding('class.sidebar') true;
 
-  constructor() {}
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit(): void {
     this.displayBreakpoint(this.display);
@@ -25,35 +30,44 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    document.body.classList.remove('sidebar-fixed');
+    this.renderer.removeClass(this.document.body, 'sidebar-fixed' );
   }
 
-  isCompact(compact: boolean): void {
-    if (this.compact) { document.querySelector('body').classList.add('sidebar-compact'); }
+  isCompact(compact: boolean = this.compact): void {
+    if (compact) {
+      this.renderer.addClass(this.document.body, 'sidebar-compact' );
+    }
   }
 
-  isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('sidebar-fixed'); }
+  isFixed(fixed: boolean = this.fixed): void {
+    if (fixed) {
+      this.renderer.addClass(this.document.body, 'sidebar-fixed');
+    }
   }
 
-  isMinimized(minimized: boolean): void {
-    if (this.minimized) { document.querySelector('body').classList.add('sidebar-minimized'); }
+  isMinimized(minimized: boolean = this.minimized): void {
+    if (minimized) {
+      this.renderer.addClass(this.document.body, 'sidebar-minimized');
+    }
   }
 
-  isOffCanvas(offCanvas: boolean): void {
-    if (this.offCanvas) { document.querySelector('body').classList.add('sidebar-off-canvas'); }
+  isOffCanvas(offCanvas: boolean = this.offCanvas): void {
+    if (offCanvas) {
+      this.renderer.addClass(this.document.body, 'sidebar-off-canvas');
+    }
   }
 
-  fixedPosition(fixed: boolean): void {
+  fixedPosition(fixed: boolean = this.fixed): void {
     console.warn('deprecated fixedPosition(), use isFixed() instead');
-    if (this.fixed) { document.querySelector('body').classList.add('sidebar-fixed'); }
+    if (fixed) {
+      this.renderer.addClass(this.document.body, 'sidebar-fixed');
+    }
   }
 
-  displayBreakpoint(display: any): void {
-    if (this.display !== false ) {
-      let cssClass;
-      this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
-      document.querySelector('body').classList.add(cssClass);
+  displayBreakpoint(display: any = this.display): void {
+    if (display !== false) {
+      const cssClass = display ? `sidebar-${display}-show` : sidebarCssClasses[0];
+      this.renderer.addClass(this.document.body, cssClass);
     }
   }
 }

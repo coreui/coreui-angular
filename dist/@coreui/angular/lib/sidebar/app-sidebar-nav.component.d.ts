@@ -1,4 +1,5 @@
 import { ElementRef, OnChanges, OnInit, Renderer2, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 export declare class NavDropdownDirective {
     private el;
     constructor(el: ElementRef);
@@ -13,12 +14,13 @@ export declare class NavDropdownToggleDirective {
     toggleOpen($event: any): void;
 }
 export declare class LinkAttributesDirective implements OnInit {
+    private document;
     private renderer;
     private el;
     appLinkAttributes: {
         [key: string]: string;
     };
-    constructor(renderer: Renderer2, el: ElementRef);
+    constructor(document: any, renderer: Renderer2, el: ElementRef);
     ngOnInit(): void;
     private setStyle;
     private addClass;
@@ -34,22 +36,24 @@ export declare class AppSidebarNavComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void;
     constructor();
 }
-import { Router } from '@angular/router';
 export declare class AppSidebarNavItemComponent implements OnInit {
     private router;
     private el;
     item: any;
+    constructor(router: Router, el: ElementRef);
     hasClass(): boolean;
     isDropdown(): boolean;
     thisUrl(): any;
     isActive(): boolean;
-    constructor(router: Router, el: ElementRef);
     ngOnInit(): void;
 }
 export declare class AppSidebarNavLinkComponent implements OnInit {
+    private document;
+    private renderer;
     private router;
     private el;
     link: any;
+    constructor(document: any, renderer: Renderer2, router: Router, el: ElementRef);
     getClasses(): {
         'nav-link': boolean;
         'disabled': boolean;
@@ -62,7 +66,6 @@ export declare class AppSidebarNavLinkComponent implements OnInit {
     isExternalLink(): boolean;
     isIcon(): boolean;
     hideMobile(): void;
-    constructor(router: Router, el: ElementRef);
     ngOnInit(): void;
 }
 export declare class AppSidebarNavDropdownComponent implements OnInit {

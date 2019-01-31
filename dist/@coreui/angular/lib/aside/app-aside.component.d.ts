@@ -1,13 +1,15 @@
-import { ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 export declare class AppAsideComponent implements OnInit, OnDestroy {
+    private document;
+    private renderer;
     private el;
     display: any;
     fixed: boolean;
     offCanvas: boolean;
-    constructor(el: ElementRef);
+    constructor(document: any, renderer: Renderer2, el: ElementRef);
     ngOnInit(): void;
     ngOnDestroy(): void;
-    isFixed(fixed: boolean): void;
-    isOffCanvas(offCanvas: boolean): void;
-    displayBreakpoint(display: any): void;
+    isFixed(fixed?: boolean): void;
+    isOffCanvas(offCanvas?: boolean): void;
+    displayBreakpoint(display?: any): void;
 }

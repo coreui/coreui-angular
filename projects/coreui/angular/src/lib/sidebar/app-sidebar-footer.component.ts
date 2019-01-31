@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit  } from '@angular/core';
-import { Replace } from './../shared';
+
+import { Replace } from '../shared';
 
 @Component({
   selector: 'app-sidebar-footer',
