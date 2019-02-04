@@ -1,5 +1,15 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.3.0`
+- feat(app-header): navbarBrand img use appHtmlAttr instead of attr.*
+- refactor: directive appLinkAttributes -> appHtmlAttr, moved to layout
+- refactor(app-header): drop unused methods
+- refactor(sidebar-nav): directive appLinkAttributes -> appHtmlAttr
+- refactor(app-footer): drop Replace footer
+- update: `@angular-devkit/build-angular` to `^0.13.0`
+- update: `@angular-devkit/build-ng-packagr` to `^0.13.0`
+- update: `@types/node` to `^10.12.21`
+
 ##### `v2.2.5`
 - refactor: use Renderer2 instead of direct DOM manipulation
 - refactor: use DOCUMENT dependency injection 
