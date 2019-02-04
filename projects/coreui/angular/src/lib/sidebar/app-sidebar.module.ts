@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule} from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { LayoutModule } from './../shared/layout/layout.module';
+import { LayoutModule } from '../shared/layout';
 
 // App Sidebar Component
 import { AppSidebarFooterComponent } from './app-sidebar-footer.component';
@@ -16,8 +16,7 @@ import {
   AppSidebarNavLinkComponent,
   AppSidebarNavTitleComponent,
   NavDropdownDirective,
-  NavDropdownToggleDirective,
-  LinkAttributesDirective
+  NavDropdownToggleDirective
 } from './app-sidebar-nav.component';
 
 @NgModule({
@@ -39,7 +38,6 @@ import {
     AppSidebarNavTitleComponent,
     NavDropdownDirective,
     NavDropdownToggleDirective,
-    LinkAttributesDirective,
     LayoutModule
   ],
   declarations: [
@@ -55,8 +53,7 @@ import {
     AppSidebarNavLinkComponent,
     AppSidebarNavTitleComponent,
     NavDropdownDirective,
-    NavDropdownToggleDirective,
-    LinkAttributesDirective
+    NavDropdownToggleDirective
   ]
 })
 export class AppSidebarModule { }

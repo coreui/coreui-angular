@@ -44,51 +44,6 @@ export class NavDropdownToggleDirective {
   }
 }
 
-@Directive({
-  selector: '[appLinkAttributes]'
-})
-export class LinkAttributesDirective implements OnInit {
-  @Input() appLinkAttributes: {[key: string]: string };
-
-  constructor(
-    @Inject(DOCUMENT) private document: any,
-    private renderer: Renderer2,
-    private el: ElementRef
-  ) {}
-
-  ngOnInit() {
-    const attribs = this.appLinkAttributes;
-    for (const attr in attribs) {
-      if (attr === 'style' && typeof(attribs[attr]) === 'object' ) {
-        this.setStyle(attribs[attr]);
-      } else if (attr === 'class') {
-        this.addClass(attribs[attr]);
-      } else {
-        this.setAttrib(attr, attribs[attr]);
-      }
-    }
-  }
-
-  private setStyle(styles) {
-    for (const style in styles) {
-      this.renderer.setStyle(this.el.nativeElement, style, styles[style] );
-    }
-  }
-
-  private addClass(classes) {
-    const classArray = Array.isArray(classes) ? classes : classes.split(' ');
-    classArray.forEach(element => {
-      this.renderer.addClass(this.el.nativeElement, element );
-    });
-  }
-
-  private setAttrib(key, value) {
-    const newAttr = this.document.createAttribute(key);
-    newAttr.value = value;
-    this.renderer.setAttribute(this.el.nativeElement, key, value );
-  }
-}
-
 @Component({
   selector: 'app-sidebar-nav',
   template: `
@@ -102,7 +57,8 @@ export class LinkAttributesDirective implements OnInit {
           <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>
         </ng-template>
       </ng-template>
-    </ul>`
+    </ul>
+  `
 })
 export class AppSidebarNavComponent implements OnChanges {
   @Input() navItems: Array<any>;
@@ -175,21 +131,21 @@ export class AppSidebarNavItemComponent implements OnInit {
     <ng-container [ngSwitch]="getLinkType()">
       <a *ngSwitchCase="'disabled'"
       [attr.disabled]="true"
-      [appLinkAttributes]="link.attributes"
+      [appHtmlAttr]="link.attributes"
       href=""
       [ngClass]="getClasses()">
         <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
         {{ link.name }}
         <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
       </a>
-      <a *ngSwitchCase="'external'" [ngClass]="getClasses()" href="{{link.url}}" [appLinkAttributes]="link.attributes">
+      <a *ngSwitchCase="'external'" [ngClass]="getClasses()" href="{{link.url}}" [appHtmlAttr]="link.attributes">
         <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
         {{ link.name }}
         <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
       </a>
       <a *ngSwitchDefault
         [ngClass]="getClasses()"
-        [appLinkAttributes]="link.attributes"
+        [appHtmlAttr]="link.attributes"
         routerLinkActive="active"
         [routerLink]="[link.url]"
         (click)="hideMobile()">
