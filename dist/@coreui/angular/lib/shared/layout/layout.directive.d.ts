@@ -1,4 +1,4 @@
-import { OnInit, Renderer2 } from '@angular/core';
+import { ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { ClassToggler } from '../toggle-classes';
 /**
 * Allows the sidebar to be toggled via click.
@@ -50,4 +50,17 @@ export declare class AsideToggleDirective implements OnInit {
     constructor(classToggler: ClassToggler);
     ngOnInit(): void;
     toggleOpen($event: any): void;
+}
+export declare class HtmlAttributesDirective implements OnInit {
+    private document;
+    private renderer;
+    private el;
+    appHtmlAttr: {
+        [key: string]: string;
+    };
+    constructor(document: any, renderer: Renderer2, el: ElementRef);
+    ngOnInit(): void;
+    private setStyle;
+    private addClass;
+    private setAttrib;
 }

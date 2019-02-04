@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, OnDestroy, Inject, Renderer2 } from '@angular/core';
+import {Component, ElementRef, Input, OnInit, OnDestroy, Inject, Renderer2} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { Replace } from '../shared';
@@ -15,23 +15,14 @@ import { Replace } from '../shared';
         <a class="navbar-brand" [href]="navbarBrandHref">
           <ng-template [ngIf]="navbarBrandImg">
           <img *ngIf="navbarBrand"
-               [src]="imgSrc(navbarBrand)"
-               [attr.width]="imgWidth(navbarBrand)"
-               [attr.height]="imgHeight(navbarBrand)"
-               [attr.alt]="imgAlt(navbarBrand)"
-               class="navbar-brand">
+               [appHtmlAttr]="navbarBrand"
+               [ngClass]="'navbar-brand'">
           <img *ngIf="navbarBrandFull"
-               [src]="imgSrc(navbarBrandFull)"
-               [attr.width]="imgWidth(navbarBrandFull)"
-               [attr.height]="imgHeight(navbarBrandFull)"
-               [attr.alt]="imgAlt(navbarBrandFull)"
-               class="navbar-brand-full">
+               [appHtmlAttr]="navbarBrandFull"
+               [ngClass]="'navbar-brand-full'">
           <img *ngIf="navbarBrandMinimized"
-               [src]="imgSrc(navbarBrandMinimized)"
-               [attr.width]="imgWidth(navbarBrandMinimized)"
-               [attr.height]="imgHeight(navbarBrandMinimized)"
-               [attr.alt]="imgAlt(navbarBrandMinimized)"
-               class="navbar-brand-minimized">
+               [appHtmlAttr]="navbarBrandMinimized"
+               [ngClass]="'navbar-brand-minimized'">
           </ng-template>
           <ng-template [ngIf]="!navbarBrandImg">
             <div class="navbar-brand-full" [innerHTML]="navbarBrandText.text"></div>
@@ -73,6 +64,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   @Input() asideMenuToggler: any;
   @Input() mobileAsideMenuToggler: any;
 
+  private readonly fixedClass = 'header-fixed';
   navbarBrandImg: boolean;
 
   constructor(
@@ -88,33 +80,12 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.renderer.removeClass(this.document.body, 'header-fixed');
+    this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
   isFixed(fixed: boolean = this.fixed): void {
     if (fixed) {
-      this.renderer.addClass(this.document.body, 'header-fixed');
+      this.renderer.addClass(this.document.body, this.fixedClass);
     }
-  }
-
-  imgSrc(brand: any): void {
-    return brand.src ? brand.src : '';
-  }
-
-  imgWidth(brand: any): void {
-    return brand.width ? brand.width : 'auto';
-  }
-
-  imgHeight(brand: any): void {
-    return brand.height ? brand.height : 'auto';
-  }
-
-  imgAlt(brand: any): void {
-    return brand.alt ? brand.alt : '';
-  }
-
-  breakpoint(breakpoint: any): void {
-    console.log(breakpoint);
-    return breakpoint ? breakpoint : '';
   }
 }

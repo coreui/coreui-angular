@@ -13,19 +13,6 @@ export declare class NavDropdownToggleDirective {
     constructor(dropdown: NavDropdownDirective);
     toggleOpen($event: any): void;
 }
-export declare class LinkAttributesDirective implements OnInit {
-    private document;
-    private renderer;
-    private el;
-    appLinkAttributes: {
-        [key: string]: string;
-    };
-    constructor(document: any, renderer: Renderer2, el: ElementRef);
-    ngOnInit(): void;
-    private setStyle;
-    private addClass;
-    private setAttrib;
-}
 export declare class AppSidebarNavComponent implements OnChanges {
     navItems: Array<any>;
     true: any;

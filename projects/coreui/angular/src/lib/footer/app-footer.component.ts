@@ -1,38 +1,33 @@
-import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Component, HostBinding, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 
-import {Replace} from '../shared';
-
 @Component({
-  selector: 'app-footer',
-  template: `
-    <ng-container class="app-footer"></ng-container>
-    <footer class="app-footer">
-      <ng-content></ng-content>
-    </footer>
-  `
+  selector: 'app-footer, cui-footer',
+  template: `<ng-content></ng-content>`
 })
 export class AppFooterComponent implements OnInit, OnDestroy {
   @Input() fixed: boolean;
 
+  @HostBinding('class.app-footer') true;
+
+  private readonly fixedClass = 'footer-fixed';
+
   constructor(
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
-    private el: ElementRef
   ) {}
 
   ngOnInit(): void {
-    Replace(this.el);
     this.isFixed(this.fixed);
   }
 
   ngOnDestroy(): void {
-    this.renderer.removeClass(this.document.body, 'footer-fixed');
+    this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
   isFixed(fixed: boolean = this.fixed): void {
     if (fixed) {
-      this.renderer.addClass(this.document.body, 'footer-fixed');
+      this.renderer.addClass(this.document.body, this.fixedClass);
     }
   }
 }
