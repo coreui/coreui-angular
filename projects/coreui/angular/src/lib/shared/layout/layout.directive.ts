@@ -2,27 +2,27 @@ import {Directive, ElementRef, HostListener, Inject, Input, OnInit, Renderer2} f
 import {DOCUMENT} from '@angular/common';
 
 import { asideMenuCssClasses, sidebarCssClasses } from '../classes';
-import { ClassToggler, ToggleClasses } from '../toggle-classes';
+import { ClassToggler } from '../toggle-classes';
 
 /**
 * Allows the sidebar to be toggled via click.
 */
 @Directive({
-  selector: '[appSidebarToggler]'
+  selector: '[appSidebarToggler]',
+  providers: [ClassToggler]
 })
 export class SidebarToggleDirective implements OnInit {
   @Input('appSidebarToggler') breakpoint: string;
   public bp;
-  constructor() {}
+  constructor(private classToggler: ClassToggler) {}
   ngOnInit(): void {
     this.bp = this.breakpoint;
   }
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
-    let cssClass;
-    this.bp ? cssClass = `sidebar-${this.bp}-show` : cssClass = sidebarCssClasses[0];
-    ToggleClasses(cssClass, sidebarCssClasses);
+    const cssClass = this.bp ? `sidebar-${this.bp}-show` : sidebarCssClasses[0];
+    this.classToggler.toggleClasses(cssClass, sidebarCssClasses);
   }
 }
 
