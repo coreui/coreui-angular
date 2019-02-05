@@ -77,7 +77,7 @@ export class AppSidebarNavComponent implements OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this.navItemsArray = JSON.parse(JSON.stringify(this.navItems));
+    this.navItemsArray = JSON.parse(JSON.stringify(this.navItems || []));
   }
 
   constructor() { }
