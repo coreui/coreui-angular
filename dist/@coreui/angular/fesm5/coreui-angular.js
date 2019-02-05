@@ -29,42 +29,6 @@ var asideMenuCssClasses = [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** @type {?} */
-var RemoveClasses = (/**
- * @param {?} NewClassNames
- * @return {?}
- */
-function (NewClassNames) {
-    /** @type {?} */
-    var MatchClasses = NewClassNames.map((/**
-     * @param {?} Class
-     * @return {?}
-     */
-    function (Class) { return document.body.classList.contains(Class); }));
-    return MatchClasses.indexOf(true) !== -1;
-});
-/** @type {?} */
-var ToggleClasses = (/**
- * @param {?} Toggle
- * @param {?} ClassNames
- * @return {?}
- */
-function (Toggle, ClassNames) {
-    /** @type {?} */
-    var Level = ClassNames.indexOf(Toggle);
-    /** @type {?} */
-    var NewClassNames = ClassNames.slice(0, Level + 1);
-    if (RemoveClasses(NewClassNames)) {
-        NewClassNames.map((/**
-         * @param {?} Class
-         * @return {?}
-         */
-        function (Class) { return document.body.classList.remove(Class); }));
-    }
-    else {
-        document.body.classList.add(Toggle);
-    }
-});
 var ClassToggler = /** @class */ (function () {
     function ClassToggler(document, renderer) {
         this.document = document;
@@ -134,7 +98,8 @@ var ClassToggler = /** @class */ (function () {
  * Allows the sidebar to be toggled via click.
  */
 var SidebarToggleDirective = /** @class */ (function () {
-    function SidebarToggleDirective() {
+    function SidebarToggleDirective(classToggler) {
+        this.classToggler = classToggler;
     }
     /**
      * @return {?}
@@ -156,17 +121,19 @@ var SidebarToggleDirective = /** @class */ (function () {
     function ($event) {
         $event.preventDefault();
         /** @type {?} */
-        var cssClass;
-        this.bp ? cssClass = "sidebar-" + this.bp + "-show" : cssClass = sidebarCssClasses[0];
-        ToggleClasses(cssClass, sidebarCssClasses);
+        var cssClass = this.bp ? "sidebar-" + this.bp + "-show" : sidebarCssClasses[0];
+        this.classToggler.toggleClasses(cssClass, sidebarCssClasses);
     };
     SidebarToggleDirective.decorators = [
         { type: Directive, args: [{
-                    selector: '[appSidebarToggler]'
+                    selector: '[appSidebarToggler]',
+                    providers: [ClassToggler]
                 },] }
     ];
     /** @nocollapse */
-    SidebarToggleDirective.ctorParameters = function () { return []; };
+    SidebarToggleDirective.ctorParameters = function () { return [
+        { type: ClassToggler }
+    ]; };
     SidebarToggleDirective.propDecorators = {
         breakpoint: [{ type: Input, args: ['appSidebarToggler',] }],
         toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
@@ -1815,6 +1782,6 @@ var AppSidebarModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule, AppAsideComponent as ɵj, AppBreadcrumbComponent as ɵk, AppBreadcrumbService as ɵl, AppFooterComponent as ɵm, AppHeaderComponent as ɵo, LayoutModule as ɵn, AsideToggleDirective as ɵg, BrandMinimizeDirective as ɵf, HtmlAttributesDirective as ɵh, MobileSidebarToggleDirective as ɵd, SidebarMinimizeDirective as ɵc, SidebarOffCanvasCloseDirective as ɵe, SidebarToggleDirective as ɵb, LayoutModule as ɵa, ClassToggler as ɵi, AppSidebarFooterComponent as ɵp, AppSidebarFormComponent as ɵq, AppSidebarHeaderComponent as ɵr, AppSidebarMinimizerComponent as ɵs, AppSidebarNavComponent as ɵw, AppSidebarNavDropdownComponent as ɵz, AppSidebarNavItemComponent as ɵx, AppSidebarNavLinkComponent as ɵy, AppSidebarNavTitleComponent as ɵba, NavDropdownDirective as ɵu, NavDropdownToggleDirective as ɵv, AppSidebarComponent as ɵt };
+export { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule, AppAsideComponent as ɵj, AppBreadcrumbComponent as ɵk, AppBreadcrumbService as ɵl, AppFooterComponent as ɵm, AppHeaderComponent as ɵn, AsideToggleDirective as ɵg, BrandMinimizeDirective as ɵf, HtmlAttributesDirective as ɵh, MobileSidebarToggleDirective as ɵd, SidebarMinimizeDirective as ɵc, SidebarOffCanvasCloseDirective as ɵe, SidebarToggleDirective as ɵb, LayoutModule as ɵa, ClassToggler as ɵi, AppSidebarFooterComponent as ɵo, AppSidebarFormComponent as ɵp, AppSidebarHeaderComponent as ɵq, AppSidebarMinimizerComponent as ɵr, AppSidebarNavComponent as ɵv, AppSidebarNavDropdownComponent as ɵy, AppSidebarNavItemComponent as ɵw, AppSidebarNavLinkComponent as ɵx, AppSidebarNavTitleComponent as ɵz, NavDropdownDirective as ɵt, NavDropdownToggleDirective as ɵu, AppSidebarComponent as ɵs };
 
 //# sourceMappingURL=coreui-angular.js.map
