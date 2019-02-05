@@ -29,38 +29,6 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    /** @type {?} */
-    var RemoveClasses = ( /**
-     * @param {?} NewClassNames
-     * @return {?}
-     */function (NewClassNames) {
-        /** @type {?} */
-        var MatchClasses = NewClassNames.map(( /**
-         * @param {?} Class
-         * @return {?}
-         */function (Class) { return document.body.classList.contains(Class); }));
-        return MatchClasses.indexOf(true) !== -1;
-    });
-    /** @type {?} */
-    var ToggleClasses = ( /**
-     * @param {?} Toggle
-     * @param {?} ClassNames
-     * @return {?}
-     */function (Toggle, ClassNames) {
-        /** @type {?} */
-        var Level = ClassNames.indexOf(Toggle);
-        /** @type {?} */
-        var NewClassNames = ClassNames.slice(0, Level + 1);
-        if (RemoveClasses(NewClassNames)) {
-            NewClassNames.map(( /**
-             * @param {?} Class
-             * @return {?}
-             */function (Class) { return document.body.classList.remove(Class); }));
-        }
-        else {
-            document.body.classList.add(Toggle);
-        }
-    });
     var ClassToggler = /** @class */ (function () {
         function ClassToggler(document, renderer) {
             this.document = document;
@@ -130,7 +98,8 @@
      * Allows the sidebar to be toggled via click.
      */
     var SidebarToggleDirective = /** @class */ (function () {
-        function SidebarToggleDirective() {
+        function SidebarToggleDirective(classToggler) {
+            this.classToggler = classToggler;
         }
         /**
          * @return {?}
@@ -152,17 +121,21 @@
             function ($event) {
                 $event.preventDefault();
                 /** @type {?} */
-                var cssClass;
-                this.bp ? cssClass = "sidebar-" + this.bp + "-show" : cssClass = sidebarCssClasses[0];
-                ToggleClasses(cssClass, sidebarCssClasses);
+                var cssClass = this.bp ? "sidebar-" + this.bp + "-show" : sidebarCssClasses[0];
+                this.classToggler.toggleClasses(cssClass, sidebarCssClasses);
             };
         SidebarToggleDirective.decorators = [
             { type: core.Directive, args: [{
-                        selector: '[appSidebarToggler]'
+                        selector: '[appSidebarToggler]',
+                        providers: [ClassToggler]
                     },] }
         ];
         /** @nocollapse */
-        SidebarToggleDirective.ctorParameters = function () { return []; };
+        SidebarToggleDirective.ctorParameters = function () {
+            return [
+                { type: ClassToggler }
+            ];
+        };
         SidebarToggleDirective.propDecorators = {
             breakpoint: [{ type: core.Input, args: ['appSidebarToggler',] }],
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
@@ -1882,8 +1855,7 @@
     exports.ɵk = AppBreadcrumbComponent;
     exports.ɵl = AppBreadcrumbService;
     exports.ɵm = AppFooterComponent;
-    exports.ɵo = AppHeaderComponent;
-    exports.ɵn = LayoutModule;
+    exports.ɵn = AppHeaderComponent;
     exports.ɵg = AsideToggleDirective;
     exports.ɵf = BrandMinimizeDirective;
     exports.ɵh = HtmlAttributesDirective;
@@ -1893,18 +1865,18 @@
     exports.ɵb = SidebarToggleDirective;
     exports.ɵa = LayoutModule;
     exports.ɵi = ClassToggler;
-    exports.ɵp = AppSidebarFooterComponent;
-    exports.ɵq = AppSidebarFormComponent;
-    exports.ɵr = AppSidebarHeaderComponent;
-    exports.ɵs = AppSidebarMinimizerComponent;
-    exports.ɵw = AppSidebarNavComponent;
-    exports.ɵz = AppSidebarNavDropdownComponent;
-    exports.ɵx = AppSidebarNavItemComponent;
-    exports.ɵy = AppSidebarNavLinkComponent;
-    exports.ɵba = AppSidebarNavTitleComponent;
-    exports.ɵu = NavDropdownDirective;
-    exports.ɵv = NavDropdownToggleDirective;
-    exports.ɵt = AppSidebarComponent;
+    exports.ɵo = AppSidebarFooterComponent;
+    exports.ɵp = AppSidebarFormComponent;
+    exports.ɵq = AppSidebarHeaderComponent;
+    exports.ɵr = AppSidebarMinimizerComponent;
+    exports.ɵv = AppSidebarNavComponent;
+    exports.ɵy = AppSidebarNavDropdownComponent;
+    exports.ɵw = AppSidebarNavItemComponent;
+    exports.ɵx = AppSidebarNavLinkComponent;
+    exports.ɵz = AppSidebarNavTitleComponent;
+    exports.ɵt = NavDropdownDirective;
+    exports.ɵu = NavDropdownToggleDirective;
+    exports.ɵs = AppSidebarComponent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -4,9 +4,10 @@ import { ClassToggler } from '../toggle-classes';
 * Allows the sidebar to be toggled via click.
 */
 export declare class SidebarToggleDirective implements OnInit {
+    private classToggler;
     breakpoint: string;
     bp: any;
-    constructor();
+    constructor(classToggler: ClassToggler);
     ngOnInit(): void;
     toggleOpen($event: any): void;
 }

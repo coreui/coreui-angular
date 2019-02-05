@@ -1,5 +1,9 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.3.1`
+- fix: faulty LayoutModule import causes: Unexpected value 'undefined' imported by the module #47
+- refactor(appSidebarToggler): inject `ClassToggler` instead of ToggleClasses function
+
 ##### `v2.3.0`
 - feat(app-header): navbarBrand img use appHtmlAttr instead of attr.*
 - refactor: directive appLinkAttributes -> appHtmlAttr, moved to layout
