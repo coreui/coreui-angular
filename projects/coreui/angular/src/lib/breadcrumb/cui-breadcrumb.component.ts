@@ -2,23 +2,14 @@ import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from
 import {DOCUMENT} from '@angular/common';
 
 import {AppBreadcrumbService} from './app-breadcrumb.service';
-import {Replace} from '../shared';
 
 @Component({
-  selector: 'app-breadcrumb',
-  template: `
-    <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
-      <li class="breadcrumb-item"
-          *ngIf="breadcrumb.label.title && (breadcrumb.url.slice(-1) == '/' || last)"
-          [ngClass]="{active: last}">
-        <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</a>
-        <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</span>
-      </li>
-    </ng-template>
-  `
+  selector: 'cui-breadcrumb',
+  templateUrl: './cui-breadcrumb.component.html'
 })
-export class AppBreadcrumbComponent implements OnInit, OnDestroy {
+export class CuiBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed: boolean;
+
   public breadcrumbs;
   private readonly fixedClass = 'breadcrumb-fixed';
 
@@ -26,11 +17,9 @@ export class AppBreadcrumbComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
     public service: AppBreadcrumbService,
-    public el: ElementRef
   ) { }
 
   public ngOnInit(): void {
-    Replace(this.el);
     this.isFixed(this.fixed);
     this.breadcrumbs = this.service.breadcrumbs;
   }

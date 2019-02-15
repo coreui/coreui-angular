@@ -1,18 +1,33 @@
-import { Component, ElementRef, OnInit  } from '@angular/core';
-
-import { Replace } from '../shared';
+import {Component, ElementRef, HostBinding, HostListener, Inject, OnInit, Renderer2} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
 
 @Component({
   selector: 'app-sidebar-minimizer',
-  template: `
-    <button class="sidebar-minimizer" type="button" appSidebarMinimizer appBrandMinimizer></button>
-  `
+  template: ``,
 })
 export class AppSidebarMinimizerComponent implements OnInit {
 
-  constructor(private el: ElementRef) { }
+  @HostBinding('attr.role') role = 'button';
 
-  ngOnInit() {
-    Replace(this.el);
+  @HostListener('click', ['$event'])
+  toggleOpen($event: any) {
+    $event.preventDefault();
+    const body = this.document.body;
+    body.classList.contains('sidebar-minimized') ?
+      this.renderer.removeClass(body, 'sidebar-minimized') :
+      this.renderer.addClass(body, 'sidebar-minimized');
+    body.classList.contains('brand-minimized') ?
+      this.renderer.removeClass(body, 'brand-minimized') :
+      this.renderer.addClass(body, 'brand-minimized');
   }
+
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
+    private hostElement: ElementRef
+  ) {
+    renderer.addClass(hostElement.nativeElement, 'sidebar-minimizer');
+  }
+
+  ngOnInit() {}
 }
