@@ -21,7 +21,6 @@ export declare class MobileSidebarToggleDirective {
     private document;
     private renderer;
     constructor(document: any, renderer: Renderer2);
-    private hasClass;
     toggleOpen($event: any): void;
 }
 /**
@@ -31,8 +30,6 @@ export declare class SidebarOffCanvasCloseDirective {
     private document;
     private renderer;
     constructor(document: any, renderer: Renderer2);
-    private hasClass;
-    private toggleClass;
     toggleOpen($event: any): void;
 }
 export declare class BrandMinimizeDirective {
@@ -53,13 +50,12 @@ export declare class AsideToggleDirective implements OnInit {
     toggleOpen($event: any): void;
 }
 export declare class HtmlAttributesDirective implements OnInit {
-    private document;
     private renderer;
     private el;
     appHtmlAttr: {
         [key: string]: string;
     };
-    constructor(document: any, renderer: Renderer2, el: ElementRef);
+    constructor(renderer: Renderer2, el: ElementRef);
     ngOnInit(): void;
     private setStyle;
     private addClass;

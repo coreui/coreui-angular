@@ -1,8 +1,8 @@
 import { BehaviorSubject } from 'rxjs/index';
 import { filter } from 'rxjs/operators';
-import { Inject, Injectable, Renderer2, Directive, ElementRef, HostListener, Input, NgModule, Component, HostBinding } from '@angular/core';
-import { DOCUMENT, CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
+import { DOCUMENT, CommonModule } from '@angular/common';
+import { Inject, Injectable, Renderer2, Directive, ElementRef, HostListener, Input, NgModule, Component, HostBinding } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -147,7 +147,6 @@ class SidebarMinimizeDirective {
         body.classList.contains('sidebar-minimized') ?
             this.renderer.removeClass(body, 'sidebar-minimized') :
             this.renderer.addClass(body, 'sidebar-minimized');
-        // document.body.classList.toggle('sidebar-minimized');
     }
 }
 SidebarMinimizeDirective.decorators = [
@@ -172,16 +171,6 @@ class MobileSidebarToggleDirective {
         this.document = document;
         this.renderer = renderer;
     }
-    // Check if element has class
-    /**
-     * @private
-     * @param {?} target
-     * @param {?} elementClassName
-     * @return {?}
-     */
-    hasClass(target, elementClassName) {
-        return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
-    }
     /**
      * @param {?} $event
      * @return {?}
@@ -193,7 +182,6 @@ class MobileSidebarToggleDirective {
         body.classList.contains('sidebar-show') ?
             this.renderer.removeClass(body, 'sidebar-show') :
             this.renderer.addClass(body, 'sidebar-show');
-        // document.body.classList.toggle('sidebar-show');
     }
 }
 MobileSidebarToggleDirective.decorators = [
@@ -221,36 +209,6 @@ class SidebarOffCanvasCloseDirective {
         this.document = document;
         this.renderer = renderer;
     }
-    // Check if element has class
-    /**
-     * @private
-     * @param {?} target
-     * @param {?} elementClassName
-     * @return {?}
-     */
-    hasClass(target, elementClassName) {
-        return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
-    }
-    // Toggle element class
-    /**
-     * @private
-     * @param {?} elem
-     * @param {?} elementClassName
-     * @return {?}
-     */
-    toggleClass(elem, elementClassName) {
-        /** @type {?} */
-        let newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
-        if (this.hasClass(elem, elementClassName)) {
-            while (newClass.indexOf(' ' + elementClassName + ' ') >= 0) {
-                newClass = newClass.replace(' ' + elementClassName + ' ', ' ');
-            }
-            elem.className = newClass.replace(/^\s+|\s+$/g, '');
-        }
-        else {
-            elem.className += ' ' + elementClassName;
-        }
-    }
     /**
      * @param {?} $event
      * @return {?}
@@ -259,11 +217,10 @@ class SidebarOffCanvasCloseDirective {
         $event.preventDefault();
         /** @type {?} */
         const body = this.document.body;
-        if (this.hasClass(body, 'sidebar-off-canvas')) {
+        if (body.classList.contains('sidebar-off-canvas')) {
             body.classList.contains('sidebar-show') ?
                 this.renderer.removeClass(body, 'sidebar-show') :
                 this.renderer.addClass(body, 'sidebar-show');
-            // this.toggleClass(document.body, 'sidebar-opened');
         }
     }
 }
@@ -300,7 +257,6 @@ class BrandMinimizeDirective {
         body.classList.contains('brand-minimized') ?
             this.renderer.removeClass(body, 'brand-minimized') :
             this.renderer.addClass(body, 'brand-minimized');
-        // document.body.classList.toggle('brand-minimized');
     }
 }
 BrandMinimizeDirective.decorators = [
@@ -359,12 +315,10 @@ AsideToggleDirective.propDecorators = {
 };
 class HtmlAttributesDirective {
     /**
-     * @param {?} document
      * @param {?} renderer
      * @param {?} el
      */
-    constructor(document, renderer, el) {
-        this.document = document;
+    constructor(renderer, el) {
         this.renderer = renderer;
         this.el = el;
     }
@@ -433,7 +387,6 @@ HtmlAttributesDirective.decorators = [
 ];
 /** @nocollapse */
 HtmlAttributesDirective.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: Renderer2 },
     { type: ElementRef }
 ];
@@ -515,18 +468,19 @@ class AppAsideComponent {
     /**
      * @param {?} document
      * @param {?} renderer
-     * @param {?} el
+     * @param {?} hostElement
      */
-    constructor(document, renderer, el) {
+    constructor(document, renderer, hostElement) {
         this.document = document;
         this.renderer = renderer;
-        this.el = el;
+        this.hostElement = hostElement;
+        this.fixedClass = 'aside-menu-fixed';
+        renderer.addClass(hostElement.nativeElement, 'aside-menu');
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        Replace(this.el);
         this.isFixed(this.fixed);
         this.isOffCanvas(this.offCanvas);
         this.displayBreakpoint(this.display);
@@ -535,7 +489,7 @@ class AppAsideComponent {
      * @return {?}
      */
     ngOnDestroy() {
-        this.renderer.removeClass(this.document.body, 'aside-menu-fixed');
+        this.renderer.removeClass(this.document.body, this.fixedClass);
     }
     /**
      * @param {?=} fixed
@@ -543,7 +497,7 @@ class AppAsideComponent {
      */
     isFixed(fixed = this.fixed) {
         if (fixed) {
-            this.renderer.addClass(this.document.body, 'aside-menu-fixed');
+            this.renderer.addClass(this.document.body, this.fixedClass);
         }
     }
     /**
@@ -569,12 +523,8 @@ class AppAsideComponent {
 }
 AppAsideComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-aside',
-                template: `
-    <aside class="aside-menu">
-      <ng-content></ng-content>
-    </aside>
-  `
+                selector: 'app-aside, cui-aside',
+                template: `<ng-content></ng-content>`
             }] }
 ];
 /** @nocollapse */
@@ -701,6 +651,7 @@ class AppBreadcrumbComponent {
         this.renderer = renderer;
         this.service = service;
         this.el = el;
+        this.fixedClass = 'breadcrumb-fixed';
     }
     /**
      * @return {?}
@@ -714,7 +665,7 @@ class AppBreadcrumbComponent {
      * @return {?}
      */
     ngOnDestroy() {
-        this.renderer.removeClass(this.document.body, 'breadcrumb-fixed');
+        this.renderer.removeClass(this.document.body, this.fixedClass);
     }
     /**
      * @param {?=} fixed
@@ -722,7 +673,7 @@ class AppBreadcrumbComponent {
      */
     isFixed(fixed = this.fixed) {
         if (fixed) {
-            this.renderer.addClass(this.document.body, 'breadcrumb-fixed');
+            this.renderer.addClass(this.document.body, this.fixedClass);
         }
     }
 }
@@ -756,6 +707,61 @@ AppBreadcrumbComponent.propDecorators = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class CuiBreadcrumbComponent {
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     * @param {?} service
+     */
+    constructor(document, renderer, service) {
+        this.document = document;
+        this.renderer = renderer;
+        this.service = service;
+        this.fixedClass = 'breadcrumb-fixed';
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() {
+        this.isFixed(this.fixed);
+        this.breadcrumbs = this.service.breadcrumbs;
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this.renderer.removeClass(this.document.body, this.fixedClass);
+    }
+    /**
+     * @param {?=} fixed
+     * @return {?}
+     */
+    isFixed(fixed = this.fixed) {
+        if (fixed) {
+            this.renderer.addClass(this.document.body, this.fixedClass);
+        }
+    }
+}
+CuiBreadcrumbComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'cui-breadcrumb',
+                template: "<ol class=\"breadcrumb\">\n  <ng-template ngFor let-breadcrumb [ngForOf]=\"breadcrumbs | async\" let-last = last>\n    <li class=\"breadcrumb-item\"\n        *ngIf=\"breadcrumb.label.title && (breadcrumb.url.slice(-1) == '/' || last)\"\n        [ngClass]=\"{active: last}\">\n      <a *ngIf=\"!last\" [routerLink]=\"breadcrumb.url\">{{breadcrumb.label.title}}</a>\n      <span *ngIf=\"last\" [routerLink]=\"breadcrumb.url\">{{breadcrumb.label.title}}</span>\n    </li>\n  </ng-template>\n  <ng-content></ng-content>\n</ol>\n"
+            }] }
+];
+/** @nocollapse */
+CuiBreadcrumbComponent.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 },
+    { type: AppBreadcrumbService }
+];
+CuiBreadcrumbComponent.propDecorators = {
+    fixed: [{ type: Input }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 // @dynamic
 class AppBreadcrumbModule {
     /**
@@ -774,8 +780,8 @@ class AppBreadcrumbModule {
 AppBreadcrumbModule.decorators = [
     { type: NgModule, args: [{
                 imports: [CommonModule, RouterModule],
-                exports: [AppBreadcrumbComponent],
-                declarations: [AppBreadcrumbComponent]
+                exports: [AppBreadcrumbComponent, CuiBreadcrumbComponent],
+                declarations: [AppBreadcrumbComponent, CuiBreadcrumbComponent]
             },] }
 ];
 
@@ -792,11 +798,14 @@ class AppFooterComponent {
     /**
      * @param {?} document
      * @param {?} renderer
+     * @param {?} hostElement
      */
-    constructor(document, renderer) {
+    constructor(document, renderer, hostElement) {
         this.document = document;
         this.renderer = renderer;
+        this.hostElement = hostElement;
         this.fixedClass = 'footer-fixed';
+        renderer.addClass(hostElement.nativeElement, 'app-footer');
     }
     /**
      * @return {?}
@@ -829,11 +838,11 @@ AppFooterComponent.decorators = [
 /** @nocollapse */
 AppFooterComponent.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Renderer2 }
+    { type: Renderer2 },
+    { type: ElementRef }
 ];
 AppFooterComponent.propDecorators = {
-    fixed: [{ type: Input }],
-    true: [{ type: HostBinding, args: ['class.app-footer',] }]
+    fixed: [{ type: Input }]
 };
 
 /**
@@ -863,21 +872,22 @@ class AppHeaderComponent {
     /**
      * @param {?} document
      * @param {?} renderer
-     * @param {?} el
+     * @param {?} hostElement
      */
-    constructor(document, renderer, el) {
+    constructor(document, renderer, hostElement) {
         this.document = document;
         this.renderer = renderer;
-        this.el = el;
+        this.hostElement = hostElement;
         this.navbarBrandText = { icon: '🅲', text: '🅲 CoreUI' };
         this.navbarBrandHref = '';
         this.fixedClass = 'header-fixed';
+        renderer.addClass(hostElement.nativeElement, 'app-header');
+        renderer.addClass(hostElement.nativeElement, 'navbar');
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        Replace(this.el);
         this.isFixed(this.fixed);
         this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
     }
@@ -899,49 +909,8 @@ class AppHeaderComponent {
 }
 AppHeaderComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-header',
-                template: `
-    <header class="app-header navbar">
-      <ng-template [ngIf]="mobileSidebarToggler != false">
-        <button class="navbar-toggler d-lg-none" type="button" appSidebarToggler>
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
-        <a class="navbar-brand" [href]="navbarBrandHref">
-          <ng-template [ngIf]="navbarBrandImg">
-          <img *ngIf="navbarBrand"
-               [appHtmlAttr]="navbarBrand"
-               [ngClass]="'navbar-brand'">
-          <img *ngIf="navbarBrandFull"
-               [appHtmlAttr]="navbarBrandFull"
-               [ngClass]="'navbar-brand-full'">
-          <img *ngIf="navbarBrandMinimized"
-               [appHtmlAttr]="navbarBrandMinimized"
-               [ngClass]="'navbar-brand-minimized'">
-          </ng-template>
-          <ng-template [ngIf]="!navbarBrandImg">
-            <div class="navbar-brand-full" [innerHTML]="navbarBrandText.text"></div>
-            <div class="navbar-brand-minimized" [innerHTML]="navbarBrandText.icon"></div>
-          </ng-template>
-        </a>
-      <ng-template [ngIf]="sidebarToggler != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [appSidebarToggler]="sidebarToggler">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
-      <ng-content></ng-content>
-      <ng-template [ngIf]="asideMenuToggler != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [appAsideMenuToggler]="asideMenuToggler">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
-      <ng-template [ngIf]="mobileAsideMenuToggler != false">
-        <button class="navbar-toggler d-lg-none" type="button" appAsideMenuToggler>
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
-    </header>
-  `
+                selector: 'app-header, cui-header',
+                template: "<ng-template [ngIf]=\"mobileSidebarToggler != false\">\n  <button class=\"navbar-toggler d-lg-none\" type=\"button\" appSidebarToggler>\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n</ng-template>\n<a class=\"navbar-brand\" [href]=\"navbarBrandHref\">\n  <ng-template [ngIf]=\"navbarBrandImg\">\n    <img *ngIf=\"navbarBrand\"\n         [appHtmlAttr]=\"navbarBrand\"\n         [ngClass]=\"'navbar-brand'\">\n    <img *ngIf=\"navbarBrandFull\"\n         [appHtmlAttr]=\"navbarBrandFull\"\n         [ngClass]=\"'navbar-brand-full'\">\n    <img *ngIf=\"navbarBrandMinimized\"\n         [appHtmlAttr]=\"navbarBrandMinimized\"\n         [ngClass]=\"'navbar-brand-minimized'\">\n  </ng-template>\n  <ng-template [ngIf]=\"!navbarBrandImg\">\n    <div class=\"navbar-brand-full\" [innerHTML]=\"navbarBrandText.text\"></div>\n    <div class=\"navbar-brand-minimized\" [innerHTML]=\"navbarBrandText.icon\"></div>\n  </ng-template>\n</a>\n<ng-template [ngIf]=\"sidebarToggler != false\">\n  <button class=\"navbar-toggler d-md-down-none\" type=\"button\" [appSidebarToggler]=\"sidebarToggler\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n</ng-template>\n<ng-content></ng-content>\n<ng-template [ngIf]=\"asideMenuToggler != false\">\n  <button class=\"navbar-toggler d-md-down-none\" type=\"button\" [appAsideMenuToggler]=\"asideMenuToggler\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n</ng-template>\n<ng-template [ngIf]=\"mobileAsideMenuToggler != false\">\n  <button class=\"navbar-toggler d-lg-none\" type=\"button\" appAsideMenuToggler>\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n</ng-template>\n"
             }] }
 ];
 /** @nocollapse */
@@ -994,143 +963,17 @@ AppHeaderModule.decorators = [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class AppSidebarFooterComponent {
-    /**
-     * @param {?} el
-     */
-    constructor(el) {
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarFooterComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-footer',
-                template: `
-    <div class="sidebar-footer">
-      <ng-content></ng-content>
-    </div>`
-            }] }
-];
-/** @nocollapse */
-AppSidebarFooterComponent.ctorParameters = () => [
-    { type: ElementRef }
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class AppSidebarFormComponent {
-    /**
-     * @param {?} el
-     */
-    constructor(el) {
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarFormComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-form',
-                template: `
-    <form class="sidebar-form">
-      <ng-content></ng-content>
-    </form>
-  `
-            }] }
-];
-/** @nocollapse */
-AppSidebarFormComponent.ctorParameters = () => [
-    { type: ElementRef }
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class AppSidebarHeaderComponent {
-    /**
-     * @param {?} el
-     */
-    constructor(el) {
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarHeaderComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-header',
-                template: `
-    <div class="sidebar-header">
-      <ng-content></ng-content>
-    </div>
-  `
-            }] }
-];
-/** @nocollapse */
-AppSidebarHeaderComponent.ctorParameters = () => [
-    { type: ElementRef }
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class AppSidebarMinimizerComponent {
-    /**
-     * @param {?} el
-     */
-    constructor(el) {
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarMinimizerComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-minimizer',
-                template: `
-    <button class="sidebar-minimizer" type="button" appSidebarMinimizer appBrandMinimizer></button>
-  `
-            }] }
-];
-/** @nocollapse */
-AppSidebarMinimizerComponent.ctorParameters = () => [
-    { type: ElementRef }
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 class AppSidebarComponent {
     /**
      * @param {?} document
      * @param {?} renderer
+     * @param {?} hostElement
      */
-    constructor(document, renderer) {
+    constructor(document, renderer, hostElement) {
         this.document = document;
         this.renderer = renderer;
+        this.hostElement = hostElement;
+        renderer.addClass(hostElement.nativeElement, 'sidebar');
     }
     /**
      * @return {?}
@@ -1185,16 +1028,6 @@ class AppSidebarComponent {
         }
     }
     /**
-     * @param {?=} fixed
-     * @return {?}
-     */
-    fixedPosition(fixed = this.fixed) {
-        console.warn('deprecated fixedPosition(), use isFixed() instead');
-        if (fixed) {
-            this.renderer.addClass(this.document.body, 'sidebar-fixed');
-        }
-    }
-    /**
      * @param {?=} display
      * @return {?}
      */
@@ -1215,15 +1048,162 @@ AppSidebarComponent.decorators = [
 /** @nocollapse */
 AppSidebarComponent.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Renderer2 }
+    { type: Renderer2 },
+    { type: ElementRef }
 ];
 AppSidebarComponent.propDecorators = {
     compact: [{ type: Input }],
     display: [{ type: Input }],
     fixed: [{ type: Input }],
     minimized: [{ type: Input }],
-    offCanvas: [{ type: Input }],
-    true: [{ type: HostBinding, args: ['class.sidebar',] }]
+    offCanvas: [{ type: Input }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarFooterComponent {
+    /**
+     * @param {?} renderer
+     * @param {?} hostElement
+     */
+    constructor(renderer, hostElement) {
+        this.renderer = renderer;
+        this.hostElement = hostElement;
+        renderer.addClass(hostElement.nativeElement, 'app-sidebar-footer');
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() { }
+}
+AppSidebarFooterComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-footer',
+                template: `<ng-content></ng-content>`
+            }] }
+];
+/** @nocollapse */
+AppSidebarFooterComponent.ctorParameters = () => [
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarFormComponent {
+    /**
+     * @param {?} renderer
+     * @param {?} hostElement
+     */
+    constructor(renderer, hostElement) {
+        this.renderer = renderer;
+        this.hostElement = hostElement;
+        renderer.addClass(hostElement.nativeElement, 'sidebar-form');
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() { }
+}
+AppSidebarFormComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-form',
+                template: `<ng-content></ng-content>`
+            }] }
+];
+/** @nocollapse */
+AppSidebarFormComponent.ctorParameters = () => [
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarHeaderComponent {
+    /**
+     * @param {?} renderer
+     * @param {?} hostElement
+     */
+    constructor(renderer, hostElement) {
+        this.renderer = renderer;
+        this.hostElement = hostElement;
+        renderer.addClass(hostElement.nativeElement, 'sidebar-header');
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() { }
+}
+AppSidebarHeaderComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-header',
+                template: `<ng-content></ng-content>`
+            }] }
+];
+/** @nocollapse */
+AppSidebarHeaderComponent.ctorParameters = () => [
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarMinimizerComponent {
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     * @param {?} hostElement
+     */
+    constructor(document, renderer, hostElement) {
+        this.document = document;
+        this.renderer = renderer;
+        this.hostElement = hostElement;
+        this.role = 'button';
+        renderer.addClass(hostElement.nativeElement, 'sidebar-minimizer');
+    }
+    /**
+     * @param {?} $event
+     * @return {?}
+     */
+    toggleOpen($event) {
+        $event.preventDefault();
+        /** @type {?} */
+        const body = this.document.body;
+        body.classList.contains('sidebar-minimized') ?
+            this.renderer.removeClass(body, 'sidebar-minimized') :
+            this.renderer.addClass(body, 'sidebar-minimized');
+        body.classList.contains('brand-minimized') ?
+            this.renderer.removeClass(body, 'brand-minimized') :
+            this.renderer.addClass(body, 'brand-minimized');
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() { }
+}
+AppSidebarMinimizerComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-minimizer',
+                template: ``
+            }] }
+];
+/** @nocollapse */
+AppSidebarMinimizerComponent.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+AppSidebarMinimizerComponent.propDecorators = {
+    role: [{ type: HostBinding, args: ['attr.role',] }],
+    toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
 
 /**
@@ -1284,140 +1264,307 @@ NavDropdownToggleDirective.ctorParameters = () => [
 NavDropdownToggleDirective.propDecorators = {
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class AppSidebarNavComponent {
-    constructor() {
+    /**
+     * @param {?} router
+     * @param {?} renderer
+     * @param {?} hostElement
+     */
+    constructor(router, renderer, hostElement) {
+        this.router = router;
+        this.renderer = renderer;
+        this.hostElement = hostElement;
         this.role = 'nav';
-    }
-    /**
-     * @param {?} item
-     * @return {?}
-     */
-    isDivider(item) {
-        return item.divider ? true : false;
-    }
-    /**
-     * @param {?} item
-     * @return {?}
-     */
-    isTitle(item) {
-        return item.title ? true : false;
+        renderer.addClass(hostElement.nativeElement, 'sidebar-nav');
     }
     /**
      * @param {?} changes
      * @return {?}
      */
     ngOnChanges(changes) {
-        this.navItemsArray = JSON.parse(JSON.stringify(this.navItems));
+        this.navItemsArray = JSON.parse(JSON.stringify(this.navItems || []));
     }
 }
 AppSidebarNavComponent.decorators = [
     { type: Component, args: [{
                 selector: 'app-sidebar-nav',
+                template: "<app-sidebar-nav-items\n  class=\"nav\"\n  [items]=\"navItemsArray\">\n</app-sidebar-nav-items>\n"
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavComponent.ctorParameters = () => [
+    { type: Router },
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+AppSidebarNavComponent.propDecorators = {
+    navItems: [{ type: Input }],
+    role: [{ type: HostBinding, args: ['attr.role',] }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavDividerComponent {
+    constructor() { }
+    /**
+     * @return {?}
+     */
+    ngOnInit() { }
+}
+AppSidebarNavDividerComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-divider',
+                template: ``
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavDividerComponent.ctorParameters = () => [];
+AppSidebarNavDividerComponent.propDecorators = {
+    item: [{ type: Input }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class SidebarNavHelper {
+    constructor() {
+        this.hasBadge = (/**
+         * @param {?} item
+         * @return {?}
+         */
+        (item) => Boolean(item.badge));
+        this.hasIcon = (/**
+         * @param {?} item
+         * @return {?}
+         */
+        (item) => Boolean(item.icon));
+    }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    itemType(item) {
+        if (item.divider) {
+            return 'divider';
+        }
+        else if (item.title) {
+            return 'title';
+        }
+        else if (item.children) {
+            return 'dropdown';
+        }
+        else if (item.label) {
+            return 'label';
+        }
+        else if (!Object.keys(item).length) {
+            return 'empty';
+        }
+        else {
+            return 'link';
+        }
+    }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    getClass(item) {
+        /** @type {?} */
+        const itemType = this.itemType(item);
+        /** @type {?} */
+        let itemClass;
+        if (['divider', 'title'].includes(itemType)) {
+            itemClass = `nav-${itemType}`;
+        }
+        else if (itemType === 'dropdown') {
+            itemClass = 'nav-item nav-dropdown';
+        }
+        else {
+            itemClass = 'nav-item';
+        }
+        return item.class ? `${itemClass} ${item.class}` : itemClass;
+    }
+    /**
+     * @param {?} router
+     * @param {?} item
+     * @return {?}
+     */
+    isActive(router, item) {
+        return router.isActive(item.url, false);
+    }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    getIconClass(item) {
+        /** @type {?} */
+        const classes = {
+            'nav-icon': true
+        };
+        /** @type {?} */
+        const icon = item.icon;
+        classes[icon] = !!item.icon;
+        return classes;
+    }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    getBadgeClass(item) {
+        /** @type {?} */
+        const classes = {
+            'badge': true
+        };
+        /** @type {?} */
+        const variant = `badge-${item.badge.variant}`;
+        classes[variant] = !!item.badge.variant;
+        return classes;
+    }
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavDropdownComponent {
+    /**
+     * @param {?} helper
+     */
+    constructor(helper) {
+        this.helper = helper;
+    }
+}
+AppSidebarNavDropdownComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-dropdown',
                 template: `
-    <ul class="nav">
-      <ng-template ngFor let-navitem [ngForOf]="navItems">
-        <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
-        <ng-template [ngIf]="isTitle(navitem)">
-          <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>
-        </ng-template>
-        <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)">
-          <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>
-        </ng-template>
-      </ng-template>
-    </ul>
+    <a class="nav-link nav-dropdown-toggle"
+       appNavDropdownToggle
+       [appHtmlAttr]="item.attributes">
+      <i *ngIf="helper.hasIcon(item)" [ngClass]="helper.getIconClass(item)"></i>
+      <ng-container>{{item.name}}</ng-container>
+      <span *ngIf="helper.hasBadge(item)" [ngClass]="helper.getBadgeClass(item)">{{ item.badge.text }}</span>
+    </a>
+    <app-sidebar-nav-items
+      class="nav-dropdown-items"
+      [items]="item.children">
+    </app-sidebar-nav-items>
+  `,
+                providers: [SidebarNavHelper],
+                styles: ['.nav-dropdown-toggle { cursor: pointer; }',
+                    '.nav-dropdown-items { display: block; }']
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavDropdownComponent.ctorParameters = () => [
+    { type: SidebarNavHelper }
+];
+AppSidebarNavDropdownComponent.propDecorators = {
+    item: [{ type: Input }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavItemsComponent {
+    /**
+     * @param {?} router
+     * @param {?} helper
+     */
+    constructor(router, helper) {
+        this.router = router;
+        this.helper = helper;
+    }
+}
+AppSidebarNavItemsComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-items',
+                template: `
+    <ng-container *ngFor="let item of items">
+      <ng-container [ngSwitch]="helper.itemType(item)">
+        <app-sidebar-nav-dropdown
+          *ngSwitchCase="'dropdown'"
+          [item]="item"
+          [class.open]="helper.isActive(router, item)"
+          [ngClass]="helper.getClass(item)"
+          appNavDropdown
+          routerLinkActive="open">
+        </app-sidebar-nav-dropdown>
+        <app-sidebar-nav-divider
+          *ngSwitchCase="'divider'"
+          [item]="item"
+          [ngClass]="helper.getClass(item)"
+          [appHtmlAttr]="item.attributes">
+        </app-sidebar-nav-divider>
+        <app-sidebar-nav-title
+          *ngSwitchCase="'title'"
+          [item]="item"
+          [ngClass]="helper.getClass(item)"
+          [appHtmlAttr]="item.attributes">
+        </app-sidebar-nav-title>
+        <app-sidebar-nav-label
+          *ngSwitchCase="'label'"
+          [item]="item"
+          class="nav-item"
+          [ngClass]="helper.getClass(item)">
+        </app-sidebar-nav-label>
+        <ng-container
+          *ngSwitchCase="'empty'">
+        </ng-container>
+        <app-sidebar-nav-link
+          *ngSwitchDefault
+          [item]="item"
+          class="nav-item"
+          [ngClass]="helper.getClass(item)">
+        </app-sidebar-nav-link>
+      </ng-container>
+    </ng-container>
   `
             }] }
 ];
 /** @nocollapse */
-AppSidebarNavComponent.ctorParameters = () => [];
-AppSidebarNavComponent.propDecorators = {
-    navItems: [{ type: Input }],
-    true: [{ type: HostBinding, args: ['class.sidebar-nav',] }],
-    role: [{ type: HostBinding, args: ['attr.role',] }]
+AppSidebarNavItemsComponent.ctorParameters = () => [
+    { type: Router },
+    { type: SidebarNavHelper }
+];
+AppSidebarNavItemsComponent.propDecorators = {
+    items: [{ type: Input }]
 };
-class AppSidebarNavItemComponent {
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavLinkComponent {
     /**
-     * @param {?} router
-     * @param {?} el
+     * @param {?} document
+     * @param {?} renderer
+     * @param {?} helper
      */
-    constructor(router, el) {
-        this.router = router;
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    hasClass() {
-        return this.item.class ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    isDropdown() {
-        return this.item.children ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    thisUrl() {
-        return this.item.url;
-    }
-    /**
-     * @return {?}
-     */
-    isActive() {
-        return this.router.isActive(this.thisUrl(), false);
+    constructor(document, renderer, helper) {
+        this.document = document;
+        this.renderer = renderer;
+        this.helper = helper;
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarNavItemComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-nav-item',
-                template: `
-    <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.class : 'nav-item'">
-      <app-sidebar-nav-link [link]='item'></app-sidebar-nav-link>
-    </li>
-    <ng-template #dropdown>
-      <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'"
-          [class.open]="isActive()"
-          routerLinkActive="open"
-          appNavDropdown>
-        <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>
-      </li>
-    </ng-template>
-    `
-            }] }
-];
-/** @nocollapse */
-AppSidebarNavItemComponent.ctorParameters = () => [
-    { type: Router },
-    { type: ElementRef }
-];
-AppSidebarNavItemComponent.propDecorators = {
-    item: [{ type: Input }]
-};
-class AppSidebarNavLinkComponent {
-    /**
-     * @param {?} document
-     * @param {?} renderer
-     * @param {?} router
-     * @param {?} el
-     */
-    constructor(document, renderer, router, el) {
-        this.document = document;
-        this.renderer = renderer;
-        this.router = router;
-        this.el = el;
+        this.linkType = this.getLinkType();
+        this.href = this.isDisabled() ? '' : this.item.url;
     }
     /**
      * @return {?}
      */
-    getClasses() {
+    getLinkClass() {
         /** @type {?} */
         const disabled = this.isDisabled();
         /** @type {?} */
@@ -1428,7 +1575,7 @@ class AppSidebarNavLinkComponent {
         };
         if (this.hasVariant()) {
             /** @type {?} */
-            const variant = `nav-link-${this.link.variant}`;
+            const variant = `nav-link-${this.item.variant}`;
             classes[variant] = true;
         }
         return classes;
@@ -1437,37 +1584,25 @@ class AppSidebarNavLinkComponent {
      * @return {?}
      */
     getLinkType() {
-        return this.isDisabled() ? 'disabled' : this.isExternalLink() ? 'external' : '';
+        return this.isExternalLink() ? 'external' : 'link';
     }
     /**
      * @return {?}
      */
     hasVariant() {
-        return this.link.variant ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    isBadge() {
-        return this.link.badge ? true : false;
+        return !!this.item.variant;
     }
     /**
      * @return {?}
      */
     isDisabled() {
-        return this.link.attributes && this.link.attributes.disabled ? true : false;
+        return !!(this.item.attributes && this.item.attributes.disabled);
     }
     /**
      * @return {?}
      */
     isExternalLink() {
-        return this.link.url.substring(0, 4) === 'http' ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    isIcon() {
-        return this.link.icon ? true : false;
+        return this.item.url.substring(0, 4) === 'http';
     }
     /**
      * @return {?}
@@ -1477,110 +1612,28 @@ class AppSidebarNavLinkComponent {
             this.renderer.removeClass(this.document.body, 'sidebar-show');
         }
     }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
 }
 AppSidebarNavLinkComponent.decorators = [
     { type: Component, args: [{
                 selector: 'app-sidebar-nav-link',
-                template: `
-    <ng-container [ngSwitch]="getLinkType()">
-      <a *ngSwitchCase="'disabled'"
-      [attr.disabled]="true"
-      [appHtmlAttr]="link.attributes"
-      href=""
-      [ngClass]="getClasses()">
-        <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-        {{ link.name }}
-        <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-      </a>
-      <a *ngSwitchCase="'external'" [ngClass]="getClasses()" href="{{link.url}}" [appHtmlAttr]="link.attributes">
-        <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-        {{ link.name }}
-        <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-      </a>
-      <a *ngSwitchDefault
-        [ngClass]="getClasses()"
-        [appHtmlAttr]="link.attributes"
-        routerLinkActive="active"
-        [routerLink]="[link.url]"
-        (click)="hideMobile()">
-        <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-        {{ link.name }}
-        <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-      </a>
-    </ng-container>
-  `
+                template: "<ng-container [ngSwitch]=\"linkType\">\n  <a *ngSwitchCase=\"'external'\"\n    [ngClass]=\"getLinkClass()\"\n    href=\"{{item.url}}\"\n    [appHtmlAttr]=\"item.attributes\">\n    <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"helper.getIconClass(item)\"></i>\n    <ng-container>{{item.name}}</ng-container>\n    <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"helper.getBadgeClass(item)\">{{ item.badge.text }}</span>\n  </a>\n  <a *ngSwitchDefault\n     [ngClass]=\"getLinkClass()\"\n     [appHtmlAttr]=\"item.attributes\"\n     [attr.disabled]=\"isDisabled()\"\n     routerLinkActive=\"active\"\n     [routerLink]=\"[item.url]\"\n     (click)=\"hideMobile()\">\n    <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"helper.getIconClass(item)\"></i>\n    <ng-container>{{item.name}}</ng-container>\n    <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"helper.getBadgeClass(item)\">{{ item.badge.text }}</span>\n  </a>\n</ng-container>\n",
+                providers: [SidebarNavHelper]
             }] }
 ];
 /** @nocollapse */
 AppSidebarNavLinkComponent.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: Renderer2 },
-    { type: Router },
-    { type: ElementRef }
+    { type: SidebarNavHelper }
 ];
 AppSidebarNavLinkComponent.propDecorators = {
-    link: [{ type: Input }]
+    item: [{ type: Input }]
 };
-class AppSidebarNavDropdownComponent {
-    /**
-     * @param {?} router
-     * @param {?} el
-     */
-    constructor(router, el) {
-        this.router = router;
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    isBadge() {
-        return this.link.badge ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    isIcon() {
-        return this.link.icon ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarNavDropdownComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-nav-dropdown',
-                template: `
-    <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle>
-      <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-      {{ link.name }}
-      <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-    </a>
-    <ul class="nav-dropdown-items">
-      <ng-template ngFor let-child [ngForOf]="link.children">
-        <app-sidebar-nav-item [item]='child'></app-sidebar-nav-item>
-      </ng-template>
-    </ul>
-  `,
-                styles: ['.nav-dropdown-toggle { cursor: pointer; }']
-            }] }
-];
-/** @nocollapse */
-AppSidebarNavDropdownComponent.ctorParameters = () => [
-    { type: Router },
-    { type: ElementRef }
-];
-AppSidebarNavDropdownComponent.propDecorators = {
-    link: [{ type: Input }]
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class AppSidebarNavTitleComponent {
     /**
      * @param {?} el
@@ -1597,26 +1650,85 @@ class AppSidebarNavTitleComponent {
         /** @type {?} */
         const nativeElement = this.el.nativeElement;
         /** @type {?} */
-        const li = this.renderer.createElement('li');
-        /** @type {?} */
-        const name = this.renderer.createText(this.title.name);
-        this.renderer.addClass(li, 'nav-title');
-        if (this.title.class) {
+        const name = this.renderer.createText(this.item.name);
+        if (this.item.class) {
             /** @type {?} */
-            const classes = this.title.class;
-            this.renderer.addClass(li, classes);
+            const classes = this.item.class;
+            this.renderer.addClass(nativeElement, classes);
         }
-        if (this.title.wrapper) {
+        if (this.item.wrapper) {
             /** @type {?} */
-            const wrapper = this.renderer.createElement(this.title.wrapper.element);
+            const wrapper = this.renderer.createElement(this.item.wrapper.element);
+            this.addAttribs(this.item.wrapper.attributes, wrapper);
             this.renderer.appendChild(wrapper, name);
-            this.renderer.appendChild(li, wrapper);
+            this.renderer.appendChild(nativeElement, wrapper);
         }
         else {
-            this.renderer.appendChild(li, name);
+            this.renderer.appendChild(nativeElement, name);
         }
-        this.renderer.appendChild(nativeElement, li);
-        Replace(this.el);
+    }
+    /**
+     * @private
+     * @param {?} attribs
+     * @param {?} element
+     * @return {?}
+     */
+    addAttribs(attribs, element) {
+        if (attribs) {
+            for (const attr in attribs) {
+                if (attr === 'style' && typeof (attribs[attr]) === 'object') {
+                    this.setStyle(attribs[attr], element);
+                }
+                else if (attr === 'class') {
+                    this.addClass(attribs[attr], element);
+                }
+                else {
+                    this.setAttrib(attr, attribs[attr], element);
+                }
+            }
+        }
+    }
+    /**
+     * @private
+     * @param {?} styles
+     * @param {?} el
+     * @return {?}
+     */
+    setStyle(styles, el) {
+        for (const style in styles) {
+            this.renderer.setStyle(el, style, styles[style]);
+        }
+    }
+    /**
+     * @private
+     * @param {?} classes
+     * @param {?} el
+     * @return {?}
+     */
+    addClass(classes, el) {
+        /** @type {?} */
+        const classArray = (Array.isArray(classes) ? classes : classes.split(' '));
+        classArray.filter((/**
+         * @param {?} element
+         * @return {?}
+         */
+        (element) => element.length > 0)).forEach((/**
+         * @param {?} element
+         * @return {?}
+         */
+        element => {
+            this.renderer.addClass(el, element);
+        }));
+    }
+    /**
+     * @private
+     * @param {?} key
+     * @param {?} value
+     * @param {?} el
+     * @return {?}
+     */
+    setAttrib(key, value, el) {
+        this.renderer.setAttribute(el, key, value);
     }
 }
 AppSidebarNavTitleComponent.decorators = [
@@ -1631,7 +1743,66 @@ AppSidebarNavTitleComponent.ctorParameters = () => [
     { type: Renderer2 }
 ];
 AppSidebarNavTitleComponent.propDecorators = {
-    title: [{ type: Input }]
+    item: [{ type: Input }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavLabelComponent {
+    /**
+     * @param {?} helper
+     */
+    constructor(helper) {
+        this.helper = helper;
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() {
+    }
+    /**
+     * @return {?}
+     */
+    getItemClass() {
+        /** @type {?} */
+        const labelClass = {
+            'nav-label': true,
+            'active': true
+        };
+        /** @type {?} */
+        const itemClass = this.item.class;
+        labelClass[itemClass] = !!itemClass;
+        return labelClass;
+    }
+    /**
+     * @return {?}
+     */
+    getLabelIconClass() {
+        /** @type {?} */
+        const classes = this.helper.getIconClass(this.item);
+        /** @type {?} */
+        const variant = `text-${this.item.label.variant}`;
+        classes[variant] = !!variant;
+        /** @type {?} */
+        const labelClass = this.item.label.class;
+        classes[labelClass] = !!labelClass;
+        return classes;
+    }
+}
+AppSidebarNavLabelComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-label',
+                template: "<a [ngClass]=\"getItemClass()\"\n   href=\"{{item.url}}\"\n   [appHtmlAttr]=\"item.attributes\">\n  <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"getLabelIconClass()\"></i>\n  <ng-container>{{item.name}}</ng-container>\n  <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"helper.getBadgeClass(item)\">{{ item.badge.text }}</span>\n</a>\n"
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavLabelComponent.ctorParameters = () => [
+    { type: SidebarNavHelper }
+];
+AppSidebarNavLabelComponent.propDecorators = {
+    item: [{ type: Input }]
 };
 
 /**
@@ -1653,9 +1824,10 @@ AppSidebarModule.decorators = [
                     AppSidebarHeaderComponent,
                     AppSidebarMinimizerComponent,
                     AppSidebarComponent,
+                    AppSidebarNavItemsComponent,
                     AppSidebarNavComponent,
+                    AppSidebarNavDividerComponent,
                     AppSidebarNavDropdownComponent,
-                    AppSidebarNavItemComponent,
                     AppSidebarNavLinkComponent,
                     AppSidebarNavTitleComponent,
                     NavDropdownDirective,
@@ -1669,13 +1841,18 @@ AppSidebarModule.decorators = [
                     AppSidebarMinimizerComponent,
                     AppSidebarMinimizerComponent,
                     AppSidebarComponent,
+                    AppSidebarNavItemsComponent,
                     AppSidebarNavComponent,
+                    AppSidebarNavDividerComponent,
                     AppSidebarNavDropdownComponent,
-                    AppSidebarNavItemComponent,
                     AppSidebarNavLinkComponent,
                     AppSidebarNavTitleComponent,
                     NavDropdownDirective,
-                    NavDropdownToggleDirective
+                    NavDropdownToggleDirective,
+                    AppSidebarNavLabelComponent
+                ],
+                providers: [
+                    SidebarNavHelper
                 ]
             },] }
 ];
@@ -1695,6 +1872,6 @@ AppSidebarModule.decorators = [
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule, AppAsideComponent as ɵj, AppBreadcrumbComponent as ɵk, AppBreadcrumbService as ɵl, AppFooterComponent as ɵm, AppHeaderComponent as ɵn, AsideToggleDirective as ɵg, BrandMinimizeDirective as ɵf, HtmlAttributesDirective as ɵh, MobileSidebarToggleDirective as ɵd, SidebarMinimizeDirective as ɵc, SidebarOffCanvasCloseDirective as ɵe, SidebarToggleDirective as ɵb, LayoutModule as ɵa, ClassToggler as ɵi, AppSidebarFooterComponent as ɵo, AppSidebarFormComponent as ɵp, AppSidebarHeaderComponent as ɵq, AppSidebarMinimizerComponent as ɵr, AppSidebarNavComponent as ɵv, AppSidebarNavDropdownComponent as ɵy, AppSidebarNavItemComponent as ɵw, AppSidebarNavLinkComponent as ɵx, AppSidebarNavTitleComponent as ɵz, NavDropdownDirective as ɵt, NavDropdownToggleDirective as ɵu, AppSidebarComponent as ɵs };
+export { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule, AppAsideComponent as ɵj, AppBreadcrumbComponent as ɵk, AppBreadcrumbService as ɵl, CuiBreadcrumbComponent as ɵm, AppFooterComponent as ɵn, AppHeaderComponent as ɵo, AsideToggleDirective as ɵg, BrandMinimizeDirective as ɵf, HtmlAttributesDirective as ɵh, MobileSidebarToggleDirective as ɵd, SidebarMinimizeDirective as ɵc, SidebarOffCanvasCloseDirective as ɵe, SidebarToggleDirective as ɵb, LayoutModule as ɵa, ClassToggler as ɵi, AppSidebarFooterComponent as ɵp, AppSidebarFormComponent as ɵq, AppSidebarHeaderComponent as ɵr, AppSidebarMinimizerComponent as ɵs, AppSidebarNavComponent as ɵw, NavDropdownDirective as ɵbb, NavDropdownToggleDirective as ɵbc, SidebarNavHelper as ɵv, AppSidebarNavDividerComponent as ɵx, AppSidebarNavDropdownComponent as ɵy, AppSidebarNavItemsComponent as ɵu, AppSidebarNavLabelComponent as ɵbd, AppSidebarNavLinkComponent as ɵz, AppSidebarNavTitleComponent as ɵba, AppSidebarComponent as ɵt };
 
 //# sourceMappingURL=coreui-angular.js.map

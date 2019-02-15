@@ -1,5 +1,32 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.4.0-beta.1`
+- fix(sidebar): navItems reassignment bug [#126](https://github.com/coreui/coreui-free-angular-admin-template/issues/126), [#42](https://github.com/coreui/coreui-free-angular-admin-template/issues/42), #12
+- refactor(aside): drop `Replace`
+- refactor(breadcrumb): drop `Replace` new component `cui-breadcrumb` (migration needed)
+- refactor(footer): minor changes
+- refactor(header): drop `Replace`
+- refactor(layout): cleanup
+- refactor(sidebar-nav): drop `Replace`, redesign
+- update: `@angular/animations` to `^7.2.4`
+- update: `@angular/common` to `^7.2.4`
+- update: `@angular/compiler` to `^7.2.4`
+- update: `@angular/core` to `^7.2.4`
+- update: `@angular/forms` to `^7.2.4`
+- update: `@angular/http` to `^7.2.4`
+- update: `@angular/platform-browser` to `^7.2.4`
+- update: `@angular/platform-browser-dynamic` to `^7.2.4`
+- update: `@angular/router` to `^7.2.4`
+- update: `core-js` to `^2.6.5`
+- update: `@angular-devkit/build-angular` to `^0.13.1`
+- update: `@angular-devkit/build-ng-packagr` to `^0.13.1`
+- update: `@angular/cli` to `^7.3.1`
+- update: `@angular/compiler-cli` to `^7.2.4`
+- update: `@angular/language-service` to `^7.2.4`
+- update: `@types/jasmine` to `^3.3.9`
+- update: `@types/node` to `^10.12.26`
+- update: `ng-packagr` to `^4.7.1`
+
 ##### `v2.3.1`
 - fix: faulty LayoutModule import causes: Unexpected value 'undefined' imported by the module #47
 - refactor(appSidebarToggler): inject `ClassToggler` instead of ToggleClasses function
