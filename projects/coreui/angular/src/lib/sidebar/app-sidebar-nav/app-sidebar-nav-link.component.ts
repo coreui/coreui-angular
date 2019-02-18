@@ -46,7 +46,7 @@ export class AppSidebarNavLinkComponent implements OnInit {
   }
 
   public isDisabled() {
-    return !!(this.item.attributes && this.item.attributes.disabled);
+    return (this.item.attributes && this.item.attributes.disabled) ? true : null;
   }
 
   public isExternalLink() {
