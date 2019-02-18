@@ -2,11 +2,12 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-import { Component, ElementRef } from '@angular/core';
-import { Replace } from '../shared';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 var AppSidebarFormComponent = /** @class */ (function () {
-    function AppSidebarFormComponent(el) {
-        this.el = el;
+    function AppSidebarFormComponent(renderer, hostElement) {
+        this.renderer = renderer;
+        this.hostElement = hostElement;
+        renderer.addClass(hostElement.nativeElement, 'sidebar-form');
     }
     /**
      * @return {?}
@@ -14,17 +15,16 @@ var AppSidebarFormComponent = /** @class */ (function () {
     AppSidebarFormComponent.prototype.ngOnInit = /**
      * @return {?}
      */
-    function () {
-        Replace(this.el);
-    };
+    function () { };
     AppSidebarFormComponent.decorators = [
         { type: Component, args: [{
                     selector: 'app-sidebar-form',
-                    template: "\n    <form class=\"sidebar-form\">\n      <ng-content></ng-content>\n    </form>\n  "
+                    template: "<ng-content></ng-content>"
                 }] }
     ];
     /** @nocollapse */
     AppSidebarFormComponent.ctorParameters = function () { return [
+        { type: Renderer2 },
         { type: ElementRef }
     ]; };
     return AppSidebarFormComponent;
@@ -35,6 +35,11 @@ if (false) {
      * @type {?}
      * @private
      */
-    AppSidebarFormComponent.prototype.el;
+    AppSidebarFormComponent.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarFormComponent.prototype.hostElement;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLXNpZGViYXItZm9ybS5jb21wb25lbnQuanMiLCJzb3VyY2VSb290Ijoibmc6Ly9AY29yZXVpL2FuZ3VsYXIvIiwic291cmNlcyI6WyJsaWIvc2lkZWJhci9hcHAtc2lkZWJhci1mb3JtLmNvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFFLFNBQVMsRUFBRSxVQUFVLEVBQVcsTUFBTSxlQUFlLENBQUM7QUFFL0QsT0FBTyxFQUFFLE9BQU8sRUFBRSxNQUFNLFdBQVcsQ0FBQztBQUVwQztJQVVFLGlDQUFvQixFQUFjO1FBQWQsT0FBRSxHQUFGLEVBQUUsQ0FBWTtJQUFJLENBQUM7Ozs7SUFFdkMsMENBQVE7OztJQUFSO1FBQ0UsT0FBTyxDQUFDLElBQUksQ0FBQyxFQUFFLENBQUMsQ0FBQztJQUNuQixDQUFDOztnQkFkRixTQUFTLFNBQUM7b0JBQ1QsUUFBUSxFQUFFLGtCQUFrQjtvQkFDNUIsUUFBUSxFQUFFLHVGQUlUO2lCQUNGOzs7O2dCQVhtQixVQUFVOztJQW1COUIsOEJBQUM7Q0FBQSxBQWZELElBZUM7U0FQWSx1QkFBdUI7Ozs7OztJQUV0QixxQ0FBc0IiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBDb21wb25lbnQsIEVsZW1lbnRSZWYsIE9uSW5pdCAgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuXHJcbmltcG9ydCB7IFJlcGxhY2UgfSBmcm9tICcuLi9zaGFyZWQnO1xyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtc2lkZWJhci1mb3JtJyxcclxuICB0ZW1wbGF0ZTogYFxyXG4gICAgPGZvcm0gY2xhc3M9XCJzaWRlYmFyLWZvcm1cIj5cclxuICAgICAgPG5nLWNvbnRlbnQ+PC9uZy1jb250ZW50PlxyXG4gICAgPC9mb3JtPlxyXG4gIGBcclxufSlcclxuZXhwb3J0IGNsYXNzIEFwcFNpZGViYXJGb3JtQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcclxuXHJcbiAgY29uc3RydWN0b3IocHJpdmF0ZSBlbDogRWxlbWVudFJlZikgeyB9XHJcblxyXG4gIG5nT25Jbml0KCkge1xyXG4gICAgUmVwbGFjZSh0aGlzLmVsKTtcclxuICB9XHJcbn1cclxuIl19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLXNpZGViYXItZm9ybS5jb21wb25lbnQuanMiLCJzb3VyY2VSb290Ijoibmc6Ly9AY29yZXVpL2FuZ3VsYXIvIiwic291cmNlcyI6WyJsaWIvc2lkZWJhci9hcHAtc2lkZWJhci1mb3JtLmNvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFDLFNBQVMsRUFBRSxVQUFVLEVBQVUsU0FBUyxFQUFDLE1BQU0sZUFBZSxDQUFDO0FBRXZFO0lBTUUsaUNBQ1UsUUFBbUIsRUFDbkIsV0FBdUI7UUFEdkIsYUFBUSxHQUFSLFFBQVEsQ0FBVztRQUNuQixnQkFBVyxHQUFYLFdBQVcsQ0FBWTtRQUUvQixRQUFRLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxhQUFhLEVBQUUsY0FBYyxDQUFDLENBQUM7SUFDL0QsQ0FBQzs7OztJQUNELDBDQUFROzs7SUFBUixjQUFhLENBQUM7O2dCQVpmLFNBQVMsU0FBQztvQkFDVCxRQUFRLEVBQUUsa0JBQWtCO29CQUM1QixRQUFRLEVBQUUsMkJBQTJCO2lCQUN0Qzs7OztnQkFMc0MsU0FBUztnQkFBN0IsVUFBVTs7SUFlN0IsOEJBQUM7Q0FBQSxBQWJELElBYUM7U0FUWSx1QkFBdUI7Ozs7OztJQUdoQywyQ0FBMkI7Ozs7O0lBQzNCLDhDQUErQiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7Q29tcG9uZW50LCBFbGVtZW50UmVmLCBPbkluaXQsIFJlbmRlcmVyMn0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5cbkBDb21wb25lbnQoe1xuICBzZWxlY3RvcjogJ2FwcC1zaWRlYmFyLWZvcm0nLFxuICB0ZW1wbGF0ZTogYDxuZy1jb250ZW50PjwvbmctY29udGVudD5gXG59KVxuZXhwb3J0IGNsYXNzIEFwcFNpZGViYXJGb3JtQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcblxuICBjb25zdHJ1Y3RvcihcbiAgICBwcml2YXRlIHJlbmRlcmVyOiBSZW5kZXJlcjIsXG4gICAgcHJpdmF0ZSBob3N0RWxlbWVudDogRWxlbWVudFJlZlxuICApIHtcbiAgICByZW5kZXJlci5hZGRDbGFzcyhob3N0RWxlbWVudC5uYXRpdmVFbGVtZW50LCAnc2lkZWJhci1mb3JtJyk7XG4gIH1cbiAgbmdPbkluaXQoKSB7IH1cbn1cbiJdfQ==

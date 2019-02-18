@@ -1,4 +1,4 @@
-import { Component, Input, Inject, HostBinding, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import {Component, Input, Inject, OnInit, OnDestroy, Renderer2, ElementRef} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { sidebarCssClasses } from '../shared';
@@ -14,12 +14,13 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   @Input() minimized: boolean;
   @Input() offCanvas: boolean;
 
-  @HostBinding('class.sidebar') true;
-
   constructor(
     @Inject(DOCUMENT) private document: any,
-    private renderer: Renderer2
-  ) {}
+    private renderer: Renderer2,
+    private hostElement: ElementRef
+  ) {
+    renderer.addClass(hostElement.nativeElement, 'sidebar');
+  }
 
   ngOnInit(): void {
     this.displayBreakpoint(this.display);
@@ -54,13 +55,6 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   isOffCanvas(offCanvas: boolean = this.offCanvas): void {
     if (offCanvas) {
       this.renderer.addClass(this.document.body, 'sidebar-off-canvas');
-    }
-  }
-
-  fixedPosition(fixed: boolean = this.fixed): void {
-    console.warn('deprecated fixedPosition(), use isFixed() instead');
-    if (fixed) {
-      this.renderer.addClass(this.document.body, 'sidebar-fixed');
     }
   }
 

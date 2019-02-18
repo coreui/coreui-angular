@@ -1,0 +1,21 @@
+<ng-container [ngSwitch]="linkType">
+  <a *ngSwitchCase="'external'"
+    [ngClass]="getLinkClass()"
+    href="{{item.url}}"
+    [appHtmlAttr]="item.attributes">
+    <i *ngIf="helper.hasIcon(item)" [ngClass]="helper.getIconClass(item)"></i>
+    <ng-container>{{item.name}}</ng-container>
+    <span *ngIf="helper.hasBadge(item)" [ngClass]="helper.getBadgeClass(item)">{{ item.badge.text }}</span>
+  </a>
+  <a *ngSwitchDefault
+     [ngClass]="getLinkClass()"
+     [appHtmlAttr]="item.attributes"
+     [attr.disabled]="isDisabled()"
+     routerLinkActive="active"
+     [routerLink]="[item.url]"
+     (click)="hideMobile()">
+    <i *ngIf="helper.hasIcon(item)" [ngClass]="helper.getIconClass(item)"></i>
+    <ng-container>{{item.name}}</ng-container>
+    <span *ngIf="helper.hasBadge(item)" [ngClass]="helper.getBadgeClass(item)">{{ item.badge.text }}</span>
+  </a>
+</ng-container>

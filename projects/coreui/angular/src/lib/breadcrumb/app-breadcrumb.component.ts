@@ -20,6 +20,7 @@ import {Replace} from '../shared';
 export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed: boolean;
   public breadcrumbs;
+  private readonly fixedClass = 'breadcrumb-fixed';
 
   constructor(
     @Inject(DOCUMENT) private document: any,
@@ -35,12 +36,12 @@ export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.renderer.removeClass(this.document.body, 'breadcrumb-fixed');
+    this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
   isFixed(fixed: boolean = this.fixed): void {
     if (fixed) {
-      this.renderer.addClass(this.document.body, 'breadcrumb-fixed');
+      this.renderer.addClass(this.document.body, this.fixedClass);
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "CoreUI Angular Bootstrap 4 components",
   "license": "MIT",
   "homepage": "https://coreui.io/angular",
@@ -17,8 +17,8 @@
     }
   ],
   "peerDependencies": {
-    "@angular/common": "^7.2.3",
-    "@angular/core": "^7.2.3",
+    "@angular/common": "^7.2.5",
+    "@angular/core": "^7.2.5",
     "@coreui/coreui": "^2.1.6"
   },
   "repository": {

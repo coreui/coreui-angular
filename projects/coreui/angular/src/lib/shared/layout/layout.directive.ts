@@ -42,7 +42,6 @@ export class SidebarMinimizeDirective {
     body.classList.contains('sidebar-minimized') ?
       this.renderer.removeClass(body, 'sidebar-minimized') :
       this.renderer.addClass(body, 'sidebar-minimized');
-    // document.body.classList.toggle('sidebar-minimized');
   }
 }
 
@@ -55,11 +54,6 @@ export class MobileSidebarToggleDirective {
     private renderer: Renderer2,
   ) { }
 
-  // Check if element has class
-  private hasClass(target: any, elementClassName: string) {
-    return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
-  }
-
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
@@ -67,7 +61,6 @@ export class MobileSidebarToggleDirective {
     body.classList.contains('sidebar-show') ?
       this.renderer.removeClass(body, 'sidebar-show') :
       this.renderer.addClass(body, 'sidebar-show');
-    // document.body.classList.toggle('sidebar-show');
   }
 }
 
@@ -83,34 +76,15 @@ export class SidebarOffCanvasCloseDirective {
     private renderer: Renderer2,
   ) { }
 
-  // Check if element has class
-  private hasClass(target: any, elementClassName: string) {
-    return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
-  }
-
-  // Toggle element class
-  private toggleClass(elem: any, elementClassName: string) {
-    let newClass = ' ' + elem.className.replace( /[\t\r\n]/g, ' ' ) + ' ';
-    if (this.hasClass(elem, elementClassName)) {
-      while (newClass.indexOf(' ' + elementClassName + ' ') >= 0 ) {
-        newClass = newClass.replace( ' ' + elementClassName + ' ' , ' ' );
-      }
-      elem.className = newClass.replace(/^\s+|\s+$/g, '');
-    } else {
-      elem.className += ' ' + elementClassName;
-    }
-  }
-
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
 
     const body = this.document.body;
-    if (this.hasClass(body, 'sidebar-off-canvas')) {
+    if (body.classList.contains('sidebar-off-canvas')) {
       body.classList.contains('sidebar-show') ?
         this.renderer.removeClass(body, 'sidebar-show') :
         this.renderer.addClass(body, 'sidebar-show');
-      // this.toggleClass(document.body, 'sidebar-opened');
     }
   }
 }
@@ -131,7 +105,6 @@ export class BrandMinimizeDirective {
     body.classList.contains('brand-minimized') ?
       this.renderer.removeClass(body, 'brand-minimized') :
       this.renderer.addClass(body, 'brand-minimized');
-    // document.body.classList.toggle('brand-minimized');
   }
 }
 
@@ -165,7 +138,6 @@ export class HtmlAttributesDirective implements OnInit {
   @Input() appHtmlAttr: {[key: string]: string };
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
     private el: ElementRef
   ) {}

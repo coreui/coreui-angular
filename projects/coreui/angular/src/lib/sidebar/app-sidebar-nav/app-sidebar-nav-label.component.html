@@ -1,0 +1,7 @@
+<a [ngClass]="getItemClass()"
+   href="{{item.url}}"
+   [appHtmlAttr]="item.attributes">
+  <i *ngIf="helper.hasIcon(item)" [ngClass]="getLabelIconClass()"></i>
+  <ng-container>{{item.name}}</ng-container>
+  <span *ngIf="helper.hasBadge(item)" [ngClass]="helper.getBadgeClass(item)">{{ item.badge.text }}</span>
+</a>

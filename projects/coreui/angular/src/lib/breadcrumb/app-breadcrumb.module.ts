@@ -5,12 +5,13 @@ import { RouterModule } from '@angular/router';
 // App Breadcrumb Component
 import { AppBreadcrumbService } from './app-breadcrumb.service';
 import { AppBreadcrumbComponent } from './app-breadcrumb.component';
+import { CuiBreadcrumbComponent } from './cui-breadcrumb.component';
 
 // @dynamic
 @NgModule({
   imports: [ CommonModule, RouterModule ],
-  exports: [ AppBreadcrumbComponent ],
-  declarations: [ AppBreadcrumbComponent ]
+  exports: [ AppBreadcrumbComponent, CuiBreadcrumbComponent ],
+  declarations: [ AppBreadcrumbComponent, CuiBreadcrumbComponent ]
 })
 export class AppBreadcrumbModule {
   static forRoot(config?: any): ModuleWithProviders {

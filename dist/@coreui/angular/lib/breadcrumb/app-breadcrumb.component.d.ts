@@ -7,6 +7,7 @@ export declare class AppBreadcrumbComponent implements OnInit, OnDestroy {
     el: ElementRef;
     fixed: boolean;
     breadcrumbs: any;
+    private readonly fixedClass;
     constructor(document: any, renderer: Renderer2, service: AppBreadcrumbService, el: ElementRef);
     ngOnInit(): void;
     ngOnDestroy(): void;
