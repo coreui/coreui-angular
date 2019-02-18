@@ -1,5 +1,25 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.4.0`
+`dist` is the same as `v2.4.0-beta.1`
+- update: `@angular/animations` to `^7.2.5`
+- update: `@angular/common` to `^7.2.5`
+- update: `@angular/compiler` to `^7.2.5`
+- update: `@angular/core` to `^7.2.5`
+- update: `@angular/forms` to `^7.2.5`
+- update: `@angular/http` to `^7.2.5`
+- update: `@angular/platform-browser` to `^7.2.5`
+- update: `@angular/platform-browser-dynamic` to `^7.2.5`
+- update: `@angular/router` to `^7.2.5`
+- update: `@angular-devkit/build-angular` to `^0.13.2`
+- update: `@angular-devkit/build-ng-packagr` to `^0.13.2`
+- update: `@angular/cli` to `^7.3.2`
+- update: `@angular/compiler-cli` to `^7.2.5`
+- update: `@angular/language-service` to `^7.2.5`
+- update: `@types/node` to `^11.9.4`
+- update: `karma` to `^4.0.0`
+- update: `karma-coverage-istanbul-reporter` to `^2.0.5`
+
 ##### `v2.4.0-beta.1`
 - fix(sidebar): navItems reassignment bug [#126](https://github.com/coreui/coreui-free-angular-admin-template/issues/126), [#42](https://github.com/coreui/coreui-free-angular-admin-template/issues/42), #12
 - refactor(aside): drop `Replace`
