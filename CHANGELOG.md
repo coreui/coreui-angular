@@ -1,5 +1,8 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.4.1`
+- fix(sidebar-nav): ie issues
+
 ##### `v2.4.0`
 `dist` is the same as `v2.4.0-beta.1`
 - update: `@angular/animations` to `^7.2.5`
