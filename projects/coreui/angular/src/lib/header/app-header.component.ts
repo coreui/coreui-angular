@@ -13,13 +13,13 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   @Input() navbarBrandFull: any;
   @Input() navbarBrandMinimized: any;
   @Input() navbarBrandText: any = {icon: '🅲', text: '🅲 CoreUI'};
-  @Input() navbarBrandHref: any = '';
+  @Input() navbarBrandRouterLink: any[] | string = '';
 
-  @Input() sidebarToggler: any;
-  @Input() mobileSidebarToggler: any;
+  @Input() sidebarToggler: string | boolean;
+  @Input() mobileSidebarToggler: boolean;
 
-  @Input() asideMenuToggler: any;
-  @Input() mobileAsideMenuToggler: any;
+  @Input() asideMenuToggler: string | boolean;
+  @Input() mobileAsideMenuToggler: boolean;
 
   private readonly fixedClass = 'header-fixed';
   navbarBrandImg: boolean;
