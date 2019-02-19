@@ -1,5 +1,8 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.4.2`
+- feat(header): use routerLink for brand instead of href attribute #51 - thanks @Hagith
+
 ##### `v2.4.1`
 - fix(sidebar-nav): ie issues
 

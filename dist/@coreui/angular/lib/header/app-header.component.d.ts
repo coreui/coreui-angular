@@ -8,11 +8,12 @@ export declare class AppHeaderComponent implements OnInit, OnDestroy {
     navbarBrandFull: any;
     navbarBrandMinimized: any;
     navbarBrandText: any;
-    navbarBrandHref: any;
-    sidebarToggler: any;
-    mobileSidebarToggler: any;
-    asideMenuToggler: any;
-    mobileAsideMenuToggler: any;
+    navbarBrandHref: string;
+    navbarBrandRouterLink: any[] | string;
+    sidebarToggler: string | boolean;
+    mobileSidebarToggler: boolean;
+    asideMenuToggler: string | boolean;
+    mobileAsideMenuToggler: boolean;
     private readonly fixedClass;
     navbarBrandImg: boolean;
     constructor(document: any, renderer: Renderer2, hostElement: ElementRef);

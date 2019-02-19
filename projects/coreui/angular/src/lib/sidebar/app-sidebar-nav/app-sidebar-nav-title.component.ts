@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostBinding, Input, OnInit, Renderer2} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
 
 @Component({
   selector: 'app-sidebar-nav-title',
@@ -23,7 +23,7 @@ export class AppSidebarNavTitleComponent implements OnInit {
 
     if ( this.item.wrapper ) {
       const wrapper = this.renderer.createElement(this.item.wrapper.element);
-      this.addAttribs(this.item.wrapper.attributes, wrapper)
+      this.addAttribs(this.item.wrapper.attributes, wrapper);
       this.renderer.appendChild(wrapper, name);
       this.renderer.appendChild(nativeElement, wrapper);
     } else {

@@ -3,7 +3,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 </ng-template>
-<a class="navbar-brand" [href]="navbarBrandHref">
+<a class="navbar-brand" [routerLink]="navbarBrandRouterLink">
   <ng-template [ngIf]="navbarBrandImg">
     <img *ngIf="navbarBrand"
          [appHtmlAttr]="navbarBrand"
