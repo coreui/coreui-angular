@@ -13,6 +13,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   @Input() navbarBrandFull: any;
   @Input() navbarBrandMinimized: any;
   @Input() navbarBrandText: any = {icon: '🅲', text: '🅲 CoreUI'};
+  @Input() navbarBrandHref: string = ''; // deprecated, use navbarBrandRouterLink instead
   @Input() navbarBrandRouterLink: any[] | string = '';
 
   @Input() sidebarToggler: string | boolean;
@@ -36,6 +37,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isFixed(this.fixed);
     this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
+    this.navbarBrandRouterLink = this.navbarBrandRouterLink[0] ? this.navbarBrandRouterLink : this.navbarBrandHref;
   }
 
   ngOnDestroy(): void {
