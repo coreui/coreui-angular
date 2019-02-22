@@ -1,5 +1,22 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.4.3`
+- update: `@coreui/coreui` to `^2.1.7`
+- update: `@angular/animations` to `^7.2.6`
+- update: `@angular/common` to `^7.2.6`
+- update: `@angular/compiler` to `^7.2.6`
+- update: `@angular/core` to `^7.2.6`
+- update: `@angular/forms` to `^7.2.6`
+- update: `@angular/http` to `^7.2.6`
+- update: `@angular/platform-browser` to `^7.2.6`
+- update: `@angular/platform-browser-dynamic` to `^7.2.6`
+- update: `@angular/router` to `^7.2.6`
+- update: `@angular-devkit/build-angular` to `^0.13.3`
+- update: `@angular-devkit/build-ng-packagr` to `^0.13.3`
+- update: `@angular/cli` to `^7.3.3`
+- update: `@angular/compiler-cli` to `^7.2.6`
+- update: `@angular/language-service` to `^7.2.6`
+    
 ##### `v2.4.2`
 - feat(header): use routerLink for brand instead of href attribute #51 - thanks @Hagith
 
