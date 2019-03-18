@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/index'), require('rxjs/operators'), require('@angular/router'), require('@angular/common'), require('@angular/core')) :
-    typeof define === 'function' && define.amd ? define('@coreui/angular', ['exports', 'rxjs/index', 'rxjs/operators', '@angular/router', '@angular/common', '@angular/core'], factory) :
-    (factory((global.coreui = global.coreui || {}, global.coreui.angular = {}),global.rxjs.index,global.rxjs.operators,global.ng.router,global.ng.common,global.ng.core));
-}(this, (function (exports,index,operators,router,common,core) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs'), require('rxjs/operators'), require('@angular/router'), require('@angular/common'), require('@angular/core')) :
+    typeof define === 'function' && define.amd ? define('@coreui/angular', ['exports', 'rxjs', 'rxjs/operators', '@angular/router', '@angular/common', '@angular/core'], factory) :
+    (factory((global.coreui = global.coreui || {}, global.coreui.angular = {}),global.rxjs,global.rxjs.operators,global.ng.router,global.ng.common,global.ng.core));
+}(this, (function (exports,rxjs,operators,router,common,core) { 'use strict';
 
     /**
      * @fileoverview added by tsickle
@@ -657,7 +657,7 @@
             var _this = this;
             this.router = router$$1;
             this.route = route;
-            this._breadcrumbs = new index.BehaviorSubject(new Array());
+            this._breadcrumbs = new rxjs.BehaviorSubject(new Array());
             this.breadcrumbs = this._breadcrumbs.asObservable();
             this.router.events.pipe(operators.filter(( /**
              * @param {?} event

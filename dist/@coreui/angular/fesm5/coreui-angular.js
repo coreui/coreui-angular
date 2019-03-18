@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs/index';
+import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
 import { DOCUMENT, CommonModule } from '@angular/common';

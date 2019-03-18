@@ -1,5 +1,27 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.4.4`
+- fix(breadcrumb.service): wrong import from `rxjs` causes overhead in resulted bundle - fixes #22 thanks @sparun160782 @lscorcia
+- update: `@angular/animations` to `^7.2.9`
+- update: `@angular/common` to `^7.2.9`
+- update: `@angular/compiler` to `^7.2.9`
+- update: `@angular/core` to `^7.2.9`
+- update: `@angular/forms` to `^7.2.9`
+- update: `@angular/http` to `^7.2.9`
+- update: `@angular/platform-browser` to `^7.2.9`
+- update: `@angular/platform-browser-dynamic` to `^7.2.9`
+- update: `@angular/router` to `^7.2.9`
+- update: `@angular-devkit/build-angular` to `^0.13.6`
+- update: `@angular-devkit/build-ng-packagr` to `^0.13.6`
+- update: `@angular/cli` to `^7.3.6`
+- update: `@angular/compiler-cli` to `^7.2.9`
+- update: `@angular/language-service` to `^7.2.9`
+- update: `@types/jasmine` to `^3.3.10`
+- update: `@types/node` to `^11.11.3`
+- update: `karma` to `^4.0.1`
+- update: `ts-node` to `^8.0.3`
+- update: `tslint` to `^5.14.0`
+
 ##### `v2.4.3`
 - update: `@coreui/coreui` to `^2.1.7`
 - update: `@angular/animations` to `^7.2.6`
