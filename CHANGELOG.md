@@ -1,7 +1,7 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
 ##### `v2.4.4`
-- fix(breadcrumb.service): wrong import from `rxjs` causes overhead in resulted bundle - fixes #22 thanks @sparun160782 @lscorcia
+- fix(breadcrumb.service): wrong import from `rxjs` causes overhead in resulted bundle - fixes #22 thanks @sparun160782 @lscorcia @nazar-kuzo
 - update: `@angular/animations` to `^7.2.9`
 - update: `@angular/common` to `^7.2.9`
 - update: `@angular/compiler` to `^7.2.9`
