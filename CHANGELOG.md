@@ -1,5 +1,22 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.4.5`
+- chore(readme): npm badges 
+- chore(readme): prerequisites 
+- update: `@angular/animations` to `^7.2.10`
+- update: `@angular/common` to `^7.2.10`
+- update: `@angular/compiler` to `^7.2.10`
+- update: `@angular/core` to `^7.2.10`
+- update: `@angular/forms` to `^7.2.10`
+- update: `@angular/http` to `^7.2.10`
+- update: `@angular/platform-browser` to `^7.2.10`
+- update: `@angular/platform-browser-dynamic` to `^7.2.10`
+- update: `@angular/router` to `^7.2.10`
+- update: `@angular/compiler-cli` to `^7.2.10`
+- update: `@angular/language-service` to `^7.2.10`
+- update: `@types/jasmine` to `^3.3.12`
+- update: `@types/node` to `^11.11.4`
+
 ##### `v2.4.4`
 - fix(breadcrumb.service): wrong import from `rxjs` causes overhead in resulted bundle - fixes #22 thanks @sparun160782 @lscorcia @nazar-kuzo
 - update: `@angular/animations` to `^7.2.9`
