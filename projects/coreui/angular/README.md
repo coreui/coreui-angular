@@ -21,15 +21,32 @@
 > [@coreui/angular](https://coreui.io/angular) v2 library project  
 > for use with [CoreUI](https://coreui.io/angular/) v2 Bootstrap Admin Template
 
-## Installation
+
+#### Prerequisites
+Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
+
+###### Node.js
+Angular requires `Node.js` version 8.x or 10.x.
+
+- To check your version, run `node -v` in a terminal/console window.
+- To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
+
+###### Angular CLI
+Install the Angular CLI globally using a terminal/console window.
+```bash
+npm install -g @angular/cli
 ```
+
+### Installation
+Go to the workspace folder and install `@coreui/angular` as a dependency.
+```bash 
 npm install @coreui/angular
 ```
 
-## Changelog
+### Changelog
 
 See the GitHub [release history](https://github.com/coreui/coreui-angular/releases).
 
-## Contributing
+### Contributing
 
 See [CONTRIBUTING.md](https://github.com/coreui/coreui-angular/blob/master/CONTRIBUTING.md).
