@@ -1,9 +1,16 @@
-[![npm package][npm-badge]][npm] 
-[![NPM downloads][npm-download]][npm]
+[![@coreui angular](https://img.shields.io/badge/@coreui%20-angular-lightgrey.svg?style=flat-square)](https://github.com/coreui/angular)
+[![npm package][npm-coreui-angular-badge]][npm-coreui-angular] 
+[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
+[![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
+[![npm package][npm-coreui-badge]][npm-coreui]
+[![NPM downloads][npm-coreui-download]][npm-coreui]  
   
-[npm-badge]: https://img.shields.io/npm/v/@coreui/angular.png?style=flat-square  
-[npm]: https://www.npmjs.com/package/@coreui/angular  
-[npm-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  
+[npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
+[npm-coreui-angular-badge]: https://img.shields.io/npm/v/@coreui/angular.png?style=flat-square  
+[npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  
+[npm-coreui]: https://www.npmjs.com/package/@coreui/coreui
+[npm-coreui-badge]: https://img.shields.io/npm/v/@coreui/coreui.png?style=flat-square
+[npm-coreui-download]: https://img.shields.io/npm/dm/@coreui/coreui.svg?style=flat-square
 
 # CoreUI for Angular 2+ - Free WebApp UI Kit built on top of Bootstrap 4 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?text=CoreUI%20-%20Free%20Bootstrap%204%20Admin%20Template%20&url=https://coreui.io&hashtags=,admin,template,dashboard,panel,free,angular,react,vue)
 
@@ -59,7 +66,7 @@ $ npm install @coreui/angular --save
 ### Yarn
 
 ``` bash
-$ yarn add @coreui/angular@2.1.0
+$ yarn add @coreui/angular
 ```
 
 ## Usage
@@ -120,7 +127,7 @@ Get updates on CoreUI's development and chat with the project maintainers and co
 
 ## Copyright and license
 
-copyright 2018 creativeLabs Łukasz Holeczek. Code released under [the MIT license](https://github.com/coreui/coreui-angular/blob/master/LICENSE).
+copyright 2017-2019 creativeLabs Łukasz Holeczek. Code released under [the MIT license](https://github.com/coreui/coreui-angular/blob/master/LICENSE).
 There is only one limitation you can't can’t re-distribute the CoreUI as stock. You can’t do this if you modify the CoreUI. In past we faced some problems with persons who tried to sell CoreUI based templates.
 
 ## Support CoreUI Development
