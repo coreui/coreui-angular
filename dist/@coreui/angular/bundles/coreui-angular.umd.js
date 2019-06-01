@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs'), require('rxjs/operators'), require('@angular/router'), require('@angular/common'), require('@angular/core')) :
-    typeof define === 'function' && define.amd ? define('@coreui/angular', ['exports', 'rxjs', 'rxjs/operators', '@angular/router', '@angular/common', '@angular/core'], factory) :
-    (factory((global.coreui = global.coreui || {}, global.coreui.angular = {}),global.rxjs,global.rxjs.operators,global.ng.router,global.ng.common,global.ng.core));
-}(this, (function (exports,rxjs,operators,router,common,core) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('@angular/router'), require('rxjs'), require('rxjs/operators')) :
+    typeof define === 'function' && define.amd ? define('@coreui/angular', ['exports', '@angular/common', '@angular/core', '@angular/router', 'rxjs', 'rxjs/operators'], factory) :
+    (global = global || self, factory((global.coreui = global.coreui || {}, global.coreui.angular = {}), global.ng.common, global.ng.core, global.ng.router, global.rxjs, global.rxjs.operators));
+}(this, function (exports, common, core, router, rxjs, operators) { 'use strict';
 
     /**
      * @fileoverview added by tsickle
@@ -42,15 +42,16 @@
          * @param {?} NewClassNames
          * @return {?}
          */
-            function (NewClassNames) {
-                var _this = this;
-                /** @type {?} */
-                var MatchClasses = NewClassNames.map(( /**
-                 * @param {?} Class
-                 * @return {?}
-                 */function (Class) { return _this.document.body.classList.contains(Class); }));
-                return MatchClasses.indexOf(true) !== -1;
-            };
+        function (NewClassNames) {
+            var _this = this;
+            /** @type {?} */
+            var MatchClasses = NewClassNames.map((/**
+             * @param {?} Class
+             * @return {?}
+             */
+            function (Class) { return _this.document.body.classList.contains(Class); }));
+            return MatchClasses.indexOf(true) !== -1;
+        };
         /**
          * @param {?} Toggle
          * @param {?} ClassNames
@@ -61,32 +62,31 @@
          * @param {?} ClassNames
          * @return {?}
          */
-            function (Toggle, ClassNames) {
-                var _this = this;
-                /** @type {?} */
-                var Level = ClassNames.indexOf(Toggle);
-                /** @type {?} */
-                var NewClassNames = ClassNames.slice(0, Level + 1);
-                if (this.removeClasses(NewClassNames)) {
-                    NewClassNames.map(( /**
-                     * @param {?} Class
-                     * @return {?}
-                     */function (Class) { return _this.renderer.removeClass(_this.document.body, Class); }));
-                }
-                else {
-                    this.renderer.addClass(this.document.body, Toggle);
-                }
-            };
+        function (Toggle, ClassNames) {
+            var _this = this;
+            /** @type {?} */
+            var Level = ClassNames.indexOf(Toggle);
+            /** @type {?} */
+            var NewClassNames = ClassNames.slice(0, Level + 1);
+            if (this.removeClasses(NewClassNames)) {
+                NewClassNames.map((/**
+                 * @param {?} Class
+                 * @return {?}
+                 */
+                function (Class) { return _this.renderer.removeClass(_this.document.body, Class); }));
+            }
+            else {
+                this.renderer.addClass(this.document.body, Toggle);
+            }
+        };
         ClassToggler.decorators = [
             { type: core.Injectable }
         ];
         /** @nocollapse */
-        ClassToggler.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 }
-            ];
-        };
+        ClassToggler.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 }
+        ]; };
         return ClassToggler;
     }());
 
@@ -107,9 +107,9 @@
         SidebarToggleDirective.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                this.bp = this.breakpoint;
-            };
+        function () {
+            this.bp = this.breakpoint;
+        };
         /**
          * @param {?} $event
          * @return {?}
@@ -118,12 +118,12 @@
          * @param {?} $event
          * @return {?}
          */
-            function ($event) {
-                $event.preventDefault();
-                /** @type {?} */
-                var cssClass = this.bp ? "sidebar-" + this.bp + "-show" : sidebarCssClasses[0];
-                this.classToggler.toggleClasses(cssClass, sidebarCssClasses);
-            };
+        function ($event) {
+            $event.preventDefault();
+            /** @type {?} */
+            var cssClass = this.bp ? "sidebar-" + this.bp + "-show" : sidebarCssClasses[0];
+            this.classToggler.toggleClasses(cssClass, sidebarCssClasses);
+        };
         SidebarToggleDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appSidebarToggler]',
@@ -131,11 +131,9 @@
                     },] }
         ];
         /** @nocollapse */
-        SidebarToggleDirective.ctorParameters = function () {
-            return [
-                { type: ClassToggler }
-            ];
-        };
+        SidebarToggleDirective.ctorParameters = function () { return [
+            { type: ClassToggler }
+        ]; };
         SidebarToggleDirective.propDecorators = {
             breakpoint: [{ type: core.Input, args: ['appSidebarToggler',] }],
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
@@ -155,26 +153,24 @@
          * @param {?} $event
          * @return {?}
          */
-            function ($event) {
-                $event.preventDefault();
-                /** @type {?} */
-                var body = this.document.body;
-                body.classList.contains('sidebar-minimized') ?
-                    this.renderer.removeClass(body, 'sidebar-minimized') :
-                    this.renderer.addClass(body, 'sidebar-minimized');
-            };
+        function ($event) {
+            $event.preventDefault();
+            /** @type {?} */
+            var body = this.document.body;
+            body.classList.contains('sidebar-minimized') ?
+                this.renderer.removeClass(body, 'sidebar-minimized') :
+                this.renderer.addClass(body, 'sidebar-minimized');
+        };
         SidebarMinimizeDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appSidebarMinimizer]'
                     },] }
         ];
         /** @nocollapse */
-        SidebarMinimizeDirective.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 }
-            ];
-        };
+        SidebarMinimizeDirective.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 }
+        ]; };
         SidebarMinimizeDirective.propDecorators = {
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
         };
@@ -193,26 +189,24 @@
          * @param {?} $event
          * @return {?}
          */
-            function ($event) {
-                $event.preventDefault();
-                /** @type {?} */
-                var body = this.document.body;
-                body.classList.contains('sidebar-show') ?
-                    this.renderer.removeClass(body, 'sidebar-show') :
-                    this.renderer.addClass(body, 'sidebar-show');
-            };
+        function ($event) {
+            $event.preventDefault();
+            /** @type {?} */
+            var body = this.document.body;
+            body.classList.contains('sidebar-show') ?
+                this.renderer.removeClass(body, 'sidebar-show') :
+                this.renderer.addClass(body, 'sidebar-show');
+        };
         MobileSidebarToggleDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appMobileSidebarToggler]'
                     },] }
         ];
         /** @nocollapse */
-        MobileSidebarToggleDirective.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 }
-            ];
-        };
+        MobileSidebarToggleDirective.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 }
+        ]; };
         MobileSidebarToggleDirective.propDecorators = {
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
         };
@@ -234,28 +228,26 @@
          * @param {?} $event
          * @return {?}
          */
-            function ($event) {
-                $event.preventDefault();
-                /** @type {?} */
-                var body = this.document.body;
-                if (body.classList.contains('sidebar-off-canvas')) {
-                    body.classList.contains('sidebar-show') ?
-                        this.renderer.removeClass(body, 'sidebar-show') :
-                        this.renderer.addClass(body, 'sidebar-show');
-                }
-            };
+        function ($event) {
+            $event.preventDefault();
+            /** @type {?} */
+            var body = this.document.body;
+            if (body.classList.contains('sidebar-off-canvas')) {
+                body.classList.contains('sidebar-show') ?
+                    this.renderer.removeClass(body, 'sidebar-show') :
+                    this.renderer.addClass(body, 'sidebar-show');
+            }
+        };
         SidebarOffCanvasCloseDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appSidebarClose]'
                     },] }
         ];
         /** @nocollapse */
-        SidebarOffCanvasCloseDirective.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 }
-            ];
-        };
+        SidebarOffCanvasCloseDirective.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 }
+        ]; };
         SidebarOffCanvasCloseDirective.propDecorators = {
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
         };
@@ -274,26 +266,24 @@
          * @param {?} $event
          * @return {?}
          */
-            function ($event) {
-                $event.preventDefault();
-                /** @type {?} */
-                var body = this.document.body;
-                body.classList.contains('brand-minimized') ?
-                    this.renderer.removeClass(body, 'brand-minimized') :
-                    this.renderer.addClass(body, 'brand-minimized');
-            };
+        function ($event) {
+            $event.preventDefault();
+            /** @type {?} */
+            var body = this.document.body;
+            body.classList.contains('brand-minimized') ?
+                this.renderer.removeClass(body, 'brand-minimized') :
+                this.renderer.addClass(body, 'brand-minimized');
+        };
         BrandMinimizeDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appBrandMinimizer]'
                     },] }
         ];
         /** @nocollapse */
-        BrandMinimizeDirective.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 }
-            ];
-        };
+        BrandMinimizeDirective.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 }
+        ]; };
         BrandMinimizeDirective.propDecorators = {
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
         };
@@ -312,9 +302,9 @@
         AsideToggleDirective.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                this.bp = this.breakpoint;
-            };
+        function () {
+            this.bp = this.breakpoint;
+        };
         /**
          * @param {?} $event
          * @return {?}
@@ -323,12 +313,12 @@
          * @param {?} $event
          * @return {?}
          */
-            function ($event) {
-                $event.preventDefault();
-                /** @type {?} */
-                var cssClass = this.bp ? "aside-menu-" + this.bp + "-show" : asideMenuCssClasses[0];
-                this.classToggler.toggleClasses(cssClass, asideMenuCssClasses);
-            };
+        function ($event) {
+            $event.preventDefault();
+            /** @type {?} */
+            var cssClass = this.bp ? "aside-menu-" + this.bp + "-show" : asideMenuCssClasses[0];
+            this.classToggler.toggleClasses(cssClass, asideMenuCssClasses);
+        };
         AsideToggleDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appAsideMenuToggler]',
@@ -336,11 +326,9 @@
                     },] }
         ];
         /** @nocollapse */
-        AsideToggleDirective.ctorParameters = function () {
-            return [
-                { type: ClassToggler }
-            ];
-        };
+        AsideToggleDirective.ctorParameters = function () { return [
+            { type: ClassToggler }
+        ]; };
         AsideToggleDirective.propDecorators = {
             breakpoint: [{ type: core.Input, args: ['appAsideMenuToggler',] }],
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
@@ -358,21 +346,21 @@
         HtmlAttributesDirective.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                /** @type {?} */
-                var attribs = this.appHtmlAttr;
-                for (var attr in attribs) {
-                    if (attr === 'style' && typeof (attribs[attr]) === 'object') {
-                        this.setStyle(attribs[attr]);
-                    }
-                    else if (attr === 'class') {
-                        this.addClass(attribs[attr]);
-                    }
-                    else {
-                        this.setAttrib(attr, attribs[attr]);
-                    }
+        function () {
+            /** @type {?} */
+            var attribs = this.appHtmlAttr;
+            for (var attr in attribs) {
+                if (attr === 'style' && typeof (attribs[attr]) === 'object') {
+                    this.setStyle(attribs[attr]);
                 }
-            };
+                else if (attr === 'class') {
+                    this.addClass(attribs[attr]);
+                }
+                else {
+                    this.setAttrib(attr, attribs[attr]);
+                }
+            }
+        };
         /**
          * @private
          * @param {?} styles
@@ -383,11 +371,11 @@
          * @param {?} styles
          * @return {?}
          */
-            function (styles) {
-                for (var style in styles) {
-                    this.renderer.setStyle(this.el.nativeElement, style, styles[style]);
-                }
-            };
+        function (styles) {
+            for (var style in styles) {
+                this.renderer.setStyle(this.el.nativeElement, style, styles[style]);
+            }
+        };
         /**
          * @private
          * @param {?} classes
@@ -398,20 +386,22 @@
          * @param {?} classes
          * @return {?}
          */
-            function (classes) {
-                var _this = this;
-                /** @type {?} */
-                var classArray = (Array.isArray(classes) ? classes : classes.split(' '));
-                classArray.filter(( /**
-                 * @param {?} element
-                 * @return {?}
-                 */function (element) { return element.length > 0; })).forEach(( /**
-                 * @param {?} element
-                 * @return {?}
-                 */function (element) {
-                    _this.renderer.addClass(_this.el.nativeElement, element);
-                }));
-            };
+        function (classes) {
+            var _this = this;
+            /** @type {?} */
+            var classArray = (Array.isArray(classes) ? classes : classes.split(' '));
+            classArray.filter((/**
+             * @param {?} element
+             * @return {?}
+             */
+            function (element) { return element.length > 0; })).forEach((/**
+             * @param {?} element
+             * @return {?}
+             */
+            function (element) {
+                _this.renderer.addClass(_this.el.nativeElement, element);
+            }));
+        };
         /**
          * @private
          * @param {?} key
@@ -424,21 +414,19 @@
          * @param {?} value
          * @return {?}
          */
-            function (key, value) {
-                this.renderer.setAttribute(this.el.nativeElement, key, value);
-            };
+        function (key, value) {
+            this.renderer.setAttribute(this.el.nativeElement, key, value);
+        };
         HtmlAttributesDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appHtmlAttr]'
                     },] }
         ];
         /** @nocollapse */
-        HtmlAttributesDirective.ctorParameters = function () {
-            return [
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        HtmlAttributesDirective.ctorParameters = function () { return [
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         HtmlAttributesDirective.propDecorators = {
             appHtmlAttr: [{ type: core.Input }]
         };
@@ -532,20 +520,20 @@
         AppAsideComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                this.isFixed(this.fixed);
-                this.isOffCanvas(this.offCanvas);
-                this.displayBreakpoint(this.display);
-            };
+        function () {
+            this.isFixed(this.fixed);
+            this.isOffCanvas(this.offCanvas);
+            this.displayBreakpoint(this.display);
+        };
         /**
          * @return {?}
          */
         AppAsideComponent.prototype.ngOnDestroy = /**
          * @return {?}
          */
-            function () {
-                this.renderer.removeClass(this.document.body, this.fixedClass);
-            };
+        function () {
+            this.renderer.removeClass(this.document.body, this.fixedClass);
+        };
         /**
          * @param {?=} fixed
          * @return {?}
@@ -554,14 +542,12 @@
          * @param {?=} fixed
          * @return {?}
          */
-            function (fixed) {
-                if (fixed === void 0) {
-                    fixed = this.fixed;
-                }
-                if (fixed) {
-                    this.renderer.addClass(this.document.body, this.fixedClass);
-                }
-            };
+        function (fixed) {
+            if (fixed === void 0) { fixed = this.fixed; }
+            if (fixed) {
+                this.renderer.addClass(this.document.body, this.fixedClass);
+            }
+        };
         /**
          * @param {?=} offCanvas
          * @return {?}
@@ -570,14 +556,12 @@
          * @param {?=} offCanvas
          * @return {?}
          */
-            function (offCanvas) {
-                if (offCanvas === void 0) {
-                    offCanvas = this.offCanvas;
-                }
-                if (offCanvas) {
-                    this.renderer.addClass(this.document.body, 'aside-menu-off-canvas');
-                }
-            };
+        function (offCanvas) {
+            if (offCanvas === void 0) { offCanvas = this.offCanvas; }
+            if (offCanvas) {
+                this.renderer.addClass(this.document.body, 'aside-menu-off-canvas');
+            }
+        };
         /**
          * @param {?=} display
          * @return {?}
@@ -586,16 +570,14 @@
          * @param {?=} display
          * @return {?}
          */
-            function (display) {
-                if (display === void 0) {
-                    display = this.display;
-                }
-                if (display !== false) {
-                    /** @type {?} */
-                    var cssClass = this.display ? "aside-menu-" + this.display + "-show" : asideMenuCssClasses[0];
-                    this.renderer.addClass(this.document.body, cssClass);
-                }
-            };
+        function (display) {
+            if (display === void 0) { display = this.display; }
+            if (display !== false) {
+                /** @type {?} */
+                var cssClass = this.display ? "aside-menu-" + this.display + "-show" : asideMenuCssClasses[0];
+                this.renderer.addClass(this.document.body, cssClass);
+            }
+        };
         AppAsideComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-aside, cui-aside',
@@ -603,13 +585,11 @@
                     }] }
         ];
         /** @nocollapse */
-        AppAsideComponent.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppAsideComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         AppAsideComponent.propDecorators = {
             display: [{ type: core.Input }],
             fixed: [{ type: core.Input }],
@@ -653,19 +633,21 @@
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var AppBreadcrumbService = /** @class */ (function () {
-        function AppBreadcrumbService(router$$1, route) {
+        function AppBreadcrumbService(router$1, route) {
             var _this = this;
-            this.router = router$$1;
+            this.router = router$1;
             this.route = route;
             this._breadcrumbs = new rxjs.BehaviorSubject(new Array());
             this.breadcrumbs = this._breadcrumbs.asObservable();
-            this.router.events.pipe(operators.filter(( /**
+            this.router.events.pipe(operators.filter((/**
              * @param {?} event
              * @return {?}
-             */function (event) { return event instanceof router.NavigationEnd; }))).subscribe(( /**
+             */
+            function (event) { return event instanceof router.NavigationEnd; }))).subscribe((/**
              * @param {?} event
              * @return {?}
-             */function (event) {
+             */
+            function (event) {
                 /** @type {?} */
                 var breadcrumbs = [];
                 /** @type {?} */
@@ -677,17 +659,19 @@
                     var childrenRoutes = currentRoute.children;
                     currentRoute = null;
                     // tslint:disable-next-line:no-shadowed-variable
-                    childrenRoutes.forEach(( /**
+                    childrenRoutes.forEach((/**
                      * @param {?} route
                      * @return {?}
-                     */function (route) {
+                     */
+                    function (route) {
                         if (route.outlet === 'primary') {
                             /** @type {?} */
                             var routeSnapshot = route.snapshot;
-                            url += '/' + routeSnapshot.url.map(( /**
+                            url += '/' + routeSnapshot.url.map((/**
                              * @param {?} segment
                              * @return {?}
-                             */function (segment) { return segment.path; })).join('/');
+                             */
+                            function (segment) { return segment.path; })).join('/');
                             breadcrumbs.push({
                                 label: route.snapshot.data,
                                 url: url
@@ -704,12 +688,10 @@
             { type: core.Injectable }
         ];
         /** @nocollapse */
-        AppBreadcrumbService.ctorParameters = function () {
-            return [
-                { type: router.Router },
-                { type: router.ActivatedRoute }
-            ];
-        };
+        AppBreadcrumbService.ctorParameters = function () { return [
+            { type: router.Router },
+            { type: router.ActivatedRoute }
+        ]; };
         return AppBreadcrumbService;
     }());
 
@@ -731,20 +713,20 @@
         AppBreadcrumbComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                Replace(this.el);
-                this.isFixed(this.fixed);
-                this.breadcrumbs = this.service.breadcrumbs;
-            };
+        function () {
+            Replace(this.el);
+            this.isFixed(this.fixed);
+            this.breadcrumbs = this.service.breadcrumbs;
+        };
         /**
          * @return {?}
          */
         AppBreadcrumbComponent.prototype.ngOnDestroy = /**
          * @return {?}
          */
-            function () {
-                this.renderer.removeClass(this.document.body, this.fixedClass);
-            };
+        function () {
+            this.renderer.removeClass(this.document.body, this.fixedClass);
+        };
         /**
          * @param {?=} fixed
          * @return {?}
@@ -753,14 +735,12 @@
          * @param {?=} fixed
          * @return {?}
          */
-            function (fixed) {
-                if (fixed === void 0) {
-                    fixed = this.fixed;
-                }
-                if (fixed) {
-                    this.renderer.addClass(this.document.body, this.fixedClass);
-                }
-            };
+        function (fixed) {
+            if (fixed === void 0) { fixed = this.fixed; }
+            if (fixed) {
+                this.renderer.addClass(this.document.body, this.fixedClass);
+            }
+        };
         AppBreadcrumbComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-breadcrumb',
@@ -768,14 +748,12 @@
                     }] }
         ];
         /** @nocollapse */
-        AppBreadcrumbComponent.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 },
-                { type: AppBreadcrumbService },
-                { type: core.ElementRef }
-            ];
-        };
+        AppBreadcrumbComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
+            { type: AppBreadcrumbService },
+            { type: core.ElementRef }
+        ]; };
         AppBreadcrumbComponent.propDecorators = {
             fixed: [{ type: core.Input }]
         };
@@ -799,19 +777,19 @@
         CuiBreadcrumbComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                this.isFixed(this.fixed);
-                this.breadcrumbs = this.service.breadcrumbs;
-            };
+        function () {
+            this.isFixed(this.fixed);
+            this.breadcrumbs = this.service.breadcrumbs;
+        };
         /**
          * @return {?}
          */
         CuiBreadcrumbComponent.prototype.ngOnDestroy = /**
          * @return {?}
          */
-            function () {
-                this.renderer.removeClass(this.document.body, this.fixedClass);
-            };
+        function () {
+            this.renderer.removeClass(this.document.body, this.fixedClass);
+        };
         /**
          * @param {?=} fixed
          * @return {?}
@@ -820,14 +798,12 @@
          * @param {?=} fixed
          * @return {?}
          */
-            function (fixed) {
-                if (fixed === void 0) {
-                    fixed = this.fixed;
-                }
-                if (fixed) {
-                    this.renderer.addClass(this.document.body, this.fixedClass);
-                }
-            };
+        function (fixed) {
+            if (fixed === void 0) { fixed = this.fixed; }
+            if (fixed) {
+                this.renderer.addClass(this.document.body, this.fixedClass);
+            }
+        };
         CuiBreadcrumbComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'cui-breadcrumb',
@@ -835,13 +811,11 @@
                     }] }
         ];
         /** @nocollapse */
-        CuiBreadcrumbComponent.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 },
-                { type: AppBreadcrumbService }
-            ];
-        };
+        CuiBreadcrumbComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
+            { type: AppBreadcrumbService }
+        ]; };
         CuiBreadcrumbComponent.propDecorators = {
             fixed: [{ type: core.Input }]
         };
@@ -864,14 +838,14 @@
          * @param {?=} config
          * @return {?}
          */
-            function (config) {
-                return {
-                    ngModule: AppBreadcrumbModule,
-                    providers: [
-                        AppBreadcrumbService
-                    ]
-                };
+        function (config) {
+            return {
+                ngModule: AppBreadcrumbModule,
+                providers: [
+                    AppBreadcrumbService
+                ]
             };
+        };
         AppBreadcrumbModule.decorators = [
             { type: core.NgModule, args: [{
                         imports: [common.CommonModule, router.RouterModule],
@@ -905,18 +879,18 @@
         AppFooterComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                this.isFixed(this.fixed);
-            };
+        function () {
+            this.isFixed(this.fixed);
+        };
         /**
          * @return {?}
          */
         AppFooterComponent.prototype.ngOnDestroy = /**
          * @return {?}
          */
-            function () {
-                this.renderer.removeClass(this.document.body, this.fixedClass);
-            };
+        function () {
+            this.renderer.removeClass(this.document.body, this.fixedClass);
+        };
         /**
          * @param {?=} fixed
          * @return {?}
@@ -925,14 +899,12 @@
          * @param {?=} fixed
          * @return {?}
          */
-            function (fixed) {
-                if (fixed === void 0) {
-                    fixed = this.fixed;
-                }
-                if (fixed) {
-                    this.renderer.addClass(this.document.body, this.fixedClass);
-                }
-            };
+        function (fixed) {
+            if (fixed === void 0) { fixed = this.fixed; }
+            if (fixed) {
+                this.renderer.addClass(this.document.body, this.fixedClass);
+            }
+        };
         AppFooterComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-footer, cui-footer',
@@ -940,13 +912,11 @@
                     }] }
         ];
         /** @nocollapse */
-        AppFooterComponent.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppFooterComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         AppFooterComponent.propDecorators = {
             fixed: [{ type: core.Input }]
         };
@@ -998,20 +968,20 @@
         AppHeaderComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                this.isFixed(this.fixed);
-                this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
-                this.navbarBrandRouterLink = this.navbarBrandRouterLink[0] ? this.navbarBrandRouterLink : this.navbarBrandHref;
-            };
+        function () {
+            this.isFixed(this.fixed);
+            this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
+            this.navbarBrandRouterLink = this.navbarBrandRouterLink[0] ? this.navbarBrandRouterLink : this.navbarBrandHref;
+        };
         /**
          * @return {?}
          */
         AppHeaderComponent.prototype.ngOnDestroy = /**
          * @return {?}
          */
-            function () {
-                this.renderer.removeClass(this.document.body, this.fixedClass);
-            };
+        function () {
+            this.renderer.removeClass(this.document.body, this.fixedClass);
+        };
         /**
          * @param {?=} fixed
          * @return {?}
@@ -1020,14 +990,12 @@
          * @param {?=} fixed
          * @return {?}
          */
-            function (fixed) {
-                if (fixed === void 0) {
-                    fixed = this.fixed;
-                }
-                if (fixed) {
-                    this.renderer.addClass(this.document.body, this.fixedClass);
-                }
-            };
+        function (fixed) {
+            if (fixed === void 0) { fixed = this.fixed; }
+            if (fixed) {
+                this.renderer.addClass(this.document.body, this.fixedClass);
+            }
+        };
         AppHeaderComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-header, cui-header',
@@ -1035,13 +1003,11 @@
                     }] }
         ];
         /** @nocollapse */
-        AppHeaderComponent.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppHeaderComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         AppHeaderComponent.propDecorators = {
             fixed: [{ type: core.Input }],
             navbarBrand: [{ type: core.Input }],
@@ -1106,22 +1072,22 @@
         AppSidebarComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                this.displayBreakpoint(this.display);
-                this.isCompact(this.compact);
-                this.isFixed(this.fixed);
-                this.isMinimized(this.minimized);
-                this.isOffCanvas(this.offCanvas);
-            };
+        function () {
+            this.displayBreakpoint(this.display);
+            this.isCompact(this.compact);
+            this.isFixed(this.fixed);
+            this.isMinimized(this.minimized);
+            this.isOffCanvas(this.offCanvas);
+        };
         /**
          * @return {?}
          */
         AppSidebarComponent.prototype.ngOnDestroy = /**
          * @return {?}
          */
-            function () {
-                this.renderer.removeClass(this.document.body, 'sidebar-fixed');
-            };
+        function () {
+            this.renderer.removeClass(this.document.body, 'sidebar-fixed');
+        };
         /**
          * @param {?=} compact
          * @return {?}
@@ -1130,14 +1096,12 @@
          * @param {?=} compact
          * @return {?}
          */
-            function (compact) {
-                if (compact === void 0) {
-                    compact = this.compact;
-                }
-                if (compact) {
-                    this.renderer.addClass(this.document.body, 'sidebar-compact');
-                }
-            };
+        function (compact) {
+            if (compact === void 0) { compact = this.compact; }
+            if (compact) {
+                this.renderer.addClass(this.document.body, 'sidebar-compact');
+            }
+        };
         /**
          * @param {?=} fixed
          * @return {?}
@@ -1146,14 +1110,12 @@
          * @param {?=} fixed
          * @return {?}
          */
-            function (fixed) {
-                if (fixed === void 0) {
-                    fixed = this.fixed;
-                }
-                if (fixed) {
-                    this.renderer.addClass(this.document.body, 'sidebar-fixed');
-                }
-            };
+        function (fixed) {
+            if (fixed === void 0) { fixed = this.fixed; }
+            if (fixed) {
+                this.renderer.addClass(this.document.body, 'sidebar-fixed');
+            }
+        };
         /**
          * @param {?=} minimized
          * @return {?}
@@ -1162,14 +1124,12 @@
          * @param {?=} minimized
          * @return {?}
          */
-            function (minimized) {
-                if (minimized === void 0) {
-                    minimized = this.minimized;
-                }
-                if (minimized) {
-                    this.renderer.addClass(this.document.body, 'sidebar-minimized');
-                }
-            };
+        function (minimized) {
+            if (minimized === void 0) { minimized = this.minimized; }
+            if (minimized) {
+                this.renderer.addClass(this.document.body, 'sidebar-minimized');
+            }
+        };
         /**
          * @param {?=} offCanvas
          * @return {?}
@@ -1178,14 +1138,12 @@
          * @param {?=} offCanvas
          * @return {?}
          */
-            function (offCanvas) {
-                if (offCanvas === void 0) {
-                    offCanvas = this.offCanvas;
-                }
-                if (offCanvas) {
-                    this.renderer.addClass(this.document.body, 'sidebar-off-canvas');
-                }
-            };
+        function (offCanvas) {
+            if (offCanvas === void 0) { offCanvas = this.offCanvas; }
+            if (offCanvas) {
+                this.renderer.addClass(this.document.body, 'sidebar-off-canvas');
+            }
+        };
         /**
          * @param {?=} display
          * @return {?}
@@ -1194,16 +1152,14 @@
          * @param {?=} display
          * @return {?}
          */
-            function (display) {
-                if (display === void 0) {
-                    display = this.display;
-                }
-                if (display !== false) {
-                    /** @type {?} */
-                    var cssClass = display ? "sidebar-" + display + "-show" : sidebarCssClasses[0];
-                    this.renderer.addClass(this.document.body, cssClass);
-                }
-            };
+        function (display) {
+            if (display === void 0) { display = this.display; }
+            if (display !== false) {
+                /** @type {?} */
+                var cssClass = display ? "sidebar-" + display + "-show" : sidebarCssClasses[0];
+                this.renderer.addClass(this.document.body, cssClass);
+            }
+        };
         AppSidebarComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar',
@@ -1211,13 +1167,11 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarComponent.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppSidebarComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         AppSidebarComponent.propDecorators = {
             compact: [{ type: core.Input }],
             display: [{ type: core.Input }],
@@ -1244,7 +1198,7 @@
         AppSidebarFooterComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () { };
+        function () { };
         AppSidebarFooterComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-footer',
@@ -1252,12 +1206,10 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarFooterComponent.ctorParameters = function () {
-            return [
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppSidebarFooterComponent.ctorParameters = function () { return [
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         return AppSidebarFooterComponent;
     }());
 
@@ -1277,7 +1229,7 @@
         AppSidebarFormComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () { };
+        function () { };
         AppSidebarFormComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-form',
@@ -1285,12 +1237,10 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarFormComponent.ctorParameters = function () {
-            return [
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppSidebarFormComponent.ctorParameters = function () { return [
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         return AppSidebarFormComponent;
     }());
 
@@ -1310,7 +1260,7 @@
         AppSidebarHeaderComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () { };
+        function () { };
         AppSidebarHeaderComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-header',
@@ -1318,12 +1268,10 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarHeaderComponent.ctorParameters = function () {
-            return [
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppSidebarHeaderComponent.ctorParameters = function () { return [
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         return AppSidebarHeaderComponent;
     }());
 
@@ -1347,24 +1295,24 @@
          * @param {?} $event
          * @return {?}
          */
-            function ($event) {
-                $event.preventDefault();
-                /** @type {?} */
-                var body = this.document.body;
-                body.classList.contains('sidebar-minimized') ?
-                    this.renderer.removeClass(body, 'sidebar-minimized') :
-                    this.renderer.addClass(body, 'sidebar-minimized');
-                body.classList.contains('brand-minimized') ?
-                    this.renderer.removeClass(body, 'brand-minimized') :
-                    this.renderer.addClass(body, 'brand-minimized');
-            };
+        function ($event) {
+            $event.preventDefault();
+            /** @type {?} */
+            var body = this.document.body;
+            body.classList.contains('sidebar-minimized') ?
+                this.renderer.removeClass(body, 'sidebar-minimized') :
+                this.renderer.addClass(body, 'sidebar-minimized');
+            body.classList.contains('brand-minimized') ?
+                this.renderer.removeClass(body, 'brand-minimized') :
+                this.renderer.addClass(body, 'brand-minimized');
+        };
         /**
          * @return {?}
          */
         AppSidebarMinimizerComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () { };
+        function () { };
         AppSidebarMinimizerComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-minimizer',
@@ -1372,13 +1320,11 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarMinimizerComponent.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppSidebarMinimizerComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         AppSidebarMinimizerComponent.propDecorators = {
             role: [{ type: core.HostBinding, args: ['attr.role',] }],
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
@@ -1400,20 +1346,18 @@
         NavDropdownDirective.prototype.toggle = /**
          * @return {?}
          */
-            function () {
-                this.el.nativeElement.classList.toggle('open');
-            };
+        function () {
+            this.el.nativeElement.classList.toggle('open');
+        };
         NavDropdownDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appNavDropdown]'
                     },] }
         ];
         /** @nocollapse */
-        NavDropdownDirective.ctorParameters = function () {
-            return [
-                { type: core.ElementRef }
-            ];
-        };
+        NavDropdownDirective.ctorParameters = function () { return [
+            { type: core.ElementRef }
+        ]; };
         return NavDropdownDirective;
     }());
     /**
@@ -1431,21 +1375,19 @@
          * @param {?} $event
          * @return {?}
          */
-            function ($event) {
-                $event.preventDefault();
-                this.dropdown.toggle();
-            };
+        function ($event) {
+            $event.preventDefault();
+            this.dropdown.toggle();
+        };
         NavDropdownToggleDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[appNavDropdownToggle]'
                     },] }
         ];
         /** @nocollapse */
-        NavDropdownToggleDirective.ctorParameters = function () {
-            return [
-                { type: NavDropdownDirective }
-            ];
-        };
+        NavDropdownToggleDirective.ctorParameters = function () { return [
+            { type: NavDropdownDirective }
+        ]; };
         NavDropdownToggleDirective.propDecorators = {
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
         };
@@ -1457,8 +1399,8 @@
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var AppSidebarNavComponent = /** @class */ (function () {
-        function AppSidebarNavComponent(router$$1, renderer, hostElement) {
-            this.router = router$$1;
+        function AppSidebarNavComponent(router, renderer, hostElement) {
+            this.router = router;
             this.renderer = renderer;
             this.hostElement = hostElement;
             this.role = 'nav';
@@ -1472,9 +1414,9 @@
          * @param {?} changes
          * @return {?}
          */
-            function (changes) {
-                this.navItemsArray = JSON.parse(JSON.stringify(this.navItems || []));
-            };
+        function (changes) {
+            this.navItemsArray = JSON.parse(JSON.stringify(this.navItems || []));
+        };
         AppSidebarNavComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-nav',
@@ -1482,13 +1424,11 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarNavComponent.ctorParameters = function () {
-            return [
-                { type: router.Router },
-                { type: core.Renderer2 },
-                { type: core.ElementRef }
-            ];
-        };
+        AppSidebarNavComponent.ctorParameters = function () { return [
+            { type: router.Router },
+            { type: core.Renderer2 },
+            { type: core.ElementRef }
+        ]; };
         AppSidebarNavComponent.propDecorators = {
             navItems: [{ type: core.Input }],
             role: [{ type: core.HostBinding, args: ['attr.role',] }]
@@ -1509,7 +1449,7 @@
         AppSidebarNavDividerComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () { };
+        function () { };
         AppSidebarNavDividerComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-nav-divider',
@@ -1530,14 +1470,16 @@
      */
     var SidebarNavHelper = /** @class */ (function () {
         function SidebarNavHelper() {
-            this.hasBadge = ( /**
+            this.hasBadge = (/**
              * @param {?} item
              * @return {?}
-             */function (item) { return Boolean(item.badge); });
-            this.hasIcon = ( /**
+             */
+            function (item) { return Boolean(item.badge); });
+            this.hasIcon = (/**
              * @param {?} item
              * @return {?}
-             */function (item) { return Boolean(item.icon); });
+             */
+            function (item) { return Boolean(item.icon); });
         }
         /**
          * @param {?} item
@@ -1547,26 +1489,26 @@
          * @param {?} item
          * @return {?}
          */
-            function (item) {
-                if (item.divider) {
-                    return 'divider';
-                }
-                else if (item.title) {
-                    return 'title';
-                }
-                else if (item.children) {
-                    return 'dropdown';
-                }
-                else if (item.label) {
-                    return 'label';
-                }
-                else if (!Object.keys(item).length) {
-                    return 'empty';
-                }
-                else {
-                    return 'link';
-                }
-            };
+        function (item) {
+            if (item.divider) {
+                return 'divider';
+            }
+            else if (item.title) {
+                return 'title';
+            }
+            else if (item.children) {
+                return 'dropdown';
+            }
+            else if (item.label) {
+                return 'label';
+            }
+            else if (!Object.keys(item).length) {
+                return 'empty';
+            }
+            else {
+                return 'link';
+            }
+        };
         /**
          * @param {?} item
          * @return {?}
@@ -1575,22 +1517,22 @@
          * @param {?} item
          * @return {?}
          */
-            function (item) {
-                /** @type {?} */
-                var itemType = this.itemType(item);
-                /** @type {?} */
-                var itemClass;
-                if (['divider', 'title'].includes(itemType)) {
-                    itemClass = "nav-" + itemType;
-                }
-                else if (itemType === 'dropdown') {
-                    itemClass = 'nav-item nav-dropdown';
-                }
-                else {
-                    itemClass = 'nav-item';
-                }
-                return item.class ? itemClass + " " + item.class : itemClass;
-            };
+        function (item) {
+            /** @type {?} */
+            var itemType = this.itemType(item);
+            /** @type {?} */
+            var itemClass;
+            if (['divider', 'title'].includes(itemType)) {
+                itemClass = "nav-" + itemType;
+            }
+            else if (itemType === 'dropdown') {
+                itemClass = 'nav-item nav-dropdown';
+            }
+            else {
+                itemClass = 'nav-item';
+            }
+            return item.class ? itemClass + " " + item.class : itemClass;
+        };
         /**
          * @param {?} router
          * @param {?} item
@@ -1601,9 +1543,9 @@
          * @param {?} item
          * @return {?}
          */
-            function (router$$1, item) {
-                return router$$1.isActive(item.url, false);
-            };
+        function (router, item) {
+            return router.isActive(item.url, false);
+        };
         /**
          * @param {?} item
          * @return {?}
@@ -1612,16 +1554,16 @@
          * @param {?} item
          * @return {?}
          */
-            function (item) {
-                /** @type {?} */
-                var classes = {
-                    'nav-icon': true
-                };
-                /** @type {?} */
-                var icon = item.icon;
-                classes[icon] = !!item.icon;
-                return classes;
+        function (item) {
+            /** @type {?} */
+            var classes = {
+                'nav-icon': true
             };
+            /** @type {?} */
+            var icon = item.icon;
+            classes[icon] = !!item.icon;
+            return classes;
+        };
         /**
          * @param {?} item
          * @return {?}
@@ -1630,16 +1572,16 @@
          * @param {?} item
          * @return {?}
          */
-            function (item) {
-                /** @type {?} */
-                var classes = {
-                    'badge': true
-                };
-                /** @type {?} */
-                var variant = "badge-" + item.badge.variant;
-                classes[variant] = !!item.badge.variant;
-                return classes;
+        function (item) {
+            /** @type {?} */
+            var classes = {
+                'badge': true
             };
+            /** @type {?} */
+            var variant = "badge-" + item.badge.variant;
+            classes[variant] = !!item.badge.variant;
+            return classes;
+        };
         return SidebarNavHelper;
     }());
 
@@ -1661,11 +1603,9 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarNavDropdownComponent.ctorParameters = function () {
-            return [
-                { type: SidebarNavHelper }
-            ];
-        };
+        AppSidebarNavDropdownComponent.ctorParameters = function () { return [
+            { type: SidebarNavHelper }
+        ]; };
         AppSidebarNavDropdownComponent.propDecorators = {
             item: [{ type: core.Input }]
         };
@@ -1677,8 +1617,8 @@
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var AppSidebarNavItemsComponent = /** @class */ (function () {
-        function AppSidebarNavItemsComponent(router$$1, helper) {
-            this.router = router$$1;
+        function AppSidebarNavItemsComponent(router, helper) {
+            this.router = router;
             this.helper = helper;
         }
         AppSidebarNavItemsComponent.decorators = [
@@ -1688,12 +1628,10 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarNavItemsComponent.ctorParameters = function () {
-            return [
-                { type: router.Router },
-                { type: SidebarNavHelper }
-            ];
-        };
+        AppSidebarNavItemsComponent.ctorParameters = function () { return [
+            { type: router.Router },
+            { type: SidebarNavHelper }
+        ]; };
         AppSidebarNavItemsComponent.propDecorators = {
             items: [{ type: core.Input }]
         };
@@ -1716,79 +1654,79 @@
         AppSidebarNavLinkComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-                this.linkType = this.getLinkType();
-                this.href = this.isDisabled() ? '' : this.item.url;
-            };
+        function () {
+            this.linkType = this.getLinkType();
+            this.href = this.isDisabled() ? '' : this.item.url;
+        };
         /**
          * @return {?}
          */
         AppSidebarNavLinkComponent.prototype.getLinkClass = /**
          * @return {?}
          */
-            function () {
-                /** @type {?} */
-                var disabled = this.isDisabled();
-                /** @type {?} */
-                var classes = {
-                    'nav-link': true,
-                    'disabled': disabled,
-                    'btn-link': disabled
-                };
-                if (this.hasVariant()) {
-                    /** @type {?} */
-                    var variant = "nav-link-" + this.item.variant;
-                    classes[variant] = true;
-                }
-                return classes;
+        function () {
+            /** @type {?} */
+            var disabled = this.isDisabled();
+            /** @type {?} */
+            var classes = {
+                'nav-link': true,
+                'disabled': disabled,
+                'btn-link': disabled
             };
+            if (this.hasVariant()) {
+                /** @type {?} */
+                var variant = "nav-link-" + this.item.variant;
+                classes[variant] = true;
+            }
+            return classes;
+        };
         /**
          * @return {?}
          */
         AppSidebarNavLinkComponent.prototype.getLinkType = /**
          * @return {?}
          */
-            function () {
-                return this.isExternalLink() ? 'external' : 'link';
-            };
+        function () {
+            return this.isExternalLink() ? 'external' : 'link';
+        };
         /**
          * @return {?}
          */
         AppSidebarNavLinkComponent.prototype.hasVariant = /**
          * @return {?}
          */
-            function () {
-                return !!this.item.variant;
-            };
+        function () {
+            return !!this.item.variant;
+        };
         /**
          * @return {?}
          */
         AppSidebarNavLinkComponent.prototype.isDisabled = /**
          * @return {?}
          */
-            function () {
-                return (this.item.attributes && this.item.attributes.disabled) ? true : null;
-            };
+        function () {
+            return (this.item.attributes && this.item.attributes.disabled) ? true : null;
+        };
         /**
          * @return {?}
          */
         AppSidebarNavLinkComponent.prototype.isExternalLink = /**
          * @return {?}
          */
-            function () {
-                return this.item.url.substring(0, 4) === 'http';
-            };
+        function () {
+            return this.item.url.substring(0, 4) === 'http';
+        };
         /**
          * @return {?}
          */
         AppSidebarNavLinkComponent.prototype.hideMobile = /**
          * @return {?}
          */
-            function () {
-                if (this.document.body.classList.contains('sidebar-show')) {
-                    this.renderer.removeClass(this.document.body, 'sidebar-show');
-                }
-            };
+        function () {
+            if (this.document.body.classList.contains('sidebar-show')) {
+                this.renderer.removeClass(this.document.body, 'sidebar-show');
+            }
+        };
         AppSidebarNavLinkComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-nav-link',
@@ -1797,13 +1735,11 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarNavLinkComponent.ctorParameters = function () {
-            return [
-                { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-                { type: core.Renderer2 },
-                { type: SidebarNavHelper }
-            ];
-        };
+        AppSidebarNavLinkComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
+            { type: SidebarNavHelper }
+        ]; };
         AppSidebarNavLinkComponent.propDecorators = {
             item: [{ type: core.Input }]
         };
@@ -1825,27 +1761,27 @@
         AppSidebarNavTitleComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
+        function () {
+            /** @type {?} */
+            var nativeElement = this.el.nativeElement;
+            /** @type {?} */
+            var name = this.renderer.createText(this.item.name);
+            if (this.item.class) {
                 /** @type {?} */
-                var nativeElement = this.el.nativeElement;
+                var classes = this.item.class;
+                this.renderer.addClass(nativeElement, classes);
+            }
+            if (this.item.wrapper) {
                 /** @type {?} */
-                var name = this.renderer.createText(this.item.name);
-                if (this.item.class) {
-                    /** @type {?} */
-                    var classes = this.item.class;
-                    this.renderer.addClass(nativeElement, classes);
-                }
-                if (this.item.wrapper) {
-                    /** @type {?} */
-                    var wrapper = this.renderer.createElement(this.item.wrapper.element);
-                    this.addAttribs(this.item.wrapper.attributes, wrapper);
-                    this.renderer.appendChild(wrapper, name);
-                    this.renderer.appendChild(nativeElement, wrapper);
-                }
-                else {
-                    this.renderer.appendChild(nativeElement, name);
-                }
-            };
+                var wrapper = this.renderer.createElement(this.item.wrapper.element);
+                this.addAttribs(this.item.wrapper.attributes, wrapper);
+                this.renderer.appendChild(wrapper, name);
+                this.renderer.appendChild(nativeElement, wrapper);
+            }
+            else {
+                this.renderer.appendChild(nativeElement, name);
+            }
+        };
         /**
          * @private
          * @param {?} attribs
@@ -1858,21 +1794,21 @@
          * @param {?} element
          * @return {?}
          */
-            function (attribs, element) {
-                if (attribs) {
-                    for (var attr in attribs) {
-                        if (attr === 'style' && typeof (attribs[attr]) === 'object') {
-                            this.setStyle(attribs[attr], element);
-                        }
-                        else if (attr === 'class') {
-                            this.addClass(attribs[attr], element);
-                        }
-                        else {
-                            this.setAttrib(attr, attribs[attr], element);
-                        }
+        function (attribs, element) {
+            if (attribs) {
+                for (var attr in attribs) {
+                    if (attr === 'style' && typeof (attribs[attr]) === 'object') {
+                        this.setStyle(attribs[attr], element);
+                    }
+                    else if (attr === 'class') {
+                        this.addClass(attribs[attr], element);
+                    }
+                    else {
+                        this.setAttrib(attr, attribs[attr], element);
                     }
                 }
-            };
+            }
+        };
         /**
          * @private
          * @param {?} styles
@@ -1885,11 +1821,11 @@
          * @param {?} el
          * @return {?}
          */
-            function (styles, el) {
-                for (var style in styles) {
-                    this.renderer.setStyle(el, style, styles[style]);
-                }
-            };
+        function (styles, el) {
+            for (var style in styles) {
+                this.renderer.setStyle(el, style, styles[style]);
+            }
+        };
         /**
          * @private
          * @param {?} classes
@@ -1902,20 +1838,22 @@
          * @param {?} el
          * @return {?}
          */
-            function (classes, el) {
-                var _this = this;
-                /** @type {?} */
-                var classArray = (Array.isArray(classes) ? classes : classes.split(' '));
-                classArray.filter(( /**
-                 * @param {?} element
-                 * @return {?}
-                 */function (element) { return element.length > 0; })).forEach(( /**
-                 * @param {?} element
-                 * @return {?}
-                 */function (element) {
-                    _this.renderer.addClass(el, element);
-                }));
-            };
+        function (classes, el) {
+            var _this = this;
+            /** @type {?} */
+            var classArray = (Array.isArray(classes) ? classes : classes.split(' '));
+            classArray.filter((/**
+             * @param {?} element
+             * @return {?}
+             */
+            function (element) { return element.length > 0; })).forEach((/**
+             * @param {?} element
+             * @return {?}
+             */
+            function (element) {
+                _this.renderer.addClass(el, element);
+            }));
+        };
         /**
          * @private
          * @param {?} key
@@ -1930,9 +1868,9 @@
          * @param {?} el
          * @return {?}
          */
-            function (key, value, el) {
-                this.renderer.setAttribute(el, key, value);
-            };
+        function (key, value, el) {
+            this.renderer.setAttribute(el, key, value);
+        };
         AppSidebarNavTitleComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-nav-title',
@@ -1940,12 +1878,10 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarNavTitleComponent.ctorParameters = function () {
-            return [
-                { type: core.ElementRef },
-                { type: core.Renderer2 }
-            ];
-        };
+        AppSidebarNavTitleComponent.ctorParameters = function () { return [
+            { type: core.ElementRef },
+            { type: core.Renderer2 }
+        ]; };
         AppSidebarNavTitleComponent.propDecorators = {
             item: [{ type: core.Input }]
         };
@@ -1966,42 +1902,42 @@
         AppSidebarNavLabelComponent.prototype.ngOnInit = /**
          * @return {?}
          */
-            function () {
-            };
+        function () {
+        };
         /**
          * @return {?}
          */
         AppSidebarNavLabelComponent.prototype.getItemClass = /**
          * @return {?}
          */
-            function () {
-                /** @type {?} */
-                var labelClass = {
-                    'nav-label': true,
-                    'active': true
-                };
-                /** @type {?} */
-                var itemClass = this.item.class;
-                labelClass[itemClass] = !!itemClass;
-                return labelClass;
+        function () {
+            /** @type {?} */
+            var labelClass = {
+                'nav-label': true,
+                'active': true
             };
+            /** @type {?} */
+            var itemClass = this.item.class;
+            labelClass[itemClass] = !!itemClass;
+            return labelClass;
+        };
         /**
          * @return {?}
          */
         AppSidebarNavLabelComponent.prototype.getLabelIconClass = /**
          * @return {?}
          */
-            function () {
-                /** @type {?} */
-                var classes = this.helper.getIconClass(this.item);
-                /** @type {?} */
-                var variant = "text-" + this.item.label.variant;
-                classes[variant] = !!variant;
-                /** @type {?} */
-                var labelClass = this.item.label.class;
-                classes[labelClass] = !!labelClass;
-                return classes;
-            };
+        function () {
+            /** @type {?} */
+            var classes = this.helper.getIconClass(this.item);
+            /** @type {?} */
+            var variant = "text-" + this.item.label.variant;
+            classes[variant] = !!variant;
+            /** @type {?} */
+            var labelClass = this.item.label.class;
+            classes[labelClass] = !!labelClass;
+            return classes;
+        };
         AppSidebarNavLabelComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-nav-label',
@@ -2009,11 +1945,9 @@
                     }] }
         ];
         /** @nocollapse */
-        AppSidebarNavLabelComponent.ctorParameters = function () {
-            return [
-                { type: SidebarNavHelper }
-            ];
-        };
+        AppSidebarNavLabelComponent.ctorParameters = function () { return [
+            { type: SidebarNavHelper }
+        ]; };
         AppSidebarNavLabelComponent.propDecorators = {
             item: [{ type: core.Input }]
         };
@@ -2075,59 +2009,43 @@
         return AppSidebarModule;
     }());
 
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
     exports.AppAsideModule = AppAsideModule;
     exports.AppBreadcrumbModule = AppBreadcrumbModule;
     exports.AppFooterModule = AppFooterModule;
     exports.AppHeaderModule = AppHeaderModule;
     exports.AppSidebarModule = AppSidebarModule;
+    exports.ɵa = LayoutModule;
+    exports.ɵb = SidebarToggleDirective;
+    exports.ɵba = AppSidebarNavTitleComponent;
+    exports.ɵbb = NavDropdownDirective;
+    exports.ɵbc = NavDropdownToggleDirective;
+    exports.ɵbd = AppSidebarNavLabelComponent;
+    exports.ɵc = SidebarMinimizeDirective;
+    exports.ɵd = MobileSidebarToggleDirective;
+    exports.ɵe = SidebarOffCanvasCloseDirective;
+    exports.ɵf = BrandMinimizeDirective;
+    exports.ɵg = AsideToggleDirective;
+    exports.ɵh = HtmlAttributesDirective;
+    exports.ɵi = ClassToggler;
     exports.ɵj = AppAsideComponent;
     exports.ɵk = AppBreadcrumbComponent;
     exports.ɵl = AppBreadcrumbService;
     exports.ɵm = CuiBreadcrumbComponent;
     exports.ɵn = AppFooterComponent;
     exports.ɵo = AppHeaderComponent;
-    exports.ɵg = AsideToggleDirective;
-    exports.ɵf = BrandMinimizeDirective;
-    exports.ɵh = HtmlAttributesDirective;
-    exports.ɵd = MobileSidebarToggleDirective;
-    exports.ɵc = SidebarMinimizeDirective;
-    exports.ɵe = SidebarOffCanvasCloseDirective;
-    exports.ɵb = SidebarToggleDirective;
-    exports.ɵa = LayoutModule;
-    exports.ɵi = ClassToggler;
     exports.ɵp = AppSidebarFooterComponent;
     exports.ɵq = AppSidebarFormComponent;
     exports.ɵr = AppSidebarHeaderComponent;
     exports.ɵs = AppSidebarMinimizerComponent;
-    exports.ɵw = AppSidebarNavComponent;
-    exports.ɵbb = NavDropdownDirective;
-    exports.ɵbc = NavDropdownToggleDirective;
+    exports.ɵt = AppSidebarComponent;
+    exports.ɵu = AppSidebarNavItemsComponent;
     exports.ɵv = SidebarNavHelper;
+    exports.ɵw = AppSidebarNavComponent;
     exports.ɵx = AppSidebarNavDividerComponent;
     exports.ɵy = AppSidebarNavDropdownComponent;
-    exports.ɵu = AppSidebarNavItemsComponent;
-    exports.ɵbd = AppSidebarNavLabelComponent;
     exports.ɵz = AppSidebarNavLinkComponent;
-    exports.ɵba = AppSidebarNavTitleComponent;
-    exports.ɵt = AppSidebarComponent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
-
+}));
 //# sourceMappingURL=coreui-angular.umd.js.map

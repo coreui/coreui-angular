@@ -1,8 +1,8 @@
+import { DOCUMENT, CommonModule } from '@angular/common';
+import { Injectable, Inject, Renderer2, Directive, Input, HostListener, ElementRef, NgModule, Component, HostBinding } from '@angular/core';
+import { NavigationEnd, Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
-import { DOCUMENT, CommonModule } from '@angular/common';
-import { Inject, Injectable, Renderer2, Directive, ElementRef, HostListener, Input, NgModule, Component, HostBinding } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -1877,6 +1877,5 @@ AppSidebarModule.decorators = [
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule, AppAsideComponent as ɵj, AppBreadcrumbComponent as ɵk, AppBreadcrumbService as ɵl, CuiBreadcrumbComponent as ɵm, AppFooterComponent as ɵn, AppHeaderComponent as ɵo, AsideToggleDirective as ɵg, BrandMinimizeDirective as ɵf, HtmlAttributesDirective as ɵh, MobileSidebarToggleDirective as ɵd, SidebarMinimizeDirective as ɵc, SidebarOffCanvasCloseDirective as ɵe, SidebarToggleDirective as ɵb, LayoutModule as ɵa, ClassToggler as ɵi, AppSidebarFooterComponent as ɵp, AppSidebarFormComponent as ɵq, AppSidebarHeaderComponent as ɵr, AppSidebarMinimizerComponent as ɵs, AppSidebarNavComponent as ɵw, NavDropdownDirective as ɵbb, NavDropdownToggleDirective as ɵbc, SidebarNavHelper as ɵv, AppSidebarNavDividerComponent as ɵx, AppSidebarNavDropdownComponent as ɵy, AppSidebarNavItemsComponent as ɵu, AppSidebarNavLabelComponent as ɵbd, AppSidebarNavLinkComponent as ɵz, AppSidebarNavTitleComponent as ɵba, AppSidebarComponent as ɵt };
-
+export { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule, LayoutModule as ɵa, SidebarToggleDirective as ɵb, AppSidebarNavTitleComponent as ɵba, NavDropdownDirective as ɵbb, NavDropdownToggleDirective as ɵbc, AppSidebarNavLabelComponent as ɵbd, SidebarMinimizeDirective as ɵc, MobileSidebarToggleDirective as ɵd, SidebarOffCanvasCloseDirective as ɵe, BrandMinimizeDirective as ɵf, AsideToggleDirective as ɵg, HtmlAttributesDirective as ɵh, ClassToggler as ɵi, AppAsideComponent as ɵj, AppBreadcrumbComponent as ɵk, AppBreadcrumbService as ɵl, CuiBreadcrumbComponent as ɵm, AppFooterComponent as ɵn, AppHeaderComponent as ɵo, AppSidebarFooterComponent as ɵp, AppSidebarFormComponent as ɵq, AppSidebarHeaderComponent as ɵr, AppSidebarMinimizerComponent as ɵs, AppSidebarComponent as ɵt, AppSidebarNavItemsComponent as ɵu, SidebarNavHelper as ɵv, AppSidebarNavComponent as ɵw, AppSidebarNavDividerComponent as ɵx, AppSidebarNavDropdownComponent as ɵy, AppSidebarNavLinkComponent as ɵz };
 //# sourceMappingURL=coreui-angular.js.map
