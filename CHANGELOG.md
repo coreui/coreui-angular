@@ -1,5 +1,36 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.5.0`
+- chore: upgrade to Angular 8.0 - thanks @dennisameling
+- chore: move browserslist file
+- chore(tslint): cleanup unused/deprecated rules
+- chore(tsconfig): target update 
+
+###### dependencies update
+- update `@angular/animations` to `^8.0.0`
+- update `@angular/common` to `^8.0.0`
+- update `@angular/compiler` to `^8.0.0`
+- update `@angular/core` to `^8.0.0`
+- update `@angular/forms` to `^8.0.0`
+- update `@angular/platform-browser` to `^8.0.0`
+- update `@angular/platform-browser-dynamic` to `^8.0.0`
+- update `@angular/router` to `^8.0.0`
+- update `core-js` to `^2.6.9`
+- update `rxjs` to `^6.5.2`
+- update `zone.js` to `~0.9.1`
+- update `@angular-devkit/build-angular` to `~0.800.1`
+- update `@angular-devkit/build-ng-packagr` to `~0.800.1`
+- update `@angular/cli` to `^8.0.1`
+- update `@angular/compiler-cli` to `^8.0.0`
+- update `@angular/language-service` to `^8.0.0`
+- update `@types/jasmine` to `^3.3.13`
+- update `@types/node` to `^11.13.13`
+- update `codelyzer` to `^5.0.1`
+- update `jasmine-core` to `~3.4.0`
+- update `ng-packagr` to `^5.2.0`
+- update `tsickle` to `^0.35.0`
+- update `typescript` to `~3.4.5`
+
 ##### `v2.4.5`
 - chore(readme): npm badges 
 - chore(readme): prerequisites 

@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../projects/coreui/angular/src/lib/sidebar/index.ts"],"names":[],"mappings":"AAAA,cAAc,sBAAsB,CAAC","sourcesContent":["export * from './app-sidebar.module';\r\n"]}
