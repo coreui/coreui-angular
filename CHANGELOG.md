@@ -1,5 +1,15 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.5.1`
+- fix(appHtmlAttr): cannot remove html attribute,   
+  ex: `attributes: {hidden: null}` removes attribute `hidden`  
+
+###### dependencies update
+- update `@angular-devkit/build-angular` to `^0.800.2`
+- update `@angular-devkit/build-ng-packagr` to `^0.800.2`
+- update `@angular/cli` to `^8.0.2`
+- update `ng-packagr` to `^5.3.0`
+
 ##### `v2.5.0`
 - chore: upgrade to Angular 8.0 - thanks @dennisameling
 - chore: move browserslist file
