@@ -377,7 +377,9 @@ class HtmlAttributesDirective {
      * @return {?}
      */
     setAttrib(key, value) {
-        this.renderer.setAttribute(this.el.nativeElement, key, value);
+        value !== null ?
+            this.renderer.setAttribute(this.el.nativeElement, key, value) :
+            this.renderer.removeAttribute(this.el.nativeElement, key);
     }
 }
 HtmlAttributesDirective.decorators = [
