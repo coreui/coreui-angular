@@ -19,4 +19,5 @@ export declare class AppSidebarNavLinkComponent implements OnInit {
     isDisabled(): boolean;
     isExternalLink(): boolean;
     hideMobile(): void;
+    checkRouterLinkActiveOptions(): void;
 }

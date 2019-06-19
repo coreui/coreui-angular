@@ -21,6 +21,7 @@ export class AppSidebarNavLinkComponent implements OnInit {
   ngOnInit() {
     this.linkType = this.getLinkType();
     this.href = this.isDisabled() ? '' : this.item.url;
+    this.checkRouterLinkActiveOptions();
   }
 
   public getLinkClass() {
@@ -56,6 +57,14 @@ export class AppSidebarNavLinkComponent implements OnInit {
   public hideMobile() {
     if (this.document.body.classList.contains('sidebar-show')) {
       this.renderer.removeClass(this.document.body, 'sidebar-show');
+    }
+  }
+
+  public checkRouterLinkActiveOptions() {
+    if (!this.item.routerLinkActiveOptions) {
+      this.item.routerLinkActiveOptions = {
+        exact: false
+      };
     }
   }
 }
