@@ -1,5 +1,5 @@
 <ng-template [ngIf]="mobileSidebarToggler != false">
-  <button class="navbar-toggler d-lg-none" type="button" appSidebarToggler>
+  <button class="navbar-toggler {{sidebarTogglerMobileClass}}" type="button" appSidebarToggler>
     <span class="navbar-toggler-icon"></span>
   </button>
 </ng-template>
@@ -21,18 +21,18 @@
   </ng-template>
 </a>
 <ng-template [ngIf]="sidebarToggler != false">
-  <button class="navbar-toggler d-md-down-none" type="button" [appSidebarToggler]="sidebarToggler">
+  <button class="navbar-toggler {{sidebarTogglerClass}}" type="button" [appSidebarToggler]="sidebarToggler">
     <span class="navbar-toggler-icon"></span>
   </button>
 </ng-template>
 <ng-content></ng-content>
 <ng-template [ngIf]="asideMenuToggler != false">
-  <button class="navbar-toggler d-md-down-none" type="button" [appAsideMenuToggler]="asideMenuToggler">
+  <button class="navbar-toggler {{asideTogglerClass}}" type="button" [appAsideMenuToggler]="asideMenuToggler">
     <span class="navbar-toggler-icon"></span>
   </button>
 </ng-template>
 <ng-template [ngIf]="mobileAsideMenuToggler != false">
-  <button class="navbar-toggler d-lg-none" type="button" appAsideMenuToggler>
+  <button class="navbar-toggler {{asideTogglerMobileClass}}" type="button" appAsideMenuToggler>
     <span class="navbar-toggler-icon"></span>
   </button>
 </ng-template>
