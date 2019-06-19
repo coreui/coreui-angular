@@ -1,5 +1,32 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.5.2`
+- refactor(AppHeader): add reactive toggler class based on breakpoint   
+usage: set toggler breakpoint
+```html
+<app-header
+  [sidebarToggler]="'lg'"
+  [asideMenuToggler]="'md'">
+</app-header>
+```
+###### dependencies update
+- update `@angular/animations` to `^8.0.2`
+- update `@angular/common` to `^8.0.2`
+- update `@angular/compiler` to `^8.0.2`
+- update `@angular/core` to `^8.0.2`
+- update `@angular/forms` to `^8.0.2`
+- update `@angular/platform-browser` to `^8.0.2`
+- update `@angular/platform-browser-dynamic` to `^8.0.2`
+- update `@angular/router` to `^8.0.2`
+- update `@angular-devkit/build-angular` to `^0.800.3`
+- update `@angular-devkit/build-ng-packagr` to `^0.800.3`
+- update `@angular/cli` to `^8.0.3`
+- update `@angular/compiler-cli` to `^8.0.2`
+- update `@angular/language-service` to `^8.0.2`
+- update `@types/node` to `^11.13.14`
+- update `ts-node` to `^8.3.0`
+- update `tslib` to `^1.10.0`
+
 ##### `v2.5.1`
 - fix(appHtmlAttr): cannot remove html attribute,   
   ex: `attributes: {hidden: null}` removes attribute `hidden`  
