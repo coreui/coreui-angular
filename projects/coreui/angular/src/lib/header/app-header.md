@@ -19,7 +19,7 @@ notes:
 - `[sidebarToggler] = "false"` : remove toggler 
 - `[mobileSidebarToggler] = "false"` : remove mobile toggler 
 - `[asideMenuToggler] = "false"` : remove toggler 
-- `[mobileAsideMenuToggler | boolean |] = "false"` : remove mobile toggler 
+- `[mobileAsideMenuToggler] = "false"` : remove mobile toggler 
 
 to shift default ( lg, md ) desktop/mobile breakpoint in your template:
 1. override `_variables.scss`
