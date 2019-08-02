@@ -12,6 +12,8 @@ export class AppSidebarNavLinkComponent implements OnInit {
   public linkType: string;
   public href: string;
 
+  private classes = { 'nav-link': true };
+
   constructor(
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
@@ -25,16 +27,13 @@ export class AppSidebarNavLinkComponent implements OnInit {
 
   public getLinkClass() {
     const disabled = this.isDisabled();
-    const classes = {
-      'nav-link': true,
-      'disabled': disabled,
-      'btn-link': disabled
-    };
+    this.classes['disabled'] = disabled;
+    this.classes['btn-link'] = disabled;
     if (this.hasVariant()) {
       const variant = `nav-link-${this.item.variant}`;
-      classes[variant] = true;
+      this.classes[variant] = true;
     }
-    return classes;
+    return this.classes;
   }
 
   public getLinkType() {

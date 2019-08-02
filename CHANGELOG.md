@@ -1,5 +1,32 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.5.3`
+- fix(sidebar): performance issues with app-sidebar-nav components due to ngClass bindings - thanks @coyoteecd #74
+- fix(sidebar): app-sidebar-nav-label.component sets an incomplete variant style - thanks @coyoteecd closes #75 
+
+###### dependencies update
+- update `@angular/animations` to `^8.2.0`
+- update `@angular/common` to `^8.2.0`
+- update `@angular/compiler` to `^8.2.0`
+- update `@angular/core` to `^8.2.0`
+- update `@angular/forms` to `^8.2.0`
+- update `@angular/platform-browser` to `^8.2.0`
+- update `@angular/platform-browser-dynamic` to `^8.2.0`
+- update `@angular/router` to `^8.2.0`
+- update `zone.js` to `~0.10.0`
+- update `@angular-devkit/build-angular` to `^0.802.0`
+- update `@angular-devkit/build-ng-packagr` to `^0.802.0`
+- update `@angular/cli` to `^8.2.0`
+- update `@angular/compiler-cli` to `^8.2.0`
+- update `@angular/language-service` to `^8.2.0`
+- update `@types/jasmine` to `^3.3.16`
+- update `@types/node` to `^11.13.18`
+- update `karma` to `^4.2.0`
+- update `karma-coverage-istanbul-reporter` to `^2.1.0`
+- update `ng-packagr` to `^5.4.3`
+- update `tsickle` to `^0.36.0`
+- update `tslint` to `^5.18.0`
+
 ##### `v2.5.2`
 - refactor(AppHeader): add reactive toggler class based on breakpoint   
 usage: set toggler breakpoint
