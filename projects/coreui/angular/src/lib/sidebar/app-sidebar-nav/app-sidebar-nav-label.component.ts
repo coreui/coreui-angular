@@ -8,28 +8,30 @@ import {SidebarNavHelper} from '../app-sidebar-nav.service';
 export class AppSidebarNavLabelComponent implements OnInit {
   @Input() item: any;
 
+  private classes = {
+    'nav-label': true,
+    'active': true
+  };
+  private iconClasses = {};
+
   constructor(
     public helper: SidebarNavHelper
   ) { }
 
   ngOnInit() {
+    this.iconClasses = this.helper.getIconClass(this.item);
   }
 
   getItemClass() {
-    const labelClass = {
-      'nav-label': true,
-      'active': true
-    };
     const itemClass = this.item.class;
-    labelClass[itemClass] = !!itemClass;
-    return labelClass;
+    this.classes[itemClass] = !!itemClass;
+    return this.classes;
   }
   getLabelIconClass() {
-    const classes = this.helper.getIconClass(this.item);
     const variant = `text-${this.item.label.variant}`;
-    classes[variant] = !!variant;
+    this.iconClasses[variant] = !!this.item.label.variant;
     const labelClass = this.item.label.class;
-    classes[labelClass] = !!labelClass;
-    return classes;
+    this.iconClasses[labelClass] = !!labelClass;
+    return this.iconClasses;
   }
 }

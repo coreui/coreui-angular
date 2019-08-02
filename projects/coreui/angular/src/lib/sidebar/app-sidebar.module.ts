@@ -19,6 +19,8 @@ import { AppSidebarNavLinkComponent } from './app-sidebar-nav/app-sidebar-nav-li
 import { AppSidebarNavTitleComponent } from './app-sidebar-nav/app-sidebar-nav-title.component';
 import { SidebarNavHelper } from './app-sidebar-nav.service';
 import { AppSidebarNavLabelComponent } from './app-sidebar-nav/app-sidebar-nav-label.component';
+import { AppSidebarNavIconPipe } from './app-sidebar-nav/app-sidebar-nav-icon.pipe';
+import { AppSidebarNavBadgePipe } from './app-sidebar-nav/app-sidebar-nav-badge.pipe';
 
 @NgModule({
   imports: [
@@ -57,7 +59,9 @@ import { AppSidebarNavLabelComponent } from './app-sidebar-nav/app-sidebar-nav-l
     AppSidebarNavTitleComponent,
     NavDropdownDirective,
     NavDropdownToggleDirective,
-    AppSidebarNavLabelComponent
+    AppSidebarNavLabelComponent,
+    AppSidebarNavIconPipe,
+    AppSidebarNavBadgePipe
   ],
   providers: [
     SidebarNavHelper
