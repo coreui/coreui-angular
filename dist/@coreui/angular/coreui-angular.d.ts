@@ -18,8 +18,10 @@ export { AppSidebarMinimizerComponent as ɵs } from './lib/sidebar/app-sidebar-m
 export { AppSidebarNavComponent as ɵw } from './lib/sidebar/app-sidebar-nav.component';
 export { NavDropdownDirective as ɵbb, NavDropdownToggleDirective as ɵbc } from './lib/sidebar/app-sidebar-nav.directive';
 export { SidebarNavHelper as ɵv } from './lib/sidebar/app-sidebar-nav.service';
+export { AppSidebarNavBadgePipe as ɵbf } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-badge.pipe';
 export { AppSidebarNavDividerComponent as ɵx } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-divider.component';
 export { AppSidebarNavDropdownComponent as ɵy } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-dropdown.component';
+export { AppSidebarNavIconPipe as ɵbe } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-icon.pipe';
 export { AppSidebarNavItemsComponent as ɵu } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-items.component';
 export { AppSidebarNavLabelComponent as ɵbd } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-label.component';
 export { AppSidebarNavLinkComponent as ɵz } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-link.component';

@@ -7,12 +7,11 @@ export declare class AppSidebarNavLinkComponent implements OnInit {
     item: any;
     linkType: string;
     href: string;
+    private classes;
     constructor(document: any, renderer: Renderer2, helper: SidebarNavHelper);
     ngOnInit(): void;
     getLinkClass(): {
         'nav-link': boolean;
-        'disabled': boolean;
-        'btn-link': boolean;
     };
     getLinkType(): "link" | "external";
     hasVariant(): boolean;
