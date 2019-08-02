@@ -17,9 +17,9 @@
     }
   ],
   "peerDependencies": {
-    "@angular/common": "^8.0.2",
-    "@angular/core": "^8.0.2",
-    "@angular/router": "^8.0.2",
+    "@angular/common": "^8.2.0",
+    "@angular/core": "^8.2.0",
+    "@angular/router": "^8.2.0",
     "@coreui/coreui": "^2.1.12"
   },
   "repository": {
