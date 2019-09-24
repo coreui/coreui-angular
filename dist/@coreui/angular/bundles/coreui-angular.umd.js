@@ -853,13 +853,16 @@
             }));
         }
         AppBreadcrumbService.decorators = [
-            { type: core.Injectable }
+            { type: core.Injectable, args: [{
+                        providedIn: 'root'
+                    },] }
         ];
         /** @nocollapse */
         AppBreadcrumbService.ctorParameters = function () { return [
             { type: router.Router },
             { type: router.ActivatedRoute }
         ]; };
+        /** @nocollapse */ AppBreadcrumbService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function AppBreadcrumbService_Factory() { return new AppBreadcrumbService(core.ɵɵinject(router.Router), core.ɵɵinject(router.ActivatedRoute)); }, token: AppBreadcrumbService, providedIn: "root" });
         return AppBreadcrumbService;
     }());
     if (false) {
@@ -2688,13 +2691,40 @@
     exports.AppAsideModule = AppAsideModule;
     exports.AppBreadcrumbComponent = AppBreadcrumbComponent;
     exports.AppBreadcrumbModule = AppBreadcrumbModule;
-    exports.AppBreadcrumbService = AppBreadcrumbService;
     exports.AppFooterComponent = AppFooterComponent;
     exports.AppFooterModule = AppFooterModule;
     exports.AppHeaderComponent = AppHeaderComponent;
     exports.AppHeaderModule = AppHeaderModule;
     exports.AppSidebarComponent = AppSidebarComponent;
     exports.AppSidebarModule = AppSidebarModule;
+    exports.ɵa = LayoutModule;
+    exports.ɵb = SidebarToggleDirective;
+    exports.ɵba = AppSidebarNavBadgePipe;
+    exports.ɵbb = AppSidebarNavItemClassPipe;
+    exports.ɵc = SidebarMinimizeDirective;
+    exports.ɵd = MobileSidebarToggleDirective;
+    exports.ɵe = SidebarOffCanvasCloseDirective;
+    exports.ɵf = BrandMinimizeDirective;
+    exports.ɵg = AsideToggleDirective;
+    exports.ɵh = HtmlAttributesDirective;
+    exports.ɵi = ClassToggler;
+    exports.ɵj = AppBreadcrumbService;
+    exports.ɵk = CuiBreadcrumbComponent;
+    exports.ɵl = AppSidebarFooterComponent;
+    exports.ɵm = AppSidebarFormComponent;
+    exports.ɵn = AppSidebarHeaderComponent;
+    exports.ɵo = AppSidebarMinimizerComponent;
+    exports.ɵp = AppSidebarNavItemsComponent;
+    exports.ɵq = SidebarNavHelper;
+    exports.ɵr = AppSidebarNavComponent;
+    exports.ɵs = AppSidebarNavDividerComponent;
+    exports.ɵt = AppSidebarNavDropdownComponent;
+    exports.ɵu = AppSidebarNavLinkComponent;
+    exports.ɵv = AppSidebarNavTitleComponent;
+    exports.ɵw = NavDropdownDirective;
+    exports.ɵx = NavDropdownToggleDirective;
+    exports.ɵy = AppSidebarNavLabelComponent;
+    exports.ɵz = AppSidebarNavIconPipe;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
