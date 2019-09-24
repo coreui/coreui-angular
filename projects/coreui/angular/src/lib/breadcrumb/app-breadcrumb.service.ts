@@ -3,7 +3,10 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  }
+)
 export class AppBreadcrumbService {
 
   breadcrumbs: Observable<Array<Object>>;
