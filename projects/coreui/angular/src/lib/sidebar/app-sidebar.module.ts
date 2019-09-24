@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { LayoutModule } from '../shared/layout/layout.module';
@@ -21,6 +21,7 @@ import { SidebarNavHelper } from './app-sidebar-nav.service';
 import { AppSidebarNavLabelComponent } from './app-sidebar-nav/app-sidebar-nav-label.component';
 import { AppSidebarNavIconPipe } from './app-sidebar-nav/app-sidebar-nav-icon.pipe';
 import { AppSidebarNavBadgePipe } from './app-sidebar-nav/app-sidebar-nav-badge.pipe';
+import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-item-class.pipe';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { AppSidebarNavBadgePipe } from './app-sidebar-nav/app-sidebar-nav-badge.
     NavDropdownToggleDirective,
     AppSidebarNavLabelComponent,
     AppSidebarNavIconPipe,
-    AppSidebarNavBadgePipe
+    AppSidebarNavBadgePipe,
+    AppSidebarNavItemClassPipe
   ],
   providers: [
     SidebarNavHelper

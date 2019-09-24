@@ -1,1 +1,2 @@
-export * from './app-footer.module';
+export * from './public_api';
+

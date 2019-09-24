@@ -2,9 +2,9 @@
  * Public API Surface of @coreui/angular
  */
 
-export * from './lib/aside/index';
-export * from './lib/breadcrumb/index';
-export * from './lib/footer/index';
-export * from './lib/header/index';
-export * from './lib/sidebar/index';
+export * from './lib/aside';
+export * from './lib/breadcrumb';
+export * from './lib/footer';
+export * from './lib/header';
+export * from './lib/sidebar';
 // export * from './lib/shared/index';
