@@ -1,5 +1,8 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.5.5`
+- fix: regression build issue - Please add a @NgModule annotation
+
 ##### `v2.5.4`
 - refactor(sidebar): move INavData interface to @coreui/angular library - thanks @Fredx87 #72
 - refactor(sidebar): add pipe SidebarNavItemClass #74
