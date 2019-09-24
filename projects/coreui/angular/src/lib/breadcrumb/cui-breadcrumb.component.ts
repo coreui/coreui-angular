@@ -4,6 +4,7 @@ import {DOCUMENT} from '@angular/common';
 import {AppBreadcrumbService} from './app-breadcrumb.service';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'cui-breadcrumb',
   templateUrl: './cui-breadcrumb.component.html'
 })

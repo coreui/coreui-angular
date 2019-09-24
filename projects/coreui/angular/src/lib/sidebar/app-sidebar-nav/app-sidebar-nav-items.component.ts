@@ -12,27 +12,27 @@ import {SidebarNavHelper} from '../app-sidebar-nav.service';
           *ngSwitchCase="'dropdown'"
           [item]="item"
           [class.open]="helper.isActive(router, item)"
-          [ngClass]="helper.getClass(item)"
+          [ngClass]="item | appSidebarNavItemClass"
           appNavDropdown
           routerLinkActive="open">
         </app-sidebar-nav-dropdown>
         <app-sidebar-nav-divider
           *ngSwitchCase="'divider'"
           [item]="item"
-          [ngClass]="helper.getClass(item)"
+          [ngClass]="item | appSidebarNavItemClass"
           [appHtmlAttr]="item.attributes">
         </app-sidebar-nav-divider>
         <app-sidebar-nav-title
           *ngSwitchCase="'title'"
           [item]="item"
-          [ngClass]="helper.getClass(item)"
+          [ngClass]="item | appSidebarNavItemClass"
           [appHtmlAttr]="item.attributes">
         </app-sidebar-nav-title>
         <app-sidebar-nav-label
           *ngSwitchCase="'label'"
           [item]="item"
           class="nav-item"
-          [ngClass]="helper.getClass(item)">
+          [ngClass]="item | appSidebarNavItemClass">
         </app-sidebar-nav-label>
         <ng-container
           *ngSwitchCase="'empty'">
@@ -41,7 +41,7 @@ import {SidebarNavHelper} from '../app-sidebar-nav.service';
           *ngSwitchDefault
           [item]="item"
           class="nav-item"
-          [ngClass]="helper.getClass(item)">
+          [ngClass]="item | appSidebarNavItemClass">
         </app-sidebar-nav-link>
       </ng-container>
     </ng-container>

@@ -1,0 +1,7 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+export { AppFooterComponent } from './app-footer.component';
+export { AppFooterModule } from './app-footer.module';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljX2FwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0Bjb3JldWkvYW5ndWxhci8iLCJzb3VyY2VzIjpbImxpYi9mb290ZXIvcHVibGljX2FwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFFLGtCQUFrQixFQUFFLE1BQU0sd0JBQXdCLENBQUM7QUFDNUQsT0FBTyxFQUFFLGVBQWUsRUFBRSxNQUFNLHFCQUFxQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IHsgQXBwRm9vdGVyQ29tcG9uZW50IH0gZnJvbSAnLi9hcHAtZm9vdGVyLmNvbXBvbmVudCc7XG5leHBvcnQgeyBBcHBGb290ZXJNb2R1bGUgfSBmcm9tICcuL2FwcC1mb290ZXIubW9kdWxlJztcbiJdfQ==

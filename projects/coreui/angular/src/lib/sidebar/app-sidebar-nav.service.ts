@@ -1,3 +1,15 @@
+import { Injectable } from '@angular/core';
+
+import { INavData } from './app-sidebar-nav';
+
+@Injectable()
+export abstract class SidebarNavService {
+  /**
+   * Returns a sidebar-nav items config NavData
+   */
+  abstract getSidebarNavItemsConfig(): INavData[];
+}
+
 export class SidebarNavHelper {
 
   itemType(item) {
@@ -16,19 +28,6 @@ export class SidebarNavHelper {
     }
   }
 
-  getClass(item) {
-    const itemType = this.itemType(item);
-    let itemClass;
-    if (['divider', 'title'].includes(itemType)) {
-      itemClass = `nav-${itemType}`;
-    } else if (itemType === 'dropdown') {
-      itemClass = 'nav-item nav-dropdown' ;
-    } else {
-      itemClass = 'nav-item';
-    }
-    return item.class ? `${itemClass} ${item.class}` : itemClass;
-  }
-
   public isActive(router, item) {
     return router.isActive(item.url, false);
   }
@@ -41,16 +40,7 @@ export class SidebarNavHelper {
       'nav-icon': true
     };
     const icon = item.icon;
-    classes[icon] = !!item.icon;
-    return classes;
-  }
-
-  public getBadgeClass(item) {
-    const classes = {
-      'badge': true
-    };
-    const variant = `badge-${item.badge.variant}`;
-    classes[variant] = !!item.badge.variant;
+    classes[icon] = this.hasIcon(item);
     return classes;
   }
 }

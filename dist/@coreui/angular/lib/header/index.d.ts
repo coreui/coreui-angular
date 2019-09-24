@@ -1,1 +1,1 @@
-export * from './app-header.module';
+export * from './public_api';

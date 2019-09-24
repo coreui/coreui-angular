@@ -1,0 +1,7 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+export { AppHeaderComponent } from './app-header.component';
+export { AppHeaderModule } from './app-header.module';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljX2FwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0Bjb3JldWkvYW5ndWxhci8iLCJzb3VyY2VzIjpbImxpYi9oZWFkZXIvcHVibGljX2FwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFFLGtCQUFrQixFQUFFLE1BQU0sd0JBQXdCLENBQUM7QUFDNUQsT0FBTyxFQUFFLGVBQWUsRUFBRSxNQUFNLHFCQUFxQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IHsgQXBwSGVhZGVyQ29tcG9uZW50IH0gZnJvbSAnLi9hcHAtaGVhZGVyLmNvbXBvbmVudCc7XG5leHBvcnQgeyBBcHBIZWFkZXJNb2R1bGUgfSBmcm9tICcuL2FwcC1oZWFkZXIubW9kdWxlJztcbiJdfQ==

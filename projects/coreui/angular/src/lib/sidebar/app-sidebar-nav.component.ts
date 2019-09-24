@@ -1,16 +1,18 @@
 import { Component, ElementRef, HostBinding, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { INavData } from './app-sidebar-nav';
+
 @Component({
   selector: 'app-sidebar-nav',
   templateUrl: './app-sidebar-nav.component.html'
 })
 export class AppSidebarNavComponent implements OnChanges {
-  @Input() navItems: Array<any>;
+  @Input() navItems: INavData[] = [];
 
   @HostBinding('attr.role') role = 'nav';
 
-  public navItemsArray: Array<any>;
+  public navItemsArray: INavData[] = [];
 
   constructor(
     public router: Router,
@@ -21,6 +23,6 @@ export class AppSidebarNavComponent implements OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this.navItemsArray = JSON.parse(JSON.stringify(this.navItems || []));
+    this.navItemsArray = Array.isArray(this.navItems) ? this.navItems.slice() : [];
   }
 }

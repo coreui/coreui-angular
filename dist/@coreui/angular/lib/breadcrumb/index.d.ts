@@ -1,1 +1,1 @@
-export * from './app-breadcrumb.module';
+export * from './public_api';
