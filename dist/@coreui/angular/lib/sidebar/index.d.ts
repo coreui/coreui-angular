@@ -1,1 +1,1 @@
-export * from './app-sidebar.module';
+export * from './public_api';

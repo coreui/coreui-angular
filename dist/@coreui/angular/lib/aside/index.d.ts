@@ -1,1 +1,1 @@
-export * from './app-aside.module';
+export * from './public_api';

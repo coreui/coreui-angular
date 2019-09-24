@@ -1,5 +1,38 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.5.4`
+- refactor(sidebar): move INavData interface to @coreui/angular library - thanks @Fredx87 #72
+- refactor(sidebar): add pipe SidebarNavItemClass #74
+- refactor(sidebar): use pipes in sidebar-nav-dropdown - thanks @coyoteecd #74
+- refactor(sidebar): use pipes in sidebar-nav-items pipe #74
+- refactor(sidebar): sidebar-nav-service cleanup
+- refactor: public_api
+
+###### dependencies update
+- update `@angular/animations` to `^8.2.7`
+- update `@angular/common` to `^8.2.7`
+- update `@angular/compiler` to `^8.2.7`
+- update `@angular/core` to `^8.2.7`
+- update `@angular/forms` to `^8.2.7`
+- update `@angular/platform-browser` to `^8.2.7`
+- update `@angular/platform-browser-dynamic` to `^8.2.7`
+- update `@angular/router` to `^8.2.7`
+- update `rxjs` to `^6.5.3`
+- update `zone.js` to `^0.10.2`
+- update `@angular-devkit/build-angular` to `^0.803.5`
+- update `@angular-devkit/build-ng-packagr` to `^0.803.5`
+- update `@angular/cli` to `^8.3.5`
+- update `@angular/compiler-cli` to `^8.2.7`
+- update `@angular/language-service` to `^8.2.7`
+- update `@types/jasmine` to `^3.4.0`
+- update `@types/node` to `^11.13.20`
+- update `codelyzer` to `^5.1.1`
+- update `karma` to `^4.3.0`
+- update `ng-packagr` to `^5.5.1`
+- update `ts-node` to `^8.4.1`
+- update `tsickle` to `~0.37.0`
+- update `tslint` to `^5.20.0`
+
 ##### `v2.5.3`
 - fix(sidebar): performance issues with app-sidebar-nav components due to ngClass bindings - thanks @coyoteecd #74
 - fix(sidebar): app-sidebar-nav-label.component sets an incomplete variant style - thanks @coyoteecd closes #75 
