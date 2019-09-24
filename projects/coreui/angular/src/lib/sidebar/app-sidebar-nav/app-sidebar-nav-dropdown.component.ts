@@ -8,9 +8,9 @@ import {SidebarNavHelper} from '../app-sidebar-nav.service';
     <a class="nav-link nav-dropdown-toggle"
        appNavDropdownToggle
        [appHtmlAttr]="item.attributes">
-      <i *ngIf="helper.hasIcon(item)" [ngClass]="helper.getIconClass(item)"></i>
+      <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
       <ng-container>{{item.name}}</ng-container>
-      <span *ngIf="helper.hasBadge(item)" [ngClass]="helper.getBadgeClass(item)">{{ item.badge.text }}</span>
+      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
     </a>
     <app-sidebar-nav-items
       class="nav-dropdown-items"
