@@ -19,7 +19,7 @@
   <a *ngSwitchDefault
      [ngClass]="getLinkClass()"
      [appHtmlAttr]="item.attributes"
-     [target]="item.attributes.target ? item.attributes.target : '_self'"
+     [target]="item.attributes && item.attributes.target ? item.attributes.target : '_self'"
      [attr.disabled]="isDisabled()"
      routerLinkActive="active"
      [routerLink]="item.url"
