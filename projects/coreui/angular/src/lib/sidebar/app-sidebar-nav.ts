@@ -19,7 +19,7 @@ export interface INavLabel {
 
 export interface INavData {
   name?: string;
-  url?: string;
+  url?: string | any[];
   icon?: string;
   badge?: INavBadge;
   title?: boolean;

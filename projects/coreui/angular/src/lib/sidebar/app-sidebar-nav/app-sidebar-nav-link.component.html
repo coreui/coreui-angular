@@ -13,7 +13,7 @@
      [target]="item.attributes.target ? item.attributes.target : '_self'"
      [attr.disabled]="isDisabled()"
      routerLinkActive="active"
-     [routerLink]="[item.url]"
+     [routerLink]="item.url"
      (click)="hideMobile()">
     <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
     <ng-container>{{item.name}}</ng-container>
