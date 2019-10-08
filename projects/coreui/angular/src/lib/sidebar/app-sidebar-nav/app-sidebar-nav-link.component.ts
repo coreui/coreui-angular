@@ -22,7 +22,7 @@ export class AppSidebarNavLinkComponent implements OnInit {
 
   ngOnInit() {
     this.linkType = this.getLinkType();
-    this.href = this.isDisabled() ? '' : this.item.url;
+    this.href = this.isDisabled() ? '' : (this.item.href || this.item.url);
   }
 
   public getLinkClass() {
@@ -49,7 +49,7 @@ export class AppSidebarNavLinkComponent implements OnInit {
   }
 
   public isExternalLink() {
-    return this.item.url.substring(0, 4) === 'http';
+    return !!this.item.href || this.item.url.substring(0, 4) === 'http';
   }
 
   public hideMobile() {

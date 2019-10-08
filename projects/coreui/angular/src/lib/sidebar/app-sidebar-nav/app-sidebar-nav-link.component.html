@@ -9,7 +9,7 @@
   </a>
   <a *ngSwitchCase="'external'"
      [ngClass]="getLinkClass()"
-     [href]="item.url"
+     [href]="href"
      [appHtmlAttr]="item.attributes"
   >
     <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
