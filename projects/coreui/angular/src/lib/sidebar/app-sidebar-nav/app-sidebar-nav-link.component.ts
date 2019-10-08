@@ -3,6 +3,24 @@ import {DOCUMENT} from '@angular/common';
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
 
 @Component({
+  selector: 'app-sidebar-nav-link-content',
+  template: `
+    <ng-container *ngIf="true">
+      <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
+      <ng-container>{{item.name}}</ng-container>
+      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
+    </ng-container>
+  `,
+  providers: [ SidebarNavHelper ]
+})
+export class AppSidebarNavLinkContentComponent {
+  @Input() item: any;
+  constructor(
+    public helper: SidebarNavHelper
+  ) { }
+}
+
+@Component({
   selector: 'app-sidebar-nav-link',
   templateUrl: './app-sidebar-nav-link.component.html',
   providers: [ SidebarNavHelper ]

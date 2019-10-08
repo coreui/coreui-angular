@@ -3,18 +3,14 @@
      [ngClass]="getLinkClass()"
      [appHtmlAttr]="item.attributes"
   >
-    <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
-    <ng-container>{{item.name}}</ng-container>
-    <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
+    <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
   </a>
   <a *ngSwitchCase="'external'"
      [ngClass]="getLinkClass()"
      [href]="href"
      [appHtmlAttr]="item.attributes"
   >
-    <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
-    <ng-container>{{item.name}}</ng-container>
-    <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
+    <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
   </a>
   <a *ngSwitchDefault
      [ngClass]="getLinkClass()"
@@ -25,8 +21,6 @@
      [routerLink]="item.url"
      (click)="hideMobile()"
   >
-    <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
-    <ng-container>{{item.name}}</ng-container>
-    <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
+    <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
   </a>
 </ng-container>
