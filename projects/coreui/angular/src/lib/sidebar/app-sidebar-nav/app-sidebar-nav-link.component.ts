@@ -37,7 +37,7 @@ export class AppSidebarNavLinkComponent implements OnInit {
   }
 
   public getLinkType() {
-    return this.isExternalLink() ? 'external' : 'link';
+    return this.isDisabled() ? 'disabled' : this.isExternalLink() ? 'external' : 'link';
   }
 
   public hasVariant() {
