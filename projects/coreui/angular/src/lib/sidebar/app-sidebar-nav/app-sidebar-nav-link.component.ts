@@ -3,7 +3,7 @@ import {DOCUMENT} from '@angular/common';
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
 
 @Component({
-  selector: 'app-sidebar-nav-link',
+  selector: 'app-sidebar-nav-link, cui-sidebar-nav-link',
   templateUrl: './app-sidebar-nav-link.component.html',
   providers: [ SidebarNavHelper ]
 })

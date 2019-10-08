@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
 
 @Component({
-  selector: 'app-sidebar-nav-items',
+  selector: 'app-sidebar-nav-items, cui-sidebar-nav-items',
   template: `
     <ng-container *ngFor="let item of items">
       <ng-container [ngSwitch]="helper.itemType(item)">
