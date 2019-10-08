@@ -11,6 +11,7 @@ export class AppSidebarNavBadgePipe implements PipeTransform {
     };
     const variant = `badge-${item.badge.variant}`;
     classes[variant] = !!item.badge.variant;
+    classes[item.badge.class] = !!item.badge.class;
     return classes;
   }
 
