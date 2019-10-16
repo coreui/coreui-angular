@@ -1,5 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, Inject, Input, Renderer2} from '@angular/core';
 import {Router} from '@angular/router';
+import {DOCUMENT} from '@angular/common';
 
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
 
@@ -41,16 +42,36 @@ import {SidebarNavHelper} from '../app-sidebar-nav.service';
           *ngSwitchDefault
           [item]="item"
           class="nav-item"
-          [ngClass]="item | appSidebarNavItemClass">
+          [ngClass]="item | appSidebarNavItemClass"
+          (linkClick)="hideMobile()"
+        >
         </app-sidebar-nav-link>
       </ng-container>
     </ng-container>
   `
 })
 export class AppSidebarNavItemsComponent {
-  @Input() items: Array<any>;
+
+  protected _items: any;
+
+  @Input()
+  set items(items: Array<any>) {
+    this._items = [...items];
+  }
+  get items(): Array<any> {
+    return this._items;
+  }
+
   constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
     public router: Router,
     public helper: SidebarNavHelper
   ) {}
+
+  public hideMobile() {
+    if (this.document.body.classList.contains('sidebar-show')) {
+      this.renderer.removeClass(this.document.body, 'sidebar-show');
+    }
+  }
 }

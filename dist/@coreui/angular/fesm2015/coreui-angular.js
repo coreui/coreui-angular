@@ -1,4 +1,4 @@
-import { Injectable, Inject, Renderer2, Directive, Input, HostListener, ElementRef, NgModule, Component, ɵɵdefineInjectable, ɵɵinject, HostBinding, Pipe } from '@angular/core';
+import { Injectable, Inject, Renderer2, Directive, Input, HostListener, ElementRef, NgModule, Component, ɵɵdefineInjectable, ɵɵinject, HostBinding, EventEmitter, Output, Pipe } from '@angular/core';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { NavigationEnd, Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -1968,12 +1968,37 @@ if (false) {
  */
 class AppSidebarNavItemsComponent {
     /**
+     * @param {?} document
+     * @param {?} renderer
      * @param {?} router
      * @param {?} helper
      */
-    constructor(router, helper) {
+    constructor(document, renderer, router, helper) {
+        this.document = document;
+        this.renderer = renderer;
         this.router = router;
         this.helper = helper;
+    }
+    /**
+     * @param {?} items
+     * @return {?}
+     */
+    set items(items) {
+        this._items = [...items];
+    }
+    /**
+     * @return {?}
+     */
+    get items() {
+        return this._items;
+    }
+    /**
+     * @return {?}
+     */
+    hideMobile() {
+        if (this.document.body.classList.contains('sidebar-show')) {
+            this.renderer.removeClass(this.document.body, 'sidebar-show');
+        }
     }
 }
 AppSidebarNavItemsComponent.decorators = [
@@ -2015,7 +2040,9 @@ AppSidebarNavItemsComponent.decorators = [
           *ngSwitchDefault
           [item]="item"
           class="nav-item"
-          [ngClass]="item | appSidebarNavItemClass">
+          [ngClass]="item | appSidebarNavItemClass"
+          (linkClick)="hideMobile()"
+        >
         </app-sidebar-nav-link>
       </ng-container>
     </ng-container>
@@ -2024,6 +2051,8 @@ AppSidebarNavItemsComponent.decorators = [
 ];
 /** @nocollapse */
 AppSidebarNavItemsComponent.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 },
     { type: Router },
     { type: SidebarNavHelper }
 ];
@@ -2031,8 +2060,21 @@ AppSidebarNavItemsComponent.propDecorators = {
     items: [{ type: Input }]
 };
 if (false) {
-    /** @type {?} */
-    AppSidebarNavItemsComponent.prototype.items;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AppSidebarNavItemsComponent.prototype._items;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavItemsComponent.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavItemsComponent.prototype.renderer;
     /** @type {?} */
     AppSidebarNavItemsComponent.prototype.router;
     /** @type {?} */
@@ -2043,51 +2085,103 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class AppSidebarNavLinkComponent {
+class AppSidebarNavLinkContentComponent {
     /**
-     * @param {?} document
-     * @param {?} renderer
      * @param {?} helper
      */
-    constructor(document, renderer, helper) {
-        this.document = document;
-        this.renderer = renderer;
+    constructor(helper) {
         this.helper = helper;
-        this.classes = { 'nav-link': true };
+    }
+}
+AppSidebarNavLinkContentComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-link-content',
+                template: `
+    <ng-container *ngIf="true">
+      <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
+      <ng-container>{{item.name}}</ng-container>
+      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
+    </ng-container>
+  `,
+                providers: [SidebarNavHelper]
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavLinkContentComponent.ctorParameters = () => [
+    { type: SidebarNavHelper }
+];
+AppSidebarNavLinkContentComponent.propDecorators = {
+    item: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    AppSidebarNavLinkContentComponent.prototype.item;
+    /** @type {?} */
+    AppSidebarNavLinkContentComponent.prototype.helper;
+}
+class AppSidebarNavLinkComponent {
+    /**
+     * @param {?} router
+     */
+    constructor(router) {
+        this.router = router;
+        this.linkClick = new EventEmitter();
+        this.navigationEndObservable = (/** @type {?} */ (router.events.pipe(filter((/**
+         * @param {?} event
+         * @return {?}
+         */
+        event => {
+            return event instanceof NavigationEnd;
+        })))));
+    }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    set item(item) {
+        this._item = JSON.parse(JSON.stringify(item));
+    }
+    /**
+     * @return {?}
+     */
+    get item() {
+        return this._item;
     }
     /**
      * @return {?}
      */
     ngOnInit() {
         this.linkType = this.getLinkType();
-        this.href = this.isDisabled() ? '' : this.item.url;
+        this.href = this.isDisabled() ? '' : (this.item.href || this.item.url);
+        this.linkActive = this.router.url.split(/[?#(]/)[0] === this.item.url.split(/[?#(]/)[0];
+        this.navSubscription = this.navigationEndObservable.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        event => {
+            /** @type {?} */
+            const itemUrlArray = this.item.url.split(/[?#(]/)[0].split('/');
+            /** @type {?} */
+            const urlArray = event.urlAfterRedirects.split(/[?#(]/)[0].split('/');
+            this.linkActive = itemUrlArray.every((/**
+             * @param {?} value
+             * @param {?} index
+             * @return {?}
+             */
+            (value, index) => value === urlArray[index]));
+        }));
     }
     /**
      * @return {?}
      */
-    getLinkClass() {
-        /** @type {?} */
-        const disabled = this.isDisabled();
-        this.classes['disabled'] = disabled;
-        this.classes['btn-link'] = disabled;
-        if (this.hasVariant()) {
-            /** @type {?} */
-            const variant = `nav-link-${this.item.variant}`;
-            this.classes[variant] = true;
-        }
-        return this.classes;
+    ngOnDestroy() {
+        this.navSubscription.unsubscribe();
     }
     /**
      * @return {?}
      */
     getLinkType() {
-        return this.isExternalLink() ? 'external' : 'link';
-    }
-    /**
-     * @return {?}
-     */
-    hasVariant() {
-        return !!this.item.variant;
+        return this.isDisabled() ? 'disabled' : this.isExternalLink() ? 'external' : 'link';
     }
     /**
      * @return {?}
@@ -2099,57 +2193,58 @@ class AppSidebarNavLinkComponent {
      * @return {?}
      */
     isExternalLink() {
-        return this.item.url.substring(0, 4) === 'http';
+        /** @type {?} */
+        const linkPath = Array.isArray(this.item.url) ? this.item.url[0] : this.item.url;
+        return !!this.item.href || linkPath.substring(0, 4) === 'http';
     }
     /**
      * @return {?}
      */
-    hideMobile() {
-        if (this.document.body.classList.contains('sidebar-show')) {
-            this.renderer.removeClass(this.document.body, 'sidebar-show');
-        }
+    linkClicked() {
+        this.linkClick.emit();
     }
 }
 AppSidebarNavLinkComponent.decorators = [
     { type: Component, args: [{
                 selector: 'app-sidebar-nav-link',
-                template: "<ng-container [ngSwitch]=\"linkType\">\r\n  <a *ngSwitchCase=\"'external'\"\r\n    [ngClass]=\"getLinkClass()\"\r\n    href=\"{{item.url}}\"\r\n    [appHtmlAttr]=\"item.attributes\">\r\n    <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"item | appSidebarNavIcon\"></i>\r\n    <ng-container>{{item.name}}</ng-container>\r\n    <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\r\n  </a>\r\n  <a *ngSwitchDefault\r\n     [ngClass]=\"getLinkClass()\"\r\n     [appHtmlAttr]=\"item.attributes\"\r\n     [attr.disabled]=\"isDisabled()\"\r\n     routerLinkActive=\"active\"\r\n     [routerLink]=\"[item.url]\"\r\n     (click)=\"hideMobile()\">\r\n    <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"item | appSidebarNavIcon\"></i>\r\n    <ng-container>{{item.name}}</ng-container>\r\n    <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\r\n  </a>\r\n</ng-container>\r\n",
+                template: "<ng-container [ngSwitch]=\"linkType\">\n  <a *ngSwitchCase=\"'disabled'\"\n     [ngClass]=\"item | appSidebarNavLink\"\n     [appHtmlAttr]=\"item.attributes\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n  <a *ngSwitchCase=\"'external'\"\n     [ngClass]=\"item | appSidebarNavLink\"\n     [href]=\"href\"\n     [appHtmlAttr]=\"item.attributes\"\n     (click)=\"linkClicked()\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n  <a *ngSwitchDefault\n     [ngClass]=\"item | appSidebarNavLink\"\n     [appHtmlAttr]=\"item.attributes\"\n     [target]=\"item.attributes?.target\"\n     [queryParams]=\"item.linkProps?.queryParams\"\n     [fragment]=\"item.linkProps?.fragment\"\n     [queryParamsHandling]=\"item.linkProps?.queryParamsHandling\"\n     [preserveFragment]=\"item.linkProps?.preserveFragment\"\n     [skipLocationChange]=\"item.linkProps?.skipLocationChange\"\n     [replaceUrl]=\"item.linkProps?.replaceUrl\"\n     [state]=\"item.linkProps?.state\"\n     [routerLink]=\"item.url\"\n     [class.active]=\"linkActive\"\n     (click)=\"linkClicked()\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n</ng-container>\n",
                 providers: [SidebarNavHelper]
             }] }
 ];
 /** @nocollapse */
 AppSidebarNavLinkComponent.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Renderer2 },
-    { type: SidebarNavHelper }
+    { type: Router }
 ];
 AppSidebarNavLinkComponent.propDecorators = {
-    item: [{ type: Input }]
+    item: [{ type: Input }],
+    linkClick: [{ type: Output }]
 };
 if (false) {
+    /**
+     * @type {?}
+     * @protected
+     */
+    AppSidebarNavLinkComponent.prototype._item;
     /** @type {?} */
-    AppSidebarNavLinkComponent.prototype.item;
+    AppSidebarNavLinkComponent.prototype.linkClick;
     /** @type {?} */
     AppSidebarNavLinkComponent.prototype.linkType;
     /** @type {?} */
     AppSidebarNavLinkComponent.prototype.href;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarNavLinkComponent.prototype.classes;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarNavLinkComponent.prototype.document;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarNavLinkComponent.prototype.renderer;
     /** @type {?} */
-    AppSidebarNavLinkComponent.prototype.helper;
+    AppSidebarNavLinkComponent.prototype.linkActive;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavLinkComponent.prototype.navigationEndObservable;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavLinkComponent.prototype.navSubscription;
+    /** @type {?} */
+    AppSidebarNavLinkComponent.prototype.router;
 }
 
 /**
@@ -2401,12 +2496,39 @@ class AppSidebarNavBadgePipe {
         /** @type {?} */
         const variant = `badge-${item.badge.variant}`;
         classes[variant] = !!item.badge.variant;
+        classes[item.badge.class] = !!item.badge.class;
         return classes;
     }
 }
 AppSidebarNavBadgePipe.decorators = [
     { type: Pipe, args: [{
                 name: 'appSidebarNavBadge'
+            },] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavLinkPipe {
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    transform(item) {
+        /** @type {?} */
+        const classes = { 'nav-link': true };
+        /** @type {?} */
+        const disabled = item.attributes && item.attributes.disabled;
+        classes['disabled'] = disabled;
+        classes['btn-link'] = disabled;
+        classes[`nav-link-${item.variant}`] = !!item.variant;
+        return classes;
+    }
+}
+AppSidebarNavLinkPipe.decorators = [
+    { type: Pipe, args: [{
+                name: 'appSidebarNavLink'
             },] }
 ];
 
@@ -2481,6 +2603,7 @@ AppSidebarModule.decorators = [
                     AppSidebarNavDividerComponent,
                     AppSidebarNavDropdownComponent,
                     AppSidebarNavLinkComponent,
+                    AppSidebarNavLinkContentComponent,
                     AppSidebarNavTitleComponent,
                     NavDropdownDirective,
                     NavDropdownToggleDirective,
@@ -2498,12 +2621,14 @@ AppSidebarModule.decorators = [
                     AppSidebarNavDividerComponent,
                     AppSidebarNavDropdownComponent,
                     AppSidebarNavLinkComponent,
+                    AppSidebarNavLinkContentComponent,
                     AppSidebarNavTitleComponent,
                     NavDropdownDirective,
                     NavDropdownToggleDirective,
                     AppSidebarNavLabelComponent,
                     AppSidebarNavIconPipe,
                     AppSidebarNavBadgePipe,
+                    AppSidebarNavLinkPipe,
                     AppSidebarNavItemClassPipe
                 ],
                 providers: [
@@ -2532,5 +2657,5 @@ AppSidebarModule.decorators = [
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AppAsideComponent, AppAsideModule, AppBreadcrumbComponent, AppBreadcrumbModule, AppFooterComponent, AppFooterModule, AppHeaderComponent, AppHeaderModule, AppSidebarComponent, AppSidebarModule, LayoutModule as ɵa, SidebarToggleDirective as ɵb, AppSidebarNavBadgePipe as ɵba, AppSidebarNavItemClassPipe as ɵbb, SidebarMinimizeDirective as ɵc, MobileSidebarToggleDirective as ɵd, SidebarOffCanvasCloseDirective as ɵe, BrandMinimizeDirective as ɵf, AsideToggleDirective as ɵg, HtmlAttributesDirective as ɵh, ClassToggler as ɵi, AppBreadcrumbService as ɵj, CuiBreadcrumbComponent as ɵk, AppSidebarFooterComponent as ɵl, AppSidebarFormComponent as ɵm, AppSidebarHeaderComponent as ɵn, AppSidebarMinimizerComponent as ɵo, AppSidebarNavItemsComponent as ɵp, SidebarNavHelper as ɵq, AppSidebarNavComponent as ɵr, AppSidebarNavDividerComponent as ɵs, AppSidebarNavDropdownComponent as ɵt, AppSidebarNavLinkComponent as ɵu, AppSidebarNavTitleComponent as ɵv, NavDropdownDirective as ɵw, NavDropdownToggleDirective as ɵx, AppSidebarNavLabelComponent as ɵy, AppSidebarNavIconPipe as ɵz };
+export { AppAsideComponent, AppAsideModule, AppBreadcrumbComponent, AppBreadcrumbModule, AppFooterComponent, AppFooterModule, AppHeaderComponent, AppHeaderModule, AppSidebarComponent, AppSidebarModule, LayoutModule as ɵa, SidebarToggleDirective as ɵb, AppSidebarNavIconPipe as ɵba, AppSidebarNavBadgePipe as ɵbb, AppSidebarNavLinkPipe as ɵbc, AppSidebarNavItemClassPipe as ɵbd, SidebarMinimizeDirective as ɵc, MobileSidebarToggleDirective as ɵd, SidebarOffCanvasCloseDirective as ɵe, BrandMinimizeDirective as ɵf, AsideToggleDirective as ɵg, HtmlAttributesDirective as ɵh, ClassToggler as ɵi, AppBreadcrumbService as ɵj, CuiBreadcrumbComponent as ɵk, AppSidebarFooterComponent as ɵl, AppSidebarFormComponent as ɵm, AppSidebarHeaderComponent as ɵn, AppSidebarMinimizerComponent as ɵo, AppSidebarNavItemsComponent as ɵp, SidebarNavHelper as ɵq, AppSidebarNavComponent as ɵr, AppSidebarNavDividerComponent as ɵs, AppSidebarNavDropdownComponent as ɵt, AppSidebarNavLinkContentComponent as ɵu, AppSidebarNavLinkComponent as ɵv, AppSidebarNavTitleComponent as ɵw, NavDropdownDirective as ɵx, NavDropdownToggleDirective as ɵy, AppSidebarNavLabelComponent as ɵz };
 //# sourceMappingURL=coreui-angular.js.map

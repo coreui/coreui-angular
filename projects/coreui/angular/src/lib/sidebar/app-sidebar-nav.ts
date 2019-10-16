@@ -1,3 +1,5 @@
+import {QueryParamsHandling} from '@angular/router';
+
 export interface INavAttributes {
   [propName: string]: any;
 }
@@ -10,6 +12,7 @@ export interface INavWrapper {
 export interface INavBadge {
   text: string;
   variant: string;
+  class?: string;
 }
 
 export interface INavLabel {
@@ -17,9 +20,21 @@ export interface INavLabel {
   variant: string;
 }
 
+export interface INavLinkProps {
+  queryParams?: {[k: string]: any};
+  fragment?: string;
+  queryParamsHandling?: QueryParamsHandling;
+  preserveFragment?: boolean;
+  skipLocationChange?: boolean;
+  replaceUrl?: boolean;
+  state?: {[k: string]: any};
+  routerLinkActiveOptions?: {exact: boolean};
+  routerLinkActive?: string | string[];
+}
+
 export interface INavData {
   name?: string;
-  url?: string;
+  url?: string | any[];
   icon?: string;
   badge?: INavBadge;
   title?: boolean;
@@ -30,4 +45,5 @@ export interface INavData {
   class?: string;
   label?: INavLabel;
   wrapper?: INavWrapper;
+  linkProps?: INavLinkProps;
 }

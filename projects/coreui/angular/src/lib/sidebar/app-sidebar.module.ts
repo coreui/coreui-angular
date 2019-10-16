@@ -15,12 +15,13 @@ import { AppSidebarNavComponent } from './app-sidebar-nav.component';
 import { AppSidebarNavDividerComponent } from './app-sidebar-nav/app-sidebar-nav-divider.component';
 import { AppSidebarNavDropdownComponent } from './app-sidebar-nav/app-sidebar-nav-dropdown.component';
 import { AppSidebarNavItemsComponent } from './app-sidebar-nav/app-sidebar-nav-items.component';
-import { AppSidebarNavLinkComponent } from './app-sidebar-nav/app-sidebar-nav-link.component';
+import { AppSidebarNavLinkComponent, AppSidebarNavLinkContentComponent } from './app-sidebar-nav/app-sidebar-nav-link.component';
 import { AppSidebarNavTitleComponent } from './app-sidebar-nav/app-sidebar-nav-title.component';
 import { SidebarNavHelper } from './app-sidebar-nav.service';
 import { AppSidebarNavLabelComponent } from './app-sidebar-nav/app-sidebar-nav-label.component';
 import { AppSidebarNavIconPipe } from './app-sidebar-nav/app-sidebar-nav-icon.pipe';
 import { AppSidebarNavBadgePipe } from './app-sidebar-nav/app-sidebar-nav-badge.pipe';
+import { AppSidebarNavLinkPipe } from './app-sidebar-nav/app-sidebar-nav-link.pipe';
 import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-item-class.pipe';
 
 @NgModule({
@@ -40,6 +41,7 @@ import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-it
     AppSidebarNavDividerComponent,
     AppSidebarNavDropdownComponent,
     AppSidebarNavLinkComponent,
+    AppSidebarNavLinkContentComponent,
     AppSidebarNavTitleComponent,
     NavDropdownDirective,
     NavDropdownToggleDirective,
@@ -57,12 +59,14 @@ import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-it
     AppSidebarNavDividerComponent,
     AppSidebarNavDropdownComponent,
     AppSidebarNavLinkComponent,
+    AppSidebarNavLinkContentComponent,
     AppSidebarNavTitleComponent,
     NavDropdownDirective,
     NavDropdownToggleDirective,
     AppSidebarNavLabelComponent,
     AppSidebarNavIconPipe,
     AppSidebarNavBadgePipe,
+    AppSidebarNavLinkPipe,
     AppSidebarNavItemClassPipe
   ],
   providers: [

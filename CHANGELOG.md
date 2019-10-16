@@ -1,5 +1,50 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.6.0`
+- fix(SidebarNavLink): nav link target doesn't work through appHtmlAttr - thanks @Hagith #79
+- fix(SidebarNavLink): allow link parameters array
+- refactor(SidebarNavLink): extract disabled link type
+- fix(SidebarNavLink): test for item.attributes presence
+- refactor(SidebarNavLink): add `item.href` for explicit external links
+- refactor(SidebarNavLink): extract SidebarNavLinkContent component
+- fix(SidebarNavBadge): add missing badge.class prop
+- feat(SidebarNavLink): allow `routerLink` properties as `item.linkProps`
+- refactor(SidebarNavLink): `active` class workaround with NavigationEnd Observable
+- refactor(SidebarNavLink): add pipe SidebarNavLink
+
+```typescript
+export interface INavLinkProps {
+  queryParams?: {[k: string]: any};
+  fragment?: string;
+  queryParamsHandling?: 'merge' | 'preserve' | '';
+  preserveFragment?: boolean;
+  skipLocationChange?: boolean;
+  replaceUrl?: boolean;
+  state?: {[k: string]: any};
+}
+```
+
+###### dependencies update
+- update `@angular/animations` to `^8.2.11`
+- update `@angular/common` to `^8.2.11`
+- update `@angular/compiler` to `^8.2.11`
+- update `@angular/core` to `^8.2.11`
+- update `@angular/forms` to `^8.2.11`
+- update `@angular/platform-browser` to `^8.2.11`
+- update `@angular/platform-browser-dynamic` to `^8.2.11`
+- update `@angular/router` to `^8.2.11`
+- update `core-js` to `^2.6.10`
+- update `@angular-devkit/build-angular` to `^0.803.10`
+- update `@angular-devkit/build-ng-packagr` to `^0.803.10`
+- update `@angular/cli` to `^8.3.10`
+- update `@angular/compiler-cli` to `^8.2.11`
+- update `@angular/language-service` to `^8.2.11`
+- update `@types/jasmine` to `^3.4.4`
+- update `@types/jasminewd2` to `^2.0.8`
+- update `@types/node` to `^11.13.22`
+- update `codelyzer` to `^5.1.2`
+- update `ng-packagr` to `^5.7.0`
+    
 ##### `v2.5.5`
 - fix: regression build issue - Please add a @NgModule annotation
 
