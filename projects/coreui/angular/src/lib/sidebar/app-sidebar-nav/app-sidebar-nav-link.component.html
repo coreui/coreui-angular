@@ -1,25 +1,32 @@
 <ng-container [ngSwitch]="linkType">
   <a *ngSwitchCase="'disabled'"
-     [ngClass]="getLinkClass()"
+     [ngClass]="item | appSidebarNavLink"
      [appHtmlAttr]="item.attributes"
   >
     <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
   </a>
   <a *ngSwitchCase="'external'"
-     [ngClass]="getLinkClass()"
+     [ngClass]="item | appSidebarNavLink"
      [href]="href"
      [appHtmlAttr]="item.attributes"
+     (click)="linkClicked()"
   >
     <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
   </a>
   <a *ngSwitchDefault
-     [ngClass]="getLinkClass()"
+     [ngClass]="item | appSidebarNavLink"
      [appHtmlAttr]="item.attributes"
-     [target]="item.attributes && item.attributes.target ? item.attributes.target : '_self'"
-     [attr.disabled]="isDisabled()"
-     routerLinkActive="active"
+     [target]="item.attributes?.target"
+     [queryParams]="item.linkProps?.queryParams"
+     [fragment]="item.linkProps?.fragment"
+     [queryParamsHandling]="item.linkProps?.queryParamsHandling"
+     [preserveFragment]="item.linkProps?.preserveFragment"
+     [skipLocationChange]="item.linkProps?.skipLocationChange"
+     [replaceUrl]="item.linkProps?.replaceUrl"
+     [state]="item.linkProps?.state"
      [routerLink]="item.url"
-     (click)="hideMobile()"
+     [class.active]="linkActive"
+     (click)="linkClicked()"
   >
     <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
   </a>
