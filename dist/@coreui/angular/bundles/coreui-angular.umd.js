@@ -4,6 +4,203 @@
     (global = global || self, factory((global.coreui = global.coreui || {}, global.coreui.angular = {}), global.ng.core, global.ng.common, global.ng.router, global.rxjs, global.rxjs.operators));
 }(this, function (exports, core, common, router, rxjs, operators) { 'use strict';
 
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+    /* global Reflect, Promise */
+
+    var extendStatics = function(d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+
+    function __extends(d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
+
+    var __assign = function() {
+        __assign = Object.assign || function __assign(t) {
+            for (var s, i = 1, n = arguments.length; i < n; i++) {
+                s = arguments[i];
+                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+            }
+            return t;
+        };
+        return __assign.apply(this, arguments);
+    };
+
+    function __rest(s, e) {
+        var t = {};
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+            t[p] = s[p];
+        if (s != null && typeof Object.getOwnPropertySymbols === "function")
+            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+                if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                    t[p[i]] = s[p[i]];
+            }
+        return t;
+    }
+
+    function __decorate(decorators, target, key, desc) {
+        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    }
+
+    function __param(paramIndex, decorator) {
+        return function (target, key) { decorator(target, key, paramIndex); }
+    }
+
+    function __metadata(metadataKey, metadataValue) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+    }
+
+    function __awaiter(thisArg, _arguments, P, generator) {
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+            step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+    }
+
+    function __generator(thisArg, body) {
+        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        function verb(n) { return function (v) { return step([n, v]); }; }
+        function step(op) {
+            if (f) throw new TypeError("Generator is already executing.");
+            while (_) try {
+                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+                if (y = 0, t) op = [op[0] & 2, t.value];
+                switch (op[0]) {
+                    case 0: case 1: t = op; break;
+                    case 4: _.label++; return { value: op[1], done: false };
+                    case 5: _.label++; y = op[1]; op = [0]; continue;
+                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                    default:
+                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                        if (t[2]) _.ops.pop();
+                        _.trys.pop(); continue;
+                }
+                op = body.call(thisArg, _);
+            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+        }
+    }
+
+    function __exportStar(m, exports) {
+        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    }
+
+    function __values(o) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+        if (m) return m.call(o);
+        return {
+            next: function () {
+                if (o && i >= o.length) o = void 0;
+                return { value: o && o[i++], done: !o };
+            }
+        };
+    }
+
+    function __read(o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m) return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+        }
+        catch (error) { e = { error: error }; }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"])) m.call(i);
+            }
+            finally { if (e) throw e.error; }
+        }
+        return ar;
+    }
+
+    function __spread() {
+        for (var ar = [], i = 0; i < arguments.length; i++)
+            ar = ar.concat(__read(arguments[i]));
+        return ar;
+    }
+
+    function __spreadArrays() {
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var r = Array(s), k = 0, i = 0; i < il; i++)
+            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+                r[k] = a[j];
+        return r;
+    };
+
+    function __await(v) {
+        return this instanceof __await ? (this.v = v, this) : new __await(v);
+    }
+
+    function __asyncGenerator(thisArg, _arguments, generator) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var g = generator.apply(thisArg, _arguments || []), i, q = [];
+        return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+        function fulfill(value) { resume("next", value); }
+        function reject(value) { resume("throw", value); }
+        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+    }
+
+    function __asyncDelegator(o) {
+        var i, p;
+        return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+    }
+
+    function __asyncValues(o) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var m = o[Symbol.asyncIterator], i;
+        return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+        function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+    }
+
+    function __makeTemplateObject(cooked, raw) {
+        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+        return cooked;
+    };
+
+    function __importStar(mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+        result.default = mod;
+        return result;
+    }
+
+    function __importDefault(mod) {
+        return (mod && mod.__esModule) ? mod : { default: mod };
+    }
+
     /**
      * @fileoverview added by tsickle
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
@@ -2109,18 +2306,50 @@
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var AppSidebarNavItemsComponent = /** @class */ (function () {
-        function AppSidebarNavItemsComponent(router, helper) {
+        function AppSidebarNavItemsComponent(document, renderer, router, helper) {
+            this.document = document;
+            this.renderer = renderer;
             this.router = router;
             this.helper = helper;
         }
+        Object.defineProperty(AppSidebarNavItemsComponent.prototype, "items", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this._items;
+            },
+            set: /**
+             * @param {?} items
+             * @return {?}
+             */
+            function (items) {
+                this._items = __spread(items);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @return {?}
+         */
+        AppSidebarNavItemsComponent.prototype.hideMobile = /**
+         * @return {?}
+         */
+        function () {
+            if (this.document.body.classList.contains('sidebar-show')) {
+                this.renderer.removeClass(this.document.body, 'sidebar-show');
+            }
+        };
         AppSidebarNavItemsComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-nav-items',
-                        template: "\n    <ng-container *ngFor=\"let item of items\">\n      <ng-container [ngSwitch]=\"helper.itemType(item)\">\n        <app-sidebar-nav-dropdown\n          *ngSwitchCase=\"'dropdown'\"\n          [item]=\"item\"\n          [class.open]=\"helper.isActive(router, item)\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          appNavDropdown\n          routerLinkActive=\"open\">\n        </app-sidebar-nav-dropdown>\n        <app-sidebar-nav-divider\n          *ngSwitchCase=\"'divider'\"\n          [item]=\"item\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          [appHtmlAttr]=\"item.attributes\">\n        </app-sidebar-nav-divider>\n        <app-sidebar-nav-title\n          *ngSwitchCase=\"'title'\"\n          [item]=\"item\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          [appHtmlAttr]=\"item.attributes\">\n        </app-sidebar-nav-title>\n        <app-sidebar-nav-label\n          *ngSwitchCase=\"'label'\"\n          [item]=\"item\"\n          class=\"nav-item\"\n          [ngClass]=\"item | appSidebarNavItemClass\">\n        </app-sidebar-nav-label>\n        <ng-container\n          *ngSwitchCase=\"'empty'\">\n        </ng-container>\n        <app-sidebar-nav-link\n          *ngSwitchDefault\n          [item]=\"item\"\n          class=\"nav-item\"\n          [ngClass]=\"item | appSidebarNavItemClass\">\n        </app-sidebar-nav-link>\n      </ng-container>\n    </ng-container>\n  "
+                        template: "\n    <ng-container *ngFor=\"let item of items\">\n      <ng-container [ngSwitch]=\"helper.itemType(item)\">\n        <app-sidebar-nav-dropdown\n          *ngSwitchCase=\"'dropdown'\"\n          [item]=\"item\"\n          [class.open]=\"helper.isActive(router, item)\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          appNavDropdown\n          routerLinkActive=\"open\">\n        </app-sidebar-nav-dropdown>\n        <app-sidebar-nav-divider\n          *ngSwitchCase=\"'divider'\"\n          [item]=\"item\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          [appHtmlAttr]=\"item.attributes\">\n        </app-sidebar-nav-divider>\n        <app-sidebar-nav-title\n          *ngSwitchCase=\"'title'\"\n          [item]=\"item\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          [appHtmlAttr]=\"item.attributes\">\n        </app-sidebar-nav-title>\n        <app-sidebar-nav-label\n          *ngSwitchCase=\"'label'\"\n          [item]=\"item\"\n          class=\"nav-item\"\n          [ngClass]=\"item | appSidebarNavItemClass\">\n        </app-sidebar-nav-label>\n        <ng-container\n          *ngSwitchCase=\"'empty'\">\n        </ng-container>\n        <app-sidebar-nav-link\n          *ngSwitchDefault\n          [item]=\"item\"\n          class=\"nav-item\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          (linkClick)=\"hideMobile()\"\n        >\n        </app-sidebar-nav-link>\n      </ng-container>\n    </ng-container>\n  "
                     }] }
         ];
         /** @nocollapse */
         AppSidebarNavItemsComponent.ctorParameters = function () { return [
+            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+            { type: core.Renderer2 },
             { type: router.Router },
             { type: SidebarNavHelper }
         ]; };
@@ -2130,8 +2359,21 @@
         return AppSidebarNavItemsComponent;
     }());
     if (false) {
-        /** @type {?} */
-        AppSidebarNavItemsComponent.prototype.items;
+        /**
+         * @type {?}
+         * @protected
+         */
+        AppSidebarNavItemsComponent.prototype._items;
+        /**
+         * @type {?}
+         * @private
+         */
+        AppSidebarNavItemsComponent.prototype.document;
+        /**
+         * @type {?}
+         * @private
+         */
+        AppSidebarNavItemsComponent.prototype.renderer;
         /** @type {?} */
         AppSidebarNavItemsComponent.prototype.router;
         /** @type {?} */
@@ -2142,13 +2384,61 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    var AppSidebarNavLinkComponent = /** @class */ (function () {
-        function AppSidebarNavLinkComponent(document, renderer, helper) {
-            this.document = document;
-            this.renderer = renderer;
+    var AppSidebarNavLinkContentComponent = /** @class */ (function () {
+        function AppSidebarNavLinkContentComponent(helper) {
             this.helper = helper;
-            this.classes = { 'nav-link': true };
         }
+        AppSidebarNavLinkContentComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'app-sidebar-nav-link-content',
+                        template: "\n    <ng-container *ngIf=\"true\">\n      <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"item | appSidebarNavIcon\"></i>\n      <ng-container>{{item.name}}</ng-container>\n      <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\n    </ng-container>\n  ",
+                        providers: [SidebarNavHelper]
+                    }] }
+        ];
+        /** @nocollapse */
+        AppSidebarNavLinkContentComponent.ctorParameters = function () { return [
+            { type: SidebarNavHelper }
+        ]; };
+        AppSidebarNavLinkContentComponent.propDecorators = {
+            item: [{ type: core.Input }]
+        };
+        return AppSidebarNavLinkContentComponent;
+    }());
+    if (false) {
+        /** @type {?} */
+        AppSidebarNavLinkContentComponent.prototype.item;
+        /** @type {?} */
+        AppSidebarNavLinkContentComponent.prototype.helper;
+    }
+    var AppSidebarNavLinkComponent = /** @class */ (function () {
+        function AppSidebarNavLinkComponent(router$1) {
+            this.router = router$1;
+            this.linkClick = new core.EventEmitter();
+            this.navigationEndObservable = (/** @type {?} */ (router$1.events.pipe(operators.filter((/**
+             * @param {?} event
+             * @return {?}
+             */
+            function (event) {
+                return event instanceof router.NavigationEnd;
+            })))));
+        }
+        Object.defineProperty(AppSidebarNavLinkComponent.prototype, "item", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this._item;
+            },
+            set: /**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) {
+                this._item = JSON.parse(JSON.stringify(item));
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * @return {?}
          */
@@ -2156,26 +2446,35 @@
          * @return {?}
          */
         function () {
+            var _this = this;
             this.linkType = this.getLinkType();
-            this.href = this.isDisabled() ? '' : this.item.url;
+            this.href = this.isDisabled() ? '' : (this.item.href || this.item.url);
+            this.linkActive = this.router.url.split(/[?#(]/)[0] === this.item.url.split(/[?#(]/)[0];
+            this.navSubscription = this.navigationEndObservable.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            function (event) {
+                /** @type {?} */
+                var itemUrlArray = _this.item.url.split(/[?#(]/)[0].split('/');
+                /** @type {?} */
+                var urlArray = event.urlAfterRedirects.split(/[?#(]/)[0].split('/');
+                _this.linkActive = itemUrlArray.every((/**
+                 * @param {?} value
+                 * @param {?} index
+                 * @return {?}
+                 */
+                function (value, index) { return value === urlArray[index]; }));
+            }));
         };
         /**
          * @return {?}
          */
-        AppSidebarNavLinkComponent.prototype.getLinkClass = /**
+        AppSidebarNavLinkComponent.prototype.ngOnDestroy = /**
          * @return {?}
          */
         function () {
-            /** @type {?} */
-            var disabled = this.isDisabled();
-            this.classes['disabled'] = disabled;
-            this.classes['btn-link'] = disabled;
-            if (this.hasVariant()) {
-                /** @type {?} */
-                var variant = "nav-link-" + this.item.variant;
-                this.classes[variant] = true;
-            }
-            return this.classes;
+            this.navSubscription.unsubscribe();
         };
         /**
          * @return {?}
@@ -2184,16 +2483,7 @@
          * @return {?}
          */
         function () {
-            return this.isExternalLink() ? 'external' : 'link';
-        };
-        /**
-         * @return {?}
-         */
-        AppSidebarNavLinkComponent.prototype.hasVariant = /**
-         * @return {?}
-         */
-        function () {
-            return !!this.item.variant;
+            return this.isDisabled() ? 'disabled' : this.isExternalLink() ? 'external' : 'link';
         };
         /**
          * @return {?}
@@ -2211,61 +2501,62 @@
          * @return {?}
          */
         function () {
-            return this.item.url.substring(0, 4) === 'http';
+            /** @type {?} */
+            var linkPath = Array.isArray(this.item.url) ? this.item.url[0] : this.item.url;
+            return !!this.item.href || linkPath.substring(0, 4) === 'http';
         };
         /**
          * @return {?}
          */
-        AppSidebarNavLinkComponent.prototype.hideMobile = /**
+        AppSidebarNavLinkComponent.prototype.linkClicked = /**
          * @return {?}
          */
         function () {
-            if (this.document.body.classList.contains('sidebar-show')) {
-                this.renderer.removeClass(this.document.body, 'sidebar-show');
-            }
+            this.linkClick.emit();
         };
         AppSidebarNavLinkComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-nav-link',
-                        template: "<ng-container [ngSwitch]=\"linkType\">\r\n  <a *ngSwitchCase=\"'external'\"\r\n    [ngClass]=\"getLinkClass()\"\r\n    href=\"{{item.url}}\"\r\n    [appHtmlAttr]=\"item.attributes\">\r\n    <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"item | appSidebarNavIcon\"></i>\r\n    <ng-container>{{item.name}}</ng-container>\r\n    <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\r\n  </a>\r\n  <a *ngSwitchDefault\r\n     [ngClass]=\"getLinkClass()\"\r\n     [appHtmlAttr]=\"item.attributes\"\r\n     [attr.disabled]=\"isDisabled()\"\r\n     routerLinkActive=\"active\"\r\n     [routerLink]=\"[item.url]\"\r\n     (click)=\"hideMobile()\">\r\n    <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"item | appSidebarNavIcon\"></i>\r\n    <ng-container>{{item.name}}</ng-container>\r\n    <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\r\n  </a>\r\n</ng-container>\r\n",
+                        template: "<ng-container [ngSwitch]=\"linkType\">\n  <a *ngSwitchCase=\"'disabled'\"\n     [ngClass]=\"item | appSidebarNavLink\"\n     [appHtmlAttr]=\"item.attributes\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n  <a *ngSwitchCase=\"'external'\"\n     [ngClass]=\"item | appSidebarNavLink\"\n     [href]=\"href\"\n     [appHtmlAttr]=\"item.attributes\"\n     (click)=\"linkClicked()\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n  <a *ngSwitchDefault\n     [ngClass]=\"item | appSidebarNavLink\"\n     [appHtmlAttr]=\"item.attributes\"\n     [target]=\"item.attributes?.target\"\n     [queryParams]=\"item.linkProps?.queryParams\"\n     [fragment]=\"item.linkProps?.fragment\"\n     [queryParamsHandling]=\"item.linkProps?.queryParamsHandling\"\n     [preserveFragment]=\"item.linkProps?.preserveFragment\"\n     [skipLocationChange]=\"item.linkProps?.skipLocationChange\"\n     [replaceUrl]=\"item.linkProps?.replaceUrl\"\n     [state]=\"item.linkProps?.state\"\n     [routerLink]=\"item.url\"\n     [class.active]=\"linkActive\"\n     (click)=\"linkClicked()\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n</ng-container>\n",
                         providers: [SidebarNavHelper]
                     }] }
         ];
         /** @nocollapse */
         AppSidebarNavLinkComponent.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-            { type: core.Renderer2 },
-            { type: SidebarNavHelper }
+            { type: router.Router }
         ]; };
         AppSidebarNavLinkComponent.propDecorators = {
-            item: [{ type: core.Input }]
+            item: [{ type: core.Input }],
+            linkClick: [{ type: core.Output }]
         };
         return AppSidebarNavLinkComponent;
     }());
     if (false) {
+        /**
+         * @type {?}
+         * @protected
+         */
+        AppSidebarNavLinkComponent.prototype._item;
         /** @type {?} */
-        AppSidebarNavLinkComponent.prototype.item;
+        AppSidebarNavLinkComponent.prototype.linkClick;
         /** @type {?} */
         AppSidebarNavLinkComponent.prototype.linkType;
         /** @type {?} */
         AppSidebarNavLinkComponent.prototype.href;
-        /**
-         * @type {?}
-         * @private
-         */
-        AppSidebarNavLinkComponent.prototype.classes;
-        /**
-         * @type {?}
-         * @private
-         */
-        AppSidebarNavLinkComponent.prototype.document;
-        /**
-         * @type {?}
-         * @private
-         */
-        AppSidebarNavLinkComponent.prototype.renderer;
         /** @type {?} */
-        AppSidebarNavLinkComponent.prototype.helper;
+        AppSidebarNavLinkComponent.prototype.linkActive;
+        /**
+         * @type {?}
+         * @private
+         */
+        AppSidebarNavLinkComponent.prototype.navigationEndObservable;
+        /**
+         * @type {?}
+         * @private
+         */
+        AppSidebarNavLinkComponent.prototype.navSubscription;
+        /** @type {?} */
+        AppSidebarNavLinkComponent.prototype.router;
     }
 
     /**
@@ -2565,6 +2856,7 @@
             /** @type {?} */
             var variant = "badge-" + item.badge.variant;
             classes[variant] = !!item.badge.variant;
+            classes[item.badge.class] = !!item.badge.class;
             return classes;
         };
         AppSidebarNavBadgePipe.decorators = [
@@ -2573,6 +2865,39 @@
                     },] }
         ];
         return AppSidebarNavBadgePipe;
+    }());
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var AppSidebarNavLinkPipe = /** @class */ (function () {
+        function AppSidebarNavLinkPipe() {
+        }
+        /**
+         * @param {?} item
+         * @return {?}
+         */
+        AppSidebarNavLinkPipe.prototype.transform = /**
+         * @param {?} item
+         * @return {?}
+         */
+        function (item) {
+            /** @type {?} */
+            var classes = { 'nav-link': true };
+            /** @type {?} */
+            var disabled = item.attributes && item.attributes.disabled;
+            classes['disabled'] = disabled;
+            classes['btn-link'] = disabled;
+            classes["nav-link-" + item.variant] = !!item.variant;
+            return classes;
+        };
+        AppSidebarNavLinkPipe.decorators = [
+            { type: core.Pipe, args: [{
+                        name: 'appSidebarNavLink'
+                    },] }
+        ];
+        return AppSidebarNavLinkPipe;
     }());
 
     /**
@@ -2654,6 +2979,7 @@
                             AppSidebarNavDividerComponent,
                             AppSidebarNavDropdownComponent,
                             AppSidebarNavLinkComponent,
+                            AppSidebarNavLinkContentComponent,
                             AppSidebarNavTitleComponent,
                             NavDropdownDirective,
                             NavDropdownToggleDirective,
@@ -2671,12 +2997,14 @@
                             AppSidebarNavDividerComponent,
                             AppSidebarNavDropdownComponent,
                             AppSidebarNavLinkComponent,
+                            AppSidebarNavLinkContentComponent,
                             AppSidebarNavTitleComponent,
                             NavDropdownDirective,
                             NavDropdownToggleDirective,
                             AppSidebarNavLabelComponent,
                             AppSidebarNavIconPipe,
                             AppSidebarNavBadgePipe,
+                            AppSidebarNavLinkPipe,
                             AppSidebarNavItemClassPipe
                         ],
                         providers: [
@@ -2699,8 +3027,10 @@
     exports.AppSidebarModule = AppSidebarModule;
     exports.ɵa = LayoutModule;
     exports.ɵb = SidebarToggleDirective;
-    exports.ɵba = AppSidebarNavBadgePipe;
-    exports.ɵbb = AppSidebarNavItemClassPipe;
+    exports.ɵba = AppSidebarNavIconPipe;
+    exports.ɵbb = AppSidebarNavBadgePipe;
+    exports.ɵbc = AppSidebarNavLinkPipe;
+    exports.ɵbd = AppSidebarNavItemClassPipe;
     exports.ɵc = SidebarMinimizeDirective;
     exports.ɵd = MobileSidebarToggleDirective;
     exports.ɵe = SidebarOffCanvasCloseDirective;
@@ -2719,12 +3049,12 @@
     exports.ɵr = AppSidebarNavComponent;
     exports.ɵs = AppSidebarNavDividerComponent;
     exports.ɵt = AppSidebarNavDropdownComponent;
-    exports.ɵu = AppSidebarNavLinkComponent;
-    exports.ɵv = AppSidebarNavTitleComponent;
-    exports.ɵw = NavDropdownDirective;
-    exports.ɵx = NavDropdownToggleDirective;
-    exports.ɵy = AppSidebarNavLabelComponent;
-    exports.ɵz = AppSidebarNavIconPipe;
+    exports.ɵu = AppSidebarNavLinkContentComponent;
+    exports.ɵv = AppSidebarNavLinkComponent;
+    exports.ɵw = AppSidebarNavTitleComponent;
+    exports.ɵx = NavDropdownDirective;
+    exports.ɵy = NavDropdownToggleDirective;
+    exports.ɵz = AppSidebarNavLabelComponent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

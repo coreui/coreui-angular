@@ -1,21 +1,26 @@
-import { OnInit, Renderer2 } from '@angular/core';
+import { EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { SidebarNavHelper } from '../app-sidebar-nav.service';
-export declare class AppSidebarNavLinkComponent implements OnInit {
-    private document;
-    private renderer;
+import { Router } from '@angular/router';
+export declare class AppSidebarNavLinkContentComponent {
     helper: SidebarNavHelper;
     item: any;
+    constructor(helper: SidebarNavHelper);
+}
+export declare class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
+    router: Router;
+    protected _item: any;
+    item: any;
+    linkClick: EventEmitter<{}>;
     linkType: string;
     href: string;
-    private classes;
-    constructor(document: any, renderer: Renderer2, helper: SidebarNavHelper);
+    linkActive: boolean;
+    private navigationEndObservable;
+    private navSubscription;
+    constructor(router: Router);
     ngOnInit(): void;
-    getLinkClass(): {
-        'nav-link': boolean;
-    };
-    getLinkType(): "link" | "external";
-    hasVariant(): boolean;
+    ngOnDestroy(): void;
+    getLinkType(): "disabled" | "link" | "external";
     isDisabled(): boolean;
     isExternalLink(): boolean;
-    hideMobile(): void;
+    linkClicked(): void;
 }
