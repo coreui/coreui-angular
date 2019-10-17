@@ -1,6 +1,5 @@
-import {Component, Input, Inject, OnInit, OnDestroy, Renderer2, ElementRef} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-
+import { Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 import { sidebarCssClasses } from '../shared';
 
 @Component({
@@ -11,32 +10,51 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   @Input() compact: boolean;
   @Input() display: any;
   @Input() fixed: boolean;
-  @Input() minimized: boolean;
   @Input() offCanvas: boolean;
+
+  @Input()
+  get minimized() {
+    return this._minimized;
+  }
+  set minimized(value: boolean) {
+    // only update / emit events when the value changes
+    if (this._minimized !== value) {
+      this._minimized = value;
+      this._updateMinimized(value);
+      this.minimizedChange.emit(value);
+    }
+  }
+  private _minimized = false;
+
+  /**
+   * Emits whenever the minimized state of the sidebar changes.
+   * Primarily used to facilitate two-way binding.
+   */
+  @Output() minimizedChange = new EventEmitter<boolean>();
+
+  @HostBinding('class.sidebar') _sidebar = true;
 
   constructor(
     @Inject(DOCUMENT) private document: any,
-    private renderer: Renderer2,
-    private hostElement: ElementRef
+    private renderer: Renderer2
   ) {
-    renderer.addClass(hostElement.nativeElement, 'sidebar');
   }
 
   ngOnInit(): void {
     this.displayBreakpoint(this.display);
     this.isCompact(this.compact);
     this.isFixed(this.fixed);
-    this.isMinimized(this.minimized);
     this.isOffCanvas(this.offCanvas);
   }
 
   ngOnDestroy(): void {
-    this.renderer.removeClass(this.document.body, 'sidebar-fixed' );
+    this.minimizedChange.complete();
+    this.renderer.removeClass(this.document.body, 'sidebar-fixed');
   }
 
   isCompact(compact: boolean = this.compact): void {
     if (compact) {
-      this.renderer.addClass(this.document.body, 'sidebar-compact' );
+      this.renderer.addClass(this.document.body, 'sidebar-compact');
     }
   }
 
@@ -46,10 +64,8 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     }
   }
 
-  isMinimized(minimized: boolean = this.minimized): void {
-    if (minimized) {
-      this.renderer.addClass(this.document.body, 'sidebar-minimized');
-    }
+  toggleMinimized(): void {
+    this.minimized = !this._minimized;
   }
 
   isOffCanvas(offCanvas: boolean = this.offCanvas): void {
@@ -62,6 +78,18 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     if (display !== false) {
       const cssClass = display ? `sidebar-${display}-show` : sidebarCssClasses[0];
       this.renderer.addClass(this.document.body, cssClass);
+    }
+  }
+
+  private _updateMinimized(minimized: boolean): void {
+    const body = this.document.body;
+
+    if (minimized) {
+      this.renderer.addClass(body, 'sidebar-minimized');
+      this.renderer.addClass(body, 'brand-minimized');
+    } else {
+      this.renderer.removeClass(body, 'sidebar-minimized');
+      this.renderer.removeClass(body, 'brand-minimized');
     }
   }
 }

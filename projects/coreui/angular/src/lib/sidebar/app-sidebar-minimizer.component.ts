@@ -1,33 +1,24 @@
-import {Component, ElementRef, HostBinding, HostListener, Inject, OnInit, Renderer2} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import { Component, HostBinding, HostListener, Optional } from '@angular/core';
+import { AppSidebarComponent } from './app-sidebar.component';
 
 @Component({
   selector: 'app-sidebar-minimizer, cui-sidebar-minimizer',
-  template: ``,
+  template: ``
 })
-export class AppSidebarMinimizerComponent implements OnInit {
+export class AppSidebarMinimizerComponent {
 
   @HostBinding('attr.role') role = 'button';
+  @HostBinding('class.sidebar-minimizer') _minimizer = true;
 
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
-    const body = this.document.body;
-    body.classList.contains('sidebar-minimized') ?
-      this.renderer.removeClass(body, 'sidebar-minimized') :
-      this.renderer.addClass(body, 'sidebar-minimized');
-    body.classList.contains('brand-minimized') ?
-      this.renderer.removeClass(body, 'brand-minimized') :
-      this.renderer.addClass(body, 'brand-minimized');
+    this.sidebar.toggleMinimized();
   }
 
-  constructor(
-    @Inject(DOCUMENT) private document: any,
-    private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {
-    renderer.addClass(hostElement.nativeElement, 'sidebar-minimizer');
+  constructor(@Optional() private sidebar: AppSidebarComponent) {
+    if (!sidebar) {
+      throw Error(`AppSidebarMinimizer must be placed within a AppSidebar component.`);
+    }
   }
-
-  ngOnInit() {}
 }
