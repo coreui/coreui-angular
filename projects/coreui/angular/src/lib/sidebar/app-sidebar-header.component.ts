@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, Renderer2} from '@angular/core';
 
 @Component({
-  selector: 'app-sidebar-header',
+  selector: 'app-sidebar-header, cui-sidebar-header',
   template: `<ng-content></ng-content>`
 })
 export class AppSidebarHeaderComponent implements OnInit {

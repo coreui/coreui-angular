@@ -3,7 +3,7 @@ import {Component, Input} from '@angular/core';
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
 
 @Component({
-  selector: 'app-sidebar-nav-dropdown',
+  selector: 'app-sidebar-nav-dropdown, cui-sidebar-nav-dropdown',
   template: `
     <a class="nav-link nav-dropdown-toggle"
        appNavDropdownToggle

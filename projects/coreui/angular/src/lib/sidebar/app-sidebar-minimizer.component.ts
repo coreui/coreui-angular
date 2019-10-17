@@ -2,7 +2,7 @@ import {Component, ElementRef, HostBinding, HostListener, Inject, OnInit, Render
 import {DOCUMENT} from '@angular/common';
 
 @Component({
-  selector: 'app-sidebar-minimizer',
+  selector: 'app-sidebar-minimizer, cui-sidebar-minimizer',
   template: ``,
 })
 export class AppSidebarMinimizerComponent implements OnInit {

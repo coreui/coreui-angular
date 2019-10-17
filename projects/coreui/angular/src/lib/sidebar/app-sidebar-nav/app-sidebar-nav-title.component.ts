@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
 
 @Component({
-  selector: 'app-sidebar-nav-title',
+  selector: 'app-sidebar-nav-title, cui-sidebar-nav-title',
   template: '',
 })
 export class AppSidebarNavTitleComponent implements OnInit {

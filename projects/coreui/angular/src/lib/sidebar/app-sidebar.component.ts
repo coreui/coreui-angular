@@ -4,7 +4,7 @@ import { DOCUMENT } from '@angular/common';
 import { sidebarCssClasses } from '../shared';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-sidebar, cui-sidebar',
   template: `<ng-content></ng-content>`
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {

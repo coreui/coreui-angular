@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { INavData } from './app-sidebar-nav';
 
 @Component({
-  selector: 'app-sidebar-nav',
+  selector: 'app-sidebar-nav, cui-sidebar-nav',
   templateUrl: './app-sidebar-nav.component.html'
 })
 export class AppSidebarNavComponent implements OnChanges {
