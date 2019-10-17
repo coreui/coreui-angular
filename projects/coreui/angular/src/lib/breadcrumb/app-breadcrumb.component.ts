@@ -5,7 +5,7 @@ import {AppBreadcrumbService} from './app-breadcrumb.service';
 import {Replace} from '../shared';
 
 @Component({
-  selector: 'app-breadcrumb, cui-breadcrumb',
+  selector: 'app-breadcrumb',
   template: `
     <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
       <li class="breadcrumb-item"
