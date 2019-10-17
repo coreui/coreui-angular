@@ -1,5 +1,8 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.6.x`
+- chore: add "cui" prefixed selector alias to all components - thanks @Hagith #80
+
 ##### `v2.6.0`
 - fix(SidebarNavLink): nav link target doesn't work through appHtmlAttr - thanks @Hagith #79
 - fix(SidebarNavLink): allow link parameters array

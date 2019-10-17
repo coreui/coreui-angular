@@ -5,7 +5,7 @@ import {Observable, Subscription} from 'rxjs';
 import {filter} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-sidebar-nav-link-content',
+  selector: 'app-sidebar-nav-link-content, cui-sidebar-nav-link-content',
   template: `
     <ng-container *ngIf="true">
       <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
@@ -24,7 +24,7 @@ export class AppSidebarNavLinkContentComponent {
 }
 
 @Component({
-  selector: 'app-sidebar-nav-link',
+  selector: 'app-sidebar-nav-link, cui-sidebar-nav-link',
   templateUrl: './app-sidebar-nav-link.component.html',
   providers: [ SidebarNavHelper ]
 })

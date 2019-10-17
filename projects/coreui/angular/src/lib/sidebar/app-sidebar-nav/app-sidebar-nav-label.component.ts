@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
 
 @Component({
-  selector: 'app-sidebar-nav-label',
+  selector: 'app-sidebar-nav-label, cui-sidebar-nav-label',
   templateUrl: './app-sidebar-nav-label.component.html'
 })
 export class AppSidebarNavLabelComponent implements OnInit {
