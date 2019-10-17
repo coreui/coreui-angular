@@ -20,6 +20,7 @@
     "build": "ng build",
     "build-lib": "ng build @coreui/angular --prod",
     "test": "ng test",
+    "test-lib": "ng test @coreui/angular",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "publish": "cd dist/@coreui/angular/ && npm publish",
