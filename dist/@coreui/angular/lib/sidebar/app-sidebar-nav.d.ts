@@ -35,6 +35,7 @@ export interface INavLinkProps {
 export interface INavData {
     name?: string;
     url?: string | any[];
+    href?: string;
     icon?: string;
     badge?: INavBadge;
     title?: boolean;
