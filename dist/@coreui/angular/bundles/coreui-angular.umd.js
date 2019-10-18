@@ -1740,7 +1740,7 @@
         };
         AppSidebarComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar',
+                        selector: 'app-sidebar, cui-sidebar',
                         template: "<ng-content></ng-content>"
                     }] }
         ];
@@ -1806,7 +1806,7 @@
         function () { };
         AppSidebarFooterComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-footer',
+                        selector: 'app-sidebar-footer, cui-sidebar-footer',
                         template: "<ng-content></ng-content>"
                     }] }
         ];
@@ -1849,7 +1849,7 @@
         function () { };
         AppSidebarFormComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-form',
+                        selector: 'app-sidebar-form, cui-sidebar-form',
                         template: "<ng-content></ng-content>"
                     }] }
         ];
@@ -1892,7 +1892,7 @@
         function () { };
         AppSidebarHeaderComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-header',
+                        selector: 'app-sidebar-header, cui-sidebar-header',
                         template: "<ng-content></ng-content>"
                     }] }
         ];
@@ -1956,7 +1956,7 @@
         function () { };
         AppSidebarMinimizerComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-minimizer',
+                        selector: 'app-sidebar-minimizer, cui-sidebar-minimizer',
                         template: ""
                     }] }
         ];
@@ -2095,8 +2095,8 @@
         };
         AppSidebarNavComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-nav',
-                        template: "<app-sidebar-nav-items\r\n  class=\"nav\"\r\n  [items]=\"navItemsArray\">\r\n</app-sidebar-nav-items>\r\n"
+                        selector: 'app-sidebar-nav, cui-sidebar-nav',
+                        template: "<app-sidebar-nav-items\n  class=\"nav\"\n  [items]=\"navItemsArray\">\n</app-sidebar-nav-items>\n"
                     }] }
         ];
         /** @nocollapse */
@@ -2148,7 +2148,7 @@
         function () { };
         AppSidebarNavDividerComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-nav-divider',
+                        selector: 'app-sidebar-nav-divider, cui-sidebar-nav-divider',
                         template: ""
                     }] }
         ];
@@ -2278,7 +2278,7 @@
         }
         AppSidebarNavDropdownComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-nav-dropdown',
+                        selector: 'app-sidebar-nav-dropdown, cui-sidebar-nav-dropdown',
                         template: "\n    <a class=\"nav-link nav-dropdown-toggle\"\n       appNavDropdownToggle\n       [appHtmlAttr]=\"item.attributes\">\n      <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"item | appSidebarNavIcon\"></i>\n      <ng-container>{{item.name}}</ng-container>\n      <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\n    </a>\n    <app-sidebar-nav-items\n      class=\"nav-dropdown-items\"\n      [items]=\"item.children\">\n    </app-sidebar-nav-items>\n  ",
                         providers: [SidebarNavHelper],
                         styles: ['.nav-dropdown-toggle { cursor: pointer; }',
@@ -2342,7 +2342,7 @@
         };
         AppSidebarNavItemsComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-nav-items',
+                        selector: 'app-sidebar-nav-items, cui-sidebar-nav-items',
                         template: "\n    <ng-container *ngFor=\"let item of items\">\n      <ng-container [ngSwitch]=\"helper.itemType(item)\">\n        <app-sidebar-nav-dropdown\n          *ngSwitchCase=\"'dropdown'\"\n          [item]=\"item\"\n          [class.open]=\"helper.isActive(router, item)\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          appNavDropdown\n          routerLinkActive=\"open\">\n        </app-sidebar-nav-dropdown>\n        <app-sidebar-nav-divider\n          *ngSwitchCase=\"'divider'\"\n          [item]=\"item\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          [appHtmlAttr]=\"item.attributes\">\n        </app-sidebar-nav-divider>\n        <app-sidebar-nav-title\n          *ngSwitchCase=\"'title'\"\n          [item]=\"item\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          [appHtmlAttr]=\"item.attributes\">\n        </app-sidebar-nav-title>\n        <app-sidebar-nav-label\n          *ngSwitchCase=\"'label'\"\n          [item]=\"item\"\n          class=\"nav-item\"\n          [ngClass]=\"item | appSidebarNavItemClass\">\n        </app-sidebar-nav-label>\n        <ng-container\n          *ngSwitchCase=\"'empty'\">\n        </ng-container>\n        <app-sidebar-nav-link\n          *ngSwitchDefault\n          [item]=\"item\"\n          class=\"nav-item\"\n          [ngClass]=\"item | appSidebarNavItemClass\"\n          (linkClick)=\"hideMobile()\"\n        >\n        </app-sidebar-nav-link>\n      </ng-container>\n    </ng-container>\n  "
                     }] }
         ];
@@ -2390,7 +2390,7 @@
         }
         AppSidebarNavLinkContentComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-nav-link-content',
+                        selector: 'app-sidebar-nav-link-content, cui-sidebar-nav-link-content',
                         template: "\n    <ng-container *ngIf=\"true\">\n      <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"item | appSidebarNavIcon\"></i>\n      <ng-container>{{item.name}}</ng-container>\n      <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\n    </ng-container>\n  ",
                         providers: [SidebarNavHelper]
                     }] }
@@ -2447,18 +2447,19 @@
          */
         function () {
             var _this = this;
+            this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url));
             this.linkType = this.getLinkType();
-            this.href = this.isDisabled() ? '' : (this.item.href || this.item.url);
-            this.linkActive = this.router.url.split(/[?#(]/)[0] === this.item.url.split(/[?#(]/)[0];
+            this.href = this.isDisabled() ? '' : (this.item.href || this.url);
+            this.linkActive = this.router.url.split(/[?#(;]/)[0] === this.href.split(/[?#(;]/)[0];
             this.navSubscription = this.navigationEndObservable.subscribe((/**
              * @param {?} event
              * @return {?}
              */
             function (event) {
                 /** @type {?} */
-                var itemUrlArray = _this.item.url.split(/[?#(]/)[0].split('/');
+                var itemUrlArray = _this.href.split(/[?#(;]/)[0].split('/');
                 /** @type {?} */
-                var urlArray = event.urlAfterRedirects.split(/[?#(]/)[0].split('/');
+                var urlArray = event.urlAfterRedirects.split(/[?#(;]/)[0].split('/');
                 _this.linkActive = itemUrlArray.every((/**
                  * @param {?} value
                  * @param {?} index
@@ -2501,9 +2502,7 @@
          * @return {?}
          */
         function () {
-            /** @type {?} */
-            var linkPath = Array.isArray(this.item.url) ? this.item.url[0] : this.item.url;
-            return !!this.item.href || linkPath.substring(0, 4) === 'http';
+            return !!this.item.href || this.url.substring(0, 4) === 'http';
         };
         /**
          * @return {?}
@@ -2516,8 +2515,8 @@
         };
         AppSidebarNavLinkComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-nav-link',
-                        template: "<ng-container [ngSwitch]=\"linkType\">\n  <a *ngSwitchCase=\"'disabled'\"\n     [ngClass]=\"item | appSidebarNavLink\"\n     [appHtmlAttr]=\"item.attributes\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n  <a *ngSwitchCase=\"'external'\"\n     [ngClass]=\"item | appSidebarNavLink\"\n     [href]=\"href\"\n     [appHtmlAttr]=\"item.attributes\"\n     (click)=\"linkClicked()\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n  <a *ngSwitchDefault\n     [ngClass]=\"item | appSidebarNavLink\"\n     [appHtmlAttr]=\"item.attributes\"\n     [target]=\"item.attributes?.target\"\n     [queryParams]=\"item.linkProps?.queryParams\"\n     [fragment]=\"item.linkProps?.fragment\"\n     [queryParamsHandling]=\"item.linkProps?.queryParamsHandling\"\n     [preserveFragment]=\"item.linkProps?.preserveFragment\"\n     [skipLocationChange]=\"item.linkProps?.skipLocationChange\"\n     [replaceUrl]=\"item.linkProps?.replaceUrl\"\n     [state]=\"item.linkProps?.state\"\n     [routerLink]=\"item.url\"\n     [class.active]=\"linkActive\"\n     (click)=\"linkClicked()\"\n  >\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\n  </a>\n</ng-container>\n",
+                        selector: 'app-sidebar-nav-link, cui-sidebar-nav-link',
+                        template: "<ng-container [ngSwitch]=\"linkType\">\r\n  <a *ngSwitchCase=\"'disabled'\"\r\n     [ngClass]=\"item | appSidebarNavLink\"\r\n     [appHtmlAttr]=\"item.attributes\"\r\n  >\r\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\r\n  </a>\r\n  <a *ngSwitchCase=\"'external'\"\r\n     [ngClass]=\"item | appSidebarNavLink\"\r\n     [href]=\"href\"\r\n     [appHtmlAttr]=\"item.attributes\"\r\n     (click)=\"linkClicked()\"\r\n  >\r\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\r\n  </a>\r\n  <a *ngSwitchDefault\r\n     [ngClass]=\"item | appSidebarNavLink\"\r\n     [appHtmlAttr]=\"item.attributes\"\r\n     [target]=\"item.attributes?.target\"\r\n     [queryParams]=\"item.linkProps?.queryParams\"\r\n     [fragment]=\"item.linkProps?.fragment\"\r\n     [queryParamsHandling]=\"item.linkProps?.queryParamsHandling\"\r\n     [preserveFragment]=\"item.linkProps?.preserveFragment\"\r\n     [skipLocationChange]=\"item.linkProps?.skipLocationChange\"\r\n     [replaceUrl]=\"item.linkProps?.replaceUrl\"\r\n     [state]=\"item.linkProps?.state\"\r\n     [routerLink]=\"item.url\"\r\n     [class.active]=\"linkActive\"\r\n     (click)=\"linkClicked()\"\r\n  >\r\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\r\n  </a>\r\n</ng-container>\r\n",
                         providers: [SidebarNavHelper]
                     }] }
         ];
@@ -2545,6 +2544,11 @@
         AppSidebarNavLinkComponent.prototype.href;
         /** @type {?} */
         AppSidebarNavLinkComponent.prototype.linkActive;
+        /**
+         * @type {?}
+         * @private
+         */
+        AppSidebarNavLinkComponent.prototype.url;
         /**
          * @type {?}
          * @private
@@ -2686,7 +2690,7 @@
         };
         AppSidebarNavTitleComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-nav-title',
+                        selector: 'app-sidebar-nav-title, cui-sidebar-nav-title',
                         template: ''
                     }] }
         ];
@@ -2766,7 +2770,7 @@
         };
         AppSidebarNavLabelComponent.decorators = [
             { type: core.Component, args: [{
-                        selector: 'app-sidebar-nav-label',
+                        selector: 'app-sidebar-nav-label, cui-sidebar-nav-label',
                         template: "<a [ngClass]=\"getItemClass()\"\r\n   href=\"{{item.url}}\"\r\n   [appHtmlAttr]=\"item.attributes\">\r\n  <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"getLabelIconClass()\"></i>\r\n  <ng-container>{{item.name}}</ng-container>\r\n  <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\r\n</a>\r\n"
                     }] }
         ];
@@ -3025,12 +3029,12 @@
     exports.AppHeaderModule = AppHeaderModule;
     exports.AppSidebarComponent = AppSidebarComponent;
     exports.AppSidebarModule = AppSidebarModule;
+    exports.CuiBreadcrumbComponent = CuiBreadcrumbComponent;
     exports.ɵa = LayoutModule;
     exports.ɵb = SidebarToggleDirective;
-    exports.ɵba = AppSidebarNavIconPipe;
-    exports.ɵbb = AppSidebarNavBadgePipe;
-    exports.ɵbc = AppSidebarNavLinkPipe;
-    exports.ɵbd = AppSidebarNavItemClassPipe;
+    exports.ɵba = AppSidebarNavBadgePipe;
+    exports.ɵbb = AppSidebarNavLinkPipe;
+    exports.ɵbc = AppSidebarNavItemClassPipe;
     exports.ɵc = SidebarMinimizeDirective;
     exports.ɵd = MobileSidebarToggleDirective;
     exports.ɵe = SidebarOffCanvasCloseDirective;
@@ -3039,22 +3043,22 @@
     exports.ɵh = HtmlAttributesDirective;
     exports.ɵi = ClassToggler;
     exports.ɵj = AppBreadcrumbService;
-    exports.ɵk = CuiBreadcrumbComponent;
-    exports.ɵl = AppSidebarFooterComponent;
-    exports.ɵm = AppSidebarFormComponent;
-    exports.ɵn = AppSidebarHeaderComponent;
-    exports.ɵo = AppSidebarMinimizerComponent;
-    exports.ɵp = AppSidebarNavItemsComponent;
-    exports.ɵq = SidebarNavHelper;
-    exports.ɵr = AppSidebarNavComponent;
-    exports.ɵs = AppSidebarNavDividerComponent;
-    exports.ɵt = AppSidebarNavDropdownComponent;
-    exports.ɵu = AppSidebarNavLinkContentComponent;
-    exports.ɵv = AppSidebarNavLinkComponent;
-    exports.ɵw = AppSidebarNavTitleComponent;
-    exports.ɵx = NavDropdownDirective;
-    exports.ɵy = NavDropdownToggleDirective;
-    exports.ɵz = AppSidebarNavLabelComponent;
+    exports.ɵk = AppSidebarFooterComponent;
+    exports.ɵl = AppSidebarFormComponent;
+    exports.ɵm = AppSidebarHeaderComponent;
+    exports.ɵn = AppSidebarMinimizerComponent;
+    exports.ɵo = AppSidebarNavItemsComponent;
+    exports.ɵp = SidebarNavHelper;
+    exports.ɵq = AppSidebarNavComponent;
+    exports.ɵr = AppSidebarNavDividerComponent;
+    exports.ɵs = AppSidebarNavDropdownComponent;
+    exports.ɵt = AppSidebarNavLinkContentComponent;
+    exports.ɵu = AppSidebarNavLinkComponent;
+    exports.ɵv = AppSidebarNavTitleComponent;
+    exports.ɵw = NavDropdownDirective;
+    exports.ɵx = NavDropdownToggleDirective;
+    exports.ɵy = AppSidebarNavLabelComponent;
+    exports.ɵz = AppSidebarNavIconPipe;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

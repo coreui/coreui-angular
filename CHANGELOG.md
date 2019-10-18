@@ -1,7 +1,16 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
-##### `v2.6.x`
+##### `v2.6.1`
 - chore: add "cui" prefixed selector alias to all components - thanks @Hagith #80
+- fix(INavData): add missing `href` for explicit external links
+- refactor(SidebarNavLink): add `INavData` type to items, cleanup
+- test: add `test-lib` script & make it work - thanks @Hagith #83
+
+###### dependencies update
+- update `@angular-devkit/build-angular` to `^0.803.12`
+- update `@angular-devkit/build-ng-packagr` to `^0.803.12`
+- update `@angular/cli` to `^8.3.12`
+- update `karma` to `^4.4.0`
 
 ##### `v2.6.0`
 - fix(SidebarNavLink): nav link target doesn't work through appHtmlAttr - thanks @Hagith #79

@@ -1,4 +1,6 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppSidebarNavComponent } from './app-sidebar-nav.component';
 
@@ -8,7 +10,9 @@ describe('AppSidebarNavComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppSidebarNavComponent ]
+      declarations: [AppSidebarNavComponent],
+      imports: [RouterTestingModule],
+      schemas: [NO_ERRORS_SCHEMA],
     })
     .compileComponents();
   }));

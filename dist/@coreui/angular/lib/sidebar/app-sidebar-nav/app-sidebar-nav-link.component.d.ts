@@ -1,6 +1,7 @@
 import { EventEmitter, OnDestroy, OnInit } from '@angular/core';
-import { SidebarNavHelper } from '../app-sidebar-nav.service';
 import { Router } from '@angular/router';
+import { SidebarNavHelper } from '../app-sidebar-nav.service';
+import { INavData } from '../app-sidebar-nav';
 export declare class AppSidebarNavLinkContentComponent {
     helper: SidebarNavHelper;
     item: any;
@@ -8,12 +9,13 @@ export declare class AppSidebarNavLinkContentComponent {
 }
 export declare class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
     router: Router;
-    protected _item: any;
-    item: any;
+    protected _item: INavData;
+    item: INavData;
     linkClick: EventEmitter<{}>;
     linkType: string;
     href: string;
     linkActive: boolean;
+    private url;
     private navigationEndObservable;
     private navSubscription;
     constructor(router: Router);
