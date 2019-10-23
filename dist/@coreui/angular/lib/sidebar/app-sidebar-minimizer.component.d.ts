@@ -1,10 +1,8 @@
-import { ElementRef, OnInit, Renderer2 } from '@angular/core';
-export declare class AppSidebarMinimizerComponent implements OnInit {
-    private document;
-    private renderer;
-    private hostElement;
+import { AppSidebarService } from './app-sidebar.service';
+export declare class AppSidebarMinimizerComponent {
+    private sidebarService;
     role: string;
+    _minimizer: boolean;
     toggleOpen($event: any): void;
-    constructor(document: any, renderer: Renderer2, hostElement: ElementRef);
-    ngOnInit(): void;
+    constructor(sidebarService: AppSidebarService);
 }

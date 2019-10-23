@@ -1637,13 +1637,90 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    /**
+     * @record
+     */
+    function ISidebarAction() { }
+    if (false) {
+        /** @type {?|undefined} */
+        ISidebarAction.prototype.minimize;
+    }
+    var AppSidebarService = /** @class */ (function () {
+        function AppSidebarService() {
+            this.events = new rxjs.BehaviorSubject({});
+            this.events$ = this.events.asObservable();
+        }
+        /**
+         * @param {?} action
+         * @return {?}
+         */
+        AppSidebarService.prototype.toggle = /**
+         * @param {?} action
+         * @return {?}
+         */
+        function (action) {
+            this.events.next(action);
+        };
+        AppSidebarService.decorators = [
+            { type: core.Injectable, args: [{
+                        providedIn: 'root'
+                    },] }
+        ];
+        /** @nocollapse */
+        AppSidebarService.ctorParameters = function () { return []; };
+        /** @nocollapse */ AppSidebarService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function AppSidebarService_Factory() { return new AppSidebarService(); }, token: AppSidebarService, providedIn: "root" });
+        return AppSidebarService;
+    }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        AppSidebarService.prototype.events;
+        /** @type {?} */
+        AppSidebarService.prototype.events$;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var AppSidebarComponent = /** @class */ (function () {
-        function AppSidebarComponent(document, renderer, hostElement) {
+        function AppSidebarComponent(document, renderer, sidebarService) {
             this.document = document;
             this.renderer = renderer;
-            this.hostElement = hostElement;
-            renderer.addClass(hostElement.nativeElement, 'sidebar');
+            this.sidebarService = sidebarService;
+            this._minimized = false;
+            /**
+             * Emits whenever the minimized state of the sidebar changes.
+             * Primarily used to facilitate two-way binding.
+             */
+            this.minimizedChange = new core.EventEmitter();
+            this._sidebar = true;
         }
+        Object.defineProperty(AppSidebarComponent.prototype, "minimized", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this._minimized;
+            },
+            set: /**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) {
+                // only update / emit events when the value changes
+                if (this._minimized !== value) {
+                    this._minimized = value;
+                    this._updateMinimized(value);
+                    this.minimizedChange.emit(value);
+                    this.sidebarService.toggle({ minimize: value });
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * @return {?}
          */
@@ -1651,11 +1728,21 @@
          * @return {?}
          */
         function () {
+            var _this = this;
             this.displayBreakpoint(this.display);
             this.isCompact(this.compact);
             this.isFixed(this.fixed);
-            this.isMinimized(this.minimized);
             this.isOffCanvas(this.offCanvas);
+            this.sidebarService.toggle({ minimize: this.minimized });
+            this.subscriptionEvents = this.sidebarService.events$.subscribe((/**
+             * @param {?} action
+             * @return {?}
+             */
+            function (action) {
+                if (action.minimize !== undefined) {
+                    action.minimize === 'toggle' ? _this.toggleMinimized() : _this.minimized = !!action.minimize;
+                }
+            }));
         };
         /**
          * @return {?}
@@ -1664,7 +1751,10 @@
          * @return {?}
          */
         function () {
+            this.subscriptionEvents.unsubscribe();
+            this.minimizedChange.complete();
             this.renderer.removeClass(this.document.body, 'sidebar-fixed');
+            this._updateMinimized(false);
         };
         /**
          * @param {?=} compact
@@ -1695,18 +1785,13 @@
             }
         };
         /**
-         * @param {?=} minimized
          * @return {?}
          */
-        AppSidebarComponent.prototype.isMinimized = /**
-         * @param {?=} minimized
+        AppSidebarComponent.prototype.toggleMinimized = /**
          * @return {?}
          */
-        function (minimized) {
-            if (minimized === void 0) { minimized = this.minimized; }
-            if (minimized) {
-                this.renderer.addClass(this.document.body, 'sidebar-minimized');
-            }
+        function () {
+            this.minimized = !this._minimized;
         };
         /**
          * @param {?=} offCanvas
@@ -1738,6 +1823,28 @@
                 this.renderer.addClass(this.document.body, cssClass);
             }
         };
+        /**
+         * @private
+         * @param {?} minimized
+         * @return {?}
+         */
+        AppSidebarComponent.prototype._updateMinimized = /**
+         * @private
+         * @param {?} minimized
+         * @return {?}
+         */
+        function (minimized) {
+            /** @type {?} */
+            var body = this.document.body;
+            if (minimized) {
+                this.renderer.addClass(body, 'sidebar-minimized');
+                this.renderer.addClass(body, 'brand-minimized');
+            }
+            else {
+                this.renderer.removeClass(body, 'sidebar-minimized');
+                this.renderer.removeClass(body, 'brand-minimized');
+            }
+        };
         AppSidebarComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar, cui-sidebar',
@@ -1748,18 +1855,30 @@
         AppSidebarComponent.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
             { type: core.Renderer2 },
-            { type: core.ElementRef }
+            { type: AppSidebarService }
         ]; };
         AppSidebarComponent.propDecorators = {
             compact: [{ type: core.Input }],
             display: [{ type: core.Input }],
             fixed: [{ type: core.Input }],
+            offCanvas: [{ type: core.Input }],
             minimized: [{ type: core.Input }],
-            offCanvas: [{ type: core.Input }]
+            minimizedChange: [{ type: core.Output }],
+            _sidebar: [{ type: core.HostBinding, args: ['class.sidebar',] }]
         };
         return AppSidebarComponent;
     }());
     if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        AppSidebarComponent.prototype.subscriptionEvents;
+        /**
+         * @type {?}
+         * @private
+         */
+        AppSidebarComponent.prototype._minimized;
         /** @type {?} */
         AppSidebarComponent.prototype.compact;
         /** @type {?} */
@@ -1767,9 +1886,15 @@
         /** @type {?} */
         AppSidebarComponent.prototype.fixed;
         /** @type {?} */
-        AppSidebarComponent.prototype.minimized;
-        /** @type {?} */
         AppSidebarComponent.prototype.offCanvas;
+        /**
+         * Emits whenever the minimized state of the sidebar changes.
+         * Primarily used to facilitate two-way binding.
+         * @type {?}
+         */
+        AppSidebarComponent.prototype.minimizedChange;
+        /** @type {?} */
+        AppSidebarComponent.prototype._sidebar;
         /**
          * @type {?}
          * @private
@@ -1784,7 +1909,7 @@
          * @type {?}
          * @private
          */
-        AppSidebarComponent.prototype.hostElement;
+        AppSidebarComponent.prototype.sidebarService;
     }
 
     /**
@@ -1921,12 +2046,10 @@
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var AppSidebarMinimizerComponent = /** @class */ (function () {
-        function AppSidebarMinimizerComponent(document, renderer, hostElement) {
-            this.document = document;
-            this.renderer = renderer;
-            this.hostElement = hostElement;
+        function AppSidebarMinimizerComponent(sidebarService) {
+            this.sidebarService = sidebarService;
             this.role = 'button';
-            renderer.addClass(hostElement.nativeElement, 'sidebar-minimizer');
+            this._minimizer = true;
         }
         /**
          * @param {?} $event
@@ -1938,22 +2061,8 @@
          */
         function ($event) {
             $event.preventDefault();
-            /** @type {?} */
-            var body = this.document.body;
-            body.classList.contains('sidebar-minimized') ?
-                this.renderer.removeClass(body, 'sidebar-minimized') :
-                this.renderer.addClass(body, 'sidebar-minimized');
-            body.classList.contains('brand-minimized') ?
-                this.renderer.removeClass(body, 'brand-minimized') :
-                this.renderer.addClass(body, 'brand-minimized');
+            this.sidebarService.toggle({ minimize: 'toggle' });
         };
-        /**
-         * @return {?}
-         */
-        AppSidebarMinimizerComponent.prototype.ngOnInit = /**
-         * @return {?}
-         */
-        function () { };
         AppSidebarMinimizerComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'app-sidebar-minimizer, cui-sidebar-minimizer',
@@ -1962,12 +2071,11 @@
         ];
         /** @nocollapse */
         AppSidebarMinimizerComponent.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-            { type: core.Renderer2 },
-            { type: core.ElementRef }
+            { type: AppSidebarService }
         ]; };
         AppSidebarMinimizerComponent.propDecorators = {
             role: [{ type: core.HostBinding, args: ['attr.role',] }],
+            _minimizer: [{ type: core.HostBinding, args: ['class.sidebar-minimizer',] }],
             toggleOpen: [{ type: core.HostListener, args: ['click', ['$event'],] }]
         };
         return AppSidebarMinimizerComponent;
@@ -1975,21 +2083,13 @@
     if (false) {
         /** @type {?} */
         AppSidebarMinimizerComponent.prototype.role;
+        /** @type {?} */
+        AppSidebarMinimizerComponent.prototype._minimizer;
         /**
          * @type {?}
          * @private
          */
-        AppSidebarMinimizerComponent.prototype.document;
-        /**
-         * @type {?}
-         * @private
-         */
-        AppSidebarMinimizerComponent.prototype.renderer;
-        /**
-         * @type {?}
-         * @private
-         */
-        AppSidebarMinimizerComponent.prototype.hostElement;
+        AppSidebarMinimizerComponent.prototype.sidebarService;
     }
 
     /**
@@ -3012,7 +3112,8 @@
                             AppSidebarNavItemClassPipe
                         ],
                         providers: [
-                            SidebarNavHelper
+                            SidebarNavHelper,
+                            AppSidebarService
                         ]
                     },] }
         ];
@@ -3032,9 +3133,10 @@
     exports.CuiBreadcrumbComponent = CuiBreadcrumbComponent;
     exports.ɵa = LayoutModule;
     exports.ɵb = SidebarToggleDirective;
-    exports.ɵba = AppSidebarNavBadgePipe;
-    exports.ɵbb = AppSidebarNavLinkPipe;
-    exports.ɵbc = AppSidebarNavItemClassPipe;
+    exports.ɵba = AppSidebarNavIconPipe;
+    exports.ɵbb = AppSidebarNavBadgePipe;
+    exports.ɵbc = AppSidebarNavLinkPipe;
+    exports.ɵbd = AppSidebarNavItemClassPipe;
     exports.ɵc = SidebarMinimizeDirective;
     exports.ɵd = MobileSidebarToggleDirective;
     exports.ɵe = SidebarOffCanvasCloseDirective;
@@ -3043,22 +3145,22 @@
     exports.ɵh = HtmlAttributesDirective;
     exports.ɵi = ClassToggler;
     exports.ɵj = AppBreadcrumbService;
-    exports.ɵk = AppSidebarFooterComponent;
-    exports.ɵl = AppSidebarFormComponent;
-    exports.ɵm = AppSidebarHeaderComponent;
-    exports.ɵn = AppSidebarMinimizerComponent;
-    exports.ɵo = AppSidebarNavItemsComponent;
-    exports.ɵp = SidebarNavHelper;
-    exports.ɵq = AppSidebarNavComponent;
-    exports.ɵr = AppSidebarNavDividerComponent;
-    exports.ɵs = AppSidebarNavDropdownComponent;
-    exports.ɵt = AppSidebarNavLinkContentComponent;
-    exports.ɵu = AppSidebarNavLinkComponent;
-    exports.ɵv = AppSidebarNavTitleComponent;
-    exports.ɵw = NavDropdownDirective;
-    exports.ɵx = NavDropdownToggleDirective;
-    exports.ɵy = AppSidebarNavLabelComponent;
-    exports.ɵz = AppSidebarNavIconPipe;
+    exports.ɵk = AppSidebarService;
+    exports.ɵl = AppSidebarFooterComponent;
+    exports.ɵm = AppSidebarFormComponent;
+    exports.ɵn = AppSidebarHeaderComponent;
+    exports.ɵo = AppSidebarMinimizerComponent;
+    exports.ɵp = AppSidebarNavItemsComponent;
+    exports.ɵq = SidebarNavHelper;
+    exports.ɵr = AppSidebarNavComponent;
+    exports.ɵs = AppSidebarNavDividerComponent;
+    exports.ɵt = AppSidebarNavDropdownComponent;
+    exports.ɵu = AppSidebarNavLinkContentComponent;
+    exports.ɵv = AppSidebarNavLinkComponent;
+    exports.ɵw = AppSidebarNavTitleComponent;
+    exports.ɵx = NavDropdownDirective;
+    exports.ɵy = NavDropdownToggleDirective;
+    exports.ɵz = AppSidebarNavLabelComponent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
