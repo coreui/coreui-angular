@@ -53,9 +53,10 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     this.isCompact(this.compact);
     this.isFixed(this.fixed);
     this.isOffCanvas(this.offCanvas);
+    this.sidebarService.toggle({ minimize: this.minimized } );
     this.subscriptionEvents = this.sidebarService.events$.subscribe(action => {
-      if (action.minimize === 'toggle') {
-        this.toggleMinimized();
+      if (action.minimize !== undefined) {
+        action.minimize === 'toggle' ? this.toggleMinimized() : this.minimized = !!action.minimize;
       }
     });
   }
@@ -64,6 +65,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     this.subscriptionEvents.unsubscribe();
     this.minimizedChange.complete();
     this.renderer.removeClass(this.document.body, 'sidebar-fixed');
+    this._updateMinimized(false);
   }
 
   isCompact(compact: boolean = this.compact): void {
