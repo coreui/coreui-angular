@@ -1,12 +1,19 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { sidebarCssClasses } from '../shared';
+import { AppSidebarService } from './app-sidebar.service';
 
 @Component({
   selector: 'app-sidebar, cui-sidebar',
   template: `<ng-content></ng-content>`
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {
+
+  private subscriptionEvents: Subscription;
+  private _minimized = false;
+
   @Input() compact: boolean;
   @Input() display: any;
   @Input() fixed: boolean;
@@ -22,9 +29,9 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
       this._minimized = value;
       this._updateMinimized(value);
       this.minimizedChange.emit(value);
+      this.sidebarService.toggle({ minimize: value } );
     }
   }
-  private _minimized = false;
 
   /**
    * Emits whenever the minimized state of the sidebar changes.
@@ -36,7 +43,8 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(DOCUMENT) private document: any,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private sidebarService: AppSidebarService
   ) {
   }
 
@@ -45,9 +53,15 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     this.isCompact(this.compact);
     this.isFixed(this.fixed);
     this.isOffCanvas(this.offCanvas);
+    this.subscriptionEvents = this.sidebarService.events$.subscribe(action => {
+      if (action.minimize === 'toggle') {
+        this.toggleMinimized();
+      }
+    });
   }
 
   ngOnDestroy(): void {
+    this.subscriptionEvents.unsubscribe();
     this.minimizedChange.complete();
     this.renderer.removeClass(this.document.body, 'sidebar-fixed');
   }
