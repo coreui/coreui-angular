@@ -1,5 +1,6 @@
 import { Component, HostBinding, HostListener, Optional } from '@angular/core';
-import { AppSidebarComponent } from './app-sidebar.component';
+
+import { AppSidebarService } from './app-sidebar.service';
 
 @Component({
   selector: 'app-sidebar-minimizer, cui-sidebar-minimizer',
@@ -13,12 +14,10 @@ export class AppSidebarMinimizerComponent {
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
-    this.sidebar.toggleMinimized();
+    this.sidebarService.toggle({minimize: 'toggle'});
   }
 
-  constructor(@Optional() private sidebar: AppSidebarComponent) {
-    if (!sidebar) {
-      throw Error(`AppSidebarMinimizer must be placed within a AppSidebar component.`);
-    }
-  }
+  constructor(
+    private sidebarService: AppSidebarService
+  ) { }
 }
