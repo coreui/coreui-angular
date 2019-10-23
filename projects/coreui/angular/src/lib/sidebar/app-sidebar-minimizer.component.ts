@@ -1,33 +1,23 @@
-import {Component, ElementRef, HostBinding, HostListener, Inject, OnInit, Renderer2} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import { Component, HostBinding, HostListener, Optional } from '@angular/core';
+
+import { AppSidebarService } from './app-sidebar.service';
 
 @Component({
   selector: 'app-sidebar-minimizer, cui-sidebar-minimizer',
-  template: ``,
+  template: ``
 })
-export class AppSidebarMinimizerComponent implements OnInit {
+export class AppSidebarMinimizerComponent {
 
   @HostBinding('attr.role') role = 'button';
+  @HostBinding('class.sidebar-minimizer') _minimizer = true;
 
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
-    const body = this.document.body;
-    body.classList.contains('sidebar-minimized') ?
-      this.renderer.removeClass(body, 'sidebar-minimized') :
-      this.renderer.addClass(body, 'sidebar-minimized');
-    body.classList.contains('brand-minimized') ?
-      this.renderer.removeClass(body, 'brand-minimized') :
-      this.renderer.addClass(body, 'brand-minimized');
+    this.sidebarService.toggle({minimize: 'toggle'});
   }
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
-    private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {
-    renderer.addClass(hostElement.nativeElement, 'sidebar-minimizer');
-  }
-
-  ngOnInit() {}
+    private sidebarService: AppSidebarService
+  ) { }
 }

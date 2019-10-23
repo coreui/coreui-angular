@@ -1,5 +1,25 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.6.2`
+- feat(Sidebar): `minimized` state @Input/@Output - thanks @Hagith #84
+- test(Sidebar): `minimized` state - thanks @Hagith #84
+- feat(SidebarService): add SidebarService with observable actions 
+- refactor(Sidebar): inject SidebarService, subscribe and toggle action events 
+- refactor(SidebarMinimizer): inject SidebarService, toggle action events 
+- refactor(Sidebar): onDestroy remove minimized classes
+
+###### dependencies update
+- update `@angular-devkit/build-angular` to `^0.803.13`
+- update `@angular-devkit/build-ng-packagr` to `^0.803.13`
+- update `@angular/cli` to `^8.3.13`
+- update `codelyzer` to `^5.2.0`
+- update `jasmine-core` to `^3.5.0`
+- update `jasmine-spec-reporter` to `^4.2.1`
+- update `karma` to `^4.4.1`
+- update `karma-chrome-launcher` to `^3.1.0`
+- update `karma-jasmine-html-reporter` to `^1.4.2`
+- update `protractor` to `^6.0.0`
+
 ##### `v2.6.1`
 - chore: add "cui" prefixed selector alias to all components - thanks @Hagith #80
 - fix(INavData): add missing `href` for explicit external links

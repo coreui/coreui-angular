@@ -9,6 +9,8 @@ import { AppSidebarFooterComponent } from './app-sidebar-footer.component';
 import { AppSidebarFormComponent } from './app-sidebar-form.component';
 import { AppSidebarHeaderComponent } from './app-sidebar-header.component';
 import { AppSidebarMinimizerComponent } from './app-sidebar-minimizer.component';
+import { AppSidebarService  } from './app-sidebar.service';
+
 // App SidebarNav Component
 import { NavDropdownDirective, NavDropdownToggleDirective } from './app-sidebar-nav.directive';
 import { AppSidebarNavComponent } from './app-sidebar-nav.component';
@@ -70,7 +72,8 @@ import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-it
     AppSidebarNavItemClassPipe
   ],
   providers: [
-    SidebarNavHelper
+    SidebarNavHelper,
+    AppSidebarService
   ]
 })
 export class AppSidebarModule { }
