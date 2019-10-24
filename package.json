@@ -17,7 +17,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
     "build-lib": "ng build @coreui/angular --prod",
     "test": "ng test",
     "test-lib": "ng test @coreui/angular",
