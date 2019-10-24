@@ -2,21 +2,11 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 export class AppSidebarFooterComponent {
-    /**
-     * @param {?} renderer
-     * @param {?} hostElement
-     */
-    constructor(renderer, hostElement) {
-        this.renderer = renderer;
-        this.hostElement = hostElement;
-        renderer.addClass(hostElement.nativeElement, 'app-sidebar-footer');
+    constructor() {
+        this._sidebarFooter = true;
     }
-    /**
-     * @return {?}
-     */
-    ngOnInit() { }
 }
 AppSidebarFooterComponent.decorators = [
     { type: Component, args: [{
@@ -25,20 +15,12 @@ AppSidebarFooterComponent.decorators = [
             }] }
 ];
 /** @nocollapse */
-AppSidebarFooterComponent.ctorParameters = () => [
-    { type: Renderer2 },
-    { type: ElementRef }
-];
+AppSidebarFooterComponent.ctorParameters = () => [];
+AppSidebarFooterComponent.propDecorators = {
+    _sidebarFooter: [{ type: HostBinding, args: ['class.sidebar-footer',] }]
+};
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFooterComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFooterComponent.prototype.hostElement;
+    /** @type {?} */
+    AppSidebarFooterComponent.prototype._sidebarFooter;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLXNpZGViYXItZm9vdGVyLmNvbXBvbmVudC5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0Bjb3JldWkvYW5ndWxhci8iLCJzb3VyY2VzIjpbImxpYi9zaWRlYmFyL2FwcC1zaWRlYmFyLWZvb3Rlci5jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLE9BQU8sRUFBQyxTQUFTLEVBQUUsVUFBVSxFQUFVLFNBQVMsRUFBQyxNQUFNLGVBQWUsQ0FBQztBQU12RSxNQUFNLE9BQU8seUJBQXlCOzs7OztJQUVwQyxZQUNVLFFBQW1CLEVBQ25CLFdBQXVCO1FBRHZCLGFBQVEsR0FBUixRQUFRLENBQVc7UUFDbkIsZ0JBQVcsR0FBWCxXQUFXLENBQVk7UUFFL0IsUUFBUSxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsYUFBYSxFQUFFLG9CQUFvQixDQUFDLENBQUM7SUFDckUsQ0FBQzs7OztJQUVELFFBQVEsS0FBSyxDQUFDOzs7WUFiZixTQUFTLFNBQUM7Z0JBQ1QsUUFBUSxFQUFFLHdDQUF3QztnQkFDbEQsUUFBUSxFQUFFLDJCQUEyQjthQUN0Qzs7OztZQUxzQyxTQUFTO1lBQTdCLFVBQVU7Ozs7Ozs7SUFTekIsNkNBQTJCOzs7OztJQUMzQixnREFBK0IiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge0NvbXBvbmVudCwgRWxlbWVudFJlZiwgT25Jbml0LCBSZW5kZXJlcjJ9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtc2lkZWJhci1mb290ZXIsIGN1aS1zaWRlYmFyLWZvb3RlcicsXHJcbiAgdGVtcGxhdGU6IGA8bmctY29udGVudD48L25nLWNvbnRlbnQ+YFxyXG59KVxyXG5leHBvcnQgY2xhc3MgQXBwU2lkZWJhckZvb3RlckNvbXBvbmVudCBpbXBsZW1lbnRzIE9uSW5pdCB7XHJcblxyXG4gIGNvbnN0cnVjdG9yKFxyXG4gICAgcHJpdmF0ZSByZW5kZXJlcjogUmVuZGVyZXIyLFxyXG4gICAgcHJpdmF0ZSBob3N0RWxlbWVudDogRWxlbWVudFJlZlxyXG4gICkge1xyXG4gICAgcmVuZGVyZXIuYWRkQ2xhc3MoaG9zdEVsZW1lbnQubmF0aXZlRWxlbWVudCwgJ2FwcC1zaWRlYmFyLWZvb3RlcicpO1xyXG4gIH1cclxuXHJcbiAgbmdPbkluaXQoKSB7IH1cclxufVxyXG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLXNpZGViYXItZm9vdGVyLmNvbXBvbmVudC5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0Bjb3JldWkvYW5ndWxhci8iLCJzb3VyY2VzIjpbImxpYi9zaWRlYmFyL2FwcC1zaWRlYmFyLWZvb3Rlci5jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLE9BQU8sRUFBQyxTQUFTLEVBQUUsV0FBVyxFQUFDLE1BQU0sZUFBZSxDQUFDO0FBTXJELE1BQU0sT0FBTyx5QkFBeUI7SUFJcEM7UUFGcUMsbUJBQWMsR0FBRyxJQUFJLENBQUM7SUFFM0MsQ0FBQzs7O1lBUmxCLFNBQVMsU0FBQztnQkFDVCxRQUFRLEVBQUUsd0NBQXdDO2dCQUNsRCxRQUFRLEVBQUUsMkJBQTJCO2FBQ3RDOzs7Ozs2QkFHRSxXQUFXLFNBQUMsc0JBQXNCOzs7O0lBQW5DLG1EQUEyRCIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7Q29tcG9uZW50LCBIb3N0QmluZGluZ30gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5cbkBDb21wb25lbnQoe1xuICBzZWxlY3RvcjogJ2FwcC1zaWRlYmFyLWZvb3RlciwgY3VpLXNpZGViYXItZm9vdGVyJyxcbiAgdGVtcGxhdGU6IGA8bmctY29udGVudD48L25nLWNvbnRlbnQ+YFxufSlcbmV4cG9ydCBjbGFzcyBBcHBTaWRlYmFyRm9vdGVyQ29tcG9uZW50IHtcblxuICBASG9zdEJpbmRpbmcoJ2NsYXNzLnNpZGViYXItZm9vdGVyJykgX3NpZGViYXJGb290ZXIgPSB0cnVlO1xuXG4gIGNvbnN0cnVjdG9yKCkgeyB9XG59XG4iXX0=

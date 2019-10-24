@@ -45,8 +45,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
     private sidebarService: AppSidebarService
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     this.displayBreakpoint(this.display);

@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Component, HostBinding, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 
 @Component({
@@ -10,13 +10,12 @@ export class AppFooterComponent implements OnInit, OnDestroy {
 
   private readonly fixedClass = 'footer-fixed';
 
+  @HostBinding('class.app-footer') _footer = true;
+
   constructor(
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {
-    renderer.addClass(hostElement.nativeElement, 'app-footer');
-  }
+  ) { }
 
   ngOnInit(): void {
     this.isFixed(this.fixed);

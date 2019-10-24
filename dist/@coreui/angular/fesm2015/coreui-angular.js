@@ -1,4 +1,4 @@
-import { Injectable, Inject, Renderer2, Directive, Input, HostListener, ElementRef, NgModule, Component, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Output, HostBinding, Pipe } from '@angular/core';
+import { Injectable, Inject, Renderer2, Directive, Input, HostListener, ElementRef, NgModule, Component, HostBinding, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Output, Pipe } from '@angular/core';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { NavigationEnd, Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -603,14 +603,12 @@ class AppAsideComponent {
     /**
      * @param {?} document
      * @param {?} renderer
-     * @param {?} hostElement
      */
-    constructor(document, renderer, hostElement) {
+    constructor(document, renderer) {
         this.document = document;
         this.renderer = renderer;
-        this.hostElement = hostElement;
         this.fixedClass = 'aside-menu-fixed';
-        renderer.addClass(hostElement.nativeElement, 'aside-menu');
+        this._aside = true;
     }
     /**
      * @return {?}
@@ -665,13 +663,13 @@ AppAsideComponent.decorators = [
 /** @nocollapse */
 AppAsideComponent.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Renderer2 },
-    { type: ElementRef }
+    { type: Renderer2 }
 ];
 AppAsideComponent.propDecorators = {
     display: [{ type: Input }],
     fixed: [{ type: Input }],
-    offCanvas: [{ type: Input }]
+    offCanvas: [{ type: Input }],
+    _aside: [{ type: HostBinding, args: ['class.aside-menu',] }]
 };
 if (false) {
     /** @type {?} */
@@ -685,6 +683,8 @@ if (false) {
      * @private
      */
     AppAsideComponent.prototype.fixedClass;
+    /** @type {?} */
+    AppAsideComponent.prototype._aside;
     /**
      * @type {?}
      * @private
@@ -695,11 +695,6 @@ if (false) {
      * @private
      */
     AppAsideComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppAsideComponent.prototype.hostElement;
 }
 
 /**
@@ -1042,14 +1037,12 @@ class AppFooterComponent {
     /**
      * @param {?} document
      * @param {?} renderer
-     * @param {?} hostElement
      */
-    constructor(document, renderer, hostElement) {
+    constructor(document, renderer) {
         this.document = document;
         this.renderer = renderer;
-        this.hostElement = hostElement;
         this.fixedClass = 'footer-fixed';
-        renderer.addClass(hostElement.nativeElement, 'app-footer');
+        this._footer = true;
     }
     /**
      * @return {?}
@@ -1082,11 +1075,11 @@ AppFooterComponent.decorators = [
 /** @nocollapse */
 AppFooterComponent.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Renderer2 },
-    { type: ElementRef }
+    { type: Renderer2 }
 ];
 AppFooterComponent.propDecorators = {
-    fixed: [{ type: Input }]
+    fixed: [{ type: Input }],
+    _footer: [{ type: HostBinding, args: ['class.app-footer',] }]
 };
 if (false) {
     /** @type {?} */
@@ -1096,6 +1089,8 @@ if (false) {
      * @private
      */
     AppFooterComponent.prototype.fixedClass;
+    /** @type {?} */
+    AppFooterComponent.prototype._footer;
     /**
      * @type {?}
      * @private
@@ -1106,11 +1101,6 @@ if (false) {
      * @private
      */
     AppFooterComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppFooterComponent.prototype.hostElement;
 }
 
 /**
@@ -1145,23 +1135,21 @@ class AppHeaderComponent {
     /**
      * @param {?} document
      * @param {?} renderer
-     * @param {?} hostElement
      */
-    constructor(document, renderer, hostElement) {
+    constructor(document, renderer) {
         this.document = document;
         this.renderer = renderer;
-        this.hostElement = hostElement;
         this.navbarBrandText = { icon: '🅲', text: '🅲 CoreUI' };
         // deprecated, use navbarBrandRouterLink instead
         this.navbarBrandRouterLink = '';
         this.fixedClass = 'header-fixed';
+        this._header = true;
+        this._navbar = true;
         this.breakpoints = ['xl', 'lg', 'md', 'sm', 'xs'];
         this.sidebarTogglerClass = 'd-none d-md-block';
         this.sidebarTogglerMobileClass = 'd-lg-none';
         this.asideTogglerClass = 'd-none d-md-block';
         this.asideTogglerMobileClass = 'd-lg-none';
-        renderer.addClass(hostElement.nativeElement, 'app-header');
-        renderer.addClass(hostElement.nativeElement, 'navbar');
     }
     /**
      * @return {?}
@@ -1226,8 +1214,7 @@ AppHeaderComponent.decorators = [
 /** @nocollapse */
 AppHeaderComponent.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Renderer2 },
-    { type: ElementRef }
+    { type: Renderer2 }
 ];
 AppHeaderComponent.propDecorators = {
     fixed: [{ type: Input }],
@@ -1240,7 +1227,9 @@ AppHeaderComponent.propDecorators = {
     sidebarToggler: [{ type: Input }],
     mobileSidebarToggler: [{ type: Input }],
     asideMenuToggler: [{ type: Input }],
-    mobileAsideMenuToggler: [{ type: Input }]
+    mobileAsideMenuToggler: [{ type: Input }],
+    _header: [{ type: HostBinding, args: ['class.app-header',] }],
+    _navbar: [{ type: HostBinding, args: ['class.navbar',] }]
 };
 if (false) {
     /** @type {?} */
@@ -1271,6 +1260,10 @@ if (false) {
      */
     AppHeaderComponent.prototype.fixedClass;
     /** @type {?} */
+    AppHeaderComponent.prototype._header;
+    /** @type {?} */
+    AppHeaderComponent.prototype._navbar;
+    /** @type {?} */
     AppHeaderComponent.prototype.navbarBrandImg;
     /**
      * @type {?}
@@ -1295,11 +1288,6 @@ if (false) {
      * @private
      */
     AppHeaderComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppHeaderComponent.prototype.hostElement;
 }
 
 /**
@@ -1579,19 +1567,9 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppSidebarFooterComponent {
-    /**
-     * @param {?} renderer
-     * @param {?} hostElement
-     */
-    constructor(renderer, hostElement) {
-        this.renderer = renderer;
-        this.hostElement = hostElement;
-        renderer.addClass(hostElement.nativeElement, 'app-sidebar-footer');
+    constructor() {
+        this._sidebarFooter = true;
     }
-    /**
-     * @return {?}
-     */
-    ngOnInit() { }
 }
 AppSidebarFooterComponent.decorators = [
     { type: Component, args: [{
@@ -1600,21 +1578,13 @@ AppSidebarFooterComponent.decorators = [
             }] }
 ];
 /** @nocollapse */
-AppSidebarFooterComponent.ctorParameters = () => [
-    { type: Renderer2 },
-    { type: ElementRef }
-];
+AppSidebarFooterComponent.ctorParameters = () => [];
+AppSidebarFooterComponent.propDecorators = {
+    _sidebarFooter: [{ type: HostBinding, args: ['class.sidebar-footer',] }]
+};
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFooterComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFooterComponent.prototype.hostElement;
+    /** @type {?} */
+    AppSidebarFooterComponent.prototype._sidebarFooter;
 }
 
 /**
@@ -1622,19 +1592,9 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppSidebarFormComponent {
-    /**
-     * @param {?} renderer
-     * @param {?} hostElement
-     */
-    constructor(renderer, hostElement) {
-        this.renderer = renderer;
-        this.hostElement = hostElement;
-        renderer.addClass(hostElement.nativeElement, 'sidebar-form');
+    constructor() {
+        this._sidebarForm = true;
     }
-    /**
-     * @return {?}
-     */
-    ngOnInit() { }
 }
 AppSidebarFormComponent.decorators = [
     { type: Component, args: [{
@@ -1643,21 +1603,13 @@ AppSidebarFormComponent.decorators = [
             }] }
 ];
 /** @nocollapse */
-AppSidebarFormComponent.ctorParameters = () => [
-    { type: Renderer2 },
-    { type: ElementRef }
-];
+AppSidebarFormComponent.ctorParameters = () => [];
+AppSidebarFormComponent.propDecorators = {
+    _sidebarForm: [{ type: HostBinding, args: ['class.sidebar-form',] }]
+};
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFormComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFormComponent.prototype.hostElement;
+    /** @type {?} */
+    AppSidebarFormComponent.prototype._sidebarForm;
 }
 
 /**
@@ -1665,19 +1617,9 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppSidebarHeaderComponent {
-    /**
-     * @param {?} renderer
-     * @param {?} hostElement
-     */
-    constructor(renderer, hostElement) {
-        this.renderer = renderer;
-        this.hostElement = hostElement;
-        renderer.addClass(hostElement.nativeElement, 'sidebar-header');
+    constructor() {
+        this._sidebarHeader = true;
     }
-    /**
-     * @return {?}
-     */
-    ngOnInit() { }
 }
 AppSidebarHeaderComponent.decorators = [
     { type: Component, args: [{
@@ -1686,21 +1628,13 @@ AppSidebarHeaderComponent.decorators = [
             }] }
 ];
 /** @nocollapse */
-AppSidebarHeaderComponent.ctorParameters = () => [
-    { type: Renderer2 },
-    { type: ElementRef }
-];
+AppSidebarHeaderComponent.ctorParameters = () => [];
+AppSidebarHeaderComponent.propDecorators = {
+    _sidebarHeader: [{ type: HostBinding, args: ['class.sidebar-header',] }]
+};
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarHeaderComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarHeaderComponent.prototype.hostElement;
+    /** @type {?} */
+    AppSidebarHeaderComponent.prototype._sidebarHeader;
 }
 
 /**
@@ -1736,7 +1670,7 @@ AppSidebarMinimizerComponent.ctorParameters = () => [
     { type: AppSidebarService }
 ];
 AppSidebarMinimizerComponent.propDecorators = {
-    role: [{ type: HostBinding, args: ['attr.role',] }],
+    role: [{ type: HostBinding, args: ['attr.role',] }, { type: Input }],
     _minimizer: [{ type: HostBinding, args: ['class.sidebar-minimizer',] }],
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
@@ -1832,17 +1766,13 @@ if (false) {
 class AppSidebarNavComponent {
     /**
      * @param {?} router
-     * @param {?} renderer
-     * @param {?} hostElement
      */
-    constructor(router, renderer, hostElement) {
+    constructor(router) {
         this.router = router;
-        this.renderer = renderer;
-        this.hostElement = hostElement;
         this.navItems = [];
+        this._sidebarBav = true;
         this.role = 'nav';
         this.navItemsArray = [];
-        renderer.addClass(hostElement.nativeElement, 'sidebar-nav');
     }
     /**
      * @param {?} changes
@@ -1860,33 +1790,24 @@ AppSidebarNavComponent.decorators = [
 ];
 /** @nocollapse */
 AppSidebarNavComponent.ctorParameters = () => [
-    { type: Router },
-    { type: Renderer2 },
-    { type: ElementRef }
+    { type: Router }
 ];
 AppSidebarNavComponent.propDecorators = {
     navItems: [{ type: Input }],
-    role: [{ type: HostBinding, args: ['attr.role',] }]
+    _sidebarBav: [{ type: HostBinding, args: ['class.sidebar-nav',] }],
+    role: [{ type: HostBinding, args: ['attr.role',] }, { type: Input }]
 };
 if (false) {
     /** @type {?} */
     AppSidebarNavComponent.prototype.navItems;
+    /** @type {?} */
+    AppSidebarNavComponent.prototype._sidebarBav;
     /** @type {?} */
     AppSidebarNavComponent.prototype.role;
     /** @type {?} */
     AppSidebarNavComponent.prototype.navItemsArray;
     /** @type {?} */
     AppSidebarNavComponent.prototype.router;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarNavComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarNavComponent.prototype.hostElement;
 }
 
 /**

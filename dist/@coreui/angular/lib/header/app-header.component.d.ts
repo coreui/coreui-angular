@@ -1,8 +1,7 @@
-import { ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { OnInit, OnDestroy, Renderer2 } from '@angular/core';
 export declare class AppHeaderComponent implements OnInit, OnDestroy {
     private document;
     private renderer;
-    private hostElement;
     fixed: boolean;
     navbarBrand: any;
     navbarBrandFull: any;
@@ -15,13 +14,15 @@ export declare class AppHeaderComponent implements OnInit, OnDestroy {
     asideMenuToggler: string | boolean;
     mobileAsideMenuToggler: boolean;
     private readonly fixedClass;
+    _header: boolean;
+    _navbar: boolean;
     navbarBrandImg: boolean;
     private readonly breakpoints;
     sidebarTogglerClass: string;
     sidebarTogglerMobileClass: string;
     asideTogglerClass: string;
     asideTogglerMobileClass: string;
-    constructor(document: any, renderer: Renderer2, hostElement: ElementRef);
+    constructor(document: any, renderer: Renderer2);
     ngOnInit(): void;
     ngOnDestroy(): void;
     isFixed(fixed?: boolean): void;
