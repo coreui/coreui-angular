@@ -1,4 +1,4 @@
-import { Injectable, Inject, Renderer2, Directive, Input, HostListener, ElementRef, NgModule, Component, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Output, HostBinding, Pipe } from '@angular/core';
+import { Injectable, Inject, Renderer2, Directive, Input, HostListener, ElementRef, NgModule, Component, HostBinding, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Output, Pipe } from '@angular/core';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { NavigationEnd, Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -643,12 +643,11 @@ function Replace(el) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AppAsideComponent = /** @class */ (function () {
-    function AppAsideComponent(document, renderer, hostElement) {
+    function AppAsideComponent(document, renderer) {
         this.document = document;
         this.renderer = renderer;
-        this.hostElement = hostElement;
         this.fixedClass = 'aside-menu-fixed';
-        renderer.addClass(hostElement.nativeElement, 'aside-menu');
+        this._aside = true;
     }
     /**
      * @return {?}
@@ -723,13 +722,13 @@ var AppAsideComponent = /** @class */ (function () {
     /** @nocollapse */
     AppAsideComponent.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-        { type: Renderer2 },
-        { type: ElementRef }
+        { type: Renderer2 }
     ]; };
     AppAsideComponent.propDecorators = {
         display: [{ type: Input }],
         fixed: [{ type: Input }],
-        offCanvas: [{ type: Input }]
+        offCanvas: [{ type: Input }],
+        _aside: [{ type: HostBinding, args: ['class.aside-menu',] }]
     };
     return AppAsideComponent;
 }());
@@ -745,6 +744,8 @@ if (false) {
      * @private
      */
     AppAsideComponent.prototype.fixedClass;
+    /** @type {?} */
+    AppAsideComponent.prototype._aside;
     /**
      * @type {?}
      * @private
@@ -755,11 +756,6 @@ if (false) {
      * @private
      */
     AppAsideComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppAsideComponent.prototype.hostElement;
 }
 
 /**
@@ -1111,12 +1107,11 @@ var AppBreadcrumbModule = /** @class */ (function () {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AppFooterComponent = /** @class */ (function () {
-    function AppFooterComponent(document, renderer, hostElement) {
+    function AppFooterComponent(document, renderer) {
         this.document = document;
         this.renderer = renderer;
-        this.hostElement = hostElement;
         this.fixedClass = 'footer-fixed';
-        renderer.addClass(hostElement.nativeElement, 'app-footer');
+        this._footer = true;
     }
     /**
      * @return {?}
@@ -1159,11 +1154,11 @@ var AppFooterComponent = /** @class */ (function () {
     /** @nocollapse */
     AppFooterComponent.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-        { type: Renderer2 },
-        { type: ElementRef }
+        { type: Renderer2 }
     ]; };
     AppFooterComponent.propDecorators = {
-        fixed: [{ type: Input }]
+        fixed: [{ type: Input }],
+        _footer: [{ type: HostBinding, args: ['class.app-footer',] }]
     };
     return AppFooterComponent;
 }());
@@ -1175,6 +1170,8 @@ if (false) {
      * @private
      */
     AppFooterComponent.prototype.fixedClass;
+    /** @type {?} */
+    AppFooterComponent.prototype._footer;
     /**
      * @type {?}
      * @private
@@ -1185,11 +1182,6 @@ if (false) {
      * @private
      */
     AppFooterComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppFooterComponent.prototype.hostElement;
 }
 
 /**
@@ -1224,21 +1216,20 @@ var AppFooterModule = /** @class */ (function () {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AppHeaderComponent = /** @class */ (function () {
-    function AppHeaderComponent(document, renderer, hostElement) {
+    function AppHeaderComponent(document, renderer) {
         this.document = document;
         this.renderer = renderer;
-        this.hostElement = hostElement;
         this.navbarBrandText = { icon: '🅲', text: '🅲 CoreUI' };
         // deprecated, use navbarBrandRouterLink instead
         this.navbarBrandRouterLink = '';
         this.fixedClass = 'header-fixed';
+        this._header = true;
+        this._navbar = true;
         this.breakpoints = ['xl', 'lg', 'md', 'sm', 'xs'];
         this.sidebarTogglerClass = 'd-none d-md-block';
         this.sidebarTogglerMobileClass = 'd-lg-none';
         this.asideTogglerClass = 'd-none d-md-block';
         this.asideTogglerMobileClass = 'd-lg-none';
-        renderer.addClass(hostElement.nativeElement, 'app-header');
-        renderer.addClass(hostElement.nativeElement, 'navbar');
     }
     /**
      * @return {?}
@@ -1323,8 +1314,7 @@ var AppHeaderComponent = /** @class */ (function () {
     /** @nocollapse */
     AppHeaderComponent.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-        { type: Renderer2 },
-        { type: ElementRef }
+        { type: Renderer2 }
     ]; };
     AppHeaderComponent.propDecorators = {
         fixed: [{ type: Input }],
@@ -1337,7 +1327,9 @@ var AppHeaderComponent = /** @class */ (function () {
         sidebarToggler: [{ type: Input }],
         mobileSidebarToggler: [{ type: Input }],
         asideMenuToggler: [{ type: Input }],
-        mobileAsideMenuToggler: [{ type: Input }]
+        mobileAsideMenuToggler: [{ type: Input }],
+        _header: [{ type: HostBinding, args: ['class.app-header',] }],
+        _navbar: [{ type: HostBinding, args: ['class.navbar',] }]
     };
     return AppHeaderComponent;
 }());
@@ -1370,6 +1362,10 @@ if (false) {
      */
     AppHeaderComponent.prototype.fixedClass;
     /** @type {?} */
+    AppHeaderComponent.prototype._header;
+    /** @type {?} */
+    AppHeaderComponent.prototype._navbar;
+    /** @type {?} */
     AppHeaderComponent.prototype.navbarBrandImg;
     /**
      * @type {?}
@@ -1394,11 +1390,6 @@ if (false) {
      * @private
      */
     AppHeaderComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppHeaderComponent.prototype.hostElement;
 }
 
 /**
@@ -1721,18 +1712,9 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AppSidebarFooterComponent = /** @class */ (function () {
-    function AppSidebarFooterComponent(renderer, hostElement) {
-        this.renderer = renderer;
-        this.hostElement = hostElement;
-        renderer.addClass(hostElement.nativeElement, 'app-sidebar-footer');
+    function AppSidebarFooterComponent() {
+        this._sidebarFooter = true;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarFooterComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () { };
     AppSidebarFooterComponent.decorators = [
         { type: Component, args: [{
                     selector: 'app-sidebar-footer, cui-sidebar-footer',
@@ -1740,23 +1722,15 @@ var AppSidebarFooterComponent = /** @class */ (function () {
                 }] }
     ];
     /** @nocollapse */
-    AppSidebarFooterComponent.ctorParameters = function () { return [
-        { type: Renderer2 },
-        { type: ElementRef }
-    ]; };
+    AppSidebarFooterComponent.ctorParameters = function () { return []; };
+    AppSidebarFooterComponent.propDecorators = {
+        _sidebarFooter: [{ type: HostBinding, args: ['class.sidebar-footer',] }]
+    };
     return AppSidebarFooterComponent;
 }());
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFooterComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFooterComponent.prototype.hostElement;
+    /** @type {?} */
+    AppSidebarFooterComponent.prototype._sidebarFooter;
 }
 
 /**
@@ -1764,18 +1738,9 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AppSidebarFormComponent = /** @class */ (function () {
-    function AppSidebarFormComponent(renderer, hostElement) {
-        this.renderer = renderer;
-        this.hostElement = hostElement;
-        renderer.addClass(hostElement.nativeElement, 'sidebar-form');
+    function AppSidebarFormComponent() {
+        this._sidebarForm = true;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarFormComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () { };
     AppSidebarFormComponent.decorators = [
         { type: Component, args: [{
                     selector: 'app-sidebar-form, cui-sidebar-form',
@@ -1783,23 +1748,15 @@ var AppSidebarFormComponent = /** @class */ (function () {
                 }] }
     ];
     /** @nocollapse */
-    AppSidebarFormComponent.ctorParameters = function () { return [
-        { type: Renderer2 },
-        { type: ElementRef }
-    ]; };
+    AppSidebarFormComponent.ctorParameters = function () { return []; };
+    AppSidebarFormComponent.propDecorators = {
+        _sidebarForm: [{ type: HostBinding, args: ['class.sidebar-form',] }]
+    };
     return AppSidebarFormComponent;
 }());
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFormComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarFormComponent.prototype.hostElement;
+    /** @type {?} */
+    AppSidebarFormComponent.prototype._sidebarForm;
 }
 
 /**
@@ -1807,18 +1764,9 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AppSidebarHeaderComponent = /** @class */ (function () {
-    function AppSidebarHeaderComponent(renderer, hostElement) {
-        this.renderer = renderer;
-        this.hostElement = hostElement;
-        renderer.addClass(hostElement.nativeElement, 'sidebar-header');
+    function AppSidebarHeaderComponent() {
+        this._sidebarHeader = true;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarHeaderComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () { };
     AppSidebarHeaderComponent.decorators = [
         { type: Component, args: [{
                     selector: 'app-sidebar-header, cui-sidebar-header',
@@ -1826,23 +1774,15 @@ var AppSidebarHeaderComponent = /** @class */ (function () {
                 }] }
     ];
     /** @nocollapse */
-    AppSidebarHeaderComponent.ctorParameters = function () { return [
-        { type: Renderer2 },
-        { type: ElementRef }
-    ]; };
+    AppSidebarHeaderComponent.ctorParameters = function () { return []; };
+    AppSidebarHeaderComponent.propDecorators = {
+        _sidebarHeader: [{ type: HostBinding, args: ['class.sidebar-header',] }]
+    };
     return AppSidebarHeaderComponent;
 }());
 if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarHeaderComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarHeaderComponent.prototype.hostElement;
+    /** @type {?} */
+    AppSidebarHeaderComponent.prototype._sidebarHeader;
 }
 
 /**
@@ -1878,7 +1818,7 @@ var AppSidebarMinimizerComponent = /** @class */ (function () {
         { type: AppSidebarService }
     ]; };
     AppSidebarMinimizerComponent.propDecorators = {
-        role: [{ type: HostBinding, args: ['attr.role',] }],
+        role: [{ type: HostBinding, args: ['attr.role',] }, { type: Input }],
         _minimizer: [{ type: HostBinding, args: ['class.sidebar-minimizer',] }],
         toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
     };
@@ -1977,14 +1917,12 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AppSidebarNavComponent = /** @class */ (function () {
-    function AppSidebarNavComponent(router, renderer, hostElement) {
+    function AppSidebarNavComponent(router) {
         this.router = router;
-        this.renderer = renderer;
-        this.hostElement = hostElement;
         this.navItems = [];
+        this._sidebarBav = true;
         this.role = 'nav';
         this.navItemsArray = [];
-        renderer.addClass(hostElement.nativeElement, 'sidebar-nav');
     }
     /**
      * @param {?} changes
@@ -2005,13 +1943,12 @@ var AppSidebarNavComponent = /** @class */ (function () {
     ];
     /** @nocollapse */
     AppSidebarNavComponent.ctorParameters = function () { return [
-        { type: Router },
-        { type: Renderer2 },
-        { type: ElementRef }
+        { type: Router }
     ]; };
     AppSidebarNavComponent.propDecorators = {
         navItems: [{ type: Input }],
-        role: [{ type: HostBinding, args: ['attr.role',] }]
+        _sidebarBav: [{ type: HostBinding, args: ['class.sidebar-nav',] }],
+        role: [{ type: HostBinding, args: ['attr.role',] }, { type: Input }]
     };
     return AppSidebarNavComponent;
 }());
@@ -2019,21 +1956,13 @@ if (false) {
     /** @type {?} */
     AppSidebarNavComponent.prototype.navItems;
     /** @type {?} */
+    AppSidebarNavComponent.prototype._sidebarBav;
+    /** @type {?} */
     AppSidebarNavComponent.prototype.role;
     /** @type {?} */
     AppSidebarNavComponent.prototype.navItemsArray;
     /** @type {?} */
     AppSidebarNavComponent.prototype.router;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarNavComponent.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
-    AppSidebarNavComponent.prototype.hostElement;
 }
 
 /**

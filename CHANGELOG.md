@@ -1,5 +1,28 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.6.3`
+- refactor: change renderer.addClass to HostBinding
+- test: add e2e test bed with some tests 
+
+###### dependencies update
+- update `@angular-devkit/build-angular` to `^0.803.14`
+- update `@angular-devkit/build-ng-packagr` to `^0.803.14`
+- update `@angular/cli` to `^8.3.14`
+- update `@angular/compiler-cli` to `^8.2.12`
+- update `@angular/language-service` to `^8.2.12`
+- update `@angular/animations` to `^8.2.12`
+- update `@angular/common` to `^8.2.12`
+- update `@angular/compiler` to `^8.2.12`
+- update `@angular/core` to `^8.2.12`
+- update `@angular/forms` to `^8.2.12`
+- update `@angular/platform-browser` to `^8.2.12`
+- update `@angular/platform-browser-dynamic` to `^8.2.12`
+- update `@angular/router` to `^8.2.12`
+- rollback `protractor` to `^5.4.2`
+- add `@coreui/coreui` (e2e)
+- add `simple-line-icons` (e2e)
+- add `ngx-perfect-scrollbar` (e2e)
+
 ##### `v2.6.2`
 - feat(Sidebar): `minimized` state @Input/@Output - thanks @Hagith #84
 - test(Sidebar): `minimized` state - thanks @Hagith #84

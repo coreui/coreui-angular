@@ -1,13 +1,12 @@
-import { ElementRef, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { INavData } from './app-sidebar-nav';
 export declare class AppSidebarNavComponent implements OnChanges {
     router: Router;
-    private renderer;
-    private hostElement;
     navItems: INavData[];
+    _sidebarBav: boolean;
     role: string;
     navItemsArray: INavData[];
-    constructor(router: Router, renderer: Renderer2, hostElement: ElementRef);
+    constructor(router: Router);
     ngOnChanges(changes: SimpleChanges): void;
 }
