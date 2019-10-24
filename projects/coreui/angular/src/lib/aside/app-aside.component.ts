@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, OnDestroy, Inject, Renderer2} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 
 import { asideMenuCssClasses } from '../shared';
@@ -14,13 +14,12 @@ export class AppAsideComponent implements OnInit, OnDestroy {
 
   private readonly fixedClass = 'aside-menu-fixed';
 
+  @HostBinding('class.aside-menu') _aside = true;
+
   constructor(
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {
-    renderer.addClass(hostElement.nativeElement, 'aside-menu');
-  }
+  ) { }
 
   ngOnInit(): void {
     this.isFixed(this.fixed);

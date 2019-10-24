@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, Optional } from '@angular/core';
+import {Component, HostBinding, HostListener, Input} from '@angular/core';
 
 import { AppSidebarService } from './app-sidebar.service';
 
@@ -8,7 +8,7 @@ import { AppSidebarService } from './app-sidebar.service';
 })
 export class AppSidebarMinimizerComponent {
 
-  @HostBinding('attr.role') role = 'button';
+  @HostBinding('attr.role') @Input() role = 'button';
   @HostBinding('class.sidebar-minimizer') _minimizer = true;
 
   @HostListener('click', ['$event'])

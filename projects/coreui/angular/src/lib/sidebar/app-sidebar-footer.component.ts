@@ -1,17 +1,12 @@
-import {Component, ElementRef, OnInit, Renderer2} from '@angular/core';
+import {Component, HostBinding} from '@angular/core';
 
 @Component({
   selector: 'app-sidebar-footer, cui-sidebar-footer',
   template: `<ng-content></ng-content>`
 })
-export class AppSidebarFooterComponent implements OnInit {
+export class AppSidebarFooterComponent {
 
-  constructor(
-    private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {
-    renderer.addClass(hostElement.nativeElement, 'app-sidebar-footer');
-  }
+  @HostBinding('class.sidebar-footer') _sidebarFooter = true;
 
-  ngOnInit() { }
+  constructor() { }
 }

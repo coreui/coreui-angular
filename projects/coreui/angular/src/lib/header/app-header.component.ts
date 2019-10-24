@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, OnDestroy, Inject, Renderer2} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -23,6 +23,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   @Input() mobileAsideMenuToggler: boolean;
 
   private readonly fixedClass = 'header-fixed';
+
+  @HostBinding('class.app-header') _header = true;
+  @HostBinding('class.navbar') _navbar = true;
+
   navbarBrandImg: boolean;
 
   private readonly breakpoints = ['xl', 'lg', 'md', 'sm', 'xs'];
@@ -34,11 +38,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {
-    renderer.addClass(hostElement.nativeElement, 'app-header');
-    renderer.addClass(hostElement.nativeElement, 'navbar');
-  }
+  ) { }
 
   ngOnInit(): void {
     this.isFixed(this.fixed);
