@@ -10,6 +10,7 @@ export abstract class SidebarNavService {
   abstract getSidebarNavItemsConfig(): INavData[];
 }
 
+@Injectable()
 export class SidebarNavHelper {
 
   itemType(item) {
