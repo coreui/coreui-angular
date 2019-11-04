@@ -30,6 +30,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -133,7 +139,8 @@
           "configurations": {
             "production": {
               "project": "projects/coreui/angular/ng-package.prod.json"
-            }
+            ,              "tsConfig": "projects/coreui/angular/tsconfig.lib.prod.json"
+}
           }
         },
         "test": {
