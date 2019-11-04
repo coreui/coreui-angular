@@ -14,7 +14,7 @@ import { CuiBreadcrumbComponent } from './cui-breadcrumb.component';
   declarations: [ AppBreadcrumbComponent, CuiBreadcrumbComponent ]
 })
 export class AppBreadcrumbModule {
-  static forRoot(config?: any): ModuleWithProviders {
+  static forRoot(config?: any): ModuleWithProviders<AppBreadcrumbModule> {
     return {
       ngModule: AppBreadcrumbModule,
       providers: [
