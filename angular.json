@@ -138,9 +138,9 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/coreui/angular/ng-package.prod.json"
-            ,              "tsConfig": "projects/coreui/angular/tsconfig.lib.prod.json"
-}
+              "project": "projects/coreui/angular/ng-package.prod.json",
+              "tsConfig": "projects/coreui/angular/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -166,5 +166,8 @@
       }
     }
   },
-  "defaultProject": "coreui"
+  "defaultProject": "coreui",
+  "cli": {
+    "analytics": false
+  }
 }

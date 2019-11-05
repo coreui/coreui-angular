@@ -1,5 +1,39 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.7.0`
+- chore: upgrade to Angular 9 - see also: 
+    - `https://next.angular.io/guide/updating-to-version-9`
+    - `https://update.angular.io/#8.0:9.0`
+    - add missing `@Injectable` decorator to `SidebarNavHelper`
+    - add a generic type to `ModuleWithProviders`
+    - tsconfig.lib `enableIvy: false` for library backward compatibility
+    - tsconfig.lib `annotateForClosureCompiler: false` and remove `tsickle` dependency 
+    - move `tslib` to `dependencies`
+    - tsconfig.app: add files[]
+    - test: deprecate TestBed.get() use TestBed.inject()
+- refactor(SidebarNavItem): add INavData items type
+
+###### dependencies update
+- update `@angular/animations` to `^9.0.0-rc.0`
+- update `@angular/common` to `^9.0.0-rc.0`
+- update `@angular/compiler` to `^9.0.0-rc.0`
+- update `@angular/core` to `^9.0.0-rc.0`
+- update `@angular/forms` to `^9.0.0-rc.0`
+- update `@angular/platform-browser` to `^9.0.0-rc.0`
+- update `@angular/platform-browser-dynamic` to `^9.0.0-rc.0`
+- update `@angular/router` to `^9.0.0-rc.0`
+- update `@angular-devkit/build-angular` to `~0.900.0-rc.0`
+- update `@angular-devkit/build-ng-packagr` to `~0.900.0-rc.0`
+- update `@angular/cli` to `^9.0.0-rc.0`
+- update `@angular/compiler-cli` to `^9.0.0-rc.0`
+- update `@angular/language-service` to `^9.0.0-rc.0`
+- update `ng-packagr` to `^9.0.0-rc.1`
+- update `typescript` to `~3.6.4"
+- update `@types/node` to `^12.11.1`
+- update `codelyzer` to `^5.1.2`
+- update `@coreui/coreui` to `^2.1.16`
+- update `@types/jasmine` to `^3.4.5`
+
 ##### `v2.6.3`
 - refactor: change renderer.addClass to HostBinding
 - test: add e2e test bed with some tests 
