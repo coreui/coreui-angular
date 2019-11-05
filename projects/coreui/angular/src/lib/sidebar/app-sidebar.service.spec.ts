@@ -6,7 +6,7 @@ describe('AppSidebarService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AppSidebarService = TestBed.get(AppSidebarService);
+    const service: AppSidebarService = TestBed.inject(AppSidebarService);
     expect(service).toBeTruthy();
   });
 });
