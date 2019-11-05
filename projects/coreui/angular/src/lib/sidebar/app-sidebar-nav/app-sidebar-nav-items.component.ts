@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {DOCUMENT} from '@angular/common';
 
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
+import {INavData} from '../app-sidebar-nav';
 
 @Component({
   selector: 'app-sidebar-nav-items, cui-sidebar-nav-items',
@@ -52,13 +53,13 @@ import {SidebarNavHelper} from '../app-sidebar-nav.service';
 })
 export class AppSidebarNavItemsComponent {
 
-  protected _items: any;
+  protected _items: INavData[];
 
   @Input()
-  set items(items: Array<any>) {
+  set items(items:  INavData[]) {
     this._items = [...items];
   }
-  get items(): Array<any> {
+  get items(): INavData[] {
     return this._items;
   }
 
