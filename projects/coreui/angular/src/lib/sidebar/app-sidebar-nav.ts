@@ -1,5 +1,3 @@
-import {QueryParamsHandling} from '@angular/router';
-
 export interface INavAttributes {
   [propName: string]: any;
 }
@@ -23,7 +21,7 @@ export interface INavLabel {
 export interface INavLinkProps {
   queryParams?: {[k: string]: any};
   fragment?: string;
-  queryParamsHandling?: QueryParamsHandling;
+  queryParamsHandling?: 'merge' | 'preserve' | '';
   preserveFragment?: boolean;
   skipLocationChange?: boolean;
   replaceUrl?: boolean;

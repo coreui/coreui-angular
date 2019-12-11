@@ -1,5 +1,10 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.7.x`
+- fix(sidebar-nav): @angular/router has no exported member QueryParamsHandling, see: 
+    - https://github.com/angular/angular/issues/30925
+    - https://github.com/angular/angular/issues/30816
+
 ##### `v2.7.0`
 - chore: upgrade to Angular 9 - see also: 
     - `https://next.angular.io/guide/updating-to-version-9`
