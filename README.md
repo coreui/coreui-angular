@@ -1,19 +1,18 @@
 # [@coreui/angular](https://coreui.io/angular)
 
-[![@coreui angular](https://img.shields.io/badge/@coreui%20-angular-lightgrey.svg?style=flat-square)](https://github.com/coreui/angular)
-[![npm package][npm-coreui-angular-badge]][npm-coreui-angular] 
-[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
-[![@coreui angular-next](https://img.shields.io/badge/@coreui%20-angular@next-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui-angular)
-[![npm-coreui-angular-next][npm-coreui-angular-next]][npm-coreui-angular]  
+[![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular] 
+[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
+[![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]  
 [![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
 [![npm package][npm-coreui-badge]][npm-coreui]
 [![NPM downloads][npm-coreui-download]][npm-coreui]    
-![angular](https://img.shields.io/badge/angular-^9.0.0%20rc.0-lightgrey.svg?style=flat-square)  
+![angular](https://img.shields.io/badge/angular-^9.0.0--rc.5-lightgrey.svg?style=flat-square&logo=angular)  
 
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
-[npm-coreui-angular-badge]: https://img.shields.io/npm/v/@coreui/angular.png?style=flat-square  
+[npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=red  
+[npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red  
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  
-[npm-coreui-angular-next]: https://img.shields.io/npm/v/@coreui/angular/next.png?style=flat-square
+[npm-coreui-angular-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square
 [npm-coreui]: https://www.npmjs.com/package/@coreui/coreui
 [npm-coreui-badge]: https://img.shields.io/npm/v/@coreui/coreui.png?style=flat-square
 [npm-coreui-download]: https://img.shields.io/npm/dm/@coreui/coreui.svg?style=flat-square
@@ -57,7 +56,7 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
 ###### Node.js
-Angular 8 requires `Node.js` version 12.x
+Angular 9 requires `Node.js` version 12.x
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -68,7 +67,7 @@ Install the Angular CLI globally using a terminal/console window.
 npm install -g @angular/cli
 ```
 
-##### Update to Angular 8
+##### Update to Angular 9
 see: [https://update.angular.io](https://update.angular.io)
 
 ## CoreUI Installation

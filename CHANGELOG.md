@@ -1,5 +1,32 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.7.1`
+- fix(sidebar-nav): @angular/router has no exported member QueryParamsHandling, see: 
+    - https://github.com/angular/angular/issues/30925
+    - https://github.com/angular/angular/issues/30816
+
+###### dependencies update
+- update `@angular/animations` to `^9.0.0-rc.5`
+- update `@angular/common` to `^9.0.0-rc.5`
+- update `@angular/compiler` to `^9.0.0-rc.5`
+- update `@angular/core` to `^9.0.0-rc.5`
+- update `@angular/forms` to `^9.0.0-rc.5`
+- update `@angular/platform-browser` to `^9.0.0-rc.5`
+- update `@angular/platform-browser-dynamic` to `^9.0.0-rc.5`
+- update `@angular/router` to `^9.0.0-rc.5`
+- update `core-js` to `^2.6.11`
+- update `@angular-devkit/build-angular` to `^0.900.0-rc.5`
+- update `@angular-devkit/build-ng-packagr` to `^0.900.0-rc.5`
+- update `@angular/cli` to `^9.0.0-rc.5`
+- update `@angular/compiler-cli` to `^9.0.0-rc.5`
+- update `@angular/language-service` to `^9.0.0-rc.5`
+- update `@types/jasmine` to `^3.5.0`
+- update `@types/node` to `^12.12.17`
+- update `karma-coverage-istanbul-reporter` to `^2.1.1`
+- update `ng-packagr` to `^9.0.0-rc.3`
+- update `ts-node` to `^8.5.4`
+- update `tslint` to `^5.20.1`
+
 ##### `v2.7.0`
 - chore: upgrade to Angular 9 - see also: 
     - `https://next.angular.io/guide/updating-to-version-9`
