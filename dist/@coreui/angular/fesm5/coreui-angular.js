@@ -1581,6 +1581,7 @@ var AppSidebarModule = /** @class */ (function () {
                 AppSidebarNavComponent,
                 AppSidebarNavDividerComponent,
                 AppSidebarNavDropdownComponent,
+                AppSidebarNavLabelComponent,
                 AppSidebarNavLinkComponent,
                 AppSidebarNavLinkContentComponent,
                 AppSidebarNavTitleComponent,
@@ -1628,5 +1629,5 @@ var AppSidebarModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { AppAsideComponent, AppAsideModule, AppBreadcrumbComponent, AppBreadcrumbModule, AppFooterComponent, AppFooterModule, AppHeaderComponent, AppHeaderModule, AppSidebarComponent, AppSidebarModule, CuiBreadcrumbComponent, LayoutModule as ɵa, SidebarToggleDirective as ɵb, AppSidebarNavIconPipe as ɵba, AppSidebarNavBadgePipe as ɵbb, AppSidebarNavLinkPipe as ɵbc, AppSidebarNavItemClassPipe as ɵbd, SidebarMinimizeDirective as ɵc, MobileSidebarToggleDirective as ɵd, SidebarOffCanvasCloseDirective as ɵe, BrandMinimizeDirective as ɵf, AsideToggleDirective as ɵg, HtmlAttributesDirective as ɵh, ClassToggler as ɵi, AppBreadcrumbService as ɵj, AppSidebarService as ɵk, AppSidebarFooterComponent as ɵl, AppSidebarFormComponent as ɵm, AppSidebarHeaderComponent as ɵn, AppSidebarMinimizerComponent as ɵo, AppSidebarNavItemsComponent as ɵp, SidebarNavHelper as ɵq, AppSidebarNavComponent as ɵr, AppSidebarNavDividerComponent as ɵs, AppSidebarNavDropdownComponent as ɵt, AppSidebarNavLinkContentComponent as ɵu, AppSidebarNavLinkComponent as ɵv, AppSidebarNavTitleComponent as ɵw, NavDropdownDirective as ɵx, NavDropdownToggleDirective as ɵy, AppSidebarNavLabelComponent as ɵz };
+export { AppAsideComponent, AppAsideModule, AppBreadcrumbComponent, AppBreadcrumbModule, AppFooterComponent, AppFooterModule, AppHeaderComponent, AppHeaderModule, AppSidebarComponent, AppSidebarModule, CuiBreadcrumbComponent, LayoutModule as ɵa, SidebarToggleDirective as ɵb, AppSidebarNavIconPipe as ɵba, AppSidebarNavBadgePipe as ɵbb, AppSidebarNavLinkPipe as ɵbc, AppSidebarNavItemClassPipe as ɵbd, SidebarMinimizeDirective as ɵc, MobileSidebarToggleDirective as ɵd, SidebarOffCanvasCloseDirective as ɵe, BrandMinimizeDirective as ɵf, AsideToggleDirective as ɵg, HtmlAttributesDirective as ɵh, ClassToggler as ɵi, AppBreadcrumbService as ɵj, AppSidebarService as ɵk, AppSidebarFooterComponent as ɵl, AppSidebarFormComponent as ɵm, AppSidebarHeaderComponent as ɵn, AppSidebarMinimizerComponent as ɵo, AppSidebarNavItemsComponent as ɵp, SidebarNavHelper as ɵq, AppSidebarNavComponent as ɵr, AppSidebarNavDividerComponent as ɵs, AppSidebarNavDropdownComponent as ɵt, AppSidebarNavLabelComponent as ɵu, AppSidebarNavLinkContentComponent as ɵv, AppSidebarNavLinkComponent as ɵw, AppSidebarNavTitleComponent as ɵx, NavDropdownDirective as ɵy, NavDropdownToggleDirective as ɵz };
 //# sourceMappingURL=coreui-angular.js.map
