@@ -1777,6 +1777,7 @@
                     AppSidebarNavComponent,
                     AppSidebarNavDividerComponent,
                     AppSidebarNavDropdownComponent,
+                    AppSidebarNavLabelComponent,
                     AppSidebarNavLinkComponent,
                     AppSidebarNavLinkContentComponent,
                     AppSidebarNavTitleComponent,
@@ -1850,12 +1851,12 @@
     exports.ɵr = AppSidebarNavComponent;
     exports.ɵs = AppSidebarNavDividerComponent;
     exports.ɵt = AppSidebarNavDropdownComponent;
-    exports.ɵu = AppSidebarNavLinkContentComponent;
-    exports.ɵv = AppSidebarNavLinkComponent;
-    exports.ɵw = AppSidebarNavTitleComponent;
-    exports.ɵx = NavDropdownDirective;
-    exports.ɵy = NavDropdownToggleDirective;
-    exports.ɵz = AppSidebarNavLabelComponent;
+    exports.ɵu = AppSidebarNavLabelComponent;
+    exports.ɵv = AppSidebarNavLinkContentComponent;
+    exports.ɵw = AppSidebarNavLinkComponent;
+    exports.ɵx = AppSidebarNavTitleComponent;
+    exports.ɵy = NavDropdownDirective;
+    exports.ɵz = NavDropdownToggleDirective;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

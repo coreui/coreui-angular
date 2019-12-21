@@ -11,7 +11,7 @@ export { AppSidebarFormComponent as ɵm } from './lib/sidebar/app-sidebar-form.c
 export { AppSidebarHeaderComponent as ɵn } from './lib/sidebar/app-sidebar-header.component';
 export { AppSidebarMinimizerComponent as ɵo } from './lib/sidebar/app-sidebar-minimizer.component';
 export { AppSidebarNavComponent as ɵr } from './lib/sidebar/app-sidebar-nav.component';
-export { NavDropdownDirective as ɵx, NavDropdownToggleDirective as ɵy } from './lib/sidebar/app-sidebar-nav.directive';
+export { NavDropdownDirective as ɵy, NavDropdownToggleDirective as ɵz } from './lib/sidebar/app-sidebar-nav.directive';
 export { SidebarNavHelper as ɵq } from './lib/sidebar/app-sidebar-nav.service';
 export { AppSidebarNavBadgePipe as ɵbb } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-badge.pipe';
 export { AppSidebarNavDividerComponent as ɵs } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-divider.component';
@@ -19,8 +19,8 @@ export { AppSidebarNavDropdownComponent as ɵt } from './lib/sidebar/app-sidebar
 export { AppSidebarNavIconPipe as ɵba } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-icon.pipe';
 export { AppSidebarNavItemClassPipe as ɵbd } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-item-class.pipe';
 export { AppSidebarNavItemsComponent as ɵp } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-items.component';
-export { AppSidebarNavLabelComponent as ɵz } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-label.component';
-export { AppSidebarNavLinkComponent as ɵv, AppSidebarNavLinkContentComponent as ɵu } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-link.component';
+export { AppSidebarNavLabelComponent as ɵu } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-label.component';
+export { AppSidebarNavLinkComponent as ɵw, AppSidebarNavLinkContentComponent as ɵv } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-link.component';
 export { AppSidebarNavLinkPipe as ɵbc } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-link.pipe';
-export { AppSidebarNavTitleComponent as ɵw } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-title.component';
+export { AppSidebarNavTitleComponent as ɵx } from './lib/sidebar/app-sidebar-nav/app-sidebar-nav-title.component';
 export { AppSidebarService as ɵk } from './lib/sidebar/app-sidebar.service';

@@ -42,6 +42,7 @@ import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-it
     AppSidebarNavComponent,
     AppSidebarNavDividerComponent,
     AppSidebarNavDropdownComponent,
+    AppSidebarNavLabelComponent,
     AppSidebarNavLinkComponent,
     AppSidebarNavLinkContentComponent,
     AppSidebarNavTitleComponent,

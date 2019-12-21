@@ -1,5 +1,25 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.7.2`
+- fix(sidebar-nav): AppSidebarNavLabelComponent is not exported in the AppSidebarModule - thanks @zwiras #63
+
+###### dependencies update
+- update `@angular/animations` to `^9.0.0-rc.7`
+- update `@angular/common` to `^9.0.0-rc.7`
+- update `@angular/compiler` to `^9.0.0-rc.7`
+- update `@angular/core` to `^9.0.0-rc.7`
+- update `@angular/forms` to `^9.0.0-rc.7`
+- update `@angular/platform-browser` to `^9.0.0-rc.7`
+- update `@angular/platform-browser-dynamic` to `^9.0.0-rc.7`
+- update `@angular/router` to `^9.0.0-rc.7`
+- update `@angular-devkit/build-angular` to `^0.900.0-rc.7`
+- update `@angular-devkit/build-ng-packagr` to `^0.900.0-rc.7`
+- update `@angular/cli` to `^9.0.0-rc.7`
+- update `@angular/compiler-cli` to `^9.0.0-rc.7`
+- update `@angular/language-service` to `^9.0.0-rc.7`
+- update `@types/node` to `^12.12.21`
+- update `codelyzer` to `^5.2.1`
+
 ##### `v2.7.1`
 - fix(sidebar-nav): @angular/router has no exported member QueryParamsHandling, see: 
     - https://github.com/angular/angular/issues/30925
