@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
 import { AppSidebarComponent } from './app-sidebar.component';
 
 describe('AppSidebarComponent', () => {
@@ -7,6 +9,7 @@ describe('AppSidebarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes([])],
       declarations: [ AppSidebarComponent ],
     })
     .compileComponents();
