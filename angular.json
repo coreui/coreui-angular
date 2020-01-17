@@ -125,9 +125,9 @@
       }
     },
     "@coreui/angular": {
+      "projectType": "library",
       "root": "projects/coreui/angular",
       "sourceRoot": "projects/coreui/angular/src",
-      "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
