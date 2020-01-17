@@ -9,7 +9,7 @@ import { AppSidebarService } from './app-sidebar.service';
 export class AppSidebarMinimizerComponent {
 
   @HostBinding('attr.role') @Input() role = 'button';
-  @HostBinding('class.sidebar-minimizer') _minimizer = true;
+  @HostBinding('class.sidebar-minimizer') sidebarMinimizerClass = true;
 
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {

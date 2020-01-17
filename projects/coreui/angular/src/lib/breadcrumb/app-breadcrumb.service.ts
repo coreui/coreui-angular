@@ -9,20 +9,20 @@ import { filter } from 'rxjs/operators';
 )
 export class AppBreadcrumbService {
 
-  breadcrumbs: Observable<Array<Object>>;
+  breadcrumbs: Observable<Array<any>>;
 
-  private _breadcrumbs: BehaviorSubject<Array<Object>>;
+  private breadcrumbSubject: BehaviorSubject<Array<any>>;
 
   constructor(private router: Router, private route: ActivatedRoute) {
 
-    this._breadcrumbs = new BehaviorSubject<Object[]>(new Array<Object>());
+    this.breadcrumbSubject = new BehaviorSubject<any[]>(new Array<any>());
 
-    this.breadcrumbs = this._breadcrumbs.asObservable();
+    this.breadcrumbs = this.breadcrumbSubject.asObservable();
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
       const breadcrumbs = [];
-      let currentRoute = this.route.root,
-      url = '';
+      let currentRoute = this.route.root;
+      let url = '';
       do {
         const childrenRoutes = currentRoute.children;
         currentRoute = null;
@@ -33,14 +33,14 @@ export class AppBreadcrumbService {
             url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
             breadcrumbs.push({
               label: route.snapshot.data,
-              url:   url
+              url
             });
             currentRoute = route;
           }
         });
       } while (currentRoute);
 
-      this._breadcrumbs.next(Object.assign([], breadcrumbs));
+      this.breadcrumbSubject.next(Object.assign([], breadcrumbs));
 
       return breadcrumbs;
     });

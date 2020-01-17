@@ -10,7 +10,7 @@ export class AppSidebarNavLabelComponent implements OnInit {
 
   private classes = {
     'nav-label': true,
-    'active': true
+    active: true
   };
   private iconClasses = {};
 

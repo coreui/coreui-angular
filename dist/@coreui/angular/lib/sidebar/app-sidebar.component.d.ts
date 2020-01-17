@@ -16,7 +16,7 @@ export declare class AppSidebarComponent implements OnInit, OnDestroy {
      * Primarily used to facilitate two-way binding.
      */
     minimizedChange: EventEmitter<boolean>;
-    _sidebar: boolean;
+    sidebarClass: boolean;
     constructor(document: any, renderer: Renderer2, sidebarService: AppSidebarService);
     ngOnInit(): void;
     ngOnDestroy(): void;

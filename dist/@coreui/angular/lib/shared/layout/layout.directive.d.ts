@@ -1,8 +1,8 @@
 import { ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { ClassToggler } from '../toggle-classes';
 /**
-* Allows the sidebar to be toggled via click.
-*/
+ * Allows the sidebar to be toggled via click.
+ */
 export declare class SidebarToggleDirective implements OnInit {
     private classToggler;
     breakpoint: string;
@@ -24,8 +24,8 @@ export declare class MobileSidebarToggleDirective {
     toggleOpen($event: any): void;
 }
 /**
-* Allows the off-canvas sidebar to be closed via click.
-*/
+ * Allows the off-canvas sidebar to be closed via click.
+ */
 export declare class SidebarOffCanvasCloseDirective {
     private document;
     private renderer;
@@ -39,8 +39,8 @@ export declare class BrandMinimizeDirective {
     toggleOpen($event: any): void;
 }
 /**
-* Allows the aside to be toggled via click.
-*/
+ * Allows the aside to be toggled via click.
+ */
 export declare class AsideToggleDirective implements OnInit {
     private classToggler;
     breakpoint: string;

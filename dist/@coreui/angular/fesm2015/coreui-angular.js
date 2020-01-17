@@ -66,8 +66,8 @@ ClassToggler = __decorate([
 ], ClassToggler);
 
 /**
-* Allows the sidebar to be toggled via click.
-*/
+ * Allows the sidebar to be toggled via click.
+ */
 let SidebarToggleDirective = class SidebarToggleDirective {
     constructor(classToggler) {
         this.classToggler = classToggler;
@@ -162,8 +162,8 @@ MobileSidebarToggleDirective = __decorate([
     __metadata("design:paramtypes", [Object, Renderer2])
 ], MobileSidebarToggleDirective);
 /**
-* Allows the off-canvas sidebar to be closed via click.
-*/
+ * Allows the off-canvas sidebar to be closed via click.
+ */
 let SidebarOffCanvasCloseDirective = class SidebarOffCanvasCloseDirective {
     constructor(document, renderer) {
         this.document = document;
@@ -227,8 +227,8 @@ BrandMinimizeDirective = __decorate([
     __metadata("design:paramtypes", [Object, Renderer2])
 ], BrandMinimizeDirective);
 /**
-* Allows the aside to be toggled via click.
-*/
+ * Allows the aside to be toggled via click.
+ */
 let AsideToggleDirective = class AsideToggleDirective {
     constructor(classToggler) {
         this.classToggler = classToggler;
@@ -361,7 +361,7 @@ let AppAsideComponent = class AppAsideComponent {
         this.document = document;
         this.renderer = renderer;
         this.fixedClass = 'aside-menu-fixed';
-        this._aside = true;
+        this.asideMenuClass = true;
     }
     ngOnInit() {
         this.isFixed(this.fixed);
@@ -407,7 +407,7 @@ __decorate([
 __decorate([
     HostBinding('class.aside-menu'),
     __metadata("design:type", Object)
-], AppAsideComponent.prototype, "_aside", void 0);
+], AppAsideComponent.prototype, "asideMenuClass", void 0);
 AppAsideComponent = __decorate([
     Component({
         selector: 'app-aside, cui-aside',
@@ -439,11 +439,12 @@ let AppBreadcrumbService = class AppBreadcrumbService {
     constructor(router, route) {
         this.router = router;
         this.route = route;
-        this._breadcrumbs = new BehaviorSubject(new Array());
-        this.breadcrumbs = this._breadcrumbs.asObservable();
+        this.breadcrumbSubject = new BehaviorSubject(new Array());
+        this.breadcrumbs = this.breadcrumbSubject.asObservable();
         this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
             const breadcrumbs = [];
-            let currentRoute = this.route.root, url = '';
+            let currentRoute = this.route.root;
+            let url = '';
             do {
                 const childrenRoutes = currentRoute.children;
                 currentRoute = null;
@@ -454,13 +455,13 @@ let AppBreadcrumbService = class AppBreadcrumbService {
                         url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
                         breadcrumbs.push({
                             label: route.snapshot.data,
-                            url: url
+                            url
                         });
                         currentRoute = route;
                     }
                 });
             } while (currentRoute);
-            this._breadcrumbs.next(Object.assign([], breadcrumbs));
+            this.breadcrumbSubject.next(Object.assign([], breadcrumbs));
             return breadcrumbs;
         });
     }
@@ -594,7 +595,7 @@ let AppFooterComponent = class AppFooterComponent {
         this.document = document;
         this.renderer = renderer;
         this.fixedClass = 'footer-fixed';
-        this._footer = true;
+        this.appFooterClass = true;
     }
     ngOnInit() {
         this.isFixed(this.fixed);
@@ -619,7 +620,7 @@ __decorate([
 __decorate([
     HostBinding('class.app-footer'),
     __metadata("design:type", Object)
-], AppFooterComponent.prototype, "_footer", void 0);
+], AppFooterComponent.prototype, "appFooterClass", void 0);
 AppFooterComponent = __decorate([
     Component({
         selector: 'app-footer, cui-footer',
@@ -646,8 +647,8 @@ let AppHeaderComponent = class AppHeaderComponent {
         this.navbarBrandText = { icon: '🅲', text: '🅲 CoreUI' };
         this.navbarBrandRouterLink = '';
         this.fixedClass = 'header-fixed';
-        this._header = true;
-        this._navbar = true;
+        this.appHeaderClass = true;
+        this.navbarClass = true;
         this.breakpoints = ['xl', 'lg', 'md', 'sm', 'xs'];
         this.sidebarTogglerClass = 'd-none d-md-block';
         this.sidebarTogglerMobileClass = 'd-lg-none';
@@ -738,11 +739,11 @@ __decorate([
 __decorate([
     HostBinding('class.app-header'),
     __metadata("design:type", Object)
-], AppHeaderComponent.prototype, "_header", void 0);
+], AppHeaderComponent.prototype, "appHeaderClass", void 0);
 __decorate([
     HostBinding('class.navbar'),
     __metadata("design:type", Object)
-], AppHeaderComponent.prototype, "_navbar", void 0);
+], AppHeaderComponent.prototype, "navbarClass", void 0);
 AppHeaderComponent = __decorate([
     Component({
         selector: 'app-header, cui-header',
@@ -799,7 +800,7 @@ let AppSidebarComponent = class AppSidebarComponent {
          * Primarily used to facilitate two-way binding.
          */
         this.minimizedChange = new EventEmitter();
-        this._sidebar = true;
+        this.sidebarClass = true;
     }
     get minimized() {
         return this._minimized;
@@ -900,7 +901,7 @@ __decorate([
 __decorate([
     HostBinding('class.sidebar'),
     __metadata("design:type", Object)
-], AppSidebarComponent.prototype, "_sidebar", void 0);
+], AppSidebarComponent.prototype, "sidebarClass", void 0);
 AppSidebarComponent = __decorate([
     Component({
         selector: 'app-sidebar, cui-sidebar',
@@ -913,13 +914,13 @@ AppSidebarComponent = __decorate([
 
 let AppSidebarFooterComponent = class AppSidebarFooterComponent {
     constructor() {
-        this._sidebarFooter = true;
+        this.sidebarFooterClass = true;
     }
 };
 __decorate([
     HostBinding('class.sidebar-footer'),
     __metadata("design:type", Object)
-], AppSidebarFooterComponent.prototype, "_sidebarFooter", void 0);
+], AppSidebarFooterComponent.prototype, "sidebarFooterClass", void 0);
 AppSidebarFooterComponent = __decorate([
     Component({
         selector: 'app-sidebar-footer, cui-sidebar-footer',
@@ -930,13 +931,13 @@ AppSidebarFooterComponent = __decorate([
 
 let AppSidebarFormComponent = class AppSidebarFormComponent {
     constructor() {
-        this._sidebarForm = true;
+        this.sidebarFormClass = true;
     }
 };
 __decorate([
     HostBinding('class.sidebar-form'),
     __metadata("design:type", Object)
-], AppSidebarFormComponent.prototype, "_sidebarForm", void 0);
+], AppSidebarFormComponent.prototype, "sidebarFormClass", void 0);
 AppSidebarFormComponent = __decorate([
     Component({
         selector: 'app-sidebar-form, cui-sidebar-form',
@@ -947,13 +948,13 @@ AppSidebarFormComponent = __decorate([
 
 let AppSidebarHeaderComponent = class AppSidebarHeaderComponent {
     constructor() {
-        this._sidebarHeader = true;
+        this.sidebarHeaderClass = true;
     }
 };
 __decorate([
     HostBinding('class.sidebar-header'),
     __metadata("design:type", Object)
-], AppSidebarHeaderComponent.prototype, "_sidebarHeader", void 0);
+], AppSidebarHeaderComponent.prototype, "sidebarHeaderClass", void 0);
 AppSidebarHeaderComponent = __decorate([
     Component({
         selector: 'app-sidebar-header, cui-sidebar-header',
@@ -966,7 +967,7 @@ let AppSidebarMinimizerComponent = class AppSidebarMinimizerComponent {
     constructor(sidebarService) {
         this.sidebarService = sidebarService;
         this.role = 'button';
-        this._minimizer = true;
+        this.sidebarMinimizerClass = true;
     }
     toggleOpen($event) {
         $event.preventDefault();
@@ -983,7 +984,7 @@ __decorate([
 __decorate([
     HostBinding('class.sidebar-minimizer'),
     __metadata("design:type", Object)
-], AppSidebarMinimizerComponent.prototype, "_minimizer", void 0);
+], AppSidebarMinimizerComponent.prototype, "sidebarMinimizerClass", void 0);
 __decorate([
     HostListener('click', ['$event']),
     __metadata("design:type", Function),
@@ -1047,7 +1048,7 @@ let AppSidebarNavComponent = class AppSidebarNavComponent {
     constructor(router) {
         this.router = router;
         this.navItems = [];
-        this._sidebarBav = true;
+        this.sidebarNavClass = true;
         this.role = 'nav';
         this.navItemsArray = [];
     }
@@ -1065,7 +1066,7 @@ __decorate([
 __decorate([
     HostBinding('class.sidebar-nav'),
     __metadata("design:type", Object)
-], AppSidebarNavComponent.prototype, "_sidebarBav", void 0);
+], AppSidebarNavComponent.prototype, "sidebarNavClass", void 0);
 __decorate([
     HostBinding('attr.role'), Input(),
     __metadata("design:type", Object)
@@ -1262,6 +1263,8 @@ let AppSidebarNavLinkContentComponent = class AppSidebarNavLinkContentComponent 
     constructor(helper) {
         this.helper = helper;
     }
+    ngOnInit() { }
+    ngOnDestroy() { }
 };
 AppSidebarNavLinkContentComponent.ctorParameters = () => [
     { type: SidebarNavHelper }
@@ -1293,10 +1296,10 @@ let AppSidebarNavLinkComponent = class AppSidebarNavLinkComponent {
         }));
     }
     set item(item) {
-        this._item = JSON.parse(JSON.stringify(item));
+        this._Item = JSON.parse(JSON.stringify(item));
     }
     get item() {
-        return this._item;
+        return this._Item;
     }
     ngOnInit() {
         this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url));
@@ -1420,7 +1423,7 @@ let AppSidebarNavLabelComponent = class AppSidebarNavLabelComponent {
         this.helper = helper;
         this.classes = {
             'nav-label': true,
-            'active': true
+            active: true
         };
         this.iconClasses = {};
     }
@@ -1474,7 +1477,7 @@ AppSidebarNavIconPipe = __decorate([
 let AppSidebarNavBadgePipe = class AppSidebarNavBadgePipe {
     transform(item, args) {
         const classes = {
-            'badge': true
+            badge: true
         };
         const variant = `badge-${item.badge.variant}`;
         classes[variant] = !!item.badge.variant;
@@ -1593,6 +1596,7 @@ AppSidebarModule = __decorate([
  * Public API Surface of @coreui/angular
  */
 // export * from './lib/shared/index';
+// export * from './lib/coreui.module';
 
 /**
  * Generated bundle index. Do not edit.

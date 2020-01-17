@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 export declare class AppBreadcrumbService {
     private router;
     private route;
-    breadcrumbs: Observable<Array<Object>>;
-    private _breadcrumbs;
+    breadcrumbs: Observable<Array<any>>;
+    private breadcrumbSubject;
     constructor(router: Router, route: ActivatedRoute);
 }

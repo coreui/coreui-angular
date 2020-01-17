@@ -6,7 +6,7 @@ export declare class AppAsideComponent implements OnInit, OnDestroy {
     fixed: boolean;
     offCanvas: boolean;
     private readonly fixedClass;
-    _aside: boolean;
+    asideMenuClass: boolean;
     constructor(document: any, renderer: Renderer2);
     ngOnInit(): void;
     ngOnDestroy(): void;

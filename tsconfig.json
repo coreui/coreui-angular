@@ -2,32 +2,30 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "importHelpers": true,
-    "module": "esnext",
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
     "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "esnext",
+      "es2018",
       "dom"
     ],
     "paths": {
-      "coreui-angular": [
-        "dist/coreui-angular"
-      ],
-      "angular": [
-        "dist/angular"
-      ],
-      "angular/*": [
-        "dist/angular/*"
+      "@coreui/angular": [
+        "dist/coreui/angular"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }

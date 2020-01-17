@@ -4,7 +4,7 @@ import { INavData } from './app-sidebar-nav';
 export declare class AppSidebarNavComponent implements OnChanges {
     router: Router;
     navItems: INavData[];
-    _sidebarBav: boolean;
+    sidebarNavClass: boolean;
     role: string;
     navItemsArray: INavData[];
     constructor(router: Router);

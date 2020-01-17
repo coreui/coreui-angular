@@ -6,7 +6,7 @@ import {Component, HostBinding} from '@angular/core';
 })
 export class AppSidebarFormComponent {
 
-  @HostBinding('class.sidebar-form') _sidebarForm = true;
+  @HostBinding('class.sidebar-form') sidebarFormClass = true;
 
   constructor() { }
 }

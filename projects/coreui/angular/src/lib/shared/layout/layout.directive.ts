@@ -5,8 +5,8 @@ import { asideMenuCssClasses, sidebarCssClasses } from '../classes';
 import { ClassToggler } from '../toggle-classes';
 
 /**
-* Allows the sidebar to be toggled via click.
-*/
+ * Allows the sidebar to be toggled via click.
+ */
 @Directive({
   selector: '[appSidebarToggler]',
   providers: [ClassToggler]
@@ -65,8 +65,8 @@ export class MobileSidebarToggleDirective {
 }
 
 /**
-* Allows the off-canvas sidebar to be closed via click.
-*/
+ * Allows the off-canvas sidebar to be closed via click.
+ */
 @Directive({
   selector: '[appSidebarClose]'
 })
@@ -110,8 +110,8 @@ export class BrandMinimizeDirective {
 
 
 /**
-* Allows the aside to be toggled via click.
-*/
+ * Allows the aside to be toggled via click.
+ */
 @Directive({
   selector: '[appAsideMenuToggler]',
   providers: [ClassToggler]

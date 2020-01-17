@@ -10,7 +10,7 @@ export class AppFooterComponent implements OnInit, OnDestroy {
 
   private readonly fixedClass = 'footer-fixed';
 
-  @HostBinding('class.app-footer') _footer = true;
+  @HostBinding('class.app-footer') appFooterClass = true;
 
   constructor(
     @Inject(DOCUMENT) private document: any,

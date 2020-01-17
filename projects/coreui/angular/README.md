@@ -5,8 +5,8 @@
 [![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]  
 [![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
 [![npm package][npm-coreui-badge]][npm-coreui]
-[![NPM downloads][npm-coreui-download]][npm-coreui]    
-![angular](https://img.shields.io/badge/angular-^9.0.0--rc.5-lightgrey.svg?style=flat-square&logo=angular)  
+[![NPM downloads][npm-coreui-download]][npm-coreui]
+![angular](https://img.shields.io/badge/angular-^9.0.0--rc.9-lightgrey.svg?style=flat-square&logo=angular)  
 
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=red  

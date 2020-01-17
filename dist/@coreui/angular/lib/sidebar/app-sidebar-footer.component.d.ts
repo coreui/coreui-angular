@@ -1,4 +1,4 @@
 export declare class AppSidebarFooterComponent {
-    _sidebarFooter: boolean;
+    sidebarFooterClass: boolean;
     constructor();
 }

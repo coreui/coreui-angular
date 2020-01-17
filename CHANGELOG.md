@@ -1,5 +1,38 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.7.3`
+- chore: update to `Angular 9.0.0-rc.9`
+- refactor: `@coreui/angular` components library
+- tests: fix and add some missing tests
+
+###### dependencies update
+- update `@angular/animations` to `~9.0.0-rc.9`
+- update `@angular/common` to `~9.0.0-rc.9`
+- update `@angular/compiler` to `~9.0.0-rc.9`
+- update `@angular/core` to `~9.0.0-rc.9`
+- update `@angular/forms` to `~9.0.0-rc.9`
+- update `@angular/platform-browser` to `~9.0.0-rc.9`
+- update `@angular/platform-browser-dynamic` to `~9.0.0-rc.9`
+- update `@angular/router` to `~9.0.0-rc.9`
+- update `@angular-devkit/build-angular` to `~0.900.0-rc.9`
+- update `@angular-devkit/build-ng-packagr` to `~0.900.0-rc.9`
+- update `@angular/cli` to `~9.0.0-rc.9`
+- update `@angular/compiler-cli` to `~9.0.0-rc.9`
+- update `@angular/language-service` to `~9.0.0-rc.9`
+- update `@types/node` to `^12.11.1`
+- update `@types/jasmine` to `~3.5.0`
+- update `@types/jasminewd2` to `~2.0.3`
+- update `codelyzer` to `^5.1.2`
+- update `jasmine-core` to `~3.5.0`
+- update `jasmine-spec-reporter` to `~4.2.1`
+- update `karma` to `~4.3.0`
+- update `karma-chrome-launcher` to `~3.1.0`
+- update `karma-coverage-istanbul-reporter` to `~2.1.0`
+- update `ng-packagr` to `^9.0.0-rc.7`
+- update `protractor` to `~5.4.2`
+- update `ts-node` to `~8.3.0`
+- update `tslint` to `~5.18.0`
+
 ##### `v2.7.2`
 - fix(sidebar-nav): AppSidebarNavLabelComponent is not exported in the AppSidebarModule - thanks @zwiras #63
 
