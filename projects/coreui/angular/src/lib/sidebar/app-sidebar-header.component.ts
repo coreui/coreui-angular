@@ -6,7 +6,7 @@ import {Component, HostBinding} from '@angular/core';
 })
 export class AppSidebarHeaderComponent {
 
-  @HostBinding('class.sidebar-header') _sidebarHeader = true;
+  @HostBinding('class.sidebar-header') sidebarHeaderClass = true;
 
   constructor() { }
 }

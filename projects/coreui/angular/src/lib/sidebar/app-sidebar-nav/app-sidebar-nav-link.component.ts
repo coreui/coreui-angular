@@ -17,12 +17,15 @@ import {INavData} from '../app-sidebar-nav';
   `,
   providers: [ SidebarNavHelper ]
 })
-export class AppSidebarNavLinkContentComponent {
+export class AppSidebarNavLinkContentComponent implements OnInit, OnDestroy {
   @Input() item: any;
 
   constructor(
     public helper: SidebarNavHelper
   ) { }
+
+  ngOnInit() {}
+  ngOnDestroy() {}
 }
 
 @Component({
@@ -32,14 +35,14 @@ export class AppSidebarNavLinkContentComponent {
 })
 export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
 
-  protected _item: INavData;
+  protected _Item: INavData;
 
   @Input()
   set item(item: INavData) {
-    this._item = JSON.parse(JSON.stringify(item));
+    this._Item = JSON.parse(JSON.stringify(item));
   }
   get item(): INavData {
-    return this._item;
+    return this._Item;
   }
 
   @Output() linkClick = new EventEmitter();
@@ -52,7 +55,7 @@ export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
   private navigationEndObservable: Observable<NavigationEnd>;
   private navSubscription: Subscription;
 
-  constructor (
+  constructor(
     public router: Router,
   ) {
     this.navigationEndObservable = router.events.pipe(

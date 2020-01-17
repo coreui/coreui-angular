@@ -14,7 +14,7 @@ export class AppAsideComponent implements OnInit, OnDestroy {
 
   private readonly fixedClass = 'aside-menu-fixed';
 
-  @HostBinding('class.aside-menu') _aside = true;
+  @HostBinding('class.aside-menu') asideMenuClass = true;
 
   constructor(
     @Inject(DOCUMENT) private document: any,

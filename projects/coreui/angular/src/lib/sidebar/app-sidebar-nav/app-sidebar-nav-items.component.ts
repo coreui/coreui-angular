@@ -56,7 +56,7 @@ export class AppSidebarNavItemsComponent {
   protected _items: INavData[];
 
   @Input()
-  set items(items:  INavData[]) {
+  set items(items: INavData[]) {
     this._items = [...items];
   }
   get items(): INavData[] {

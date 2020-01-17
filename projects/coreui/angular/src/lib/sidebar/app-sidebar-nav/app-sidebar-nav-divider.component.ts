@@ -7,7 +7,7 @@ import {Component, Input, OnInit} from '@angular/core';
 export class AppSidebarNavDividerComponent implements OnInit {
   @Input() item: any;
 
-  constructor () {}
+  constructor() {}
 
   ngOnInit() {}
 }

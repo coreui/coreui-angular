@@ -24,8 +24,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   private readonly fixedClass = 'header-fixed';
 
-  @HostBinding('class.app-header') _header = true;
-  @HostBinding('class.navbar') _navbar = true;
+  @HostBinding('class.app-header') appHeaderClass = true;
+  @HostBinding('class.navbar') navbarClass = true;
 
   navbarBrandImg: boolean;
 
@@ -44,10 +44,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     this.isFixed(this.fixed);
     this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
     this.navbarBrandRouterLink = this.navbarBrandRouterLink[0] ? this.navbarBrandRouterLink : this.navbarBrandHref;
-    this.sidebarTogglerClass = this.setToggerBreakpointClass(<string>this.sidebarToggler);
-    this.sidebarTogglerMobileClass = this.setToggerMobileBreakpointClass(<string>this.sidebarToggler);
-    this.asideTogglerClass = this.setToggerBreakpointClass(<string>this.asideMenuToggler);
-    this.asideTogglerMobileClass = this.setToggerMobileBreakpointClass(<string>this.asideMenuToggler);
+    this.sidebarTogglerClass = this.setToggerBreakpointClass(this.sidebarToggler as string);
+    this.sidebarTogglerMobileClass = this.setToggerMobileBreakpointClass(this.sidebarToggler as string);
+    this.asideTogglerClass = this.setToggerBreakpointClass(this.asideMenuToggler as string);
+    this.asideTogglerMobileClass = this.setToggerMobileBreakpointClass(this.asideMenuToggler as string);
   }
 
   ngOnDestroy(): void {

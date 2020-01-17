@@ -10,7 +10,7 @@ import { INavData } from './app-sidebar-nav';
 export class AppSidebarNavComponent implements OnChanges {
   @Input() navItems: INavData[] = [];
 
-  @HostBinding('class.sidebar-nav') _sidebarBav = true;
+  @HostBinding('class.sidebar-nav') sidebarNavClass = true;
   @HostBinding('attr.role') @Input() role = 'nav';
 
   public navItemsArray: INavData[] = [];

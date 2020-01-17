@@ -39,7 +39,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
    */
   @Output() minimizedChange = new EventEmitter<boolean>();
 
-  @HostBinding('class.sidebar') _sidebar = true;
+  @HostBinding('class.sidebar') sidebarClass = true;
 
   constructor(
     @Inject(DOCUMENT) private document: any,
