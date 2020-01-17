@@ -9,7 +9,7 @@ export declare class AppSidebarNavLabelComponent implements OnInit {
     ngOnInit(): void;
     getItemClass(): {
         'nav-label': boolean;
-        'active': boolean;
+        active: boolean;
     };
     getLabelIconClass(): {};
 }

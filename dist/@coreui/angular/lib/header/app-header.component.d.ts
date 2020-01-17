@@ -14,8 +14,8 @@ export declare class AppHeaderComponent implements OnInit, OnDestroy {
     asideMenuToggler: string | boolean;
     mobileAsideMenuToggler: boolean;
     private readonly fixedClass;
-    _header: boolean;
-    _navbar: boolean;
+    appHeaderClass: boolean;
+    navbarClass: boolean;
     navbarBrandImg: boolean;
     private readonly breakpoints;
     sidebarTogglerClass: string;

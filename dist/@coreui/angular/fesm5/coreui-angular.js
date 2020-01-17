@@ -69,8 +69,8 @@ var ClassToggler = /** @class */ (function () {
 }());
 
 /**
-* Allows the sidebar to be toggled via click.
-*/
+ * Allows the sidebar to be toggled via click.
+ */
 var SidebarToggleDirective = /** @class */ (function () {
     function SidebarToggleDirective(classToggler) {
         this.classToggler = classToggler;
@@ -168,8 +168,8 @@ var MobileSidebarToggleDirective = /** @class */ (function () {
     return MobileSidebarToggleDirective;
 }());
 /**
-* Allows the off-canvas sidebar to be closed via click.
-*/
+ * Allows the off-canvas sidebar to be closed via click.
+ */
 var SidebarOffCanvasCloseDirective = /** @class */ (function () {
     function SidebarOffCanvasCloseDirective(document, renderer) {
         this.document = document;
@@ -235,8 +235,8 @@ var BrandMinimizeDirective = /** @class */ (function () {
     return BrandMinimizeDirective;
 }());
 /**
-* Allows the aside to be toggled via click.
-*/
+ * Allows the aside to be toggled via click.
+ */
 var AsideToggleDirective = /** @class */ (function () {
     function AsideToggleDirective(classToggler) {
         this.classToggler = classToggler;
@@ -375,7 +375,7 @@ var AppAsideComponent = /** @class */ (function () {
         this.document = document;
         this.renderer = renderer;
         this.fixedClass = 'aside-menu-fixed';
-        this._aside = true;
+        this.asideMenuClass = true;
     }
     AppAsideComponent.prototype.ngOnInit = function () {
         this.isFixed(this.fixed);
@@ -423,7 +423,7 @@ var AppAsideComponent = /** @class */ (function () {
     __decorate([
         HostBinding('class.aside-menu'),
         __metadata("design:type", Object)
-    ], AppAsideComponent.prototype, "_aside", void 0);
+    ], AppAsideComponent.prototype, "asideMenuClass", void 0);
     AppAsideComponent = __decorate([
         Component({
             selector: 'app-aside, cui-aside',
@@ -461,11 +461,12 @@ var AppBreadcrumbService = /** @class */ (function () {
         var _this = this;
         this.router = router;
         this.route = route;
-        this._breadcrumbs = new BehaviorSubject(new Array());
-        this.breadcrumbs = this._breadcrumbs.asObservable();
+        this.breadcrumbSubject = new BehaviorSubject(new Array());
+        this.breadcrumbs = this.breadcrumbSubject.asObservable();
         this.router.events.pipe(filter(function (event) { return event instanceof NavigationEnd; })).subscribe(function (event) {
             var breadcrumbs = [];
-            var currentRoute = _this.route.root, url = '';
+            var currentRoute = _this.route.root;
+            var url = '';
             do {
                 var childrenRoutes = currentRoute.children;
                 currentRoute = null;
@@ -482,7 +483,7 @@ var AppBreadcrumbService = /** @class */ (function () {
                     }
                 });
             } while (currentRoute);
-            _this._breadcrumbs.next(Object.assign([], breadcrumbs));
+            _this.breadcrumbSubject.next(Object.assign([], breadcrumbs));
             return breadcrumbs;
         });
     }
@@ -616,7 +617,7 @@ var AppFooterComponent = /** @class */ (function () {
         this.document = document;
         this.renderer = renderer;
         this.fixedClass = 'footer-fixed';
-        this._footer = true;
+        this.appFooterClass = true;
     }
     AppFooterComponent.prototype.ngOnInit = function () {
         this.isFixed(this.fixed);
@@ -641,7 +642,7 @@ var AppFooterComponent = /** @class */ (function () {
     __decorate([
         HostBinding('class.app-footer'),
         __metadata("design:type", Object)
-    ], AppFooterComponent.prototype, "_footer", void 0);
+    ], AppFooterComponent.prototype, "appFooterClass", void 0);
     AppFooterComponent = __decorate([
         Component({
             selector: 'app-footer, cui-footer',
@@ -673,8 +674,8 @@ var AppHeaderComponent = /** @class */ (function () {
         this.navbarBrandText = { icon: '🅲', text: '🅲 CoreUI' };
         this.navbarBrandRouterLink = '';
         this.fixedClass = 'header-fixed';
-        this._header = true;
-        this._navbar = true;
+        this.appHeaderClass = true;
+        this.navbarClass = true;
         this.breakpoints = ['xl', 'lg', 'md', 'sm', 'xs'];
         this.sidebarTogglerClass = 'd-none d-md-block';
         this.sidebarTogglerMobileClass = 'd-lg-none';
@@ -767,11 +768,11 @@ var AppHeaderComponent = /** @class */ (function () {
     __decorate([
         HostBinding('class.app-header'),
         __metadata("design:type", Object)
-    ], AppHeaderComponent.prototype, "_header", void 0);
+    ], AppHeaderComponent.prototype, "appHeaderClass", void 0);
     __decorate([
         HostBinding('class.navbar'),
         __metadata("design:type", Object)
-    ], AppHeaderComponent.prototype, "_navbar", void 0);
+    ], AppHeaderComponent.prototype, "navbarClass", void 0);
     AppHeaderComponent = __decorate([
         Component({
             selector: 'app-header, cui-header',
@@ -834,7 +835,7 @@ var AppSidebarComponent = /** @class */ (function () {
          * Primarily used to facilitate two-way binding.
          */
         this.minimizedChange = new EventEmitter();
-        this._sidebar = true;
+        this.sidebarClass = true;
     }
     Object.defineProperty(AppSidebarComponent.prototype, "minimized", {
         get: function () {
@@ -943,7 +944,7 @@ var AppSidebarComponent = /** @class */ (function () {
     __decorate([
         HostBinding('class.sidebar'),
         __metadata("design:type", Object)
-    ], AppSidebarComponent.prototype, "_sidebar", void 0);
+    ], AppSidebarComponent.prototype, "sidebarClass", void 0);
     AppSidebarComponent = __decorate([
         Component({
             selector: 'app-sidebar, cui-sidebar',
@@ -958,12 +959,12 @@ var AppSidebarComponent = /** @class */ (function () {
 
 var AppSidebarFooterComponent = /** @class */ (function () {
     function AppSidebarFooterComponent() {
-        this._sidebarFooter = true;
+        this.sidebarFooterClass = true;
     }
     __decorate([
         HostBinding('class.sidebar-footer'),
         __metadata("design:type", Object)
-    ], AppSidebarFooterComponent.prototype, "_sidebarFooter", void 0);
+    ], AppSidebarFooterComponent.prototype, "sidebarFooterClass", void 0);
     AppSidebarFooterComponent = __decorate([
         Component({
             selector: 'app-sidebar-footer, cui-sidebar-footer',
@@ -976,12 +977,12 @@ var AppSidebarFooterComponent = /** @class */ (function () {
 
 var AppSidebarFormComponent = /** @class */ (function () {
     function AppSidebarFormComponent() {
-        this._sidebarForm = true;
+        this.sidebarFormClass = true;
     }
     __decorate([
         HostBinding('class.sidebar-form'),
         __metadata("design:type", Object)
-    ], AppSidebarFormComponent.prototype, "_sidebarForm", void 0);
+    ], AppSidebarFormComponent.prototype, "sidebarFormClass", void 0);
     AppSidebarFormComponent = __decorate([
         Component({
             selector: 'app-sidebar-form, cui-sidebar-form',
@@ -994,12 +995,12 @@ var AppSidebarFormComponent = /** @class */ (function () {
 
 var AppSidebarHeaderComponent = /** @class */ (function () {
     function AppSidebarHeaderComponent() {
-        this._sidebarHeader = true;
+        this.sidebarHeaderClass = true;
     }
     __decorate([
         HostBinding('class.sidebar-header'),
         __metadata("design:type", Object)
-    ], AppSidebarHeaderComponent.prototype, "_sidebarHeader", void 0);
+    ], AppSidebarHeaderComponent.prototype, "sidebarHeaderClass", void 0);
     AppSidebarHeaderComponent = __decorate([
         Component({
             selector: 'app-sidebar-header, cui-sidebar-header',
@@ -1014,7 +1015,7 @@ var AppSidebarMinimizerComponent = /** @class */ (function () {
     function AppSidebarMinimizerComponent(sidebarService) {
         this.sidebarService = sidebarService;
         this.role = 'button';
-        this._minimizer = true;
+        this.sidebarMinimizerClass = true;
     }
     AppSidebarMinimizerComponent.prototype.toggleOpen = function ($event) {
         $event.preventDefault();
@@ -1030,7 +1031,7 @@ var AppSidebarMinimizerComponent = /** @class */ (function () {
     __decorate([
         HostBinding('class.sidebar-minimizer'),
         __metadata("design:type", Object)
-    ], AppSidebarMinimizerComponent.prototype, "_minimizer", void 0);
+    ], AppSidebarMinimizerComponent.prototype, "sidebarMinimizerClass", void 0);
     __decorate([
         HostListener('click', ['$event']),
         __metadata("design:type", Function),
@@ -1098,7 +1099,7 @@ var AppSidebarNavComponent = /** @class */ (function () {
     function AppSidebarNavComponent(router) {
         this.router = router;
         this.navItems = [];
-        this._sidebarBav = true;
+        this.sidebarNavClass = true;
         this.role = 'nav';
         this.navItemsArray = [];
     }
@@ -1115,7 +1116,7 @@ var AppSidebarNavComponent = /** @class */ (function () {
     __decorate([
         HostBinding('class.sidebar-nav'),
         __metadata("design:type", Object)
-    ], AppSidebarNavComponent.prototype, "_sidebarBav", void 0);
+    ], AppSidebarNavComponent.prototype, "sidebarNavClass", void 0);
     __decorate([
         HostBinding('attr.role'), Input(),
         __metadata("design:type", Object)
@@ -1272,6 +1273,8 @@ var AppSidebarNavLinkContentComponent = /** @class */ (function () {
     function AppSidebarNavLinkContentComponent(helper) {
         this.helper = helper;
     }
+    AppSidebarNavLinkContentComponent.prototype.ngOnInit = function () { };
+    AppSidebarNavLinkContentComponent.prototype.ngOnDestroy = function () { };
     AppSidebarNavLinkContentComponent.ctorParameters = function () { return [
         { type: SidebarNavHelper }
     ]; };
@@ -1299,10 +1302,10 @@ var AppSidebarNavLinkComponent = /** @class */ (function () {
     }
     Object.defineProperty(AppSidebarNavLinkComponent.prototype, "item", {
         get: function () {
-            return this._item;
+            return this._Item;
         },
         set: function (item) {
-            this._item = JSON.parse(JSON.stringify(item));
+            this._Item = JSON.parse(JSON.stringify(item));
         },
         enumerable: true,
         configurable: true
@@ -1433,7 +1436,7 @@ var AppSidebarNavLabelComponent = /** @class */ (function () {
         this.helper = helper;
         this.classes = {
             'nav-label': true,
-            'active': true
+            active: true
         };
         this.iconClasses = {};
     }
@@ -1493,7 +1496,7 @@ var AppSidebarNavBadgePipe = /** @class */ (function () {
     }
     AppSidebarNavBadgePipe.prototype.transform = function (item, args) {
         var classes = {
-            'badge': true
+            badge: true
         };
         var variant = "badge-" + item.badge.variant;
         classes[variant] = !!item.badge.variant;
@@ -1624,6 +1627,7 @@ var AppSidebarModule = /** @class */ (function () {
  * Public API Surface of @coreui/angular
  */
 // export * from './lib/shared/index';
+// export * from './lib/coreui.module';
 
 /**
  * Generated bundle index. Do not edit.

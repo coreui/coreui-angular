@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "license": "MIT",
   "author": {
     "name": "Łukasz Holeczek",
@@ -34,6 +34,7 @@
     "@angular/compiler": "~9.0.0-rc.9",
     "@angular/core": "~9.0.0-rc.9",
     "@angular/forms": "~9.0.0-rc.9",
+    "@angular/localize": "^9.0.0-rc.0",
     "@angular/platform-browser": "~9.0.0-rc.9",
     "@angular/platform-browser-dynamic": "~9.0.0-rc.9",
     "@angular/router": "~9.0.0-rc.9",

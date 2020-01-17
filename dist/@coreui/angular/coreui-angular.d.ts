@@ -1,7 +1,7 @@
 /**
  * Generated bundle index. Do not edit.
  */
-export * from './public_api';
+export * from './public-api';
 export { AppBreadcrumbService as ɵj } from './lib/breadcrumb/app-breadcrumb.service';
 export { AsideToggleDirective as ɵg, BrandMinimizeDirective as ɵf, HtmlAttributesDirective as ɵh, MobileSidebarToggleDirective as ɵd, SidebarMinimizeDirective as ɵc, SidebarOffCanvasCloseDirective as ɵe, SidebarToggleDirective as ɵb } from './lib/shared/layout/layout.directive';
 export { LayoutModule as ɵa } from './lib/shared/layout/layout.module';

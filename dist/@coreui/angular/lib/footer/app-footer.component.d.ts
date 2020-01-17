@@ -4,7 +4,7 @@ export declare class AppFooterComponent implements OnInit, OnDestroy {
     private renderer;
     fixed: boolean;
     private readonly fixedClass;
-    _footer: boolean;
+    appFooterClass: boolean;
     constructor(document: any, renderer: Renderer2);
     ngOnInit(): void;
     ngOnDestroy(): void;
