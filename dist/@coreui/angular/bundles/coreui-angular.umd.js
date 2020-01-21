@@ -1153,6 +1153,56 @@
         return AppSidebarComponent;
     }());
 
+    var SidebarNavService = /** @class */ (function () {
+        function SidebarNavService() {
+        }
+        SidebarNavService = __decorate([
+            core.Injectable()
+        ], SidebarNavService);
+        return SidebarNavService;
+    }());
+    var SidebarNavHelper = /** @class */ (function () {
+        function SidebarNavHelper() {
+            this.hasBadge = function (item) { return Boolean(item.badge); };
+            this.hasIcon = function (item) { return Boolean(item.icon); };
+        }
+        SidebarNavHelper.prototype.itemType = function (item) {
+            if (item.divider) {
+                return 'divider';
+            }
+            else if (item.title) {
+                return 'title';
+            }
+            else if (item.children) {
+                return 'dropdown';
+            }
+            else if (item.label) {
+                return 'label';
+            }
+            else if (!Object.keys(item).length) {
+                return 'empty';
+            }
+            else {
+                return 'link';
+            }
+        };
+        SidebarNavHelper.prototype.isActive = function (router, item) {
+            return router.isActive(item.url, false);
+        };
+        SidebarNavHelper.prototype.getIconClass = function (item) {
+            var classes = {
+                'nav-icon': true
+            };
+            var icon = item.icon;
+            classes[icon] = this.hasIcon(item);
+            return classes;
+        };
+        SidebarNavHelper = __decorate([
+            core.Injectable()
+        ], SidebarNavHelper);
+        return SidebarNavHelper;
+    }());
+
     var AppSidebarFooterComponent = /** @class */ (function () {
         function AppSidebarFooterComponent() {
             this.sidebarFooterClass = true;
@@ -1343,56 +1393,6 @@
             __metadata("design:paramtypes", [])
         ], AppSidebarNavDividerComponent);
         return AppSidebarNavDividerComponent;
-    }());
-
-    var SidebarNavService = /** @class */ (function () {
-        function SidebarNavService() {
-        }
-        SidebarNavService = __decorate([
-            core.Injectable()
-        ], SidebarNavService);
-        return SidebarNavService;
-    }());
-    var SidebarNavHelper = /** @class */ (function () {
-        function SidebarNavHelper() {
-            this.hasBadge = function (item) { return Boolean(item.badge); };
-            this.hasIcon = function (item) { return Boolean(item.icon); };
-        }
-        SidebarNavHelper.prototype.itemType = function (item) {
-            if (item.divider) {
-                return 'divider';
-            }
-            else if (item.title) {
-                return 'title';
-            }
-            else if (item.children) {
-                return 'dropdown';
-            }
-            else if (item.label) {
-                return 'label';
-            }
-            else if (!Object.keys(item).length) {
-                return 'empty';
-            }
-            else {
-                return 'link';
-            }
-        };
-        SidebarNavHelper.prototype.isActive = function (router, item) {
-            return router.isActive(item.url, false);
-        };
-        SidebarNavHelper.prototype.getIconClass = function (item) {
-            var classes = {
-                'nav-icon': true
-            };
-            var icon = item.icon;
-            classes[icon] = this.hasIcon(item);
-            return classes;
-        };
-        SidebarNavHelper = __decorate([
-            core.Injectable()
-        ], SidebarNavHelper);
-        return SidebarNavHelper;
     }());
 
     var AppSidebarNavDropdownComponent = /** @class */ (function () {
@@ -1830,12 +1830,12 @@
     exports.AppSidebarComponent = AppSidebarComponent;
     exports.AppSidebarModule = AppSidebarModule;
     exports.CuiBreadcrumbComponent = CuiBreadcrumbComponent;
+    exports.SidebarNavHelper = SidebarNavHelper;
     exports.ɵa = LayoutModule;
     exports.ɵb = SidebarToggleDirective;
-    exports.ɵba = AppSidebarNavIconPipe;
-    exports.ɵbb = AppSidebarNavBadgePipe;
-    exports.ɵbc = AppSidebarNavLinkPipe;
-    exports.ɵbd = AppSidebarNavItemClassPipe;
+    exports.ɵba = AppSidebarNavBadgePipe;
+    exports.ɵbb = AppSidebarNavLinkPipe;
+    exports.ɵbc = AppSidebarNavItemClassPipe;
     exports.ɵc = SidebarMinimizeDirective;
     exports.ɵd = MobileSidebarToggleDirective;
     exports.ɵe = SidebarOffCanvasCloseDirective;
@@ -1850,16 +1850,16 @@
     exports.ɵn = AppSidebarHeaderComponent;
     exports.ɵo = AppSidebarMinimizerComponent;
     exports.ɵp = AppSidebarNavItemsComponent;
-    exports.ɵq = SidebarNavHelper;
-    exports.ɵr = AppSidebarNavComponent;
-    exports.ɵs = AppSidebarNavDividerComponent;
-    exports.ɵt = AppSidebarNavDropdownComponent;
-    exports.ɵu = AppSidebarNavLabelComponent;
-    exports.ɵv = AppSidebarNavLinkContentComponent;
-    exports.ɵw = AppSidebarNavLinkComponent;
-    exports.ɵx = AppSidebarNavTitleComponent;
-    exports.ɵy = NavDropdownDirective;
-    exports.ɵz = NavDropdownToggleDirective;
+    exports.ɵq = AppSidebarNavComponent;
+    exports.ɵr = AppSidebarNavDividerComponent;
+    exports.ɵs = AppSidebarNavDropdownComponent;
+    exports.ɵt = AppSidebarNavLabelComponent;
+    exports.ɵu = AppSidebarNavLinkContentComponent;
+    exports.ɵv = AppSidebarNavLinkComponent;
+    exports.ɵw = AppSidebarNavTitleComponent;
+    exports.ɵx = NavDropdownDirective;
+    exports.ɵy = NavDropdownToggleDirective;
+    exports.ɵz = AppSidebarNavIconPipe;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

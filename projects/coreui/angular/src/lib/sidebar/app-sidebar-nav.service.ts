@@ -13,7 +13,7 @@ export abstract class SidebarNavService {
 @Injectable()
 export class SidebarNavHelper {
 
-  itemType(item) {
+  public itemType(item) {
     if (item.divider) {
       return 'divider';
     } else if (item.title) {

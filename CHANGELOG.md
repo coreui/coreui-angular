@@ -1,5 +1,8 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.7.4`
+- fix: add `SidebarNavHelper` to public-api surface - see: #67 
+
 ##### `v2.7.3`
 - chore: update to `Angular 9.0.0-rc.9`
 - refactor: `@coreui/angular` components library
