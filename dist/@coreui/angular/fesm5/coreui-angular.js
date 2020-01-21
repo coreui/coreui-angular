@@ -957,6 +957,56 @@ var AppSidebarComponent = /** @class */ (function () {
     return AppSidebarComponent;
 }());
 
+var SidebarNavService = /** @class */ (function () {
+    function SidebarNavService() {
+    }
+    SidebarNavService = __decorate([
+        Injectable()
+    ], SidebarNavService);
+    return SidebarNavService;
+}());
+var SidebarNavHelper = /** @class */ (function () {
+    function SidebarNavHelper() {
+        this.hasBadge = function (item) { return Boolean(item.badge); };
+        this.hasIcon = function (item) { return Boolean(item.icon); };
+    }
+    SidebarNavHelper.prototype.itemType = function (item) {
+        if (item.divider) {
+            return 'divider';
+        }
+        else if (item.title) {
+            return 'title';
+        }
+        else if (item.children) {
+            return 'dropdown';
+        }
+        else if (item.label) {
+            return 'label';
+        }
+        else if (!Object.keys(item).length) {
+            return 'empty';
+        }
+        else {
+            return 'link';
+        }
+    };
+    SidebarNavHelper.prototype.isActive = function (router, item) {
+        return router.isActive(item.url, false);
+    };
+    SidebarNavHelper.prototype.getIconClass = function (item) {
+        var classes = {
+            'nav-icon': true
+        };
+        var icon = item.icon;
+        classes[icon] = this.hasIcon(item);
+        return classes;
+    };
+    SidebarNavHelper = __decorate([
+        Injectable()
+    ], SidebarNavHelper);
+    return SidebarNavHelper;
+}());
+
 var AppSidebarFooterComponent = /** @class */ (function () {
     function AppSidebarFooterComponent() {
         this.sidebarFooterClass = true;
@@ -1147,56 +1197,6 @@ var AppSidebarNavDividerComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [])
     ], AppSidebarNavDividerComponent);
     return AppSidebarNavDividerComponent;
-}());
-
-var SidebarNavService = /** @class */ (function () {
-    function SidebarNavService() {
-    }
-    SidebarNavService = __decorate([
-        Injectable()
-    ], SidebarNavService);
-    return SidebarNavService;
-}());
-var SidebarNavHelper = /** @class */ (function () {
-    function SidebarNavHelper() {
-        this.hasBadge = function (item) { return Boolean(item.badge); };
-        this.hasIcon = function (item) { return Boolean(item.icon); };
-    }
-    SidebarNavHelper.prototype.itemType = function (item) {
-        if (item.divider) {
-            return 'divider';
-        }
-        else if (item.title) {
-            return 'title';
-        }
-        else if (item.children) {
-            return 'dropdown';
-        }
-        else if (item.label) {
-            return 'label';
-        }
-        else if (!Object.keys(item).length) {
-            return 'empty';
-        }
-        else {
-            return 'link';
-        }
-    };
-    SidebarNavHelper.prototype.isActive = function (router, item) {
-        return router.isActive(item.url, false);
-    };
-    SidebarNavHelper.prototype.getIconClass = function (item) {
-        var classes = {
-            'nav-icon': true
-        };
-        var icon = item.icon;
-        classes[icon] = this.hasIcon(item);
-        return classes;
-    };
-    SidebarNavHelper = __decorate([
-        Injectable()
-    ], SidebarNavHelper);
-    return SidebarNavHelper;
 }());
 
 var AppSidebarNavDropdownComponent = /** @class */ (function () {
@@ -1633,5 +1633,5 @@ var AppSidebarModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { AppAsideComponent, AppAsideModule, AppBreadcrumbComponent, AppBreadcrumbModule, AppFooterComponent, AppFooterModule, AppHeaderComponent, AppHeaderModule, AppSidebarComponent, AppSidebarModule, CuiBreadcrumbComponent, LayoutModule as ɵa, SidebarToggleDirective as ɵb, AppSidebarNavIconPipe as ɵba, AppSidebarNavBadgePipe as ɵbb, AppSidebarNavLinkPipe as ɵbc, AppSidebarNavItemClassPipe as ɵbd, SidebarMinimizeDirective as ɵc, MobileSidebarToggleDirective as ɵd, SidebarOffCanvasCloseDirective as ɵe, BrandMinimizeDirective as ɵf, AsideToggleDirective as ɵg, HtmlAttributesDirective as ɵh, ClassToggler as ɵi, AppBreadcrumbService as ɵj, AppSidebarService as ɵk, AppSidebarFooterComponent as ɵl, AppSidebarFormComponent as ɵm, AppSidebarHeaderComponent as ɵn, AppSidebarMinimizerComponent as ɵo, AppSidebarNavItemsComponent as ɵp, SidebarNavHelper as ɵq, AppSidebarNavComponent as ɵr, AppSidebarNavDividerComponent as ɵs, AppSidebarNavDropdownComponent as ɵt, AppSidebarNavLabelComponent as ɵu, AppSidebarNavLinkContentComponent as ɵv, AppSidebarNavLinkComponent as ɵw, AppSidebarNavTitleComponent as ɵx, NavDropdownDirective as ɵy, NavDropdownToggleDirective as ɵz };
+export { AppAsideComponent, AppAsideModule, AppBreadcrumbComponent, AppBreadcrumbModule, AppFooterComponent, AppFooterModule, AppHeaderComponent, AppHeaderModule, AppSidebarComponent, AppSidebarModule, CuiBreadcrumbComponent, SidebarNavHelper, LayoutModule as ɵa, SidebarToggleDirective as ɵb, AppSidebarNavBadgePipe as ɵba, AppSidebarNavLinkPipe as ɵbb, AppSidebarNavItemClassPipe as ɵbc, SidebarMinimizeDirective as ɵc, MobileSidebarToggleDirective as ɵd, SidebarOffCanvasCloseDirective as ɵe, BrandMinimizeDirective as ɵf, AsideToggleDirective as ɵg, HtmlAttributesDirective as ɵh, ClassToggler as ɵi, AppBreadcrumbService as ɵj, AppSidebarService as ɵk, AppSidebarFooterComponent as ɵl, AppSidebarFormComponent as ɵm, AppSidebarHeaderComponent as ɵn, AppSidebarMinimizerComponent as ɵo, AppSidebarNavItemsComponent as ɵp, AppSidebarNavComponent as ɵq, AppSidebarNavDividerComponent as ɵr, AppSidebarNavDropdownComponent as ɵs, AppSidebarNavLabelComponent as ɵt, AppSidebarNavLinkContentComponent as ɵu, AppSidebarNavLinkComponent as ɵv, AppSidebarNavTitleComponent as ɵw, NavDropdownDirective as ɵx, NavDropdownToggleDirective as ɵy, AppSidebarNavIconPipe as ɵz };
 //# sourceMappingURL=coreui-angular.js.map
