@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.7.4",
+  "version": "2.7.5",
   "license": "MIT",
   "author": {
     "name": "Łukasz Holeczek",
@@ -17,6 +17,7 @@
   "scripts": {
     "ng": "ng",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
+    "build-lib:dev": "ng build @coreui/angular --watch",
     "build-lib": "ng build @coreui/angular --prod",
     "test-lib": "ng test @coreui/angular",
     "start": "ng serve",
@@ -68,5 +69,9 @@
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
     "typescript": "~3.6.4"
+  },
+  "engines": {
+    "node": ">= 10",
+    "npm": ">= 6"
   }
 }

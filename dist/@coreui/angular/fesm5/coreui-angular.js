@@ -997,8 +997,10 @@ var SidebarNavHelper = /** @class */ (function () {
         var classes = {
             'nav-icon': true
         };
-        var icon = item.icon;
-        classes[icon] = this.hasIcon(item);
+        if (this.hasIcon(item)) {
+            var icon = item.icon;
+            classes[icon] = this.hasIcon(item);
+        }
         return classes;
     };
     SidebarNavHelper = __decorate([
