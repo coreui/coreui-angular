@@ -40,8 +40,10 @@ export class SidebarNavHelper {
     const classes = {
       'nav-icon': true
     };
-    const icon = item.icon;
-    classes[icon] = this.hasIcon(item);
+    if (this.hasIcon(item)) {
+      const icon = item.icon;
+      classes[icon] = this.hasIcon(item);
+    }
     return classes;
   }
 }
