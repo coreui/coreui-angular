@@ -12,7 +12,8 @@ export declare class AppSidebarNavLinkContentComponent implements OnInit, OnDest
 export declare class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
     router: Router;
     protected _Item: INavData;
-    item: INavData;
+    set item(item: INavData);
+    get item(): INavData;
     linkClick: EventEmitter<any>;
     linkType: string;
     href: string;
