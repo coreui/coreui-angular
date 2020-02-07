@@ -8,7 +8,8 @@ export declare class AppSidebarNavItemsComponent {
     router: Router;
     helper: SidebarNavHelper;
     protected _items: INavData[];
-    items: INavData[];
+    set items(items: INavData[]);
+    get items(): INavData[];
     constructor(document: any, renderer: Renderer2, router: Router, helper: SidebarNavHelper);
     hideMobile(): void;
 }
