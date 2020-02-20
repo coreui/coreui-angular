@@ -24,7 +24,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "publish": "cd dist/@coreui/angular/ && npm publish",
+    "publish": "cd dist/@coreui/angular/ && npm publish --tag next --dry-run",
     "link": "cd dist/@coreui/angular/ && npm link",
     "release-version": "node build/change-version.js"
   },
