@@ -1,1 +1,70 @@
-// Variable overrides
+@import "node_modules/@coreui/coreui/scss/variables/colors";
+
+$ss-secondary: #888888;
+$ss-secondary-d5: darken($ss-secondary, 5%);
+$ss-secondary-l5: lighten($ss-secondary, 5%);
+
+$ss-danger: #d32f19;
+$ss-danger-d5: darken($ss-danger, 5%);
+$ss-danger-l5: lighten($ss-danger, 5%);
+$ss-danger-l35: lighten($ss-danger, 35%);
+$ss-danger-l40: lighten($ss-danger, 40%);
+
+$ss-gray-1000: #1a1f23;
+$ss-text: #333333;
+$ss-disabled-text: #3333331a;
+$ss-form-outline: #c5c5c5;
+$ss-form-dark: #fafafa;
+
+$primary-d5: darken($primary, 5%);
+$primary-l5: lighten($primary, 5%);
+$primary-l30: lighten($primary, 30%);
+
+$success-d5: darken($success, 5%);
+$success-l25: lighten($success, 25%);
+$success-l30: lighten($success, 30%);
+$success-l35: lighten($success, 35%);
+$success-l40: lighten($success, 40%);
+
+$warning-d5: darken($warning, 5%);
+$warning-l5: lighten($warning, 5%);
+$warning-l30: lighten($warning, 30%);
+$warning-l40: lighten($warning, 40%);
+
+$info-d5: darken($info, 5%);
+$info-l5: lighten($info, 5%);
+
+// ALIASES
+$primary-pressed: $primary-d5;
+$primary-hover: $primary-l5;
+$primary-disabled: $primary-l30;
+
+$secondary: $ss-secondary;
+$secondary-pressed: $ss-secondary-d5;
+$secondary-hover: $ss-secondary-l5;
+
+$success-pressed: $success-d5;
+
+$selected-dark-outline: $success-l25;
+$selected-dark: $success-l30;
+$selected-light-outline: $success-l35;
+$selected-light: $success-l40;
+
+$warning-pressed: $warning-d5;
+$warning-hover: $warning-l5;
+$warning-disabled: $warning-l40;
+
+$info-pressed: $info-d5;
+$info-hover: $info-l5;
+
+$danger: $ss-danger;
+$danger-pressed: $ss-danger-d5;
+$danger-hover: $ss-danger-l5;
+$selected-error-outline: $ss-danger-l35;
+$selected-error-hover: $ss-danger-l40;
+
+$gray-1000: $ss-gray-1000;
+$text: $ss-text;
+$disabled-text: $ss-disabled-text;
+$form-outline: $ss-form-outline;
+$form-dark: $ss-form-dark;
