@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "license": "MIT",
   "author": {
     "name": "Łukasz Holeczek",
@@ -50,9 +50,9 @@
     "@angular/compiler-cli": "~9.0.0",
     "@angular/language-service": "~9.0.0",
     "@coreui/coreui": "^2.1.16",
-    "@types/node": "^12.12.26",
     "@types/jasmine": "~3.5.3",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.12.26",
     "codelyzer": "^5.1.2",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -68,7 +68,7 @@
     "simple-line-icons": "^2.4.1",
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
-    "typescript": "~3.7.5"
+    "typescript": "~3.6.4"
   },
   "engines": {
     "node": ">= 10",
