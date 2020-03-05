@@ -1,5 +1,30 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.9.1`
+- fix: downgrade TypeScript to ~3.6.4 - thanks @jrocha closes #103
+
+###### dependencies update
+- update `typescript` to `~3.6.4`
+- update `@angular/animations` to `~9.0.5`
+- update `@angular/common` to `~9.0.5`
+- update `@angular/compiler` to `~9.0.5`
+- update `@angular/core` to `~9.0.5`
+- update `@angular/forms` to `~9.0.5`
+- update `@angular/localize` to `^9.0.5`
+- update `@angular/platform-browser` to `~9.0.5`
+- update `@angular/platform-browser-dynamic` to `~9.0.5`
+- update `@angular/router` to `~9.0.5`
+- update `tslib` to `^1.11.1`
+- update `@angular-devkit/build-angular` to `~0.900.5`
+- update `@angular-devkit/build-ng-packagr` to `~0.900.5`
+- update `@angular/cli` to `~9.0.5`
+- update `@angular/compiler-cli` to `~9.0.5`
+- update `@angular/language-service` to `~9.0.5`
+- update `@types/jasmine` to `^3.5.7`
+- update `@types/node` to `^12.12.29`
+- update `ng-packagr` to `^9.0.2`
+- update `ngx-perfect-scrollbar` to `^9.0.0`
+
 ##### `v2.9.0`
 - chore: update to `Angular 9.0.0`
     - [https://update.angular.io/](https://update.angular.io/#8.0:9.0)

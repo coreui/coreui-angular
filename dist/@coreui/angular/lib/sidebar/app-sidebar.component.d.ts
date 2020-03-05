@@ -10,8 +10,7 @@ export declare class AppSidebarComponent implements OnInit, OnDestroy {
     display: any;
     fixed: boolean;
     offCanvas: boolean;
-    get minimized(): boolean;
-    set minimized(value: boolean);
+    minimized: boolean;
     /**
      * Emits whenever the minimized state of the sidebar changes.
      * Primarily used to facilitate two-way binding.
