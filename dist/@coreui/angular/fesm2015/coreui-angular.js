@@ -1122,7 +1122,7 @@ __decorate([
 AppSidebarNavComponent = __decorate([
     Component({
         selector: 'app-sidebar-nav, cui-sidebar-nav',
-        template: "<app-sidebar-nav-items\r\n  class=\"nav\"\r\n  [items]=\"navItemsArray\">\r\n</app-sidebar-nav-items>\r\n"
+        template: "<app-sidebar-nav-items\n  class=\"nav\"\n  [items]=\"navItemsArray\">\n</app-sidebar-nav-items>\n"
     }),
     __metadata("design:paramtypes", [Router])
 ], AppSidebarNavComponent);

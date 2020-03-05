@@ -25,7 +25,7 @@
 Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
 ###### Node.js
-Angular 9 requires `Node.js` version 12.x
+Angular 9 requires `Node.js` version 10.13 or later.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
