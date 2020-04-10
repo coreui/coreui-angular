@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@coreui/angular": [
-        "dist/coreui/angular"
+        "dist/@coreui/angular"
       ]
     }
   },
