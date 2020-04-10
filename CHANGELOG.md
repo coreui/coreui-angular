@@ -1,5 +1,42 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.9.2`
+- chore: update to `Angular 9.1.1`
+- chore: remove build artifacts from git
+
+###### dependencies update
+- update `@angular/animations` to `^9.1.1`
+- update `@angular/common` to `^9.1.1`
+- update `@angular/compiler` to `^9.1.1`
+- update `@angular/core` to `^9.1.1`
+- update `@angular/forms` to `^9.1.1`
+- update `@angular/localize` to `^9.1.1`
+- update `@angular/platform-browser` to `^9.1.1`
+- update `@angular/platform-browser-dynamic` to `^9.1.1`
+- update `@angular/router` to `^9.1.1`
+- update `rxjs` to `^6.5.5`
+- update `zone.js` to `^0.10.3`
+- update `@angular-devkit/build-angular` to `~0.901.1`
+- update `@angular-devkit/build-ng-packagr` to `~0.901.1`
+- update `@angular/cli` to `^9.1.1`
+- update `@angular/compiler-cli` to `^9.1.1`
+- update `@angular/language-service` to `^9.1.1`
+- update `@types/jasmine` to `^3.5.10`
+- update `@types/jasminewd2` to `~2.0.8`
+- update `@types/node` to `^13.11.1`
+- update `codelyzer` to `^5.2.2`
+- update `jasmine-spec-reporter` to `^5.0.1`
+- update `karma` to `^5.0.1`
+- update `karma-chrome-launcher` to `^3.1.0`
+- update `karma-coverage-istanbul-reporter` to `^2.1.1`
+- update `karma-jasmine` to `^3.1.1`
+- update `karma-jasmine-html-reporter` to `^1.5.3`
+- update `ng-packagr` to `^9.1.0`
+- update `protractor` to `^5.4.3`
+- update `ts-node` to `^8.8.2`
+- update `tslint` to `^6.1.1`
+- update `typescript` to `~3.6.5`
+
 ##### `v2.9.1`
 - fix: downgrade TypeScript to ~3.6.4 - thanks @jrocha closes #103
 
