@@ -7,6 +7,7 @@ import { DOCUMENT } from '@angular/common';
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
 
+  swapLogoAndBrand = false;
   @Input() fixed: boolean;
 
   @Input() navbarBrand: any;
