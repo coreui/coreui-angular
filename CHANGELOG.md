@@ -1,5 +1,8 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.9.4`
+- fix: routerLinkActiveOptions not passed to SidebarNavLink - thanks @CloudStrife28492 fixes #107
+
 ##### `v2.9.3`
 - fix: add missing AppSidebarNavComponent/AppSidebarMinimizer to public api - thanks @coyoteecd fixes #110
 
