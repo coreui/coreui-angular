@@ -25,7 +25,9 @@
      [replaceUrl]="item.linkProps?.replaceUrl"
      [state]="item.linkProps?.state"
      [routerLink]="item.url"
-     [class.active]="linkActive"
+     [routerLinkActive]="item.linkProps?.routerLinkActive || 'active'"
+     [routerLinkActiveOptions]="item.linkProps?.routerLinkActiveOptions?.exact ? item.linkProps?.routerLinkActiveOptions : {exact: false}"
+     [class.active]="linkActive && !item.linkProps?.routerLinkActiveOptions"
      (click)="linkClicked()"
   >
     <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
