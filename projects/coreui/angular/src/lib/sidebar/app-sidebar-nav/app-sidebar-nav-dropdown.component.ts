@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
+import { INavData } from '../app-sidebar-nav';
 
 @Component({
   selector: 'app-sidebar-nav-dropdown, cui-sidebar-nav-dropdown',
@@ -24,7 +25,7 @@ import {SidebarNavHelper} from '../app-sidebar-nav.service';
   providers: [ SidebarNavHelper ]
 })
 export class AppSidebarNavDropdownComponent {
-  @Input() item: any;
+  @Input() item: INavData;
 
   constructor(
     public helper: SidebarNavHelper

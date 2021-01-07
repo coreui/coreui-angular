@@ -1,12 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SidebarNavHelper} from '../app-sidebar-nav.service';
+import { INavData } from '../app-sidebar-nav';
 
 @Component({
   selector: 'app-sidebar-nav-label, cui-sidebar-nav-label',
   templateUrl: './app-sidebar-nav-label.component.html'
 })
 export class AppSidebarNavLabelComponent implements OnInit {
-  @Input() item: any;
+  @Input() item: INavData;
 
   private classes = {
     'nav-label': true,

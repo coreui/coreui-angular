@@ -18,7 +18,7 @@ import {INavData} from '../app-sidebar-nav';
   providers: [ SidebarNavHelper ]
 })
 export class AppSidebarNavLinkContentComponent implements OnInit, OnDestroy {
-  @Input() item: any;
+  @Input() item: INavData;
 
   constructor(
     public helper: SidebarNavHelper
