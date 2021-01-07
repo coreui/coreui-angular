@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular",
-  "version": "2.9.4",
+  "version": "2.9.5",
   "description": "CoreUI Angular Bootstrap 4 components",
   "license": "MIT",
   "homepage": "https://coreui.io/angular",
@@ -16,11 +16,13 @@
       "url": "https://github.com/xidedix"
     }
   ],
+  "dependencies": {
+    "tslib": "^1.14.1"
+  },
   "peerDependencies": {
     "@angular/common": "^9.1.1",
     "@angular/core": "^9.1.1",
     "@angular/router": "^9.1.1",
-    "tslib": "^1.13.0",
     "@coreui/coreui": "^2.1.16"
   },
   "repository": {
