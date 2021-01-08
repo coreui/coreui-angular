@@ -16,7 +16,7 @@ describe('AppSidebarNavTitleComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AppSidebarNavTitleComponent);
     component = fixture.componentInstance;
-    component.item = {};
+    component.item = { title: true, name: 'title'};
     fixture.detectChanges();
   });
 
