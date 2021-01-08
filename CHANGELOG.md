@@ -1,5 +1,34 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.9.5`
+- fix: use type INavData instead of any
+- chore(.github): add project checks workflows
+- test: minor updates e2e, unit
+
+###### dependencies update
+- update `@angular/animations` to `^9.1.13`
+- update `@angular/common` to `^9.1.13`
+- update `@angular/compiler` to `^9.1.13`
+- update `@angular/core` to `^9.1.13`
+- update `@angular/forms` to `^9.1.13`
+- update `@angular/localize` to `^9.1.13`
+- update `@angular/platform-browser` to `^9.1.13`
+- update `@angular/platform-browser-dynamic` to `^9.1.13`
+- update `@angular/router` to `^9.1.13`
+- update `rxjs` to `^6.6.3`
+- update `tslib` to `^1.14.1`
+- update `@angular-devkit/build-angular` to `^0.901.13`
+- update `@angular-devkit/build-ng-packagr` to `^0.901.13`
+- update `@angular/cli` to `^9.1.13`
+- update `@angular/compiler-cli` to `^9.1.13`
+- update `@angular/language-service` to `^9.1.13`
+- update `@types/jasmine` to `^3.6.2`
+- update `@types/node` to `^14.14.20`
+- update `karma` to `^5.2.3`
+- update `simple-line-icons` to `^2.5.5`  
+---
+- update `stylus@0.54.8` with `npm --depth 2 update stylus`
+
 ##### `v2.9.4`
 - fix: routerLinkActiveOptions not passed to SidebarNavLink - thanks @CloudStrife28492 fixes #107
 
