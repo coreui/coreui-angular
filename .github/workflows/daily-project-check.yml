@@ -1,0 +1,49 @@
+name: Daily project check
+
+on:
+  schedule:
+    # build runs every weekday at 3AM UTC
+    - cron: '0 3 * * 1-5'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: project check
+        run: |
+          npm i
+          npm run build-lib:prod
+          npm run test-lib:prod
+          npm run lint
+        env:
+          CI: true
+
+  e2e-chrome:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: e2e chrome test
+        run: |
+          choco install googlechrome
+          npm i
+          npm run e2e
+        env:
+          BROWSER: chrome
