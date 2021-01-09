@@ -20,7 +20,7 @@
     "build-lib:dev": "ng build @coreui/angular --watch",
     "build-lib:prod": "ng build @coreui/angular --prod",
     "test-lib:dev": "ng test @coreui/angular",
-    "test-lib:prod": "ng test @coreui/angular --watch=false",
+    "test-lib:prod": "ng test @coreui/angular --karmaConfig=projects/coreui/angular/karma.conf.github.js",
     "start": "ng serve",
     "test": "ng test",
     "lint": "ng lint",
