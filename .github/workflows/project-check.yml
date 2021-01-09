@@ -47,6 +47,7 @@ jobs:
         run: |
           choco install googlechrome
           npm i
+          npm run build-lib:prod
           npm run e2e
         env:
           BROWSER: chrome
