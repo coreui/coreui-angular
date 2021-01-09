@@ -1,6 +1,6 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
-##### `v2.9.5`
+##### `v2.9.6`
 - fix: use type INavData instead of any
 - chore(.github): add project checks workflows
 - test: minor updates e2e, unit
