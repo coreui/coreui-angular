@@ -1,5 +1,44 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.10.0`
+
+- chore: update to `Angular 10` and `TypeScript 3.9` 
+  - [https://update.angular.io/](https://update.angular.io/?v=9.1-10.2)
+  - [https://v10.angular.io/guide/updating-to-version-10](https://v10.angular.io/guide/updating-to-version-10)
+  - [TypeScript: Documentation - TypeScript 3.9](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html)  
+
+
+- test: deprecate `async()` in favour of `waitForAsync()`
+
+###### dependencies update
+- update `@angular/animations` to `^10.2.4`
+- update `@angular/common` to `^10.2.4`
+- update `@angular/compiler` to `^10.2.4`
+- update `@angular/core` to `^10.2.4`
+- update `@angular/forms` to `^10.2.4`
+- update `@angular/localize` to `^10.2.4`
+- update `@angular/platform-browser` to `^10.2.4`
+- update `@angular/platform-browser-dynamic` to `^10.2.4`
+- update `@angular/router` to `^10.2.4`
+- update `tslib` to `^2.0.0`
+- update `@angular-devkit/build-angular` to `^0.1002.1`
+- update `@angular-devkit/build-ng-packagr` to `^0.1002.1`
+- update `@angular/cli` to `^10.2.1`
+- update `@angular/compiler-cli` to `^10.2.4`
+- update `@angular/language-service` to `^10.2.4`
+- update `codelyzer` to `^6.0.1`
+- update `jasmine-spec-reporter` to `~5.0.0`
+- update `karma` to `~5.0.0`
+- update `karma-chrome-launcher` to `~3.1.0`
+- update `karma-coverage-istanbul-reporter` to `~3.0.2`
+- update `karma-jasmine` to `~4.0.0`
+- update `karma-jasmine-html-reporter` to `^1.5.0`
+- update `ng-packagr` to `^10.1.0`
+- update `ngx-perfect-scrollbar` to `^10.1.0`
+- update `protractor` to `~7.0.0`
+- update `tslint` to `~6.1.0`
+- update `typescript` to `~3.9.7`
+
 ##### `v2.9.6`
 - fix: use type INavData instead of any
 - chore(.github): add project checks workflows
