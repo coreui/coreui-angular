@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppSidebarNavBadgePipe } from './app-sidebar-nav-badge.pipe';
@@ -10,7 +10,7 @@ describe('AppSidebarNavLinkComponent', () => {
   let component: AppSidebarNavLinkComponent;
   let fixture: ComponentFixture<AppSidebarNavLinkComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppSidebarNavLinkComponent,

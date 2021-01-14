@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppSidebarComponent } from './app-sidebar.component';
@@ -7,7 +7,7 @@ describe('AppSidebarComponent', () => {
   let component: AppSidebarComponent;
   let fixture: ComponentFixture<AppSidebarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],
       declarations: [ AppSidebarComponent ],
@@ -40,7 +40,7 @@ describe('AppSidebarComponent', () => {
       expect(document.body.classList.contains('brand-minimized')).toBeFalsy();
     });
 
-    it('emits only when value changes', async(() => {
+    it('emits only when value changes', waitForAsync(() => {
       spyOn(component.minimizedChange, 'emit');
 
       component.minimized = true;
