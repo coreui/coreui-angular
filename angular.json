@@ -166,8 +166,14 @@
       }
     }
   },
-  "defaultProject": "coreui",
   "cli": {
     "analytics": false
+  },
+  "defaultProject": "coreui",
+  "schematics": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
   }
+
 }
