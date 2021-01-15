@@ -2,6 +2,7 @@
  * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
  */
 import '@angular/localize/init';
+
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
@@ -22,35 +23,14 @@ import '@angular/localize/init';
 * BROWSER POLYFILLS
 */
 
-/** IE9, IE10 and IE11 requires all of the following polyfills. */
-import 'core-js/es/symbol';
-import 'core-js/es/object';
-import 'core-js/es/function';
-import 'core-js/es/parse-int';
-import 'core-js/es/parse-float';
-import 'core-js/es/number';
-import 'core-js/es/math';
-import 'core-js/es/string';
-import 'core-js/es/date';
-import 'core-js/es/array';
-import 'core-js/es/regexp';
-import 'core-js/es/map';
-import 'core-js/es/weak-map';
-import 'core-js/es/set';
-import 'core-js/es/array';
-import 'core-js/es/object';
-
-/** IE10 and IE11 requires the following for NgClass support on SVG elements */
+/** IE11 requires the following for NgClass support on SVG elements */
 // import 'classlist.js';  // Run `npm install --save classlist.js`.
 
-/** IE10 and IE11 requires the following for the Reflect API. */
+/** IE11 requires all of the following polyfills. */
+import 'core-js';
+
+/** IE11 requires the following for the Reflect API. */
 import 'core-js/es/reflect';
-
-
-/** Evergreen browsers require these. */
-// Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-
-
 
 /**
  * Web Animations `@angular/platform-browser/animations`
@@ -62,17 +42,26 @@ import 'core-js/es/reflect';
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
  * user can disable parts of macroTask/DomEvents patch by setting following flags
+ * because those flags need to be set before `zone.js` being loaded, and webpack
+ * will put import in the top of bundle, so user need to create a separate file
+ * in this directory (for example: zone-flags.ts), and put the following flags
+ * into that file, and then add the following code before importing zone.js.
+ * import './zone-flags';
+ *
+ * The flags allowed in zone-flags.ts are listed here.
+ *
+ * The following flags will work for all browsers.
+ *
+ * (window as any).__Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
+ * (window as any).__Zone_disable_on_property = true; // disable patch onProperty such as onclick
+ * (window as any).__zone_symbol__UNPATCHED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
+ *
+ *  in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
+ *  with the following flag, it will bypass `zone.js` patch for IE/Edge
+ *
+ *  (window as any).__Zone_enable_cross_context_check = true;
+ *
  */
-
-(window as any).__Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
-(window as any).__Zone_disable_on_property = true; // disable patch onProperty such as onclick
-(window as any).__zone_symbol__BLACK_LISTED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
-
- /**
-  * in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
-  * with the following flag, it will bypass `zone.js` patch for IE/Edge
-  */
-(window as any).__Zone_enable_cross_context_check = true;
 
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
@@ -80,7 +69,8 @@ import 'core-js/es/reflect';
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 
-
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+(window as any).global = window;
+

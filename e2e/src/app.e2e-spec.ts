@@ -15,8 +15,8 @@ describe('CoreUI template', () => {
   //   page.navigateTo();
   // });
 
-  it('should display CoreUI Dashboard', () => {
-    expect(page.getParagraphText()).toEqual('CoreUI Dashboard');
+  it('should display CoreUI Dashboard', async () => {
+    expect(await page.getParagraphText()).toEqual('CoreUI Dashboard');
   });
 
   it('should toggle `sidebar-minimized` body.class on `sidebar-minimizer` click', () => {

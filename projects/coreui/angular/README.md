@@ -2,11 +2,12 @@
 
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular] 
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
+![angular](https://img.shields.io/badge/angular-^11.0.9-lightgrey.svg?style=flat-square&logo=angular)  
 [![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]  
 [![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
 [![npm package][npm-coreui-badge]][npm-coreui]
 [![NPM downloads][npm-coreui-download]][npm-coreui]
-![angular](https://img.shields.io/badge/angular-^10.2.0-lightgrey.svg?style=flat-square&logo=angular)  
+ 
 
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=red  
@@ -25,7 +26,7 @@
 Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
 ###### Node.js
-Angular 10 requires `Node.js` version 10.13 or later.
+Angular 11 requires `Node.js` version 10.13 or later.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -36,7 +37,7 @@ Install the Angular CLI globally using a terminal/console window.
 npm install -g @angular/cli
 ```
 
-##### Update to Angular 10
+##### Update to Angular 11
 see: [https://update.angular.io](https://update.angular.io)
 
 ## CoreUI Installation
