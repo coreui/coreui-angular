@@ -2,7 +2,7 @@
 
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular] 
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
-![angular](https://img.shields.io/badge/angular-^11.0.9-lightgrey.svg?style=flat-square&logo=angular)  
+![angular](https://img.shields.io/badge/angular-^11.1.0-lightgrey.svg?style=flat-square&logo=angular)  
 [![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]  
 [![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
 [![npm package][npm-coreui-badge]][npm-coreui]

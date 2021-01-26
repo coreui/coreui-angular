@@ -1,5 +1,28 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.11.1`
+
+- ##### `update to Angular 11.1`
+
+###### dependencies update
+- update `@angular/animations` to `^11.1.0`
+- update `@angular/common` to `^11.1.0`
+- update `@angular/compiler` to `^11.1.0`
+- update `@angular/core` to `^11.1.0`
+- update `@angular/forms` to `^11.1.0`
+- update `@angular/localize` to `^11.1.0`
+- update `@angular/platform-browser` to `^11.1.0`
+- update `@angular/platform-browser-dynamic` to `^11.1.0`
+- update `@angular/router` to `^11.1.0`
+- update `@angular-devkit/build-angular` to `^0.1101.1`
+- update `@angular/cli` to `^11.1.1`
+- update `@angular/compiler-cli` to `^11.1.0`
+- update `@angular/language-service` to `^11.1.0`
+- update `@types/jasmine` to `^3.6.3`
+- update `@types/node` to `^14.14.22`
+- update `ng-packagr` to `^11.1.2`
+
+
 ##### `v2.11.0`
 
 - chore: update to `Angular 11` and `TypeScript 4`
