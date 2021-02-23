@@ -1,5 +1,35 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.11.2`
+
+- ##### `update to Angular 11.2`
+
+###### dependencies update
+- update `@angular/animations` to `^11.2.2`
+- update `@angular/common` to `^11.2.2`
+- update `@angular/compiler` to `^11.2.2`
+- update `@angular/core` to `^11.2.2`
+- update `@angular/forms` to `^11.2.2`
+- update `@angular/localize` to `^11.2.2`
+- update `@angular/platform-browser` to `^11.2.2`
+- update `@angular/platform-browser-dynamic` to `^11.2.2`
+- update `@angular/router` to `^11.2.2`
+- update `tslib` to `^2.1.0`
+- update `zone.js` to `^0.11.4`
+- update `@angular-devkit/build-angular` to `^0.1102.1`
+- update `@angular/cli` to `^11.2.1`
+- update `@angular/compiler-cli` to `^11.2.2`
+- update `@angular/language-service` to `^11.2.2`
+- update `@types/jasmine` to `^3.6.4`
+- update `@types/node` to `^14.14.31`
+- update `codelyzer` to `^6.0.1`
+- update `jasmine-spec-reporter` to `~5.0.2`
+- update `karma-jasmine` to `~4.0.1`
+- update `karma-jasmine-html-reporter` to `^1.5.4`
+- update `ng-packagr` to `^11.2.4`
+- update `tslint` to `~6.1.3`
+
+
 ##### `v2.11.1`
 
 - ##### `update to Angular 11.1`
