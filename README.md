@@ -56,7 +56,7 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
 ###### Node.js
-Angular 11 requires `Node.js` version 10.13 or later.
+Angular 12 requires `Node.js` version 12.20.0 or later.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -67,7 +67,7 @@ Install the Angular CLI globally using a terminal/console window.
 npm install -g @angular/cli
 ```
 
-##### Update to Angular 11
+##### Update to Angular 12
 see: [https://update.angular.io](https://update.angular.io)
 
 ## CoreUI Installation
