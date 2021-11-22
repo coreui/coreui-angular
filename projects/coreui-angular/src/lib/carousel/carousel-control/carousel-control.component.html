@@ -1,0 +1,5 @@
+<div #content *ngIf = "hasContent; else default"><ng-content></ng-content></div>
+<ng-template #default>
+  <span [class]="carouselControlIconClass" [attr.aria-label]="direction" [attr.aria-hidden]="true"></span>
+  <span class="visually-hidden">{{caption}}</span>
+</ng-template>

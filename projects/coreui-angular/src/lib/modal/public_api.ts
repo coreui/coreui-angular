@@ -1,0 +1,10 @@
+export { ModalBodyComponent } from './modal-body/modal-body.component';
+export { ModalContentComponent } from './modal-content/modal-content.component';
+export { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
+export { ModalToggleDirective } from './modal-dismiss/modal-toggle.directive';
+export { ModalFooterComponent } from './modal-footer/modal-footer.component';
+export { ModalHeaderComponent } from './modal-header/modal-header.component';
+export { ModalTitleDirective } from './modal-title/modal-title.directive';
+export { ModalComponent } from './modal/modal.component';
+export { ModalService } from './modal.service';
+export { ModalModule } from './modal.module';

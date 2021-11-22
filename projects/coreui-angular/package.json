@@ -1,0 +1,47 @@
+{
+  "name": "@coreui/angular",
+  "version": "4.0.0-alpha.0",
+  "description": "CoreUI for Angular UI components library",
+  "license": "MIT",
+  "homepage": "https://coreui.io/angular",
+  "author": {
+    "name": "creativeLabs Łukasz Holeczek",
+    "url": "https://coreui.io",
+    "github": "https://github.com/coreui",
+    "twitter": "https://twitter.com/core_ui"
+  },
+  "contributors": [
+    {
+      "name": "CoreUI Team",
+      "url": "https://github.com/orgs/coreui/people"
+    }
+  ],
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "@popperjs/core": "^2.10.2"
+  },
+  "peerDependencies": {
+    "@angular/common": "^12.2.0",
+    "@angular/core": "^12.2.0",
+    "@angular/router": "^12.2.0",
+    "chart.js": "^2.9.4",
+    "ng2-charts": "^2.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coreui/coreui-angular.git"
+  },
+  "bugs": {
+    "url": "https://github.com/coreui/coreui-angular/issues"
+  },
+  "keywords": [
+    "coreui",
+    "angular",
+    "bootstrap",
+    "framework",
+    "responsive",
+    "layout",
+    "component",
+    "components"
+  ]
+}

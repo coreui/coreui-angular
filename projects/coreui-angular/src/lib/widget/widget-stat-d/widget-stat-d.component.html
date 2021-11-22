@@ -1,0 +1,12 @@
+<c-card-header [ngClass]="headerClasses">
+  <ng-content></ng-content>
+</c-card-header>
+<c-card-body cRow class="text-center">
+  <ng-template [ngForOf]="values" let-i="index" let-item ngFor>
+    <div *ngIf="i % 2 !== 0" class="vr"></div>
+    <c-col>
+      <div class="fs-5 fw-semibold">{{item.value}}</div>
+      <div class="text-uppercase text-medium-emphasis small">{{item.title}}</div>
+    </c-col>
+  </ng-template>
+</c-card-body>

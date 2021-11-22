@@ -1,0 +1,11 @@
+<ng-container>
+  <ng-container *ngTemplateOutlet="defaultImageTemplate"></ng-container>
+  <span *ngIf="!!status" [ngClass]="statusClass"></span>
+</ng-container>
+
+<ng-template #defaultImageTemplate>
+  <img *ngIf="!!src; else imageContent" [src]="src" class="avatar-img" />
+  <ng-template #imageContent>
+    <ng-content></ng-content>
+  </ng-template>
+</ng-template>

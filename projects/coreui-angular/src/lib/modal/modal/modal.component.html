@@ -1,0 +1,11 @@
+<c-modal-dialog
+  [alignment]="alignment"
+  [fullscreen]="fullscreen"
+  [scrollable]="scrollable"
+  [size]="size">
+  <c-modal-content>
+    <div [cdkTrapFocus]="visible" [cdkTrapFocusAutoCapture]="visible" style="display: contents;">
+      <ng-content></ng-content>
+    </div>
+  </c-modal-content>
+</c-modal-dialog>

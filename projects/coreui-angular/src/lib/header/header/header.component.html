@@ -1,0 +1,8 @@
+<div [class]="headerClasses" *ngIf="!!container; else elseBlock">
+  <ng-content></ng-content>
+</div>
+<ng-template #elseBlock>
+  <ng-content></ng-content>
+</ng-template>
+
+

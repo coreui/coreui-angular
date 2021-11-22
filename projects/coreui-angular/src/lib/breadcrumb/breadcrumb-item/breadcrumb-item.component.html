@@ -1,0 +1,24 @@
+<a *ngIf="!active; else activeItem"
+   [routerLink]="url"
+   [cHtmlAttr]="attributes ?? {}"
+   [target]="attributes?.target"
+   [queryParams]="linkProps?.queryParams ?? null"
+   [fragment]="linkProps?.fragment"
+   [queryParamsHandling]="linkProps?.queryParamsHandling ?? null"
+   [preserveFragment]="linkProps?.preserveFragment ?? false"
+   [skipLocationChange]="linkProps?.skipLocationChange ?? false"
+   [replaceUrl]="linkProps?.replaceUrl ?? false"
+   [state]="linkProps?.state ?? {}"
+>
+  <ng-container *ngTemplateOutlet="defaultBreadcrumbItemContentTemplate"></ng-container>
+</a>
+
+<ng-template #activeItem>
+  <span [cHtmlAttr]="attributes ?? {}">
+      <ng-container *ngTemplateOutlet="defaultBreadcrumbItemContentTemplate"></ng-container>
+  </span>
+</ng-template>
+
+<ng-template #defaultBreadcrumbItemContentTemplate>
+  <ng-content></ng-content>
+</ng-template>

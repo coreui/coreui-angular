@@ -1,0 +1,4 @@
+<ng-container>
+  <ng-content></ng-content>
+  <button *ngIf="closeButton" [cToastClose]="toast" [style]="{outline: 0}" aria-label="close" cButtonClose class="ms-auto"></button>
+</ng-container>

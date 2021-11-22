@@ -1,0 +1,22 @@
+<ng-container>
+  <c-card-body [ngClass]="cardBodyClasses">
+    <div [ngClass]="iconClasses">
+      <ng-container *ngTemplateOutlet="templates?.widgetIconTemplate || defaultWidgetIconTemplate"></ng-container>
+    </div>
+    <div>
+      <div [ngClass]="valueClasses">{{value}}</div>
+      <div [ngClass]="titleClasses">{{title}}</div>
+    </div>
+  </c-card-body>
+  <c-card-footer *ngIf="footer || templates?.widgetFooterTemplate">
+    <ng-container *ngTemplateOutlet="templates?.widgetFooterTemplate || defaultFooterIconTemplate"></ng-container>
+  </c-card-footer>
+</ng-container>
+
+<ng-template #defaultWidgetIconTemplate>
+  <span>{{icon}}</span>
+</ng-template>
+
+<ng-template #defaultFooterIconTemplate>
+  <span>{{footer}}</span>
+</ng-template>

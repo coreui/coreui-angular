@@ -1,0 +1,5 @@
+<div class="carousel-indicators">
+  <ng-container *ngFor="let item of items; let i=index">
+    <button [attr.data-coreui-target]="i" type="button" (click)="onClick(i)" [class]="{active: active === i}" [attr.aria-current]="active === i"></button>
+  </ng-container>
+</div>

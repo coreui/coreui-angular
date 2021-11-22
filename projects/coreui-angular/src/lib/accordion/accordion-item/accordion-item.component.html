@@ -1,0 +1,32 @@
+<ng-container>
+  <div class="accordion-header">
+    <ng-container *ngTemplateOutlet="templates?.accordionHeaderTemplate || defaultAccordionHeaderTemplate; context: itemContext"></ng-container>
+  </div>
+  <div class="accordion-collapse" cCollapse [visible]="open" [attr.aria-expanded]="open" [id]="contentId">
+    <ng-container *ngTemplateOutlet="templates?.accordionBodyTemplate || defaultAccordionBodyTemplate; context: itemContext"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #defaultAccordionHeaderTemplate>
+  <button cAccordionButton [collapsed]="!open" [attr.aria-controls]="contentId" (click)="toggleItem()">
+    <ng-container
+      *ngTemplateOutlet="templates?.accordionHeader || defaultAccordionHeaderContentTemplate; context: itemContext">
+    </ng-container>
+  </button>
+</ng-template>
+
+<ng-template #defaultAccordionHeaderContentTemplate>
+  <ng-content></ng-content>
+</ng-template>
+
+<ng-template #defaultAccordionBodyTemplate>
+  <div class="accordion-body">
+    <ng-container
+      *ngTemplateOutlet="templates?.accordionBody || defaultAccordionBodyContentTemplate; context: itemContext">
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #defaultAccordionBodyContentTemplate>
+  <ng-content></ng-content>
+</ng-template>

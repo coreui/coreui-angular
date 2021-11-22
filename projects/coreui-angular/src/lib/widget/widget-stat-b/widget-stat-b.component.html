@@ -1,0 +1,8 @@
+<c-card-body>
+  <div *ngIf="!!value" class="fs-4 fw-semibold">{{value}}</div>
+  <div *ngIf="!!title">{{title}}</div>
+  <ng-content></ng-content>
+  <small *ngIf="text" [ngClass]="inverse ? 'text-medium-emphasis-inverse' : 'text-medium-emphasis'">
+    {{text}}
+  </small>
+</c-card-body>

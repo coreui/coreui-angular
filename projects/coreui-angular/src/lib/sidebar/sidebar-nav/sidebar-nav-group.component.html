@@ -1,0 +1,23 @@
+<a class="nav-link nav-group-toggle"
+   (click)="toggleGroup($event)"
+   [cHtmlAttr]="item.attributes">
+  <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: item}"></ng-container>
+  <ng-container>{{ item.name }}</ng-container>
+  <span *ngIf="helper.hasBadge(item)" [ngClass]="item | cSidebarNavBadge">{{ item.badge.text }}</span>
+</a>
+<c-sidebar-nav
+  [groupItems]="true"
+  [navItems]="navItems">
+</c-sidebar-nav>
+
+<ng-template #iconTemplate let-item>
+  <i *ngIf="item?.icon" [ngClass]="item | cSidebarNavIcon"></i>
+  <ng-template [ngIf]="item?.iconComponent">
+    <svg
+      [cIcon]="item.iconComponent?.content"
+      [name]="item.iconComponent?.name"
+      [customClasses]="item | cSidebarNavIcon"
+    ></svg>
+  </ng-template>
+  <span *ngIf="!item?.icon && !item?.iconComponent" [ngClass]="item | cSidebarNavIcon"></span>
+</ng-template>

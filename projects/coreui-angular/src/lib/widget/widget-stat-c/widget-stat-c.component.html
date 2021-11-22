@@ -1,0 +1,22 @@
+<c-card-body>
+  <div *ngIf="icon || templates?.widgetIconTemplate" [ngClass]="iconClasses">
+    <ng-container *ngTemplateOutlet="templates?.widgetIconTemplate || defaultWidgetIconTemplate"></ng-container>
+  </div>
+  <div *ngIf="!!value" [ngClass]="valueClasses">
+    {{value}}
+  </div>
+  <div *ngIf="!!title" [ngClass]="titleClasses">
+    {{title}}
+  </div>
+  <ng-container *ngIf="templates?.widgetProgressTemplate">
+    <ng-container *ngTemplateOutlet="templates?.widgetProgressTemplate || defaultWidgetProgressTemplate"></ng-container>
+  </ng-container>
+</c-card-body>
+
+<ng-template #defaultWidgetIconTemplate>
+  {{icon}}
+</ng-template>
+
+<ng-template #defaultWidgetProgressTemplate>
+  <ng-content></ng-content>
+</ng-template>

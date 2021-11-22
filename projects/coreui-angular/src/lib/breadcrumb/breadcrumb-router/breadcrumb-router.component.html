@@ -1,0 +1,14 @@
+<c-breadcrumb class="m-0">
+  <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last="last">
+    <ng-container *ngIf="breadcrumb?.label && (breadcrumb?.url?.slice(-1) === '/' || last)">
+      <c-breadcrumb-item
+        [active]="last"
+        [url]="breadcrumb?.url"
+        [attributes]="breadcrumb?.attributes"
+        [linkProps]="breadcrumb?.linkProps"
+      >
+        {{ breadcrumb?.label }}
+      </c-breadcrumb-item>
+    </ng-container>
+  </ng-template>
+</c-breadcrumb>

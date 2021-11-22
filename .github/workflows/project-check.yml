@@ -27,27 +27,8 @@ jobs:
       - name: project check
         run: |
           npm i
-          npm run build-lib:prod
-          npm run test-lib:prod
-          npm run lint
+          npm run build:lib:prod
+          npm run lint:lib
+          npm run test:lib:prod
         env:
           CI: true
-
-  e2e-chrome:
-
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js 14
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: e2e chrome test
-        run: |
-          choco install googlechrome
-          npm i
-          npm run build-lib:prod
-          npm run e2e
-        env:
-          BROWSER: chrome
