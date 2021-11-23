@@ -7,6 +7,10 @@
       "coreui-angular": [
         "dist/coreui-angular/coreui-angular",
         "dist/coreui-angular"
+      ],
+      "coreui-angular-chartjs": [
+        "dist/coreui-angular-chartjs/coreui-angular-chartjs",
+        "dist/coreui-angular-chartjs"
       ]
     },
     "outDir": "./dist/out-tsc",

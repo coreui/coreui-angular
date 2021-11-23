@@ -14,7 +14,7 @@ export * from './lib/button-group';
 export * from './lib/callout';
 export * from './lib/card';
 export * from './lib/carousel';
-export * from './lib/chart';
+// export * from './lib/chart';
 export * from './lib/collapse';
 export * from './lib/dropdown';
 export * from './lib/footer';

@@ -1,7 +1,7 @@
 {
-  "root": true,
+  "extends": "../../.eslintrc.json",
   "ignorePatterns": [
-    "projects/**/*"
+    "!**/*"
   ],
   "overrides": [
     {
@@ -10,20 +10,17 @@
       ],
       "parserOptions": {
         "project": [
-          "./tsconfig.json"
+          "./projects/coreui-angular-chartjs/tsconfig.lib.json",
+          "./projects/coreui-angular-chartjs/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },
-      "extends": [
-        "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
-      ],
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
           {
             "type": "attribute",
-            "prefix": "app",
+            "prefix": "c",
             "style": "camelCase"
           }
         ],
@@ -31,19 +28,15 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": "c",
             "style": "kebab-case"
           }
-        ],
-        "@angular-eslint/no-conflicting-lifecycle": "off"
+        ]
       }
     },
     {
       "files": [
         "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended"
       ],
       "rules": {}
     }

@@ -5,13 +5,8 @@
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
       "@coreui/icons-angular": "coreui.icons-angular",
-      "@popperjs/core": "popperjs.core",
-      "ng2-charts": "ng2Charts"
+      "@popperjs/core": "popperjs.core"
     }
   },
-  "allowedNonPeerDependencies": ["@popperjs/core"],
-  "assets": [
-    "../../LICENSE",
-    "../../README.md"
-  ]
+  "allowedNonPeerDependencies": ["@popperjs/core"]
 }

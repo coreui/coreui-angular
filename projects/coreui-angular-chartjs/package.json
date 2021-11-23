@@ -1,0 +1,24 @@
+{
+  "name": "@coreui/angular-chartjs",
+  "description": "Angular wrapper component for Chart.js",
+  "version": "2.0.0-alpha.0",
+  "homepage": "https://coreui.io/angular/docs/components/chart/",
+  "bugs": {
+    "url": "https://github.com/coreui/coreui-angular/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coreui/coreui-angular.git"
+  },
+  "license": "MIT",
+  "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
+  "peerDependencies": {
+    "@angular/common": "^12.2.0",
+    "@angular/core": "^12.2.0",
+    "@coreui/chartjs": "^3.0.0",
+    "chart.js": "^3.6.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

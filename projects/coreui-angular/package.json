@@ -23,9 +23,7 @@
   "peerDependencies": {
     "@angular/common": "^12.2.0",
     "@angular/core": "^12.2.0",
-    "@angular/router": "^12.2.0",
-    "chart.js": "^2.9.4",
-    "ng2-charts": "^2.4.3"
+    "@angular/router": "^12.2.0"
   },
   "repository": {
     "type": "git",
