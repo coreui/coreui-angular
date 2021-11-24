@@ -22,7 +22,7 @@ import { OffcanvasService } from '../offcanvas.service';
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
-const nextId = 0;
+let nextId = 0;
 
 @Component({
   selector: 'c-offcanvas',
@@ -94,7 +94,7 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   }
   private _scroll = false;
 
-  @Input() id = `offcanvas-${this.placement}-${nextId}`;
+  @Input() id = `offcanvas-${this.placement}-${nextId++}`;
   /**
    * Default role for offcanvas. [docs]
    * @type string
