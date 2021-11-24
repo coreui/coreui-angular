@@ -17,10 +17,11 @@
     }
   ],
   "dependencies": {
-    "tslib": "^2.3.0",
-    "@popperjs/core": "^2.10.2"
+    "@popperjs/core": "^2.10.2",
+    "tslib": "^2.3.0"
   },
   "peerDependencies": {
+    "@angular/cdk": "^12.2.0",
     "@angular/common": "^12.2.0",
     "@angular/core": "^12.2.0",
     "@angular/router": "^12.2.0"

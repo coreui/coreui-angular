@@ -1,35 +1,47 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
   HostBinding,
   Input,
+  NgZone,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
+import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
 
-import assign from 'lodash/assign';
-import find from 'lodash/find';
-import merge from 'lodash/merge';
+import { assign, find, merge } from 'lodash';
 
-import { Chart, ChartData, ChartOptions, ChartType, Plugin } from 'chart.js/auto';
+import Chart, { ChartData, ChartOptions, ChartType, Plugin } from 'chart.js/auto';
 import * as chartjs from 'chart.js';
 
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
 import { IChartjs } from './chartjs.interface';
+
+let nextId = 0;
 
 @Component({
   selector: 'c-chart',
   templateUrl: './chartjs.component.html',
   styleUrls: ['./chartjs.component.scss']
 })
-export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
+// export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnInit {
+export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnInit, OnChanges {
+
+  static ngAcceptInputType_height: NumberInput;
+  static ngAcceptInputType_width: NumberInput;
+  static ngAcceptInputType_redraw: BooleanInput;
+
   @Input() customTooltips = true;
   @Input() data: ChartData | ((canvas: HTMLCanvasElement) => ChartData) | undefined;
 
+  @HostBinding('style.height.px')
   @Input()
   set height(value: number) {
     this._height = coerceNumberProperty(value);
@@ -39,7 +51,7 @@ export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
   }
   private _height = 150;
 
-  @Input() id?: string;
+  @Input() id = `c-chartjs-${nextId++}`;
   @Input() options?: ChartOptions;
   @Input() plugins?: Plugin[];
 
@@ -61,8 +73,8 @@ export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
   get width() {
     return this._width;
   }
-
   private _width = 300;
+
   @Input() wrapper = true;
 
   @Output() getDatasetAtEvent = new EventEmitter<any>();
@@ -71,7 +83,7 @@ export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
 
   @ViewChild('canvasElement') canvasElement!: ElementRef;
 
-  private chart: Chart | undefined;
+  chart: Chart | undefined;
 
   @HostBinding('class')
   get hostClasses() {
@@ -89,10 +101,20 @@ export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
       : merge({}, this.data);
   }
 
-  constructor() {}
+  constructor(
+    private elementRef: ElementRef,
+    private ngZone: NgZone,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit(): void {
+    // this.setupChart();
+    // this.updateChart();
+  }
+
+  ngAfterViewInit(): void {
     this.setupChart();
+    this.updateChart();
   }
 
   ngOnDestroy(): void {
@@ -102,8 +124,6 @@ export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
   setupChart() {
     if (!this.canvasElement) return;
 
-    const canvasRef = this.canvasElement.nativeElement;
-
     if (this.customTooltips) {
       chartjs.defaults.plugins.tooltip.enabled = false;
       chartjs.defaults.plugins.tooltip.mode = 'index';
@@ -111,11 +131,18 @@ export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
       chartjs.defaults.plugins.tooltip.external = cuiCustomTooltips;
     }
 
-    this.chart = new Chart(canvasRef.value, {
-      type: this.type,
-      data: this.computedData,
-      options: this.options as ChartOptions,
-      plugins: this.plugins
+    const ctx: CanvasRenderingContext2D = this.canvasElement.nativeElement.getContext('2d');
+
+    return this.ngZone.runOutsideAngular(() => {
+      this.chart = new Chart(ctx, {
+        type: this.type,
+        data: this.computedData,
+        options: this.options as ChartOptions,
+        plugins: this.plugins
+      });
+      setTimeout(() => {
+        this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
+      });
     });
   }
 
@@ -139,13 +166,20 @@ export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
   updateChart() {
     if (!this.chart) return;
 
+    if (this.redraw) {
+      this.destroyChart();
+      setTimeout(() => {
+        this.setupChart();
+      });
+    }
+
     if (this.options) {
       this.chart.options = { ...this.options };
     }
 
     if (!this.chart.config.data) {
       this.chart.config.data = this.computedData;
-      this.chart.update();
+      this.ngZone.runOutsideAngular(() => {this.chart?.update();});
       return;
     }
 
@@ -181,6 +215,14 @@ export class ChartjsComponent implements IChartjs, OnDestroy, OnInit {
       };
     });
 
-    this.chart?.update();
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.chart?.update();
+      });
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateChart();
   }
 }

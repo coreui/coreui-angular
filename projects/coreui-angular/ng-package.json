@@ -8,5 +8,7 @@
       "@popperjs/core": "popperjs.core"
     }
   },
-  "allowedNonPeerDependencies": ["@popperjs/core"]
+  "allowedNonPeerDependencies": [
+    "@popperjs/core"
+  ]
 }

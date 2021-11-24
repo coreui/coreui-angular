@@ -13,6 +13,7 @@
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "peerDependencies": {
+    "@angular/cdk": "^12.2.0",
     "@angular/common": "^12.2.0",
     "@angular/core": "^12.2.0",
     "@coreui/chartjs": "^3.0.0",
