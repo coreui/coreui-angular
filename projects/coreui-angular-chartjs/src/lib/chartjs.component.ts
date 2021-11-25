@@ -112,7 +112,9 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.updateChart();
+    if (!changes.data.firstChange) {
+      this.updateChart();
+    }
   }
 
   ngOnDestroy(): void {
@@ -157,7 +159,7 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
       });
       setTimeout(() => {
         this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
-      });
+      })
     });
   }
 
@@ -178,7 +180,9 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
 
     if (!this.chart.config.data) {
       this.chart.config.data = this.computedData;
-      this.ngZone.runOutsideAngular(() => {this.chart?.update();});
+      this.ngZone.runOutsideAngular(() => {
+        this.chart?.update();
+      });
       return;
     }
 
@@ -213,11 +217,10 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
         data: currentDataSet.data
       };
     });
-
-    this.ngZone.runOutsideAngular(() => {
-      setTimeout(() => {
+    setTimeout(() => {
+      this.ngZone.runOutsideAngular(() => {
         this.chart?.update();
       });
-    });
+    })
   }
 }
