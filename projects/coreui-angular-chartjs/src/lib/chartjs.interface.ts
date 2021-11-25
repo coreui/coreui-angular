@@ -21,7 +21,7 @@ export interface IChartjs {
   height?: number;
 
   /**
-   * id html attribute applied to the rendered canvas.
+   * Html id attribute applied to the rendered canvas.
    */
   id?: string;
 

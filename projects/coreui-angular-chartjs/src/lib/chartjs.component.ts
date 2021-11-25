@@ -8,7 +8,6 @@ import {
   NgZone,
   OnChanges,
   OnDestroy,
-  OnInit,
   Output,
   Renderer2,
   SimpleChanges,
@@ -31,8 +30,7 @@ let nextId = 0;
   templateUrl: './chartjs.component.html',
   styleUrls: ['./chartjs.component.scss']
 })
-// export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnInit {
-export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnInit, OnChanges {
+export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnChanges {
 
   static ngAcceptInputType_height: NumberInput;
   static ngAcceptInputType_width: NumberInput;
@@ -66,14 +64,15 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnI
 
   @Input() type: ChartType = 'bar';
 
+  @HostBinding('style.width.px')
   @Input()
-  set width(value: number) {
+  set width(value: number | undefined) {
     this._width = coerceNumberProperty(value);
   }
   get width() {
     return this._width;
   }
-  private _width = 300;
+  private _width: number | undefined;
 
   @Input() wrapper = true;
 
@@ -107,18 +106,34 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnI
     private renderer: Renderer2
   ) {}
 
-  ngOnInit(): void {
-    // this.setupChart();
-    // this.updateChart();
-  }
-
   ngAfterViewInit(): void {
     this.setupChart();
     this.updateChart();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateChart();
+  }
+
   ngOnDestroy(): void {
     this.destroyChart();
+  }
+
+  handleOnClick($event: MouseEvent) {
+    if (!this.chart) return;
+
+    const datasetAtEvent = this.chart.getElementsAtEventForMode($event, 'dataset', { intersect: true }, false);
+    this.getDatasetAtEvent.emit(datasetAtEvent);
+
+    const elementAtEvent = this.chart.getElementsAtEventForMode($event, 'nearest', { intersect: true }, false);
+    this.getElementAtEvent.emit(elementAtEvent);
+
+    const elementsAtEvent = this.chart.getElementsAtEventForMode($event, 'index', { intersect: true }, false);
+    this.getElementsAtEvent.emit(elementsAtEvent);
+  }
+
+  destroyChart() {
+    this.chart?.destroy();
   }
 
   setupChart() {
@@ -146,23 +161,6 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnI
     });
   }
 
-  handleOnClick($event: MouseEvent) {
-    if (!this.chart) return;
-
-    const datasetAtEvent = this.chart.getElementsAtEventForMode($event, 'dataset', { intersect: true }, false);
-    this.getDatasetAtEvent.emit(datasetAtEvent);
-
-    const elementAtEvent = this.chart.getElementsAtEventForMode($event, 'nearest', { intersect: true }, false);
-    this.getElementAtEvent.emit(elementAtEvent);
-
-    const elementsAtEvent = this.chart.getElementsAtEventForMode($event, 'index', { intersect: true }, false);
-    this.getElementsAtEvent.emit(elementsAtEvent);
-  }
-
-  destroyChart() {
-    this.chart?.destroy();
-  }
-
   updateChart() {
     if (!this.chart) return;
 
@@ -171,6 +169,7 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnI
       setTimeout(() => {
         this.setupChart();
       });
+      return;
     }
 
     if (this.options) {
@@ -220,9 +219,5 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnI
         this.chart?.update();
       });
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.updateChart();
   }
 }
