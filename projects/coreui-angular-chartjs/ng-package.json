@@ -11,5 +11,8 @@
   "allowedNonPeerDependencies": [
     "@coreui/chartjs",
     "chart.js"
+  ],
+  "assets": [
+    "README.png"
   ]
 }

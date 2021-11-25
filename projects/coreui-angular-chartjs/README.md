@@ -1,24 +1,126 @@
-# CoreuiAngularChartjs
+<p align="center">
+  <a href="https://coreui.io/">
+    <img
+      src="https://coreui.io/images/brand/coreui-signet.svg"
+      alt="CoreUI logo"
+      width="200"
+    />
+  </a>
+</p>
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.0.
+<h3 align="center">CoreUI Angular wrapper for Chart.js</h3>
 
-## Code scaffolding
+<p align="center">
+  <a href="https://coreui.io/angular/docs/components/chart/"><strong>Explore @coreui/angular-chartjs docs & examples »</strong></a>
+  <br>
+  <br>
+  <a href="https://github.com/coreui/coreui-angular/issues/new?template=bug_report.md">Report bug</a>
+  ·
+  <a href="https://github.com/coreui/coreui-angular/issues/new?template=feature_request.md">Request feature</a>
+  ·
+  <a href="https://blog.coreui.io/">Blog</a>
+</p>
 
-Run `ng generate component component-name --project coreui-angular-chartjs` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project coreui-angular-chartjs`.
-> Note: Don't forget to add `--project coreui-angular-chartjs` or else it will be added to the default project in your `angular.json` file. 
+## Status
 
-## Build
+[![npm package][npm-badge]][npm]
+[![NPM downloads][npm-download]][npm]
 
-Run `ng build coreui-angular-chartjs` to build the project. The build artifacts will be stored in the `dist/` directory.
+[npm-badge]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square
+[npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
+[npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
 
-## Publishing
+##### install:
 
-After building your library with `ng build coreui-angular-chartjs`, go to the dist folder `cd dist/coreui-angular-chartjs` and run `npm publish`.
+```bash
+npm install chart.js
+npm install @coreui/chartjs@3
+npm install @coreui/angular-chartjs
+````
 
-## Running unit tests
+##### import:
 
-Run `ng test coreui-angular-chartjs` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```ts
+import { ChartjsModule } from '@coreui/angular-chartjs';
 
-## Further help
+@NgModule({
+  imports: [
+      ChartjsModule,
+...
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+##### usage:
+
+```tsx
+@Component({
+  selector: 'app-chart-sample',
+  template: `<c-chart type="line" [data]="data" [options]="options" width="300"></c-chart>`,
+})
+export class ChartSample {
+
+  colors = {
+    label: 'My dataset',
+    backgroundColor: 'rgba(77,189,116,.2)',
+    borderColor: '#4dbd74',
+    pointHoverBackgroundColor: '#fff',
+  }
+
+  labels = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+  data = {
+    labels: this.labels,
+    datasets: [{
+      data: [65, 59, 84, 84, 51, 55, 40],
+      ...this.colors,
+      fill:  {value: 65}
+    }],
+  }
+
+  options = {
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    maintainAspectRatio: false,
+    elements: {
+      line: {
+        tension: 0.4
+      },
+    }
+  };
+}
+```
+![README.png](./README.png)
+
+
+### c-chart
+_component_
+
+##### Inputs:
+
+|name|description|type|default|
+|---|---|---|---|
+|`customTooltips`|Enables custom html based tooltips|`boolean`|_true_
+|`data`|The data passed to Chart.js chart|[`ChartData`](https://www.chartjs.org/docs/latest/general/data-structures.html)|**required**
+|`options`|The options object that is passed into the Chart.js chart|[`ChartOptions`](https://www.chartjs.org/docs/latest/general/options.html)|_undefined_
+|`plugins`|The plugins array that is passed into the Chart.js chart|[`Plugin[]`](https://www.chartjs.org/docs/latest/developers/plugins.html)|_undefined_
+|`redraw`|If true, will tear down and redraw chart on all updates|`boolean`|_false_
+|`type`|Chart.js chart type.|[`ChartType`](https://www.chartjs.org/docs/latest/charts/)|_bar_
+|`wrapper`|Put the chart into the wrapper with `display: block`.|[`ChartType`](https://www.chartjs.org/docs/latest/charts/)|_bar_
+|`height`|Height attribute applied to the rendered canvas (px)|`number`|_150_
+|`width`|Width attribute applied to the rendered canvas (px)|`number`|_undefined_
+|`id`|Html id attribute applied to the rendered canvas|`string`|_undefined_
+
+##### Outputs:
+
+|name|description|
+|---|---|
+|`getDatasetAtEvent`|Proxy for Chart.js getDatasetAtEvent. Calls with dataset and triggering event.
+|`getElementAtEvent`|Proxy for Chart.js getElementAtEvent. Calls with single element array and triggering event.
+|`getElementsAtEvent`|Proxy for Chart.js getElementsAtEvent. Calls with element array and triggering event.
+
+
+### See also:
+
+- Chart.js docs [https://www.chartjs.org/docs/](https://www.chartjs.org/docs/)
