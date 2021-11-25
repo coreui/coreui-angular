@@ -28,7 +28,8 @@ let nextId = 0;
 @Component({
   selector: 'c-chart',
   templateUrl: './chartjs.component.html',
-  styleUrls: ['./chartjs.component.scss']
+  styleUrls: ['./chartjs.component.scss'],
+  exportAs: 'cChart'
 })
 export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnChanges {
 
