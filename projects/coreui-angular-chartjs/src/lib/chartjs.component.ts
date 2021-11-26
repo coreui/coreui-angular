@@ -15,10 +15,9 @@ import {
 } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
 
-import { assign, find, merge } from 'lodash';
+import { merge } from 'lodash';
 
 import Chart, { ChartData, ChartOptions, ChartType, Plugin } from 'chart.js/auto';
-import * as chartjs from 'chart.js';
 
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
 import { IChartjs } from './chartjs.interface';
@@ -52,7 +51,7 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
 
   @Input() id = `c-chartjs-${nextId++}`;
   @Input() options?: ChartOptions;
-  @Input() plugins?: Plugin[];
+  @Input() plugins: Plugin[] = [];
 
   @Input()
   set redraw(value: boolean) {
@@ -92,13 +91,13 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
     };
   }
 
-  get computedData() {
+  get chartData() {
     const canvasRef = this.canvasElement.nativeElement;
     return typeof this.data === 'function'
       ? canvasRef.value
         ? this.data(canvasRef.value)
-        : { datasets: [] }
-      : merge({}, this.data);
+        : { labels: [], datasets: [] }
+      : merge({ labels: [], datasets: [] }, { ...this.data });
   }
 
   constructor(
@@ -108,21 +107,21 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
   ) {}
 
   ngAfterViewInit(): void {
-    this.setupChart();
-    this.updateChart();
+    this.chartRender();
+    this.chartUpdate();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes.data.firstChange) {
-      this.updateChart();
+      this.chartUpdate();
     }
   }
 
   ngOnDestroy(): void {
-    this.destroyChart();
+    this.chartDestroy();
   }
 
-  handleOnClick($event: MouseEvent) {
+  public handleOnClick($event: MouseEvent) {
     if (!this.chart) return;
 
     const datasetAtEvent = this.chart.getElementsAtEventForMode($event, 'dataset', { intersect: true }, false);
@@ -135,42 +134,50 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
     this.getElementsAtEvent.emit(elementsAtEvent);
   }
 
-  destroyChart() {
+  public chartDestroy() {
     this.chart?.destroy();
   }
 
-  setupChart() {
+  public chartRender() {
     if (!this.canvasElement) return;
 
     if (this.customTooltips) {
-      chartjs.defaults.plugins.tooltip.enabled = false;
-      chartjs.defaults.plugins.tooltip.mode = 'index';
-      chartjs.defaults.plugins.tooltip.position = 'nearest';
-      chartjs.defaults.plugins.tooltip.external = cuiCustomTooltips;
+      const options = this.options
+      this.options = {
+        ...options,
+        plugins: {
+          ...options?.plugins,
+          tooltip: {
+            ...options?.plugins?.tooltip,
+            enabled: false,
+            mode: 'index',
+            position: 'nearest',
+            external: cuiCustomTooltips
+          }
+        }
+      };
     }
 
     const ctx: CanvasRenderingContext2D = this.canvasElement.nativeElement.getContext('2d');
 
     return this.ngZone.runOutsideAngular(() => {
-      this.chart = new Chart(ctx, {
-        type: this.type,
-        data: this.computedData,
-        options: this.options as ChartOptions,
-        plugins: this.plugins
-      });
-      setTimeout(() => {
-        this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
-      })
+      const config = this.chartConfig();
+      if (config) {
+        this.chart = new Chart(ctx, config);
+        setTimeout(() => {
+            this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
+        });
+      }
     });
   }
 
-  updateChart() {
+  chartUpdate() {
     if (!this.chart) return;
 
     if (this.redraw) {
-      this.destroyChart();
+      this.chartDestroy();
       setTimeout(() => {
-        this.setupChart();
+        this.chartRender();
       });
       return;
     }
@@ -179,49 +186,47 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
       this.chart.options = { ...this.options };
     }
 
+    const config = this.chartConfig();
+
     if (!this.chart.config.data) {
-      this.chart.config.data = this.computedData;
-      this.ngZone.runOutsideAngular(() => {
-        this.chart?.update();
-      });
-      return;
+      this.chart.config.data = { ...config.data };
+      this.chartUpdateOutsideAngular();
     }
 
-    const { datasets: newDataSets = [], ...newChartData } = this.computedData;
-    const { datasets: currentDataSets = [] } = this.chart.config.data;
+    if (this.chart) {
+      Object.assign(this.chart.config.options, config.options);
+      Object.assign(this.chart.config.plugins, config.plugins);
+      Object.assign(this.chart.config.data, config.data);
+    }
 
-    // copy values
-    assign(this.chart.config.data, newChartData);
-    this.chart.config.data.datasets = newDataSets.map((newDataSet: any) => {
-      // given the new set, find it's current match
-      const currentDataSet = find(
-        currentDataSets,
-        (d: any) => d.label === newDataSet.label && d.type === newDataSet.type
-      );
+    this.chartUpdateOutsideAngular();
+  }
 
-      // There is no original to update, so simply add new one
-      if (!currentDataSet || !newDataSet.data) return newDataSet;
-
-      if (!currentDataSet.data) {
-        currentDataSet.data = [];
-      } else {
-        currentDataSet.data.length = newDataSet.data.length;
-      }
-
-      // copy in values
-      assign(currentDataSet.data, newDataSet.data);
-
-      // apply dataset changes, but keep copied data
-      return {
-        ...currentDataSet,
-        ...newDataSet,
-        data: currentDataSet.data
-      };
-    });
+  private chartUpdateOutsideAngular() {
     setTimeout(() => {
       this.ngZone.runOutsideAngular(() => {
         this.chart?.update();
       });
-    })
+    });
+  }
+
+  public chartToBase64Image(): string | undefined {
+    return this.chart?.toBase64Image();
+  }
+
+  private chartDataConfig() {
+    return {
+      labels: this.chartData?.labels ?? [],
+      datasets: [...this.chartData?.datasets] ?? []
+    };
+  }
+
+  private chartConfig() {
+    return {
+      data: this.chartDataConfig(),
+      options: this.options as ChartOptions,
+      plugins: this.plugins,
+      type: this.type
+    };
   }
 }
