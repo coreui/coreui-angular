@@ -32,5 +32,8 @@ jobs:
           npm run build:lib:prod
           npm run lint:lib
           npm run test:lib:prod
+          npm run build:chartjs:prod
+          npm run lint:chartjs
+          npm run test:chartjs:prod
         env:
           CI: true

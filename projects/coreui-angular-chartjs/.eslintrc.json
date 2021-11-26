@@ -10,8 +10,6 @@
       ],
       "parserOptions": {
         "project": [
-          "./tsconfig.lib.json",
-          "./tsconfig.spec.json",
           "./projects/coreui-angular-chartjs/tsconfig.lib.json",
           "./projects/coreui-angular-chartjs/tsconfig.spec.json"
         ],
