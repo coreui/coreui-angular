@@ -1,0 +1,36 @@
+name: Project check
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - v4-dev
+  pull_request:
+    branches:
+      - master
+      - main
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: project check
+        run: |
+          npm i
+          npm run build:chartjs:prod
+          npm run lint:chartjs
+          npm run test:chartjs:prod
+        env:
+          CI: true
