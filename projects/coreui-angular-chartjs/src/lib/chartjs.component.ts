@@ -108,11 +108,11 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
 
   ngAfterViewInit(): void {
     this.chartRender();
-    this.chartUpdate();
+    // this.chartUpdate();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes.data.firstChange) {
+    if (changes.data && !changes.data.firstChange) {
       this.chartUpdate();
     }
   }
@@ -160,7 +160,7 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
 
     const ctx: CanvasRenderingContext2D = this.canvasElement.nativeElement.getContext('2d');
 
-    return this.ngZone.runOutsideAngular(() => {
+    this.ngZone.runOutsideAngular(() => {
       const config = this.chartConfig();
       if (config) {
         this.chart = new Chart(ctx, config);
