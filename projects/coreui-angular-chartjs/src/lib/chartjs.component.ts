@@ -182,11 +182,12 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
       return;
     }
 
-    if (this.options) {
-      this.chart.options = { ...this.options };
-    }
 
     const config = this.chartConfig();
+
+    if (this.options) {
+      Object.assign(this.chart.options, config.options);
+    }
 
     if (!this.chart.config.data) {
       this.chart.config.data = { ...config.data };
@@ -222,6 +223,7 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
   }
 
   private chartConfig() {
+    this.chartCustomTooltips();
     return {
       data: this.chartDataConfig(),
       options: this.options as ChartOptions,
@@ -229,4 +231,23 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
       type: this.type
     };
   }
+
+  private chartCustomTooltips() {
+    if (this.customTooltips) {
+      const options = this.options
+      this.options = {
+        ...options,
+        plugins: {
+          ...options?.plugins,
+          tooltip: {
+            ...options?.plugins?.tooltip,
+            enabled: false,
+            mode: 'index',
+            position: 'nearest',
+            external: cuiCustomTooltips
+          }
+        }
+      };
+    };
+  };
 }
