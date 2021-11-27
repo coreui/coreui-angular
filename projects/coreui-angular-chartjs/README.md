@@ -11,7 +11,7 @@
 <h3 align="center">CoreUI Angular wrapper for Chart.js</h3>
 
 <p align="center">
-  <a href="https://coreui.io/angular/docs/components/chart/"><strong>Explore @coreui/angular-chartjs docs & examples »</strong></a>
+  <a href="https://coreui.io/angular/docs/"><strong>Explore @coreui/angular-chartjs docs & examples »</strong></a>
   <br>
   <br>
   <a href="https://github.com/coreui/coreui-angular/issues/new?template=bug_report.md">Report bug</a>
