@@ -11,7 +11,8 @@
   },
   "allowedNonPeerDependencies": [
     "@coreui/chartjs",
-    "chart.js"
+    "chart.js",
+    "lodash-es"
   ],
   "assets": [
     "README.png"
