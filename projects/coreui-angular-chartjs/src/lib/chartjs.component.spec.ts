@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChartjsComponent } from './chartjs.component';
+import { Chart, registerables } from 'chart.js';
 
 describe('ChartjsComponent', () => {
   let component: ChartjsComponent;
@@ -25,12 +26,13 @@ describe('ChartjsComponent', () => {
   };
 
   beforeEach(async () => {
+    Chart.register(...registerables);
+
     await TestBed.configureTestingModule({
       declarations: [ChartjsComponent]
     }).compileComponents();
 
-    // Chart.register(...registerables);
-
+    // @ts-ignore
     fixture = TestBed.createComponent(ChartjsComponent);
     component = fixture.componentInstance;
     component.data = undefined;
@@ -46,9 +48,9 @@ describe('ChartjsComponent', () => {
   it('chart should receive data', () => {
     component.data = { ...data };
     fixture.detectChanges();
-    expect(component.chart?.data.labels?.length).toBe(7);
-    expect(component.chart?.data.labels).toEqual(labels);
-    expect(component.chart?.data.datasets[0]?.data.length).toBe(7);
+    expect(component.chart?.config.data.labels?.length).toBe(7);
+    expect(component.chart?.config.data.labels).toEqual(labels);
+    expect(component.chart?.config.data.datasets[0]?.data.length).toBe(7);
   });
 
   it('chart to Base64Image', () => {
@@ -61,10 +63,6 @@ describe('ChartjsComponent', () => {
   });
 
   it('chart should update on data change', () => {
-    component.data = { ...data };
-    // todo
-    fixture.detectChanges();
-
     component.data = {
       ...data,
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
@@ -73,15 +71,8 @@ describe('ChartjsComponent', () => {
         { ...data.datasets[0], data: [55, 44, 55, 66, 22] }
       ]
     };
-    // todo
-    // @ts-ignore
-    component.chart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
-    // @ts-ignore
-    component.chart.data.datasets.fill({ ...data.datasets[0], data: [42, 88, 42, 66, 77] });
-    // @ts-ignore
-    component.chart.data.datasets.push({ ...data.datasets[0], data: [55, 44, 55, 66, 22] });
     fixture.detectChanges();
-    expect(component.chart?.data.labels?.length).toBe(5);
-    expect(component.chart?.data.datasets[1].data.length).toBe(5);
+    expect(component.chart.config?.data.labels?.length).toBe(5);
+    expect(component.chart.config?.data.datasets[1]?.data.length).toBe(5);
   });
 });
