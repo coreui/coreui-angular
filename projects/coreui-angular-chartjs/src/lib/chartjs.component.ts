@@ -17,10 +17,10 @@ import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput 
 
 import { merge } from 'lodash';
 
-import Chart, { ChartData, ChartOptions, ChartType, Plugin } from 'chart.js/auto';
-
+import { Chart, ChartConfiguration, ChartType, DefaultDataPoint, registerables } from 'chart.js';
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
-import { IChartjs } from './chartjs.interface';
+
+Chart.register(...registerables);
 
 let nextId = 0;
 
@@ -30,48 +30,54 @@ let nextId = 0;
   styleUrls: ['./chartjs.component.scss'],
   exportAs: 'cChart'
 })
-export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnChanges {
+export class ChartjsComponent<TType extends ChartType = ChartType, TData = DefaultDataPoint<TType>, TLabel = unknown> implements AfterViewInit, OnDestroy, OnChanges {
 
   static ngAcceptInputType_height: NumberInput;
   static ngAcceptInputType_width: NumberInput;
   static ngAcceptInputType_redraw: BooleanInput;
 
   @Input() customTooltips = true;
-  @Input() data: ChartData | ((canvas: HTMLCanvasElement) => ChartData) | undefined;
+  @Input() data?: ChartConfiguration<TType, TData, TLabel>['data'];
 
   @HostBinding('style.height.px')
   @Input()
-  set height(value: number) {
+  set height(value: number | undefined) {
     this._height = coerceNumberProperty(value);
   }
+
   get height() {
     return this._height;
   }
-  private _height = 150;
+
+  private _height: number | undefined;
 
   @Input() id = `c-chartjs-${nextId++}`;
-  @Input() options?: ChartOptions;
-  @Input() plugins: Plugin[] = [];
+  @Input() options?: ChartConfiguration<TType, TData, TLabel>['options'];
+  @Input() plugins: ChartConfiguration<TType, TData, TLabel>['plugins'] = [];
 
   @Input()
   set redraw(value: boolean) {
     this._redraw = coerceBooleanProperty(value);
   }
+
   get redraw(): boolean {
     return this._redraw;
   }
+
   private _redraw = false;
 
-  @Input() type: ChartType = 'bar';
+  @Input() type: ChartConfiguration<TType, TData, TLabel>['type'] = 'bar' as TType;
 
   @HostBinding('style.width.px')
   @Input()
   set width(value: number | undefined) {
     this._width = coerceNumberProperty(value);
   }
+
   get width() {
     return this._width;
   }
+
   private _width: number | undefined;
 
   @Input() wrapper = true;
@@ -82,22 +88,13 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
 
   @ViewChild('canvasElement') canvasElement!: ElementRef;
 
-  chart: Chart | undefined;
+  chart!: Chart<TType, TData, TLabel>;
 
   @HostBinding('class')
   get hostClasses() {
     return {
       'chart-wrapper': this.wrapper
     };
-  }
-
-  get chartData() {
-    const canvasRef = this.canvasElement.nativeElement;
-    return typeof this.data === 'function'
-      ? canvasRef.value
-        ? this.data(canvasRef.value)
-        : { labels: [], datasets: [] }
-      : merge({ labels: [], datasets: [] }, { ...this.data });
   }
 
   constructor(
@@ -141,23 +138,6 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
   public chartRender() {
     if (!this.canvasElement) return;
 
-    if (this.customTooltips) {
-      const options = this.options
-      this.options = {
-        ...options,
-        plugins: {
-          ...options?.plugins,
-          tooltip: {
-            ...options?.plugins?.tooltip,
-            enabled: false,
-            mode: 'index',
-            position: 'nearest',
-            external: cuiCustomTooltips
-          }
-        }
-      };
-    }
-
     const ctx: CanvasRenderingContext2D = this.canvasElement.nativeElement.getContext('2d');
 
     this.ngZone.runOutsideAngular(() => {
@@ -165,7 +145,7 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
       if (config) {
         this.chart = new Chart(ctx, config);
         setTimeout(() => {
-            this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
+          this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
         });
       }
     });
@@ -181,7 +161,6 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
       });
       return;
     }
-
 
     const config = this.chartConfig();
 
@@ -215,18 +194,22 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
     return this.chart?.toBase64Image();
   }
 
-  private chartDataConfig() {
+  private chartDataConfig(): ChartConfiguration<TType, TData, TLabel>['data'] {
     return {
-      labels: this.chartData?.labels ?? [],
-      datasets: [...this.chartData?.datasets] ?? []
+      labels: this.data?.labels ?? [],
+      datasets: this.data?.datasets ?? []
     };
   }
 
-  private chartConfig() {
+  private chartOptions(): ChartConfiguration<TType, TData, TLabel>['options'] {
+    return this.options;
+  }
+
+  private chartConfig(): ChartConfiguration<TType, TData, TLabel> {
     this.chartCustomTooltips();
     return {
       data: this.chartDataConfig(),
-      options: this.options as ChartOptions,
+      options: this.chartOptions(),
       plugins: this.plugins,
       type: this.type
     };
@@ -234,20 +217,24 @@ export class ChartjsComponent implements IChartjs, AfterViewInit, OnDestroy, OnC
 
   private chartCustomTooltips() {
     if (this.customTooltips) {
-      const options = this.options
-      this.options = {
+      const options = this.options;
+      // @ts-ignore
+      const plugins = this.options?.plugins;
+      // @ts-ignore
+      const tooltip = this.options?.plugins?.tooltip;
+      this.options = merge({
         ...options,
         plugins: {
-          ...options?.plugins,
+          ...plugins,
           tooltip: {
-            ...options?.plugins?.tooltip,
+            ...tooltip,
             enabled: false,
             mode: 'index',
             position: 'nearest',
             external: cuiCustomTooltips
           }
         }
-      };
-    };
+      });
+    }
   };
 }

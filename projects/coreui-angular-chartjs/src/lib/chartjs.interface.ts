@@ -1,7 +1,8 @@
-import { ChartData, ChartOptions, ChartType, Plugin } from 'chart.js/auto';
+import { ChartType } from 'chart.js/auto';
 import { EventEmitter } from '@angular/core';
+import { ChartConfiguration, DefaultDataPoint } from 'chart.js';
 
-export interface IChartjs {
+export interface IChartjs<TType extends ChartType = ChartType, TData = DefaultDataPoint<TType>, TLabel = unknown> {
   /**
    * Enables custom html based tooltips instead of standard tooltips.
    * @default true
@@ -11,12 +12,12 @@ export interface IChartjs {
   /**
    * The data object that is passed into the Chart.js chart (more info).
    */
-  data: ChartData | ((canvas: HTMLCanvasElement) => ChartData) | undefined;
+  data?: ChartConfiguration<TType, TData, TLabel>['data'];
 
   /**
    * Height attribute applied to the rendered canvas.
    *
-   * @default 150
+   * @default undefined
    */
   height?: number;
 
@@ -29,13 +30,13 @@ export interface IChartjs {
    * The options object that is passed into the Chart.js chart.
    * {@link https://www.chartjs.org/docs/latest/general/options.html More Info}
    */
-  options?: ChartOptions;
+  options?: ChartConfiguration<TType, TData, TLabel>['options'];
 
   /**
    * The plugins array that is passed into the Chart.js chart (more info)
    * {@link https://www.chartjs.org/docs/latest/developers/plugins.html More Info}
    */
-  plugins?: Plugin[];
+  plugins?: ChartConfiguration<TType, TData, TLabel>['plugins'];
 
   /**
    * If true, will tear down and redraw chart on all updates.
@@ -47,7 +48,7 @@ export interface IChartjs {
    * Chart.js chart type.
    * @type {'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'pie' | 'scatter'}
    */
-  type: ChartType;
+  type: ChartConfiguration<TType, TData, TLabel>['type'];
 
   /**
    * Width attribute applied to the rendered canvas.

@@ -4,8 +4,9 @@
   "lib": {
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
-      "@coreui/chartjs": "@coreui/chartjs",
-      "chart.js": "chart.js"
+      "@coreui/chartjs": "coreui.chartjs",
+      "chart.js": "chart.js",
+      "lodash": "lodash"
     }
   },
   "allowedNonPeerDependencies": [
