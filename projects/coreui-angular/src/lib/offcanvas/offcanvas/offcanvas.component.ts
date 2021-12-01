@@ -217,7 +217,7 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
 
   private setBackdrop(setBackdrop: boolean): void {
     if (setBackdrop) {
-      this.activeBackdrop = this.backdropService.setBackdrop();
+      this.activeBackdrop = this.backdropService.setBackdrop('offcanvas');
       this.backdropClickSubscribe();
     } else {
       this.activeBackdrop = this.backdropService.clearBackdrop(this.activeBackdrop);
