@@ -54,6 +54,11 @@
     },
     "coreui-angular-chartjs": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/coreui-angular-chartjs",
       "sourceRoot": "projects/coreui-angular-chartjs/src",
       "prefix": "c",
