@@ -20,18 +20,18 @@ export class BackdropService {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
 
-  setBackdrop(): any {
-    const backdrop = this.renderer.createElement('div');
-    this.renderer.addClass(backdrop, 'modal-backdrop');
-    this.renderer.addClass(backdrop, 'fade');
-    this.renderer.appendChild(this.document.body, backdrop);
-    this.unListen = this.renderer.listen(backdrop, 'click', (e): void => {
+  setBackdrop(type: string = 'modal'): any {
+    const backdropElement = this.renderer.createElement('div');
+    this.renderer.addClass(backdropElement, `${type}-backdrop`);
+    this.renderer.addClass(backdropElement, 'fade');
+    this.renderer.appendChild(this.document.body, backdropElement);
+    this.unListen = this.renderer.listen(backdropElement, 'click', (e): void => {
       this.onClickHandler();
     });
     setTimeout(() => {
-      this.renderer.addClass(backdrop, 'show');
+      this.renderer.addClass(backdropElement, 'show');
     });
-    return backdrop;
+    return backdropElement;
   }
 
   clearBackdrop(backdrop: any): any {
