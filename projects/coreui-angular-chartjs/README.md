@@ -102,13 +102,13 @@ _component_
 |name|description|type|default|
 |---|---|---|---|
 |`customTooltips`|Enables custom html based tooltips|`boolean`|_true_
-|`data`|The data passed to Chart.js chart|[`ChartData`](https://www.chartjs.org/docs/latest/general/data-structures.html)|**required**
+|`data`|The data passed to Chart.js chart|[`ChartData`](https://www.chartjs.org/docs/latest/api/interfaces/ChartData.html)|**required**
 |`options`|The options object that is passed into the Chart.js chart|[`ChartOptions`](https://www.chartjs.org/docs/latest/general/options.html)|_undefined_
-|`plugins`|The plugins array that is passed into the Chart.js chart|[`Plugin[]`](https://www.chartjs.org/docs/latest/developers/plugins.html)|_undefined_
+|`plugins`|The plugins array that is passed into the Chart.js chart|[`PluginOptionsByType`](https://www.chartjs.org/docs/latest/api/interfaces/PluginOptionsByType.html)|_undefined_
 |`redraw`|If true, will tear down and redraw chart on all updates|`boolean`|_false_
-|`type`|Chart.js chart type.|[`ChartType`](https://www.chartjs.org/docs/latest/charts/)|_bar_
-|`wrapper`|Put the chart into the wrapper with `display: block`.|[`ChartType`](https://www.chartjs.org/docs/latest/charts/)|_bar_
-|`height`|Height attribute applied to the rendered canvas (px)|`number`|_150_
+|`type`|Chart.js chart type.|[`keyof ChartTypeRegistry`](https://www.chartjs.org/docs/latest/api/interfaces/ChartTypeRegistry.html)|_bar_
+|`wrapper`|Put the chart into the wrapper with `display: block`.|`boolean`|_true_
+|`height`|Height attribute applied to the rendered canvas (px)|`number`|_undefined_
 |`width`|Width attribute applied to the rendered canvas (px)|`number`|_undefined_
 |`id`|Html id attribute applied to the rendered canvas|`string`|_undefined_
 
