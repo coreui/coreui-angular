@@ -47,6 +47,7 @@ import { ModalContentComponent } from '../modal-content/modal-content.component'
 export class ModalComponent implements OnInit, OnDestroy {
 
   static ngAcceptInputType_scrollable: BooleanInput;
+  static ngAcceptInputType_visible: BooleanInput;
 
   constructor(
     @Inject(DOCUMENT) private document: any,
@@ -120,11 +121,14 @@ export class ModalComponent implements OnInit, OnDestroy {
    * @type boolean
    */
   @Input()
-  set visible(visible: boolean) {
-    this._visible = visible;
-    this.setBackdrop(this.backdrop !== false && visible);
-    this.setBodyStyles(visible);
-    this.visibleChange.emit(visible);
+  set visible(value: boolean) {
+    const newValue = coerceBooleanProperty(value);
+    if(this._visible !== newValue) {
+      this._visible = newValue;
+      this.setBackdrop(this.backdrop !== false && newValue);
+      this.setBodyStyles(newValue);
+      this.visibleChange.emit(newValue);
+    }
   }
   get visible(): boolean {
     return this._visible;
