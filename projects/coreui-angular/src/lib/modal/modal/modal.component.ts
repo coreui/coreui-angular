@@ -260,7 +260,7 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   private setBackdrop(setBackdrop: boolean): void {
     if (setBackdrop) {
-      this.activeBackdrop = this.backdropService.setBackdrop();
+      this.activeBackdrop = this.backdropService.setBackdrop('modal');
     } else {
       this.activeBackdrop = this.backdropService.clearBackdrop(this.activeBackdrop);
     }
