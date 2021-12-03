@@ -93,7 +93,7 @@ export class TabContentRefDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.active?.currentValue) {
+    if (changes['active']?.currentValue) {
       this.setActiveTabPane();
     }
   }

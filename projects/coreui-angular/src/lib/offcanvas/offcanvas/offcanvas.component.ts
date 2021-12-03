@@ -182,7 +182,7 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.scroll) {
+    if (changes['scroll']) {
       this.setScroll();
     }
   }

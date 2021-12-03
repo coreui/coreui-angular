@@ -20,7 +20,7 @@
   <a *ngSwitchDefault
      [ngClass]="item | cSidebarNavLink"
      [cHtmlAttr]="item.attributes ?? {}"
-     [target]="item.attributes?.target"
+     [target]="item.attributes?.['target']"
      [queryParams]="item.linkProps?.queryParams ?? null"
      [fragment]="item.linkProps?.fragment"
      [queryParamsHandling]="item.linkProps?.queryParamsHandling"

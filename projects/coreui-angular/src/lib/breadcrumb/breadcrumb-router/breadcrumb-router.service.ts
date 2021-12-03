@@ -37,7 +37,7 @@ export class BreadcrumbRouterService {
                 '/' +
                 routeSnapshot.url.map((segment) => segment.path).join('/');
               breadcrumbs.push({
-                label: childRoute.snapshot.data.title || '',
+                label: childRoute.snapshot.data['title'] || '',
                 url,
                 queryParams: routeSnapshot.queryParams,
               });

@@ -22,7 +22,7 @@ export class ButtonCloseDirective extends ButtonDirective {
   }
 
   @HostBinding('class')
-  get hostClasses(): any {
+  override get hostClasses(): any {
     return {
       'btn-close': true,
       'btn-close-white': this.white,

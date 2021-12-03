@@ -30,8 +30,11 @@ describe('ChartjsComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [ChartjsComponent]
-    }).compileComponents();
+    })
+      .compileComponents();
+  });
 
+  beforeEach(() => {
     // @ts-ignore
     fixture = TestBed.createComponent(ChartjsComponent);
     component = fixture.componentInstance;

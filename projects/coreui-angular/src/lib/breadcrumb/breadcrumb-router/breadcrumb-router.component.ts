@@ -27,7 +27,7 @@ export class BreadcrumbRouterComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.items) {
+    if (changes['items']) {
       this.setup();
     }
   }

@@ -99,8 +99,8 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.visible) {
-      changes.visible.currentValue ? this.addTooltipElement() : this.removeTooltipElement();
+    if (changes['visible']) {
+      changes['visible'].currentValue ? this.addTooltipElement() : this.removeTooltipElement();
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.3",
   "description": "CoreUI for Angular UI components library",
   "license": "MIT",
   "homepage": "https://coreui.io/angular",
@@ -17,14 +17,14 @@
     }
   ],
   "dependencies": {
-    "@popperjs/core": "^2.10.2",
+    "@popperjs/core": "^2.11.0",
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/cdk": "^12.2.0",
-    "@angular/common": "^12.2.0",
-    "@angular/core": "^12.2.0",
-    "@angular/router": "^12.2.0"
+    "@angular/cdk": "^13.0.0",
+    "@angular/common": "^13.0.0",
+    "@angular/core": "^13.0.0",
+    "@angular/router": "^13.0.0"
   },
   "repository": {
     "type": "git",
@@ -42,5 +42,8 @@
     "layout",
     "component",
     "components"
-  ]
+  ],
+  "eslintConfig": {
+
+  }
 }

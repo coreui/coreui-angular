@@ -52,7 +52,7 @@ export class PageItemDirective implements AfterContentInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.disabled) {
+    if (changes['disabled']) {
       this.setAttributes();
     }
   }

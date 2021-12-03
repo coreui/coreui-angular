@@ -59,7 +59,7 @@ export class DropdownItemDirective implements AfterContentInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.disabled) {
+    if (changes['disabled']) {
       this.setAttributes(this.hostElement);
     }
   }

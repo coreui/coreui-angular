@@ -109,7 +109,7 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data && !changes.data.firstChange) {
+    if (changes['data'] && !changes['data'].firstChange) {
       this.chartUpdate();
     }
   }

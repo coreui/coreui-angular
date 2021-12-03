@@ -94,8 +94,8 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.visible) {
-      changes.visible.currentValue ? this.addPopoverElement() : this.removePopoverElement();
+    if (changes['visible']) {
+      changes['visible'].currentValue ? this.addPopoverElement() : this.removePopoverElement();
     }
   }
 

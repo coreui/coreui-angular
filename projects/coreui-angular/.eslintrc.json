@@ -10,8 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "./projects/coreui-angular/tsconfig.lib.json",
-          "./projects/coreui-angular/tsconfig.spec.json"
+          "projects/coreui-angular/tsconfig.lib.json",
+          "projects/coreui-angular/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },

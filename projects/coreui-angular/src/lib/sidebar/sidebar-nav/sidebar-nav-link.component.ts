@@ -92,7 +92,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   }
 
   public isDisabled(): boolean {
-    return this.item?.attributes?.disabled;
+    return this.item?.attributes?.['disabled'];
   }
 
   public isExternalLink(): boolean {

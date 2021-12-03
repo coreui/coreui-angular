@@ -25,10 +25,12 @@
 
 [![npm package][npm-badge]][npm]
 [![NPM downloads][npm-download]][npm]
+![angular][angular-badge]
 
 [npm-badge]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square
 [npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
 [npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
+[angular-badge]: https://img.shields.io/badge/angular-^13.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ##### install:
 

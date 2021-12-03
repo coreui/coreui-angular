@@ -97,9 +97,9 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.visible) {
+    if (changes['visible']) {
       // tslint:disable-next-line:no-unused-expression
-      (!changes.visible.firstChange || !changes.visible.currentValue) && this.toggle(changes.visible.currentValue);
+      (!changes['visible'].firstChange || !changes['visible'].currentValue) && this.toggle(changes['visible'].currentValue);
     }
   }
 

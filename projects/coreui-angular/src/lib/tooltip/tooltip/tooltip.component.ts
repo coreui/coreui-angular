@@ -55,7 +55,7 @@ export class TooltipComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.content) {
+    if (changes['content']) {
       setTimeout(() => {
         this.updateView(this.content);
       });

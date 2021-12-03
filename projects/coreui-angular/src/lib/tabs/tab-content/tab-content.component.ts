@@ -82,8 +82,8 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.activeTabPaneIdx?.currentValue) {
-      this.tabService.setActiveTabIdx({ tabContent: this, activeIdx: changes.activeTabPaneIdx.currentValue });
+    if (changes['activeTabPaneIdx']?.currentValue) {
+      this.tabService.setActiveTabIdx({ tabContent: this, activeIdx: changes['activeTabPaneIdx'].currentValue });
     }
   }
 

@@ -22,12 +22,12 @@ export class WidgetStatBComponent extends CardComponent {
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() color?: Colors;
+  @Input() override color?: Colors;
   /**
    * Sets the text-color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() textColor?: Colors | 'white' | 'muted';
+  @Input() override textColor?: Colors | 'white' | 'muted';
   /**
    * Title of the widget to display
    * @type string
@@ -57,7 +57,7 @@ export class WidgetStatBComponent extends CardComponent {
   private _inverse = false;
 
   @HostBinding('class')
-  get hostClasses() {
+  override get hostClasses() {
     return {
       'card': true,
       [`bg-${this.color}`]: !!this.color,
