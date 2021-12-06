@@ -61,6 +61,11 @@ export class NavLinkDirective {
     return this.disabled ? '-1' : null;
   }
 
+  @HostBinding('style.cursor')
+  get getCursorStyle(): string | null {
+    return this.disabled ? null : 'pointer';
+  }
+
   @HostBinding('class')
   get hostClasses(): any {
     return {
