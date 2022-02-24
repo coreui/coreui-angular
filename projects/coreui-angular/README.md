@@ -24,10 +24,20 @@
   <a href="https://blog.coreui.io/">Blog</a>
 </p>
 
+## Status
+
+[![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
+[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
+![angular](https://img.shields.io/badge/angular-^13.2.0-lightgrey.svg?style=flat-square&logo=angular)
+
+[npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
+[npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
+[npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
+
 ## Table of contents
 
-- [Quick start](#quick-start)
 - [Status](#status)
+- [Quick start](#quick-start)
 - [Templates](#templates)
 - [Bugs and feature requests](#bugs-and-feature-requests)
 - [Documentation](#documentation)
@@ -86,16 +96,6 @@ import '~@coreui/coreui/dist/css/coreui.min.css'
 ```bash
 npm install bootstrap
 ```
-
-## Status
-
-[![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
-[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
-![angular](https://img.shields.io/badge/angular-^13.0.0-lightgrey.svg?style=flat-square&logo=angular)  
-
-[npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
-[npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
-[npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
 
 ## Templates
 
