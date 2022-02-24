@@ -1,7 +1,7 @@
 {
   "name": "@coreui/angular-chartjs",
   "description": "Angular wrapper component for Chart.js",
-  "version": "2.0.0-alpha.8",
+  "version": "2.0.0-alpha.9",
   "homepage": "https://coreui.io/angular/docs/",
   "bugs": {
     "url": "https://github.com/coreui/coreui-angular/issues"
