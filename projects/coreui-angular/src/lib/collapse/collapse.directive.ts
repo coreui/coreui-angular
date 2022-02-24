@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Directive,
   DoCheck,
   ElementRef,
@@ -8,6 +9,7 @@ import {
   OnChanges,
   OnDestroy,
   Output,
+  Renderer2,
   SimpleChanges
 } from '@angular/core';
 import { AnimationBuilder, AnimationPlayer, useAnimation } from '@angular/animations';
@@ -21,7 +23,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
   selector: '[cCollapse]',
   exportAs: 'cCollapse'
 })
-export class CollapseDirective implements OnChanges, OnDestroy, DoCheck {
+export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterViewInit {
 
   static ngAcceptInputType_navbar: BooleanInput;
 
@@ -60,6 +62,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck {
   get navbar() {
     return this._navbar;
   }
+
   /**
    * @ignore
    */
@@ -79,9 +82,11 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck {
 
   constructor(
     private hostElement: ElementRef,
+    private renderer: Renderer2,
     private animationBuilder: AnimationBuilder
   ) {
     this.host = this.hostElement.nativeElement;
+    this.renderer.setStyle(this.host, 'display', 'none');
   }
 
   @HostBinding('class')
@@ -90,6 +95,10 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck {
       'navbar-collapse': this.navbar,
       show: this.visible,
     };
+  }
+
+  ngAfterViewInit(): void {
+    this.renderer.removeStyle(this.host, 'display');
   }
 
   ngOnDestroy(): void {
