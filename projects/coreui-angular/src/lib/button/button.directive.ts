@@ -58,6 +58,7 @@ export class ButtonDirective {
    * Specifies the type of button. Always specify the type attribute for the `<button>` element.
    * Different browsers may use different default types for the `<button>` element.
    */
+  @HostBinding('attr.type')
   @Input() type: ButtonType = 'button';
   /**
    * Set the button variant to an outlined button or a ghost button.
