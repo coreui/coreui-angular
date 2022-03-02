@@ -21,7 +21,7 @@ export class AccordionService {
   }
 
   toggelItem(item: AccordionItemComponent): void {
-    item.open = !item.open;
+    item.visible = !item.visible;
     this.closeOtherItems(item);
   }
 
@@ -29,7 +29,7 @@ export class AccordionService {
     if (!this.alwaysOpen) {
       this.items.forEach((item: AccordionItemComponent) => {
         if (item !== openItem) {
-          item.open = false;
+          item.visible = false;
         }
       });
     }

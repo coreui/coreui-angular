@@ -2,7 +2,7 @@
   <div class="accordion-header">
     <ng-container *ngTemplateOutlet="templates?.accordionHeaderTemplate || defaultAccordionHeaderTemplate; context: itemContext"></ng-container>
   </div>
-  <div class="accordion-collapse" cCollapse [visible]="open" [attr.aria-expanded]="open" [id]="contentId">
+  <div class="accordion-collapse" cCollapse [visible]="visible" [attr.aria-expanded]="open" [id]="contentId">
     <ng-container *ngTemplateOutlet="templates?.accordionBodyTemplate || defaultAccordionBodyTemplate; context: itemContext"></ng-container>
   </div>
 </ng-container>

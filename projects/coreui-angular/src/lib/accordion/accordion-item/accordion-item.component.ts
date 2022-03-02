@@ -23,8 +23,13 @@ export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentIn
   /**
    * Toggle an accordion item programmatically
    * @type boolean
+   * @default false
    */
-  @Input() open = false;
+  @Input() visible: boolean = false;
+  @Input() set open(value: boolean) {
+    console.warn('c-accordion-item "open" prop is deprecated, use "visible"  prop instead.')
+    this.visible = value ?? false;
+  }
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -33,7 +38,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentIn
     };
   }
   contentId = `accordion-item-${nextId++}`;
-  itemContext = { $implicit: this.open };
+  itemContext = { $implicit: this.visible };
   templates: any = {};
 
   @ContentChildren(TemplateIdDirective, {descendants: true}) contentTemplates!: QueryList<TemplateIdDirective>;
