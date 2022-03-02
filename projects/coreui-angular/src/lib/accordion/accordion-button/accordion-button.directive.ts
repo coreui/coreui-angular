@@ -11,6 +11,14 @@ export class AccordionButtonDirective {
    */
   @Input() collapsed!: boolean;
 
+  /**
+  * Default type for cAccordionButton. [docs]
+   * @type string
+   * @default 'button'
+   */
+  @HostBinding('attr.type')
+  @Input() type = 'button';
+
   @HostBinding('class')
   get hostClasses(): any {
     return {
