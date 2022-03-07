@@ -84,6 +84,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   public onMouseleave($event: MouseEvent): void {
     this.setTimer();
   }
+  private activeItemInterval = 0;
 
   constructor(
     @Inject(CarouselConfig) private config: CarouselConfig,
@@ -103,16 +104,24 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.carouselState.state = { activeItemIndex: this.activeIndex, animate: this.animate };
-    this.setTimer();
   }
 
+  set visible(value) {
+    this._visible = value;
+  }
+  get visible() {
+    return this._visible;
+  }
+  private _visible: boolean = true;
+
   setTimer(): void {
+    const interval = this.activeItemInterval || 0;
     this.resetTimer();
-    if (this.interval > 0) {
+    if (interval > 0) {
       this.timerId = setTimeout(() => {
         const nextIndex = this.carouselState.direction(this.direction);
         this.carouselState.state = { activeItemIndex: nextIndex };
-      }, this.interval);
+      }, interval);
     }
   }
 
@@ -124,8 +133,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     if (subscribe) {
       this.carouselIndexSubscription = this.carouselService.carouselIndex$.subscribe((nextIndex) => {
         if ('active' in nextIndex) {
-          this.setTimer();
+          this.itemChange.emit(nextIndex.active);
         }
+        this.activeItemInterval = typeof nextIndex.interval === 'number' && nextIndex.interval > -1 ? nextIndex.interval : this.interval;
+        this.setTimer();
       });
     } else {
       this.carouselIndexSubscription?.unsubscribe();

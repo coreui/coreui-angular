@@ -24,7 +24,9 @@ export class CarouselState {
     const nextState = { ...this._state, ...state };
     this._state = nextState;
     if (prevState.activeItemIndex !== nextState.activeItemIndex) {
-      this.carouselService.setIndex({active: nextState.activeItemIndex});
+      const activeItemIndex = this.state.activeItemIndex || 0;
+      const itemInterval = this.state.items && this.state.items[activeItemIndex]?.interval || -1;
+      this.carouselService.setIndex({ active: nextState.activeItemIndex, interval: itemInterval });
     }
   }
 
@@ -35,7 +37,7 @@ export class CarouselState {
         item.index = i;
       });
       this.state = {
-        items: itemsArray,
+        items: itemsArray
       };
     } else {
       this.reset();
@@ -46,7 +48,7 @@ export class CarouselState {
     this.carouselService.setIndex(nextIndex);
   }
 
-  direction(direction: 'next' | 'prev' = 'next' ): number {
+  direction(direction: 'next' | 'prev' = 'next'): number {
     this.state = { direction };
     const { activeItemIndex = -1, items } = this.state;
     const itemsCount = items?.length ?? 0;

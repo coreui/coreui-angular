@@ -8,12 +8,11 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 @Component({
   selector: 'c-carousel-item',
   templateUrl: './carousel-item.component.html',
-  styleUrls: ['./carousel-item.component.scss'],
+  styleUrls: ['./carousel-item.component.scss']
 })
 export class CarouselItemComponent implements OnDestroy, AfterViewInit {
 
   static ngAcceptInputType_active: BooleanInput;
-  private _active = false;
 
   index?: number;
   private carouselIndexSubscription?: Subscription;
@@ -29,12 +28,20 @@ export class CarouselItemComponent implements OnDestroy, AfterViewInit {
   get active(): boolean {
     return this._active;
   }
+  private _active = false;
+
+  /**
+   * Time delay before cycling to next item. If -1, uses carousel interval value.
+   * @type number
+   * @default -1
+   */
+  @Input() interval: number = -1;
 
   @HostBinding('class')
   get hostClasses(): any {
     return {
       'carousel-item': true,
-      active: this.active,
+      active: this.active
     };
   }
 
