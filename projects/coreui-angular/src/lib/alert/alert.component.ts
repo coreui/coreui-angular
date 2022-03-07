@@ -84,6 +84,14 @@ export class AlertComponent implements AfterContentInit {
   private _fade = false;
 
   /**
+   * Default role for alert. [docs]
+   * @type string
+   * @default 'alert'
+   */
+  @HostBinding('attr.role')
+  @Input() role = 'alert';
+
+  /**
    * Set the alert variant to a solid.
    * @type string
    */
