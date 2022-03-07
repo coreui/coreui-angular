@@ -27,6 +27,7 @@ export * from './lib/navbar';
 export * from './lib/modal';
 export * from './lib/offcanvas';
 export * from './lib/pagination';
+export * from './lib/placeholder';
 export * from './lib/popover';
 export * from './lib/progress';
 export * from './lib/services';
