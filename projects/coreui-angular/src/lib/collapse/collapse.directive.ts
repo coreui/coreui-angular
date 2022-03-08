@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Directive,
   DoCheck,
   ElementRef,
@@ -22,7 +23,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
   selector: '[cCollapse]',
   exportAs: 'cCollapse'
 })
-export class CollapseDirective implements OnChanges, OnDestroy, DoCheck {
+export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterViewInit {
 
   static ngAcceptInputType_navbar: BooleanInput;
 
@@ -92,7 +93,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck {
   get hostClasses(): any {
     return {
       'navbar-collapse': this.navbar,
-      show: this.visible,
+      show: this.visible
     };
   }
 
@@ -144,5 +145,9 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck {
     this.player = animationFactory.create(this.host);
     this.player.onStart(() => {this.collapseChange.emit(visible ? 'opening' : 'collapsing'); });
     this.player.onDone(() => {this.collapseChange.emit(visible ? 'open' : 'collapsed'); });
+  }
+
+  ngAfterViewInit(): void {
+    this.toggle();
   }
 }

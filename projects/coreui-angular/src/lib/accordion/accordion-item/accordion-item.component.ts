@@ -72,7 +72,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentIn
   }
 
   toggleItem(): void {
-    this.accordionService.toggelItem(this);
+    this.accordionService.toggleItem(this);
   }
 
   ngAfterContentInit(): void {
