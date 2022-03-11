@@ -1,6 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+interface IIntersectionObserverInit {
+  root?: Element | null;
+  rootMargin?: string;
+  threshold?: number | number[];
+}
+
 @Injectable()
 export class IntersectionService implements OnDestroy {
 
@@ -12,15 +18,17 @@ export class IntersectionService implements OnDestroy {
   private intersectionObserver!: IntersectionObserver;
   private hostElement!: { nativeElement: Element; };
 
-  createIntersectionObserver(hostElement: { nativeElement: Element; }) {
+  private defaultObserverOptions: IIntersectionObserverInit = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.2
+  };
+
+  createIntersectionObserver(hostElement: { nativeElement: Element; }, observerOptions = this.defaultObserverOptions) {
+
+    const options = { ...this.defaultObserverOptions, ...observerOptions }
 
     this.hostElement = hostElement;
-
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.2
-    };
 
     const handleIntersect = (entries: any[], observer: any) => {
       entries.forEach((entry: any) => {

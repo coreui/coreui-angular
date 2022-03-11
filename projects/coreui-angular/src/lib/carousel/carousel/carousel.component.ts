@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { IntersectionService } from '../intersection.service';
+import { IntersectionService } from '../../services/intersection.service';
 import { IListenersConfig, ListenersService } from '../../services/listeners.service';
 
 import { CarouselState } from '../carousel-state';
