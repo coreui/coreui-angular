@@ -65,6 +65,12 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    */
   @Input() transition: 'slide' | 'crossfade' = 'slide';
   /**
+   * Set whether the carousel should cycle continuously or have hard stops.
+   * @type boolean
+   * @default true
+   */
+  @Input() wrap = true;
+  /**
    * Event emitted on carousel item change. [docs]
    * @type number
    */
@@ -156,12 +162,13 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   private carouselStateSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.carouselIndexSubscription = this.carouselService.carouselIndex$.subscribe((nextIndex) => {
-        if ('active' in nextIndex) {
-          this.itemChange.emit(nextIndex.active);
+      this.carouselIndexSubscription = this.carouselService.carouselIndex$.subscribe((nextItem) => {
+        if ('active' in nextItem) {
+          this.itemChange.emit(nextItem.active);
         }
-        this.activeItemInterval = typeof nextIndex.interval === 'number' && nextIndex.interval > -1 ? nextIndex.interval : this.interval;
-        this.setTimer();
+        this.activeItemInterval = typeof nextItem.interval === 'number' && nextItem.interval > -1 ? nextItem.interval : this.interval;
+        const isLastItem = ((nextItem.active === nextItem.lastItemIndex) && this.direction === 'next') || ((nextItem.active === 0) && this.direction === 'prev');
+        !this.wrap && isLastItem ? this.resetTimer() : this.setTimer();
       });
     } else {
       this.carouselIndexSubscription?.unsubscribe();

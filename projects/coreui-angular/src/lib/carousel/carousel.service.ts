@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 export interface ICarouselIndex {
   active?: number;
   interval?: number;
+  lastItemIndex?: number;
 }
 
 @Injectable()

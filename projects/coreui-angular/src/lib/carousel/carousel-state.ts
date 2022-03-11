@@ -26,7 +26,11 @@ export class CarouselState {
     if (prevState.activeItemIndex !== nextState.activeItemIndex) {
       const activeItemIndex = this.state.activeItemIndex || 0;
       const itemInterval = this.state.items && this.state.items[activeItemIndex]?.interval || -1;
-      this.carouselService.setIndex({ active: nextState.activeItemIndex, interval: itemInterval });
+      this.carouselService.setIndex({
+        active: nextState.activeItemIndex,
+        interval: itemInterval,
+        lastItemIndex: (nextState.items?.length ?? 0) - 1
+      });
     }
   }
 
