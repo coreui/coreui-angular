@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "4.0.0-alpha.12",
+  "version": "4.0.0-alpha.13",
   "description": "CoreUI Components Library for Angular",
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
@@ -39,7 +39,7 @@
     "@coreui/chartjs": "^3.0.0",
     "@coreui/icons-angular": "^3.0.0-alpha.4",
     "@popperjs/core": "^2.11.0",
-    "chart.js": "~3.6.0",
+    "chart.js": "~3.7.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
