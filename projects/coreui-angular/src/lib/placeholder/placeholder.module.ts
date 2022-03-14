@@ -1,16 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlaceholderDirective } from './placeholder.directive';
+import { PlaceholderAnimationDirective } from './placeholder-animation.directive';
 
 @NgModule({
   declarations: [
-    PlaceholderDirective
+    PlaceholderDirective,
+    PlaceholderAnimationDirective
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    PlaceholderDirective
+    PlaceholderDirective,
+    PlaceholderAnimationDirective
   ]
 })
 export class PlaceholderModule {

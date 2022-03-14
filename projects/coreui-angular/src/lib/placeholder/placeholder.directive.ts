@@ -1,40 +1,45 @@
 import { Directive, HostBinding, Input } from '@angular/core';
-import { Colors } from '../coreui.types';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-  selector: '[cPlaceholder]'
+  selector: '[cPlaceholder]',
+  exportAs: 'cPlaceholder'
 })
 export class PlaceholderDirective {
+
+  static ngAcceptInputType_visible: BooleanInput;
 
   constructor() { }
 
   /**
-   * Animation type for placeholder
-   * @type 'glow' | 'wave'
-   * @default undefined
+   * placeholder toggler
+   * @type boolean
+   * @default true
    */
-  @Input() animation?: 'glow' | 'wave';
-
-  /**
-   * Custom color for placeholder
-   * @type Colors
-   * @default undefined
-   */
-  @Input('cPlaceholderColor') color?: Colors;
+  @Input('cPlaceholder')
+  set visible(value: boolean) {
+    this._visible = coerceBooleanProperty(value);
+  }
+  get visible() {
+    return this._visible;
+  }
+  private _visible: boolean = false;
 
   /**
    * Size the placeholder extra small, small, large.
    */
   @Input('cPlaceholderSize') size?: 'xs' | 'sm' | 'lg';
 
+  @HostBinding('attr.aria-hidden')
+  get ariaHidden(): boolean | null {
+    return this.visible ? null : true;
+  };
+
   @HostBinding('class')
   get hostClasses(): any {
     return {
-      'placeholder': true,
-      [`placeholder-${this.animation}`]: !!this.animation,
-      [`placeholder-${this.size}`]: !!this.size,
-      [`bg-${this.color}`]: !!this.color
+      'placeholder': this.visible,
+      [`placeholder-${this.size}`]: !!this.size
     };
   }
-
 }
