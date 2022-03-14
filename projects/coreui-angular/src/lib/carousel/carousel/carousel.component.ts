@@ -1,9 +1,9 @@
 import {
   AfterContentInit,
   Component,
+  ElementRef,
   EventEmitter,
   HostBinding,
-  HostListener,
   Inject,
   Input,
   OnDestroy,
@@ -12,15 +12,19 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { IntersectionService } from '../../services/intersection.service';
+import { IListenersConfig, ListenersService } from '../../services/listeners.service';
+
 import { CarouselState } from '../carousel-state';
 import { CarouselService } from '../carousel.service';
 import { CarouselConfig } from '../carousel.config';
+import { Triggers } from '../../coreui.types';
 
 @Component({
   selector: 'c-carousel',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content></ng-content>',
   styleUrls: ['./carousel.component.scss'],
-  providers: [CarouselService, CarouselState, CarouselConfig]
+  providers: [CarouselService, CarouselState, CarouselConfig, IntersectionService, ListenersService]
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   /**
@@ -46,14 +50,26 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   /**
    * The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.
    * @type number
+   * @default 0
    */
   @Input() interval = 0;
+  /**
+   * Sets which event handlers you’d like provided to your pause prop. You can specify one trigger or an array of them.
+   * @type {'hover' | 'focus' | 'click'}
+   */
+  @Input() pause: Triggers | Triggers[] | false = 'hover';
   /**
    * Set type of the transition.
    * @type {'slide' | 'crossfade'}
    * @default 'slide'
    */
   @Input() transition: 'slide' | 'crossfade' = 'slide';
+  /**
+   * Set whether the carousel should cycle continuously or have hard stops.
+   * @type boolean
+   * @default true
+   */
+  @Input() wrap = true;
   /**
    * Event emitted on carousel item change. [docs]
    * @type number
@@ -72,23 +88,16 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   private carouselIndexSubscription?: Subscription;
   private timerId!: any;
-
-  @HostListener('mouseenter', ['$event'])
-  @HostListener('mousedown', ['$event'])
-  public onMouseenter($event: MouseEvent): void {
-    this.resetTimer();
-  }
-
-  @HostListener('mouseleave', ['$event'])
-  @HostListener('mouseup', ['$event'])
-  public onMouseleave($event: MouseEvent): void {
-    this.setTimer();
-  }
+  private intersectingSubscription?: Subscription;
+  private activeItemInterval = 0;
 
   constructor(
     @Inject(CarouselConfig) private config: CarouselConfig,
+    private hostElement: ElementRef,
     private carouselService: CarouselService,
-    private carouselState: CarouselState
+    private carouselState: CarouselState,
+    private intersectionService: IntersectionService,
+    private listenersService: ListenersService
   ) {
     Object.assign(this, config);
   }
@@ -98,21 +107,52 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   ngOnDestroy(): void {
+    this.clearListeners();
     this.carouselStateSubscribe(false);
+    this.intersectionServiceSubscribe(false);
   }
 
   ngAfterContentInit(): void {
+    this.intersectionService.createIntersectionObserver(this.hostElement);
+    this.intersectionServiceSubscribe();
     this.carouselState.state = { activeItemIndex: this.activeIndex, animate: this.animate };
-    this.setTimer();
+    this.setListeners();
   }
 
+  private setListeners(): void {
+    const config: IListenersConfig = {
+      hostElement: this.hostElement,
+      trigger: this.pause || [],
+      callbackOff: () => {
+        this.setTimer();
+      },
+      callbackOn: () => {
+        this.resetTimer();
+      }
+    };
+    this.listenersService.setListeners(config);
+  }
+
+  private clearListeners(): void {
+    this.listenersService.clearListeners();
+  }
+
+  set visible(value) {
+    this._visible = value;
+  }
+  get visible() {
+    return this._visible;
+  }
+  private _visible: boolean = true;
+
   setTimer(): void {
+    const interval = this.activeItemInterval || 0;
     this.resetTimer();
-    if (this.interval > 0) {
+    if (interval > 0) {
       this.timerId = setTimeout(() => {
         const nextIndex = this.carouselState.direction(this.direction);
         this.carouselState.state = { activeItemIndex: nextIndex };
-      }, this.interval);
+      }, interval);
     }
   }
 
@@ -122,13 +162,27 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   private carouselStateSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.carouselIndexSubscription = this.carouselService.carouselIndex$.subscribe((nextIndex) => {
-        if ('active' in nextIndex) {
-          this.setTimer();
+      this.carouselIndexSubscription = this.carouselService.carouselIndex$.subscribe((nextItem) => {
+        if ('active' in nextItem) {
+          this.itemChange.emit(nextItem.active);
         }
+        this.activeItemInterval = typeof nextItem.interval === 'number' && nextItem.interval > -1 ? nextItem.interval : this.interval;
+        const isLastItem = ((nextItem.active === nextItem.lastItemIndex) && this.direction === 'next') || ((nextItem.active === 0) && this.direction === 'prev');
+        !this.wrap && isLastItem ? this.resetTimer() : this.setTimer();
       });
     } else {
       this.carouselIndexSubscription?.unsubscribe();
+    }
+  }
+
+  private intersectionServiceSubscribe(subscribe: boolean = true): void {
+    if (subscribe) {
+      this.intersectingSubscription = this.intersectionService.intersecting$.subscribe(isIntersecting => {
+        this.visible = isIntersecting;
+        isIntersecting ? this.setTimer() : this.resetTimer();
+      });
+    } else {
+      this.intersectingSubscription?.unsubscribe();
     }
   }
 }

@@ -20,7 +20,7 @@ export class AccordionService {
     }
   }
 
-  toggelItem(item: AccordionItemComponent): void {
+  toggleItem(item: AccordionItemComponent): void {
     item.visible = !item.visible;
     this.closeOtherItems(item);
   }

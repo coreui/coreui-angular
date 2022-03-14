@@ -1,6 +1,5 @@
-import { Component, DebugElement, Renderer2, Type } from '@angular/core';
+import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
 
 import { ListenersService } from './listeners.service';
 

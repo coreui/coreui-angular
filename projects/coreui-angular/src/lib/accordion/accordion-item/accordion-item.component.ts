@@ -10,6 +10,7 @@ import {
 
 import { AccordionService } from '../accordion.service';
 import { TemplateIdDirective } from '../../shared';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 let nextId = 0;
 
@@ -20,15 +21,30 @@ let nextId = 0;
   exportAs: 'cAccordionItem',
 })
 export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentInit {
+
+  static ngAcceptInputType_visible: BooleanInput;
+
   /**
    * Toggle an accordion item programmatically
    * @type boolean
    * @default false
    */
-  @Input() visible: boolean = false;
-  @Input() set open(value: boolean) {
+  @Input()
+  set visible(value: boolean){
+    this._visible = coerceBooleanProperty(value);
+  }
+  get visible() {
+    return this._visible;
+  }
+  private _visible: boolean = false;
+
+  @Input()
+  set open(value: boolean) {
     console.warn('c-accordion-item "open" prop is deprecated, use "visible"  prop instead.')
-    this.visible = value ?? false;
+    this.visible = value || this.visible;
+  }
+  get open() {
+    return this.visible;
   }
 
   @HostBinding('class')
@@ -56,7 +72,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentIn
   }
 
   toggleItem(): void {
-    this.accordionService.toggelItem(this);
+    this.accordionService.toggleItem(this);
   }
 
   ngAfterContentInit(): void {
