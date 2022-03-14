@@ -34,7 +34,6 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   static ngAcceptInputType_horizontal: BooleanInput;
   static ngAcceptInputType_navbar: BooleanInput;
 
-  private _animate = true;
   /**
    * @ignore
    */
@@ -45,6 +44,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   get animate(): boolean {
     return this._animate;
   }
+  private _animate = true;
 
   /**
    * Set horizontal collapsing to transition the width instead of height.
@@ -58,7 +58,6 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   }
   private _horizontal: boolean = false;
 
-  private _visible = false;
   /**
    * Toggle the visibility of collapsible element.
    */
@@ -69,8 +68,8 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   get visible(): boolean {
     return this._visible;
   }
+  private _visible = false;
 
-  private _navbar = false;
   /**
    * Add `navbar` prop for grouping and hiding navbar contents by a parent breakpoint.
    */
@@ -81,6 +80,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   get navbar() {
     return this._navbar;
   }
+  private _navbar = false;
 
   /**
    * @ignore
@@ -98,7 +98,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
 
   private player!: AnimationPlayer;
   private readonly host: HTMLElement;
-  private scrollHeight!: number;
+  // private scrollHeight!: number;
   private scrollWidth!: number;
   private collapsing: boolean = false;
 
@@ -108,7 +108,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
     private animationBuilder: AnimationBuilder
   ) {
     this.host = this.hostElement.nativeElement;
-    this.setDisplay(false);
+    this.renderer.setStyle(this.host, 'display', 'none');
   }
 
   @HostBinding('class')
@@ -118,7 +118,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
       show: this.visible,
       'collapse-horizontal': this.horizontal,
       collapsing: this.collapsing
-      // collapse: !this.collapsing
+      // collapse: !this.collapsing && !this.visible
     };
   }
 
@@ -147,9 +147,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   }
 
   toggle(visible = this.visible): void {
-    this.setDisplay(true);
     this.createPlayer(visible);
-    this.visible = visible;
     this.player?.play();
   }
 
@@ -162,20 +160,23 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
       this.destroyPlayer();
     }
 
-    let animationFactory;
+    if (visible) {
+      this.renderer.removeStyle(this.host, 'display');
+    }
 
     const duration = this.animate ? this.duration : '0ms';
 
     const expand = this.horizontal ? expandHorizontalAnimation : expandAnimation;
     const collapse = this.horizontal ? collapseHorizontalAnimation : collapseAnimation;
 
-    animationFactory = this.animationBuilder.build(
+    const animationFactory = this.animationBuilder.build(
       useAnimation(visible ? expand : collapse, { params: { time: duration, easing: this.transition } })
     );
 
     this.player = animationFactory.create(this.host);
     this.player.onStart(() => {
       this.setMaxSize();
+      this.visible = visible;
       this.collapsing = true;
       this.collapseChange.emit(visible ? 'opening' : 'collapsing');
     });
@@ -195,9 +196,5 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
         // this.scrollHeight > 0 && this.renderer.setStyle(this.host, 'maxHeight', `${this.scrollHeight}px`);
       }
     });
-  }
-
-  setDisplay(display: boolean) {
-    display ? this.renderer.removeStyle(this.host, 'display') : this.renderer.setStyle(this.host, 'display', 'none');
   }
 }
