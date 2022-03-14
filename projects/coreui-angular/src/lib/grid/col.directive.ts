@@ -9,6 +9,7 @@ import { BreakpointInfix } from '../coreui.types';
 })
 export class ColDirective implements ICol {
 
+  static ngAcceptInputType_cCol: (BooleanInput | NumberInput);
   static ngAcceptInputType_xs: (BooleanInput | NumberInput);
   static ngAcceptInputType_sm: (BooleanInput | NumberInput);
   static ngAcceptInputType_md: (BooleanInput | NumberInput);
@@ -20,6 +21,10 @@ export class ColDirective implements ICol {
    * The number of columns/offset/order on extra small devices (<576px).
    * @type { 'auto' | number |  boolean }
    */
+  @Input()
+  set cCol(value: (BooleanInput | NumberInput)) {
+    this.xs = this.xs || this.coerceInput(value);
+  }
   @Input()
   set xs(value) {
     this._xs = this.coerceInput(value);
