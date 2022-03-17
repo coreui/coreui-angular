@@ -2,6 +2,7 @@ import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from
 import {DOCUMENT} from '@angular/common';
 
 import {AppBreadcrumbService} from './app-breadcrumb.service';
+import { Observable } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -9,9 +10,9 @@ import {AppBreadcrumbService} from './app-breadcrumb.service';
   templateUrl: './cui-breadcrumb.component.html'
 })
 export class CuiBreadcrumbComponent implements OnInit, OnDestroy {
-  @Input() fixed: boolean;
+  @Input() fixed?: boolean;
 
-  public breadcrumbs;
+  public breadcrumbs?: Observable<any[]>;
   private readonly fixedClass = 'breadcrumb-fixed';
 
   constructor(
@@ -29,7 +30,7 @@ export class CuiBreadcrumbComponent implements OnInit, OnDestroy {
     this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
-  isFixed(fixed: boolean = this.fixed): void {
+  isFixed(fixed = this.fixed): void {
     if (fixed) {
       this.renderer.addClass(this.document.body, this.fixedClass);
     }

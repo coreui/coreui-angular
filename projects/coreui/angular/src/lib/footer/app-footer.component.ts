@@ -6,7 +6,7 @@ import {DOCUMENT} from '@angular/common';
   template: `<ng-content></ng-content>`
 })
 export class AppFooterComponent implements OnInit, OnDestroy {
-  @Input() fixed: boolean;
+  @Input() fixed?: boolean;
 
   private readonly fixedClass = 'footer-fixed';
 
@@ -25,7 +25,7 @@ export class AppFooterComponent implements OnInit, OnDestroy {
     this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
-  isFixed(fixed: boolean = this.fixed): void {
+  isFixed(fixed = this.fixed): void {
     if (fixed) {
       this.renderer.addClass(this.document.body, this.fixedClass);
     }

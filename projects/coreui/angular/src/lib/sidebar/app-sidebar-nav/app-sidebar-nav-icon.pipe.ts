@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class AppSidebarNavIconPipe implements PipeTransform {
 
   transform(item: any, args?: any): any {
-    const classes = {
+    const classes: any = {
       'nav-icon': true
     };
     const icon = item.icon;

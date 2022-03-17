@@ -15,8 +15,8 @@ import { AppSidebarService  } from './app-sidebar.service';
 import { NavDropdownDirective, NavDropdownToggleDirective } from './app-sidebar-nav.directive';
 import { AppSidebarNavComponent } from './app-sidebar-nav.component';
 import { AppSidebarNavDividerComponent } from './app-sidebar-nav/app-sidebar-nav-divider.component';
-import { AppSidebarNavDropdownComponent } from './app-sidebar-nav/app-sidebar-nav-dropdown.component';
-import { AppSidebarNavItemsComponent } from './app-sidebar-nav/app-sidebar-nav-items.component';
+// import { AppSidebarNavDropdownComponent } from './app-sidebar-nav/app-sidebar-nav-dropdown.component';
+import { AppSidebarNavDropdownComponent, AppSidebarNavItemsComponent } from './app-sidebar-nav/app-sidebar-nav-items.component';
 import { AppSidebarNavLinkComponent, AppSidebarNavLinkContentComponent } from './app-sidebar-nav/app-sidebar-nav-link.component';
 import { AppSidebarNavTitleComponent } from './app-sidebar-nav/app-sidebar-nav-title.component';
 import { SidebarNavHelper } from './app-sidebar-nav.service';
@@ -38,17 +38,16 @@ import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-it
     AppSidebarHeaderComponent,
     AppSidebarMinimizerComponent,
     AppSidebarComponent,
-    AppSidebarNavItemsComponent,
+    // AppSidebarNavItemsComponent,
     AppSidebarNavComponent,
-    AppSidebarNavDividerComponent,
-    AppSidebarNavDropdownComponent,
-    AppSidebarNavLabelComponent,
-    AppSidebarNavLinkComponent,
-    AppSidebarNavLinkContentComponent,
-    AppSidebarNavTitleComponent,
-    NavDropdownDirective,
-    NavDropdownToggleDirective,
-    LayoutModule
+    // AppSidebarNavDividerComponent,
+    // AppSidebarNavDropdownComponent,
+    // AppSidebarNavLabelComponent,
+    // AppSidebarNavLinkComponent,
+    // AppSidebarNavLinkContentComponent,
+    // AppSidebarNavTitleComponent,
+    // NavDropdownDirective,
+    // NavDropdownToggleDirective,
   ],
   declarations: [
     AppSidebarFooterComponent,

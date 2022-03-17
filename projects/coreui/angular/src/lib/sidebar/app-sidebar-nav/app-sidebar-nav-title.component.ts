@@ -1,28 +1,29 @@
 import {Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
-import { INavData } from '../app-sidebar-nav';
+import { INavAttributes, INavData } from '../app-sidebar-nav';
 
 @Component({
   selector: 'app-sidebar-nav-title, cui-sidebar-nav-title',
   template: '',
 })
 export class AppSidebarNavTitleComponent implements OnInit {
-  @Input() item: INavData;
+  @Input() item: INavData = {};
 
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const nativeElement: HTMLElement = this.el.nativeElement;
-    const name = this.renderer.createText(this.item.name);
+    const name = this.renderer.createText(this.item.name as string);
 
-    if ( this.item.class ) {
+    if (this.item.class) {
       const classes = this.item.class;
       this.renderer.addClass(nativeElement, classes);
     }
 
-    if ( this.item.wrapper ) {
+    if (this.item.wrapper) {
       const wrapper = this.renderer.createElement(this.item.wrapper.element);
       this.addAttribs(this.item.wrapper.attributes, wrapper);
       this.renderer.appendChild(wrapper, name);
@@ -32,7 +33,7 @@ export class AppSidebarNavTitleComponent implements OnInit {
     }
   }
 
-  private addAttribs(attribs, element) {
+  private addAttribs(attribs: INavAttributes, element: any) {
     if (attribs) {
       for (const attr in attribs) {
         if (attr === 'style' && typeof(attribs[attr]) === 'object' ) {
@@ -46,20 +47,20 @@ export class AppSidebarNavTitleComponent implements OnInit {
     }
   }
 
-  private setStyle(styles, el) {
+  private setStyle(styles: { [x: string]: any; }, el: any) {
     for (const style in styles) {
       this.renderer.setStyle(el, style, styles[style] );
     }
   }
 
-  private addClass(classes, el) {
+  private addClass(classes: string | string[], el: any) {
     const classArray = (Array.isArray(classes) ? classes : classes.split(' '));
     classArray.filter((element) => element.length > 0).forEach(element => {
       this.renderer.addClass(el, element );
     });
   }
 
-  private setAttrib(key, value, el) {
+  private setAttrib(key: string, value: string, el: any) {
     this.renderer.setAttribute(el, key, value );
   }
 }

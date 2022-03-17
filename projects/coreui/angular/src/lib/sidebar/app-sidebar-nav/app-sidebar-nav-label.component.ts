@@ -7,7 +7,7 @@ import { INavData } from '../app-sidebar-nav';
   templateUrl: './app-sidebar-nav-label.component.html'
 })
 export class AppSidebarNavLabelComponent implements OnInit {
-  @Input() item: INavData;
+  @Input() item: INavData = {};
 
   private classes = {
     'nav-label': true,
@@ -25,13 +25,16 @@ export class AppSidebarNavLabelComponent implements OnInit {
 
   getItemClass() {
     const itemClass = this.item.class;
+    // @ts-ignore
     this.classes[itemClass] = !!itemClass;
     return this.classes;
   }
   getLabelIconClass() {
-    const variant = `text-${this.item.label.variant}`;
-    this.iconClasses[variant] = !!this.item.label.variant;
-    const labelClass = this.item.label.class;
+    const variant = `text-${this.item.label?.variant}`;
+    // @ts-ignore
+    this.iconClasses[variant] = !!this.item.label?.variant;
+    const labelClass = this.item.label?.class;
+    // @ts-ignore
     this.iconClasses[labelClass] = !!labelClass;
     return this.iconClasses;
   }

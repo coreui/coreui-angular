@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class AppSidebarNavBadgePipe implements PipeTransform {
 
   transform(item: any, args?: any): any {
-    const classes = {
+    const classes: any = {
       badge: true
     };
     const variant = `badge-${item.badge.variant}`;

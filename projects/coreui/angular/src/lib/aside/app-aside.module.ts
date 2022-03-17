@@ -10,8 +10,7 @@ import { AppAsideComponent } from './app-aside.component';
     LayoutModule
   ],
   exports: [
-    AppAsideComponent,
-    LayoutModule
+    AppAsideComponent
   ],
   declarations: [
     AppAsideComponent

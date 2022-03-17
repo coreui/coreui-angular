@@ -29,7 +29,7 @@ describe('SidebarNavHelper', () => {
     expect(service.itemType({divider: true})).toEqual('divider');
     expect(service.itemType({title: true})).toEqual('title');
     expect(service.itemType({children: []})).toEqual('dropdown');
-    expect(service.itemType({label: true})).toEqual('label');
+    expect(service.itemType({label: { variant: 'info'}})).toEqual('label');
     expect(service.itemType({})).toEqual('empty');
     expect(service.itemType({
       name: 'Disabled',
@@ -46,7 +46,7 @@ describe('SidebarNavHelper', () => {
   });
 
   it('item hasBadge', () => {
-    expect(service.hasBadge({badge: {}})).toBeTruthy();
+    expect(service.hasBadge({badge: { text: 'badge', variant: 'info'}})).toBeTruthy();
     expect(service.hasBadge({})).toBeFalsy();
   });
   it('item hasIcon', () => {

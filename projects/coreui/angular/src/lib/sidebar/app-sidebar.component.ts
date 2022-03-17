@@ -11,13 +11,13 @@ import { AppSidebarService } from './app-sidebar.service';
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {
 
-  private subscriptionEvents: Subscription;
+  private subscriptionEvents!: Subscription;
   private _minimized = false;
 
-  @Input() compact: boolean;
+  @Input() compact?: boolean;
   @Input() display: any;
-  @Input() fixed: boolean;
-  @Input() offCanvas: boolean;
+  @Input() fixed?: boolean;
+  @Input() offCanvas?: boolean;
 
   @Input()
   get minimized() {
@@ -67,13 +67,13 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     this._updateMinimized(false);
   }
 
-  isCompact(compact: boolean = this.compact): void {
+  isCompact(compact = this.compact): void {
     if (compact) {
       this.renderer.addClass(this.document.body, 'sidebar-compact');
     }
   }
 
-  isFixed(fixed: boolean = this.fixed): void {
+  isFixed(fixed = this.fixed): void {
     if (fixed) {
       this.renderer.addClass(this.document.body, 'sidebar-fixed');
     }
@@ -83,7 +83,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     this.minimized = !this._minimized;
   }
 
-  isOffCanvas(offCanvas: boolean = this.offCanvas): void {
+  isOffCanvas(offCanvas = this.offCanvas): void {
     if (offCanvas) {
       this.renderer.addClass(this.document.body, 'sidebar-off-canvas');
     }
