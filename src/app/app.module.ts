@@ -26,7 +26,8 @@ import {
   AppHeaderModule,
   AppFooterModule,
   AppSidebarModule,
-} from '../../dist/@coreui/angular';
+} from '../../projects/coreui/angular/src/public-api';
+// } from '../../dist/@coreui/angular';
 
 // Import routing module
 import { AppRoutingModule } from './app.routing';
