@@ -1,6 +1,6 @@
 # [@coreui/angular](https://coreui.io/angular)
 
-![angular](https://img.shields.io/badge/angular-^11.2.0-lightgrey.svg?style=flat-square&logo=angular)
+![angular](https://img.shields.io/badge/angular-^12.2.0-lightgrey.svg?style=flat-square&logo=angular)
 [![npm package][npm-coreui-angular-badge-v2]][npm-coreui-angular]
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
@@ -21,7 +21,7 @@
 [npm-coreui-badge-v2]: https://img.shields.io/npm/v/@coreui/coreui/v2-lts?style=flat-square
 [npm-coreui-download]: https://img.shields.io/npm/dm/@coreui/coreui.svg?style=flat-square
 
-# CoreUI for Angular 11 - Free WebApp UI Kit built on top of Bootstrap 4 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?text=CoreUI%20-%20Free%20Bootstrap%204%20Admin%20Template%20&url=https://coreui.io&hashtags=,admin,template,dashboard,panel,free,angular,react,vue)
+# CoreUI for Angular 12 - Free WebApp UI Kit built on top of Bootstrap 4 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?text=CoreUI%20-%20Free%20Bootstrap%204%20Admin%20Template%20&url=https://coreui.io&hashtags=,admin,template,dashboard,panel,free,angular,react,vue)
 
 Please help us on [Product Hunt](https://www.producthunt.com/posts/coreui-open-source-bootstrap-4-admin-template-with-angular-2-react-js-vue-js-support) and [Designer News](https://www.designernews.co/stories/81127). Thanks in advance!
 
@@ -55,7 +55,7 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
 ###### Node.js
-Angular 11 requires `Node.js` version 10.19 or later.
+Angular 12 requires `Node.js` version 12.20 or later.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -66,7 +66,7 @@ Install the Angular CLI globally using a terminal/console window.
 npm install -g @angular/cli
 ```
 
-##### Update to Angular 11
+##### Update to Angular 12
 see: [https://update.angular.io](https://update.angular.io)
 
 ## CoreUI Installation
