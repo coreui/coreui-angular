@@ -1,5 +1,6 @@
 export function Replace(el: any): any {
   const nativeElement: HTMLElement = el.nativeElement;
+  // @ts-ignore
   const parentElement: HTMLElement = nativeElement.parentElement;
   // move all children out of the element
   while (nativeElement.firstChild) {

@@ -6,7 +6,7 @@ import { INavData } from '../app-sidebar-nav';
   template: ``
 })
 export class AppSidebarNavDividerComponent implements OnInit {
-  @Input() item: INavData;
+  @Input() item?: INavData;
 
   constructor() {}
 

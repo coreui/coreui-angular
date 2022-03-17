@@ -13,7 +13,6 @@ import { AppHeaderComponent } from './app-header.component';
   ],
   exports: [
     AppHeaderComponent,
-    LayoutModule
   ],
   declarations: [
     AppHeaderComponent

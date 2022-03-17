@@ -16,7 +16,7 @@ export class AppDashboard {
   getBody() {
     return element(by.xpath('/html/body'));
   }
-  getByCss(selector) {
+  getByCss(selector: string) {
     return element.all(by.css(selector));
   }
 

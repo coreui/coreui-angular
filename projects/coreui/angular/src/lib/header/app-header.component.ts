@@ -7,27 +7,27 @@ import { DOCUMENT } from '@angular/common';
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
 
-  @Input() fixed: boolean;
+  @Input() fixed?: boolean;
 
   @Input() navbarBrand: any;
   @Input() navbarBrandFull: any;
   @Input() navbarBrandMinimized: any;
   @Input() navbarBrandText: any = {icon: '🅲', text: '🅲 CoreUI'};
-  @Input() navbarBrandHref: ''; // deprecated, use navbarBrandRouterLink instead
+  @Input() navbarBrandHref = ''; // deprecated, use navbarBrandRouterLink instead
   @Input() navbarBrandRouterLink: any[] | string = '';
 
-  @Input() sidebarToggler: string | boolean;
-  @Input() mobileSidebarToggler: boolean;
+  @Input() sidebarToggler: string | boolean = 'lg';
+  @Input() mobileSidebarToggler = true;
 
-  @Input() asideMenuToggler: string | boolean;
-  @Input() mobileAsideMenuToggler: boolean;
+  @Input() asideMenuToggler: string | boolean = 'lg';
+  @Input() mobileAsideMenuToggler = true;
 
   private readonly fixedClass = 'header-fixed';
 
   @HostBinding('class.app-header') appHeaderClass = true;
   @HostBinding('class.navbar') navbarClass = true;
 
-  navbarBrandImg: boolean;
+  navbarBrandImg!: boolean;
 
   private readonly breakpoints = ['xl', 'lg', 'md', 'sm', 'xs'];
   sidebarTogglerClass = 'd-none d-md-block';
@@ -44,23 +44,23 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     this.isFixed(this.fixed);
     this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
     this.navbarBrandRouterLink = this.navbarBrandRouterLink[0] ? this.navbarBrandRouterLink : this.navbarBrandHref;
-    this.sidebarTogglerClass = this.setToggerBreakpointClass(this.sidebarToggler as string);
-    this.sidebarTogglerMobileClass = this.setToggerMobileBreakpointClass(this.sidebarToggler as string);
-    this.asideTogglerClass = this.setToggerBreakpointClass(this.asideMenuToggler as string);
-    this.asideTogglerMobileClass = this.setToggerMobileBreakpointClass(this.asideMenuToggler as string);
+    this.sidebarTogglerClass = this.setTogglerBreakpointClass(this.sidebarToggler as string);
+    this.sidebarTogglerMobileClass = this.setTogglerMobileBreakpointClass(this.sidebarToggler as string);
+    this.asideTogglerClass = this.setTogglerBreakpointClass(this.asideMenuToggler as string);
+    this.asideTogglerMobileClass = this.setTogglerMobileBreakpointClass(this.asideMenuToggler as string);
   }
 
   ngOnDestroy(): void {
     this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
-  isFixed(fixed: boolean = this.fixed): void {
+  isFixed(fixed = this.fixed): void {
     if (fixed) {
       this.renderer.addClass(this.document.body, this.fixedClass);
     }
   }
 
-  setToggerBreakpointClass(breakpoint = 'md') {
+  setTogglerBreakpointClass(breakpoint = 'md') {
     let togglerClass = 'd-none d-md-block';
     if (this.breakpoints.includes(breakpoint)) {
       const breakpointIndex = this.breakpoints.indexOf(breakpoint);
@@ -69,7 +69,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     return togglerClass;
   }
 
-  setToggerMobileBreakpointClass(breakpoint = 'lg') {
+  setTogglerMobileBreakpointClass(breakpoint = 'lg') {
     let togglerClass = 'd-lg-none';
     if (this.breakpoints.includes(breakpoint)) {
       togglerClass = `d-${breakpoint}-none`;

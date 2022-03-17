@@ -1,5 +1,32 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.12.0`
+
+- update to `Angular 12.2`
+- refactor(library): typings, api surface
+- refactor(app): minor fixes
+
+###### dependencies update
+- update `@angular/animations` to `^12.2.16`
+- update `@angular/common` to `^12.2.16`
+- update `@angular/compiler` to `^12.2.16`
+- update `@angular/core` to `^12.2.16`
+- update `@angular/forms` to `^12.2.16`
+- update `@angular/localize` to `^12.2.16`
+- update `@angular/platform-browser` to `^12.2.16`
+- update `@angular/platform-browser-dynamic` to `^12.2.16`
+- update `@angular/router` to `^12.2.16`
+- update `zone.js` to `~0.11.4`
+- update `@angular-devkit/build-angular` to `^12.2.16`
+- update `@angular/cli` to `^12.2.16`
+- update `@angular/compiler-cli` to `^12.2.16`
+- update `@angular/language-service` to `^12.2.16`
+- update `@types/jasminewd2` to `^2.0.10`
+- update `jasmine-spec-reporter` to `~7.0.0`
+- update `karma` to `^6.3.17`
+- update `ng-packagr` to `^12.2.7`
+- update `typescript` to `~4.3.5`
+
 ##### `v2.11.3`
 
 - ##### `update to Angular 11.2.14`

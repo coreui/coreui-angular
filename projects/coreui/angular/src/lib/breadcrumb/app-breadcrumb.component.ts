@@ -3,6 +3,7 @@ import {DOCUMENT} from '@angular/common';
 
 import {AppBreadcrumbService} from './app-breadcrumb.service';
 import {Replace} from '../shared';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -18,8 +19,8 @@ import {Replace} from '../shared';
   `
 })
 export class AppBreadcrumbComponent implements OnInit, OnDestroy {
-  @Input() fixed: boolean;
-  public breadcrumbs;
+  @Input() fixed?: boolean;
+  public breadcrumbs?: Observable<any>;
   private readonly fixedClass = 'breadcrumb-fixed';
 
   constructor(
@@ -39,7 +40,7 @@ export class AppBreadcrumbComponent implements OnInit, OnDestroy {
     this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
-  isFixed(fixed: boolean = this.fixed): void {
+  isFixed(fixed = this.fixed): void {
     if (fixed) {
       this.renderer.addClass(this.document.body, this.fixedClass);
     }

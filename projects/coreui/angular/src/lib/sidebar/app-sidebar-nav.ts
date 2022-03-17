@@ -1,3 +1,5 @@
+import { IsActiveMatchOptions } from '@angular/router';
+
 export interface INavAttributes {
   [propName: string]: any;
 }
@@ -26,7 +28,7 @@ export interface INavLinkProps {
   skipLocationChange?: boolean;
   replaceUrl?: boolean;
   state?: {[k: string]: any};
-  routerLinkActiveOptions?: {exact: boolean};
+  routerLinkActiveOptions?: {exact: boolean}  | IsActiveMatchOptions;
   routerLinkActive?: string | string[];
 }
 

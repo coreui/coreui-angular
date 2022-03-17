@@ -1,12 +1,12 @@
 import {Inject, Injectable, Renderer2} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 
-const RemoveClasses = (NewClassNames) => {
+const RemoveClasses = (NewClassNames: string[]) => {
   const MatchClasses = NewClassNames.map((Class) => document.body.classList.contains(Class));
   return MatchClasses.indexOf(true) !== -1;
 };
 
-export const ToggleClasses = (Toggle, ClassNames) => {
+export const ToggleClasses = (Toggle: string, ClassNames: string[]) => {
   const Level = ClassNames.indexOf(Toggle);
   const NewClassNames = ClassNames.slice(0, Level + 1);
 
@@ -25,12 +25,12 @@ export class ClassToggler {
     private renderer: Renderer2,
   ) {}
 
-  removeClasses(NewClassNames) {
+  removeClasses(NewClassNames: string[]) {
     const MatchClasses = NewClassNames.map((Class) => this.document.body.classList.contains(Class));
     return MatchClasses.indexOf(true) !== -1;
   }
 
-  toggleClasses(Toggle, ClassNames) {
+  toggleClasses(Toggle: string, ClassNames: string[]) {
     const Level = ClassNames.indexOf(Toggle);
     const NewClassNames = ClassNames.slice(0, Level + 1);
 

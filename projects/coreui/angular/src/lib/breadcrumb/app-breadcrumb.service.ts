@@ -20,8 +20,8 @@ export class AppBreadcrumbService {
     this.breadcrumbs = this.breadcrumbSubject.asObservable();
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
-      const breadcrumbs = [];
-      let currentRoute = this.route.root;
+      const breadcrumbs: any[] = [];
+      let currentRoute: ActivatedRoute | null = this.route.root;
       let url = '';
       do {
         const childrenRoutes = currentRoute.children;

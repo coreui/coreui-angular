@@ -20,17 +20,13 @@ import '@angular/localize/init';
  */
 
 /***************************************************************************************************
-* BROWSER POLYFILLS
-*/
+ * BROWSER POLYFILLS
+ */
 
-/** IE11 requires the following for NgClass support on SVG elements */
+/**
+ * IE11 requires the following for NgClass support on SVG elements
+ */
 // import 'classlist.js';  // Run `npm install --save classlist.js`.
-
-/** IE11 requires all of the following polyfills. */
-import 'core-js';
-
-/** IE11 requires the following for the Reflect API. */
-import 'core-js/es/reflect';
 
 /**
  * Web Animations `@angular/platform-browser/animations`
@@ -73,4 +69,3 @@ import 'zone.js';  // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 (window as any).global = window;
-

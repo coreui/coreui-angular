@@ -10,7 +10,7 @@ export class DefaultLayoutComponent {
   minimized = false;
   public navItems = [...navItems];
 
-  toggleMinimize(e) {
+  toggleMinimize(e: boolean) {
     this.minimized = e;
   }
 }

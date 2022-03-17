@@ -9,8 +9,8 @@ import { asideMenuCssClasses } from '../shared';
 })
 export class AppAsideComponent implements OnInit, OnDestroy {
   @Input() display: any;
-  @Input() fixed: boolean;
-  @Input() offCanvas: boolean;
+  @Input() fixed?: boolean;
+  @Input() offCanvas?: boolean;
 
   private readonly fixedClass = 'aside-menu-fixed';
 
@@ -31,13 +31,13 @@ export class AppAsideComponent implements OnInit, OnDestroy {
     this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
-  isFixed(fixed: boolean = this.fixed): void {
+  isFixed(fixed = this.fixed): void {
     if (fixed) {
       this.renderer.addClass(this.document.body, this.fixedClass);
     }
   }
 
-  isOffCanvas(offCanvas: boolean = this.offCanvas): void {
+  isOffCanvas(offCanvas = this.offCanvas): void {
     if (offCanvas) {
       this.renderer.addClass(this.document.body, 'aside-menu-off-canvas');
     }

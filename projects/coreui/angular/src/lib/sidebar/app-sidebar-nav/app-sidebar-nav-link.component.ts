@@ -11,14 +11,14 @@ import {INavData} from '../app-sidebar-nav';
   template: `
     <ng-container *ngIf="true">
       <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
-      <ng-container>{{item.name}}</ng-container>
-      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
+      <ng-container>{{item?.name}}</ng-container>
+      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item?.badge?.text }}</span>
     </ng-container>
   `,
   providers: [ SidebarNavHelper ]
 })
 export class AppSidebarNavLinkContentComponent implements OnInit, OnDestroy {
-  @Input() item: INavData;
+  @Input() item: INavData = {};
 
   constructor(
     public helper: SidebarNavHelper
@@ -35,7 +35,7 @@ export class AppSidebarNavLinkContentComponent implements OnInit, OnDestroy {
 })
 export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
 
-  protected _Item: INavData;
+  protected _Item!: INavData;
 
   @Input()
   set item(item: INavData) {
@@ -47,13 +47,13 @@ export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
 
   @Output() linkClick = new EventEmitter();
 
-  public linkType: string;
-  public href: string;
-  public linkActive: boolean;
-  private url: string;
+  public linkType!: string;
+  public href!: string;
+  public linkActive!: boolean;
+  private url!: string;
 
   private navigationEndObservable: Observable<NavigationEnd>;
-  private navSubscription: Subscription;
+  private navSubscription!: Subscription;
 
   constructor(
     public router: Router,
@@ -66,6 +66,7 @@ export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // @ts-ignore
     this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url)) ;
     this.linkType = this.getLinkType();
     this.href = this.isDisabled() ? '' : (this.item.href || this.url);
