@@ -24,7 +24,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prepublish": "ng test @coreui/angular --watch=false && ng e2e && ng build @coreui/angular --configuration production",
     "publish": "cd dist/@coreui/angular/ && npm publish --tag v2-lts --dry-run",
     "link": "cd dist/@coreui/angular/ && npm link",
     "release-version": "node build/change-version.js"
