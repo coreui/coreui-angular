@@ -1,19 +1,15 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
-    "module": "esnext",
-    "target": "es2015",
     "types": [],
     "paths": {
       "@angular/*": [
         "../node_modules/@angular/*"
       ]
     }
-  },
-  "angularCompilerOptions": {
-    "enableIvy": true
   },
   "files": [
     "main.ts",
