@@ -13,7 +13,8 @@ export class FormCheckInputDirective {
    * @type {'checkbox' | 'radio'}
    * @default 'checkbox'
    */
-  @Input() type: 'checkbox' | 'radio' = 'checkbox';
+  @HostBinding('attr.type')
+  @Input() type: ('checkbox' | 'radio') = 'checkbox';
 
   /**
    * Set component indeterminate state.
@@ -27,11 +28,9 @@ export class FormCheckInputDirective {
       this.renderer.setProperty(this.hostElement.nativeElement, 'indeterminate', newValue);
     }
   };
-
   get indeterminate() {
     return this._indeterminate;
   }
-
   private _indeterminate = false;
 
   /**
@@ -42,7 +41,6 @@ export class FormCheckInputDirective {
 
   @HostBinding('class')
   get hostClasses(): any {
-
     return {
       'form-check-input': true,
       'is-valid': this.valid === true,
