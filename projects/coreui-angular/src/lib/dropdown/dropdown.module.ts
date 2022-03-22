@@ -7,6 +7,7 @@ import { DropdownItemDirective } from './dropdown-item/dropdown-item.directive';
 import { DropdownItemPlainDirective } from './dropdown-item/dropdown-item-plain.directive';
 import { DropdownMenuDirective } from './dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from './dropdown.service';
+import { DropdownCloseDirective } from './dropdown-close/dropdown-close.directive';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { DropdownService } from './dropdown.service';
     DropdownItemDirective,
     DropdownItemPlainDirective,
     DropdownToggleDirective,
-    DropdownMenuDirective
+    DropdownMenuDirective,
+    DropdownCloseDirective
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { DropdownService } from './dropdown.service';
     DropdownItemDirective,
     DropdownItemPlainDirective,
     DropdownToggleDirective,
-    DropdownMenuDirective
+    DropdownMenuDirective,
+    DropdownCloseDirective
   ],
   providers: [
     DropdownService,

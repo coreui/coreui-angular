@@ -33,7 +33,6 @@ export class DropdownMenuDirective implements OnInit, OnDestroy {
   get dark(): boolean {
     return this._dark;
   }
-
   set dark(value: boolean) {
     this._dark = coerceBooleanProperty(value);
   }
