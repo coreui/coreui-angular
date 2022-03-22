@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import { BreadcrumbRouterComponent } from './breadcrumb-router.component';
 import { BreadcrumbRouterService } from './breadcrumb-router.service';
+import { BreadcrumbModule } from '../breadcrumb.module';
 
 describe('BreadcrumbComponent', () => {
   let component: BreadcrumbRouterComponent;
@@ -13,9 +14,9 @@ describe('BreadcrumbComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ CommonModule, RouterTestingModule.withRoutes([]) ],
+      imports: [ CommonModule, RouterTestingModule.withRoutes([]), BreadcrumbModule ],
       declarations: [ BreadcrumbRouterComponent ],
-      providers: [ BreadcrumbRouterService ]
+      providers: [ BreadcrumbRouterService ],
     })
     .compileComponents();
   }));

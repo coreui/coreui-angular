@@ -1,8 +1,12 @@
 import { TabContentRefDirective } from './tab-content-ref.directive';
+import { TabService } from './tab.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 describe('TabContentRefDirective', () => {
-  // it('should create an instance', () => {
-  //   const directive = new TabContentRefDirective();
-  //   expect(directive).toBeTruthy();
-  // });
+  let changeDetectorRef: ChangeDetectorRef;
+  it('should create an instance', () => {
+    const tabService = new TabService();
+    const directive = new TabContentRefDirective(changeDetectorRef, tabService);
+    expect(directive).toBeTruthy();
+  });
 });

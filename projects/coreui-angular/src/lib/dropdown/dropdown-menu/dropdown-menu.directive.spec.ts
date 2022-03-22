@@ -1,8 +1,12 @@
+import { ElementRef } from '@angular/core';
+import { DropdownService } from '../dropdown.service';
 import { DropdownMenuDirective } from './dropdown-menu.directive';
 
 describe('DropdownMenuDirective', () => {
-  // it('should create an instance', () => {
-  //   const directive = new DropdownMenuDirective();
-  //   expect(directive).toBeTruthy();
-  // });
+  let elementRef: ElementRef;
+  it('should create an instance', () => {
+    const dropdownService = new DropdownService();
+    const directive = new DropdownMenuDirective(elementRef, dropdownService);
+    expect(directive).toBeTruthy();
+  });
 });

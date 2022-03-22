@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ToasterComponent } from './toaster.component';
+import { ToasterHostDirective } from './toaster-host.directive';
 
 describe('ToasterComponent', () => {
   let component: ToasterComponent;
@@ -8,7 +9,7 @@ describe('ToasterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToasterComponent ]
+      declarations: [ ToasterComponent, ToasterHostDirective ]
     })
     .compileComponents();
   }));

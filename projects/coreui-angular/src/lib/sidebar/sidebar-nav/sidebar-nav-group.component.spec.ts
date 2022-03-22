@@ -9,6 +9,7 @@ import { SidebarNavLinkComponent } from './sidebar-nav-link.component';
 import { SidebarNavTitleComponent } from './sidebar-nav-title.component';
 import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 import { HtmlAttributesDirective } from '../../shared';
+import { SidebarModule } from '../sidebar.module';
 
 describe('SidebarNavGroupComponent', () => {
   let component: SidebarNavGroupComponent;
@@ -18,7 +19,7 @@ describe('SidebarNavGroupComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]) ],
+      imports: [ RouterTestingModule.withRoutes([]), SidebarModule ],
       declarations: [
         SidebarNavDividerComponent,
         SidebarNavGroupComponent,
@@ -26,7 +27,7 @@ describe('SidebarNavGroupComponent', () => {
         SidebarNavLinkComponent,
         SidebarNavTitleComponent,
         HtmlAttributesDirective,
-        SidebarNavIconPipe
+        SidebarNavIconPipe,
       ],
     })
     .compileComponents();

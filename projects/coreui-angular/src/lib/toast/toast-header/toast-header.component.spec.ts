@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ToastHeaderComponent } from './toast-header.component';
+import { ToastModule } from '../toast.module';
 
 describe('ToastHeaderComponent', () => {
   let component: ToastHeaderComponent;
@@ -8,7 +9,8 @@ describe('ToastHeaderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToastHeaderComponent ]
+      declarations: [ ToastHeaderComponent ],
+      imports: [ToastModule]
     })
     .compileComponents();
   }));

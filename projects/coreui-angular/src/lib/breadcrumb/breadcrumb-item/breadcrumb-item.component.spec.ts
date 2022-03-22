@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
+import { SharedModule } from '../../shared';
 import { BreadcrumbItemComponent } from './breadcrumb-item.component';
 
 describe('BreadcrumbItemComponent', () => {
@@ -8,9 +9,10 @@ describe('BreadcrumbItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BreadcrumbItemComponent ]
+      declarations: [BreadcrumbItemComponent],
+      imports: [SharedModule, RouterTestingModule]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {SidebarNavLabelComponent} from './sidebar-nav-label.component';
 import {SidebarNavHelper} from './sidebar-nav.service';
+import { SharedModule } from '../../shared';
 // import {LayoutModule} from '../../shared/layout/index.ts_';
 
 describe('SidebarNavLabelComponent', () => {
@@ -13,7 +14,7 @@ describe('SidebarNavLabelComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ SidebarNavLabelComponent ],
       providers: [ SidebarNavHelper ],
-      // imports: [ LayoutModule ],
+      imports: [ SharedModule ],
     })
     .compileComponents();
   }));

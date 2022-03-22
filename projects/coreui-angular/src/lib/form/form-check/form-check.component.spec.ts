@@ -10,22 +10,20 @@ describe('FormCheckComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FormCheckComponent ],
+      declarations: [FormCheckComponent],
       providers: [Renderer2]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
-
-  // todo
   beforeEach(() => {
-    // fixture = TestBed.createComponent(FormCheckComponent);
-    // renderer =  fixture.debugElement.injector.get(Renderer2);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    fixture = TestBed.createComponent(FormCheckComponent);
+    renderer = fixture.debugElement.injector.get(Renderer2);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-    // expect(component).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 });

@@ -9,7 +9,7 @@ import { SidebarNavDividerComponent } from './sidebar-nav-divider.component';
 import { SidebarNavLabelComponent } from './sidebar-nav-label.component';
 import { SidebarNavLinkComponent } from './sidebar-nav-link.component';
 import { SidebarNavTitleComponent } from './sidebar-nav-title.component';
-import { HtmlAttributesDirective } from '../../shared';
+import { HtmlAttributesDirective, SharedModule } from '../../shared';
 
 describe('SidebarNavComponent', () => {
   let component: SidebarNavComponent;
@@ -19,7 +19,7 @@ describe('SidebarNavComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]) ],
+      imports: [ RouterTestingModule.withRoutes([]), SharedModule ],
       declarations: [
         SidebarNavComponent,
         SidebarNavGroupComponent,

@@ -7,6 +7,7 @@ import { SidebarNavLinkPipe } from './sidebar-nav-link.pipe';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 import { HtmlAttributesDirective } from '../../shared';
+import { SidebarModule } from '../sidebar.module';
 
 describe('SidebarNavLinkComponent', () => {
   let component: SidebarNavLinkComponent;
@@ -16,7 +17,7 @@ describe('SidebarNavLinkComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterTestingModule.withRoutes([]), SidebarModule],
       declarations: [SidebarNavLinkComponent, HtmlAttributesDirective, SidebarNavLinkPipe, SidebarNavBadgePipe, SidebarNavIconPipe]
     })
       .compileComponents();

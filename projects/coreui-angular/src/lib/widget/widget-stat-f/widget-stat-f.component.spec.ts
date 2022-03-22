@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WidgetStatFComponent } from './widget-stat-f.component';
+import { CardModule } from '../../card';
 
 describe('WidgetStatFComponent', () => {
   let component: WidgetStatFComponent;
@@ -8,7 +9,8 @@ describe('WidgetStatFComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WidgetStatFComponent ]
+      declarations: [ WidgetStatFComponent ],
+      imports: [CardModule]
     })
     .compileComponents();
   });

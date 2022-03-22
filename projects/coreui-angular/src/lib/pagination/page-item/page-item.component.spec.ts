@@ -8,19 +8,18 @@ describe('PaginationItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PageItemComponent ]
+      declarations: [PageItemComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
-  // todo
   beforeEach(() => {
-    // fixture = TestBed.createComponent(PageItemComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    fixture = TestBed.createComponent(PageItemComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-    // expect(component).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 });
