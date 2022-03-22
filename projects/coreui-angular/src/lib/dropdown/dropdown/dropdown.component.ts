@@ -15,15 +15,15 @@ import {
   OnInit,
   Optional,
   Output,
-  Renderer2,
+  Renderer2
 } from '@angular/core';
-
+import { DOCUMENT } from '@angular/common';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
+import { createPopper, Instance, Options, Placement } from '@popperjs/core';
+
 import { DropdownService } from '../dropdown.service';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { createPopper, Instance, Options, Placement } from '@popperjs/core';
-import { DOCUMENT } from '@angular/common';
 
 @Directive({
   selector: '[cDropdownToggle]',
@@ -40,7 +40,6 @@ export class DropdownToggleDirective {
    */
   @Input() caret = true;
 
-  private _split = false;
   /**
    * Create split button dropdowns with virtually the same markup as single button dropdowns, but with the addition of `.dropdown-toggle-split` class for proper spacing around the dropdown caret.
    * @type boolean
@@ -49,10 +48,10 @@ export class DropdownToggleDirective {
   set split(value: boolean) {
     this._split = coerceBooleanProperty(value);
   }
-
   get split(): boolean {
     return this._split;
   }
+  private _split = false;
 
   constructor(
     public elementRef: ElementRef,
@@ -85,6 +84,7 @@ export class DropdownToggleDirective {
 export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
 
   static ngAcceptInputType_dark: BooleanInput;
+  static ngAcceptInputType_visible: BooleanInput;
 
   /**
    * Set alignment of dropdown menu.
@@ -146,10 +146,11 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
    */
   @Input()
   set visible(value: boolean) {
-    this.activeTrap = value;
-    this._visible = value;
-    value ? this.createPopperInstance() : this.destroyPopperInstance();
-    this.visibleChange.emit(value);
+    const _value = coerceBooleanProperty(value);
+    this.activeTrap = _value;
+    this._visible = _value;
+    _value ? this.createPopperInstance() : this.destroyPopperInstance();
+    this.visibleChange.emit(_value);
   }
   get visible(): boolean {
     return this._visible;
@@ -248,14 +249,8 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   onClick(event: any): void {
-    if (this.autoClose === true || this.autoClose === 'outside') {
-      if (
-        !this._toggler?.elementRef.nativeElement.contains(
-          event.target?.closest('[cDropdownToggle]')
-        )
-      ) {
-        this.toggleDropdown();
-      }
+    if (!this._toggler?.elementRef.nativeElement.contains(event.target?.closest('[cDropdownToggle]'))) {
+      this.toggleDropdown();
     }
   }
 
@@ -313,14 +308,30 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     const host = this.elementRef.nativeElement;
     this.listeners.push(
       this.renderer.listen(this.document, 'click', (event) => {
-        if (!host.contains(event.target)) {
+        if (this._toggler?.elementRef.nativeElement.contains(event.target)) {
+          return;
+        }
+        if (this.autoClose === true) {
           this.setVisibleState(false);
+          return;
+        }
+        if (!host.contains(event.target)) {
+          if (this.autoClose === 'outside') {
+            this.setVisibleState(false);
+            return;
+          }
+        }
+        if (this._menu.elementRef.nativeElement.contains(event.target)) {
+          if (this.autoClose === 'inside') {
+            this.setVisibleState(false);
+            return;
+          }
         }
       })
     );
     this.listeners.push(
       this.renderer.listen(this.document, 'keyup', (event) => {
-        if (event.key === 'Escape') {
+        if (event.key === 'Escape' && this.autoClose !== false) {
           this.setVisibleState(false);
         }
       })
