@@ -1,15 +1,4 @@
-import {
-  AfterContentInit,
-  Directive,
-  ElementRef,
-  HostBinding,
-  HostListener,
-  Input,
-  OnChanges,
-  Optional,
-  Renderer2,
-  SimpleChanges
-} from '@angular/core';
+import { Directive, HostBinding, HostListener, Input, Optional } from '@angular/core';
 import { DropdownService } from '../dropdown.service';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 
@@ -17,19 +6,27 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
   selector: '[cDropdownItem]',
   exportAs: 'cDropdownItem'
 })
-export class DropdownItemDirective implements AfterContentInit, OnChanges {
+export class DropdownItemDirective {
   /**
    * Set active state to a dropdown-item.
+   * @type boolean
+   * @default undefined
    */
   @Input() active?: boolean;
   /**
+   * Configure dropdown-item close dropdown behavior.
+   * @type boolean
+   * @default true
+   */
+  @Input() autoClose: boolean = true;
+  /**
    * Disables a dropdown-item.
+   * @type boolean
+   * @default undefined
    */
   @Input() disabled?: boolean;
 
   constructor(
-    private renderer: Renderer2,
-    private hostElement: ElementRef,
     private dropdownService: DropdownService,
     @Optional() public dropdown?: DropdownComponent
   ) {
@@ -45,32 +42,38 @@ export class DropdownItemDirective implements AfterContentInit, OnChanges {
     return {
       'dropdown-item': true,
       active: this.active,
-      disabled: this.disabled,
+      disabled: this.disabled
     };
   }
 
+  @HostBinding('attr.tabindex')
+  @Input()
+  set tabIndex(value: string | number | null) {
+    this._tabIndex = value;
+  }
+  get tabIndex() {
+    return this.disabled ? '-1' : this._tabIndex;
+  }
+  private _tabIndex: string | number | null = null;
+
+  @HostBinding('attr.aria-disabled')
+  get isDisabled(): boolean | null {
+    return this.disabled || null;
+  }
+
   @HostListener('click', ['$event'])
-  public onClick($event: MouseEvent): void {
-    this.dropdownService.toggle({visible: 'toggle', dropdown: this.dropdown});
-  }
-
-  ngAfterContentInit(): void {
-    this.setAttributes(this.hostElement);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['disabled']) {
-      this.setAttributes(this.hostElement);
+  private onClick($event: MouseEvent): void {
+    if (this.autoClose) {
+      this.dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
     }
   }
 
-  setAttributes(element: any): void {
-    if (this.disabled) {
-      this.renderer.setAttribute(element.nativeElement, 'aria-disabled', 'true');
-      this.renderer.setAttribute(element.nativeElement, 'tabindex', '-1');
-    } else {
-      this.renderer.removeAttribute(element.nativeElement, 'aria-disabled');
-      this.renderer.removeAttribute(element.nativeElement, 'tabindex');
+  @HostListener('keyup', ['$event'])
+  private onKeyUp($event: KeyboardEvent): void {
+    if ($event.key === 'Enter') {
+      if (this.autoClose) {
+        this.dropdownService.toggle({ visible: false, dropdown: this.dropdown });
+      }
     }
   }
 }
