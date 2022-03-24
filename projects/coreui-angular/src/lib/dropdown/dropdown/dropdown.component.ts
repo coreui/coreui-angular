@@ -135,6 +135,43 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   private _popper = true;
 
   /**
+   * Optional popper Options object, placement prop takes precedence over
+   * @type Partial<Options>
+   */
+  @Input()
+  set popperOptions(value: Partial<Options>) {
+    this._popperOptions = { ...this._popperOptions, ...value };
+  };
+  get popperOptions(): Partial<Options> {
+    let placement = this.placement;
+    switch (this.direction) {
+      case 'dropup': {
+        placement = 'top-start';
+        break;
+      }
+      case 'dropend': {
+        placement = 'right-start';
+        break;
+      }
+      case 'dropstart': {
+        placement = 'left-start';
+        break;
+      }
+    }
+    if (this.alignment === 'end') {
+      placement = 'bottom-end';
+    }
+    this._popperOptions = { ...this._popperOptions, placement: placement };
+    return this._popperOptions;
+  }
+
+  private _popperOptions: Partial<Options> = {
+    placement: this.placement,
+    modifiers: [],
+    strategy: 'absolute'
+  };
+
+  /**
    * Set the dropdown variant to an btn-group, dropdown, input-group, and nav-item.
    */
   @Input() variant?: 'btn-group' | 'dropdown' | 'input-group' | 'nav-item' = 'dropdown';
@@ -196,35 +233,6 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   @HostBinding('style')
   get hostStyle(): any {
     return this.variant === 'input-group' ? {display: 'contents'} : {};
-  }
-
-  private _popperOptions: Options = {
-    placement: this.placement,
-    modifiers: [],
-    strategy: 'absolute',
-  };
-
-  private get popperOptions(): Options {
-    let placement = this.placement;
-    switch (this.direction) {
-      case 'dropup': {
-        placement = 'top-start';
-        break;
-      }
-      case 'dropend': {
-        placement = 'right-start';
-        break;
-      }
-      case 'dropstart': {
-        placement = 'left-start';
-        break;
-      }
-    }
-    if (this.alignment === 'end') {
-      placement = 'bottom-end';
-    }
-    this._popperOptions = {...this._popperOptions, placement: placement};
-    return this._popperOptions;
   }
 
   dropdownStateSubscribe(subscribe: boolean = true): void {
