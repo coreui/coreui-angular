@@ -8,8 +8,7 @@
   </a>
 </p>
 
-<h3 align="center">CoreUI for Angular</h3>
-<h6 align="center"><small>(v4 alpha)</small></h6>
+<h2 align="center">CoreUI for Angular</h3>
 
 <p align="center">
   Angular Components Library built on top of Bootstrap 5 and TypeScript.
