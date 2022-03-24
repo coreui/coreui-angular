@@ -38,7 +38,7 @@
     "@angular/router": "~13.3.0",
     "@coreui/chartjs": "^3.0.0",
     "@coreui/icons-angular": "^3.0.0-alpha.4",
-    "@popperjs/core": "^2.11.4",
+    "@popperjs/core": "~2.10.2",
     "chart.js": "~3.7.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
