@@ -235,6 +235,13 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     return this.variant === 'input-group' ? {display: 'contents'} : {};
   }
 
+  private clickedTarget!: HTMLElement;
+
+  @HostListener('click', ['$event'])
+  private onHostClick($event: MouseEvent): void {
+    this.clickedTarget = $event.target as HTMLElement;
+  }
+
   dropdownStateSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
       this.dropdownStateSubscription =
@@ -313,9 +320,9 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   private setListeners(): void {
-    const host = this.elementRef.nativeElement;
     this.listeners.push(
       this.renderer.listen(this.document, 'click', (event) => {
+        const target = event.target as HTMLElement;
         if (this._toggler?.elementRef.nativeElement.contains(event.target)) {
           return;
         }
@@ -323,18 +330,14 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
           this.setVisibleState(false);
           return;
         }
-        if (!host.contains(event.target)) {
-          if (this.autoClose === 'outside') {
+        if (this.clickedTarget === target && this.autoClose === 'inside') {
             this.setVisibleState(false);
             return;
           }
-        }
-        if (this._menu.elementRef.nativeElement.contains(event.target)) {
-          if (this.autoClose === 'inside') {
+        if (this.clickedTarget !== target && this.autoClose === 'outside') {
             this.setVisibleState(false);
             return;
           }
-        }
       })
     );
     this.listeners.push(
