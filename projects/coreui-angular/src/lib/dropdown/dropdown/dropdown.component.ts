@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ContentChild,
@@ -20,6 +21,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
+
 import { createPopper, Instance, Options, Placement } from '@popperjs/core';
 
 import { DropdownService } from '../dropdown.service';
@@ -27,12 +29,32 @@ import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive'
 
 @Directive({
   selector: '[cDropdownToggle]',
-  exportAs: 'cDropdownToggle',
+  exportAs: 'cDropdownToggle'
 })
-export class DropdownToggleDirective {
+export class DropdownToggleDirective implements AfterViewInit {
 
   static ngAcceptInputType_split: BooleanInput;
   static ngAcceptInputType_popper: BooleanInput;
+
+  constructor(
+    public elementRef: ElementRef,
+    private dropdownService: DropdownService,
+    @Optional() public dropdown?: DropdownComponent
+  ) {}
+
+  /**
+   * Toggle the disabled state for the toggler.
+   * @type DropdownComponent | undefined
+   * @default undefined
+   */
+  @Input() dropdownComponent?: DropdownComponent;
+
+  /**
+   * Disables the toggler.
+   * @type boolean
+   * @default false
+   */
+  @Input() disabled?: boolean = false;
 
   /**
    * Enables pseudo element caret on toggler.
@@ -53,24 +75,26 @@ export class DropdownToggleDirective {
   }
   private _split = false;
 
-  constructor(
-    public elementRef: ElementRef,
-    private dropdownService: DropdownService,
-    @Optional() public dropdown?: DropdownComponent
-  ) {}
-
   @HostBinding('class')
   get hostClasses(): any {
     return {
       'dropdown-toggle': this.caret,
       'dropdown-toggle-split': this.split,
+      disabled: this.disabled
     };
   }
 
   @HostListener('click', ['$event'])
   public onClick($event: MouseEvent): void {
     $event.preventDefault();
-    this.dropdownService.toggle({visible: 'toggle', dropdown: this.dropdown});
+    !this.disabled && this.dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.dropdownComponent) {
+      this.dropdown = this.dropdownComponent;
+      this.dropdownService = this.dropdownComponent?.dropdownService;
+    }
   }
 }
 
@@ -79,7 +103,7 @@ export class DropdownToggleDirective {
   template: '<ng-content></ng-content>',
   styleUrls: ['./dropdown.component.scss'],
   exportAs: 'cDropdown',
-  providers: [DropdownService],
+  providers: [DropdownService]
 })
 export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
 
@@ -164,7 +188,6 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     this._popperOptions = { ...this._popperOptions, placement: placement };
     return this._popperOptions;
   }
-
   private _popperOptions: Partial<Options> = {
     placement: this.placement,
     modifiers: [],
@@ -196,7 +219,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
 
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  dropdownContext = {$implicit: this.visible};
+  dropdownContext = { $implicit: this.visible };
   @ContentChild(DropdownToggleDirective) _toggler!: DropdownToggleDirective;
   @ContentChild(DropdownMenuDirective) _menu!: DropdownMenuDirective;
 
@@ -212,7 +235,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     private renderer: Renderer2,
     private ngZone: NgZone,
     private changeDetectorRef: ChangeDetectorRef,
-    private dropdownService: DropdownService
+    public dropdownService: DropdownService
   ) {}
 
   @HostBinding('class')
@@ -225,14 +248,14 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
       'btn-group': this.variant === 'btn-group',
       'nav-item': this.variant === 'nav-item',
       'input-group': this.variant === 'input-group',
-      show: this.visible,
+      show: this.visible
     };
   }
 
   // todo: find better solution
   @HostBinding('style')
   get hostStyle(): any {
-    return this.variant === 'input-group' ? {display: 'contents'} : {};
+    return this.variant === 'input-group' ? { display: 'contents' } : {};
   }
 
   private clickedTarget!: HTMLElement;
@@ -287,7 +310,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   setVisibleState(value: boolean): void {
-    this.dropdownService.toggle({visible: value, dropdown: this});
+    this.dropdownService.toggle({ visible: value, dropdown: this });
   }
 
   // todo: turn off popper in navbar-nav
@@ -301,7 +324,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
           this.popperInstance = createPopper(
             this._toggler.elementRef.nativeElement,
             this._menu.elementRef.nativeElement,
-            {...this.popperOptions}
+            { ...this.popperOptions }
           );
         }
         this.ngZone.run(() => {
@@ -331,13 +354,13 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
           return;
         }
         if (this.clickedTarget === target && this.autoClose === 'inside') {
-            this.setVisibleState(false);
-            return;
-          }
+          this.setVisibleState(false);
+          return;
+        }
         if (this.clickedTarget !== target && this.autoClose === 'outside') {
-            this.setVisibleState(false);
-            return;
-          }
+          this.setVisibleState(false);
+          return;
+        }
       })
     );
     this.listeners.push(
