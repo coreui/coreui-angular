@@ -1,5 +1,13 @@
 // todo: find better soulution
 
+:host-context(.dropdown, .dropup) {
+  display: block;
+}
+
+:host-context(.dropstart, .dropend) {
+  display: inline-flex;
+}
+
 :host-context(html:not([dir=rtl])) {
   :host-context(.input-group) {
     :host {
