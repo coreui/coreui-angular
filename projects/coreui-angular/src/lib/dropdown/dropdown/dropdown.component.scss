@@ -1,10 +1,10 @@
 // todo: find better soulution
 
-:host-context(.dropdown, .dropup) {
+:host-context(.dropdown, .dropup):not(.btn-group) {
   display: block;
 }
 
-:host-context(.dropstart, .dropend) {
+:host-context(.dropstart, .dropend):not(.btn-group) {
   display: inline-flex;
 }
 
