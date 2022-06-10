@@ -1,4 +1,4 @@
-import { Directive, HostBinding, HostListener, Input, Optional } from '@angular/core';
+import { AfterViewInit, Directive, HostBinding, HostListener, Input, Optional } from '@angular/core';
 import { DropdownService } from '../dropdown.service';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 
@@ -6,7 +6,12 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
   selector: '[cDropdownClose]',
   exportAs: 'cDropdownClose'
 })
-export class DropdownCloseDirective {
+export class DropdownCloseDirective implements AfterViewInit {
+
+  constructor(
+    private dropdownService: DropdownService,
+    @Optional() public dropdown?: DropdownComponent
+  ) { }
 
   /**
    * Disables a dropdown-close directive.
@@ -15,10 +20,14 @@ export class DropdownCloseDirective {
    */
   @Input() disabled?: boolean;
 
-  constructor(
-    private dropdownService: DropdownService,
-    @Optional() public dropdown?: DropdownComponent
-  ) { }
+  @Input() dropdownComponent?: DropdownComponent;
+
+  ngAfterViewInit(): void {
+    if (this.dropdownComponent) {
+      this.dropdown = this.dropdownComponent;
+      this.dropdownService = this.dropdownComponent?.dropdownService;
+    }
+  }
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -44,13 +53,13 @@ export class DropdownCloseDirective {
 
   @HostListener('click', ['$event'])
   private onClick($event: MouseEvent): void {
-    this.dropdownService.toggle({ visible: false, dropdown: this.dropdown });
+    !this.disabled && this.dropdownService.toggle({ visible: false, dropdown: this.dropdown });
   }
 
   @HostListener('keyup', ['$event'])
   private onKeyUp($event: KeyboardEvent): void {
     if ($event.key === 'Enter') {
-      this.dropdownService.toggle({ visible: false, dropdown: this.dropdown });
+      !this.disabled && this.dropdownService.toggle({ visible: false, dropdown: this.dropdown });
     }
   }
 }
