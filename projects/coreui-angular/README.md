@@ -52,7 +52,7 @@
 Before you begin, make sure your development environment includes `Node.js®` and `npm` package manager.
 
 ###### Node.js
-[**Angular 13**](https://angular.io/guide/what-is-angular) requires `Node.js` LTS version `^12.20`, `^14.15` or `^16.10`. 
+[**Angular 13**](https://angular.io/guide/what-is-angular) requires `Node.js` LTS version `^14.15` or `^16.10`. 
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -146,4 +146,4 @@ See [the Releases section of our project](https://github.com/coreui/coreui-angul
 
 ## Copyright and license
 
-Copyright 2021 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2022 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
