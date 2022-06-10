@@ -1,3 +1,5 @@
+import { IsActiveMatchOptions } from '@angular/router';
+
 export enum BreakpointInfix {
   xs = 'xs',
   sm = 'sm',
@@ -130,7 +132,7 @@ export interface INavLinkProps {
   skipLocationChange?: boolean;
   replaceUrl?: boolean;
   state?: { [k: string]: any };
-  routerLinkActiveOptions?: { exact: boolean };
+  routerLinkActiveOptions?: { exact: boolean } | IsActiveMatchOptions;
   routerLinkActive?: string | string[];
 }
 

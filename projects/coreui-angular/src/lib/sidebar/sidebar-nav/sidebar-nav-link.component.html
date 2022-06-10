@@ -30,6 +30,7 @@
      [state]="item.linkProps?.state ?? {}"
      [routerLink]="item.url"
      routerLinkActive="active"
+     [routerLinkActiveOptions]="item.linkProps?.routerLinkActiveOptions ?? { exact: false }"
      (click)="linkClicked()"
   >
 <!--    [class.active]="linkActive"-->
