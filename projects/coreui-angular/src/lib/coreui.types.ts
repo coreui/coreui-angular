@@ -134,6 +134,7 @@ export interface INavLinkProps {
   state?: { [k: string]: any };
   routerLinkActiveOptions?: { exact: boolean } | IsActiveMatchOptions;
   routerLinkActive?: string | string[];
+  ariaCurrentWhenActive?: 'page' | 'step' | 'location' | 'date' | 'time' | true | false;
 }
 
 export interface INavAttributes {
