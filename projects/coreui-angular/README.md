@@ -94,7 +94,14 @@ $ yarn add @coreui/angular
 
 ### CSS
 
-Copy-paste the stylesheet `<link>` into your `<head>` before all other stylesheets to load our CSS.
+Import scss in `src/scss/style.scss`
+
+```scss
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+```
+
+Or copy-paste the stylesheet `<link>` into your `<head>` before all other stylesheets to load our CSS.
 
 ``` html
 <link rel="stylesheet" href="node_modules/@coreui/coreui/dist/css/coreui.min.css">
