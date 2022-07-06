@@ -3,6 +3,11 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "coreui-angular": [
+        "dist/coreui-angular"
+      ]
+    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -16,7 +21,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
+    "target": "es2020",
     "module": "es2020",
     "typeRoots": [
       "node_modules/@types"
@@ -24,12 +29,7 @@
     "lib": [
       "es2020",
       "dom"
-    ],
-    "paths": {
-      "@coreui/angular": [
-        "dist/@coreui/angular"
-      ]
-    }
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

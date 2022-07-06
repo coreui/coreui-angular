@@ -1,8 +1,5 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": false
-  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -123,23 +120,23 @@
         }
       }
     },
-    "@coreui/angular": {
+    "coreui-angular": {
       "projectType": "library",
-      "root": "projects/coreui/angular",
-      "sourceRoot": "projects/coreui/angular/src",
+      "root": "projects/coreui-angular",
+      "sourceRoot": "projects/coreui-angular/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/coreui/angular/ng-package.json"
+            "project": "projects/coreui-angular/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/coreui/angular/tsconfig.lib.prod.json"
+              "tsConfig": "projects/coreui-angular/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/coreui/angular/tsconfig.lib.json"
+              "tsConfig": "projects/coreui-angular/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -147,13 +144,15 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/coreui/angular/src/test.ts",
-            "tsConfig": "projects/coreui/angular/tsconfig.spec.json",
-            "karmaConfig": "projects/coreui/angular/karma.conf.js"
+            "main": "projects/coreui-angular/src/test.ts",
+            "tsConfig": "projects/coreui-angular/tsconfig.spec.json",
+            "karmaConfig": "projects/coreui-angular/karma.conf.js"
           }
         }
       }
     }
   },
-  "defaultProject": "coreui"
+  "cli": {
+    "analytics": false
+  }
 }

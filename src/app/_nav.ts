@@ -1,4 +1,4 @@
-import { INavData } from '../../projects/coreui/angular/src/public-api';
+import { INavData } from '../../projects/coreui-angular/src/public-api';
 
 export const navItems: INavData[] = [
   {
@@ -30,7 +30,7 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Try CoreUI PRO',
-    url: 'http://coreui.io/pro/angular/',
+    url: 'http://coreui.io/angular/',
     icon: 'icon-layers',
     variant: 'danger',
     attributes: { target: '_blank', rel: 'noopener' }
