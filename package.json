@@ -1,6 +1,7 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.13.1",
+  "version": "2.13.2",
+  "description": "CoreUI Angular 13 Bootstrap 4 components",
   "license": "MIT",
   "author": {
     "name": "Łukasz Holeczek",
