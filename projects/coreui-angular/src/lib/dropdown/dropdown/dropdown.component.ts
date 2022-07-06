@@ -7,6 +7,7 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  forwardRef,
   HostBinding,
   HostListener,
   Inject,
@@ -27,8 +28,12 @@ import { createPopper, Instance, Options, Placement } from '@popperjs/core';
 import { DropdownService } from '../dropdown.service';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 
+// lightweight injection token
+export abstract class DropdownToken {}
+
 @Directive({
   selector: '[cDropdownToggle]',
+  providers: [{provide: DropdownToken, useExisting: forwardRef(() => DropdownComponent)}],
   exportAs: 'cDropdownToggle'
 })
 export class DropdownToggleDirective implements AfterViewInit {
@@ -39,7 +44,7 @@ export class DropdownToggleDirective implements AfterViewInit {
   constructor(
     public elementRef: ElementRef,
     private dropdownService: DropdownService,
-    @Optional() public dropdown?: DropdownComponent
+    @Optional() public dropdown?: DropdownToken
   ) {}
 
   /**
