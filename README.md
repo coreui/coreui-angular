@@ -13,7 +13,7 @@
 <p align="center">
   Angular Components Library built on top of Bootstrap 5 and TypeScript.
   <br>
-  <a href="https://coreui.io/angular/docs/4.0/"><strong>Explore CoreUI for Angular docs »</strong></a>
+  <a href="https://coreui.io/angular/docs/"><strong>Explore CoreUI for Angular docs »</strong></a>
   <br>
   <br>
   <a href="https://github.com/coreui/coreui-angular/issues/new?template=bug_report.md">Report a bug</a>
@@ -75,7 +75,7 @@ Several quick start options are available (pick one):
 - Install with [npm](https://www.npmjs.com/): `npm install @coreui/angular`
 - Install with [yarn](https://yarnpkg.com/): `yarn add @coreui/angular`
 
-Read the [Getting started page](https://coreui.io/angular/docs/4.0/) for information on the framework contents, templates and examples, and more.
+Read the [Getting started page](https://coreui.io/angular/docs/) for information on the framework contents, templates and examples, and more.
 
 #### CoreUI CSS files
 
@@ -102,7 +102,7 @@ npm install bootstrap
 ## Templates
 
 * [CoreUI Free Angular Admin Template](https://github.com/coreui/coreui-free-angular-admin-template)
-* 💪  [CoreUI Pro Angular Admin Template](https://coreui.io/pro/angular/)
+* 💪  [CoreUI Pro Angular Admin Template](https://coreui.io/angular/)
 
 ## Bugs and feature requests
 
@@ -110,7 +110,7 @@ Have a bug or a feature request? Please first read the [issue guidelines](https:
 
 ## Documentation
 
-The documentation for the CoreUI & CoreUI PRO is hosted at our website [CoreUI for Angular](https://coreui.io/angular/docs/4.0/)
+The documentation for the CoreUI & CoreUI PRO is hosted at our website [CoreUI for Angular](https://coreui.io/angular/docs/)
 
 ## Frameworks
 
