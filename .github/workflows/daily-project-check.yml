@@ -26,7 +26,7 @@ jobs:
           npm i
           npm run build-lib:prod
           npm run test-lib:prod
-          npm run lint
+#          npm run lint
         env:
           CI: true
 
