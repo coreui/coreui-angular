@@ -17,7 +17,7 @@ import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput 
 
 import { merge } from 'lodash';
 
-import { Chart, ChartConfiguration, ChartType, DefaultDataPoint, registerables } from 'chart.js';
+import { Chart, ChartConfiguration, ChartOptions, ChartType, DefaultDataPoint, registerables } from 'chart.js';
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
 
 Chart.register(...registerables);
@@ -165,6 +165,8 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     const config = this.chartConfig();
 
     if (this.options) {
+      // todo
+      // @ts-ignore
       Object.assign(this.chart.options, config.options);
     }
 
@@ -174,7 +176,11 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     }
 
     if (this.chart) {
+      // todo
+      // @ts-ignore
       Object.assign(this.chart.config.options, config.options);
+      // todo
+      // @ts-ignore
       Object.assign(this.chart.config.plugins, config.plugins);
       Object.assign(this.chart.config.data, config.data);
     }

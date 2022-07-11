@@ -6,11 +6,13 @@ on:
       - master
       - main
       - v4
+      - v4.1
   pull_request:
     branches:
       - master
       - main
       - v4
+      - v4.1
 jobs:
   build:
 

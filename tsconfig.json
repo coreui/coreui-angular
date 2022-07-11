@@ -5,11 +5,9 @@
     "baseUrl": "./",
     "paths": {
       "coreui-angular": [
-        "dist/coreui-angular/coreui-angular",
         "dist/coreui-angular"
       ],
       "coreui-angular-chartjs": [
-        "dist/coreui-angular-chartjs/coreui-angular-chartjs",
         "dist/coreui-angular-chartjs"
       ]
     },
@@ -17,7 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
@@ -26,8 +24,11 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
+    "target": "es2020",
     "module": "es2020",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
       "es2020",
       "dom"
