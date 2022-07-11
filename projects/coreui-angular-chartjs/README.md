@@ -23,11 +23,14 @@
 
 ## Status
 
-[![npm package][npm-badge]][npm]
-[![NPM downloads][npm-download]][npm]
 ![angular][angular-badge]
+[![npm package][npm-badge]][npm]
+[![npm package][npm-badge-next]][npm]
+[![NPM downloads][npm-download]][npm]
 
-[npm-badge]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square
+
+[npm-badge]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square&color=brightgreen
+[npm-badge-next]: https://img.shields.io/npm/v/@coreui/angular-chartjs/next?style=flat-square&color=red
 [npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
 [npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
 [angular-badge]: https://img.shields.io/badge/angular-^14.0.0-lightgrey.svg?style=flat-square&logo=angular

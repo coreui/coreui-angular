@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
 
-import { merge } from 'lodash';
+import merge from 'lodash-es/merge';
 
 import { Chart, ChartConfiguration, ChartOptions, ChartType, DefaultDataPoint, registerables } from 'chart.js';
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
