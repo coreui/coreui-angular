@@ -28,9 +28,9 @@ type AnimateType = ('hide' | 'show');
   exportAs: 'cToast',
   animations: [
     trigger('fadeInOut', [
-      state('show', style({opacity: 1, height: '*', padding: '*', border: '*', margin: '*', overflow: 'hidden'})),
-      state('hide', style({opacity: 0, height: 0, padding: 0, border: 0, margin: 0, overflow: 'hidden'})),
-      state('void', style({opacity: 0, height: 0, padding: 0, border: 0, margin: 0, overflow: 'hidden'})),
+      state('show', style({opacity: 1, height: '*', padding: '*', border: '*', margin: '*'})),
+      state('hide', style({opacity: 0, height: 0, padding: 0, border: 0, margin: 0})),
+      state('void', style({opacity: 0, height: 0, padding: 0, border: 0, margin: 0})),
       transition('show => hide', [
         animate('{{ time }} {{ easing }}'),
       ], {
