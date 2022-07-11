@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "description": "CoreUI Components Library for Angular",
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
@@ -101,7 +101,7 @@
     "url": "git+https://github.com/coreui/coreui-angular.git"
   },
   "config": {
-    "version_short": "4.0"
+    "version_short": "4.1"
   },
   "engines": {
     "node": "^14.15.0 || >=16.10.0",

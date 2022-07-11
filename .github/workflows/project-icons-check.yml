@@ -1,0 +1,35 @@
+name: Project icons check
+
+on:
+  push:
+    branches:
+      - main
+      - v4.1
+  pull_request:
+    branches:
+      - main
+      - v4.1
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: project check
+        run: |
+          npm i
+          npm run build:icons:prod
+          npm run lint:icons
+          npm run test:icons:prod
+        env:
+          CI: true

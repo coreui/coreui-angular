@@ -25,13 +25,16 @@
 
 ## Status
 
-[![npm-coreui-angular-next][npm-coreui-angular-badge-latest]][npm-coreui-angular]
+![angular][angular-badge]
+[![npm-coreui-angular-latest][npm-coreui-angular-badge-latest]][npm-coreui-angular]
+[![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
-![angular](https://img.shields.io/badge/angular-^14.0.0-lightgrey.svg?style=flat-square&logo=angular)
 
-[npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=red
+[npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=brightgreen
+[npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
+[angular-badge]: https://img.shields.io/badge/angular-^14.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## Table of contents
 
