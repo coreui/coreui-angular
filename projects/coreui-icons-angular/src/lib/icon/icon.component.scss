@@ -1,0 +1,49 @@
+:host use, :host svg {}
+
+// Icon variables
+$icon-size-base: 1rem !default;
+$icon-size-sm: $icon-size-base * .875 !default;
+$icon-size-lg: $icon-size-base * 1.25 !default;
+$icon-size-xl: $icon-size-base * 1.5 !default;
+$icon-size-xxl: $icon-size-base * 2 !default;
+
+// Icon sizes
+@mixin icon-size($icon-size) {
+  width: $icon-size;
+  height: $icon-size;
+  font-size: $icon-size;
+}
+
+// Icons
+.icon {
+  display: inline-block;
+  color: inherit;
+  text-align: center;
+  vertical-align: -.125rem; // Fix the position of icon
+  fill: currentColor;
+  &:not(.icon-c-s):not(.icon-custom-size) {
+    @include icon-size($icon-size-base);
+
+    &.icon-xxl {
+      @include icon-size($icon-size-xxl);
+    }
+
+    &.icon-xl {
+      @include icon-size($icon-size-xl);
+    }
+
+    &.icon-lg {
+      @include icon-size($icon-size-lg);
+    }
+
+    &.icon-sm {
+      @include icon-size($icon-size-sm);
+    }
+
+    @for $i from 3 through 9 {
+      &.icon-#{$i}xl {
+        @include icon-size($i * $icon-size-base);
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+<svg *ngIf="(!use) && (!!code)"
+     xmlns="http://www.w3.org/2000/svg"
+     [attr.width]="width"
+     [attr.height]="height || width"
+     [attr.viewBox]="viewBox"
+     [innerHtml]="innerHtml"
+     [ngClass]="computedClasses"
+     [cHtmlAttr]="attributes"
+     role="img"
+     pointer-events="none"
+     #svgElement
+>
+</svg>
+
+<svg *ngIf="use"
+     xmlns="http://www.w3.org/2000/svg"
+     [attr.width]="width"
+     [attr.height]="height || width"
+     [ngClass]="computedClasses"
+     [cHtmlAttr]="attributes"
+     role="img"
+     pointer-events="none"
+>
+  <use [attr.href]="use"></use>
+</svg>

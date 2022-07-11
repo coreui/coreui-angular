@@ -1,0 +1,46 @@
+{
+  "name": "@coreui/icons-angular",
+  "version": "4.2.0",
+  "description": "CoreUI Icons Angular component and service",
+  "copyright": "Copyright 2022 creativeLabs Łukasz Holeczek",
+  "license": "MIT",
+  "homepage": "https://coreui.io/angular",
+  "author": {
+    "name": "CoreUI",
+    "url": "https://coreui.io",
+    "github": "https://github.com/coreui",
+    "twitter": "https://twitter.com/core_ui"
+  },
+  "contributors": [
+    {
+      "name": "CoreUI Team",
+      "url": "https://github.com/orgs/coreui/people"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coreui/coreui-angular.git"
+  },
+  "bugs": {
+    "url": "https://github.com/coreui/coreui-angular/issues"
+  },
+  "peerDependencies": {
+    "@angular/common": "^14.0.0",
+    "@angular/core": "^14.0.0",
+    "@coreui/icons": "^2.1.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "keywords": [
+    "coreui",
+    "coreui-icons",
+    "coreui-angular",
+    "icons",
+    "svg",
+    "svg-icons",
+    "layout",
+    "component",
+    "angular"
+  ]
+}

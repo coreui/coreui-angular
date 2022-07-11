@@ -9,6 +9,9 @@
       ],
       "coreui-angular-chartjs": [
         "dist/coreui-angular-chartjs"
+      ],
+      "@coreui/icons-angular": [
+        "dist/coreui-icons-angular"
       ]
     },
     "outDir": "./dist/out-tsc",
