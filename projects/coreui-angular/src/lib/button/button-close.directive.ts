@@ -24,6 +24,7 @@ export class ButtonCloseDirective extends ButtonDirective {
   @HostBinding('class')
   override get hostClasses(): any {
     return {
+      btn: true,
       'btn-close': true,
       'btn-close-white': this.white,
       [`btn-${this.size}`]: !!this.size,
