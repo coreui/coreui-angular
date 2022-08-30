@@ -40,10 +40,11 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
    */
   @Input('cPopoverOptions')
   set popperOptions(value: Partial<Options>) {
-    this._popperOptions = {...this._popperOptions, placement: this.placement, ...value};
+    this._popperOptions = { ...this._popperOptions, placement: this.placement, ...value };
   };
+
   get popperOptions(): Partial<Options> {
-    return {placement: this.placement, ...this._popperOptions};
+    return { placement: this.placement, ...this._popperOptions };
   }
 
   /**
@@ -63,10 +64,16 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
   set visible(value: boolean) {
     this._visible = value;
   }
+
   get visible() {
     return this._visible;
   }
+
   private _visible = false;
+
+  @HostBinding('attr.aria-describedby') get ariaDescribedBy(): string | null {
+    return this.popoverId ? this.popoverId : null;
+  }
 
   private popover!: HTMLDivElement;
   private popoverId!: string;
@@ -78,10 +85,10 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
       {
         name: 'offset',
         options: {
-          offset: [0, 8],
-        },
-      },
-    ],
+          offset: [0, 8]
+        }
+      }
+    ]
   };
 
   constructor(
@@ -99,17 +106,12 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
     }
   }
 
-  @HostBinding('attr.aria-describedby') get ariaDescribedBy(): string | null {
-    return this.popoverId ? this.popoverId : null;
-  }
-
   ngOnDestroy(): void {
     this.clearListeners();
     this.destroyPopoverElement();
   }
 
   ngOnInit(): void {
-    // this.createPopoverElement();
     this.setListeners();
   }
 
@@ -129,8 +131,8 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
         this.visible = true;
         this.addPopoverElement();
       }
-    }
-    this.listenersService.setListeners(config)
+    };
+    this.listenersService.setListeners(config);
   }
 
   private clearListeners(): void {
@@ -171,25 +173,23 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
     this.popoverRef.instance.content = this.content;
     this.popover = this.popoverRef.location.nativeElement;
     this.renderer.addClass(this.popover, 'fade');
-    // this.renderer.setStyle(this.popover, 'visibility', 'hidden')
 
     setTimeout(() => {
       this.popperInstance = createPopper(
         this.hostElement.nativeElement,
         this.popover,
-        {...this.popperOptions}
+        { ...this.popperOptions }
       );
       this.viewContainerRef.insert(this.popoverRef.hostView);
       setTimeout(() => {
         this.popoverId = this.getUID('popover');
         this.popoverRef.instance.id = this.popoverId;
         this.popoverRef.instance.visible = this.visible;
-        // this.renderer.removeStyle(this.popover, 'visibility');
         this.renderer.appendChild(this.document.body, this.popover);
         this.popperInstance.forceUpdate();
-        // this.popoverRef.changeDetectorRef.detectChanges();
+        // this.popoverRef.changeDetectorRef.markForCheck();
       }, 100);
-    })
+    });
   }
 
   private removePopoverElement(): void {
@@ -197,12 +197,9 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
       return;
     }
     this.popoverRef.instance.visible = this.visible;
-    // this.popoverRef.changeDetectorRef?.detectChanges();
     this.popoverRef.instance.id = undefined;
     setTimeout(() => {
       this.viewContainerRef.detach();
-      // this.viewContainerRef.remove();
-      // this.renderer.removeChild(this.document.body, this.popover);
       this.popperInstance?.destroy();
       this.popoverId = '';
     }, 300);
