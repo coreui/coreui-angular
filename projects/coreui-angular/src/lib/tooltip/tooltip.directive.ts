@@ -5,7 +5,8 @@ import {
   ElementRef,
   HostBinding,
   Inject,
-  Input, OnChanges,
+  Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -39,10 +40,11 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
    */
   @Input('cTooltipOptions')
   set popperOptions(value: Partial<Options>) {
-    this._popperOptions = {...this._popperOptions, placement: this.placement, ...value};
+    this._popperOptions = { ...this._popperOptions, placement: this.placement, ...value };
   };
+
   get popperOptions(): Partial<Options> {
-    return {placement: this.placement, ...this._popperOptions};
+    return { placement: this.placement, ...this._popperOptions };
   }
 
   /**
@@ -61,12 +63,12 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
   @Input('cTooltipVisible')
   set visible(value: boolean) {
     this._visible = value;
-    value ? this.addTooltipElement() : this.removeTooltipElement();
-    this.tooltipRef?.changeDetectorRef.markForCheck();
   }
+
   get visible() {
     return this._visible;
   }
+
   private _visible = false;
 
   @HostBinding('attr.aria-describedby') get ariaDescribedBy(): string | null {
@@ -83,10 +85,10 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
       {
         name: 'offset',
         options: {
-          offset: [0, 0],
-        },
-      },
-    ],
+          offset: [0, 0]
+        }
+      }
+    ]
   };
 
   constructor(
@@ -110,7 +112,6 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    // this.createTooltipElement();
     this.setListeners();
   }
 
@@ -120,15 +121,18 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
       trigger: this.trigger,
       callbackToggle: () => {
         this.visible = !this.visible;
+        this.visible ? this.addTooltipElement() : this.removeTooltipElement();
       },
       callbackOff: () => {
         this.visible = false;
+        this.removeTooltipElement();
       },
       callbackOn: () => {
         this.visible = true;
+        this.addTooltipElement();
       }
-    }
-    this.listenersService.setListeners(config)
+    };
+    this.listenersService.setListeners(config);
   }
 
   private clearListeners(): void {
@@ -146,8 +150,11 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
 
   private createTooltipElement(): void {
     if (!this.tooltipRef) {
-      const tooltipComponent = this.componentFactoryResolver.resolveComponentFactory(TooltipComponent);
-      this.tooltipRef = this.viewContainerRef.createComponent(tooltipComponent);
+      const tooltipComponent =
+        this.componentFactoryResolver.resolveComponentFactory(TooltipComponent);
+      this.tooltipRef = tooltipComponent.create(this.viewContainerRef.injector);
+      // this.tooltipRef = this.viewContainerRef.createComponent<TooltipComponent>(TooltipComponent);
+      // this.viewContainerRef.detach();
     }
   }
 
@@ -167,6 +174,7 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
     }
     this.tooltipRef.instance.content = this.content;
     this.tooltip = this.tooltipRef.location.nativeElement;
+    this.renderer.addClass(this.tooltip, 'fade');
 
     setTimeout(() => {
       this.popperInstance = createPopper(
@@ -174,27 +182,26 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
         this.tooltip,
         { ...this.popperOptions }
       );
+      this.viewContainerRef.insert(this.tooltipRef.hostView);
       setTimeout(() => {
         this.tooltipId = this.getUID('tooltip');
         this.tooltipRef.instance.id = this.tooltipId;
         this.tooltipRef.instance.visible = this.visible;
         this.renderer.appendChild(this.document.body, this.tooltip);
         this.popperInstance.forceUpdate();
-        this.tooltipRef.changeDetectorRef.markForCheck();
-        // this.tooltipRef.changeDetectorRef.detectChanges();
+        // this.tooltipRef.changeDetectorRef.markForCheck();
       }, 100);
-    })
+    });
   }
 
   private removeTooltipElement(): void {
     if (!this.tooltipRef) {
-      return
+      return;
     }
     this.tooltipRef.instance.visible = this.visible;
+    this.tooltipRef.instance.id = undefined;
     setTimeout(() => {
-      // this.tooltipRef.changeDetectorRef.detectChanges();
-      this.tooltipRef.instance.id = undefined;
-      this.renderer.removeChild(this.document.body, this.tooltip);
+      this.viewContainerRef.detach();
       this.popperInstance?.destroy();
       this.tooltipId = '';
     }, 300);

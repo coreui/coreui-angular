@@ -14,7 +14,7 @@ import {
 
 @Component({
   selector: 'c-tooltip',
-  templateUrl: './tooltip.component.html',
+  templateUrl: './tooltip.component.html'
 })
 export class TooltipComponent implements AfterViewInit, OnChanges, OnDestroy {
 
@@ -31,11 +31,11 @@ export class TooltipComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() @HostBinding('attr.id') id?: string;
   @Input() @HostBinding('attr.role') role = 'tooltip';
 
-  @ViewChild('tooltipTemplate', {read: ViewContainerRef}) viewContainerRef!: ViewContainerRef;
+  @ViewChild('tooltipTemplate', { read: ViewContainerRef }) viewContainerRef!: ViewContainerRef;
   private textNode!: Text;
 
   constructor(
-    private renderer: Renderer2,
+    private renderer: Renderer2
   ) { }
 
   @HostBinding('class')
