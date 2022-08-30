@@ -1,4 +1,4 @@
-name: Daily project check
+name: Build check
 
 on:
   schedule:
