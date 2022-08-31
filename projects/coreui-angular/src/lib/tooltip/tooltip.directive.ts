@@ -1,5 +1,4 @@
 import {
-  ComponentFactoryResolver,
   ComponentRef,
   Directive,
   ElementRef,
@@ -92,10 +91,9 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
   };
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private hostElement: ElementRef,
-    private componentFactoryResolver: ComponentFactoryResolver,
     private viewContainerRef: ViewContainerRef,
     private listenersService: ListenersService
   ) {}
@@ -150,10 +148,7 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
 
   private createTooltipElement(): void {
     if (!this.tooltipRef) {
-      const tooltipComponent =
-        this.componentFactoryResolver.resolveComponentFactory(TooltipComponent);
-      this.tooltipRef = tooltipComponent.create(this.viewContainerRef.injector);
-      // this.tooltipRef = this.viewContainerRef.createComponent<TooltipComponent>(TooltipComponent);
+      this.tooltipRef = this.viewContainerRef.createComponent<TooltipComponent>(TooltipComponent);
       // this.viewContainerRef.detach();
     }
   }
@@ -164,8 +159,8 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
     // @ts-ignore
     this.tooltipRef = undefined;
     this.popperInstance?.destroy();
-    this.viewContainerRef.detach();
-    this.viewContainerRef.clear();
+    this.viewContainerRef?.detach();
+    this.viewContainerRef?.clear();
   }
 
   private addTooltipElement(): void {
@@ -174,7 +169,10 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
     }
     this.tooltipRef.instance.content = this.content;
     this.tooltip = this.tooltipRef.location.nativeElement;
+    this.renderer.addClass(this.tooltip, 'd-none');
     this.renderer.addClass(this.tooltip, 'fade');
+
+    this.popperInstance?.destroy();
 
     setTimeout(() => {
       this.popperInstance = createPopper(
@@ -183,27 +181,34 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
         { ...this.popperOptions }
       );
       this.viewContainerRef.insert(this.tooltipRef.hostView);
+      this.renderer.appendChild(this.document.body, this.tooltip);
+      if (!this.visible) {
+        this.removeTooltipElement();
+        return;
+      }
       setTimeout(() => {
         this.tooltipId = this.getUID('tooltip');
         this.tooltipRef.instance.id = this.tooltipId;
+        if (!this.visible) {
+          this.removeTooltipElement();
+          return;
+        }
+        this.renderer.removeClass(this.tooltip, 'd-none');
         this.tooltipRef.instance.visible = this.visible;
-        this.renderer.appendChild(this.document.body, this.tooltip);
         this.popperInstance.forceUpdate();
-        // this.tooltipRef.changeDetectorRef.markForCheck();
       }, 100);
     });
   }
 
   private removeTooltipElement(): void {
+    this.tooltipId = '';
     if (!this.tooltipRef) {
       return;
     }
     this.tooltipRef.instance.visible = this.visible;
     this.tooltipRef.instance.id = undefined;
     setTimeout(() => {
-      this.viewContainerRef.detach();
-      this.popperInstance?.destroy();
-      this.tooltipId = '';
+      this.viewContainerRef?.detach();
     }, 300);
   }
 }
