@@ -1,5 +1,4 @@
 import {
-  ComponentFactoryResolver,
   ComponentRef,
   Directive,
   ElementRef,
@@ -95,7 +94,6 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2,
     private hostElement: ElementRef,
-    private componentFactoryResolver: ComponentFactoryResolver,
     private viewContainerRef: ViewContainerRef,
     private listenersService: ListenersService
   ) {}
@@ -150,9 +148,8 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
 
   private createPopoverElement(): void {
     if (!this.popoverRef) {
-      const popoverComponent =
-        this.componentFactoryResolver.resolveComponentFactory(PopoverComponent);
-      this.popoverRef = popoverComponent.create(this.viewContainerRef.injector);
+      this.popoverRef = this.viewContainerRef.createComponent<PopoverComponent>(PopoverComponent);
+      // this.viewContainerRef.detach();
     }
   }
 
@@ -162,8 +159,8 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
     // @ts-ignore
     this.popoverRef = undefined;
     this.popperInstance?.destroy();
-    this.viewContainerRef.detach();
-    this.viewContainerRef.clear();
+    this.viewContainerRef?.detach();
+    this.viewContainerRef?.clear();
   }
 
   private addPopoverElement(): void {
@@ -172,7 +169,10 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
     }
     this.popoverRef.instance.content = this.content;
     this.popover = this.popoverRef.location.nativeElement;
+    this.renderer.addClass(this.popover, 'd-none');
     this.renderer.addClass(this.popover, 'fade');
+
+    this.popperInstance?.destroy();
 
     setTimeout(() => {
       this.popperInstance = createPopper(
@@ -181,18 +181,27 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
         { ...this.popperOptions }
       );
       this.viewContainerRef.insert(this.popoverRef.hostView);
+      this.renderer.appendChild(this.document.body, this.popover);
+      if (!this.visible) {
+        this.removePopoverElement();
+        return;
+      }
       setTimeout(() => {
         this.popoverId = this.getUID('popover');
         this.popoverRef.instance.id = this.popoverId;
+        if (!this.visible) {
+          this.removePopoverElement();
+          return;
+        }
+        this.renderer.removeClass(this.popover, 'd-none');
         this.popoverRef.instance.visible = this.visible;
-        this.renderer.appendChild(this.document.body, this.popover);
         this.popperInstance.forceUpdate();
-        // this.popoverRef.changeDetectorRef.markForCheck();
       }, 100);
     });
   }
 
   private removePopoverElement(): void {
+    this.popoverId = '';
     if (!this.popoverRef) {
       return;
     }
@@ -200,8 +209,6 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
     this.popoverRef.instance.id = undefined;
     setTimeout(() => {
       this.viewContainerRef.detach();
-      this.popperInstance?.destroy();
-      this.popoverId = '';
     }, 300);
   }
 }
