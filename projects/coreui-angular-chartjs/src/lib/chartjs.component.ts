@@ -143,8 +143,8 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     this.ngZone.runOutsideAngular(() => {
       const config = this.chartConfig();
       if (config) {
-        this.chart = new Chart(ctx, config);
         setTimeout(() => {
+          this.chart = new Chart(ctx, config);
           this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
         });
       }
