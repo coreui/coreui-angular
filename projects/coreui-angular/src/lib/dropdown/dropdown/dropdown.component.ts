@@ -141,7 +141,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
    * Sets a specified  direction and location of the dropdown menu.
    * @type 'dropup' | 'dropend' | 'dropstart'
    */
-  @Input() direction?: 'dropup' | 'dropend' | 'dropstart';
+  @Input() direction?: 'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart';
 
   /**
    * Describes the placement of your component after Popper.js has applied all the modifiers that may have flipped or altered the originally provided placement property.
@@ -184,6 +184,14 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
       }
       case 'dropstart': {
         placement = 'left-start';
+        break;
+      }
+      case 'center': {
+        placement = 'bottom';
+        break;
+      }
+      case 'dropup-center': {
+        placement = 'top';
         break;
       }
     }
@@ -250,9 +258,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
         (this.variant === 'dropdown' || this.variant === 'nav-item') &&
         !this.direction,
       [`${this.direction}`]: !!this.direction,
-      'btn-group': this.variant === 'btn-group',
-      'nav-item': this.variant === 'nav-item',
-      'input-group': this.variant === 'input-group',
+      [`${this.variant}`]: !!this.variant,
       show: this.visible
     };
   }
