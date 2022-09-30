@@ -259,6 +259,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
         !this.direction,
       [`${this.direction}`]: !!this.direction,
       [`${this.variant}`]: !!this.variant,
+      'dropup' : this.direction === 'dropup' || this.direction === 'dropup-center',
       show: this.visible
     };
   }
