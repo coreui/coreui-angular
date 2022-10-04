@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 
@@ -19,7 +20,7 @@ describe('SidebarNavGroupComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]), SidebarModule ],
+      imports: [ RouterTestingModule.withRoutes([]), SidebarModule, NoopAnimationsModule ],
       declarations: [
         SidebarNavDividerComponent,
         SidebarNavGroupComponent,
