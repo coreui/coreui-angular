@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { ChartjsComponent } from './chartjs.component';
 import { Chart, registerables } from 'chart.js';
@@ -42,30 +42,33 @@ describe('ChartjsComponent', () => {
     component.type = 'line';
   });
 
-  it('chart should create', () => {
+  it('chart should create', fakeAsync(() => {
     fixture.detectChanges();
+    tick();
     expect(component).toBeTruthy();
     expect(component.chart).toBeDefined();
-  });
+  }));
 
-  it('chart should receive data', () => {
+  it('chart should receive data', fakeAsync(() => {
     component.data = { ...data };
     fixture.detectChanges();
+    tick();
     expect(component.chart?.config.data.labels?.length).toBe(7);
     expect(component.chart?.config.data.labels).toEqual(labels);
     expect(component.chart?.config.data.datasets[0]?.data.length).toBe(7);
-  });
+  }));
 
-  it('chart to Base64Image', () => {
+  it('chart to Base64Image', fakeAsync(() => {
     component.data = { ...data };
     fixture.detectChanges();
+    tick();
     const image = component.chartToBase64Image();
     expect(image).toBeDefined();
     expect(typeof image).toBe('string');
     expect(image).toContain('data:image/png;base64,');
-  });
+  }));
 
-  it('chart should update on data change', () => {
+  it('chart should update on data change', fakeAsync(() => {
     component.data = {
       ...data,
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
@@ -75,7 +78,8 @@ describe('ChartjsComponent', () => {
       ]
     };
     fixture.detectChanges();
-    expect(component.chart.config?.data.labels?.length).toBe(5);
-    expect(component.chart.config?.data.datasets[1]?.data.length).toBe(5);
-  });
+    tick();
+    expect(component.chart?.config?.data.labels?.length).toBe(5);
+    expect(component.chart?.config?.data.datasets[1]?.data.length).toBe(5);
+  }));
 });
