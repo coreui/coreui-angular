@@ -18,12 +18,13 @@ import { SidebarService } from '../sidebar.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'c-sidebar-nav',
   templateUrl: './sidebar-nav.component.html',
   styleUrls: ['./sidebar-nav.component.scss']
-  })
+})
 export class SidebarNavComponent implements OnChanges {
   @Input() navItems?: INavData[] = [];
   @Input() dropdownMode?: 'closeInactive' | 'noAction' | 'openActive' = 'closeInactive';
@@ -63,7 +64,7 @@ export class SidebarNavComponent implements OnChanges {
   public hideMobile(): void {
     // todo: proper scrollIntoView() after NavigationEnd
     if (this.sidebar && this.sidebar.sidebarState.mobile) {
-      this.sidebarService.toggle({toggle: 'visible', sidebar: this.sidebar});
+      this.sidebarService.toggle({ toggle: 'visible', sidebar: this.sidebar });
     }
   }
 }
@@ -72,7 +73,20 @@ export class SidebarNavComponent implements OnChanges {
   selector: 'c-sidebar-nav-group',
   templateUrl: './sidebar-nav-group.component.html',
   styleUrls: ['./sidebar-nav-group.component.scss'],
-  providers: [ SidebarNavHelper ]
+  providers: [SidebarNavHelper],
+  animations: [
+    trigger('openClose', [
+      state('open', style({
+        height: '*'
+      })),
+      state('closed', style({
+        height: '0px'
+      })),
+      transition('open <=> closed', [
+        animate('.15s ease')
+      ])
+    ])
+  ]
 })
 export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   @Input() item: any;
@@ -85,7 +99,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   get hostClasses(): any {
     return {
       'nav-group': true,
-      show: this.open,
+      show: this.open
     };
   }
 
@@ -96,8 +110,9 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   navSubscription: Subscription;
 
   // @ts-ignore
-  private open: boolean;
+  public open: boolean;
   public navItems: INavData[] = [];
+  public display: any = { display: 'block' };
 
   constructor(
     private router: Router,
@@ -144,5 +159,19 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navSubscription.unsubscribe();
+  }
+
+  onAnimationStart($event: AnimationEvent) {
+    setTimeout(() => {
+      this.display = { display: 'block' };
+    });
+  }
+
+  onAnimationDone($event: AnimationEvent) {
+    if ($event.toState === 'closed') {
+      setTimeout(() => {
+        this.display = null;
+      });
+    }
   }
 }

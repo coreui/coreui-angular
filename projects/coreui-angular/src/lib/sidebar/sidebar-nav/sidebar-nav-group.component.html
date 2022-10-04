@@ -7,7 +7,12 @@
 </a>
 <c-sidebar-nav
   [groupItems]="true"
-  [navItems]="navItems">
+  [navItems]="navItems"
+  [@openClose]="open ? 'open' : 'closed'"
+  (@openClose.start)="onAnimationStart($event)"
+  (@openClose.done)="onAnimationDone($event)"
+  [ngStyle]="display"
+>
 </c-sidebar-nav>
 
 <ng-template #iconTemplate let-item>
