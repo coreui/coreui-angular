@@ -28,13 +28,13 @@ import { ModalContentComponent } from '../modal-content/modal-content.component'
       state(
         'visible',
         style({
-          display: 'block'
+          // display: 'block'
         })
       ),
       state(
         'hidden',
         style({
-          display: 'none'
+          // display: 'none'
         })
       ),
       transition('visible <=> *', [animate('300ms')])
@@ -147,7 +147,8 @@ export class ModalComponent implements OnInit, OnDestroy {
   @ViewChild(ModalContentComponent, { read: ElementRef }) modalContent!: ElementRef;
   private activeBackdrop!: any;
   private stateToggleSubscription!: Subscription;
-  private inBoundingClientRect!: boolean;
+
+  // private inBoundingClientRect!: boolean;
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -196,6 +197,11 @@ export class ModalComponent implements OnInit, OnDestroy {
     if (event.toState === 'visible') {
       this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
       this.renderer.setStyle(this.document.body, 'padding-right', scrollbarWidth);
+      this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'block');
+    } else {
+      if (!this.transition) {
+        this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'none');
+      }
     }
   }
 
@@ -203,11 +209,12 @@ export class ModalComponent implements OnInit, OnDestroy {
   animateDone(event: AnimationEvent) {
     setTimeout(() => {
       if (event.toState === 'hidden') {
+        this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'none');
         this.renderer.removeStyle(this.document.body, 'overflow');
         this.renderer.removeStyle(this.document.body, 'padding-right');
       }
-      this.show = this.visible;
     });
+    this.show = this.visible;
   }
 
   @HostListener('document:keydown', ['$event'])
