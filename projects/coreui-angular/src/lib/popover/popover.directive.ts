@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   ComponentRef,
   Directive,
   ElementRef,
@@ -91,10 +92,11 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
   };
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private hostElement: ElementRef,
     private viewContainerRef: ViewContainerRef,
+    private changeDetectorRef: ChangeDetectorRef,
     private listenersService: ListenersService
   ) {}
 
@@ -196,6 +198,7 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
         this.renderer.removeClass(this.popover, 'd-none');
         this.popoverRef.instance.visible = this.visible;
         this.popperInstance.forceUpdate();
+        this.changeDetectorRef.markForCheck();
       }, 100);
     });
   }
@@ -205,8 +208,9 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
     if (!this.popoverRef) {
       return;
     }
-    this.popoverRef.instance.visible = this.visible;
+    this.popoverRef.instance.visible = false;
     this.popoverRef.instance.id = undefined;
+    this.changeDetectorRef.markForCheck();
     setTimeout(() => {
       this.viewContainerRef.detach();
     }, 300);
