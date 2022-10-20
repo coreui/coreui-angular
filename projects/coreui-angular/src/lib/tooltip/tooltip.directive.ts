@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   ComponentRef,
   Directive,
   ElementRef,
@@ -95,6 +96,7 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
     private renderer: Renderer2,
     private hostElement: ElementRef,
     private viewContainerRef: ViewContainerRef,
+    private changeDetectorRef: ChangeDetectorRef,
     private listenersService: ListenersService
   ) {}
 
@@ -167,37 +169,38 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
     if (!this.tooltipRef) {
       this.createTooltipElement();
     }
+
+    this.tooltipId = this.getUID('tooltip');
+    this.tooltipRef.instance.id = this.tooltipId;
     this.tooltipRef.instance.content = this.content;
+
     this.tooltip = this.tooltipRef.location.nativeElement;
     this.renderer.addClass(this.tooltip, 'd-none');
     this.renderer.addClass(this.tooltip, 'fade');
 
     this.popperInstance?.destroy();
 
+    this.viewContainerRef.insert(this.tooltipRef.hostView);
+    this.renderer.appendChild(this.document.body, this.tooltip);
+
+    this.popperInstance = createPopper(
+      this.hostElement.nativeElement,
+      this.tooltip,
+      { ...this.popperOptions }
+    );
+    if (!this.visible) {
+      this.removeTooltipElement();
+      return;
+    }
+    this.renderer.removeClass(this.tooltip, 'd-none');
+    this.changeDetectorRef.markForCheck();
+
     setTimeout(() => {
-      this.popperInstance = createPopper(
-        this.hostElement.nativeElement,
-        this.tooltip,
-        { ...this.popperOptions }
-      );
-      this.viewContainerRef.insert(this.tooltipRef.hostView);
-      this.renderer.appendChild(this.document.body, this.tooltip);
-      if (!this.visible) {
-        this.removeTooltipElement();
-        return;
-      }
-      setTimeout(() => {
-        this.tooltipId = this.getUID('tooltip');
-        this.tooltipRef.instance.id = this.tooltipId;
-        if (!this.visible) {
-          this.removeTooltipElement();
-          return;
-        }
-        this.renderer.removeClass(this.tooltip, 'd-none');
-        this.tooltipRef.instance.visible = this.visible;
-        this.popperInstance.forceUpdate();
-      }, 100);
-    });
+      this.tooltipRef.instance.visible = this.visible;
+      this.popperInstance.forceUpdate();
+      this.changeDetectorRef.markForCheck();
+    }, 100);
+
   }
 
   private removeTooltipElement(): void {
@@ -205,8 +208,9 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
     if (!this.tooltipRef) {
       return;
     }
-    this.tooltipRef.instance.visible = this.visible;
+    this.tooltipRef.instance.visible = false;
     this.tooltipRef.instance.id = undefined;
+    this.changeDetectorRef.markForCheck();
     setTimeout(() => {
       this.viewContainerRef?.detach();
     }, 300);
