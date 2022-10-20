@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "4.2.7",
+  "version": "4.2.8",
   "description": "CoreUI Components Library for Angular",
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
@@ -11,7 +11,7 @@
     "test:lib:dev": "ng test coreui-angular",
     "test:lib:prod": "ng test coreui-angular --karma-config=projects/coreui-angular/karma.conf.github.js",
     "prepublish:lib": "ng build coreui-icons-angular && ng lint coreui-angular && ng test coreui-angular --watch=false && ng build coreui-angular",
-    "publish:lib": "cd dist/coreui-angular/ && npm publish --tag next",
+    "publish:lib": "cd dist/coreui-angular/ && npm publish --tag next --dry-run",
     "lint:lib": "ng lint coreui-angular",
     "link:lib": "cd dist/coreui-angular/ && npm link",
     "chartjs": "ng",
