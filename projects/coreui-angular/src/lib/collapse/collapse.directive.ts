@@ -33,6 +33,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
 
   static ngAcceptInputType_horizontal: BooleanInput;
   static ngAcceptInputType_navbar: BooleanInput;
+  static ngAcceptInputType_visible: BooleanInput;
 
   /**
    * @ignore
@@ -41,9 +42,11 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   set animate(value: boolean) {
     this._animate = value;
   }
+
   get animate(): boolean {
     return this._animate;
   }
+
   private _animate = true;
 
   /**
@@ -53,9 +56,11 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   set horizontal(value: boolean) {
     this._horizontal = coerceBooleanProperty(value);
   }
+
   get horizontal(): boolean {
     return this._horizontal;
   }
+
   private _horizontal: boolean = false;
 
   /**
@@ -63,11 +68,13 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
    */
   @Input()
   set visible(value) {
-    this._visible = value;
+    this._visible = coerceBooleanProperty(value);
   }
+
   get visible(): boolean {
     return this._visible;
   }
+
   private _visible = false;
 
   /**
@@ -77,9 +84,11 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   set navbar(value: boolean) {
     this._navbar = coerceBooleanProperty(value);
   };
+
   get navbar() {
     return this._navbar;
   }
+
   private _navbar = false;
 
   /**
@@ -115,10 +124,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   get hostClasses(): any {
     return {
       'navbar-collapse': this.navbar,
-      show: this.visible,
-      'collapse-horizontal': this.horizontal,
-      collapsing: this.collapsing
-      // collapse: !this.collapsing && !this.visible
+      'collapse-horizontal': this.horizontal
     };
   }
 
@@ -169,32 +175,58 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
     const expand = this.horizontal ? expandHorizontalAnimation : expandAnimation;
     const collapse = this.horizontal ? collapseHorizontalAnimation : collapseAnimation;
 
+    const dimension = this.horizontal ? 'width' : 'height';
+    const capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
+    const scrollSize = `scroll${capitalizedDimension}`;
+
     const animationFactory = this.animationBuilder.build(
       useAnimation(visible ? expand : collapse, { params: { time: duration, easing: this.transition } })
     );
 
     this.player = animationFactory.create(this.host);
+
+    this.renderer.setStyle(this.host, dimension, visible ? 0 : `${this.host.getBoundingClientRect()[dimension]}px`);
+
+    !visible && this.host.offsetHeight;
+
     this.player.onStart(() => {
       this.setMaxSize();
-      this.visible = visible;
+      this.renderer.removeClass(this.host, 'collapse');
+      this.renderer.addClass(this.host, 'collapsing');
+      this.renderer.removeClass(this.host, 'show');
       this.collapsing = true;
+      if (visible) {
+        // @ts-ignore
+        this.renderer.setStyle(this.host, dimension, `${this.host[scrollSize]}px`);
+      } else {
+        this.renderer.setStyle(this.host, dimension, '');
+      }
       this.collapseChange.emit(visible ? 'opening' : 'collapsing');
     });
     this.player.onDone(() => {
+      this.visible = visible;
       this.collapsing = false;
+      this.renderer.removeClass(this.host, 'collapsing');
+      this.renderer.addClass(this.host, 'collapse');
+      if (visible) {
+        this.renderer.addClass(this.host, 'show');
+        this.renderer.setStyle(this.host, dimension, '');
+      } else {
+        this.renderer.removeClass(this.host, 'show');
+      }
       this.collapseChange.emit(visible ? 'open' : 'collapsed');
     });
   }
 
   setMaxSize() {
-    setTimeout(() => {
-      if (this.horizontal) {
-        this.scrollWidth = this.host.scrollWidth;
-        this.scrollWidth > 0 && this.renderer.setStyle(this.host, 'maxWidth', `${this.scrollWidth}px`);
-        // } else {
-        // this.scrollHeight = this.host.scrollHeight;
-        // this.scrollHeight > 0 && this.renderer.setStyle(this.host, 'maxHeight', `${this.scrollHeight}px`);
-      }
-    });
+    // setTimeout(() => {
+    if (this.horizontal) {
+      this.scrollWidth = this.host.scrollWidth;
+      this.scrollWidth > 0 && this.renderer.setStyle(this.host, 'maxWidth', `${this.scrollWidth}px`);
+      // } else {
+      // this.scrollHeight = this.host.scrollHeight;
+      // this.scrollHeight > 0 && this.renderer.setStyle(this.host, 'maxHeight', `${this.scrollHeight}px`);
+    }
+    // });
   }
 }
