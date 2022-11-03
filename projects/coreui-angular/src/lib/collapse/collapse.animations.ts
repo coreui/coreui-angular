@@ -1,11 +1,14 @@
-import { animate, animation } from '@angular/animations';
+import { animate, animation, style } from '@angular/animations';
 
 export const expandAnimation = animation([
   animate('{{ time }} {{ easing }}')
 ]);
 
 export const collapseAnimation = animation([
-  animate('{{ time }} {{ easing }}')
+  style({ height: '*', opacity: '*', minHeight: '*' }),
+  animate('{{ time }} {{ easing }}',
+    style({ height: 0, opacity: 0, minHeight: 0 })
+  )
 ]);
 
 export const expandHorizontalAnimation = animation([
@@ -13,5 +16,9 @@ export const expandHorizontalAnimation = animation([
 ]);
 
 export const collapseHorizontalAnimation = animation([
-  animate('{{ time }} {{ easing }}')
+  style({ opacity: '*' }),
+  animate(
+    '{{ time }} {{ easing }}',
+    style({ opacity: 0 })
+  )
 ]);
