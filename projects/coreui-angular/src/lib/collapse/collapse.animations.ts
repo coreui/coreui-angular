@@ -5,9 +5,9 @@ export const expandAnimation = animation([
 ]);
 
 export const collapseAnimation = animation([
-  style({ height: '*', opacity: '*', minHeight: '*' }),
+  style({ height: '*', minHeight: '*' }),
   animate('{{ time }} {{ easing }}',
-    style({ height: 0, opacity: 0, minHeight: 0 })
+    style({ height: 0, minHeight: 0 })
   )
 ]);
 
@@ -16,9 +16,9 @@ export const expandHorizontalAnimation = animation([
 ]);
 
 export const collapseHorizontalAnimation = animation([
-  style({ opacity: '*' }),
+  // style({ opacity: '*' }),
   animate(
-    '{{ time }} {{ easing }}',
-    style({ opacity: 0 })
+    '{{ time }} {{ easing }}'
+    // style({ opacity: 0 })
   )
 ]);
