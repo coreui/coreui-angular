@@ -217,7 +217,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     this.show = this.visible;
   }
 
-  @HostListener('document:keydown', ['$event'])
+  @HostListener('document:keyup', ['$event'])
   onKeyDownHandler(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.keyboard && this.visible) {
       if (this.backdrop === 'static') {

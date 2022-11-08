@@ -398,9 +398,11 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
       })
     );
     this.listeners.push(
-      this.renderer.listen(this.document, 'keyup', (event) => {
+      this.renderer.listen(this.elementRef.nativeElement, 'keyup', (event) => {
         if (event.key === 'Escape' && this.autoClose !== false) {
+          event.stopPropagation();
           this.setVisibleState(false);
+          return;
         }
       })
     );
