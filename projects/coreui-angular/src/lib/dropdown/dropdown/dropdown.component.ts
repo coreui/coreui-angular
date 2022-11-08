@@ -21,6 +21,7 @@ import {
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { FocusMonitor } from '@angular/cdk/a11y';
 import { Subscription } from 'rxjs';
 
 import { createPopper, Instance, Options, Placement } from '@popperjs/core';
@@ -33,7 +34,7 @@ export abstract class DropdownToken {}
 
 @Directive({
   selector: '[cDropdownToggle]',
-  providers: [{provide: DropdownToken, useExisting: forwardRef(() => DropdownComponent)}],
+  providers: [{ provide: DropdownToken, useExisting: forwardRef(() => DropdownComponent) }],
   exportAs: 'cDropdownToggle'
 })
 export class DropdownToggleDirective implements AfterViewInit {
@@ -75,9 +76,11 @@ export class DropdownToggleDirective implements AfterViewInit {
   set split(value: boolean) {
     this._split = coerceBooleanProperty(value);
   }
+
   get split(): boolean {
     return this._split;
   }
+
   private _split = false;
 
   @HostBinding('class')
@@ -132,9 +135,11 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   set dark(value: boolean) {
     this._dark = coerceBooleanProperty(value);
   };
+
   get dark() {
     return this._dark;
   }
+
   private _dark = false;
 
   /**
@@ -158,9 +163,11 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   set popper(value: boolean) {
     this._popper = coerceBooleanProperty(value);
   }
+
   get popper(): boolean {
     return this._popper;
   }
+
   private _popper = true;
 
   /**
@@ -171,6 +178,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   set popperOptions(value: Partial<Options>) {
     this._popperOptions = { ...this._popperOptions, ...value };
   };
+
   get popperOptions(): Partial<Options> {
     let placement = this.placement;
     switch (this.direction) {
@@ -201,6 +209,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     this._popperOptions = { ...this._popperOptions, placement: placement };
     return this._popperOptions;
   }
+
   private _popperOptions: Partial<Options> = {
     placement: this.placement,
     modifiers: [],
@@ -208,7 +217,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   };
 
   /**
-   * Set the dropdown variant to an btn-group, dropdown, input-group, and nav-item.
+   * Set the dropdown variant to a btn-group, dropdown, input-group, and nav-item.
    */
   @Input() variant?: 'btn-group' | 'dropdown' | 'input-group' | 'nav-item' = 'dropdown';
 
@@ -225,9 +234,11 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     _value ? this.createPopperInstance() : this.destroyPopperInstance();
     this.visibleChange.emit(_value);
   }
+
   get visible(): boolean {
     return this._visible;
   }
+
   private _visible = false;
 
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -243,11 +254,12 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   private listeners: (() => void)[] = [];
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
     private renderer: Renderer2,
     private ngZone: NgZone,
     private changeDetectorRef: ChangeDetectorRef,
+    private focusMonitor: FocusMonitor,
     public dropdownService: DropdownService
   ) {}
 
@@ -259,7 +271,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
         !this.direction,
       [`${this.direction}`]: !!this.direction,
       [`${this.variant}`]: !!this.variant,
-      'dropup' : this.direction === 'dropup' || this.direction === 'dropup-center',
+      'dropup': this.direction === 'dropup' || this.direction === 'dropup-center',
       show: this.visible
     };
   }
@@ -308,6 +320,14 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     if (this.variant === 'nav-item') {
       this.renderer.addClass(this._toggler.elementRef.nativeElement, 'nav-link');
     }
+    this.focusMonitor.monitor(this.elementRef, true).subscribe(origin => {
+      this.ngZone.run(() => {
+        if ((!origin) && (this.autoClose === true || this.autoClose === 'outside')) {
+          this.setVisibleState(false);
+          this.changeDetectorRef.markForCheck();
+        }
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -316,6 +336,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
+    this.focusMonitor?.stopMonitoring(this.elementRef);
     this.clearListeners();
     this.dropdownStateSubscribe(false);
     this.destroyPopperInstance();
@@ -341,6 +362,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
         }
         this.ngZone.run(() => {
           this.setListeners();
+          this.changeDetectorRef.markForCheck();
           this.changeDetectorRef.detectChanges();
         });
       });
