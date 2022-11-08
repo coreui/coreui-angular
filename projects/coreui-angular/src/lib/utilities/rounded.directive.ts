@@ -48,7 +48,7 @@ export class RoundedDirective {
           classes[`rounded-${val}`] = true;
         }
       });
-      console.log('rounded keys', keys, classes);
+      // console.log('rounded keys', keys, classes);
       return Object.entries(classes).length === 0 ? {rounded: false} : classes;
     }
   }
