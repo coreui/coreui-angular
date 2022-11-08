@@ -10,7 +10,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { fromEvent, Subscription, withLatestFrom, zipWith } from 'rxjs';
 
 import { IntersectionService } from '../../services/intersection.service';
 import { IListenersConfig, ListenersService } from '../../services/listeners.service';
@@ -59,6 +59,12 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    */
   @Input() pause: Triggers | Triggers[] | false = 'hover';
   /**
+   * Support left/right swipe interactions on touchscreen devices.
+   * @type boolean
+   * @default true
+   */
+  @Input() touch: boolean = true;
+  /**
    * Set type of the transition.
    * @type {'slide' | 'crossfade'}
    * @default 'slide'
@@ -90,6 +96,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   private timerId!: any;
   private intersectingSubscription?: Subscription;
   private activeItemInterval = 0;
+  private swipeSubscription?: Subscription;
 
   constructor(
     @Inject(CarouselConfig) private config: CarouselConfig,
@@ -110,6 +117,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     this.clearListeners();
     this.carouselStateSubscribe(false);
     this.intersectionServiceSubscribe(false);
+    this.swipeSubscribe(false);
   }
 
   ngAfterContentInit(): void {
@@ -117,6 +125,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     this.intersectionServiceSubscribe();
     this.carouselState.state = { activeItemIndex: this.activeIndex, animate: this.animate };
     this.setListeners();
+    this.swipeSubscribe();
   }
 
   private setListeners(): void {
@@ -140,9 +149,11 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   set visible(value) {
     this._visible = value;
   }
+
   get visible() {
     return this._visible;
   }
+
   private _visible: boolean = true;
 
   setTimer(): void {
@@ -183,6 +194,27 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
       });
     } else {
       this.intersectingSubscription?.unsubscribe();
+    }
+  }
+
+  private swipeSubscribe(subscribe: boolean = true): void {
+    if (this.touch && subscribe) {
+      const carouselElement = this.hostElement.nativeElement;
+      const touchStart$ = fromEvent<TouchEvent>(carouselElement, 'touchstart');
+      const touchEnd$ = fromEvent<TouchEvent>(carouselElement, 'touchend');
+      const touchMove$ = fromEvent<TouchEvent>(carouselElement, 'touchmove');
+      this.swipeSubscription = touchStart$.pipe(zipWith(touchEnd$.pipe(withLatestFrom(touchMove$))))
+        .subscribe(([touchstart, [touchend, touchmove]]) => {
+          touchstart.stopPropagation();
+          touchmove.stopPropagation();
+          const distanceX = touchstart.touches[0].clientX - touchmove.touches[0].clientX;
+          if (Math.abs(distanceX) > 0.3 * carouselElement.clientWidth && touchstart.timeStamp <= touchmove.timeStamp) {
+            const nextIndex = this.carouselState.direction(distanceX > 0 ? 'next' : 'prev');
+            this.carouselState.state = { activeItemIndex: nextIndex };
+          }
+        });
+    } else {
+      this.swipeSubscription?.unsubscribe();
     }
   }
 }
