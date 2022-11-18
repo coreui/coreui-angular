@@ -1,25 +1,26 @@
 <ng-container *ngFor="let item of navItemsArray">
   <ng-container [ngSwitch]="helper.itemType(item)">
     <c-sidebar-nav-group
+      #rla="routerLinkActive"
       *ngSwitchCase="'group'"
+      [dropdownMode]="dropdownMode"
       [item]="item"
       [ngClass]="item | cSidebarNavItemClass"
-      routerLinkActive="show"
-      #rla="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
+      routerLinkActive="show"
     >
     </c-sidebar-nav-group>
     <c-sidebar-nav-divider
       *ngSwitchCase="'divider'"
+      [cHtmlAttr]="item.attributes ?? {}"
       [item]="item"
-      [ngClass]="item | cSidebarNavItemClass"
-      [cHtmlAttr]="item.attributes ?? {}">
+      [ngClass]="item | cSidebarNavItemClass">
     </c-sidebar-nav-divider>
     <c-sidebar-nav-title
       *ngSwitchCase="'title'"
+      [cHtmlAttr]="item.attributes ?? {}"
       [item]="item"
-      [ngClass]="item | cSidebarNavItemClass"
-      [cHtmlAttr]="item.attributes ?? {}">
+      [ngClass]="item | cSidebarNavItemClass">
     </c-sidebar-nav-title>
     <c-sidebar-nav-label
       *ngSwitchCase="'label'"
@@ -30,10 +31,10 @@
       *ngSwitchCase="'empty'">
     </ng-container>
     <c-sidebar-nav-link
+      (linkClick)="hideMobile()"
       *ngSwitchDefault
       [item]="item"
       [ngClass]="item | cSidebarNavItemClass"
-      (linkClick)="hideMobile()"
     >
     </c-sidebar-nav-link>
   </ng-container>

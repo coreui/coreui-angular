@@ -8,7 +8,8 @@ import {
   OnInit,
   Optional,
   Renderer2,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -19,6 +20,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import { SidebarNavGroupService } from './sidebar-nav-group.service';
 
 @Component({
   selector: 'c-sidebar-nav',
@@ -26,8 +28,18 @@ import { animate, AnimationEvent, state, style, transition, trigger } from '@ang
   styleUrls: ['./sidebar-nav.component.scss']
 })
 export class SidebarNavComponent implements OnChanges {
+
+  constructor(
+    @Optional() public sidebar: SidebarComponent,
+    public helper: SidebarNavHelper,
+    public router: Router,
+    private renderer: Renderer2,
+    private hostElement: ElementRef,
+    private sidebarService: SidebarService
+  ) { }
+
   @Input() navItems?: INavData[] = [];
-  @Input() dropdownMode?: 'closeInactive' | 'noAction' | 'openActive' = 'closeInactive';
+  @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
   @Input() groupItems?: boolean;
   @Input() compact?: boolean;
 
@@ -47,15 +59,6 @@ export class SidebarNavComponent implements OnChanges {
   @HostBinding('attr.role') role = 'nav';
 
   public navItemsArray: INavData[] = [];
-
-  constructor(
-    @Optional() public sidebar: SidebarComponent,
-    public helper: SidebarNavHelper,
-    public router: Router,
-    private renderer: Renderer2,
-    private hostElement: ElementRef,
-    private sidebarService: SidebarService
-  ) { }
 
   public ngOnChanges(changes: SimpleChanges): void {
     this.navItemsArray = Array.isArray(this.navItems) ? this.navItems.slice() : [];
@@ -89,13 +92,24 @@ export class SidebarNavComponent implements OnChanges {
   ]
 })
 export class SidebarNavGroupComponent implements OnInit, OnDestroy {
+
+  constructor(
+    private router: Router,
+    private renderer: Renderer2,
+    private hostElement: ElementRef,
+    public helper: SidebarNavHelper,
+    private sidebarNavGroupService: SidebarNavGroupService
+  ) {
+    this.navigationEndObservable = router.events.pipe(
+      filter((event: any) => event instanceof NavigationEnd)
+    ) as Observable<NavigationEnd>;
+  }
+
   @Input() item: any;
-  @Input() dropdownMode: 'closeInactive' | 'noAction' | 'openActive' = 'closeInactive';
-  // @ts-ignore
-  @Input() show: boolean;
+  @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
+  @Input() show?: boolean;
 
   @HostBinding('class')
-  // tslint:disable-next-line:typedef
   get hostClasses(): any {
     return {
       'nav-group': true,
@@ -103,39 +117,36 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     };
   }
 
-  // todo: dropdownMode
+  @ViewChild(SidebarNavComponent, { read: ElementRef }) sidebarNav!: ElementRef;
 
   navigationEndObservable: Observable<NavigationEnd>;
-  // @ts-ignore
-  navSubscription: Subscription;
+  navSubscription!: Subscription;
+  navGroupSubscription!: Subscription;
 
-  // @ts-ignore
-  public open: boolean;
+  public open!: boolean;
   public navItems: INavData[] = [];
   public display: any = { display: 'block' };
-
-  constructor(
-    private router: Router,
-    public helper: SidebarNavHelper,
-    private hostElement: ElementRef
-  ) {
-    this.navigationEndObservable = router.events.pipe(
-      filter((event: any) => event instanceof NavigationEnd)
-    ) as Observable<NavigationEnd>;
-  }
 
   ngOnInit(): void {
 
     this.navItems = [...this.item.children];
 
     this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
-      const samePath = this.samePath(event.url);
-      this.openGroup(samePath);
+      if (this.dropdownMode !== 'none') {
+        const samePath = this.samePath(event.url);
+        this.openGroup(samePath);
+      }
     });
 
     if (this.samePath(this.router.routerState.snapshot.url)) {
       this.openGroup(true);
     }
+
+    this.navGroupSubscription = this.sidebarNavGroupService.sidebarNavGroupState$.subscribe(next => {
+      if (this.dropdownMode === 'close' && next.sidebarNavGroup && next.sidebarNavGroup !== this) {
+        this.openGroup(false);
+      }
+    });
   }
 
   samePath(url: string): boolean {
@@ -154,7 +165,10 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
   toggleGroup($event: any): void {
     $event.preventDefault();
-    this.open = !this.open;
+    this.openGroup(!this.open);
+    if (this.open) {
+      this.sidebarNavGroupService.toggle({ open: this.open, sidebarNavGroup: this });
+    }
   }
 
   ngOnDestroy(): void {
@@ -162,9 +176,11 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   onAnimationStart($event: AnimationEvent) {
-    setTimeout(() => {
-      this.display = { display: 'block' };
-    });
+    this.display = { display: 'block' };
+    if ($event.toState === 'open') {
+      const host = this.sidebarNav.nativeElement;
+      this.renderer.setStyle(host, 'height', `${host['scrollHeight']}px`);
+    }
   }
 
   onAnimationDone($event: AnimationEvent) {

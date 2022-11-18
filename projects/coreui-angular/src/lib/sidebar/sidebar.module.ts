@@ -11,6 +11,7 @@ import { SidebarToggleDirective } from './sidebar-toggle/sidebar-toggle.directiv
 import { SidebarTogglerComponent } from './sidebar-toggler/sidebar-toggler.component';
 import { SidebarHeaderComponent } from './sidebar-header/sidebar-header.component';
 import { SidebarFooterComponent } from './sidebar-footer/sidebar-footer.component';
+import { SidebarNavGroupService } from './sidebar-nav/sidebar-nav-group.service';
 
 import { SharedModule } from '../shared';
 
@@ -28,6 +29,7 @@ import {
   SidebarNavLinkPipe,
   SidebarNavTitleComponent
 } from './sidebar-nav';
+
 
 
 @NgModule({
@@ -68,7 +70,8 @@ import {
   ],
   providers: [
     SidebarService,
-    SidebarNavHelper
+    SidebarNavHelper,
+    SidebarNavGroupService
   ],
 })
 export class SidebarModule { }
