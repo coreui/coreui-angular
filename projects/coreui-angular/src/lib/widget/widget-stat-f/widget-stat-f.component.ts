@@ -33,10 +33,7 @@ export class WidgetStatFComponent implements AfterContentInit {
    * @type string
    */
   @Input() icon?: string;
-  /**
-   * Title of the widget to display
-   * @type string
-   */
+
   /**
    * Set padding of your component.
    * @type boolean
@@ -50,6 +47,10 @@ export class WidgetStatFComponent implements AfterContentInit {
   }
   private _padding = false;
 
+  /**
+   * Title of the widget to display
+   * @type string
+   */
   @Input() title?: string;
   /**
    * Value for your widget to display
