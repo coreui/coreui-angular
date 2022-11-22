@@ -237,16 +237,22 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   @HostListener('click', ['$event'])
   public onClickHandler($event: MouseEvent): void {
-    $event.stopPropagation();
+
     if (this.mouseDownTarget !== $event.target) {
       this.mouseDownTarget = null;
       return;
     }
-    if (this.backdrop === 'static') {
-      this.setStaticBackdrop();
-      return;
+
+    const targetElement = $event.target;
+    if (targetElement === this.hostElement.nativeElement) {
+
+      if (this.backdrop === 'static') {
+        this.setStaticBackdrop();
+        return;
+      }
+
+      this.modalService.toggle({ show: false, modal: this });
     }
-    this.modalService.toggle({ show: false, modal: this });
   }
 
   ngOnInit(): void {
