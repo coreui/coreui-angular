@@ -1,5 +1,4 @@
-import { Component, ElementRef, HostBinding, HostListener } from '@angular/core';
-import { InteractivityChecker } from '@angular/cdk/a11y';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'c-modal-content',
@@ -7,23 +6,12 @@ import { InteractivityChecker } from '@angular/cdk/a11y';
 })
 export class ModalContentComponent {
 
-  constructor(
-    private hostElement: ElementRef,
-    private interactivityChecker: InteractivityChecker
-  ) { }
+  constructor() { }
 
   @HostBinding('class')
   get hostClasses(): any {
     return {
       'modal-content': true
     };
-  }
-
-  @HostListener('click', ['$event'])
-  public onClickHandler($event: MouseEvent): boolean {
-    $event.stopPropagation();
-    const targetElement = $event.target;
-    return this.hostElement?.nativeElement?.contains(targetElement) &&
-      this.interactivityChecker.isFocusable((targetElement as HTMLElement));
   }
 }
