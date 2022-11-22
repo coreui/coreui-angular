@@ -21,7 +21,6 @@ import {
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { FocusMonitor } from '@angular/cdk/a11y';
 import { Subscription } from 'rxjs';
 
 import { createPopper, Instance, Options, Placement } from '@popperjs/core';
@@ -117,6 +116,15 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
 
   static ngAcceptInputType_dark: BooleanInput;
   static ngAcceptInputType_visible: BooleanInput;
+
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private elementRef: ElementRef,
+    private renderer: Renderer2,
+    private ngZone: NgZone,
+    private changeDetectorRef: ChangeDetectorRef,
+    public dropdownService: DropdownService
+  ) {}
 
   /**
    * Set alignment of dropdown menu.
@@ -246,22 +254,13 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   dropdownContext = { $implicit: this.visible };
   @ContentChild(DropdownToggleDirective) _toggler!: DropdownToggleDirective;
   @ContentChild(DropdownMenuDirective) _menu!: DropdownMenuDirective;
+  @ContentChild(DropdownMenuDirective, { read: ElementRef }) _menuElementRef!: ElementRef;
 
   public activeTrap = false;
 
   private dropdownStateSubscription!: Subscription;
   private popperInstance!: Instance | undefined;
   private listeners: (() => void)[] = [];
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-    private ngZone: NgZone,
-    private changeDetectorRef: ChangeDetectorRef,
-    private focusMonitor: FocusMonitor,
-    public dropdownService: DropdownService
-  ) {}
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -320,14 +319,6 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     if (this.variant === 'nav-item') {
       this.renderer.addClass(this._toggler.elementRef.nativeElement, 'nav-link');
     }
-    this.focusMonitor.monitor(this.elementRef, true).subscribe(origin => {
-      this.ngZone.run(() => {
-        if ((!origin) && (this.autoClose === true || this.autoClose === 'outside')) {
-          this.setVisibleState(false);
-          this.changeDetectorRef.markForCheck();
-        }
-      });
-    });
   }
 
   ngOnInit(): void {
@@ -336,7 +327,6 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.focusMonitor?.stopMonitoring(this.elementRef);
     this.clearListeners();
     this.dropdownStateSubscribe(false);
     this.destroyPopperInstance();
@@ -380,6 +370,9 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     this.listeners.push(
       this.renderer.listen(this.document, 'click', (event) => {
         const target = event.target as HTMLElement;
+        if (this._menuElementRef?.nativeElement.contains(event.target)) {
+          this.clickedTarget = target;
+        }
         if (this._toggler?.elementRef.nativeElement.contains(event.target)) {
           return;
         }
@@ -401,6 +394,14 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
       this.renderer.listen(this.elementRef.nativeElement, 'keyup', (event) => {
         if (event.key === 'Escape' && this.autoClose !== false) {
           event.stopPropagation();
+          this.setVisibleState(false);
+          return;
+        }
+      })
+    );
+    this.listeners.push(
+      this.renderer.listen(this.document, 'keyup', (event) => {
+        if (event.key === 'Tab' && this.autoClose !== false && !this.elementRef.nativeElement.contains(event.target)) {
           this.setVisibleState(false);
           return;
         }
