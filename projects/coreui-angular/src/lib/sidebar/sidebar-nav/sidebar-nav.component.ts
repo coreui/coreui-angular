@@ -144,6 +144,13 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
     this.navGroupSubscription = this.sidebarNavGroupService.sidebarNavGroupState$.subscribe(next => {
       if (this.dropdownMode === 'close' && next.sidebarNavGroup && next.sidebarNavGroup !== this) {
+        if (next.sidebarNavGroup.item.url.startsWith(this.item.url)) {
+          return;
+        }
+        if (this.samePath(this.router.routerState.snapshot.url)) {
+          this.openGroup(true);
+          return;
+        }
         this.openGroup(false);
       }
     });
