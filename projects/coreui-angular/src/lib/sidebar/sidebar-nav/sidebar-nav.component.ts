@@ -184,6 +184,10 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   onAnimationDone($event: AnimationEvent) {
+    if ($event.toState === 'open') {
+      const host = this.sidebarNav.nativeElement;
+      this.renderer.setStyle(host, 'height', 'auto');
+    }
     if ($event.toState === 'closed') {
       setTimeout(() => {
         this.display = null;
