@@ -11,15 +11,15 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
+import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { NavigationEnd, Router } from '@angular/router';
-
-import { INavData } from './sidebar-nav';
-import { SidebarNavHelper } from './sidebar-nav.service';
-import { SidebarService } from '../sidebar.service';
-import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+
+import { SidebarService } from '../sidebar.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { INavData } from './sidebar-nav';
+import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
 
 @Component({
