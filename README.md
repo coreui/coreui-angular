@@ -71,7 +71,7 @@ Install the Angular CLI globally using a terminal/console window.
 npm install -g @angular/cli
 ```
 
-### Instalation
+### Installation
 Several quick start options are available (pick one):
 
 - [Download the latest release](https://github.com/coreui/coreui-angular/)
