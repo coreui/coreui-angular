@@ -22,7 +22,7 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
 @Component({
   selector: 'c-sidebar',
   exportAs: 'cSidebar',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content></ng-content>'
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
@@ -58,6 +58,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   set narrow(value: boolean) {
     this._narrow = coerceBooleanProperty(value);
   }
+
   get narrow() {
     return this._narrow;
   }
@@ -70,6 +71,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   set overlaid(value: boolean) {
     this._overlaid = coerceBooleanProperty(value);
   }
+
   get overlaid() {
     return this._overlaid;
   }
@@ -92,6 +94,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   set unfoldable(value: boolean) {
     this._unfoldable = coerceBooleanProperty(value);
   }
+
   get unfoldable() {
     return this._unfoldable;
   }
@@ -101,9 +104,13 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
    */
   @Input()
   set visible(value: boolean) {
-    this._visible = coerceBooleanProperty(value);
-    this.visibleChange.emit(this._visible);
+    const visible = coerceBooleanProperty(value);
+    if (this._visible !== visible) {
+      this._visible = visible;
+      this.visibleChange.emit(this._visible);
+    }
   }
+
   get visible() {
     return this._visible;
   }
@@ -124,6 +131,8 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
         newState.unfoldable = !this.state.unfoldable;
         this.unfoldable = newState.unfoldable;
       }
+    } else {
+      this.visible = (newState.visible ?? this.visible) && !this.overlaid;
     }
     this.state = {
       ...this.state,
@@ -155,12 +164,12 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   @HostBinding('class')
   get getClasses(): any {
-    const {mobile, unfoldable, visible} = this.sidebarState;
+    const { mobile, unfoldable, visible } = this.sidebarState;
     return {
       sidebar: true,
       'sidebar-fixed': this.position === 'fixed' && !mobile,
       'sidebar-narrow': this.narrow && !this.unfoldable,
-      'sidebar-narrow-unfoldable': unfoldable,
+      'sidebar-narrow-unfoldable': this.unfoldable,
       'sidebar-overlaid': this.overlaid,
       [`sidebar-${this.size}`]: !!this.size,
       show: visible && this.onMobile,
@@ -232,12 +241,13 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
       this.layoutChangeSubscription = layoutChanges.subscribe((result: BreakpointState) => {
         const isOnMobile = result.breakpoints[onMobile];
+        const isUnfoldable = isOnMobile ? false : this.unfoldable;
         if (this.onMobile !== isOnMobile) {
           this.onMobile = isOnMobile;
           this.sidebarService.toggle({
             mobile: isOnMobile,
-            unfoldable: isOnMobile ? false : this.unfoldable,
-            visible: isOnMobile ? false : this.visible,
+            unfoldable: isUnfoldable,
+            visible: (!isOnMobile) || isUnfoldable,
             sidebar: this
           });
         }
