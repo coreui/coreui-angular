@@ -10,14 +10,14 @@ import {
   Output,
   Renderer2,
   SimpleChanges
-} from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Subscription } from 'rxjs';
+} from "@angular/core";
+import { DOCUMENT } from "@angular/common";
+import { BooleanInput, coerceBooleanProperty } from "@angular/cdk/coercion";
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { Subscription } from "rxjs";
 
-import { ISidebarAction, SidebarService } from '../sidebar.service';
-import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.service';
+import { ISidebarAction, SidebarService } from "../sidebar.service";
+import { SidebarBackdropService } from "../sidebar-backdrop/sidebar-backdrop.service";
 
 @Component({
   selector: 'c-sidebar',
@@ -25,23 +25,35 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
   template: '<ng-content></ng-content>'
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
-
   static ngAcceptInputType_narrow: BooleanInput;
   static ngAcceptInputType_overlaid: BooleanInput;
   static ngAcceptInputType_unfoldable: BooleanInput;
   static ngAcceptInputType_visible: BooleanInput;
 
-  private _narrow = false;
-  private _overlaid = false;
-  private _unfoldable = false;
-  private _visible = false;
-  private onMobile = false;
-  private layoutChangeSubscription!: Subscription;
-  private stateToggleSubscription!: Subscription;
+  #narrow = false;
+  #overlaid = false;
+  #unfoldable = false;
+  #visible = false;
+  #onMobile = false;
+  #layoutChangeSubscription!: Subscription;
+  #stateToggleSubscription!: Subscription;
 
   state: ISidebarAction = {
     sidebar: this
   };
+
+  #stateInitial = {
+    narrow: false,
+    visible: false,
+    unfoldable: false
+  };
+
+  /**
+   * Sets if the color of text should be colored for a light or dark background. [docs]
+   *
+   * @type 'dark' | 'light'
+   */
+  @Input() colorScheme?: 'dark' | 'light';
 
   /**
    * Sets html attribute id. [docs]
@@ -56,11 +68,11 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
    */
   @Input()
   set narrow(value: boolean) {
-    this._narrow = coerceBooleanProperty(value);
+    this.#narrow = coerceBooleanProperty(value);
   }
 
   get narrow() {
-    return this._narrow;
+    return this.#narrow;
   }
 
   /**
@@ -69,12 +81,18 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
    */
   @Input()
   set overlaid(value: boolean) {
-    this._overlaid = coerceBooleanProperty(value);
+    this.#overlaid = coerceBooleanProperty(value);
   }
 
   get overlaid() {
-    return this._overlaid;
+    return this.#overlaid;
   }
+
+  /**
+   * Components placement, there’s no default placement. [docs]
+   * @type 'start' | 'end'
+   */
+  @Input() placement?: 'start' | 'end';
 
   /**
    * Place sidebar in non-static positions. [docs]
@@ -92,11 +110,11 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
    */
   @Input()
   set unfoldable(value: boolean) {
-    this._unfoldable = coerceBooleanProperty(value);
+    this.#unfoldable = coerceBooleanProperty(value);
   }
 
   get unfoldable() {
-    return this._unfoldable;
+    return this.#unfoldable;
   }
 
   /**
@@ -105,14 +123,14 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   @Input()
   set visible(value: boolean) {
     const visible = coerceBooleanProperty(value);
-    if (this._visible !== visible) {
-      this._visible = visible;
-      this.visibleChange.emit(this._visible);
+    if (this.#visible !== visible) {
+      this.#visible = visible;
+      this.visibleChange.emit(this.#visible);
     }
   }
 
   get visible() {
-    return this._visible;
+    return this.#visible;
   }
 
   /**
@@ -126,7 +144,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     if ('toggle' in newState) {
       if (newState.toggle === 'visible') {
         newState.visible = !this.state.visible;
-        this.visible = newState.visible && !this.overlaid;
+        this.visible = newState.visible;
       } else if (newState.toggle === 'unfoldable') {
         newState.unfoldable = !this.state.unfoldable;
         this.unfoldable = newState.unfoldable;
@@ -136,9 +154,11 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     }
     this.state = {
       ...this.state,
-      ...newState
+      ...newState,
     };
-    this.state.mobile && this.state.visible ? this.backdropService.setBackdrop(this) : this.backdropService.clearBackdrop();
+    this.state.mobile && this.state.visible
+      ? this.backdropService.setBackdrop(this)
+      : this.backdropService.clearBackdrop();
   }
 
   get sidebarState(): ISidebarAction {
@@ -146,14 +166,19 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   get getMobileBreakpoint(): string {
-    const element = this.document.firstElementChild;
-    const mobileBreakpoint = getComputedStyle(element).getPropertyValue('--cui-mobile-breakpoint') || 'md';
-    const breakpointValue = getComputedStyle(element).getPropertyValue(`--cui-breakpoint-${mobileBreakpoint.trim()}`) || '768px';
-    return `${parseFloat(breakpointValue.trim()) - .02}px` || '767.98px';
+    const element: Element = this.document.documentElement;
+    const mobileBreakpoint =
+      getComputedStyle(element).getPropertyValue('--cui-mobile-breakpoint') ||
+      'md';
+    const breakpointValue =
+      getComputedStyle(element).getPropertyValue(
+        `--cui-breakpoint-${mobileBreakpoint.trim()}`
+      ) || '768px';
+    return `${parseFloat(breakpointValue.trim()) - 0.02}px` || '767.98px';
   }
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private breakpointObserver: BreakpointObserver,
     private sidebarService: SidebarService,
@@ -164,7 +189,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   @HostBinding('class')
   get getClasses(): any {
-    const { mobile, unfoldable, visible } = this.sidebarState;
+    const { mobile, visible } = this.sidebarState;
     return {
       sidebar: true,
       'sidebar-fixed': this.position === 'fixed' && !mobile,
@@ -172,8 +197,8 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
       'sidebar-narrow-unfoldable': this.unfoldable,
       'sidebar-overlaid': this.overlaid,
       [`sidebar-${this.size}`]: !!this.size,
-      show: visible && this.onMobile,
-      hide: !visible && !this.onMobile
+      show: visible && this.#onMobile,
+      hide: !visible,
     };
   }
 
@@ -213,23 +238,27 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   setInitialState(): void {
-    this.sidebarService.toggle({
+    this.#stateInitial = {
       narrow: this.narrow,
       visible: this.visible,
       unfoldable: this.unfoldable,
-      sidebar: this
+    };
+    this.sidebarService.toggle({
+      ...this.#stateInitial,
+      sidebar: this,
     });
   }
 
   private stateToggleSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.stateToggleSubscription = this.sidebarService.sidebarState$.subscribe((state) => {
-        if (this === state.sidebar || this.id === state.id) {
-          this.sidebarState = state;
-        }
-      });
+      this.#stateToggleSubscription =
+        this.sidebarService.sidebarState$.subscribe((state) => {
+          if (this === state.sidebar || this.id === state.id) {
+            this.sidebarState = state;
+          }
+        });
     } else {
-      this.stateToggleSubscription.unsubscribe();
+      this.#stateToggleSubscription.unsubscribe();
     }
   }
 
@@ -239,21 +268,23 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     if (subscribe) {
       const layoutChanges = this.breakpointObserver.observe([onMobile]);
 
-      this.layoutChangeSubscription = layoutChanges.subscribe((result: BreakpointState) => {
-        const isOnMobile = result.breakpoints[onMobile];
-        const isUnfoldable = isOnMobile ? false : this.unfoldable;
-        if (this.onMobile !== isOnMobile) {
-          this.onMobile = isOnMobile;
-          this.sidebarService.toggle({
-            mobile: isOnMobile,
-            unfoldable: isUnfoldable,
-            visible: (!isOnMobile) || isUnfoldable,
-            sidebar: this
-          });
+      this.#layoutChangeSubscription = layoutChanges.subscribe(
+        (result: BreakpointState) => {
+          const isOnMobile = result.breakpoints[onMobile];
+          const isUnfoldable = isOnMobile ? false : this.unfoldable;
+          if (this.#onMobile !== isOnMobile) {
+            this.#onMobile = isOnMobile;
+            this.sidebarService.toggle({
+              mobile: isOnMobile,
+              unfoldable: isUnfoldable,
+              visible: isOnMobile ? !isOnMobile : this.#stateInitial.visible,
+              sidebar: this,
+            });
+          }
         }
-      });
+      );
     } else {
-      this.layoutChangeSubscription.unsubscribe();
+      this.#layoutChangeSubscription.unsubscribe();
     }
   }
 }
