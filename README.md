@@ -27,12 +27,12 @@
 
 ![angular][angular-badge]
 [![npm-coreui-angular-latest][npm-coreui-angular-badge-latest]][npm-coreui-angular]
-[![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
+[![npm-coreui-angular-ng14][npm-coreui-angular-badge-ng14]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
 [![Build](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml)
 
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=brightgreen
-[npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
+[npm-coreui-angular-badge-ng14]: https://img.shields.io/npm/v/@coreui/angular/ng-v14?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
 [angular-badge]: https://img.shields.io/badge/angular-^14.2.0-lightgrey.svg?style=flat-square&logo=angular
