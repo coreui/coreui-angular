@@ -2,6 +2,12 @@
 
 ---
 
+#### `4.3.8`
+
+- fix(dropdown): visibleChange emit and visibleState update on changes, refactor with rxjs
+
+---
+
 #### `4.3.7`
 
 update to:
