@@ -13,20 +13,23 @@ import {
   Inject,
   Input,
   NgZone,
+  OnChanges,
   OnDestroy,
   OnInit,
   Optional,
   Output,
-  Renderer2
+  Renderer2,
+  SimpleChanges
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { createPopper, Instance, Options, Placement } from '@popperjs/core';
 
-import { DropdownService } from '../dropdown.service';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
+import { DropdownService } from '../dropdown.service';
 
 // lightweight injection token
 export abstract class DropdownToken {}
@@ -112,7 +115,7 @@ export class DropdownToggleDirective implements AfterViewInit {
   exportAs: 'cDropdown',
   providers: [DropdownService]
 })
-export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
+export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
 
   static ngAcceptInputType_dark: BooleanInput;
   static ngAcceptInputType_visible: BooleanInput;
@@ -124,7 +127,9 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     private ngZone: NgZone,
     private changeDetectorRef: ChangeDetectorRef,
     public dropdownService: DropdownService
-  ) {}
+  ) {
+    this.dropdownStateSubscribe();
+  }
 
   /**
    * Set alignment of dropdown menu.
@@ -237,10 +242,12 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   @Input()
   set visible(value: boolean) {
     const _value = coerceBooleanProperty(value);
-    this.activeTrap = _value;
-    this._visible = _value;
-    _value ? this.createPopperInstance() : this.destroyPopperInstance();
-    this.visibleChange.emit(_value);
+    if (_value !== this._visible) {
+      this.activeTrap = _value;
+      this._visible = _value;
+      _value ? this.createPopperInstance() : this.destroyPopperInstance();
+      this.visibleChange.emit(_value);
+    }
   }
 
   get visible(): boolean {
@@ -291,13 +298,15 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   dropdownStateSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
       this.dropdownStateSubscription =
-        this.dropdownService.dropdownState$.subscribe((state) => {
-          if (this === state.dropdown) {
-            if ('visible' in state) {
-              state?.visible === 'toggle'
-                ? this.toggleDropdown()
-                : (this.visible = state.visible);
-            }
+        this.dropdownService.dropdownState$.pipe(
+          filter((state) => {
+            return this === state.dropdown;
+          })
+        ).subscribe((state) => {
+          if ('visible' in state) {
+            state?.visible === 'toggle'
+            ? this.toggleDropdown()
+            : (this.visible = state.visible);
           }
         });
     } else {
@@ -322,8 +331,13 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.dropdownStateSubscribe();
     this.setVisibleState(this.visible);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['visible'] && !changes['visible'].firstChange) {
+      this.setVisibleState(changes['visible'].currentValue);
+    }
   }
 
   ngOnDestroy(): void {
