@@ -6,21 +6,19 @@ import {
   HostListener,
   Inject,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
   PLATFORM_ID,
-  Renderer2,
-  SimpleChanges
+  Renderer2
 } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 
-import { OffcanvasService } from '../offcanvas.service';
 import { BackdropService } from '../../backdrop/backdrop.service';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { OffcanvasService } from '../offcanvas.service';
 
 let nextId = 0;
 
@@ -29,29 +27,30 @@ let nextId = 0;
   animations: [
     trigger('showHide', [
       state(
-        'true',
+        'visible',
         style({
-          visibility: 'visible'
+          // visibility: 'visible'
         })
       ),
       state(
-        'false',
+        'hidden',
         style({
-          visibility: 'hidden'
+          // visibility: 'hidden'
         })
       ),
-      transition('true => false', [animate('300ms')])
+      transition('visible <=> *', [animate('300ms')])
     ])
   ],
   templateUrl: './offcanvas.component.html',
   styleUrls: ['./offcanvas.component.scss'],
   exportAs: 'cOffcanvas'
 })
-export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
+export class OffcanvasComponent implements OnInit, OnDestroy {
+
   static ngAcceptInputType_scroll: BooleanInput;
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: any,
     private renderer: Renderer2,
     private hostElement: ElementRef,
@@ -96,6 +95,7 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   private _scroll = false;
 
   @Input() id = `offcanvas-${this.placement}-${nextId++}`;
+
   /**
    * Default role for offcanvas. [docs]
    * @type string
@@ -113,17 +113,17 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   /**
    * Toggle the visibility of offcanvas component.
    * @type boolean
+   * @default false
    */
   @Input()
   set visible(value: boolean) {
     this._visible = coerceBooleanProperty(value);
-    if (value) {
+    if (this._visible) {
       this.setBackdrop(this.backdrop);
       this.setFocus();
     } else {
       this.setBackdrop(false);
     }
-    this.setScroll();
     this.visibleChange.emit(value);
   }
 
@@ -131,14 +131,14 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
     return this._visible;
   }
 
-  private _visible!: boolean;
+  private _visible: boolean = false;
 
   /**
    * Event triggered on visible change.
    */
   @Output() visibleChange = new EventEmitter<boolean>();
 
-  private activeBackdrop!: any;
+  private activeBackdrop!: HTMLDivElement;
   private scrollbarWidth!: string;
 
   private stateToggleSubscription!: Subscription;
@@ -149,7 +149,7 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
     return {
       offcanvas: true,
       [`offcanvas-${this.placement}`]: !!this.placement,
-      show: this.visible
+      show: this.show
     };
   }
 
@@ -164,8 +164,47 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   @HostBinding('@showHide')
-  get animateType(): boolean {
-    return this.visible;
+  get animateTrigger(): string {
+    return this.visible ? 'visible' : 'hidden';
+  }
+
+  get show(): boolean {
+    return this.visible && this._show;
+  }
+
+  set show(value: boolean) {
+    this._show = value;
+  }
+
+  private _show = false;
+
+  @HostListener('@showHide.start', ['$event'])
+  animateStart(event: AnimationEvent) {
+    const scrollbarWidth = this.scrollbarWidth;
+    if (event.toState === 'visible') {
+      if (!this.scroll) {
+        this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
+        this.renderer.setStyle(this.document.body, 'padding-right', scrollbarWidth);
+      }
+      this.renderer.addClass(this.hostElement.nativeElement, 'showing');
+    } else {
+      this.renderer.addClass(this.hostElement.nativeElement, 'hiding');
+    }
+  }
+
+  @HostListener('@showHide.done', ['$event'])
+  animateDone(event: AnimationEvent) {
+    setTimeout(() => {
+      if (event.toState === 'visible') {
+        this.renderer.removeClass(this.hostElement.nativeElement, 'showing');
+      }
+      if (event.toState === 'hidden') {
+        this.renderer.removeClass(this.hostElement.nativeElement, 'hiding');
+        this.renderer.removeStyle(this.document.body, 'overflow');
+        this.renderer.removeStyle(this.document.body, 'paddingRight');
+      }
+    });
+    this.show = this.visible;
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -181,20 +220,15 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.setScroll();
     this.scrollbarWidth = this.backdropService.scrollbarWidth;
     this.stateToggleSubscribe();
+    // hotfix to avoid end offcanvas flicker on first render
+    this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'flex');
   }
 
   ngOnDestroy(): void {
     this.offcanvasService.toggle({ show: false, id: this.id });
     this.stateToggleSubscribe(false);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['scroll']) {
-      this.setScroll();
-    }
   }
 
   private stateToggleSubscribe(subscribe: boolean = true): void {
@@ -235,20 +269,6 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   setFocus(): void {
     if (isPlatformBrowser(this.platformId)) {
       setTimeout(() => this.hostElement.nativeElement.focus());
-    }
-  }
-
-  setScroll() {
-    if (this.visible) {
-      if (!this.scroll) {
-        this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
-        this.renderer.setStyle(this.document.body, 'paddingRight.px', '0');
-      }
-      return;
-    }
-    if (!this.scroll) {
-      this.renderer.removeStyle(this.document.body, 'overflow');
-      this.renderer.removeStyle(this.document.body, 'paddingRight');
     }
   }
 }
