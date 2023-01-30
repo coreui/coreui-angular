@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "4.3.9",
+  "version": "4.3.10",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2022 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -70,7 +70,7 @@
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
-    "eslint": "~8.32.0",
+    "eslint": "~8.33.0",
     "jasmine-core": "^4.5.0",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",

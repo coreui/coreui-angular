@@ -2,6 +2,16 @@
 
 ---
 
+#### `4.3.10`
+
+- feat(offcanvas): add responsive variations
+- refactor(offcanvas): animation classes, scrollbar behavior, cleanup
+- refactor(modal, offcanvas): move get scrollbarWidth to BackdropService
+- feat(offcanvas): add backdrop static option support
+- chore: dependencies update
+
+---
+
 #### `4.3.9`
 
 - chore: dependencies update
