@@ -184,16 +184,9 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   private _show = true;
 
-  private get scrollbarWidth() {
-    // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth#usage_notes
-    const documentWidth = this.document.documentElement.clientWidth;
-    const scrollbarWidth = Math.abs((window?.innerWidth ?? documentWidth) - documentWidth);
-    return `${scrollbarWidth}px`;
-  }
-
   @HostListener('@showHide.start', ['$event'])
   animateStart(event: AnimationEvent) {
-    const scrollbarWidth = this.scrollbarWidth;
+    const scrollbarWidth = this.backdropService.scrollbarWidth;
     if (event.toState === 'visible') {
       this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
       this.renderer.setStyle(this.document.body, 'padding-right', scrollbarWidth);

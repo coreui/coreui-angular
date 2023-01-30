@@ -139,6 +139,7 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   @Output() visibleChange = new EventEmitter<boolean>();
 
   private activeBackdrop!: any;
+  private scrollbarWidth!: string;
 
   private stateToggleSubscription!: Subscription;
   private backdropClickSubscription!: Subscription;
@@ -181,6 +182,7 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setScroll();
+    this.scrollbarWidth = this.backdropService.scrollbarWidth;
     this.stateToggleSubscribe();
   }
 
@@ -223,6 +225,7 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private setBackdrop(setBackdrop: boolean | 'static'): void {
+    this.scrollbarWidth = this.backdropService.scrollbarWidth;
     this.activeBackdrop = !!setBackdrop ? this.backdropService.setBackdrop('offcanvas')
                                         : this.backdropService.clearBackdrop(this.activeBackdrop);
     setBackdrop === true ? this.backdropClickSubscribe()
