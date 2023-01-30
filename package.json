@@ -2,6 +2,7 @@
   "name": "coreui-angular-dev",
   "version": "4.2.27",
   "description": "CoreUI Components Library for Angular",
+  "copyright": "Copyright 2022 creativeLabs Łukasz Holeczek",
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {

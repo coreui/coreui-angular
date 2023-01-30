@@ -9,20 +9,20 @@ import {
   OnInit,
   Output,
   Renderer2,
-  SimpleChanges
-} from "@angular/core";
-import { DOCUMENT } from "@angular/common";
-import { BooleanInput, coerceBooleanProperty } from "@angular/cdk/coercion";
-import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import { Subscription } from "rxjs";
+  SimpleChanges,
+} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
 
-import { ISidebarAction, SidebarService } from "../sidebar.service";
-import { SidebarBackdropService } from "../sidebar-backdrop/sidebar-backdrop.service";
+import { ISidebarAction, SidebarService } from '../sidebar.service';
+import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.service';
 
 @Component({
   selector: 'c-sidebar',
   exportAs: 'cSidebar',
-  template: '<ng-content></ng-content>'
+  template: '<ng-content></ng-content>',
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   static ngAcceptInputType_narrow: BooleanInput;
@@ -39,13 +39,13 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   #stateToggleSubscription!: Subscription;
 
   state: ISidebarAction = {
-    sidebar: this
+    sidebar: this,
   };
 
   #stateInitial = {
     narrow: false,
     visible: false,
-    unfoldable: false
+    unfoldable: false,
   };
 
   /**
@@ -258,7 +258,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
           }
         });
     } else {
-      this.#stateToggleSubscription.unsubscribe();
+      this.#stateToggleSubscription?.unsubscribe();
     }
   }
 

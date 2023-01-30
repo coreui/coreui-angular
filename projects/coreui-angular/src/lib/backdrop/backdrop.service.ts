@@ -14,10 +14,17 @@ export class BackdropService {
   private unListen!: () => void;
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private rendererFactory: RendererFactory2
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
+  }
+
+  get scrollbarWidth() {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth#usage_notes
+    const documentWidth = this.document.documentElement.clientWidth;
+    const scrollbarWidth = Math.abs((window?.innerWidth ?? documentWidth) - documentWidth);
+    return `${scrollbarWidth}px`;
   }
 
   setBackdrop(type: string = 'modal'): any {
