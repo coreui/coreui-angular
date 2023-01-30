@@ -258,7 +258,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
           }
         });
     } else {
-      this.#stateToggleSubscription.unsubscribe();
+      this.#stateToggleSubscription?.unsubscribe();
     }
   }
 
