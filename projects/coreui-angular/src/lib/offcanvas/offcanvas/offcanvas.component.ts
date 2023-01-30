@@ -12,9 +12,9 @@ import {
   Output,
   PLATFORM_ID,
   Renderer2,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
-import { animate, state, style, transition, trigger, } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 
@@ -31,24 +31,23 @@ let nextId = 0;
       state(
         'true',
         style({
-          visibility: 'visible',
+          visibility: 'visible'
         })
       ),
       state(
         'false',
         style({
-          visibility: 'hidden',
+          visibility: 'hidden'
         })
       ),
-      transition('true => false', [animate('300ms')]),
-    ]),
+      transition('true => false', [animate('300ms')])
+    ])
   ],
   templateUrl: './offcanvas.component.html',
   styleUrls: ['./offcanvas.component.scss'],
-  exportAs: 'cOffcanvas',
+  exportAs: 'cOffcanvas'
 })
 export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
-
   static ngAcceptInputType_scroll: BooleanInput;
 
   constructor(
@@ -58,14 +57,14 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
     private hostElement: ElementRef,
     private offcanvasService: OffcanvasService,
     private backdropService: BackdropService
-  ) { }
+  ) {}
 
   /**
    * Apply a backdrop on body while offcanvas is open.
-   * @type boolean
+   * @type boolean | 'static'
    * @default true
    */
-  @Input() backdrop = true;
+  @Input() backdrop: boolean | 'static' = true;
 
   /**
    * Closes the offcanvas when escape key is pressed [docs]
@@ -88,10 +87,12 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   set scroll(value: boolean) {
     this._scroll = coerceBooleanProperty(value);
-  };
+  }
+
   get scroll() {
     return this._scroll;
   }
+
   private _scroll = false;
 
   @Input() id = `offcanvas-${this.placement}-${nextId++}`;
@@ -125,9 +126,11 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
     this.setScroll();
     this.visibleChange.emit(value);
   }
+
   get visible(): boolean {
     return this._visible;
   }
+
   private _visible!: boolean;
 
   /**
@@ -145,14 +148,14 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
     return {
       offcanvas: true,
       [`offcanvas-${this.placement}`]: !!this.placement,
-      show: this.visible,
+      show: this.visible
     };
   }
 
   @HostBinding('attr.aria-hidden')
   get ariaHidden(): boolean | null {
     return this.visible ? null : true;
-  };
+  }
 
   @HostBinding('attr.tabindex')
   get tabIndex(): string | null {
@@ -166,7 +169,12 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   onKeyDownHandler(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this.keyboard && this.visible) {
+    if (
+      event.key === 'Escape' &&
+      this.keyboard &&
+      this.visible &&
+      this.backdrop !== 'static'
+    ) {
       this.offcanvasService.toggle({ show: false, id: this.id });
     }
   }
@@ -189,15 +197,15 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
 
   private stateToggleSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.stateToggleSubscription = this.offcanvasService.offcanvasState$.subscribe(
-        (action) => {
+      this.stateToggleSubscription =
+        this.offcanvasService.offcanvasState$.subscribe((action) => {
           if (this === action.offcanvas || this.id === action.id) {
             if ('show' in action) {
-              this.visible = action?.show === 'toggle' ? !this.visible : action.show;
+              this.visible =
+                action?.show === 'toggle' ? !this.visible : action.show;
             }
           }
-        }
-      );
+        });
     } else {
       this.stateToggleSubscription.unsubscribe();
     }
@@ -205,24 +213,20 @@ export class OffcanvasComponent implements OnChanges, OnInit, OnDestroy {
 
   private backdropClickSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.backdropClickSubscription = this.backdropService.backdropClick$.subscribe(
-        (clicked) => {
+      this.backdropClickSubscription =
+        this.backdropService.backdropClick$.subscribe((clicked) => {
           this.offcanvasService.toggle({ show: !clicked, id: this.id });
-        }
-      );
+        });
     } else {
       this.backdropClickSubscription?.unsubscribe();
     }
   }
 
-  private setBackdrop(setBackdrop: boolean): void {
-    if (setBackdrop) {
-      this.activeBackdrop = this.backdropService.setBackdrop('offcanvas');
-      this.backdropClickSubscribe();
-    } else {
-      this.activeBackdrop = this.backdropService.clearBackdrop(this.activeBackdrop);
-      this.backdropClickSubscribe(false);
-    }
+  private setBackdrop(setBackdrop: boolean | 'static'): void {
+    this.activeBackdrop = !!setBackdrop ? this.backdropService.setBackdrop('offcanvas')
+                                        : this.backdropService.clearBackdrop(this.activeBackdrop);
+    setBackdrop === true ? this.backdropClickSubscribe()
+                         : this.backdropClickSubscribe(false);
   }
 
   setFocus(): void {
