@@ -2,6 +2,12 @@
 
 ---
 
+#### `4.4.0-next.0`
+
+- feat: standalone components (wip) 
+
+---
+
 #### `4.3.10`
 
 - feat(offcanvas): add responsive variations
