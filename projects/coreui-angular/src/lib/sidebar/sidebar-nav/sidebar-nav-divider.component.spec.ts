@@ -9,7 +9,7 @@ describe('SidebarNavDividerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidebarNavDividerComponent ],
+      imports: [ SidebarNavDividerComponent ],
     })
     .compileComponents();
   }));

@@ -9,23 +9,24 @@ import { ColDirective } from './col.directive';
 import { GutterDirective } from './gutter.directive';
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ColComponent,
+    ColDirective,
+    ContainerComponent,
+    GutterDirective,
+    RowComponent,
+    RowDirective
+  ],
   exports: [
-    ContainerComponent,
-    RowComponent,
     ColComponent,
-    GutterDirective,
-    RowDirective,
     ColDirective,
-  ],
-  declarations: [
     ContainerComponent,
-    RowComponent,
-    ColComponent,
-    RowDirective,
-    ColDirective,
     GutterDirective,
+    RowComponent,
+    RowDirective
   ],
-  providers: [],
+  declarations: [],
+  providers: []
 })
 export class GridModule {}

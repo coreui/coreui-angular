@@ -19,7 +19,8 @@ describe('ButtonDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ButtonCloseDirective, TestComponent],
+      declarations: [TestComponent],
+      imports: [ButtonCloseDirective],
       providers: [{ provide: ElementRef, useClass: MockElementRef }]
     })
 

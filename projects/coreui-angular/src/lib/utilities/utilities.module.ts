@@ -7,15 +7,14 @@ import { TextColorDirective } from './text-color.directive';
 import { AlignDirective } from './align.directive';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
     BgColorDirective,
     BorderDirective,
     RoundedDirective,
     TextColorDirective,
     AlignDirective
-  ],
-  imports: [
-    CommonModule
   ],
   exports: [
     BgColorDirective,

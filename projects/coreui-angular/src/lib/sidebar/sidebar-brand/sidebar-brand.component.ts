@@ -1,8 +1,14 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+
+import { HtmlAttributesDirective } from '../../shared';
 
 @Component({
   selector: 'c-sidebar-brand',
-  templateUrl: './sidebar-brand.component.html'
+  templateUrl: './sidebar-brand.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterLink, HtmlAttributesDirective]
 })
 export class SidebarBrandComponent implements OnInit {
 

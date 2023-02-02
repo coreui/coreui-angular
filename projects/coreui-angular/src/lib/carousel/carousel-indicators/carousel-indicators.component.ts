@@ -1,23 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+
 import { CarouselState } from '../carousel-state';
 import { CarouselService } from '../carousel.service';
 
 @Component({
   selector: 'c-carousel-indicators',
   templateUrl: './carousel-indicators.component.html',
-  styleUrls: ['./carousel-indicators.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class CarouselIndicatorsComponent implements OnInit, OnDestroy {
-  items: (number | undefined)[] = [];
-  active = 0;
-
-  private carouselIndexSubscription?: Subscription;
-
   constructor(
     private carouselService: CarouselService,
     private carouselState: CarouselState
   ) {}
+
+  items: (number | undefined)[] = [];
+  active = 0;
+  private carouselIndexSubscription?: Subscription;
 
   ngOnInit(): void {
     this.carouselStateSubscribe();
@@ -30,7 +32,7 @@ export class CarouselIndicatorsComponent implements OnInit, OnDestroy {
   onClick(index: number): void {
     if (index !== this.active) {
       const direction = index < this.active ? 'prev' : 'next';
-      this.carouselState.state = { direction,  activeItemIndex: index };
+      this.carouselState.state = { direction, activeItemIndex: index };
     }
   }
 

@@ -9,7 +9,6 @@ describe('ToastHeaderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToastHeaderComponent ],
       imports: [ToastModule]
     })
     .compileComponents();

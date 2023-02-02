@@ -3,18 +3,16 @@ import { CommonModule } from '@angular/common';
 import { PopoverDirective } from './popover.directive';
 import { PopoverComponent } from './popover/popover.component';
 
-
 @NgModule({
-  declarations: [
-    PopoverDirective,
-    PopoverComponent
-  ],
+  declarations: [],
   exports: [
     PopoverDirective,
     PopoverComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    PopoverDirective,
+    PopoverComponent
   ]
 })
-export class PopoverModule { }
+export class PopoverModule {}

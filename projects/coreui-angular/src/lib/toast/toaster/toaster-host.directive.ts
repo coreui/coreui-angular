@@ -2,7 +2,8 @@ import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
   selector: '[cToasterHost]',
-  exportAs: 'cToasterHost'
+  exportAs: 'cToasterHost',
+  standalone: true
 })
 export class ToasterHostDirective {
 

@@ -3,7 +3,8 @@ import { Breakpoints, Colors } from '../coreui.types';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-  selector: '[cTable]'
+  selector: '[cTable]',
+  standalone: true
 })
 export class TableDirective implements OnInit {
   static ngAcceptInputType_bordered: BooleanInput;

@@ -1,7 +1,8 @@
 import { Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: '[cLabel]'
+  selector: '[cLabel]',
+  standalone: true
 })
 export class FormLabelDirective {
 

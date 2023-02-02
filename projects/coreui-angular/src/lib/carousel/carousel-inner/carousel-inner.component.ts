@@ -4,11 +4,10 @@ import {
   Component,
   ContentChildren,
   HostBinding,
-  OnInit,
-  QueryList,
+  QueryList
 } from '@angular/core';
 
-import { slideAnimation, fadeAnimation } from '../carousel.animation';
+import { fadeAnimation, slideAnimation } from '../carousel.animation';
 import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
 import { CarouselState } from '../carousel-state';
 
@@ -16,19 +15,19 @@ import { CarouselState } from '../carousel-state';
   selector: 'c-carousel-inner',
   templateUrl: './carousel-inner.component.html',
   styleUrls: ['./carousel-inner.component.scss'],
-  animations: [ slideAnimation, fadeAnimation ]
+  animations: [slideAnimation, fadeAnimation],
+  standalone: true
 })
 export class CarouselInnerComponent implements AfterContentInit, AfterContentChecked {
-  @HostBinding('class.carousel-inner') carouselInnerClass = true;
+  constructor(private carouselState: CarouselState) {}
 
-  @ContentChildren(CarouselItemComponent) private contentItems!: QueryList<CarouselItemComponent>;
-  private prevContentItems!: QueryList<CarouselItemComponent>;
+  @HostBinding('class.carousel-inner') carouselInnerClass = true;
   activeIndex?: number;
   animate?: boolean;
-  slide = {left: true};
+  slide = { left: true };
   transition = 'slide';
-
-  constructor(private carouselState: CarouselState) {}
+  @ContentChildren(CarouselItemComponent) private contentItems!: QueryList<CarouselItemComponent>;
+  private prevContentItems!: QueryList<CarouselItemComponent>;
 
   ngAfterContentInit(): void {
     this.setItems();
@@ -41,7 +40,7 @@ export class CarouselInnerComponent implements AfterContentInit, AfterContentChe
     const nextDirection = state?.direction;
     if (this.activeIndex !== nextIndex) {
       this.animate = state?.animate;
-      this.slide = {left: nextDirection === 'next'};
+      this.slide = { left: nextDirection === 'next' };
       this.activeIndex = state?.activeItemIndex;
       this.transition = state?.transition ?? 'slide';
     }

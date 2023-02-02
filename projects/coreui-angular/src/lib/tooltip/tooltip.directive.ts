@@ -24,7 +24,8 @@ import { IListenersConfig, ListenersService } from '../services/listeners.servic
 @Directive({
   selector: '[cTooltip]',
   exportAs: 'cTooltip',
-  providers: [ListenersService]
+  providers: [ListenersService],
+  standalone: true
 })
 export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
 

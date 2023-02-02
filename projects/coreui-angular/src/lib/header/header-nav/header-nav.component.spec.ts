@@ -8,7 +8,7 @@ describe('HeaderNavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeaderNavComponent ]
+      imports: [ HeaderNavComponent ]
     })
     .compileComponents();
   });

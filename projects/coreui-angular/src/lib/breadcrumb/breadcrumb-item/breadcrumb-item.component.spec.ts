@@ -9,8 +9,7 @@ describe('BreadcrumbItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BreadcrumbItemComponent],
-      imports: [SharedModule, RouterTestingModule]
+      imports: [SharedModule, RouterTestingModule, BreadcrumbItemComponent]
     })
       .compileComponents();
   });

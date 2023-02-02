@@ -8,7 +8,7 @@ describe('InputGroupComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ InputGroupComponent ]
+      imports: [ InputGroupComponent ]
     })
     .compileComponents();
   }));

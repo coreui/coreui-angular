@@ -10,10 +10,9 @@ describe('ModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ NoopAnimationsModule, ModalModule ],
-      declarations: [ ModalComponent ],
-    })
-    .compileComponents();
+      imports: [NoopAnimationsModule, ModalModule, ModalComponent],
+      declarations: []
+    }).compileComponents();
   });
 
   beforeEach(() => {

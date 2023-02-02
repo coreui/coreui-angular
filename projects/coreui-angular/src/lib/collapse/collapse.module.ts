@@ -1,12 +1,13 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CollapseDirective } from './collapse.directive';
 
 @NgModule({
-  declarations: [CollapseDirective],
+  declarations: [],
   exports: [CollapseDirective],
   imports: [
-    CommonModule
+    CommonModule,
+    CollapseDirective
   ]
 })
 export class CollapseModule {

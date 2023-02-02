@@ -2,7 +2,8 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-  selector: 'form[cForm]'
+  selector: 'form[cForm]',
+  standalone: true
 })
 export class FormDirective {
 

@@ -1,5 +1,8 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 import { Colors } from '../../coreui.types';
+import { CommonModule } from '@angular/common';
+import { CardBodyComponent, CardHeaderComponent } from '../../card';
+import { ColComponent, RowDirective } from '../../grid';
 
 export type WidgetStatDValue = {
   title?: string,
@@ -9,10 +12,13 @@ export type WidgetStatDValue = {
 @Component({
   selector: 'c-widget-stat-d',
   templateUrl: './widget-stat-d.component.html',
-  styleUrls: ['./widget-stat-d.component.scss'],
-  exportAs: 'cWidgetStatD'
+  exportAs: 'cWidgetStatD',
+  standalone: true,
+  imports: [CommonModule, CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective]
 })
 export class WidgetStatDComponent {
+  constructor() { }
+
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
@@ -24,14 +30,11 @@ export class WidgetStatDComponent {
    */
   @Input() values?: WidgetStatDValue[];
 
-  constructor() {
-  }
-
   @HostBinding('class')
   get hostClasses() {
     return {
       'card': true
-    }
+    };
   }
 
   get headerClasses() {
@@ -40,8 +43,8 @@ export class WidgetStatDComponent {
       'd-flex': true,
       'justify-content-center': true,
       'align-items-center': true,
-      [`bg-${this.color}`]: this.color,
-    }
+      [`bg-${this.color}`]: this.color
+    };
   }
 
 }

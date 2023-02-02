@@ -31,7 +31,8 @@ describe('IconComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, IconComponent, HtmlAttributesDirective],
+      declarations: [TestComponent],
+      imports: [IconComponent, HtmlAttributesDirective],
       providers: [IconSetService]
     }).compileComponents();
 

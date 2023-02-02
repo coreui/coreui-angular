@@ -21,6 +21,7 @@ import { filter } from 'rxjs/operators';
 
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { OffcanvasService } from '../offcanvas.service';
+import { A11yModule } from '@angular/cdk/a11y';
 
 let nextId = 0;
 
@@ -45,11 +46,11 @@ let nextId = 0;
   ],
   templateUrl: './offcanvas.component.html',
   styleUrls: ['./offcanvas.component.scss'],
-  exportAs: 'cOffcanvas'
+  exportAs: 'cOffcanvas',
+  standalone: true,
+  imports: [A11yModule]
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
-
-  static ngAcceptInputType_scroll: BooleanInput;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -61,6 +62,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver
   ) {}
 
+  static ngAcceptInputType_scroll: BooleanInput;
   /**
    * Apply a backdrop on body while offcanvas is open.
    * @type boolean | 'static'
@@ -89,6 +91,35 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
    * @since 4.3.10
    */
   @Input() responsive?: boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' = true;
+  @Input() id = `offcanvas-${this.placement}-${nextId++}`;
+  /**
+   * Default role for offcanvas. [docs]
+   * @type string
+   * @default 'dialog'
+   */
+  @Input() @HostBinding('attr.role') role = 'dialog';
+  /**
+   * Set aria-modal html attr for offcanvas. [docs]
+   * @type boolean
+   * @default true
+   */
+  @Input() @HostBinding('attr.aria-modal') ariaModal = true;
+  /**
+   * Event triggered on visible change.
+   */
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
+  #scroll = false;
+  #visible: boolean = false;
+  #activeBackdrop!: HTMLDivElement;
+  #scrollbarWidth!: string;
+  #stateToggleSubscription!: Subscription;
+  #backdropClickSubscription!: Subscription;
+  #layoutChangeSubscription!: Subscription;
+  #show = false;
+
+  get scroll() {
+    return this.#scroll;
+  }
 
   /**
    * Allow body scrolling while offcanvas is visible.
@@ -100,27 +131,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.#scroll = coerceBooleanProperty(value);
   }
 
-  get scroll() {
-    return this.#scroll;
+  get visible(): boolean {
+    return this.#visible;
   }
-
-  #scroll = false;
-
-  @Input() id = `offcanvas-${this.placement}-${nextId++}`;
-
-  /**
-   * Default role for offcanvas. [docs]
-   * @type string
-   * @default 'dialog'
-   */
-  @Input() @HostBinding('attr.role') role = 'dialog';
-
-  /**
-   * Set aria-modal html attr for offcanvas. [docs]
-   * @type boolean
-   * @default true
-   */
-  @Input() @HostBinding('attr.aria-modal') ariaModal = true;
 
   /**
    * Toggle the visibility of offcanvas component.
@@ -139,24 +152,6 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.layoutChangeSubscribe(this.#visible);
     this.visibleChange.emit(value);
   }
-
-  get visible(): boolean {
-    return this.#visible;
-  }
-
-  #visible: boolean = false;
-
-  /**
-   * Event triggered on visible change.
-   */
-  @Output() readonly visibleChange = new EventEmitter<boolean>();
-
-  #activeBackdrop!: HTMLDivElement;
-  #scrollbarWidth!: string;
-
-  #stateToggleSubscription!: Subscription;
-  #backdropClickSubscription!: Subscription;
-  #layoutChangeSubscription!: Subscription;
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -191,7 +186,15 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.#show = value;
   }
 
-  #show = false;
+  get responsiveBreakpoint(): string | false {
+    if (typeof this.responsive !== 'string') {
+      return false;
+    }
+    const element: Element = this.document.documentElement;
+    const responsiveBreakpoint = this.responsive;
+    const breakpointValue = getComputedStyle(element).getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) || false;
+    return breakpointValue ? `${parseFloat(breakpointValue.trim()) - 0.02}px` : false;
+  }
 
   @HostListener('@showHide.start', ['$event'])
   animateStart(event: AnimationEvent) {
@@ -246,6 +249,12 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.stateToggleSubscribe(false);
   }
 
+  setFocus(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => this.hostElement.nativeElement.focus());
+    }
+  }
+
   private stateToggleSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
       this.#stateToggleSubscription =
@@ -279,22 +288,6 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
                                          : this.backdropService.clearBackdrop(this.#activeBackdrop);
     setBackdrop === true ? this.backdropClickSubscribe()
                          : this.backdropClickSubscribe(false);
-  }
-
-  setFocus(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => this.hostElement.nativeElement.focus());
-    }
-  }
-
-  get responsiveBreakpoint(): string | false {
-    if (typeof this.responsive !== 'string') {
-      return false;
-    }
-    const element: Element = this.document.documentElement;
-    const responsiveBreakpoint = this.responsive;
-    const breakpointValue = getComputedStyle(element).getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) || false;
-    return breakpointValue ? `${parseFloat(breakpointValue.trim()) - 0.02}px` : false;
   }
 
   private layoutChangeSubscribe(subscribe: boolean = true): void {

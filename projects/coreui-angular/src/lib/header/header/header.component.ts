@@ -1,11 +1,14 @@
 import {Component, Input, HostBinding} from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { Positions } from '../../coreui.types';
 type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
 
 @Component({
   selector: 'c-header, [c-header]',
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
+  standalone: true,
+  imports: [CommonModule]
 })
 export class HeaderComponent {
   /**

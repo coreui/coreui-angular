@@ -37,7 +37,8 @@ export abstract class DropdownToken {}
 @Directive({
   selector: '[cDropdownToggle]',
   providers: [{ provide: DropdownToken, useExisting: forwardRef(() => DropdownComponent) }],
-  exportAs: 'cDropdownToggle'
+  exportAs: 'cDropdownToggle',
+  standalone: true
 })
 export class DropdownToggleDirective implements AfterViewInit {
 
@@ -113,7 +114,8 @@ export class DropdownToggleDirective implements AfterViewInit {
   template: '<ng-content></ng-content>',
   styleUrls: ['./dropdown.component.scss'],
   exportAs: 'cDropdown',
-  providers: [DropdownService]
+  providers: [DropdownService],
+  standalone: true
 })
 export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
 

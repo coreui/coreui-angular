@@ -6,7 +6,8 @@ import { FormCheckLabelDirective } from './form-check-label.directive';
 @Component({
   selector: 'c-form-check',
   template: '<ng-content></ng-content>',
-  exportAs: 'cFormCheck'
+  exportAs: 'cFormCheck',
+  standalone: true
 })
 export class FormCheckComponent implements AfterContentInit {
 

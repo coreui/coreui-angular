@@ -8,7 +8,7 @@ describe('ColComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ColComponent ]
+      imports: [ ColComponent ]
     })
     .compileComponents();
   }));

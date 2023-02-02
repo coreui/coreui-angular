@@ -1,10 +1,14 @@
 import { Component, HostBinding, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
 
 @Component({
   selector: 'c-avatar',
   templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.scss']
+  styleUrls: ['./avatar.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class AvatarComponent {
   /**

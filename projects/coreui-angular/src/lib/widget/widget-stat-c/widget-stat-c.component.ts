@@ -1,14 +1,16 @@
 import { AfterContentInit, Component, ContentChildren, HostBinding, Input, QueryList } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
-import { CardComponent } from '../../card';
+import { CardBodyComponent, CardComponent } from '../../card';
 import { TemplateIdDirective } from '../../shared';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'c-widget-stat-c',
   templateUrl: './widget-stat-c.component.html',
-  styleUrls: ['./widget-stat-c.component.scss'],
-  exportAs: 'cWidgetStatC'
+  exportAs: 'cWidgetStatC',
+  standalone: true,
+  imports: [CommonModule, CardBodyComponent]
 })
 export class WidgetStatCComponent extends CardComponent implements AfterContentInit {
 

@@ -17,8 +17,14 @@ describe('SidebarNavLinkComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), SidebarModule],
-      declarations: [SidebarNavLinkComponent, HtmlAttributesDirective, SidebarNavLinkPipe, SidebarNavBadgePipe, SidebarNavIconPipe]
+      imports: [RouterTestingModule.withRoutes([]),
+        // SidebarModule,
+        HtmlAttributesDirective,
+        // SidebarNavBadgePipe,
+        // SidebarNavIconPipe,
+        SidebarNavLinkComponent,
+        // SidebarNavLinkPipe
+      ]
     })
       .compileComponents();
   }));

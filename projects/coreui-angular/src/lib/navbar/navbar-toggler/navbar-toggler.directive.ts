@@ -2,7 +2,8 @@ import { AfterContentInit, Directive, ElementRef, HostBinding, HostListener, Inp
 import { CollapseDirective } from '../../collapse';
 
 @Directive({
-  selector: '[cNavbarToggler]'
+  selector: '[cNavbarToggler]',
+  standalone: true
 })
 export class NavbarTogglerDirective implements AfterContentInit {
   /**

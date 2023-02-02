@@ -2,9 +2,9 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-nav',
-  template: `
-    <ng-content></ng-content>`,
-  styleUrls: ['./nav.component.scss']
+  template: `<ng-content></ng-content>`,
+  styleUrls: ['./nav.component.scss'],
+  standalone: true
 })
 export class NavComponent {
   /**

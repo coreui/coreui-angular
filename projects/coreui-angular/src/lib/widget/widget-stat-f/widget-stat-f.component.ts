@@ -3,12 +3,15 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import { TemplateIdDirective } from '../../shared';
 import { Colors } from '../../coreui.types';
+import { CommonModule } from '@angular/common';
+import { CardBodyComponent, CardFooterComponent } from '../../card';
 
 @Component({
   selector: 'c-widget-stat-f',
   templateUrl: './widget-stat-f.component.html',
-  styleUrls: ['./widget-stat-f.component.scss'],
-  exportAs: 'cWidgetStatB'
+  exportAs: 'cWidgetStatB',
+  standalone: true,
+  imports: [CommonModule, CardBodyComponent, CardFooterComponent]
 })
 export class WidgetStatFComponent implements AfterContentInit {
 

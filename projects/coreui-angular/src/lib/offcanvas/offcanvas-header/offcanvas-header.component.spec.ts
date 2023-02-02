@@ -8,7 +8,7 @@ describe('OffcanvasHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OffcanvasHeaderComponent ]
+      imports: [ OffcanvasHeaderComponent ]
     })
     .compileComponents();
   });

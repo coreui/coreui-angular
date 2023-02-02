@@ -12,9 +12,8 @@ describe('SidebarNavLabelComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidebarNavLabelComponent ],
       providers: [ SidebarNavHelper ],
-      imports: [ SharedModule ],
+      imports: [ SharedModule, SidebarNavLabelComponent ],
     })
     .compileComponents();
   }));

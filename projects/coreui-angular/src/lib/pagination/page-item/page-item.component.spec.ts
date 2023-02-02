@@ -8,7 +8,7 @@ describe('PaginationItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PageItemComponent]
+      imports: [PageItemComponent]
     })
       .compileComponents();
   });

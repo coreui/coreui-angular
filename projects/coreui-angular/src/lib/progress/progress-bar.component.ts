@@ -4,7 +4,8 @@ import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput 
 
 @Component({
   selector: 'c-progress-bar',
-  template: '<ng-content></ng-content>'
+  template: '<ng-content></ng-content>',
+  standalone: true
 })
 export class ProgressBarComponent implements OnInit, OnChanges {
 

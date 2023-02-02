@@ -11,8 +11,7 @@ describe('DropdownComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DropdownComponent ],
-      imports: [DropdownModule]
+      imports: [DropdownModule, DropdownComponent]
     })
     .compileComponents();
   });

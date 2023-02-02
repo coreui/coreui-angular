@@ -14,7 +14,8 @@ import {
 
 @Component({
   selector: 'c-tooltip',
-  templateUrl: './tooltip.component.html'
+  templateUrl: './tooltip.component.html',
+  standalone: true
 })
 export class TooltipComponent implements AfterViewInit, OnChanges, OnDestroy {
 

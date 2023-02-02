@@ -8,7 +8,7 @@ describe('CardGroupComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CardGroupComponent ]
+      imports: [ CardGroupComponent ]
     })
     .compileComponents();
   }));

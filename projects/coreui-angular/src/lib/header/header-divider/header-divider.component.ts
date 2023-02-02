@@ -2,7 +2,8 @@ import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'c-header-divider, [cHeaderDivider]',
-  template: ``
+  template: ``,
+  standalone: true
 })
 export class HeaderDividerComponent {
 

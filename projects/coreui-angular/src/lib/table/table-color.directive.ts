@@ -2,7 +2,8 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { Colors } from '../coreui.types';
 
 @Directive({
-  selector: '[cTableColor]'
+  selector: '[cTableColor]',
+  standalone: true
 })
 export class TableColorDirective {
 

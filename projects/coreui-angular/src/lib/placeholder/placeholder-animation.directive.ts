@@ -2,7 +2,8 @@ import { AfterContentInit, ContentChild, Directive, HostBinding, Input } from '@
 import { PlaceholderDirective } from './placeholder.directive';
 
 @Directive({
-  selector: '[cPlaceholderAnimation]'
+  selector: '[cPlaceholderAnimation]',
+  standalone: true
 })
 export class PlaceholderAnimationDirective implements AfterContentInit {
 
@@ -14,6 +15,8 @@ export class PlaceholderAnimationDirective implements AfterContentInit {
    * @default undefined
    */
   @Input('cPlaceholderAnimation') animation?: 'glow' | 'wave';
+  @ContentChild(PlaceholderDirective) placeholder!: PlaceholderDirective;
+  private animate: boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -21,9 +24,6 @@ export class PlaceholderAnimationDirective implements AfterContentInit {
       [`placeholder-${this.animation}`]: this.animate && !!this.animation
     };
   }
-
-  @ContentChild(PlaceholderDirective) placeholder!: PlaceholderDirective;
-  private animate: boolean = false;
 
   ngAfterContentInit() {
     this.animate = this.placeholder?.visible;

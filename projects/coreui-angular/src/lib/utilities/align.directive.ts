@@ -2,7 +2,8 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { Alignment } from '../coreui.types';
 
 @Directive({
-  selector: '[cAlign]'
+  selector: '[cAlign]',
+  standalone: true
 })
 export class AlignDirective {
   /**

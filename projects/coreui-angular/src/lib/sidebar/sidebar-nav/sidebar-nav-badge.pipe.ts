@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'cSidebarNavBadge'
+  name: 'cSidebarNavBadge',
+  standalone: true
 })
 export class SidebarNavBadgePipe implements PipeTransform {
 

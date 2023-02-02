@@ -11,23 +11,25 @@ import { ToasterHostDirective } from './toaster/toaster-host.directive';
 import { ToastCloseDirective } from './toast-close.directive';
 
 @NgModule({
-  declarations: [
-    ToastComponent,
-    ToastHeaderComponent,
+  declarations: [],
+  imports: [
+    CommonModule,
+    ButtonModule,
     ToastBodyComponent,
+    ToastComponent,
+    ToastCloseDirective,
+    ToastHeaderComponent,
     ToasterComponent,
     ToasterHostDirective,
-    ToastCloseDirective
   ],
-  imports: [CommonModule, ButtonModule],
   providers: [ToasterService],
   exports: [
-    ToastComponent,
-    ToastHeaderComponent,
     ToastBodyComponent,
+    ToastComponent,
+    ToastCloseDirective,
+    ToastHeaderComponent,
     ToasterComponent,
-    ToasterHostDirective,
-    ToastCloseDirective
+    ToasterHostDirective
   ]
 })
 export class ToastModule {

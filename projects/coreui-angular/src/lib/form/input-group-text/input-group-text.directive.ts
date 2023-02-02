@@ -1,7 +1,8 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[cInputGroupText]'
+  selector: '[cInputGroupText]',
+  standalone: true
 })
 export class InputGroupTextDirective {
 

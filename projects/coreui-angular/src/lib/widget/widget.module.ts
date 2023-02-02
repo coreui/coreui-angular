@@ -12,18 +12,17 @@ import { WidgetStatEComponent } from './widget-stat-e/widget-stat-e.component';
 import { WidgetStatFComponent } from './widget-stat-f/widget-stat-f.component';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
+    CardModule,
+    GridModule,
     WidgetStatAComponent,
     WidgetStatBComponent,
     WidgetStatCComponent,
     WidgetStatDComponent,
     WidgetStatEComponent,
     WidgetStatFComponent
-  ],
-  imports: [
-    CommonModule,
-    CardModule,
-    GridModule,
   ],
   exports: [
     WidgetStatAComponent,

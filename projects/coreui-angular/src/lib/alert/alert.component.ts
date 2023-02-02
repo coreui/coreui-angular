@@ -9,6 +9,7 @@ import {
   Output,
   QueryList
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
@@ -22,23 +23,25 @@ type AnimateType = ('hide' | 'show');
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],
   exportAs: 'cAlert',
+  standalone: true,
+  imports: [CommonModule],
   animations: [
     trigger('fadeInOut', [
-      state('show', style({opacity: 1, height: '*', padding: '*', border: '*', margin: '*'})),
-      state('hide', style({opacity: 0, height: 0, padding: 0, border: 0, margin: 0})),
-      state('void', style({opacity: 0, height: 0, padding: 0, border: 0, margin: 0})),
+      state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),
+      state('hide', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
+      state('void', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
       transition('show => hide', [
-        animate('.3s ease-out'),
+        animate('.3s ease-out')
       ]),
       transition('hide => show', [
-        animate('.3s ease-in'),
+        animate('.3s ease-in')
       ]),
       transition('show => void', [
-        animate('.3s ease-out'),
+        animate('.3s ease-out')
       ]),
       transition('void => show', [
-        animate('.3s ease-in'),
-      ]),
+        animate('.3s ease-in')
+      ])
     ])
   ]
 })
@@ -56,6 +59,26 @@ export class AlertComponent implements AfterContentInit {
    * @default 'primary'
    */
   @Input() color: Colors = 'primary';
+  /**
+   * Default role for alert. [docs]
+   * @type string
+   * @default 'alert'
+   */
+  @HostBinding('attr.role')
+  @Input() role = 'alert';
+  /**
+   * Set the alert variant to a solid.
+   * @type string
+   */
+  @Input() variant?: 'solid' | string;
+  /**
+   * Event triggered on the alert dismiss.
+   */
+  @Output() visibleChange: EventEmitter<boolean> = new EventEmitter();
+  templates: any = {};
+  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
+
+  private _dismissible = false;
 
   /**
    * Optionally adds a close button to alert and allow it to self dismiss.
@@ -65,10 +88,12 @@ export class AlertComponent implements AfterContentInit {
   get dismissible(): boolean {
     return this._dismissible;
   }
+
   set dismissible(value: boolean) {
     this._dismissible = coerceBooleanProperty(value);
   }
-  private _dismissible = false;
+
+  private _fade = false;
 
   /**
    * Adds animation for dismissible alert.
@@ -78,24 +103,16 @@ export class AlertComponent implements AfterContentInit {
   get fade(): boolean {
     return this._fade;
   }
+
   set fade(value: boolean) {
     this._fade = coerceBooleanProperty(value);
   }
-  private _fade = false;
 
-  /**
-   * Default role for alert. [docs]
-   * @type string
-   * @default 'alert'
-   */
-  @HostBinding('attr.role')
-  @Input() role = 'alert';
+  private _visible = true;
 
-  /**
-   * Set the alert variant to a solid.
-   * @type string
-   */
-  @Input() variant?: 'solid' | string;
+  get visible() {
+    return this._visible;
+  }
 
   /**
    * Toggle the visibility of alert component.
@@ -108,18 +125,6 @@ export class AlertComponent implements AfterContentInit {
       this.visibleChange.emit(value);
     }
   };
-  get visible() {
-    return this._visible;
-  }
-  private _visible = true;
-
-  /**
-   * Event triggered on the alert dismiss.
-   */
-  @Output() visibleChange: EventEmitter<boolean> = new EventEmitter();
-
-  templates: any = {};
-  @ContentChildren(TemplateIdDirective, {descendants: true}) contentTemplates!: QueryList<TemplateIdDirective>;
 
   @HostBinding('@.disabled')
   get animationDisabled(): boolean {

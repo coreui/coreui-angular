@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { BadgeComponent } from './badge.component';
 
 @NgModule({
-  declarations: [
-    BadgeComponent
-  ],
+  declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    BadgeComponent
   ],
   exports: [
     BadgeComponent
   ]
 })
-export class BadgeModule { }
+export class BadgeModule {}

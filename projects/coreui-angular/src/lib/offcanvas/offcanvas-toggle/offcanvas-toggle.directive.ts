@@ -3,7 +3,8 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { OffcanvasService } from '../offcanvas.service';
 
 @Directive({
-  selector: '[cOffcanvasToggle]'
+  selector: '[cOffcanvasToggle]',
+  standalone: true
 })
 export class OffcanvasToggleDirective {
 

@@ -15,7 +15,9 @@ import { CardTitleDirective } from './card-title.directive';
 import { CardImgOverlayComponent } from './card-img-overlay/card-img-overlay.component';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
     CardComponent,
     CardBodyComponent,
     CardFooterComponent,
@@ -27,10 +29,7 @@ import { CardImgOverlayComponent } from './card-img-overlay/card-img-overlay.com
     CardLinkDirective,
     CardSubtitleDirective,
     CardTextDirective,
-    CardTitleDirective,
-  ],
-  imports: [
-    CommonModule,
+    CardTitleDirective
   ],
   exports: [
     CardComponent,
@@ -44,7 +43,7 @@ import { CardImgOverlayComponent } from './card-img-overlay/card-img-overlay.com
     CardLinkDirective,
     CardSubtitleDirective,
     CardTextDirective,
-    CardTitleDirective,
+    CardTitleDirective
   ]
 })
-export class CardModule { }
+export class CardModule {}

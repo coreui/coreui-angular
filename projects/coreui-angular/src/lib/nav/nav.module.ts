@@ -5,10 +5,17 @@ import { NavItemComponent } from './nav-item.component';
 import { NavLinkDirective } from './nav-link.directive';
 
 @NgModule({
-  declarations: [NavComponent, NavItemComponent, NavLinkDirective],
+  declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    NavComponent,
+    NavItemComponent,
+    NavLinkDirective
   ],
-  exports: [NavComponent, NavItemComponent, NavLinkDirective]
+  exports: [
+    NavComponent,
+    NavItemComponent,
+    NavLinkDirective
+  ]
 })
-export class NavModule { }
+export class NavModule {}

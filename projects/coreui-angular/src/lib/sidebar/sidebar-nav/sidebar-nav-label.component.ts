@@ -1,11 +1,22 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {SidebarNavHelper} from './sidebar-nav.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { HtmlAttributesDirective } from '../../shared';
+import { SidebarNavHelper } from './sidebar-nav.service';
+import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 
 @Component({
   selector: 'c-sidebar-nav-label',
-  templateUrl: './sidebar-nav-label.component.html'
+  templateUrl: './sidebar-nav-label.component.html',
+  standalone: true,
+  imports: [CommonModule, HtmlAttributesDirective, SidebarNavBadgePipe]
 })
 export class SidebarNavLabelComponent implements OnInit {
+
+  constructor(
+    public helper: SidebarNavHelper
+  ) { }
+
   @Input() item: any;
 
   private classes = {
@@ -13,10 +24,6 @@ export class SidebarNavLabelComponent implements OnInit {
     'c-active': true
   };
   private iconClasses = {};
-
-  constructor(
-    public helper: SidebarNavHelper
-  ) { }
 
   ngOnInit() {
     this.iconClasses = this.helper.getIconClass(this.item);
@@ -28,6 +35,7 @@ export class SidebarNavLabelComponent implements OnInit {
     this.classes[itemClass] = !!itemClass;
     return this.classes;
   }
+
   getLabelIconClass() {
     const variant = `text-${this.item.label.variant}`;
     // @ts-ignore

@@ -15,11 +15,13 @@ import {
 import { DOCUMENT } from '@angular/common';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { A11yModule } from '@angular/cdk/a11y';
 import { Subscription } from 'rxjs';
 
 import { ModalService } from '../modal.service';
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { ModalContentComponent } from '../modal-content/modal-content.component';
+import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
 @Component({
   selector: 'c-modal',
@@ -42,7 +44,9 @@ import { ModalContentComponent } from '../modal-content/modal-content.component'
   ],
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
-  exportAs: 'cModal'
+  exportAs: 'cModal',
+  standalone: true,
+  imports: [A11yModule, ModalDialogComponent, ModalContentComponent]
 })
 export class ModalComponent implements OnInit, OnDestroy {
 

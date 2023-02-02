@@ -1,7 +1,8 @@
 import { Directive, HostBinding, Input, OnChanges } from '@angular/core';
 
 @Directive({
-  selector: 'select[cSelect]'
+  selector: 'select[cSelect]',
+  standalone: true
 })
 export class FormSelectDirective {
   /**

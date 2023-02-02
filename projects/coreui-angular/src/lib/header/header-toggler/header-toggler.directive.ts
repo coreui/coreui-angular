@@ -1,7 +1,8 @@
 import { AfterContentInit, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[cHeaderToggler]'
+  selector: '[cHeaderToggler]',
+  standalone: true
 })
 export class HeaderTogglerDirective implements AfterContentInit {
 

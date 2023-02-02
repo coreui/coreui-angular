@@ -3,7 +3,8 @@ import { Colors, TextColors } from '../coreui.types';
 
 @Component({
   selector: 'c-card, [c-card]',
-  template: `<ng-content></ng-content>`
+  template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class CardComponent {
 

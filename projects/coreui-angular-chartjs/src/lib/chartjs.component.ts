@@ -28,6 +28,7 @@ let nextId = 0;
   selector: 'c-chart',
   templateUrl: './chartjs.component.html',
   styleUrls: ['./chartjs.component.scss'],
+  standalone: true,
   exportAs: 'cChart'
 })
 export class ChartjsComponent<TType extends ChartType = ChartType, TData = DefaultDataPoint<TType>, TLabel = unknown> implements AfterViewInit, OnDestroy, OnChanges {

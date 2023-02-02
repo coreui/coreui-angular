@@ -10,32 +10,28 @@ import { DropdownService } from './dropdown.service';
 import { DropdownCloseDirective } from './dropdown-close/dropdown-close.directive';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
     DropdownComponent,
+    DropdownCloseDirective,
     DropdownDividerDirective,
     DropdownHeaderDirective,
     DropdownItemDirective,
     DropdownItemPlainDirective,
-    DropdownToggleDirective,
     DropdownMenuDirective,
-    DropdownCloseDirective
-  ],
-  imports: [
-    CommonModule,
+    DropdownToggleDirective
   ],
   exports: [
     DropdownComponent,
+    DropdownCloseDirective,
     DropdownDividerDirective,
     DropdownHeaderDirective,
     DropdownItemDirective,
     DropdownItemPlainDirective,
-    DropdownToggleDirective,
     DropdownMenuDirective,
-    DropdownCloseDirective
+    DropdownToggleDirective
   ],
-  providers: [
-    DropdownService,
-  ]
+  providers: [DropdownService]
 })
-export class DropdownModule {
-}
+export class DropdownModule {}

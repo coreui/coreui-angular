@@ -1,11 +1,17 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
-import {Observable, Subscription} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
-import {SidebarNavHelper} from './sidebar-nav.service';
 // import {SidebarService} from '../sidebar.service';
+import { HtmlAttributesDirective } from '../../shared';
+import { SidebarNavHelper } from './sidebar-nav.service';
 import { INavData } from './sidebar-nav';
+import { SidebarNavLinkPipe } from './sidebar-nav-link.pipe';
+import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
+import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
+import { IconModule } from '@coreui/icons-angular'
 
 @Component({
   selector: 'c-sidebar-nav-link-content',
@@ -14,7 +20,9 @@ import { INavData } from './sidebar-nav';
       <ng-container>{{item?.name ?? ''}}</ng-container>
     </ng-container>
   `,
-  providers: [ SidebarNavHelper ]
+  providers: [SidebarNavHelper],
+  standalone: true,
+  imports: [NgIf]
 })
 export class SidebarNavLinkContentComponent {
   @Input() item?: INavData;
@@ -27,7 +35,9 @@ export class SidebarNavLinkContentComponent {
 @Component({
   selector: 'c-sidebar-nav-link',
   templateUrl: './sidebar-nav-link.component.html',
-  providers: [ SidebarNavHelper ]
+  providers: [SidebarNavHelper],
+  standalone: true,
+  imports: [CommonModule, RouterModule, HtmlAttributesDirective, SidebarNavLinkContentComponent, SidebarNavLinkPipe, SidebarNavBadgePipe, SidebarNavIconPipe, IconModule]
 })
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
 
@@ -38,6 +48,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   set item(item: INavData) {
     this._item = JSON.parse(JSON.stringify(item));
   }
+
   get item(): INavData {
     return this._item;
   }
@@ -58,7 +69,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   private navSubscription: Subscription;
 
   constructor(
-    public router: Router,
+    public router: Router
     // private renderer: Renderer2,
     // private hostElement: ElementRef,
     // private sidebarService: SidebarService
@@ -72,7 +83,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // @ts-ignore
-    this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url)) ;
+    this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url));
     this.linkType = this.getLinkType();
     this.href = this.isDisabled() ? '' : (this.item.href || this.url);
     this.linkActive = this.router.url.split(/[?#(;]/)[0] === this.href.split(/[?#(;]/)[0];

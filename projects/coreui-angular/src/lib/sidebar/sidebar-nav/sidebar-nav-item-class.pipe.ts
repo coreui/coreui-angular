@@ -3,7 +3,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import {SidebarNavHelper} from './sidebar-nav.service';
 
 @Pipe({
-  name: 'cSidebarNavItemClass'
+  name: 'cSidebarNavItemClass',
+  standalone: true
 })
 export class SidebarNavItemClassPipe implements PipeTransform {
 

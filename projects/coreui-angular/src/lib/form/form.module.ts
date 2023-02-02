@@ -14,9 +14,13 @@ import { FormCheckLabelDirective } from './form-check/form-check-label.directive
 import { FormCheckInputDirective } from './form-check/form-check-input.directive';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
     FormDirective,
     FormCheckComponent,
+    FormCheckLabelDirective,
+    FormCheckInputDirective,
     FormControlDirective,
     FormFeedbackComponent,
     FormFloatingDirective,
@@ -24,14 +28,13 @@ import { FormCheckInputDirective } from './form-check/form-check-input.directive
     FormSelectDirective,
     FormTextDirective,
     InputGroupComponent,
-    InputGroupTextDirective,
-    FormCheckLabelDirective,
-    FormCheckInputDirective,
+    InputGroupTextDirective
   ],
-  imports: [CommonModule],
   exports: [
     FormDirective,
     FormCheckComponent,
+    FormCheckLabelDirective,
+    FormCheckInputDirective,
     FormControlDirective,
     FormFeedbackComponent,
     FormFloatingDirective,
@@ -39,9 +42,7 @@ import { FormCheckInputDirective } from './form-check/form-check-input.directive
     FormSelectDirective,
     FormTextDirective,
     InputGroupComponent,
-    InputGroupTextDirective,
-    FormCheckLabelDirective,
-    FormCheckInputDirective
+    InputGroupTextDirective
   ]
 })
 export class FormModule {}

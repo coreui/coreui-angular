@@ -4,7 +4,8 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 
 @Directive({
   selector: '[cDropdownItem]',
-  exportAs: 'cDropdownItem'
+  exportAs: 'cDropdownItem',
+  standalone: true
 })
 export class DropdownItemDirective {
   /**

@@ -7,9 +7,10 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'c-tab-pane',
-  templateUrl: './tab-pane.component.html',
+  template: `<ng-content></ng-content>`,
   styleUrls: ['./tab-pane.component.scss'],
-  exportAs: 'cTabPane'
+  exportAs: 'cTabPane',
+  standalone: true
 })
 export class TabPaneComponent implements OnDestroy, OnInit {
 

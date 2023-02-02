@@ -24,7 +24,8 @@ import { Triggers } from '../../coreui.types';
   selector: 'c-carousel',
   template: '<ng-content></ng-content>',
   styleUrls: ['./carousel.component.scss'],
-  providers: [CarouselService, CarouselState, CarouselConfig, IntersectionService, ListenersService]
+  providers: [CarouselService, CarouselState, CarouselConfig, IntersectionService, ListenersService],
+  standalone: true
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   /**

@@ -3,7 +3,8 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { ModalService } from '../modal.service';
 
 @Directive({
-  selector: '[cModalToggle]'
+  selector: '[cModalToggle]',
+  standalone: true
 })
 export class ModalToggleDirective {
   /**

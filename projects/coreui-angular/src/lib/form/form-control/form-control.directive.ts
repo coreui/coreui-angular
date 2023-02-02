@@ -4,7 +4,8 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { InputType } from '../../coreui.types';
 
 @Directive({
-  selector: 'input[cFormControl], textarea[cFormControl]'
+  selector: 'input[cFormControl], textarea[cFormControl]',
+  standalone: true
 })
 export class FormControlDirective implements OnInit {
 

@@ -24,7 +24,8 @@ import { IListenersConfig, ListenersService } from '../services/listeners.servic
 @Directive({
   selector: '[cPopover]',
   exportAs: 'cPopover',
-  providers: [ListenersService]
+  providers: [ListenersService],
+  standalone: true
 })
 export class PopoverDirective implements OnChanges, OnDestroy, OnInit {
 

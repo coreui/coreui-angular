@@ -4,7 +4,8 @@ import { Colors } from '../coreui.types';
 @Component({
   selector: 'c-callout, [cCallout]',
   template: `<ng-content></ng-content>`,
-  styleUrls: ['./callout.component.scss']
+  styleUrls: ['./callout.component.scss'],
+  standalone: true
 })
 export class CalloutComponent {
 

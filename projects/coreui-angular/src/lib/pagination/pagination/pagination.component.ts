@@ -1,9 +1,11 @@
 import { Component, HostBinding, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'c-pagination',
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+  standalone: true,
+  imports: [CommonModule]
 })
 export class PaginationComponent {
 

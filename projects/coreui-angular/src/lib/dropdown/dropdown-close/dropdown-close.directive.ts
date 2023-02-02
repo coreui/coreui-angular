@@ -4,7 +4,8 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 
 @Directive({
   selector: '[cDropdownClose]',
-  exportAs: 'cDropdownClose'
+  exportAs: 'cDropdownClose',
+  standalone: true
 })
 export class DropdownCloseDirective implements AfterViewInit {
 

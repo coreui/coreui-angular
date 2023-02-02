@@ -8,6 +8,7 @@ import {
   Input,
   ViewChild
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { CarouselState } from '../carousel-state';
 
@@ -15,6 +16,8 @@ import { CarouselState } from '../carousel-state';
   selector: 'c-carousel-control',
   templateUrl: './carousel-control.component.html',
   styleUrls: ['./carousel-control.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class CarouselControlComponent implements AfterViewInit {
 

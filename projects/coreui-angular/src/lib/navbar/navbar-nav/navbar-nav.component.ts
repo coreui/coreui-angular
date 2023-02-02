@@ -4,6 +4,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 @Component({
   selector: 'c-navbar-nav',
   template: '<ng-content></ng-content>',
+  standalone: true
 })
 export class NavbarNavComponent {
 

@@ -3,7 +3,8 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'c-form-feedback',
-  template: '<ng-content></ng-content>'
+  template: '<ng-content></ng-content>',
+  standalone: true
 })
 export class FormFeedbackComponent {
   static ngAcceptInputType_tooltip: BooleanInput;

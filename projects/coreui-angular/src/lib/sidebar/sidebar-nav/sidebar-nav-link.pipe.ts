@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'cSidebarNavLink'
+  name: 'cSidebarNavLink',
+  standalone: true
 })
 export class SidebarNavLinkPipe implements PipeTransform {
 
@@ -9,12 +10,11 @@ export class SidebarNavLinkPipe implements PipeTransform {
 
     const disabled = item?.attributes?.disabled;
 
-    const classes = {
+    return {
       'nav-link': true,
       disabled,
       'btn-link': disabled,
       [`nav-link-${item.variant}`]: !!item.variant
     };
-    return classes;
   }
 }

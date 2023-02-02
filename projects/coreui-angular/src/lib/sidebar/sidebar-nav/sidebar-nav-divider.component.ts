@@ -2,12 +2,11 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'c-sidebar-nav-divider',
-  template: ``
+  template: ``,
+  standalone: true
 })
 export class SidebarNavDividerComponent {
-  @Input() item: any;
 
-  constructor() {
-  }
+  @Input() item: any;
 
 }

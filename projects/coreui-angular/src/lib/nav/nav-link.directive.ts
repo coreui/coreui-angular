@@ -2,7 +2,8 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-  selector: '[cNavLink]'
+  selector: '[cNavLink]',
+  standalone: true
 })
 export class NavLinkDirective {
 

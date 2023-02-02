@@ -1,16 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'cSidebarNavIcon'
+  name: 'cSidebarNavIcon',
+  standalone: true
 })
 export class SidebarNavIconPipe implements PipeTransform {
 
   transform(item: any, args?: any): any {
     const icon = item.icon;
-    const classes = {
+    return {
       'nav-icon': true,
       [`${icon}`]: !!icon
     };
-    return classes;
   }
 }

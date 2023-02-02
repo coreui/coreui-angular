@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { CalloutComponent } from './callout.component';
 
 @NgModule({
-  declarations: [CalloutComponent],
+  declarations: [],
   exports: [CalloutComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    CalloutComponent
   ]
 })
 export class CalloutModule { }

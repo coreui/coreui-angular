@@ -2,8 +2,8 @@ import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'c-sidebar-footer',
-  templateUrl: './sidebar-footer.component.html',
-  styleUrls: ['./sidebar-footer.component.scss']
+  template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class SidebarFooterComponent {
 

@@ -10,7 +10,7 @@ describe('FormCheckComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FormCheckComponent],
+      imports: [FormCheckComponent],
       providers: [Renderer2]
     })
       .compileComponents();

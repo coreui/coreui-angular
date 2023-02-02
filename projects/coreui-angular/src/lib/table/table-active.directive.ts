@@ -2,7 +2,8 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-  selector: '[cTableActive]'
+  selector: '[cTableActive]',
+  standalone: true
 })
 export class TableActiveDirective {
 

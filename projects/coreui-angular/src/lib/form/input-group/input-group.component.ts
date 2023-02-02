@@ -7,6 +7,7 @@ import {
 @Component({
   selector: 'c-input-group',
   template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class InputGroupComponent {
   /**

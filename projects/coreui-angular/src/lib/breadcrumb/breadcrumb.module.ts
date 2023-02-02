@@ -10,17 +10,20 @@ import { BreadcrumbRouterService } from './breadcrumb-router/breadcrumb-router.s
 import { SharedModule } from '../shared';
 
 @NgModule({
-  imports: [CommonModule, RouterModule, SharedModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    BreadcrumbComponent,
+    BreadcrumbItemComponent,
+    BreadcrumbRouterComponent,
+    SharedModule
+  ],
   exports: [
     BreadcrumbComponent,
     BreadcrumbItemComponent,
-    BreadcrumbRouterComponent,
+    BreadcrumbRouterComponent
   ],
-  declarations: [
-    BreadcrumbRouterComponent,
-    BreadcrumbItemComponent,
-    BreadcrumbComponent,
-  ],
-  providers: [BreadcrumbRouterService],
+  declarations: [],
+  providers: [BreadcrumbRouterService]
 })
-export class BreadcrumbModule { }
+export class BreadcrumbModule {}

@@ -11,27 +11,26 @@ import { OffcanvasService } from './offcanvas.service';
 import { BackdropService } from '../backdrop/backdrop.service';
 
 @NgModule({
-  declarations: [
-    OffcanvasComponent,
-    OffcanvasBodyComponent,
-    OffcanvasHeaderComponent,
-    OffcanvasTitleDirective,
-    OffcanvasToggleDirective
-  ],
+  declarations: [],
   exports: [
-    OffcanvasComponent,
     OffcanvasBodyComponent,
+    OffcanvasComponent,
     OffcanvasHeaderComponent,
     OffcanvasTitleDirective,
     OffcanvasToggleDirective
   ],
   imports: [
     CommonModule,
-    A11yModule
+    A11yModule,
+    OffcanvasBodyComponent,
+    OffcanvasComponent,
+    OffcanvasHeaderComponent,
+    OffcanvasTitleDirective,
+    OffcanvasToggleDirective
   ],
   providers: [
     OffcanvasService,
     BackdropService
-  ],
+  ]
 })
-export class OffcanvasModule { }
+export class OffcanvasModule {}

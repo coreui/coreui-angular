@@ -9,6 +9,9 @@ import { ButtonModule } from '../button';
 @NgModule({
   imports: [
     CommonModule,
+    AlertComponent,
+    AlertHeadingDirective,
+    AlertLinkDirective,
     ButtonModule
   ],
   exports: [
@@ -16,10 +19,6 @@ import { ButtonModule } from '../button';
     AlertHeadingDirective,
     AlertLinkDirective
   ],
-  declarations: [
-    AlertComponent,
-    AlertHeadingDirective,
-    AlertLinkDirective
-  ]
+  declarations: []
 })
 export class AlertModule {}

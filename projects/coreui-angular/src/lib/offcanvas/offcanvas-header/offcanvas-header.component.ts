@@ -3,7 +3,7 @@ import { Component, HostBinding } from '@angular/core';
 @Component({
   selector: 'c-offcanvas-header',
   template: `<ng-content></ng-content>`,
-  styleUrls: ['./offcanvas-header.component.scss']
+  standalone: true
 })
 export class OffcanvasHeaderComponent {
 

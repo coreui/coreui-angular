@@ -9,23 +9,22 @@ import { NavbarTextComponent } from './navbar-text/navbar-text.component';
 import { NavbarTogglerDirective } from './navbar-toggler/navbar-toggler.directive';
 
 @NgModule({
-  declarations: [
-    NavbarComponent,
-    NavbarNavComponent,
-    NavbarTextComponent,
-    NavbarBrandDirective,
-    NavbarTogglerDirective
-  ],
+  declarations: [],
   exports: [
+    NavbarBrandDirective,
     NavbarComponent,
     NavbarNavComponent,
     NavbarTextComponent,
-    NavbarBrandDirective,
     NavbarTogglerDirective
   ],
   imports: [
     CommonModule,
+    NavbarBrandDirective,
+    NavbarComponent,
+    NavbarNavComponent,
+    NavbarTextComponent,
+    NavbarTogglerDirective,
     RouterModule
   ]
 })
-export class NavbarModule { }
+export class NavbarModule {}

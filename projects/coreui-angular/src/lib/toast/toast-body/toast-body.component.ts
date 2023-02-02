@@ -5,7 +5,8 @@ import { ToastComponent } from '../toast/toast.component';
   selector: 'c-toast-body',
   template: '<ng-content></ng-content>',
   styleUrls: ['./toast-body.component.scss'],
-  exportAs: 'cToastBody'
+  exportAs: 'cToastBody',
+  standalone: true
 })
 export class ToastBodyComponent {
 

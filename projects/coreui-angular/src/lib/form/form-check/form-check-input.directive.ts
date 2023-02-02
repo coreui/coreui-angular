@@ -2,7 +2,8 @@ import { Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/c
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-  selector: 'input[cFormCheckInput]'
+  selector: 'input[cFormCheckInput]',
+  standalone: true
 })
 export class FormCheckInputDirective {
 

@@ -1,7 +1,8 @@
 import { Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: '[cAccordionButton]'
+  selector: '[cAccordionButton]',
+  standalone: true
 })
 export class AccordionButtonDirective {
 

@@ -5,12 +5,16 @@ import {
   HostBinding,
   Input,
   OnDestroy,
-  OnInit, QueryList,
+  OnInit,
+  QueryList
 } from '@angular/core';
-
-import { AccordionService } from '../accordion.service';
-import { TemplateIdDirective } from '../../shared';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+
+import { CollapseModule } from '../../collapse';
+import { TemplateIdDirective } from '../../shared';
+import { AccordionButtonDirective } from '../accordion-button/accordion-button.directive';
+import { AccordionService } from '../accordion.service';
+import { CommonModule } from '@angular/common';
 
 let nextId = 0;
 
@@ -19,10 +23,26 @@ let nextId = 0;
   templateUrl: './accordion-item.component.html',
   styleUrls: ['./accordion-item.component.scss'],
   exportAs: 'cAccordionItem',
+  standalone: true,
+  imports: [AccordionButtonDirective, CollapseModule, CommonModule]
 })
 export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentInit {
 
+  constructor(
+    private accordionService: AccordionService
+  ) { }
+
   static ngAcceptInputType_visible: BooleanInput;
+  contentId = `accordion-item-${nextId++}`;
+  itemContext = { $implicit: this.visible };
+  templates: any = {};
+  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
+
+  private _visible: boolean = false;
+
+  get visible() {
+    return this._visible;
+  }
 
   /**
    * Toggle an accordion item programmatically
@@ -30,38 +50,26 @@ export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentIn
    * @default false
    */
   @Input()
-  set visible(value: boolean){
+  set visible(value: boolean) {
     this._visible = coerceBooleanProperty(value);
   }
-  get visible() {
-    return this._visible;
+
+  get open() {
+    return this.visible;
   }
-  private _visible: boolean = false;
 
   @Input()
   set open(value: boolean) {
-    console.warn('c-accordion-item "open" prop is deprecated, use "visible"  prop instead.')
+    console.warn('c-accordion-item "open" prop is deprecated, use "visible"  prop instead.');
     this.visible = value || this.visible;
-  }
-  get open() {
-    return this.visible;
   }
 
   @HostBinding('class')
   get hostClasses(): any {
     return {
-      'accordion-item': true,
+      'accordion-item': true
     };
   }
-  contentId = `accordion-item-${nextId++}`;
-  itemContext = { $implicit: this.visible };
-  templates: any = {};
-
-  @ContentChildren(TemplateIdDirective, {descendants: true}) contentTemplates!: QueryList<TemplateIdDirective>;
-
-  constructor(
-    private accordionService: AccordionService,
-  ) { }
 
   ngOnInit(): void {
     this.accordionService.addItem(this);

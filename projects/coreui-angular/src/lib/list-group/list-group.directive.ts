@@ -3,7 +3,8 @@ import { Sizes } from '../coreui.types';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-  selector: '[cListGroup]'
+  selector: '[cListGroup]',
+  standalone: true
 })
 export class ListGroupDirective {
   static ngAcceptInputType_flush: BooleanInput;

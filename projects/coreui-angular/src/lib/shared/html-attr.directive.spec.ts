@@ -18,7 +18,8 @@ describe('HtmlAttributesDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, HtmlAttributesDirective]
+      declarations: [TestComponent],
+      imports: [HtmlAttributesDirective],
     });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;

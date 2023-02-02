@@ -6,5 +6,6 @@ import { ColDirective } from './col.directive';
   selector: 'c-col',
   template: '<ng-content></ng-content>',
   styleUrls: ['./col.component.scss'],
+  standalone: true
 })
 export class ColComponent extends ColDirective {}

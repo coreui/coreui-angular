@@ -4,7 +4,8 @@ import { Colors } from '../coreui.types';
 
 @Directive({
   selector: '[cListGroupItem], c-list-group-item',
-  exportAs: 'cListGroupItem'
+  exportAs: 'cListGroupItem',
+  standalone: true
 })
 export class ListGroupItemDirective {
 

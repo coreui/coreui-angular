@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 
@@ -12,10 +12,12 @@ describe('HeaderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ],
-      imports: [ CommonModule, RouterTestingModule.withRoutes([])  ],
-    })
-    .compileComponents();
+      imports: [
+        CommonModule,
+        RouterTestingModule.withRoutes([]),
+        HeaderComponent,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

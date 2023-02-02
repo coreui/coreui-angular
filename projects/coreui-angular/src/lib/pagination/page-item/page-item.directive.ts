@@ -12,7 +12,8 @@ import {
 import { PageLinkDirective } from '../page-link/page-link.directive';
 
 @Directive({
-  selector: '[cPageItem]'
+  selector: '[cPageItem]',
+  standalone: true
 })
 export class PageItemDirective implements AfterContentInit, OnChanges {
 

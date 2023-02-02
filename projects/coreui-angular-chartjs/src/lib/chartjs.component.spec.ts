@@ -29,7 +29,7 @@ describe('ChartjsComponent', () => {
     Chart.register(...registerables);
 
     await TestBed.configureTestingModule({
-      declarations: [ChartjsComponent]
+      imports: [ChartjsComponent]
     })
       .compileComponents();
   });

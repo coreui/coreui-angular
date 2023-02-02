@@ -3,7 +3,8 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
   selector: '[cPlaceholder]',
-  exportAs: 'cPlaceholder'
+  exportAs: 'cPlaceholder',
+  standalone: true
 })
 export class PlaceholderDirective {
 

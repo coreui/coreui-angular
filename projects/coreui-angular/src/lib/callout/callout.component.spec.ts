@@ -8,7 +8,7 @@ describe('CalloutComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalloutComponent ]
+      imports: [ CalloutComponent ]
     })
     .compileComponents();
   }));

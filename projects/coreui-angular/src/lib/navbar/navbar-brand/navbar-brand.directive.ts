@@ -1,7 +1,8 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[cNavbarBrand]'
+  selector: '[cNavbarBrand]',
+  standalone: true
 })
 export class NavbarBrandDirective {
 

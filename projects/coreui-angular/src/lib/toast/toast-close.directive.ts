@@ -3,7 +3,8 @@ import { ToasterService } from './toaster/toaster.service';
 
 @Directive({
   selector: '[cToastClose]',
-  exportAs: 'cToastClose'
+  exportAs: 'cToastClose',
+  standalone: true
 })
 export class ToastCloseDirective {
 

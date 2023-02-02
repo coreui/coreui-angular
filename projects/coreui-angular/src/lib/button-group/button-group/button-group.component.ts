@@ -3,6 +3,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 @Component({
   selector: 'c-button-group',
   template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class ButtonGroupComponent {
 

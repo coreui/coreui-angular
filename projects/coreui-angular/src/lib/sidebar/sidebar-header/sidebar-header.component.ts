@@ -2,11 +2,10 @@ import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'c-sidebar-header',
-  templateUrl: './sidebar-header.component.html',
-  styleUrls: ['./sidebar-header.component.scss']
+  template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class SidebarHeaderComponent {
-  constructor() {}
 
   @HostBinding('class')
   get hostClasses(): any {

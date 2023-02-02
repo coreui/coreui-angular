@@ -1,7 +1,8 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[cCardTitle]'
+  selector: '[cCardTitle]',
+  standalone: true
 })
 export class CardTitleDirective {
 

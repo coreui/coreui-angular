@@ -9,7 +9,7 @@ describe('SidebarNavTitleComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidebarNavTitleComponent ]
+      imports: [ SidebarNavTitleComponent ]
     })
     .compileComponents();
   }));

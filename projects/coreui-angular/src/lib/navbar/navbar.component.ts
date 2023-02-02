@@ -1,9 +1,10 @@
 import { AfterContentInit, Component, ContentChild, ElementRef, HostBinding, Input } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 import { CollapseDirective } from '../collapse';
 import { Colors } from '../coreui.types';
+
 
 // todo: fix container prop issue not rendering children
 // todo: workaroud -  use <c-container> component directly in template
@@ -11,7 +12,9 @@ import { Colors } from '../coreui.types';
 @Component({
   selector: 'c-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class NavbarComponent implements AfterContentInit {
   /**

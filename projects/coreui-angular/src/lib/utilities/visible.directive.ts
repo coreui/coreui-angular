@@ -1,7 +1,8 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[cVisible]'
+  selector: '[cVisible]',
+  standalone: true
 })
 export class VisibleDirective {
 

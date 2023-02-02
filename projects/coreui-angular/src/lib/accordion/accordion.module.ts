@@ -8,20 +8,19 @@ import { CollapseModule } from '../collapse';
 import { SharedModule } from '../shared';
 
 @NgModule({
-  declarations: [
-    AccordionComponent,
-    AccordionButtonDirective,
-    AccordionItemComponent,
-  ],
+  declarations: [],
   imports: [
     CommonModule,
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CollapseModule,
     SharedModule
   ],
   exports: [
     AccordionComponent,
     AccordionButtonDirective,
-    AccordionItemComponent,
+    AccordionItemComponent
   ],
   providers: [
     AccordionService

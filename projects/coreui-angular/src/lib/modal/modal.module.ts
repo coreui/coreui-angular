@@ -13,32 +13,29 @@ import { ModalComponent } from './modal/modal.component';
 import { ModalService } from './modal.service';
 
 @NgModule({
-  declarations: [
-    ModalBodyComponent,
-    ModalContentComponent,
-    ModalDialogComponent,
-    ModalToggleDirective,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ModalComponent,
-  ],
+  declarations: [],
   exports: [
     ModalBodyComponent,
+    ModalComponent,
     ModalContentComponent,
     ModalDialogComponent,
-    ModalToggleDirective,
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalTitleDirective,
-    ModalComponent,
+    ModalToggleDirective
   ],
   imports: [
     CommonModule,
-    A11yModule
+    A11yModule,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalContentComponent,
+    ModalDialogComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ModalToggleDirective
   ],
-  providers: [
-    ModalService
-  ]
+  providers: [ModalService]
 })
-export class ModalModule { }
+export class ModalModule {}

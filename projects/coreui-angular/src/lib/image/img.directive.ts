@@ -2,7 +2,8 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-  selector: '[cImg]'
+  selector: '[cImg]',
+  standalone: true
 })
 export class ImgDirective {
   static ngAcceptInputType_fluid: BooleanInput;

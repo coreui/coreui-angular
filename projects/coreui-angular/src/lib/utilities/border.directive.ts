@@ -2,7 +2,8 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { Border, BorderColor, IBorderElement, BorderWidth } from './border.type';
 
 @Directive({
-  selector: '[cBorder]'
+  selector: '[cBorder]',
+  standalone: true
 })
 export class BorderDirective {
   /**

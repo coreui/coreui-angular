@@ -9,7 +9,7 @@ describe('ToasterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToasterComponent, ToasterHostDirective ]
+      imports: [ ToasterComponent, ToasterHostDirective ]
     })
     .compileComponents();
   }));

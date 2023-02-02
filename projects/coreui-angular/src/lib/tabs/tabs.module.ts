@@ -6,13 +6,12 @@ import { TabService } from './tab.service';
 import { TabContentRefDirective } from './tab-content-ref.directive';
 
 @NgModule({
-  declarations: [
-    TabContentComponent,
-    TabPaneComponent,
-    TabContentRefDirective
-  ],
+  declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    TabContentComponent,
+    TabContentRefDirective,
+    TabPaneComponent
   ],
   exports: [
     TabContentComponent,
@@ -23,4 +22,4 @@ import { TabContentRefDirective } from './tab-content-ref.directive';
     TabService
   ]
 })
-export class TabsModule { }
+export class TabsModule {}

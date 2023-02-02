@@ -8,7 +8,7 @@ describe('ModalBodyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ModalBodyComponent ]
+      imports: [ ModalBodyComponent ]
     })
     .compileComponents();
   });

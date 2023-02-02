@@ -13,9 +13,8 @@ describe('CarouselInnerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CarouselInnerComponent ],
       providers: [ CarouselService, CarouselState ],
-      imports: [NoopAnimationsModule],
+      imports: [NoopAnimationsModule, CarouselInnerComponent],
     })
     .compileComponents();
   }));

@@ -8,7 +8,7 @@ describe('ToastBodyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToastBodyComponent ]
+      imports: [ ToastBodyComponent ]
     })
     .compileComponents();
   }));

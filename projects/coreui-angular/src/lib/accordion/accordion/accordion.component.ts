@@ -1,14 +1,15 @@
 import { Component, HostBinding, Input } from '@angular/core';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import { AccordionService } from '../accordion.service';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'c-accordion',
   template: `<ng-content></ng-content>`,
   styleUrls: ['./accordion.component.scss'],
   exportAs: 'cAccordionItem',
-  providers: [AccordionService]
+  providers: [AccordionService],
+  standalone: true
 })
 export class AccordionComponent {
 

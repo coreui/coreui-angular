@@ -23,9 +23,10 @@ type AnimateType = ('hide' | 'show');
 
 @Component({
   selector: 'c-toast',
-  templateUrl: './toast.component.html',
+  template: `<ng-content></ng-content>`,
   styleUrls: ['./toast.component.scss'],
   exportAs: 'cToast',
+  standalone: true,
   animations: [
     trigger('fadeInOut', [
       state('show', style({opacity: 1, height: '*', padding: '*', border: '*', margin: '*'})),

@@ -23,6 +23,7 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
   selector: 'c-sidebar',
   exportAs: 'cSidebar',
   template: '<ng-content></ng-content>',
+  standalone: true
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   static ngAcceptInputType_narrow: BooleanInput;

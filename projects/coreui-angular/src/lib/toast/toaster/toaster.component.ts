@@ -52,7 +52,9 @@ export type TToasterPlacement =
 @Component({
   selector: 'c-toaster',
   templateUrl: './toaster.component.html',
-  exportAs: 'cToaster'
+  exportAs: 'cToaster',
+  standalone: true,
+  imports: [ToasterHostDirective]
 })
 export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked {
 

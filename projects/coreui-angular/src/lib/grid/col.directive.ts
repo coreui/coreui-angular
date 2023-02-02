@@ -5,7 +5,8 @@ import { ColOrder, ICol } from './col.type';
 import { BreakpointInfix } from '../coreui.types';
 
 @Directive({
-  selector: '[cCol]'
+  selector: '[cCol]',
+  standalone: true
 })
 export class ColDirective implements ICol {
 

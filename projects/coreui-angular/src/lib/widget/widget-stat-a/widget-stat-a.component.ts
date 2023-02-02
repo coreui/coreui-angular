@@ -2,12 +2,18 @@ import { AfterContentInit, Component, ContentChildren, HostBinding, Input, Query
 
 import { Colors } from '../../coreui.types';
 import { TemplateIdDirective } from '../../shared';
+import { CommonModule } from '@angular/common';
+import { CardBodyComponent } from '../../card';
 
 @Component({
   selector: 'c-widget-stat-a',
   templateUrl: './widget-stat-a.component.html',
-  styleUrls: ['./widget-stat-a.component.scss'],
-  exportAs: 'cWidgetStatA'
+  exportAs: 'cWidgetStatA',
+  imports: [
+    CommonModule,
+    CardBodyComponent
+  ],
+  standalone: true
 })
 export class WidgetStatAComponent implements AfterContentInit {
   /**
@@ -28,7 +34,7 @@ export class WidgetStatAComponent implements AfterContentInit {
 
   templates: any = {};
 
-  @ContentChildren(TemplateIdDirective, {descendants: true}) contentTemplates!: QueryList<TemplateIdDirective>;
+  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
 
   @HostBinding('class')
   get hostClasses() {
@@ -36,7 +42,7 @@ export class WidgetStatAComponent implements AfterContentInit {
       'card': true,
       [`bg-${this.color}`]: !!this.color,
       'text-high-emphasis-inverse': !!this.color
-    }
+    };
   }
 
   get bodyClasses() {
@@ -44,8 +50,8 @@ export class WidgetStatAComponent implements AfterContentInit {
       'pb-0': true,
       'd-flex': true,
       'justify-content-between': true,
-      'align-items-start': true,
-    }
+      'align-items-start': true
+    };
   }
 
   ngAfterContentInit(): void {

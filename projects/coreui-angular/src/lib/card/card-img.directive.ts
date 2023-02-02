@@ -1,7 +1,8 @@
 import { Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: '[cCardImg]'
+  selector: '[cCardImg]',
+  standalone: true
 })
 export class CardImgDirective {
   /**

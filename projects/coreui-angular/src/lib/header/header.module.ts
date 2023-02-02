@@ -9,16 +9,15 @@ import { HeaderTextComponent } from './header-text/header-text.component';
 import { HeaderTogglerDirective } from './header-toggler/header-toggler.directive';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
     HeaderComponent,
     HeaderBrandComponent,
     HeaderDividerComponent,
     HeaderNavComponent,
     HeaderTextComponent,
     HeaderTogglerDirective
-  ],
-  imports: [
-    CommonModule
   ],
   exports: [
     HeaderComponent,
@@ -29,4 +28,4 @@ import { HeaderTogglerDirective } from './header-toggler/header-toggler.directiv
     HeaderTogglerDirective
   ]
 })
-export class HeaderModule { }
+export class HeaderModule {}

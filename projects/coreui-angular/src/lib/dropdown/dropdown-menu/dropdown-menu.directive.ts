@@ -6,6 +6,7 @@ import { DropdownService } from '../dropdown.service';
 @Directive({
   selector: '[cDropdownMenu]',
   exportAs: 'cDropdownMenu',
+  standalone: true
 })
 export class DropdownMenuDirective implements OnInit, OnDestroy {
   static ngAcceptInputType_dark: BooleanInput;

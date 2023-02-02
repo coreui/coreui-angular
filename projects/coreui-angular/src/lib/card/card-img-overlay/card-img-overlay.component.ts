@@ -2,8 +2,9 @@ import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'c-card-img-overlay',
-  templateUrl: './card-img-overlay.component.html',
-  styleUrls: ['./card-img-overlay.component.scss']
+  template: `<ng-content></ng-content>`,
+  styleUrls: ['./card-img-overlay.component.scss'],
+  standalone: true
 })
 export class CardImgOverlayComponent {
 

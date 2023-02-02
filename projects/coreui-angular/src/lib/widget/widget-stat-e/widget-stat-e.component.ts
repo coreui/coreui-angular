@@ -1,17 +1,20 @@
 import { Component, Input } from '@angular/core';
-import { CardComponent } from '../../card';
+import { CommonModule } from '@angular/common';
+import { CardBodyComponent, CardComponent } from '../../card';
 
 @Component({
   selector: 'c-widget-stat-e',
   templateUrl: './widget-stat-e.component.html',
-  styleUrls: ['./widget-stat-e.component.scss'],
-  exportAs: 'cWidgetStatE'
+  exportAs: 'cWidgetStatE',
+  standalone: true,
+  imports: [CardBodyComponent, CommonModule]
 })
 export class WidgetStatEComponent extends CardComponent {
 
   constructor() {
     super();
   }
+
   /**
    * Title of the widget to display
    * @type string
@@ -29,8 +32,8 @@ export class WidgetStatEComponent extends CardComponent {
       'small': true,
       'text-uppercase': true,
       'fw-semibold': true,
-      [`text-${this.textColor}`]: !!this.textColor,
-    }
+      [`text-${this.textColor}`]: !!this.textColor
+    };
   }
 
 }

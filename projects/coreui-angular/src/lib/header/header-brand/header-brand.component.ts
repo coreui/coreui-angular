@@ -2,7 +2,8 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-header-brand',
-  template: `<ng-content></ng-content>`
+  template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class HeaderBrandComponent {
   /**

@@ -16,6 +16,7 @@ import { TabService } from './tab.service';
 
 @Directive({
   selector: '[cTabContent]',
+  standalone: true
 })
 export class TabContentRefDirective implements OnChanges, OnDestroy, OnInit {
 

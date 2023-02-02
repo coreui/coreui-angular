@@ -2,7 +2,8 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { Rounded, RoundedSize } from './rounded.type';
 
 @Directive({
-  selector: '[cRounded]'
+  selector: '[cRounded]',
+  standalone: true
 })
 export class RoundedDirective {
 

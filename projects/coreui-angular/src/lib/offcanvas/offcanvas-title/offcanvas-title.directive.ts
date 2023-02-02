@@ -1,7 +1,8 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[cOffcanvasTitle]'
+  selector: '[cOffcanvasTitle]',
+  standalone: true
 })
 export class OffcanvasTitleDirective {
 

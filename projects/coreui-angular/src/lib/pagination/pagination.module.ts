@@ -6,20 +6,19 @@ import { PageItemDirective } from './page-item/page-item.directive';
 import { PageLinkDirective } from './page-link/page-link.directive';
 
 @NgModule({
-  declarations: [
-    PaginationComponent,
-    PageItemComponent,
-    PageItemDirective,
-    PageLinkDirective
-  ],
+  declarations: [],
   exports: [
-    PaginationComponent,
     PageItemComponent,
     PageItemDirective,
-    PageLinkDirective
+    PageLinkDirective,
+    PaginationComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    PageItemComponent,
+    PageItemDirective,
+    PageLinkDirective,
+    PaginationComponent
   ]
 })
 export class PaginationModule {}

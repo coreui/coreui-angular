@@ -7,7 +7,8 @@ import {SidebarService} from '../sidebar.service';
  */
 @Directive({
   selector: '[cSidebarToggle]',
-  exportAs: 'cSidebarToggle'
+  exportAs: 'cSidebarToggle',
+  standalone: true
 })
 export class SidebarToggleDirective {
   /**

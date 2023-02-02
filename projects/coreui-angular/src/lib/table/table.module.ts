@@ -5,18 +5,17 @@ import { TableColorDirective } from './table-color.directive';
 import { TableActiveDirective } from './table-active.directive';
 
 @NgModule({
-  declarations: [
-    TableDirective,
-    TableColorDirective,
-    TableActiveDirective
-  ],
+  declarations: [],
   exports: [
     TableDirective,
     TableColorDirective,
     TableActiveDirective
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    TableDirective,
+    TableColorDirective,
+    TableActiveDirective
   ]
 })
-export class TableModule { }
+export class TableModule {}

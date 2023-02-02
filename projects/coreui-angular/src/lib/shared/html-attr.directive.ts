@@ -2,7 +2,8 @@ import {Directive, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
 
 @Directive({
   selector: '[cHtmlAttr]',
-  exportAs: 'cHtmlAttr'
+  exportAs: 'cHtmlAttr',
+  standalone: true
 })
 export class HtmlAttributesDirective implements OnInit {
 

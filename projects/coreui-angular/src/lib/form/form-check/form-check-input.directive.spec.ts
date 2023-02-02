@@ -16,7 +16,8 @@ describe('FormCheckInputDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, FormCheckInputDirective]
+      declarations: [TestComponent],
+      imports: [FormCheckInputDirective]
     });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;

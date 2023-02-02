@@ -12,15 +12,16 @@ import { CarouselState } from './carousel-state';
 import { CarouselConfig } from './carousel.config';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
     CarouselComponent,
     CarouselCaptionComponent,
     CarouselControlComponent,
     CarouselIndicatorsComponent,
     CarouselInnerComponent,
-    CarouselItemComponent,
+    CarouselItemComponent
   ],
-  imports: [CommonModule],
   providers: [CarouselService, CarouselState, CarouselConfig],
   exports: [
     CarouselComponent,
@@ -28,8 +29,8 @@ import { CarouselConfig } from './carousel.config';
     CarouselControlComponent,
     CarouselIndicatorsComponent,
     CarouselInnerComponent,
-    CarouselItemComponent,
-  ],
+    CarouselItemComponent
+  ]
 })
 export class CarouselModule {
   static forRoot(): ModuleWithProviders<CarouselModule> {

@@ -1,14 +1,16 @@
 import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 
 import { CarouselService } from '../carousel.service';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'c-carousel-item',
   templateUrl: './carousel-item.component.html',
-  styleUrls: ['./carousel-item.component.scss']
+  styleUrls: ['./carousel-item.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class CarouselItemComponent implements OnDestroy, AfterViewInit {
 

@@ -1,7 +1,8 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[cModalTitle]'
+  selector: '[cModalTitle]',
+  standalone: true
 })
 export class ModalTitleDirective {
 

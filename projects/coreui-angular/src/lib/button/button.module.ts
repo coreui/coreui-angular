@@ -5,12 +5,11 @@ import { ButtonDirective } from './button.directive';
 import { ButtonCloseDirective } from './button-close.directive';
 
 @NgModule({
-  declarations: [
-    ButtonDirective,
-    ButtonCloseDirective,
-  ],
+  declarations: [],
   imports: [
     CommonModule,
+    ButtonDirective,
+    ButtonCloseDirective,
   ],
   exports: [
     ButtonDirective,

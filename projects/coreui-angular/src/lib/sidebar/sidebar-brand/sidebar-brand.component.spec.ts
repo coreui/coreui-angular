@@ -5,17 +5,20 @@ import { Router } from '@angular/router';
 import { SidebarBrandComponent } from './sidebar-brand.component';
 import { HtmlAttributesDirective } from '../../shared';
 
-describe('HeaderBrandComponent', () => {
+describe('SidebarBrandComponent', () => {
   let component: SidebarBrandComponent;
   let fixture: ComponentFixture<SidebarBrandComponent>;
   let router: Router;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]) ],
-      declarations: [ SidebarBrandComponent, HtmlAttributesDirective ]
+      imports: [
+        RouterTestingModule.withRoutes([]),
+        HtmlAttributesDirective,
+        SidebarBrandComponent
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

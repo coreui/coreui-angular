@@ -22,10 +22,11 @@ import { TabService } from '../tab.service';
 
 @Component({
   selector: 'c-tab-content',
-  templateUrl: './tab-content.component.html',
+  template: `<ng-content></ng-content>`,
   styleUrls: ['./tab-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  exportAs: 'cTabContent'
+  exportAs: 'cTabContent',
+  standalone: true
 })
 export class TabContentComponent implements AfterContentChecked, AfterContentInit, OnChanges, OnDestroy {
 

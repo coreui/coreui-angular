@@ -4,12 +4,11 @@ import { PlaceholderDirective } from './placeholder.directive';
 import { PlaceholderAnimationDirective } from './placeholder-animation.directive';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
     PlaceholderDirective,
     PlaceholderAnimationDirective
-  ],
-  imports: [
-    CommonModule
   ],
   exports: [
     PlaceholderDirective,

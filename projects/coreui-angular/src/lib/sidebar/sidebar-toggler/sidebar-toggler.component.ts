@@ -3,6 +3,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 @Component({
   selector: 'c-sidebar-toggler',
   template: ``,
+  standalone: true
 })
 export class SidebarTogglerComponent {
 
@@ -10,4 +11,5 @@ export class SidebarTogglerComponent {
   @Input() role = 'button';
 
   @HostBinding('class.sidebar-toggler') sidebarTogglerClass = true;
+
 }

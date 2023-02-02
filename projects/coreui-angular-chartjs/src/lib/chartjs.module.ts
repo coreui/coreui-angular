@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { ChartjsComponent } from './chartjs.component';
 
 @NgModule({
-  declarations: [
+  imports: [
     ChartjsComponent
   ],
   exports: [

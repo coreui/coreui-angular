@@ -34,15 +34,20 @@ import {
 
 @NgModule({
   declarations: [
-    SidebarComponent,
-    SidebarTogglerComponent,
-    SidebarToggleDirective,
-    SidebarBrandComponent,
-    SidebarNavBadgePipe,
     SidebarNavComponent,
-    SidebarNavDividerComponent,
     SidebarNavGroupComponent,
     // SidebarNavGroupToggleDirective,
+  ],
+  imports: [
+    CommonModule,
+    RouterModule,
+    SharedModule,
+    SidebarComponent,
+    SidebarBrandComponent,
+    SidebarFooterComponent,
+    SidebarHeaderComponent,
+    SidebarNavBadgePipe,
+    SidebarNavDividerComponent,
     SidebarNavIconPipe,
     SidebarNavItemClassPipe,
     SidebarNavLabelComponent,
@@ -50,13 +55,8 @@ import {
     SidebarNavLinkContentComponent,
     SidebarNavLinkPipe,
     SidebarNavTitleComponent,
-    SidebarHeaderComponent,
-    SidebarFooterComponent,
-  ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    SharedModule,
+    SidebarToggleDirective,
+    SidebarTogglerComponent,
     IconModule
   ],
   exports: [

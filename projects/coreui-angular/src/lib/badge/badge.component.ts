@@ -5,6 +5,7 @@ import { BadgePositions, Colors, Shapes } from '../coreui.types';
   selector: 'c-badge',
   templateUrl: './badge.component.html',
   styleUrls: ['./badge.component.scss'],
+  standalone: true
 })
 export class BadgeComponent {
   /**

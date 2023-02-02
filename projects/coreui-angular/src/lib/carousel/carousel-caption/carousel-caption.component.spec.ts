@@ -8,7 +8,7 @@ describe('CarouselCaptionComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CarouselCaptionComponent ]
+      imports: [ CarouselCaptionComponent ]
     })
     .compileComponents();
   }));

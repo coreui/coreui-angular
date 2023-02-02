@@ -4,7 +4,8 @@ import { BreakpointInfix } from '../coreui.types';
 import { IRow, NumberOfColumns } from './row.type';
 
 @Directive({
-  selector: '[cRow]'
+  selector: '[cRow]',
+  standalone: true
 })
 export class RowDirective implements IRow {
   /**

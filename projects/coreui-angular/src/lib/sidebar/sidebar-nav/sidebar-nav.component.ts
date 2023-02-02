@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  forwardRef,
   HostBinding,
   Input,
   OnChanges,
@@ -21,56 +22,6 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { INavData } from './sidebar-nav';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
-
-@Component({
-  selector: 'c-sidebar-nav',
-  templateUrl: './sidebar-nav.component.html',
-  styleUrls: ['./sidebar-nav.component.scss']
-})
-export class SidebarNavComponent implements OnChanges {
-
-  constructor(
-    @Optional() public sidebar: SidebarComponent,
-    public helper: SidebarNavHelper,
-    public router: Router,
-    private renderer: Renderer2,
-    private hostElement: ElementRef,
-    private sidebarService: SidebarService
-  ) { }
-
-  @Input() navItems?: INavData[] = [];
-  @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
-  @Input() groupItems?: boolean;
-  @Input() compact?: boolean;
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'sidebar-nav': !this.groupItems,
-      compact: !this.groupItems && !!this.compact
-    };
-  }
-
-  @HostBinding('class.nav-group-items')
-  get sidebarNavGroupItemsClass(): boolean {
-    return !!this.groupItems;
-  }
-
-  @HostBinding('attr.role') role = 'nav';
-
-  public navItemsArray: INavData[] = [];
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    this.navItemsArray = Array.isArray(this.navItems) ? this.navItems.slice() : [];
-  }
-
-  public hideMobile(): void {
-    // todo: proper scrollIntoView() after NavigationEnd
-    if (this.sidebar && this.sidebar.sidebarState.mobile) {
-      this.sidebarService.toggle({ toggle: 'visible', sidebar: this.sidebar });
-    }
-  }
-}
 
 @Component({
   selector: 'c-sidebar-nav-group',
@@ -117,7 +68,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     };
   }
 
-  @ViewChild(SidebarNavComponent, { read: ElementRef }) sidebarNav!: ElementRef;
+  @ViewChild(forwardRef(() => SidebarNavComponent), { read: ElementRef }) sidebarNav!: ElementRef;
 
   navigationEndObservable: Observable<NavigationEnd>;
   navSubscription!: Subscription;
@@ -199,6 +150,55 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.display = null;
       });
+    }
+  }
+}
+
+@Component({
+  selector: 'c-sidebar-nav',
+  templateUrl: './sidebar-nav.component.html'
+})
+export class SidebarNavComponent implements OnChanges {
+
+  constructor(
+    @Optional() public sidebar: SidebarComponent,
+    public helper: SidebarNavHelper,
+    public router: Router,
+    private renderer: Renderer2,
+    private hostElement: ElementRef,
+    private sidebarService: SidebarService
+  ) { }
+
+  @Input() navItems?: INavData[] = [];
+  @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
+  @Input() groupItems?: boolean;
+  @Input() compact?: boolean;
+
+  @HostBinding('class')
+  get hostClasses(): any {
+    return {
+      'sidebar-nav': !this.groupItems,
+      compact: !this.groupItems && !!this.compact
+    };
+  }
+
+  @HostBinding('class.nav-group-items')
+  get sidebarNavGroupItemsClass(): boolean {
+    return !!this.groupItems;
+  }
+
+  @HostBinding('attr.role') role = 'nav';
+
+  public navItemsArray: INavData[] = [];
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    this.navItemsArray = Array.isArray(this.navItems) ? this.navItems.slice() : [];
+  }
+
+  public hideMobile(): void {
+    // todo: proper scrollIntoView() after NavigationEnd
+    if (this.sidebar && this.sidebar.sidebarState.mobile) {
+      this.sidebarService.toggle({ toggle: 'visible', sidebar: this.sidebar });
     }
   }
 }

@@ -3,7 +3,8 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ButtonDirective } from './button.directive';
 
 @Directive({
-  selector: '[cButtonClose]'
+  selector: '[cButtonClose]',
+  standalone: true
 })
 export class ButtonCloseDirective extends ButtonDirective {
 

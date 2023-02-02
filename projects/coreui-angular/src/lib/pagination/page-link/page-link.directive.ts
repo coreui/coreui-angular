@@ -1,7 +1,8 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[cPageLink]'
+  selector: '[cPageLink]',
+  standalone: true
 })
 export class PageLinkDirective {
 

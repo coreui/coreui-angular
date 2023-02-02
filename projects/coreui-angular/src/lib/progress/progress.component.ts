@@ -3,7 +3,8 @@ import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput 
 
 @Component({
   selector: 'c-progress',
-  template: '<ng-content></ng-content>'
+  template: '<ng-content></ng-content>',
+  standalone: true
 })
 export class ProgressComponent {
 

@@ -3,6 +3,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 @Component({
   selector: 'c-button-toolbar',
   template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class ButtonToolbarComponent {
   /**

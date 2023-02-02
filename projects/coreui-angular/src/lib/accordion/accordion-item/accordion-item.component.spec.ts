@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { AccordionItemComponent } from './accordion-item.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 import { CollapseModule } from '../../collapse';
-import { AccordionService } from '../accordion.service';
 import { AccordionButtonDirective } from '../accordion-button/accordion-button.directive';
+import { AccordionService } from '../accordion.service';
+import { AccordionItemComponent } from './accordion-item.component';
 
 describe('AccordionItemComponent', () => {
   let component: AccordionItemComponent;
@@ -12,11 +12,11 @@ describe('AccordionItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccordionItemComponent, AccordionButtonDirective ],
+      declarations: [],
       providers: [AccordionService],
-      imports: [NoopAnimationsModule, CollapseModule]
+      imports: [NoopAnimationsModule, AccordionButtonDirective, AccordionItemComponent, CollapseModule]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

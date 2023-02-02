@@ -1,12 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+import { HtmlAttributesDirective } from '../shared/html-attr.directive';
 import { IconSetService } from '../icon-set';
 import { IconSize, IIcon } from './icon.interface';
 
 @Component({
   selector: 'c-icon',
   templateUrl: './icon.component.svg',
-  styleUrls: ['./icon.component.scss']
+  styleUrls: ['./icon.component.scss'],
+  standalone: true,
+  imports: [CommonModule, HtmlAttributesDirective]
 })
 export class IconComponent implements IIcon, AfterViewInit {
 

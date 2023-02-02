@@ -2,16 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from './avatar.component';
 
-
 @NgModule({
-  declarations: [
-    AvatarComponent
-  ],
+  declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    AvatarComponent
   ],
   exports: [
     AvatarComponent
   ]
 })
-export class AvatarModule { }
+export class AvatarModule {}

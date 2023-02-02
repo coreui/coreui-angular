@@ -4,16 +4,8 @@ import { ButtonGroupComponent } from './button-group/button-group.component';
 import { ButtonToolbarComponent } from './button-toolbar/button-toolbar.component';
 
 @NgModule({
-  declarations: [
-    ButtonGroupComponent,
-    ButtonToolbarComponent
-  ],
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    ButtonGroupComponent,
-    ButtonToolbarComponent
-  ]
+  declarations: [],
+  imports: [CommonModule, ButtonGroupComponent, ButtonToolbarComponent],
+  exports: [ButtonGroupComponent, ButtonToolbarComponent]
 })
-export class ButtonGroupModule { }
+export class ButtonGroupModule {}

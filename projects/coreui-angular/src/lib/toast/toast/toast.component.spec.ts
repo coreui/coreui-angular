@@ -10,10 +10,9 @@ describe('ToastComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule],
-      declarations: [ ToastComponent, ToastCloseDirective ]
+      imports: [NoopAnimationsModule, ToastComponent, ToastCloseDirective]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

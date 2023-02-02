@@ -1,14 +1,17 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { CommonModule } from '@angular/common';
 
 import { Colors } from '../../coreui.types';
-import { CardComponent } from '../../card';
+import { CardBodyComponent, CardComponent } from '../../card';
 
 @Component({
   selector: 'c-widget-stat-b',
   templateUrl: './widget-stat-b.component.html',
   styleUrls: ['./widget-stat-b.component.scss'],
-  exportAs: 'cWidgetStatB'
+  exportAs: 'cWidgetStatB',
+  standalone: true,
+  imports: [CommonModule, CardBodyComponent]
 })
 export class WidgetStatBComponent extends CardComponent {
 

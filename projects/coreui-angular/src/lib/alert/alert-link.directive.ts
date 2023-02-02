@@ -1,7 +1,8 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[cAlertLink]'
+  selector: '[cAlertLink]',
+  standalone: true
 })
 export class AlertLinkDirective {
 

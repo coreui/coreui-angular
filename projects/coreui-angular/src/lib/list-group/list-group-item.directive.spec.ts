@@ -18,7 +18,8 @@ describe('ListGroupItemDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ListGroupItemDirective, TestComponent],
+      declarations: [TestComponent],
+      imports: [ListGroupItemDirective],
       providers: [{ provide: ElementRef, useClass: MockElementRef }]
     })
     fixture = TestBed.createComponent(TestComponent);

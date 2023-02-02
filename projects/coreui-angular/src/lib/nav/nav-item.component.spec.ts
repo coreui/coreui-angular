@@ -8,7 +8,7 @@ describe('NavItemComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavItemComponent ]
+      imports: [ NavItemComponent ]
     })
     .compileComponents();
   }));
