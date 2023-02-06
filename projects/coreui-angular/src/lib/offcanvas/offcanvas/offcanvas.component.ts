@@ -240,8 +240,10 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.#scrollbarWidth = this.backdropService.scrollbarWidth;
     this.stateToggleSubscribe();
-    // hotfix to avoid end offcanvas flicker on first render
-    this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'flex');
+    setTimeout(() => {
+      // hotfix to avoid offcanvas flicker on the first render
+      this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'flex');
+    })
   }
 
   ngOnDestroy(): void {
