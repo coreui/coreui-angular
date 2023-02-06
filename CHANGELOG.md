@@ -2,6 +2,12 @@
 
 ---
 
+#### `4.3.11`
+
+- fix(offcanvas): avoid flicker on the first render
+
+---
+
 #### `4.3.10`
 
 - feat(offcanvas): add responsive variations
