@@ -2,6 +2,15 @@
 
 ---
 
+#### `4.3.15` 
+
+- `@coreui/angular-chartjs`
+  - feat(c-chart): emit chartRef on new Chart()
+  - feat(c-chart): standalone component
+  - chore: dependencies update
+
+---
+
 #### `4.3.11`
 
 - fix(offcanvas): avoid flicker on the first render
