@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "4.2.29",
+  "version": "4.2.33",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2022 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -46,7 +46,7 @@
     "@angular/platform-browser": "^14.2.12",
     "@angular/platform-browser-dynamic": "^14.2.12",
     "@angular/router": "^14.2.12",
-    "@coreui/chartjs": "^3.0.0",
+    "@coreui/chartjs": "^3.1.1",
     "@popperjs/core": "~2.11.6",
     "chart.js": "^3.9.1",
     "lodash-es": "^4.17.21",
@@ -68,9 +68,9 @@
     "@types/jasmine": "~4.3.1",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^16.18.12",
-    "@typescript-eslint/eslint-plugin": "^5.50.0",
-    "@typescript-eslint/parser": "^5.50.0",
-    "eslint": "~8.33.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
+    "eslint": "~8.34.0",
     "jasmine-core": "^4.5.0",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
@@ -78,7 +78,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "^2.0.0",
     "ng-packagr": "^14.2.2",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.4",
     "typescript": "~4.7.4"
   },
   "keywords": [
