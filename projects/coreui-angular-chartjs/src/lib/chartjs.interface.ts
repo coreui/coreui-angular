@@ -77,4 +77,9 @@ export interface IChartjs<TType extends ChartType = ChartType, TData = DefaultDa
    */
   getElementsAtEvent: EventEmitter<any>;
 
+  /**
+   * Emits the chart reference
+   */
+  chartRef: EventEmitter<any>;
+
 }
