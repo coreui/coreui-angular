@@ -1,5 +1,7 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -17,7 +19,7 @@ import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput 
 
 import merge from 'lodash-es/merge';
 
-import { Chart, ChartConfiguration, ChartOptions, ChartType, DefaultDataPoint, registerables } from 'chart.js';
+import { Chart, ChartConfiguration, ChartType, DefaultDataPoint, registerables } from 'chart.js';
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
 
 Chart.register(...registerables);
@@ -28,7 +30,9 @@ let nextId = 0;
   selector: 'c-chart',
   templateUrl: './chartjs.component.html',
   styleUrls: ['./chartjs.component.scss'],
-  exportAs: 'cChart'
+  exportAs: 'cChart',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChartjsComponent<TType extends ChartType = ChartType, TData = DefaultDataPoint<TType>, TLabel = unknown> implements AfterViewInit, OnDestroy, OnChanges {
 
@@ -82,9 +86,11 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
 
   @Input() wrapper = true;
 
-  @Output() getDatasetAtEvent = new EventEmitter<any>();
-  @Output() getElementAtEvent = new EventEmitter<any>();
-  @Output() getElementsAtEvent = new EventEmitter<any>();
+  @Output() readonly getDatasetAtEvent = new EventEmitter<any>();
+  @Output() readonly getElementAtEvent = new EventEmitter<any>();
+  @Output() readonly getElementsAtEvent = new EventEmitter<any>();
+
+  @Output() readonly chartRef = new EventEmitter<any>();
 
   @ViewChild('canvasElement') canvasElement!: ElementRef;
 
@@ -100,12 +106,12 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
   constructor(
     private elementRef: ElementRef,
     private ngZone: NgZone,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngAfterViewInit(): void {
     this.chartRender();
-    // this.chartUpdate();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -118,8 +124,10 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     this.chartDestroy();
   }
 
-  public handleOnClick($event: MouseEvent) {
-    if (!this.chart) return;
+  public handleClick($event: MouseEvent) {
+    if (!this.chart) {
+      return;
+    }
 
     const datasetAtEvent = this.chart.getElementsAtEventForMode($event, 'dataset', { intersect: true }, false);
     this.getDatasetAtEvent.emit(datasetAtEvent);
@@ -133,10 +141,13 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
 
   public chartDestroy() {
     this.chart?.destroy();
+    this.chartRef.emit(undefined);
   }
 
   public chartRender() {
-    if (!this.canvasElement) return;
+    if (!this.canvasElement) {
+      return;
+    }
 
     const ctx: CanvasRenderingContext2D = this.canvasElement.nativeElement.getContext('2d');
 
@@ -146,13 +157,17 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
         setTimeout(() => {
           this.chart = new Chart(ctx, config);
           this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
+          this.changeDetectorRef.markForCheck();
+          this.chartRef.emit(this.chart);
         });
       }
     });
   }
 
   chartUpdate() {
-    if (!this.chart) return;
+    if (!this.chart) {
+      return;
+    }
 
     if (this.redraw) {
       this.chartDestroy();
@@ -165,9 +180,7 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     const config = this.chartConfig();
 
     if (this.options) {
-      // todo
-      // @ts-ignore
-      Object.assign(this.chart.options, config.options);
+      Object.assign(this.chart.options ?? {}, config.options ?? {});
     }
 
     if (!this.chart.config.data) {
@@ -176,12 +189,8 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     }
 
     if (this.chart) {
-      // todo
-      // @ts-ignore
-      Object.assign(this.chart.config.options, config.options);
-      // todo
-      // @ts-ignore
-      Object.assign(this.chart.config.plugins, config.plugins);
+      Object.assign(this.chart.config.options ?? {}, config.options ?? {});
+      Object.assign(this.chart.config.plugins ?? [], config.plugins ?? []);
       Object.assign(this.chart.config.data, config.data);
     }
 
@@ -192,6 +201,7 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     setTimeout(() => {
       this.ngZone.runOutsideAngular(() => {
         this.chart?.update();
+        this.changeDetectorRef.markForCheck();
       });
     });
   }

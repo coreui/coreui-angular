@@ -29,7 +29,7 @@ describe('ChartjsComponent', () => {
     Chart.register(...registerables);
 
     await TestBed.configureTestingModule({
-      declarations: [ChartjsComponent]
+      imports: [ChartjsComponent]
     })
       .compileComponents();
   });
@@ -74,10 +74,11 @@ describe('ChartjsComponent', () => {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
       datasets: [
         { ...data.datasets[0], data: [42, 88, 42, 66, 77] },
-        { ...data.datasets[0], data: [55, 44, 55, 66, 22] }
+        { ...data.datasets[1], data: [55, 44, 55, 66, 22] }
       ]
     };
     fixture.detectChanges();
+    component.chartUpdate();
     tick();
     expect(component.chart?.config?.data.labels?.length).toBe(5);
     expect(component.chart?.config?.data.datasets[1]?.data.length).toBe(5);
