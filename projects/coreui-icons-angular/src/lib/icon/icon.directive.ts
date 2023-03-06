@@ -6,7 +6,8 @@ import { IconSize, IIcon } from './icon.interface';
 
 @Directive({
   selector: 'svg[cIcon]',
-  exportAs: 'cIcon'
+  exportAs: 'cIcon',
+  standalone: true
 })
 export class IconDirective implements IIcon {
 

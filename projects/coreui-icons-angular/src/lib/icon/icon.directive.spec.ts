@@ -11,15 +11,14 @@ import { cilList } from '@coreui/icons';
     <svg [cIcon]="this.iconSet.icons.cilList" size="lg" class="test" title="Test"></svg>`
 })
 class TestComponent {
-  @ViewChild(IconDirective, {read: IconDirective}) iconRef!: IconDirective;
-
   constructor(
     public iconSet: IconSetService
   ) {
-    this.iconSet.icons = {cilList};
+    this.iconSet.icons = { cilList };
   }
-}
 
+  @ViewChild(IconDirective, { read: IconDirective }) iconRef!: IconDirective;
+}
 
 describe('IconDirective', () => {
   let component: TestComponent;
@@ -31,8 +30,9 @@ describe('IconDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, IconDirective],
-      providers: [IconSetService]
+      declarations: [TestComponent],
+      providers: [IconSetService],
+      imports: [IconDirective]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
