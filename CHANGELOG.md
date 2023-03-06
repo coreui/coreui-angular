@@ -4,7 +4,7 @@
 
 #### `4.3.16`
 
-- `@coreui/angular-pro`
+- `@coreui/angular`
   - chore: dependencies update
 - `@coreui/angular-chartjs`
   - chore: dependencies update
