@@ -2,6 +2,18 @@
 
 ---
 
+#### `4.3.16`
+
+- `@coreui/angular-pro`
+  - chore: dependencies update
+- `@coreui/angular-chartjs`
+  - chore: dependencies update
+- `@coreui/icons-angular`
+  - feat(cIcon): standalone directive
+  - chore: dependencies update
+
+---
+
 #### `4.3.15` 
 
 - `@coreui/angular-chartjs`
