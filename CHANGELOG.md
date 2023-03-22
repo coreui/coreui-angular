@@ -2,6 +2,14 @@
 
 ---
 
+#### `4.3.17`
+
+- `@coreui/angular`
+- `@coreui/angular-chartjs`
+- `@coreui/icons-angular`
+  - chore: dependencies update
+---
+
 #### `4.3.16`
 
 - `@coreui/angular`
