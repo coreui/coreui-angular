@@ -8,15 +8,15 @@ describe('AppSidebarNavTitleComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AppSidebarNavTitleComponent],
+      imports: [AppSidebarNavTitleComponent],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppSidebarNavTitleComponent);
     component = fixture.componentInstance;
-    component.item = { title: true, name: 'title'};
+    component.item = { title: true, name: 'title' };
     fixture.detectChanges();
   });
 

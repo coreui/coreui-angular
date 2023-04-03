@@ -12,15 +12,15 @@ describe('AppSidebarNavLinkComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
+        RouterTestingModule,
         AppSidebarNavLinkComponent,
         AppSidebarNavLinkPipe,
         AppSidebarNavBadgePipe,
       ],
-      imports: [RouterTestingModule],
       schemas: [NO_ERRORS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

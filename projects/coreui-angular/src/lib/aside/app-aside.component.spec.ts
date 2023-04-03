@@ -8,9 +8,9 @@ describe('AppAsideComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppAsideComponent ]
+      imports: [AppAsideComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

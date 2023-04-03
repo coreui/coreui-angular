@@ -1,37 +1,43 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
-import {Observable, Subscription} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { Observable, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
-import {SidebarNavHelper} from '../app-sidebar-nav.service';
-import {INavData} from '../app-sidebar-nav';
+import { SidebarNavHelper } from '../app-sidebar-nav.service';
+import { INavData } from '../app-sidebar-nav';
+import { AppSidebarNavIconPipe } from './app-sidebar-nav-icon.pipe';
+import { AppSidebarNavBadgePipe } from './app-sidebar-nav-badge.pipe';
+import { AppSidebarNavLinkPipe } from './app-sidebar-nav-link.pipe';
+import { HtmlAttributesDirective } from '../../shared';
 
 @Component({
   selector: 'app-sidebar-nav-link-content, cui-sidebar-nav-link-content',
   template: `
     <ng-container *ngIf="true">
       <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
-      <ng-container>{{item?.name}}</ng-container>
-      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item?.badge?.text }}</span>
+      <ng-container>{{item.name}}</ng-container>
+      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge?.text }}</span>
     </ng-container>
   `,
-  providers: [ SidebarNavHelper ]
+  providers: [SidebarNavHelper],
+  standalone: true,
+  imports: [NgIf, NgClass, AppSidebarNavIconPipe, AppSidebarNavBadgePipe]
 })
-export class AppSidebarNavLinkContentComponent implements OnInit, OnDestroy {
+export class AppSidebarNavLinkContentComponent {
   @Input() item: INavData = {};
 
   constructor(
     public helper: SidebarNavHelper
   ) { }
-
-  ngOnInit() {}
-  ngOnDestroy() {}
 }
 
 @Component({
   selector: 'app-sidebar-nav-link, cui-sidebar-nav-link',
   templateUrl: './app-sidebar-nav-link.component.html',
-  providers: [ SidebarNavHelper ]
+  providers: [SidebarNavHelper],
+  standalone: true,
+  imports: [NgSwitch, NgSwitchCase, NgSwitchDefault, NgClass, AppSidebarNavLinkPipe, HtmlAttributesDirective, AppSidebarNavLinkContentComponent, RouterModule]
 })
 export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
 
@@ -67,7 +73,7 @@ export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // @ts-ignore
-    this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url)) ;
+    this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url));
     this.linkType = this.getLinkType();
     this.href = this.isDisabled() ? '' : (this.item.href || this.url);
     this.linkActive = this.router.url.split(/[?#(;]/)[0] === this.href.split(/[?#(;]/)[0];

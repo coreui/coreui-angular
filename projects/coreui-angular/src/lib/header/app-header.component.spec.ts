@@ -10,10 +10,9 @@ describe('AppHeaderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
-      declarations: [ AppHeaderComponent, SidebarToggleDirective, AsideToggleDirective, HtmlAttributesDirective ]
+      imports: [RouterTestingModule.withRoutes([]), AppHeaderComponent, SidebarToggleDirective, AsideToggleDirective, HtmlAttributesDirective]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

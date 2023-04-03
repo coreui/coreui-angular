@@ -1,9 +1,10 @@
-import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { DOCUMENT, NgClass, NgIf } from '@angular/common';
 
-import {AppBreadcrumbService} from './app-breadcrumb.service';
-import {Replace} from '../shared';
+import { AppBreadcrumbService } from './app-breadcrumb.service';
+import { Replace } from '../shared';
 import { Observable } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -16,7 +17,9 @@ import { Observable } from 'rxjs';
         <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</span>
       </li>
     </ng-template>
-  `
+  `,
+  standalone: true,
+  imports: [NgIf, NgClass, RouterLink]
 })
 export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed?: boolean;
@@ -24,7 +27,7 @@ export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   private readonly fixedClass = 'breadcrumb-fixed';
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     public service: AppBreadcrumbService,
     public el: ElementRef

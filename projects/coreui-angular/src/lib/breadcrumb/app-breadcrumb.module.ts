@@ -1,5 +1,5 @@
-import { CommonModule} from '@angular/common';
-import { NgModule, ModuleWithProviders} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 // App Breadcrumb Component
@@ -9,9 +9,8 @@ import { CuiBreadcrumbComponent } from './cui-breadcrumb.component';
 
 // @dynamic
 @NgModule({
-  imports: [ CommonModule, RouterModule ],
-  exports: [ AppBreadcrumbComponent, CuiBreadcrumbComponent ],
-  declarations: [ AppBreadcrumbComponent, CuiBreadcrumbComponent ]
+  imports: [AppBreadcrumbComponent, CuiBreadcrumbComponent],
+  exports: [AppBreadcrumbComponent, CuiBreadcrumbComponent],
 })
 export class AppBreadcrumbModule {
   static forRoot(config?: any): ModuleWithProviders<AppBreadcrumbModule> {

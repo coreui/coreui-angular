@@ -1,13 +1,16 @@
-import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
-
-import {AppBreadcrumbService} from './app-breadcrumb.service';
+import { Component, Inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { DOCUMENT, NgIf, NgClass, AsyncPipe, NgForOf } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
+
+import { AppBreadcrumbService } from './app-breadcrumb.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'cui-breadcrumb',
-  templateUrl: './cui-breadcrumb.component.html'
+  templateUrl: './cui-breadcrumb.component.html',
+  standalone: true,
+  imports: [NgIf, NgClass, RouterLink, AsyncPipe, NgForOf]
 })
 export class CuiBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed?: boolean;
@@ -16,7 +19,7 @@ export class CuiBreadcrumbComponent implements OnInit, OnDestroy {
   private readonly fixedClass = 'breadcrumb-fixed';
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     public service: AppBreadcrumbService,
   ) { }

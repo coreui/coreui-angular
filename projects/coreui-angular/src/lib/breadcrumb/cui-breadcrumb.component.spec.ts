@@ -9,10 +9,9 @@ describe('CuiBreadcrumbComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
-      declarations: [ CuiBreadcrumbComponent ]
+      imports: [RouterTestingModule.withRoutes([]), CuiBreadcrumbComponent],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -9,7 +8,7 @@ import { AppSidebarFooterComponent } from './app-sidebar-footer.component';
 import { AppSidebarFormComponent } from './app-sidebar-form.component';
 import { AppSidebarHeaderComponent } from './app-sidebar-header.component';
 import { AppSidebarMinimizerComponent } from './app-sidebar-minimizer.component';
-import { AppSidebarService  } from './app-sidebar.service';
+import { AppSidebarService } from './app-sidebar.service';
 
 // App SidebarNav Component
 import { NavDropdownDirective, NavDropdownToggleDirective } from './app-sidebar-nav.directive';
@@ -28,8 +27,27 @@ import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-it
 
 @NgModule({
   imports: [
-    CommonModule,
     RouterModule,
+    AppSidebarComponent,
+    AppSidebarFooterComponent,
+    AppSidebarFormComponent,
+    AppSidebarHeaderComponent,
+    AppSidebarMinimizerComponent,
+    AppSidebarMinimizerComponent,
+    AppSidebarNavComponent,
+    NavDropdownDirective,
+    AppSidebarNavItemsComponent,
+    AppSidebarNavDividerComponent,
+    AppSidebarNavDropdownComponent,
+    AppSidebarNavLinkContentComponent,
+    AppSidebarNavTitleComponent,
+    AppSidebarNavLabelComponent,
+    AppSidebarNavIconPipe,
+    AppSidebarNavBadgePipe,
+    AppSidebarNavLinkPipe,
+    AppSidebarNavItemClassPipe,
+    AppSidebarNavLinkComponent,
+    NavDropdownToggleDirective,
     LayoutModule
   ],
   exports: [
@@ -48,28 +66,6 @@ import { AppSidebarNavItemClassPipe } from './app-sidebar-nav/app-sidebar-nav-it
     // AppSidebarNavTitleComponent,
     // NavDropdownDirective,
     // NavDropdownToggleDirective,
-  ],
-  declarations: [
-    AppSidebarFooterComponent,
-    AppSidebarFormComponent,
-    AppSidebarHeaderComponent,
-    AppSidebarMinimizerComponent,
-    AppSidebarMinimizerComponent,
-    AppSidebarComponent,
-    AppSidebarNavItemsComponent,
-    AppSidebarNavComponent,
-    AppSidebarNavDividerComponent,
-    AppSidebarNavDropdownComponent,
-    AppSidebarNavLinkComponent,
-    AppSidebarNavLinkContentComponent,
-    AppSidebarNavTitleComponent,
-    NavDropdownDirective,
-    NavDropdownToggleDirective,
-    AppSidebarNavLabelComponent,
-    AppSidebarNavIconPipe,
-    AppSidebarNavBadgePipe,
-    AppSidebarNavLinkPipe,
-    AppSidebarNavItemClassPipe
   ],
   providers: [
     SidebarNavHelper,

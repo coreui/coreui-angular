@@ -3,6 +3,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppSidebarNavComponent } from './app-sidebar-nav.component';
+import { SidebarNavHelper } from './app-sidebar-nav.service';
 
 describe('AppSidebarNavComponent', () => {
   let component: AppSidebarNavComponent;
@@ -10,11 +11,11 @@ describe('AppSidebarNavComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AppSidebarNavComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, AppSidebarNavComponent],
       schemas: [NO_ERRORS_SCHEMA],
+      providers: [SidebarNavHelper]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

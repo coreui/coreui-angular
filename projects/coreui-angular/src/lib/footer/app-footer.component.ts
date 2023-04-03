@@ -1,9 +1,10 @@
-import {Component, HostBinding, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import { Component, HostBinding, Inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-footer, cui-footer',
-  template: `<ng-content></ng-content>`
+  template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class AppFooterComponent implements OnInit, OnDestroy {
   @Input() fixed?: boolean;
@@ -13,7 +14,7 @@ export class AppFooterComponent implements OnInit, OnDestroy {
   @HostBinding('class.app-footer') appFooterClass = true;
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
   ) { }
 

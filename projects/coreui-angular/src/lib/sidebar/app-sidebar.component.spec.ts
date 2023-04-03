@@ -9,10 +9,9 @@ describe('AppSidebarComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
-      declarations: [ AppSidebarComponent ],
+      imports: [RouterTestingModule.withRoutes([]), AppSidebarComponent],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

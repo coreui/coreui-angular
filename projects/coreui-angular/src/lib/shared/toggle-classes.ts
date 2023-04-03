@@ -1,5 +1,5 @@
-import {Inject, Injectable, Renderer2} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import { Inject, Injectable, Renderer2 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 const RemoveClasses = (NewClassNames: string[]) => {
   const MatchClasses = NewClassNames.map((Class) => document.body.classList.contains(Class));
@@ -21,9 +21,9 @@ export const ToggleClasses = (Toggle: string, ClassNames: string[]) => {
 export class ClassToggler {
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
-  ) {}
+  ) { }
 
   removeClasses(NewClassNames: string[]) {
     const MatchClasses = NewClassNames.map((Class) => this.document.body.classList.contains(Class));

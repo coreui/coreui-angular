@@ -1,9 +1,22 @@
-import {Component, Inject, Input, Renderer2} from '@angular/core';
-import {Router} from '@angular/router';
-import {DOCUMENT} from '@angular/common';
+import { Component, Inject, Input, Renderer2, forwardRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { DOCUMENT, NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 
-import {SidebarNavHelper} from '../app-sidebar-nav.service';
-import {INavData} from '../app-sidebar-nav';
+import { SidebarNavHelper } from '../app-sidebar-nav.service';
+import { INavData } from '../app-sidebar-nav';
+import { HtmlAttributesDirective } from '../../shared';
+import { AppSidebarNavItemClassPipe } from './app-sidebar-nav-item-class.pipe';
+import { AppSidebarNavBadgePipe } from './app-sidebar-nav-badge.pipe';
+import { AppSidebarNavIconPipe } from './app-sidebar-nav-icon.pipe';
+import { AppSidebarNavLinkComponent } from './app-sidebar-nav-link.component';
+import { AppSidebarNavLabelComponent } from './app-sidebar-nav-label.component';
+import { AppSidebarNavTitleComponent } from './app-sidebar-nav-title.component';
+import { AppSidebarNavDividerComponent } from './app-sidebar-nav-divider.component';
+import { NavDropdownToggleDirective, NavDropdownDirective } from '../app-sidebar-nav.directive';
+
+
+// lightweight injection token
+export abstract class DropdownToken { }
 
 @Component({
   selector: 'app-sidebar-nav-items, cui-sidebar-nav-items',
@@ -49,7 +62,25 @@ import {INavData} from '../app-sidebar-nav';
         </app-sidebar-nav-link>
       </ng-container>
     </ng-container>
-  `
+  `,
+  standalone: true,
+  // providers: [{provide: DropdownToken, useExisting: forwardRef(()=> AppSidebarNavDropdownComponent)}],
+  imports: [
+    NgFor,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    NgClass,
+    HtmlAttributesDirective,
+    AppSidebarNavItemClassPipe,
+    forwardRef(() => AppSidebarNavDropdownComponent),
+    AppSidebarNavLinkComponent,
+    AppSidebarNavLabelComponent,
+    AppSidebarNavTitleComponent,
+    AppSidebarNavDividerComponent,
+    NavDropdownToggleDirective,
+    NavDropdownDirective
+  ],
 })
 export class AppSidebarNavItemsComponent {
 
@@ -64,11 +95,12 @@ export class AppSidebarNavItemsComponent {
   }
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     public router: Router,
-    public helper: SidebarNavHelper
-  ) {}
+    public helper: SidebarNavHelper, 
+
+  ) { }
 
   public hideMobile() {
     if (this.document.body.classList.contains('sidebar-show')) {
@@ -96,7 +128,9 @@ export class AppSidebarNavItemsComponent {
     '.nav-dropdown-toggle { cursor: pointer; }',
     '.nav-dropdown-items { display: block; }'
   ],
-  providers: [ SidebarNavHelper ]
+  providers: [SidebarNavHelper],
+  standalone: true,
+  imports: [NgIf, NgClass, HtmlAttributesDirective, AppSidebarNavBadgePipe, AppSidebarNavIconPipe, AppSidebarNavItemsComponent, NavDropdownToggleDirective]
 })
 export class AppSidebarNavDropdownComponent {
   @Input() item: INavData = {};

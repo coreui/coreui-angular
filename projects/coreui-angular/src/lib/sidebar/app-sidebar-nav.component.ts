@@ -2,10 +2,13 @@ import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angula
 import { Router } from '@angular/router';
 
 import { INavData } from './app-sidebar-nav';
+import { AppSidebarNavItemsComponent } from './app-sidebar-nav/app-sidebar-nav-items.component';
 
 @Component({
   selector: 'app-sidebar-nav, cui-sidebar-nav',
-  templateUrl: './app-sidebar-nav.component.html'
+  templateUrl: './app-sidebar-nav.component.html',
+  standalone: true,
+  imports: [AppSidebarNavItemsComponent]
 })
 export class AppSidebarNavComponent implements OnChanges {
   @Input() navItems: INavData[] = [];

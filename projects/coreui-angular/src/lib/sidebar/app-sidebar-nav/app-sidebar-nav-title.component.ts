@@ -1,9 +1,10 @@
-import {Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import { INavAttributes, INavData } from '../app-sidebar-nav';
 
 @Component({
   selector: 'app-sidebar-nav-title, cui-sidebar-nav-title',
   template: '',
+  standalone: true
 })
 export class AppSidebarNavTitleComponent implements OnInit {
   @Input() item: INavData = {};
@@ -36,7 +37,7 @@ export class AppSidebarNavTitleComponent implements OnInit {
   private addAttribs(attribs: INavAttributes, element: any) {
     if (attribs) {
       for (const attr in attribs) {
-        if (attr === 'style' && typeof(attribs[attr]) === 'object' ) {
+        if (attr === 'style' && typeof (attribs[attr]) === 'object') {
           this.setStyle(attribs[attr], element);
         } else if (attr === 'class') {
           this.addClass(attribs[attr], element);
@@ -49,18 +50,18 @@ export class AppSidebarNavTitleComponent implements OnInit {
 
   private setStyle(styles: { [x: string]: any; }, el: any) {
     for (const style in styles) {
-      this.renderer.setStyle(el, style, styles[style] );
+      this.renderer.setStyle(el, style, styles[style]);
     }
   }
 
   private addClass(classes: string | string[], el: any) {
     const classArray = (Array.isArray(classes) ? classes : classes.split(' '));
     classArray.filter((element) => element.length > 0).forEach(element => {
-      this.renderer.addClass(el, element );
+      this.renderer.addClass(el, element);
     });
   }
 
   private setAttrib(key: string, value: string, el: any) {
-    this.renderer.setAttribute(el, key, value );
+    this.renderer.setAttribute(el, key, value);
   }
 }

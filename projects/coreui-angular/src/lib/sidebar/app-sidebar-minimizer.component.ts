@@ -1,10 +1,11 @@
-import {Component, HostBinding, HostListener, Input} from '@angular/core';
+import { Component, HostBinding, HostListener, Input } from '@angular/core';
 
 import { AppSidebarService } from './app-sidebar.service';
 
 @Component({
   selector: 'app-sidebar-minimizer, cui-sidebar-minimizer',
-  template: ``
+  template: ``,
+  standalone: true
 })
 export class AppSidebarMinimizerComponent {
 
@@ -14,7 +15,7 @@ export class AppSidebarMinimizerComponent {
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
-    this.sidebarService.toggle({minimize: 'toggle'});
+    this.sidebarService.toggle({ minimize: 'toggle' });
   }
 
   constructor(

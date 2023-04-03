@@ -1,11 +1,12 @@
-import {Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import { Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 import { asideMenuCssClasses } from '../shared';
 
 @Component({
   selector: 'app-aside, cui-aside',
-  template: `<ng-content></ng-content>`
+  template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class AppAsideComponent implements OnInit, OnDestroy {
   @Input() display: any;
@@ -17,7 +18,7 @@ export class AppAsideComponent implements OnInit, OnDestroy {
   @HostBinding('class.aside-menu') asideMenuClass = true;
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
   ) { }
 
@@ -44,7 +45,7 @@ export class AppAsideComponent implements OnInit, OnDestroy {
   }
 
   displayBreakpoint(display: any = this.display): void {
-    if (display !== false ) {
+    if (display !== false) {
       const cssClass = this.display ? `aside-menu-${this.display}-show` : asideMenuCssClasses[0];
       this.renderer.addClass(this.document.body, cssClass);
     }

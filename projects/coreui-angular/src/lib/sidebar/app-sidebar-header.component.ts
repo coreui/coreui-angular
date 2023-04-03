@@ -1,8 +1,9 @@
-import {Component, HostBinding} from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar-header, cui-sidebar-header',
-  template: `<ng-content></ng-content>`
+  template: `<ng-content></ng-content>`,
+  standalone: true
 })
 export class AppSidebarHeaderComponent {
 

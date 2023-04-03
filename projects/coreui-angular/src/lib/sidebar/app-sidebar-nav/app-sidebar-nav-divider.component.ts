@@ -1,14 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { INavData } from '../app-sidebar-nav';
 
 @Component({
   selector: 'app-sidebar-nav-divider, cui-sidebar-nav-divider',
-  template: ``
+  template: ``,
+  standalone: true
 })
-export class AppSidebarNavDividerComponent implements OnInit {
+export class AppSidebarNavDividerComponent {
   @Input() item?: INavData;
 
-  constructor() {}
-
-  ngOnInit() {}
+  constructor() { }
 }

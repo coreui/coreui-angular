@@ -1,10 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {SidebarNavHelper} from '../app-sidebar-nav.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgIf, NgClass } from '@angular/common';
+
+import { HtmlAttributesDirective } from '../../shared';
+import { SidebarNavHelper } from '../app-sidebar-nav.service';
 import { INavData } from '../app-sidebar-nav';
+import { AppSidebarNavBadgePipe } from './app-sidebar-nav-badge.pipe';
 
 @Component({
   selector: 'app-sidebar-nav-label, cui-sidebar-nav-label',
-  templateUrl: './app-sidebar-nav-label.component.html'
+  templateUrl: './app-sidebar-nav-label.component.html',
+  standalone: true,
+  imports: [AppSidebarNavBadgePipe, HtmlAttributesDirective, NgIf, NgClass]
 })
 export class AppSidebarNavLabelComponent implements OnInit {
   @Input() item: INavData = {};

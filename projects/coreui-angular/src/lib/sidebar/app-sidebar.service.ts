@@ -13,7 +13,7 @@ export class AppSidebarService {
   private events = new BehaviorSubject<ISidebarAction>({});
   events$ = this.events.asObservable();
 
-  constructor() {}
+  constructor() { }
 
   toggle(action: ISidebarAction) {
     this.events.next(action);

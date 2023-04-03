@@ -1,9 +1,13 @@
-import {Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding} from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding } from '@angular/core';
+import { DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { AsideToggleDirective, HtmlAttributesDirective, SidebarToggleDirective } from '../shared';
 
 @Component({
   selector: 'app-header, cui-header',
-  templateUrl: './app-header.component.html'
+  templateUrl: './app-header.component.html',
+  standalone: true,
+  imports: [RouterLink, NgIf, NgClass, SidebarToggleDirective, HtmlAttributesDirective, AsideToggleDirective]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
 
@@ -12,7 +16,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   @Input() navbarBrand: any;
   @Input() navbarBrandFull: any;
   @Input() navbarBrandMinimized: any;
-  @Input() navbarBrandText: any = {icon: '🅲', text: '🅲 CoreUI'};
+  @Input() navbarBrandText: any = { icon: '🅲', text: '🅲 CoreUI' };
   @Input() navbarBrandHref = ''; // deprecated, use navbarBrandRouterLink instead
   @Input() navbarBrandRouterLink: any[] | string = '';
 
@@ -36,7 +40,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   asideTogglerMobileClass = 'd-lg-none';
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
   ) { }
 

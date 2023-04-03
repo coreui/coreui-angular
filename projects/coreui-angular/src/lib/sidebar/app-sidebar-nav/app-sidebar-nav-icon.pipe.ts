@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'appSidebarNavIcon'
+  name: 'appSidebarNavIcon',
+  standalone: true
 })
 export class AppSidebarNavIconPipe implements PipeTransform {
 

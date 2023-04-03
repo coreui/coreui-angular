@@ -10,11 +10,11 @@ describe('AppSidebarNavLabelComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AppSidebarNavLabelComponent, AppSidebarNavBadgePipe],
+      imports: [AppSidebarNavLabelComponent, AppSidebarNavBadgePipe],
       providers: [SidebarNavHelper],
       schemas: [NO_ERRORS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
