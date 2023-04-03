@@ -1,5 +1,9 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.14.1`
+
+- update to `Angular 14.3`
+
 ##### `v2.14.0`
 
 - update to `Angular 14`
