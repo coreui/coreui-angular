@@ -21,6 +21,27 @@ export const navItems: INavData[] = [
     attributes: { disabled: true },
   },
   {
+    title: true,
+    name: 'Components'
+  },
+  {
+    name: 'Buttons',
+    url: '/buttons',
+    icon: 'icon-cursor',
+    children: [
+      {
+        name: 'Buttons',
+        url: '/buttons/buttons',
+        icon: 'icon-cursor'
+      },
+      {
+        name: 'Brand Buttons',
+        url: '/buttons/brand-buttons',
+        icon: 'icon-cursor'
+      }
+    ]
+  },
+  {
     name: 'Download CoreUI',
     url: 'http://coreui.io/angular/',
     icon: 'icon-cloud-download',
