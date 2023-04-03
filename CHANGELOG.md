@@ -1,5 +1,10 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.15.0`
+
+- update to `Angular 15`
+- feat: standalone components
+
 ##### `v2.14.1`
 
 - update to `Angular 14.3`

@@ -1,6 +1,6 @@
 # [@coreui/angular](https://coreui.io/angular)
 
-![angular](https://img.shields.io/badge/angular-^14.0.0-lightgrey.svg?style=flat-square&logo=angular)
+![angular](https://img.shields.io/badge/angular-^15.0.0-lightgrey.svg?style=flat-square&logo=angular)
 [![npm package][npm-coreui-angular-badge-v2]][npm-coreui-angular]
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
@@ -54,7 +54,7 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
 ###### Node.js
-Angular 14 requires `Node.js` version 14.15 or later.
+Angular 15 requires `Node.js` version `^14.20.0` or `^16.13.0` or `^18.10.0`.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -62,10 +62,10 @@ Angular 14 requires `Node.js` version 14.15 or later.
 ###### Angular CLI
 Install the Angular CLI globally using a terminal/console window.
 ```bash
-npm install -g @angular/cli@14
+npm install -g @angular/cli@15
 ```
 
-##### Update to Angular 14
+##### Update to Angular 15
 see: [https://update.angular.io](https://update.angular.io)
 
 ## Installation
@@ -98,7 +98,7 @@ Import scss in `src/scss/style.scss`
 
 ```scss
 // Import styles
-@import "~@coreui/coreui/scss/coreui";
+@import "@coreui/coreui/scss/coreui";
 ```
 
 Or copy-paste the stylesheet `<link>` into your `<head>` before all other stylesheets to load our CSS.
@@ -212,4 +212,4 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 ## Copyright and license
 
-Copyright 2022 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2023 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
