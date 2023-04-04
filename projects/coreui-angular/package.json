@@ -1,8 +1,8 @@
 {
   "name": "@coreui/angular",
-  "version": "4.4.0-next.0",
+  "version": "4.4.0-next.1",
   "description": "CoreUI for Angular UI components library",
-  "copyright": "Copyright 2022 creativeLabs Łukasz Holeczek",
+  "copyright": "Copyright 2023 creativeLabs Łukasz Holeczek",
   "license": "MIT",
   "homepage": "https://coreui.io/angular",
   "author": {
