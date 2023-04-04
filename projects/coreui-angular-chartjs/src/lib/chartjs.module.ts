@@ -9,4 +9,4 @@ import { ChartjsComponent } from './chartjs.component';
     ChartjsComponent
   ]
 })
-export class ChartjsModule { }
+export class ChartjsModule {}

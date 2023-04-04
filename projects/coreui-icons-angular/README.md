@@ -36,7 +36,7 @@
 [coreui]: https://coreui.io/icons
 [coreui-angular-icons-npm]: https://www.npmjs.com/package/@coreui/icons-angular
 [npm-coreui-icons-angular-next]: https://img.shields.io/npm/v/@coreui/icons-angular/next.png?style=flat-square&color=red
-[angular-badge]: https://img.shields.io/badge/angular-^15.1.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^15.2.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## `cIcon` directive
 

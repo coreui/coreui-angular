@@ -2,6 +2,41 @@
 
 ---
 
+#### `4.3.17`
+
+- `@coreui/angular`
+- `@coreui/angular-chartjs`
+- `@coreui/icons-angular`
+  - chore: dependencies update
+---
+
+#### `4.3.16`
+
+- `@coreui/angular`
+  - chore: dependencies update
+- `@coreui/angular-chartjs`
+  - chore: dependencies update
+- `@coreui/icons-angular`
+  - feat(cIcon): standalone directive
+  - chore: dependencies update
+
+---
+
+#### `4.3.15` 
+
+- `@coreui/angular-chartjs`
+  - feat(c-chart): emit chartRef on new Chart()
+  - feat(c-chart): standalone component
+  - chore: dependencies update
+
+---
+
+#### `4.3.11`
+
+- fix(offcanvas): avoid flicker on the first render
+
+---
+
 #### `4.4.0-next.0`
 
 - feat: standalone components (wip) 
