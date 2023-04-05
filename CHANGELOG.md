@@ -2,8 +2,9 @@
 
 #### `4.4.0-next.1`
 
-- feat: standalone components (wip)
+- feat: standalone components
 - chore: dependencies update
+- fix(popover): remove popover when host element is not visible
 
 ---
 
