@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef } from '@angular/core';
 import { ListenersService } from '../services/listeners.service';
 import { PopoverDirective } from './popover.directive';
+import { IntersectionService } from '../services';
 
 describe('PopoverDirective', () => {
   let document: Document;
@@ -11,7 +12,8 @@ describe('PopoverDirective', () => {
 
   it('should create an instance', () => {
     const listenersService = new ListenersService(renderer);
-    const directive = new PopoverDirective(document, renderer, hostElement, viewContainerRef, listenersService, changeDetectorRef);
+    const intersectionService = new IntersectionService();
+    const directive = new PopoverDirective(document, renderer, hostElement, viewContainerRef, listenersService, changeDetectorRef, intersectionService);
     expect(directive).toBeTruthy();
   });
 });
