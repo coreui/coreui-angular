@@ -9,7 +9,7 @@ export class ClassToggleService {
   private renderer: Renderer2;
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     private rendererFactory: RendererFactory2
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
@@ -19,8 +19,8 @@ export class ClassToggleService {
     const element = document.querySelector(selector);
     if (element) {
       element.classList.contains(className) ?
-        this.renderer.removeClass(element, className) :
-        this.renderer.addClass(element, className);
+      this.renderer.removeClass(element, className) :
+      this.renderer.addClass(element, className);
     }
   }
 }

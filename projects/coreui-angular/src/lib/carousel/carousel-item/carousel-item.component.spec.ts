@@ -6,14 +6,14 @@ import { CarouselService } from '../carousel.service';
 describe('CarouselItemComponent', () => {
   let component: CarouselItemComponent;
   let fixture: ComponentFixture<CarouselItemComponent>;
-  let service: CarouselService
+  let service: CarouselService;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ CarouselItemComponent ],
-      providers: [ CarouselService ]
+      imports: [CarouselItemComponent],
+      providers: [CarouselService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

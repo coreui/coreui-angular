@@ -1,14 +1,15 @@
-import {Component, Input, HostBinding} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, HostBinding, Input } from '@angular/core';
+import { NgClass, NgIf } from '@angular/common';
 
 import { Positions } from '../../coreui.types';
+
 type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
 
 @Component({
   selector: 'c-header, [c-header]',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [CommonModule]
+  imports: [NgClass, NgIf]
 })
 export class HeaderComponent {
   /**
@@ -35,7 +36,7 @@ export class HeaderComponent {
   get headerClasses(): any {
     return {
       header: true,
-      [`header-${this.position}`]: !!this.position,
+      [`header-${this.position}`]: !!this.position
     };
   }
 

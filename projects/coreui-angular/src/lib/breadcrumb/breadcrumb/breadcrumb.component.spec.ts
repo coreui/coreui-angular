@@ -8,9 +8,9 @@ describe('BreadcrumbComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ BreadcrumbComponent ]
+      imports: [BreadcrumbComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

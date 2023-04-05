@@ -9,7 +9,6 @@ describe('AlertComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [],
       imports: [BrowserAnimationsModule, AlertComponent]
     })
       .compileComponents();

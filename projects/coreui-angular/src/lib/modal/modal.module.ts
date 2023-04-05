@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { A11yModule } from '@angular/cdk/a11y';
 
 import { ModalBodyComponent } from './modal-body/modal-body.component';
 import { ModalContentComponent } from './modal-content/modal-content.component';
@@ -13,7 +11,6 @@ import { ModalComponent } from './modal/modal.component';
 import { ModalService } from './modal.service';
 
 @NgModule({
-  declarations: [],
   exports: [
     ModalBodyComponent,
     ModalComponent,
@@ -25,8 +22,6 @@ import { ModalService } from './modal.service';
     ModalToggleDirective
   ],
   imports: [
-    CommonModule,
-    A11yModule,
     ModalBodyComponent,
     ModalComponent,
     ModalContentComponent,

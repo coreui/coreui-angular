@@ -1,6 +1,6 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { CommonModule } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 import { Colors } from '../../coreui.types';
 import { CardBodyComponent, CardComponent } from '../../card';
@@ -8,10 +8,9 @@ import { CardBodyComponent, CardComponent } from '../../card';
 @Component({
   selector: 'c-widget-stat-b',
   templateUrl: './widget-stat-b.component.html',
-  styleUrls: ['./widget-stat-b.component.scss'],
   exportAs: 'cWidgetStatB',
   standalone: true,
-  imports: [CommonModule, CardBodyComponent]
+  imports: [CardBodyComponent, NgIf, NgClass]
 })
 export class WidgetStatBComponent extends CardComponent {
 
@@ -46,6 +45,7 @@ export class WidgetStatBComponent extends CardComponent {
    * @type string
    */
   @Input() value?: string;
+
   /**
    * Invert colors from their default dark shade.
    * @type boolean
@@ -54,9 +54,11 @@ export class WidgetStatBComponent extends CardComponent {
   get inverse(): boolean {
     return this._inverse;
   }
+
   set inverse(value: boolean) {
     this._inverse = coerceBooleanProperty(value);
   }
+
   private _inverse = false;
 
   @HostBinding('class')
@@ -66,7 +68,7 @@ export class WidgetStatBComponent extends CardComponent {
       [`bg-${this.color}`]: !!this.color,
       [`text-${this.textColor}`]: !!this.textColor,
       'text-high-emphasis-inverse': !!this.color
-    }
+    };
   }
 
 }

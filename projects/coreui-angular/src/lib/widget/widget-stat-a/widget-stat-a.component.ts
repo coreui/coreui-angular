@@ -2,17 +2,14 @@ import { AfterContentInit, Component, ContentChildren, HostBinding, Input, Query
 
 import { Colors } from '../../coreui.types';
 import { TemplateIdDirective } from '../../shared';
-import { CommonModule } from '@angular/common';
 import { CardBodyComponent } from '../../card';
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'c-widget-stat-a',
   templateUrl: './widget-stat-a.component.html',
   exportAs: 'cWidgetStatA',
-  imports: [
-    CommonModule,
-    CardBodyComponent
-  ],
+  imports: [CardBodyComponent, NgClass, NgIf, NgTemplateOutlet],
   standalone: true
 })
 export class WidgetStatAComponent implements AfterContentInit {

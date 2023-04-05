@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 
 import { IBreadcrumbItem } from '../breadcrumb-item/breadcrumb-item';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
@@ -12,7 +12,7 @@ import { BreadcrumbItemComponent } from '../breadcrumb-item/breadcrumb-item.comp
   templateUrl: './breadcrumb-router.component.html',
   styleUrls: ['./breadcrumb-router.component.scss'],
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, BreadcrumbItemComponent]
+  imports: [BreadcrumbComponent, BreadcrumbItemComponent, NgForOf, NgIf, AsyncPipe]
 })
 export class BreadcrumbRouterComponent implements OnChanges, OnDestroy, OnInit {
   constructor(

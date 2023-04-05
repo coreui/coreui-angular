@@ -8,9 +8,9 @@ describe('HeaderTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HeaderTextComponent ]
+      imports: [HeaderTextComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

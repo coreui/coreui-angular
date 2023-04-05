@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { DropdownComponent, DropdownToggleDirective } from './dropdown/dropdown.component';
 import { DropdownDividerDirective } from './dropdown-divider/dropdown-divider.directive';
 import { DropdownHeaderDirective } from './dropdown-header/dropdown-header.directive';
@@ -10,9 +9,7 @@ import { DropdownService } from './dropdown.service';
 import { DropdownCloseDirective } from './dropdown-close/dropdown-close.directive';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
     DropdownComponent,
     DropdownCloseDirective,
     DropdownDividerDirective,

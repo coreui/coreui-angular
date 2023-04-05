@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { Subscription } from 'rxjs';
 
 import { CarouselState } from '../carousel-state';
@@ -9,7 +9,7 @@ import { CarouselService } from '../carousel.service';
   selector: 'c-carousel-indicators',
   templateUrl: './carousel-indicators.component.html',
   standalone: true,
-  imports: [CommonModule]
+  imports: [NgForOf]
 })
 export class CarouselIndicatorsComponent implements OnInit, OnDestroy {
   constructor(

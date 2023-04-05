@@ -16,9 +16,9 @@ describe('SidebarNavGroupComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([]),
         NoopAnimationsModule,
-        SidebarModule
+        SidebarNavGroupComponent
       ],
-      declarations: [SidebarNavGroupComponent]
+      declarations: []
     })
       .compileComponents();
   }));

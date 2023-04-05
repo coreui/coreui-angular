@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -11,11 +11,11 @@ import { IconSize, IIcon } from './icon.interface';
   templateUrl: './icon.component.svg',
   styleUrls: ['./icon.component.scss'],
   standalone: true,
-  imports: [CommonModule, HtmlAttributesDirective]
+  imports: [NgClass, NgIf, HtmlAttributesDirective]
 })
 export class IconComponent implements IIcon, AfterViewInit {
 
-  @Input() attributes: any = {role: 'img'};
+  @Input() attributes: any = { role: 'img' };
   @Input() content?: string | string[] | any[];
   @Input() size: IconSize = '';
   @Input() title?: string;
@@ -28,21 +28,25 @@ export class IconComponent implements IIcon, AfterViewInit {
   set name(name: string) {
     this._name = name.includes('-') ? this.toCamelCase(name) : name;
   }
+
   get name(): string {
     return this._name;
   }
+
   private _name!: string;
 
   @Input()
   set viewBox(viewBox: string) {
     this._viewBox = viewBox;
   }
+
   get viewBox(): string {
     return this._viewBox ?? this.scale;
   }
+
   private _viewBox!: string;
 
-  @ViewChild('svgElement', {read: ElementRef}) svgElementRef!: ElementRef;
+  @ViewChild('svgElement', { read: ElementRef }) svgElementRef!: ElementRef;
 
   get innerHtml(): SafeHtml {
     const code = Array.isArray(this.code) ? this.code[1] || this.code[0] : this.code ?? '';
@@ -81,11 +85,12 @@ export class IconComponent implements IIcon, AfterViewInit {
     if (this.iconSet && this.name) {
       return this.iconSet.getIcon(this.name);
     }
-    if (this.name && !this.iconSet?.icons[this.name])
-    console.warn(`c-icon component: icon name '${this.name}' does not exist for IconSet service. ` +
-      `To use icon by 'name' prop you need to add it to IconSet service. \n`,
-      this.name
-    );
+    if (this.name && !this.iconSet?.icons[this.name]) {
+      console.warn(`c-icon component: icon name '${this.name}' does not exist for IconSet service. ` +
+        `To use icon by 'name' prop you need to add it to IconSet service. \n`,
+        this.name
+      );
+    }
     return undefined;
   }
 

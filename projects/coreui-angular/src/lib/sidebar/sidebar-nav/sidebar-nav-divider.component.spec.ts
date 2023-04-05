@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {SidebarNavDividerComponent} from './sidebar-nav-divider.component';
+import { SidebarNavDividerComponent } from './sidebar-nav-divider.component';
 
 describe('SidebarNavDividerComponent', () => {
   let component: SidebarNavDividerComponent;
@@ -9,9 +9,9 @@ describe('SidebarNavDividerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ SidebarNavDividerComponent ],
+      imports: [SidebarNavDividerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

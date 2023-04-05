@@ -8,9 +8,9 @@ describe('ModalHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ ModalHeaderComponent ]
+      imports: [ModalHeaderComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

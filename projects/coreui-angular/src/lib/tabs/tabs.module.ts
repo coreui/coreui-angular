@@ -1,14 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TabContentComponent } from './tab-content/tab-content.component';
 import { TabPaneComponent } from './tab-pane/tab-pane.component';
 import { TabService } from './tab.service';
 import { TabContentRefDirective } from './tab-content-ref.directive';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
     TabContentComponent,
     TabContentRefDirective,
     TabPaneComponent

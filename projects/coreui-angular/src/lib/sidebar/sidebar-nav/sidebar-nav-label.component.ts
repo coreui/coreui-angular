@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
 
 import { HtmlAttributesDirective } from '../../shared';
 import { SidebarNavHelper } from './sidebar-nav.service';
@@ -9,7 +9,7 @@ import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
   selector: 'c-sidebar-nav-label',
   templateUrl: './sidebar-nav-label.component.html',
   standalone: true,
-  imports: [CommonModule, HtmlAttributesDirective, SidebarNavBadgePipe]
+  imports: [HtmlAttributesDirective, SidebarNavBadgePipe, NgClass, NgIf]
 })
 export class SidebarNavLabelComponent implements OnInit {
 

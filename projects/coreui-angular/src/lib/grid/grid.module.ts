@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { ContainerComponent } from './container.component';
@@ -10,7 +9,6 @@ import { GutterDirective } from './gutter.directive';
 
 @NgModule({
   imports: [
-    CommonModule,
     ColComponent,
     ColDirective,
     ContainerComponent,
@@ -25,8 +23,6 @@ import { GutterDirective } from './gutter.directive';
     GutterDirective,
     RowComponent,
     RowDirective
-  ],
-  declarations: [],
-  providers: []
+  ]
 })
 export class GridModule {}

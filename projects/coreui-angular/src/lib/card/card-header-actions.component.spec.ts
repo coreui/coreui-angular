@@ -8,9 +8,9 @@ describe('CardHeaderActionsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ CardHeaderActionsComponent ]
+      imports: [CardHeaderActionsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

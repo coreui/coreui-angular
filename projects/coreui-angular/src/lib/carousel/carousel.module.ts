@@ -1,5 +1,4 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { CarouselComponent } from './carousel/carousel.component';
 import { CarouselCaptionComponent } from './carousel-caption/carousel-caption.component';
@@ -12,9 +11,7 @@ import { CarouselState } from './carousel-state';
 import { CarouselConfig } from './carousel.config';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
     CarouselComponent,
     CarouselCaptionComponent,
     CarouselControlComponent,

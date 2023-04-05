@@ -11,13 +11,13 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'c-popover',
   templateUrl: './popover.component.html',
   standalone: true,
-  imports: [CommonModule]
+  imports: [NgClass]
 })
 export class PopoverComponent implements AfterViewInit, OnChanges, OnDestroy {
 

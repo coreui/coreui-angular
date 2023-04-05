@@ -12,10 +12,10 @@ describe('CarouselIndicatorsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ CarouselIndicatorsComponent ],
-      providers: [ CarouselService, CarouselState ]
+      imports: [CarouselIndicatorsComponent],
+      providers: [CarouselService, CarouselState]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

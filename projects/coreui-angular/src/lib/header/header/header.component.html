@@ -1,4 +1,4 @@
-<div [class]="headerClasses" *ngIf="!!container; else elseBlock">
+<div [ngClass]="headerClasses" *ngIf="!!container; else elseBlock">
   <ng-content></ng-content>
 </div>
 <ng-template #elseBlock>

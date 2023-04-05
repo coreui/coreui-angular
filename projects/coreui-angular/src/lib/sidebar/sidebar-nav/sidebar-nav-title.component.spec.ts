@@ -9,9 +9,9 @@ describe('SidebarNavTitleComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ SidebarNavTitleComponent ]
+      imports: [SidebarNavTitleComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

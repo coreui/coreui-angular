@@ -8,9 +8,9 @@ describe('ButtonGroupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ ButtonGroupComponent ]
+      imports: [ButtonGroupComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

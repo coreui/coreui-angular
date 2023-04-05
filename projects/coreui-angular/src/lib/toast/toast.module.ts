@@ -1,7 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { ButtonModule } from '../button';
 import { ToastComponent } from './toast/toast.component';
 import { ToastHeaderComponent } from './toast-header/toast-header.component';
 import { ToastBodyComponent } from './toast-body/toast-body.component';
@@ -11,16 +8,13 @@ import { ToasterHostDirective } from './toaster/toaster-host.directive';
 import { ToastCloseDirective } from './toast-close.directive';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
-    ButtonModule,
     ToastBodyComponent,
     ToastComponent,
     ToastCloseDirective,
     ToastHeaderComponent,
     ToasterComponent,
-    ToasterHostDirective,
+    ToasterHostDirective
   ],
   providers: [ToasterService],
   exports: [

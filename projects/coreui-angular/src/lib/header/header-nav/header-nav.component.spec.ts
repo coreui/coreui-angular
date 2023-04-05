@@ -8,9 +8,9 @@ describe('HeaderNavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HeaderNavComponent ]
+      imports: [HeaderNavComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -8,9 +8,9 @@ describe('SidebarHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ SidebarHeaderComponent ]
+      imports: [SidebarHeaderComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

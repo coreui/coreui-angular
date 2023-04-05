@@ -8,9 +8,9 @@ describe('NavbarTextComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ NavbarTextComponent ]
+      imports: [NavbarTextComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

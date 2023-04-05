@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { HeaderComponent } from './header/header.component';
 import { HeaderBrandComponent } from './header-brand/header-brand.component';
@@ -9,9 +8,7 @@ import { HeaderTextComponent } from './header-text/header-text.component';
 import { HeaderTogglerDirective } from './header-toggler/header-toggler.directive';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
     HeaderComponent,
     HeaderBrandComponent,
     HeaderDividerComponent,

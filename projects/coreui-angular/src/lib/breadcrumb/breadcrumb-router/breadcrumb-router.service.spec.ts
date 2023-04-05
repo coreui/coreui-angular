@@ -8,7 +8,7 @@ describe('AppBreadcrumbService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterTestingModule.withRoutes([])]
     });
     service = TestBed.inject(BreadcrumbRouterService);
   });

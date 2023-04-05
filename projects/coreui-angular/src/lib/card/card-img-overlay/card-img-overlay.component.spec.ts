@@ -8,9 +8,9 @@ describe('CardImgOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ CardImgOverlayComponent ]
+      imports: [CardImgOverlayComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

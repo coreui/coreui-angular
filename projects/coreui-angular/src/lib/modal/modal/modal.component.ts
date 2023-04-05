@@ -43,10 +43,9 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
     ])
   ],
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss'],
   exportAs: 'cModal',
   standalone: true,
-  imports: [A11yModule, ModalDialogComponent, ModalContentComponent]
+  imports: [ModalDialogComponent, ModalContentComponent, A11yModule]
 })
 export class ModalComponent implements OnInit, OnDestroy {
 

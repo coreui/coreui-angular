@@ -15,16 +15,10 @@ describe('SidebarNavComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule.withRoutes([])
-        // SharedModule,
-        // HtmlAttributesDirective,
-        // SidebarNavDividerComponent,
-        // SidebarNavGroupComponent,
-        // SidebarNavLabelComponent,
-        // SidebarNavLinkComponent,
-        // SidebarNavTitleComponent
+        RouterTestingModule.withRoutes([]),
+        SidebarNavComponent
       ],
-      declarations: [SidebarNavComponent],
+      declarations: [],
       providers: [SidebarNavHelper]
     })
       .compileComponents();

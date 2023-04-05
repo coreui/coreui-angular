@@ -3,7 +3,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import { TemplateIdDirective } from '../../shared';
 import { Colors } from '../../coreui.types';
-import { CommonModule } from '@angular/common';
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { CardBodyComponent, CardFooterComponent } from '../../card';
 
 @Component({
@@ -11,7 +11,7 @@ import { CardBodyComponent, CardFooterComponent } from '../../card';
   templateUrl: './widget-stat-f.component.html',
   exportAs: 'cWidgetStatB',
   standalone: true,
-  imports: [CommonModule, CardBodyComponent, CardFooterComponent]
+  imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet, NgIf]
 })
 export class WidgetStatFComponent implements AfterContentInit {
 
@@ -45,9 +45,11 @@ export class WidgetStatFComponent implements AfterContentInit {
   get padding(): boolean {
     return this._padding;
   }
+
   set padding(value: boolean) {
     this._padding = coerceBooleanProperty(value);
   }
+
   private _padding = false;
 
   /**
@@ -62,21 +64,21 @@ export class WidgetStatFComponent implements AfterContentInit {
   @Input() value?: string | number;
 
   templates: any = {};
-  @ContentChildren(TemplateIdDirective, {descendants: true}) contentTemplates!: QueryList<TemplateIdDirective>;
+  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
 
   @HostBinding('class')
   get hostClasses() {
     return {
       card: true
-    }
+    };
   }
 
   get cardBodyClasses() {
     return {
       'd-flex': true,
       'align-items-center': true,
-      'p-0': !this.padding,
-    }
+      'p-0': !this.padding
+    };
   }
 
   get iconClasses() {
@@ -85,8 +87,8 @@ export class WidgetStatFComponent implements AfterContentInit {
       'text-white': true,
       [`bg-${this.color}`]: !!this.color,
       'p-3': this.padding,
-      'p-4': !this.padding,
-    }
+      'p-4': !this.padding
+    };
   }
 
   get titleClasses() {
@@ -95,16 +97,16 @@ export class WidgetStatFComponent implements AfterContentInit {
       'small': true,
       'text-uppercase': true,
       'fw-semibold': true,
-      [`text-${this.textColor}`]: !!this.textColor,
-    }
+      [`text-${this.textColor}`]: !!this.textColor
+    };
   }
 
   get valueClasses() {
     return {
       'fs-6': !this.textColor,
       'fw-semibold': true,
-      [`text-${this.textColor}`]: !!this.textColor,
-    }
+      [`text-${this.textColor}`]: !!this.textColor
+    };
   }
 
   ngAfterContentInit(): void {

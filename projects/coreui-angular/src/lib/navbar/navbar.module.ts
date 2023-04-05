@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { NavbarComponent } from './navbar.component';
 import { NavbarBrandDirective } from './navbar-brand/navbar-brand.directive';
@@ -9,7 +7,6 @@ import { NavbarTextComponent } from './navbar-text/navbar-text.component';
 import { NavbarTogglerDirective } from './navbar-toggler/navbar-toggler.directive';
 
 @NgModule({
-  declarations: [],
   exports: [
     NavbarBrandDirective,
     NavbarComponent,
@@ -18,13 +15,11 @@ import { NavbarTogglerDirective } from './navbar-toggler/navbar-toggler.directiv
     NavbarTogglerDirective
   ],
   imports: [
-    CommonModule,
     NavbarBrandDirective,
     NavbarComponent,
     NavbarNavComponent,
     NavbarTextComponent,
-    NavbarTogglerDirective,
-    RouterModule
+    NavbarTogglerDirective
   ]
 })
 export class NavbarModule {}

@@ -8,13 +8,13 @@ import {
   OnInit,
   QueryList
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
-import { CollapseModule } from '../../collapse';
+import { CollapseDirective } from '../../collapse';
 import { TemplateIdDirective } from '../../shared';
 import { AccordionButtonDirective } from '../accordion-button/accordion-button.directive';
 import { AccordionService } from '../accordion.service';
-import { CommonModule } from '@angular/common';
 
 let nextId = 0;
 
@@ -24,7 +24,7 @@ let nextId = 0;
   styleUrls: ['./accordion-item.component.scss'],
   exportAs: 'cAccordionItem',
   standalone: true,
-  imports: [AccordionButtonDirective, CollapseModule, CommonModule]
+  imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective]
 })
 export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentInit {
 

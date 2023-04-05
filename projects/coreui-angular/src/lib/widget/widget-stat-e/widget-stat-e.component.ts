@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { CardBodyComponent, CardComponent } from '../../card';
 
 @Component({
@@ -7,7 +7,7 @@ import { CardBodyComponent, CardComponent } from '../../card';
   templateUrl: './widget-stat-e.component.html',
   exportAs: 'cWidgetStatE',
   standalone: true,
-  imports: [CardBodyComponent, CommonModule]
+  imports: [CardBodyComponent, NgIf, NgClass]
 })
 export class WidgetStatEComponent extends CardComponent {
 

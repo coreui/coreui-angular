@@ -1,4 +1,4 @@
-import { Host, Inject, Injectable, Renderer2 } from '@angular/core';
+import { Inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { SidebarService } from '../sidebar.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
@@ -13,9 +13,9 @@ export class SidebarBackdropService {
   private clickListener = (): void => {};
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(DOCUMENT) private document: Document,
     // private rendererFactory: RendererFactory2,
-    private sidebarService: SidebarService,
+    private sidebarService: SidebarService
   ) {
     // this.renderer = rendererFactory.createRenderer(null, null);
   }
@@ -29,7 +29,7 @@ export class SidebarBackdropService {
       this.renderer.appendChild(this.document.body, this.backdrop);
       this.clickListener = this.renderer.listen(this.backdrop, 'click', (e) => {
         // console.log(`sidebar-${this.id}`, ' backdrop click', e);
-        this.sidebarService.toggle({toggle: 'visible', sidebar});
+        this.sidebarService.toggle({ toggle: 'visible', sidebar });
       });
     }
     // console.log(this.backdrop, sidebar.sidebarState.mobile, sidebar.sidebarState.show);

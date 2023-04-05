@@ -8,15 +8,15 @@ import { CarouselState } from '../carousel-state';
 describe('CarouselInnerComponent', () => {
   let component: CarouselInnerComponent;
   let fixture: ComponentFixture<CarouselInnerComponent>;
-  let service: CarouselService
-  let state: CarouselState
+  let service: CarouselService;
+  let state: CarouselState;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      providers: [ CarouselService, CarouselState ],
-      imports: [NoopAnimationsModule, CarouselInnerComponent],
+      providers: [CarouselService, CarouselState],
+      imports: [NoopAnimationsModule, CarouselInnerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

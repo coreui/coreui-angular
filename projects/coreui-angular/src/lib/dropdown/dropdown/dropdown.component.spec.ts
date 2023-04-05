@@ -1,9 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent } from './dropdown.component';
-import { CdkConnectedOverlay } from '@angular/cdk/overlay';
-import { FocusOrigin } from '@angular/cdk/a11y';
-import { DropdownModule } from '../dropdown.module';
 
 describe('DropdownComponent', () => {
   let component: DropdownComponent;
@@ -11,9 +8,9 @@ describe('DropdownComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DropdownModule, DropdownComponent]
+      imports: [DropdownComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

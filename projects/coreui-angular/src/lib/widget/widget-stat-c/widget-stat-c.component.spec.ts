@@ -8,7 +8,6 @@ describe('WidgetStatCComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [],
       imports: [WidgetStatCComponent]
     })
       .compileComponents();

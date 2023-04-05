@@ -34,8 +34,6 @@ import {
 
 @NgModule({
   declarations: [
-    SidebarNavComponent,
-    SidebarNavGroupComponent,
     // SidebarNavGroupToggleDirective,
   ],
   imports: [
@@ -46,8 +44,10 @@ import {
     SidebarBrandComponent,
     SidebarFooterComponent,
     SidebarHeaderComponent,
+    SidebarNavComponent,
     SidebarNavBadgePipe,
     SidebarNavDividerComponent,
+    SidebarNavGroupComponent,
     SidebarNavIconPipe,
     SidebarNavItemClassPipe,
     SidebarNavLabelComponent,

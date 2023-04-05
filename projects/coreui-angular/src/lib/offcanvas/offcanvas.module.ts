@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { A11yModule } from '@angular/cdk/a11y';
 
 import { OffcanvasComponent } from './offcanvas/offcanvas.component';
 import { OffcanvasBodyComponent } from './offcanvas-body/offcanvas-body.component';
@@ -11,7 +9,6 @@ import { OffcanvasService } from './offcanvas.service';
 import { BackdropService } from '../backdrop/backdrop.service';
 
 @NgModule({
-  declarations: [],
   exports: [
     OffcanvasBodyComponent,
     OffcanvasComponent,
@@ -20,8 +17,6 @@ import { BackdropService } from '../backdrop/backdrop.service';
     OffcanvasToggleDirective
   ],
   imports: [
-    CommonModule,
-    A11yModule,
     OffcanvasBodyComponent,
     OffcanvasComponent,
     OffcanvasHeaderComponent,

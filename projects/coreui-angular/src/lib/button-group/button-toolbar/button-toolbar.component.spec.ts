@@ -8,9 +8,9 @@ describe('ButtonToolbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ ButtonToolbarComponent ]
+      imports: [ButtonToolbarComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

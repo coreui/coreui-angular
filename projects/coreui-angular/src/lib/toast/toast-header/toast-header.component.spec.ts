@@ -11,7 +11,7 @@ describe('ToastHeaderComponent', () => {
     TestBed.configureTestingModule({
       imports: [ToastModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

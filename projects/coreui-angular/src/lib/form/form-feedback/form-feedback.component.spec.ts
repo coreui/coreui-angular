@@ -8,9 +8,9 @@ describe('FormFeedbackComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ FormFeedbackComponent ]
+      imports: [FormFeedbackComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

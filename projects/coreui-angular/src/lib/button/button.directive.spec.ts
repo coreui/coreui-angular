@@ -7,9 +7,10 @@ import { By } from '@angular/platform-browser';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: `<button cButton></button>`
+  template: `
+    <button cButton></button>`
 })
-class TestComponent { }
+class TestComponent {}
 
 describe('ButtonDirective', () => {
 
@@ -22,15 +23,14 @@ describe('ButtonDirective', () => {
       declarations: [TestComponent],
       imports: [ButtonCloseDirective],
       providers: [{ provide: ElementRef, useClass: MockElementRef }]
-    })
+    });
 
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     buttonEl = fixture.debugElement.query(By.css('button'));
 
     fixture.detectChanges(); // initial binding
-  })
-
+  });
 
   it('should create an instance', () => {
     const directive = new ButtonDirective();

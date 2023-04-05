@@ -1,8 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { CardModule } from '../card';
-import { GridModule } from '../grid';
 
 import { WidgetStatAComponent } from './widget-stat-a/widget-stat-a.component';
 import { WidgetStatBComponent } from './widget-stat-b/widget-stat-b.component';
@@ -12,11 +8,7 @@ import { WidgetStatEComponent } from './widget-stat-e/widget-stat-e.component';
 import { WidgetStatFComponent } from './widget-stat-f/widget-stat-f.component';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
-    CardModule,
-    GridModule,
     WidgetStatAComponent,
     WidgetStatBComponent,
     WidgetStatCComponent,
@@ -33,5 +25,4 @@ import { WidgetStatFComponent } from './widget-stat-f/widget-stat-f.component';
     WidgetStatFComponent
   ]
 })
-export class WidgetModule {
-}
+export class WidgetModule {}

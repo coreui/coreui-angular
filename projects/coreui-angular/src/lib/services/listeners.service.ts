@@ -18,11 +18,9 @@ export class ListenersService {
     private renderer: Renderer2
   ) {}
 
-  setListeners({hostElement, trigger, callbackOn, callbackOff, callbackToggle}: IListenersConfig): void {
+  setListeners({ hostElement, trigger, callbackOn, callbackOff, callbackToggle }: IListenersConfig): void {
     const host = hostElement.nativeElement;
-    const triggers = Array.isArray(trigger)
-      ? trigger
-      : trigger?.split(' ') ?? [];
+    const triggers = Array.isArray(trigger) ? trigger : trigger?.split(' ') ?? [];
 
     if (triggers?.includes('click')) {
       typeof callbackToggle === 'function' && this.listeners.set(
@@ -45,7 +43,7 @@ export class ListenersService {
     if (triggers?.includes('hover')) {
       typeof callbackOn === 'function' && this.listeners.set(
         'mouseenter',
-        this.renderer.listen(host, 'mouseenter', callbackOn),
+        this.renderer.listen(host, 'mouseenter', callbackOn)
       );
       typeof callbackOff === 'function' && this.listeners.set(
         'mouseleave',
@@ -56,7 +54,7 @@ export class ListenersService {
 
   clearListeners(): void {
     this.listeners.forEach((unListen, key) => {
-       unListen();
+      unListen();
     });
     this.listeners.forEach((unListen, key) => {
       // @ts-ignore

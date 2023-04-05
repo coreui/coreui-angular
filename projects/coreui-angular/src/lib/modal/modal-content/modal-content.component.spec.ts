@@ -8,9 +8,9 @@ describe('ModalContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ ModalContentComponent ]
+      imports: [ModalContentComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

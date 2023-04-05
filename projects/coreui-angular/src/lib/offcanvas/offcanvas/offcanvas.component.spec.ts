@@ -9,9 +9,9 @@ describe('OffcanvasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ NoopAnimationsModule, OffcanvasComponent ]
+      imports: [NoopAnimationsModule, OffcanvasComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -3,8 +3,7 @@ import { BadgePositions, Colors, Shapes } from '../coreui.types';
 
 @Component({
   selector: 'c-badge',
-  templateUrl: './badge.component.html',
-  styleUrls: ['./badge.component.scss'],
+  template: '<ng-content></ng-content>',
   standalone: true
 })
 export class BadgeComponent {
@@ -43,7 +42,7 @@ export class BadgeComponent {
       'top-0': this.position?.includes('top'),
       'top-100': this.position?.includes('bottom'),
       'start-100': this.position?.includes('end'),
-      'start-0': this.position?.includes('start'),
+      'start-0': this.position?.includes('start')
     };
 
     return Object.assign({
@@ -51,7 +50,7 @@ export class BadgeComponent {
         [`bg-${this.color}`]: !!this.color,
         [`text-${this.textColor}`]: !!this.textColor,
         [`badge-${this.size}`]: !!this.size,
-        [`${this.shape}`]: !!this.shape,
+        [`${this.shape}`]: !!this.shape
       }, !!this.position ? positionClasses : {}
     );
   }

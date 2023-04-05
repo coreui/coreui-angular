@@ -11,8 +11,7 @@ describe('HeaderBrandComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), HeaderBrandComponent],
-      declarations: []
+      imports: [RouterTestingModule.withRoutes([]), HeaderBrandComponent]
     }).compileComponents();
   }));
 

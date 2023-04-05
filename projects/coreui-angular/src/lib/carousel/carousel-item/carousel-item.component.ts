@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { CarouselService } from '../carousel.service';
   templateUrl: './carousel-item.component.html',
   styleUrls: ['./carousel-item.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [NgIf]
 })
 export class CarouselItemComponent implements OnDestroy, AfterViewInit {
 
@@ -27,9 +27,11 @@ export class CarouselItemComponent implements OnDestroy, AfterViewInit {
     this._active = coerceBooleanProperty(value);
     this.changeDetectorRef.markForCheck();
   }
+
   get active(): boolean {
     return this._active;
   }
+
   private _active = false;
 
   /**

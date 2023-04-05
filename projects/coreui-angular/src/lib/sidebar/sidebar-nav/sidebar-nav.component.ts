@@ -1,3 +1,14 @@
+import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import {
+  NgClass,
+  NgForOf,
+  NgIf,
+  NgStyle,
+  NgSwitch,
+  NgSwitchCase,
+  NgSwitchDefault,
+  NgTemplateOutlet
+} from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -12,8 +23,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -22,12 +32,33 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { INavData } from './sidebar-nav';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
+import { HtmlAttributesDirective } from '../../shared';
+import { IconModule } from '@coreui/icons-angular';
+import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
+import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
+import { SidebarNavLinkComponent } from './sidebar-nav-link.component';
+import { SidebarNavLabelComponent } from './sidebar-nav-label.component';
+import { SidebarNavTitleComponent } from './sidebar-nav-title.component';
+import { SidebarNavDividerComponent } from './sidebar-nav-divider.component';
+import { SidebarNavItemClassPipe } from './sidebar-nav-item-class.pipe';
 
 @Component({
   selector: 'c-sidebar-nav-group',
   templateUrl: './sidebar-nav-group.component.html',
   styleUrls: ['./sidebar-nav-group.component.scss'],
-  providers: [SidebarNavHelper],
+  providers: [SidebarNavHelper, SidebarNavGroupService],
+  standalone: true,
+  imports: [
+    HtmlAttributesDirective,
+    NgTemplateOutlet,
+    NgIf,
+    NgClass,
+    IconModule,
+    SidebarNavIconPipe,
+    SidebarNavBadgePipe,
+    forwardRef(() => SidebarNavComponent),
+    NgStyle
+  ],
   animations: [
     trigger('openClose', [
       state('open', style({
@@ -156,7 +187,23 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
 @Component({
   selector: 'c-sidebar-nav',
-  templateUrl: './sidebar-nav.component.html'
+  templateUrl: './sidebar-nav.component.html',
+  standalone: true,
+  imports: [
+    NgForOf,
+    NgClass,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    HtmlAttributesDirective,
+    SidebarNavLinkComponent,
+    SidebarNavLabelComponent,
+    SidebarNavTitleComponent,
+    SidebarNavDividerComponent,
+    SidebarNavGroupComponent,
+    SidebarNavItemClassPipe,
+    RouterModule
+  ]
 })
 export class SidebarNavComponent implements OnChanges {
 

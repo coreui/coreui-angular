@@ -3,14 +3,14 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import { CardBodyComponent, CardComponent } from '../../card';
 import { TemplateIdDirective } from '../../shared';
-import { CommonModule } from '@angular/common';
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'c-widget-stat-c',
   templateUrl: './widget-stat-c.component.html',
   exportAs: 'cWidgetStatC',
   standalone: true,
-  imports: [CommonModule, CardBodyComponent]
+  imports: [CardBodyComponent, NgIf, NgClass, NgTemplateOutlet]
 })
 export class WidgetStatCComponent extends CardComponent implements AfterContentInit {
 
@@ -35,6 +35,7 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
    * @type string
    */
   @Input() value?: string | number;
+
   /**
    * Invert colors from their default dark shade.
    * @type boolean
@@ -43,19 +44,21 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
   get inverse(): boolean {
     return this._inverse;
   }
+
   set inverse(value: boolean) {
     this._inverse = coerceBooleanProperty(value);
   }
+
   private _inverse = false;
 
   templates: any = {};
-  @ContentChildren(TemplateIdDirective, {descendants: true}) contentTemplates!: QueryList<TemplateIdDirective>;
+  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
 
   @HostBinding('class')
   get hostExtendedClass() {
     return {
       'high-emphasis-inverse': this.inverse
-    }
+    };
   }
 
   get iconClasses() {
@@ -64,16 +67,16 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
       'text-end': true,
       'text-medium-emphasis': !this.inverse,
       'text-medium-emphasis-inverse': this.inverse,
-      [`text-${this.textColor}`]: !!this.textColor,
-    }
+      [`text-${this.textColor}`]: !!this.textColor
+    };
   }
 
   get titleClasses() {
     return {
       'text-medium-emphasis': !this.inverse,
       'text-medium-emphasis-inverse': this.inverse,
-      [`text-${this.textColor}`]: !!this.textColor,
-    }
+      [`text-${this.textColor}`]: !!this.textColor
+    };
   }
 
   get valueClasses() {
@@ -82,8 +85,8 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
       'fw-semibold': true,
       'text-high-emphasis': !this.inverse,
       'text-high-emphasis-inverse': this.inverse,
-      [`text-${this.textColor}`]: !!this.textColor,
-    }
+      [`text-${this.textColor}`]: !!this.textColor
+    };
   }
 
   ngAfterContentInit(): void {

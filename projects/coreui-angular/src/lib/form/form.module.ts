@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormDirective } from './form/form.directive';
 import { FormFeedbackComponent } from './form-feedback/form-feedback.component';
 import { InputGroupComponent } from './input-group/input-group.component';
@@ -14,9 +13,7 @@ import { FormCheckLabelDirective } from './form-check/form-check-label.directive
 import { FormCheckInputDirective } from './form-check/form-check-input.directive';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
     FormDirective,
     FormCheckComponent,
     FormCheckLabelDirective,

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { CardComponent } from './card.component';
 import { CardBodyComponent } from './card-body.component';
@@ -15,9 +14,7 @@ import { CardTitleDirective } from './card-title.directive';
 import { CardImgOverlayComponent } from './card-img-overlay/card-img-overlay.component';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
     CardComponent,
     CardBodyComponent,
     CardFooterComponent,

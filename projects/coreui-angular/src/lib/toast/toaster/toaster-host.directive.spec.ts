@@ -1,9 +1,10 @@
-import { Component, Renderer2, Type, ViewContainerRef } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ToasterHostDirective } from './toaster-host.directive';
 
 @Component({
-  template: `<div cToasterHost></div>`,
+  template: `
+    <div cToasterHost></div>`,
   standalone: true,
   imports: [ToasterHostDirective]
 })
@@ -21,7 +22,6 @@ describe('ToasterHostDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
   });
-
 
   it('should create an instance', () => {
     const directive = new ToasterHostDirective(containerRef);

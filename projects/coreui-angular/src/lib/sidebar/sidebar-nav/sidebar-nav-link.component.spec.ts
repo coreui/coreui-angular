@@ -3,11 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 
 import { SidebarNavLinkComponent } from './sidebar-nav-link.component';
-import { SidebarNavLinkPipe } from './sidebar-nav-link.pipe';
-import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
-import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 import { HtmlAttributesDirective } from '../../shared';
-import { SidebarModule } from '../sidebar.module';
 
 describe('SidebarNavLinkComponent', () => {
   let component: SidebarNavLinkComponent;
@@ -18,12 +14,8 @@ describe('SidebarNavLinkComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]),
-        // SidebarModule,
         HtmlAttributesDirective,
-        // SidebarNavBadgePipe,
-        // SidebarNavIconPipe,
-        SidebarNavLinkComponent,
-        // SidebarNavLinkPipe
+        SidebarNavLinkComponent
       ]
     })
       .compileComponents();

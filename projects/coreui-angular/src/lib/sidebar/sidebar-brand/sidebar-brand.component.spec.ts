@@ -16,7 +16,7 @@ describe('SidebarBrandComponent', () => {
         RouterTestingModule.withRoutes([]),
         HtmlAttributesDirective,
         SidebarBrandComponent
-      ],
+      ]
     })
       .compileComponents();
   }));

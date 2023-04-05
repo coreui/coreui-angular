@@ -8,9 +8,9 @@ describe('HeaderDividerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HeaderDividerComponent ]
+      imports: [HeaderDividerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

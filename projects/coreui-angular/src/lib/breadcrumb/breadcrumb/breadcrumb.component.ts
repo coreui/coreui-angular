@@ -2,8 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-breadcrumb',
-  templateUrl: './breadcrumb.component.html',
-  styleUrls: ['./breadcrumb.component.scss'],
+  template: '<ng-content></ng-content>',
   standalone: true
 })
 export class BreadcrumbComponent {
