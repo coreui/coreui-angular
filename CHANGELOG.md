@@ -1,5 +1,10 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.4.0`
+
+- chore: dependencies update
+- chore(sidebar): minor cleanups
+
 #### `4.4.0-next.1`
 
 - feat: standalone components
