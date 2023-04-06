@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { IconModule } from '@coreui/icons-angular';
-
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarService } from './sidebar.service';
 import { SidebarBrandComponent } from './sidebar-brand/sidebar-brand.component';
@@ -33,9 +31,6 @@ import {
 
 
 @NgModule({
-  declarations: [
-    // SidebarNavGroupToggleDirective,
-  ],
   imports: [
     CommonModule,
     RouterModule,
@@ -56,8 +51,7 @@ import {
     SidebarNavLinkPipe,
     SidebarNavTitleComponent,
     SidebarToggleDirective,
-    SidebarTogglerComponent,
-    IconModule
+    SidebarTogglerComponent
   ],
   exports: [
     SidebarComponent,
