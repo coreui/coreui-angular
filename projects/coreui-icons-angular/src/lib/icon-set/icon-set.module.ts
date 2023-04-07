@@ -3,10 +3,7 @@ import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core
 import { IconSetService } from './icon-set.service';
 
 @NgModule({
-  imports: [],
-  providers: [
-    IconSetService
-  ]
+  providers: [IconSetService]
 })
 export class IconSetModule {
   constructor(@Optional() @SkipSelf() parentModule?: IconSetModule) {
