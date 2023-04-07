@@ -27,10 +27,11 @@ export class HtmlAttributesDirective implements OnInit {
     }
   }
 
-  private setStyle(styles: any): void {
-    // tslint:disable-next-line:forin
+  private setStyle(styles: { [x: string]: any; }): void {
     for (const style in styles) {
-      this.renderer.setStyle(this.el.nativeElement, style, styles[style]);
+      if (style) {
+        this.renderer.setStyle(this.el.nativeElement, style, styles[style]);
+      }
     }
   }
 

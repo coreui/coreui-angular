@@ -8,8 +8,7 @@ import { HtmlAttributesDirective } from './html-attr.directive';
   template: `
     <div [cHtmlAttr]="{class: 'test', style: {backgroundColor: 'red'}, id: 'id-1'}"></div>`
 })
-class TestComponent {
-}
+class TestComponent {}
 
 describe('HtmlAttributesDirective', () => {
 
