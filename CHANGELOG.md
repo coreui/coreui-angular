@@ -1,5 +1,11 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.4.1`
+ 
+- fix(alert): typo in template
+- refactor(html-attr): cleanup
+- refactor(icon, icon-set): cleanup
+
 #### `4.4.0`
 
 - chore: dependencies update
