@@ -1,5 +1,10 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.4.7`
+
+- feat(form-check): add reverse prop
+- chore(dependencies): update
+
 #### `4.4.1`
  
 - fix(alert): typo in template
