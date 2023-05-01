@@ -100,7 +100,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
         }
       });
     } else {
-      this.tabServiceSubscription.unsubscribe();
+      this.tabServiceSubscription?.unsubscribe();
     }
   }
 

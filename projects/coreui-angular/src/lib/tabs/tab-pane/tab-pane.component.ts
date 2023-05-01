@@ -1,23 +1,26 @@
-import { ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostBinding, OnDestroy } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 
 import { TabContentComponent } from '../tab-content/tab-content.component';
 import { ITabContentState, TabService } from '../tab.service';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'c-tab-pane',
-  template: `<ng-content></ng-content>`,
+  template: `
+    <ng-content></ng-content>`,
   styleUrls: ['./tab-pane.component.scss'],
   exportAs: 'cTabPane',
   standalone: true
 })
-export class TabPaneComponent implements OnDestroy, OnInit {
+export class TabPaneComponent implements OnDestroy {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private tabService: TabService
-  ) { }
+  ) {
+    this.subscribeTabService();
+  }
 
   public tabPaneIdx!: number;
   public tabContent!: TabContentComponent;
@@ -30,9 +33,11 @@ export class TabPaneComponent implements OnDestroy, OnInit {
       this.changeDetectorRef.markForCheck();
     }
   }
+
   get active(): boolean {
     return this._active;
   }
+
   private _active: boolean = false;
 
   @HostBinding('class')
@@ -43,10 +48,6 @@ export class TabPaneComponent implements OnDestroy, OnInit {
       show: this.active,
       active: this.active
     };
-  }
-
-  ngOnInit(): void {
-    this.subscribeTabService();
   }
 
   ngOnDestroy(): void {
@@ -61,7 +62,7 @@ export class TabPaneComponent implements OnDestroy, OnInit {
         }
       });
     } else {
-      this.tabServiceSubscription.unsubscribe();
+      this.tabServiceSubscription?.unsubscribe();
     }
   }
 }

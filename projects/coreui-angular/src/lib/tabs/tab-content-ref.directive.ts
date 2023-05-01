@@ -6,11 +6,10 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   SimpleChanges
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { Subscription } from 'rxjs';
 
 import { TabService } from './tab.service';
 
@@ -18,12 +17,14 @@ import { TabService } from './tab.service';
   selector: '[cTabContent]',
   standalone: true
 })
-export class TabContentRefDirective implements OnChanges, OnDestroy, OnInit {
+export class TabContentRefDirective implements OnChanges, OnDestroy {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private tabService: TabService
-  ) { }
+  ) {
+    this.subscribeTabService();
+  }
 
   static ngAcceptInputType_disabled: BooleanInput;
   private tabServiceSubscription!: Subscription;
@@ -46,9 +47,11 @@ export class TabContentRefDirective implements OnChanges, OnDestroy, OnInit {
       this.changeDetectorRef.detectChanges();
     }
   }
+
   get active() {
     return this._active;
   }
+
   private _active = false;
 
   /**
@@ -59,9 +62,11 @@ export class TabContentRefDirective implements OnChanges, OnDestroy, OnInit {
   set disabled(value: boolean) {
     this._disabled = coerceBooleanProperty(value);
   }
+
   get disabled(): boolean {
     return this._disabled || this.tabPaneIdx >= this.tabContentRef?.panes?.length;
   }
+
   private _disabled = false;
 
   /**
@@ -116,10 +121,6 @@ export class TabContentRefDirective implements OnChanges, OnDestroy, OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.subscribeTabService();
-  }
-
   ngOnDestroy(): void {
     this.subscribeTabService(false);
   }
@@ -132,7 +133,7 @@ export class TabContentRefDirective implements OnChanges, OnDestroy, OnInit {
         }
       });
     } else {
-      this.tabServiceSubscription.unsubscribe();
+      this.tabServiceSubscription?.unsubscribe();
     }
   }
 }
