@@ -1,5 +1,10 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.4.8`
+
+- refactor(tabs): safe tabServiceSubscription?.unsubscribe()
+- chore(dependencies): update
+
 #### `4.4.7`
 
 - feat(form-check): add reverse prop
