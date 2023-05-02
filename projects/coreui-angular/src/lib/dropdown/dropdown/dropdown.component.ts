@@ -312,7 +312,7 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
           }
         });
     } else {
-      this.dropdownStateSubscription.unsubscribe();
+      this.dropdownStateSubscription?.unsubscribe();
     }
   }
 

@@ -161,7 +161,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.navSubscription.unsubscribe();
+    this.navSubscription?.unsubscribe();
   }
 
   onAnimationStart($event: AnimationEvent) {

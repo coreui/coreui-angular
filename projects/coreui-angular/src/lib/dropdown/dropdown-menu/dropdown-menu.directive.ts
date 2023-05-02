@@ -78,7 +78,7 @@ export class DropdownMenuDirective implements OnInit, OnDestroy {
           }
         });
     } else {
-      this.dropdownStateSubscription.unsubscribe();
+      this.dropdownStateSubscription?.unsubscribe();
     }
   }
 }

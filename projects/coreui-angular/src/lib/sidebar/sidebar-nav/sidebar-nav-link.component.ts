@@ -95,7 +95,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.navSubscription.unsubscribe();
+    this.navSubscription?.unsubscribe();
   }
 
   public getLinkType(): string {

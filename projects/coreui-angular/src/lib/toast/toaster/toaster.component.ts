@@ -169,7 +169,7 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
         }
       });
     } else {
-      this.stateToasterSubscription.unsubscribe();
+      this.stateToasterSubscription?.unsubscribe();
     }
   }
 }

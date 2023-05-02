@@ -276,7 +276,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.stateToggleSubscription.unsubscribe();
+      this.stateToggleSubscription?.unsubscribe();
     }
   }
 

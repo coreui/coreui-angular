@@ -269,7 +269,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
           }
         });
     } else {
-      this.#stateToggleSubscription.unsubscribe();
+      this.#stateToggleSubscription?.unsubscribe();
     }
   }
 
