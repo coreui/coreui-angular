@@ -1,5 +1,10 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.4.9`
+
+- refactor: safe ?.unsubscribe() from subscriptions
+- chore(dependencies): update
+
 #### `4.4.8`
 
 - refactor(tabs): safe tabServiceSubscription?.unsubscribe()
