@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { IBreadcrumbItem } from '../breadcrumb-item/breadcrumb-item';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class BreadcrumbRouterService {
   public outlet = 'primary';
@@ -21,7 +22,10 @@ export class BreadcrumbRouterService {
     this.breadcrumbs$ = this.breadcrumbsBehaviorSubject.asObservable();
 
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
+      .pipe(
+        takeUntilDestroyed(),
+        filter((event) => event instanceof NavigationEnd)
+      )
       .subscribe((event) => {
         const breadcrumbs: any[] = [];
         let currentRoute: ActivatedRoute | null = this.route.root;
@@ -33,13 +37,11 @@ export class BreadcrumbRouterService {
             // console.log('breadcrumb event', event, 'route', route);
             if (childRoute.outlet === this.outlet) {
               const routeSnapshot = childRoute.snapshot;
-              url +=
-                '/' +
-                routeSnapshot.url.map((segment) => segment.path).join('/');
+              url += '/' + routeSnapshot.url.map((segment) => segment.path).join('/');
               breadcrumbs.push({
                 label: childRoute.snapshot.data['title'] || '',
                 url,
-                queryParams: routeSnapshot.queryParams,
+                queryParams: routeSnapshot.queryParams
               });
               currentRoute = childRoute;
             }
