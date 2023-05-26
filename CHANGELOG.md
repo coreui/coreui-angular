@@ -1,19 +1,35 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.5.0-next.0`
+
+- chore: dependencies update
+  - `Angular 16`
+  - `TypeScript ~4.9.3`
+- refactor(breadcrumb-router.service): router.events takeUntilDestroyed()
+- refactor(toaster): remove ComponentFactoryResolver
+
+---
+
 #### `4.4.9`
 
 - refactor: safe ?.unsubscribe() from subscriptions
 - chore(dependencies): update
+
+---
 
 #### `4.4.8`
 
 - refactor(tabs): safe tabServiceSubscription?.unsubscribe()
 - chore(dependencies): update
 
+---
+
 #### `4.4.7`
 
 - feat(form-check): add reverse prop
 - chore(dependencies): update
+
+---
 
 #### `4.4.1`
  
@@ -21,10 +37,14 @@
 - refactor(html-attr): cleanup
 - refactor(icon, icon-set): cleanup
 
+---
+
 #### `4.4.0`
 
 - chore: dependencies update
 - chore(sidebar): minor cleanups
+
+---
 
 #### `4.4.0-next.1`
 
@@ -40,6 +60,7 @@
 - `@coreui/angular-chartjs`
 - `@coreui/icons-angular`
   - chore: dependencies update
+
 ---
 
 #### `4.3.16`

@@ -40,6 +40,10 @@
           "options": {
             "main": "projects/coreui-angular/src/test.ts",
             "tsConfig": "projects/coreui-angular/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "karmaConfig": "projects/coreui-angular/karma.conf.js"
           }
         },
@@ -85,6 +89,10 @@
           "options": {
             "main": "projects/coreui-angular-chartjs/src/test.ts",
             "tsConfig": "projects/coreui-angular-chartjs/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "karmaConfig": "projects/coreui-angular-chartjs/karma.conf.js"
           }
         },
@@ -130,6 +138,10 @@
           "options": {
             "main": "projects/coreui-icons-angular/src/test.ts",
             "tsConfig": "projects/coreui-icons-angular/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "karmaConfig": "projects/coreui-icons-angular/karma.conf.js"
           }
         },
