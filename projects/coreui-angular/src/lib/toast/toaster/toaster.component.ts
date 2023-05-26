@@ -1,7 +1,6 @@
 import {
   AfterContentChecked,
   Component,
-  ComponentFactoryResolver,
   ComponentRef,
   ContentChildren,
   ElementRef,
@@ -13,7 +12,6 @@ import {
   OnInit,
   QueryList,
   Renderer2,
-  VERSION,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
@@ -75,11 +73,10 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
    */
   @Input() position: (string | 'absolute' | 'fixed' | 'static') = 'absolute';
 
-  @ViewChild(ToasterHostDirective, {static: true}) toasterHost!: ToasterHostDirective;
-  @ContentChildren(ToastComponent, {read: ViewContainerRef}) contentToasts!: QueryList<ViewContainerRef>;
+  @ViewChild(ToasterHostDirective, { static: true }) toasterHost!: ToasterHostDirective;
+  @ContentChildren(ToastComponent, { read: ViewContainerRef }) contentToasts!: QueryList<ViewContainerRef>;
 
   constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
     private hostElement: ElementRef,
     private renderer: Renderer2,
     private toasterService: ToasterService
@@ -99,7 +96,7 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
       'end-0': this.placement.includes('end'),
       'translate-middle-x': this.placement.includes('center') && !this.placement.includes('middle'),
       'translate-middle-y': this.placement.includes('middle') && !this.placement.includes('center'),
-      'translate-middle': this.placement.includes('middle') && this.placement.includes('center'),
+      'translate-middle': this.placement.includes('middle') && this.placement.includes('center')
     };
   }
 
@@ -115,15 +112,13 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
     this.toasts = this.contentToasts;
   }
 
-  addToast(toast: any, props: any, options?: { index?: number; injector?: Injector; ngModuleRef?: NgModuleRef<unknown>; projectableNodes?: Node[][]; }): ComponentRef<any> {
-    let componentRef: ComponentRef<any>;
-    if (parseInt(VERSION.major) < 13) {
-      const factory = this.componentFactoryResolver.resolveComponentFactory(toast);
-      componentRef = this.toasterHost.viewContainerRef.createComponent(factory, options?.index, options?.injector, options?.projectableNodes, options?.ngModuleRef);
-    } else {
-      // @ts-ignore
-      componentRef = this.toasterHost.viewContainerRef.createComponent(toast, options);
-    }
+  addToast(toast: any, props: any, options?: {
+    index?: number;
+    injector?: Injector;
+    ngModuleRef?: NgModuleRef<unknown>;
+    projectableNodes?: Node[][];
+  }): ComponentRef<any> {
+    const componentRef: ComponentRef<any> = this.toasterHost.viewContainerRef.createComponent(toast, options);
     this.toastsDynamic.push(componentRef);
     const index = this.toastsDynamic.indexOf(componentRef);
     for (const [key, value] of Object.entries(props)) {
