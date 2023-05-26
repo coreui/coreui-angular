@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "4.5.0-next.0",
+  "version": "4.5.0",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2023 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -47,7 +47,7 @@
     "@angular/platform-browser-dynamic": "^16.0.3",
     "@angular/router": "^16.0.3",
     "@coreui/chartjs": "^3.1.1",
-    "@popperjs/core": "~2.11.7",
+    "@popperjs/core": "~2.11.6",
     "chart.js": "^3.9.1",
     "lodash-es": "^4.17.21",
     "rxjs": "~7.8.1",

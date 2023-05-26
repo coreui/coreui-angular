@@ -1,6 +1,6 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
-#### `4.5.0-next.0`
+#### `4.5.0`
 
 - chore: dependencies update
   - `Angular 16`
