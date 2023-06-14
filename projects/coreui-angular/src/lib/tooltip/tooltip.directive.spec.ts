@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef } from '@angular/core';
-import { ListenersService } from '../services/listeners.service';
+import { IntersectionService, ListenersService } from '../services';
 import { TooltipDirective } from './tooltip.directive';
 
 describe('TooltipDirective', () => {
@@ -11,7 +11,16 @@ describe('TooltipDirective', () => {
 
   it('should create an instance', () => {
     const listenersService = new ListenersService(renderer);
-    const directive = new TooltipDirective(document, renderer, hostElement, viewContainerRef, listenersService, changeDetectorRef);
+    const intersectionService = new IntersectionService();
+    const directive = new TooltipDirective(
+      document,
+      renderer,
+      hostElement,
+      viewContainerRef,
+      listenersService,
+      changeDetectorRef,
+      intersectionService
+    );
     expect(directive).toBeTruthy();
   });
 });

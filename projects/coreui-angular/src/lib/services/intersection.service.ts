@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-interface IIntersectionObserverInit {
+export interface IIntersectionObserverInit {
   root?: Element | null;
   rootMargin?: string;
   threshold?: number | number[];
@@ -26,7 +26,7 @@ export class IntersectionService implements OnDestroy {
 
   createIntersectionObserver(hostElement: { nativeElement: Element; }, observerOptions = this.defaultObserverOptions) {
 
-    const options = { ...this.defaultObserverOptions, ...observerOptions }
+    const options = { ...this.defaultObserverOptions, ...observerOptions };
 
     this.hostElement = hostElement;
 

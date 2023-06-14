@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef } from '@angular/core';
-import { ListenersService } from '../services/listeners.service';
+import { IntersectionService, ListenersService } from '../services';
 import { PopoverDirective } from './popover.directive';
-import { IntersectionService } from '../services';
 
 describe('PopoverDirective', () => {
   let document: Document;

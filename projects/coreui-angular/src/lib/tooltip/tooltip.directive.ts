@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   ComponentRef,
   Directive,
@@ -15,19 +16,22 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
 
 import { Triggers } from '../coreui.types';
 import { TooltipComponent } from './tooltip/tooltip.component';
 import { IListenersConfig, ListenersService } from '../services/listeners.service';
+import { IntersectionService } from '../services';
 
 @Directive({
   selector: '[cTooltip]',
   exportAs: 'cTooltip',
-  providers: [ListenersService],
+  providers: [ListenersService, IntersectionService],
   standalone: true
 })
-export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
+export class TooltipDirective implements OnChanges, OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Content of tooltip
@@ -92,14 +96,22 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
     ]
   };
 
+  private intersectingSubscription?: Subscription;
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private hostElement: ElementRef,
     private viewContainerRef: ViewContainerRef,
     private listenersService: ListenersService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private intersectionService: IntersectionService
   ) {}
+
+  ngAfterViewInit(): void {
+    this.intersectionService.createIntersectionObserver(this.hostElement);
+    this.intersectionServiceSubscribe();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['visible']) {
@@ -110,6 +122,7 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
   ngOnDestroy(): void {
     this.clearListeners();
     this.destroyTooltipElement();
+    this.intersectionServiceSubscribe(false);
   }
 
   ngOnInit(): void {
@@ -138,6 +151,21 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit {
 
   private clearListeners(): void {
     this.listenersService.clearListeners();
+  }
+
+  private intersectionServiceSubscribe(subscribe: boolean = true): void {
+    if (subscribe) {
+      this.intersectingSubscription = this.intersectionService.intersecting$
+        .pipe(
+          debounceTime(100)
+        )
+        .subscribe(isIntersecting => {
+          this.visible = isIntersecting ? this.visible : false;
+          !this.visible && this.removeTooltipElement();
+        });
+    } else {
+      this.intersectingSubscription?.unsubscribe();
+    }
   }
 
   private getUID(prefix: string): string {
