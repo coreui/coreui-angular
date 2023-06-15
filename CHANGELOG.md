@@ -1,5 +1,12 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.5.2`
+
+- fix(tooltip): add IntersectionObserver to remove tooltip when host element is not visible
+- chore: dependencies update
+
+---
+
 #### `4.5.0`
 
 - chore: dependencies update
