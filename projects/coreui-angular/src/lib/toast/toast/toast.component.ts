@@ -172,8 +172,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   get hostClasses(): any {
     return {
       toast: true,
-      fade: this.fade,
-      show: !this.hide,
+      show: true,
       [`bg-${this.color}`]: !!this.color,
       'border-0': !!this.color
     };
