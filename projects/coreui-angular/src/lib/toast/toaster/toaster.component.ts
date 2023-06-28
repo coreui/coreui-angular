@@ -3,19 +3,20 @@ import {
   Component,
   ComponentRef,
   ContentChildren,
+  DestroyRef,
   ElementRef,
   HostBinding,
+  inject,
   Injector,
   Input,
   NgModuleRef,
-  OnDestroy,
   OnInit,
   QueryList,
   Renderer2,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { IToasterAction, ToasterService } from './toaster.service';
 import { ToasterHostDirective } from './toaster-host.directive';
@@ -54,9 +55,16 @@ export type TToasterPlacement =
   standalone: true,
   imports: [ToasterHostDirective]
 })
-export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked {
+export class ToasterComponent implements OnInit, AfterContentChecked {
 
-  stateToasterSubscription!: Subscription;
+  readonly #destroyRef = inject(DestroyRef);
+
+  constructor(
+    private hostElement: ElementRef,
+    private renderer: Renderer2,
+    private toasterService: ToasterService
+  ) { }
+
   placements = Object.values(ToasterPlacement);
   toasts!: QueryList<ViewContainerRef>;
   toastsDynamic: any[] = [];
@@ -75,12 +83,6 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
 
   @ViewChild(ToasterHostDirective, { static: true }) toasterHost!: ToasterHostDirective;
   @ContentChildren(ToastComponent, { read: ViewContainerRef }) contentToasts!: QueryList<ViewContainerRef>;
-
-  constructor(
-    private hostElement: ElementRef,
-    private renderer: Renderer2,
-    private toasterService: ToasterService
-  ) { }
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -101,18 +103,14 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
   }
 
   ngOnInit(): void {
-    this.stateToasterSubscribe(true);
-  }
-
-  ngOnDestroy(): void {
-    this.stateToasterSubscribe(false);
+    this.stateToasterSubscribe();
   }
 
   ngAfterContentChecked(): void {
     this.toasts = this.contentToasts;
   }
 
-  addToast(toast: any, props: any, options?: {
+  public addToast(toast: any, props: any, options?: {
     index?: number;
     injector?: Injector;
     ngModuleRef?: NgModuleRef<unknown>;
@@ -133,7 +131,7 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
     return componentRef;
   }
 
-  removeToast(state: IToasterAction): void {
+  public removeToast(state: IToasterAction): void {
     this.toastsDynamic?.forEach(item => {
       if (state.toast?.dynamic && (item.instance === state.toast)) {
         item.instance.visible = false;
@@ -143,26 +141,25 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
     });
 
     this.toasts?.forEach(item => {
-      if (item.element.nativeElement === state.toast?.hostElement.nativeElement) {
-        if (!state.toast?.dynamic) {
-          // @ts-ignore
+      if (state.toast && (item.element.nativeElement === state.toast.hostElement.nativeElement)) {
+        if (!state.toast.dynamic) {
           state.toast.visible = false;
         }
       }
     });
   }
 
-  private stateToasterSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      this.stateToasterSubscription = this.toasterService.toasterState$.subscribe((state) => {
+  private stateToasterSubscribe(): void {
+    this.toasterService.toasterState$
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe((state) => {
         if (state.show === false) {
           this.removeToast(state);
         }
         if (state.show === true && state.toast?.dynamic === undefined) {
         }
       });
-    } else {
-      this.stateToasterSubscription?.unsubscribe();
-    }
   }
 }
