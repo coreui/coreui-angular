@@ -1,5 +1,15 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.5.8`
+
+- fix(toast): show animation not working
+- refactor(toast): remove: onAnimationEvent(), @fadeInOut.start, @fadeInOut.done
+- fix(toaster): drop setTimeout() on removeToast()
+- refactor(toaster): move to takeUntilDestroyed()
+- chore: dependencies update (angular v16.1.3)
+
+---
+
 #### `4.5.2`
 
 - fix(tooltip): add IntersectionObserver to remove tooltip when host element is not visible
