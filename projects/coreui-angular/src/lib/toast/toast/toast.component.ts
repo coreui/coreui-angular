@@ -9,45 +9,45 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  Renderer2,
+  Renderer2
 } from '@angular/core';
 
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
+import { Colors } from '../../coreui.types';
 import { ToasterService } from '../toaster/toaster.service';
 import { TToasterPlacement } from '../toaster/toaster.component';
-import { Colors } from '../../coreui.types';
 
 type AnimateType = ('hide' | 'show');
 
 @Component({
   selector: 'c-toast',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content></ng-content>',
   styleUrls: ['./toast.component.scss'],
   exportAs: 'cToast',
   standalone: true,
   animations: [
     trigger('fadeInOut', [
-      state('show', style({opacity: 1, height: '*', padding: '*', border: '*', margin: '*'})),
-      state('hide', style({opacity: 0, height: 0, padding: 0, border: 0, margin: 0})),
-      state('void', style({opacity: 0, height: 0, padding: 0, border: 0, margin: 0})),
+      state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),
+      state('hide', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
+      state('void', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
       transition('show => hide', [
-        animate('{{ time }} {{ easing }}'),
+        animate('{{ time }} {{ easing }}')
       ], {
-        params: {time: '300ms', easing: 'ease-out'}
+        params: { time: '300ms', easing: 'ease-out' }
       }),
       transition('hide => show', [animate('{{ time }} {{ easing }}')], {
-        params: {time: '300ms', easing: 'ease-in'},
+        params: { time: '300ms', easing: 'ease-in' }
       }),
       transition('show => void', [animate('{{ time }} {{ easing }}')], {
-        params: {time: '300ms', easing: 'ease-out'},
+        params: { time: '300ms', easing: 'ease-out' }
       }),
       transition('void => show', [animate('{{ time }} {{ easing }}')], {
-        params: {time: '300ms', easing: 'ease-in'},
-      }),
-    ]),
-  ],
+        params: { time: '300ms', easing: 'ease-in' }
+      })
+    ])
+  ]
 })
 export class ToastComponent implements OnInit, OnDestroy {
 
@@ -55,7 +55,13 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   public dynamic!: boolean;
   public placement!: TToasterPlacement;
-  public hide!: boolean;
+
+  constructor(
+    public hostElement: ElementRef,
+    public renderer: Renderer2,
+    public toasterService: ToasterService,
+    public changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   /**
    * Auto hide the toast.
@@ -95,9 +101,11 @@ export class ToastComponent implements OnInit, OnDestroy {
       this.changeDetectorRef.markForCheck();
     }
   }
+
   get visible() {
     return this._visible;
   }
+
   private _visible = false;
 
   /**
@@ -121,13 +129,6 @@ export class ToastComponent implements OnInit, OnDestroy {
   private clockId: any;
   private clockTimerId: any;
 
-  constructor(
-    public hostElement: ElementRef,
-    public renderer: Renderer2,
-    public toasterService: ToasterService,
-    public changeDetectorRef: ChangeDetectorRef
-  ) {}
-
   private _clock!: number;
 
   get clock(): number {
@@ -148,16 +149,6 @@ export class ToastComponent implements OnInit, OnDestroy {
   @HostBinding('@fadeInOut')
   get animateType(): AnimateType {
     return this.visible ? 'show' : 'hide';
-  }
-
-  @HostListener('@fadeInOut.start', ['$event'])
-  onAnimationStart($event: AnimationEvent): void {
-    this.onAnimationEvent($event);
-  }
-
-  @HostListener('@fadeInOut.done', ['$event'])
-  onAnimationDone($event: AnimationEvent): void {
-    this.onAnimationEvent($event);
   }
 
   @HostListener('mouseover') onMouseOver(): void {
@@ -183,7 +174,7 @@ export class ToastComponent implements OnInit, OnDestroy {
       this.toasterService.setState({
         toast: this,
         show: this.visible,
-        placement: this.placement,
+        placement: this.placement
       });
       this.clearTimer();
       this.setTimer();
@@ -213,7 +204,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.toasterService.setState({
       toast: this,
       show: false,
-      placement: this.placement,
+      placement: this.placement
     });
   }
 
@@ -233,15 +224,5 @@ export class ToastComponent implements OnInit, OnDestroy {
     clearTimeout(this.clockTimerId);
     clearInterval(this.clockId);
     this.clockId = null;
-  }
-
-  onAnimationEvent(event: AnimationEvent): void {
-    this.hide = event.phaseName === 'start' && event.toState === 'show';
-    if (event.phaseName === 'done') {
-      this.hide = (event.toState === 'hide' || event.toState === 'void');
-      if (event.toState === 'show') {
-        this.hide = false;
-      }
-    }
   }
 }
