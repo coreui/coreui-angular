@@ -138,9 +138,7 @@ export class ToasterComponent implements OnDestroy, OnInit, AfterContentChecked 
       if (state.toast?.dynamic && (item.instance === state.toast)) {
         item.instance.visible = false;
         item.instance['visibleChange'].emit(false);
-        setTimeout(() => {
-          item.destroy();
-        }, 300);
+        item.destroy();
       }
     });
 
