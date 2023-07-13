@@ -1,5 +1,12 @@
-import { AfterContentInit, Component, ContentChildren, HostBinding, Input, QueryList } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import {
+  AfterContentInit,
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  HostBinding,
+  Input,
+  QueryList
+} from '@angular/core';
 
 import { CardBodyComponent, CardComponent } from '../../card';
 import { TemplateIdDirective } from '../../shared';
@@ -17,8 +24,6 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
   constructor() {
     super();
   }
-
-  static ngAcceptInputType_inverse: BooleanInput;
 
   /**
    * Icon for your component.
@@ -40,16 +45,7 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
    * Invert colors from their default dark shade.
    * @type boolean
    */
-  @Input()
-  get inverse(): boolean {
-    return this._inverse;
-  }
-
-  set inverse(value: boolean) {
-    this._inverse = coerceBooleanProperty(value);
-  }
-
-  private _inverse = false;
+  @Input({ transform: booleanAttribute }) inverse: string | boolean = false;
 
   templates: any = {};
   @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;

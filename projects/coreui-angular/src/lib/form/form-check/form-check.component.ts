@@ -1,5 +1,4 @@
-import { AfterContentInit, Component, ContentChild, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { AfterContentInit, booleanAttribute, Component, ContentChild, HostBinding, Input } from '@angular/core';
 
 import { FormCheckLabelDirective } from './form-check-label.directive';
 
@@ -11,25 +10,12 @@ import { FormCheckLabelDirective } from './form-check-label.directive';
 })
 export class FormCheckComponent implements AfterContentInit {
 
-  static ngAcceptInputType_inline: BooleanInput;
-  static ngAcceptInputType_reverse: BooleanInput;
-  static ngAcceptInputType_switch: BooleanInput;
-
   /**
    * Group checkboxes or radios on the same horizontal row.
    * @type boolean
    * @default false
    */
-  @Input()
-  set inline(value: boolean) {
-    this._inline = coerceBooleanProperty(value);
-  }
-
-  get inline(): boolean {
-    return this._inline;
-  }
-
-  private _inline = false;
+  @Input({ transform: booleanAttribute }) inline: string | boolean = false;
 
   /**
    * Put checkboxes or radios on the opposite side.
@@ -37,16 +23,7 @@ export class FormCheckComponent implements AfterContentInit {
    * @default false
    * @since 4.4.7
    */
-  @Input()
-  set reverse(value: boolean) {
-    this._reverse = coerceBooleanProperty(value);
-  }
-
-  get reverse(): boolean {
-    return this._reverse;
-  }
-
-  private _reverse: boolean = false;
+  @Input({ transform: booleanAttribute }) reverse: string | boolean = false;
 
   /**
    * Size the component large or extra large. Works only with `[switch]="true"` [docs]
@@ -59,16 +36,7 @@ export class FormCheckComponent implements AfterContentInit {
    * @type boolean
    * @default false
    */
-  @Input()
-  set switch(value: boolean) {
-    this._switch = coerceBooleanProperty(value);
-  }
-
-  get switch(): boolean {
-    return this._switch;
-  }
-
-  private _switch = false;
+  @Input({ transform: booleanAttribute }) switch: string | boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -84,12 +52,12 @@ export class FormCheckComponent implements AfterContentInit {
 
   @ContentChild(FormCheckLabelDirective) formCheckLabel!: FormCheckLabelDirective;
 
-  private _formCheckClass = true;
+  #formCheckClass = true;
   get formCheckClass() {
-    return this._formCheckClass;
+    return this.#formCheckClass;
   }
 
   ngAfterContentInit(): void {
-    this._formCheckClass = !!this.formCheckLabel;
+    this.#formCheckClass = !!this.formCheckLabel;
   }
 }

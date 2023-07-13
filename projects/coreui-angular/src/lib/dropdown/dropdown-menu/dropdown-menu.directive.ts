@@ -1,6 +1,5 @@
-import { Directive, ElementRef, HostBinding, Input, OnDestroy, OnInit, } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { DropdownService } from '../dropdown.service';
 
 @Directive({
@@ -9,7 +8,6 @@ import { DropdownService } from '../dropdown.service';
   standalone: true
 })
 export class DropdownMenuDirective implements OnInit, OnDestroy {
-  static ngAcceptInputType_dark: BooleanInput;
 
   constructor(
     public elementRef: ElementRef,
@@ -29,15 +27,9 @@ export class DropdownMenuDirective implements OnInit, OnDestroy {
 
   /**
    * Sets a darker color scheme to match a dark navbar.
+   * @type boolean
    */
-  @Input()
-  get dark(): boolean {
-    return this._dark;
-  }
-  set dark(value: boolean) {
-    this._dark = coerceBooleanProperty(value);
-  }
-  private _dark = false;
+  @Input({ transform: booleanAttribute }) dark: string | boolean = false;
 
   private dropdownStateSubscription!: Subscription;
 
@@ -47,7 +39,7 @@ export class DropdownMenuDirective implements OnInit, OnDestroy {
       'dropdown-menu': true,
       'dropdown-menu-dark': this.dark,
       [`dropdown-menu-${this.alignment}`]: !!this.alignment,
-      show: this.visible,
+      show: this.visible
     };
   }
 
@@ -56,7 +48,7 @@ export class DropdownMenuDirective implements OnInit, OnDestroy {
     // workaround for popper position calculate (see also: dropdown.component)
     return {
       visibility: this.visible ? null : '',
-      display: this.visible ? null : '',
+      display: this.visible ? null : ''
     };
   }
 

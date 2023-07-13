@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -8,6 +9,7 @@ import {
   HostBinding,
   Input,
   NgZone,
+  numberAttribute,
   OnChanges,
   OnDestroy,
   Output,
@@ -15,7 +17,6 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
 
 import merge from 'lodash-es/merge';
 
@@ -36,53 +37,22 @@ let nextId = 0;
 })
 export class ChartjsComponent<TType extends ChartType = ChartType, TData = DefaultDataPoint<TType>, TLabel = unknown> implements AfterViewInit, OnDestroy, OnChanges {
 
-  static ngAcceptInputType_height: NumberInput;
-  static ngAcceptInputType_width: NumberInput;
-  static ngAcceptInputType_redraw: BooleanInput;
-
   @Input() customTooltips = true;
   @Input() data?: ChartConfiguration<TType, TData, TLabel>['data'];
 
   @HostBinding('style.height.px')
-  @Input()
-  set height(value: number | undefined) {
-    this._height = coerceNumberProperty(value);
-  }
-
-  get height() {
-    return this._height;
-  }
-
-  private _height: number | undefined;
+  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) }) height?: string | number;
 
   @Input() id = `c-chartjs-${nextId++}`;
   @Input() options?: ChartConfiguration<TType, TData, TLabel>['options'];
   @Input() plugins: ChartConfiguration<TType, TData, TLabel>['plugins'] = [];
 
-  @Input()
-  set redraw(value: boolean) {
-    this._redraw = coerceBooleanProperty(value);
-  }
-
-  get redraw(): boolean {
-    return this._redraw;
-  }
-
-  private _redraw = false;
+  @Input({ transform: booleanAttribute }) redraw: string | boolean = false;
 
   @Input() type: ChartConfiguration<TType, TData, TLabel>['type'] = 'bar' as TType;
 
   @HostBinding('style.width.px')
-  @Input()
-  set width(value: number | undefined) {
-    this._width = coerceNumberProperty(value);
-  }
-
-  get width() {
-    return this._width;
-  }
-
-  private _width: number | undefined;
+  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) }) width?: string | number;
 
   @Input() wrapper = true;
 

@@ -1,5 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
 
 import { IContainer } from './container.type';
 import { Breakpoints } from '../coreui.types';
@@ -10,32 +9,25 @@ import { Breakpoints } from '../coreui.types';
   styleUrls: ['./container.component.scss'],
   standalone: true
 })
-export class ContainerComponent implements IContainer{
-
-  static ngAcceptInputType_fluid: BooleanInput;
+export class ContainerComponent implements IContainer {
 
   /**
    * Set container 100% wide until a breakpoint.
    */
   @Input() breakpoint: Exclude<Breakpoints, 'xs'> = '';
+
   /**
    * Set container 100% wide, spanning the entire width of the viewport.
+   * @type boolean | string
    */
-  @Input()
-  set fluid(value: boolean) {
-    this._fluid = coerceBooleanProperty(value);
-  };
-  get fluid(): boolean {
-    return this._fluid;
-  }
-  private _fluid = false;
+  @Input({ transform: booleanAttribute }) fluid: string | boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {
     return {
       container: !this.fluid && !this.breakpoint,
-      'container-fluid': this.fluid,
-      [`container-${this.breakpoint}`]: !!this.breakpoint,
+      'container-fluid': !!this.fluid,
+      [`container-${this.breakpoint}`]: !!this.breakpoint
     };
   }
 }

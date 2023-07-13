@@ -15,7 +15,7 @@ export class PlaceholderDirective {
   /**
    * placeholder toggler
    * @type boolean
-   * @default true
+   * @default false
    */
   @Input('cPlaceholder')
   set visible(value: boolean) {

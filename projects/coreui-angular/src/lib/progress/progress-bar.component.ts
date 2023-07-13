@@ -1,6 +1,16 @@
-import { Component, ElementRef, HostBinding, Input, OnChanges, OnInit, Renderer2, SimpleChanges } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  ElementRef,
+  HostBinding,
+  Input,
+  numberAttribute,
+  OnChanges,
+  OnInit,
+  Renderer2,
+  SimpleChanges
+} from '@angular/core';
 import { Colors } from '../coreui.types';
-import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'c-progress-bar',
@@ -9,22 +19,11 @@ import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput 
 })
 export class ProgressBarComponent implements OnInit, OnChanges {
 
-  static ngAcceptInputType_animated: BooleanInput;
-  static ngAcceptInputType_value: NumberInput;
-
   /**
    * Use to animate the stripes right to left via CSS3 animations.
    * @type boolean
    */
-  @Input()
-  set animated(value: boolean) {
-    this._animated = coerceBooleanProperty(value);
-
-  }
-  get animated() {
-    return this._animated;
-  }
-  private _animated = false;
+  @Input({ transform: booleanAttribute }) animated: string | boolean = false;
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -32,18 +31,13 @@ export class ProgressBarComponent implements OnInit, OnChanges {
    */
   @Input() color?: Colors;
   // TODO: check if this is necessary.
-  @Input() precision = 0;
+  @Input({ transform: numberAttribute }) precision: string | number = 0;
   /**
    * The percent to progress the ProgressBar.
+   * @type number
    */
-  @Input()
-  set value(value: number) {
-    this._value = coerceNumberProperty(value);
-  };
-  get value() {
-    return this._value;
-  }
-  private _value = 0;
+  @Input({ transform: numberAttribute }) value: string | number = 0;
+
   /**
    * Set the progress bar variant to optional striped.
    * @values 'striped'
@@ -100,7 +94,7 @@ export class ProgressBarComponent implements OnInit, OnChanges {
   }
 
   setPercent(): void {
-    this.state.percent = +((this.value / (this.max - this.min)) * 100).toFixed(this.precision);
+    this.state.percent = +((<number>this.value / (this.max - this.min)) * 100).toFixed(<number>this.precision);
   }
 
   setValues(): void {

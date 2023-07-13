@@ -1,5 +1,4 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: '[cNavLink]',
@@ -7,22 +6,12 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 })
 export class NavLinkDirective {
 
-  static ngAcceptInputType_cNavLink: BooleanInput;
-  static ngAcceptInputType_disabled: BooleanInput;
-
   /**
    * Sets .nav-link class to the host. [docs]
    * @type boolean
    * @default true
    */
-  @Input()
-  set cNavLink(value: boolean) {
-    this._cNavLink = coerceBooleanProperty(value);
-  };
-  get cNavLink() {
-    return this._cNavLink;
-  }
-  private _cNavLink = true
+  @Input({ transform: booleanAttribute }) cNavLink: string | boolean = true;
 
   /**
    * Toggle the active state for the component. [docs]
@@ -33,14 +22,7 @@ export class NavLinkDirective {
    * Set disabled attr for the host element. [docs]
    * @type boolean
    */
-  @Input()
-  get disabled(): boolean {
-    return this._disabled;
-  }
-  set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
-  }
-  private _disabled = false;
+  @Input({ transform: booleanAttribute }) disabled: string | boolean = false;
 
   @HostBinding('attr.aria-current')
   get ariaCurrent(): string | null {
@@ -49,11 +31,11 @@ export class NavLinkDirective {
 
   @HostBinding('attr.aria-disabled')
   get isDisabled(): boolean | null {
-    return this.disabled || null;
+    return <boolean>this.disabled || null;
   }
 
   @HostBinding('attr.disabled')
-  get attrDisabled () {
+  get attrDisabled() {
     return this.disabled ? '' : null;
   };
 

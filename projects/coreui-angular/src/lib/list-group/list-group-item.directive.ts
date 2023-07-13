@@ -1,5 +1,4 @@
-import { Directive, ElementRef, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Directive, ElementRef, HostBinding, Input } from '@angular/core';
 import { Colors } from '../coreui.types';
 
 @Directive({
@@ -9,7 +8,9 @@ import { Colors } from '../coreui.types';
 })
 export class ListGroupItemDirective {
 
-  static ngAcceptInputType_disabled: BooleanInput;
+  constructor(
+    private hostElement: ElementRef
+  ) { }
 
   /**
    * Toggle the active state for the component.
@@ -27,18 +28,11 @@ export class ListGroupItemDirective {
    * Set disabled attr for the host element. [docs]
    * @type boolean
    */
-  @Input()
-  get disabled(): boolean {
-    return this._disabled;
-  }
-  set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
-  }
-  private _disabled = false;
+  @Input({ transform: booleanAttribute }) disabled: string | boolean = false;
 
   @HostBinding('attr.aria-disabled')
   get isDisabled(): boolean | null {
-    return this.disabled || null;
+    return <boolean>this.disabled || null;
   }
 
   @HostBinding('attr.disabled')
@@ -67,7 +61,4 @@ export class ListGroupItemDirective {
     };
   }
 
-  constructor(
-    private hostElement: ElementRef
-  ) { }
 }

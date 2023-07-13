@@ -1,5 +1,4 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 import { ButtonDirective } from './button.directive';
 
 @Directive({
@@ -8,19 +7,11 @@ import { ButtonDirective } from './button.directive';
 })
 export class ButtonCloseDirective extends ButtonDirective {
 
-  static ngAcceptInputType_white: BooleanInput;
-  private _white = false;
   /**
    * Change the default color to white.
    * @type boolean
    */
-  @Input()
-  get white(): boolean {
-    return this._white;
-  }
-  set white(value: boolean) {
-    this._white = coerceBooleanProperty(value);
-  }
+  @Input({ transform: booleanAttribute }) white: string | boolean = false;
 
   @HostBinding('class')
   override get hostClasses(): any {
@@ -30,7 +21,7 @@ export class ButtonCloseDirective extends ButtonDirective {
       'btn-close-white': this.white,
       [`btn-${this.size}`]: !!this.size,
       disabled: this.disabled,
-      active: this.active,
+      active: this.active
     };
   }
 }

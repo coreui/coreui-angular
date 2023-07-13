@@ -10,7 +10,7 @@ import { By } from '@angular/platform-browser';
 @Component({
   template: `
     <div>
-      <c-icon #icon name="cilList" size="lg" class="test"></c-icon>
+      <c-icon #icon name="cil-list" size="lg" class="test"></c-icon>
     </div>`
 })
 class TestComponent {

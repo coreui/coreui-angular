@@ -1,18 +1,16 @@
-import { Directive, ElementRef, HostBinding, Input, OnInit, Renderer2 } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, HostBinding, Input, OnInit, Renderer2 } from '@angular/core';
 import { Breakpoints, Colors } from '../coreui.types';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
   selector: '[cTable]',
   standalone: true
 })
 export class TableDirective implements OnInit {
-  static ngAcceptInputType_bordered: BooleanInput;
-  static ngAcceptInputType_borderless: BooleanInput;
-  static ngAcceptInputType_hover: BooleanInput;
-  static ngAcceptInputType_small: BooleanInput;
-  static ngAcceptInputType_striped: BooleanInput;
-  static ngAcceptInputType_stripedColumns: BooleanInput;
+
+  constructor(
+    private renderer: Renderer2,
+    private hostElement: ElementRef
+  ) { }
 
   /**
    * Set the vertical alignment.
@@ -31,31 +29,13 @@ export class TableDirective implements OnInit {
    * Add borders on all sides of the table and cells.
    * @type boolean
    */
-  @Input()
-  set bordered(value: boolean) {
-    this._bordered = coerceBooleanProperty(value);
-  };
-
-  get bordered() {
-    return this._bordered;
-  }
-
-  private _bordered = false;
+  @Input({ transform: booleanAttribute }) bordered: string | boolean = false;
 
   /**
    * Remove borders on all sides of the table and cells.
    * @type boolean
    */
-  @Input()
-  set borderless(value: boolean) {
-    this._borderless = coerceBooleanProperty(value);
-  };
-
-  get borderless() {
-    return this._borderless;
-  }
-
-  private _borderless = false;
+  @Input({ transform: booleanAttribute }) borderless: string | boolean = false;
 
   /**
    * Put the `<caption>` on the top of the table.
@@ -73,16 +53,7 @@ export class TableDirective implements OnInit {
    * Enable a hover state on table rows within table body.
    * @type boolean
    */
-  @Input()
-  set hover(value: boolean) {
-    this._hover = coerceBooleanProperty(value);
-  };
-
-  get hover() {
-    return this._hover;
-  }
-
-  private _hover = false;
+  @Input({ transform: booleanAttribute }) hover: string | boolean = false;
 
   /**
    * Make table responsive across all viewports or pick a maximum breakpoint with which to have a responsive table up to.
@@ -94,52 +65,20 @@ export class TableDirective implements OnInit {
    * Make table more compact by cutting all cell `padding` in half.
    * @type boolean
    */
-  @Input()
-  set small(value: boolean) {
-    this._small = coerceBooleanProperty(value);
-  };
-
-  get small() {
-    return this._small;
-  }
-
-  private _small = false;
+  @Input({ transform: booleanAttribute }) small: string | boolean = false;
 
   /**
    * Add zebra-striping to any table row within the table body.
    * @type boolean
    */
-  @Input()
-  set striped(value: boolean) {
-    this._striped = coerceBooleanProperty(value);
-  };
-
-  get striped() {
-    return this._striped;
-  }
-
-  private _striped = false;
+  @Input({ transform: booleanAttribute }) striped: string | boolean = false;
 
   /**
    * Add zebra-striping to any table column.
    * @type boolean
    * @since 4.2.4
    */
-  @Input()
-  set stripedColumns(value: boolean) {
-    this._stripedColumns = coerceBooleanProperty(value);
-  };
-
-  get stripedColumns() {
-    return this._stripedColumns;
-  }
-
-  private _stripedColumns = false;
-
-  constructor(
-    private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) { }
+  @Input({ transform: booleanAttribute }) stripedColumns: string | boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {

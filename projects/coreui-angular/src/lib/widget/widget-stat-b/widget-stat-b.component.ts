@@ -1,5 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 
 import { Colors } from '../../coreui.types';
@@ -17,8 +16,6 @@ export class WidgetStatBComponent extends CardComponent {
   constructor() {
     super();
   }
-
-  static ngAcceptInputType_inverse: BooleanInput;
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -50,16 +47,7 @@ export class WidgetStatBComponent extends CardComponent {
    * Invert colors from their default dark shade.
    * @type boolean
    */
-  @Input()
-  get inverse(): boolean {
-    return this._inverse;
-  }
-
-  set inverse(value: boolean) {
-    this._inverse = coerceBooleanProperty(value);
-  }
-
-  private _inverse = false;
+  @Input({ transform: booleanAttribute }) inverse: string | boolean = false;
 
   @HostBinding('class')
   override get hostClasses() {

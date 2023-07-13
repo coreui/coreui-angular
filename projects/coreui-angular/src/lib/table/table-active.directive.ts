@@ -1,5 +1,4 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: '[cTableActive]',
@@ -7,29 +6,16 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 })
 export class TableActiveDirective {
 
-  static ngAcceptInputType_active: BooleanInput;
-
   /**
    * Highlight a table row or cell
    * @type boolean
    */
-  @Input('cTableActive')
-  set active(value: boolean) {
-    this._active = coerceBooleanProperty(value);
-  };
-  get active() {
-    return this._active;
-  };
-
-  private _active = false;
+  @Input({ alias: 'cTableActive', transform: booleanAttribute }) active: string | boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {
     return {
-      'table-active': this.active,
+      'table-active': this.active
     };
   }
-
-  constructor() { }
-
 }

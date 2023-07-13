@@ -1,5 +1,4 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-import {  coerceBooleanProperty,   BooleanInput } from '@angular/cdk/coercion';
+import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 
 import { ButtonType, Colors, Shapes } from '../coreui.types';
 
@@ -10,24 +9,11 @@ import { ButtonType, Colors, Shapes } from '../coreui.types';
 })
 export class ButtonDirective {
 
-  constructor() {}
-
-  static ngAcceptInputType_active: BooleanInput;
-  private _active = false;
-  static ngAcceptInputType_disabled: BooleanInput;
-  private _disabled = false;
-
   /**
    * Toggle the active state for the component. [docs]
    * @type boolean
    */
-  @Input()
-  get active(): boolean {
-    return this._active;
-  }
-  set active(value: boolean) {
-    this._active = coerceBooleanProperty(value);
-  }
+  @Input({ transform: booleanAttribute }) active: string | boolean = false;
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors. [docs]
@@ -38,29 +24,27 @@ export class ButtonDirective {
    * Toggle the disabled state for the component.
    * @type boolean
    */
-  @Input()
-  get disabled(): boolean {
-    return this._disabled;
-  }
-  set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
-  }
+  @Input({ transform: booleanAttribute }) disabled: string | boolean = false;
+
   /**
    * Select the shape of the component.
    * @type { 'rounded' | 'rounded-top' | 'rounded-end' | 'rounded-bottom' | 'rounded-start' | 'rounded-circle' | 'rounded-pill' | 'rounded-0' | 'rounded-1' | 'rounded-2' | 'rounded-3' | string }
    */
   @Input() shape?: Shapes;
+
   /**
    * Size the component small or large.
    * @type {'sm' | 'lg'}
    */
   @Input() size?: 'sm' | 'lg' | '' = '';
+
   /**
    * Specifies the type of button. Always specify the type attribute for the `<button>` element.
    * Different browsers may use different default types for the `<button>` element.
    */
   @HostBinding('attr.type')
   @Input() type: ButtonType = 'button';
+
   /**
    * Set the button variant to an outlined button or a ghost button.
    * @type {'ghost' | 'outline'}
@@ -82,17 +66,17 @@ export class ButtonDirective {
   }
 
   @HostBinding('attr.aria-disabled')
-  get ariaDisabled () {
+  get ariaDisabled() {
     return this.disabled || null;
   };
 
   @HostBinding('attr.aria-pressed')
   get isActive(): boolean | null {
-    return this.active || null;
+    return <boolean>this.active || null;
   }
 
   @HostBinding('attr.disabled')
-  get attrDisabled () {
+  get attrDisabled() {
     return this.disabled ? '' : null;
   };
 

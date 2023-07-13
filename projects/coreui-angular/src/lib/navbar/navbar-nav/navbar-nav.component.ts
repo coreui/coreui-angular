@@ -1,5 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-navbar-nav',
@@ -8,20 +7,11 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 })
 export class NavbarNavComponent {
 
-  static ngAcceptInputType_scroll: BooleanInput;
-
   /**
    * Enable vertical scrolling of a collapsed navbar toggleable contents.
    * @type boolean
    */
-  @Input()
-  set scroll(value: boolean) {
-    this._scroll = coerceBooleanProperty(value);
-  };
-  get scroll() {
-    return this._scroll;
-  }
-  private _scroll = false;
+  @Input({ transform: booleanAttribute }) scroll: string | boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {

@@ -1,5 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
+import { booleanAttribute, Component, HostBinding, Input, numberAttribute } from '@angular/core';
 
 @Component({
   selector: 'c-progress',
@@ -8,48 +7,23 @@ import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput 
 })
 export class ProgressComponent {
 
-  static ngAcceptInputType_height: NumberInput;
-  static ngAcceptInputType_thin: BooleanInput;
-  static ngAcceptInputType_white: BooleanInput;
-
   /**
    * Sets the height of the component. If you set that value the inner `<CProgressBar>` will automatically resize accordingly.
    * @type number
    */
-  @Input()
-  set height(value: number) {
-    this._height = coerceNumberProperty(value);
-  }
-  get height() {
-    return this._height;
-  }
-  private _height: number = 0;
+  @Input({ transform: numberAttribute }) height: string | number = 0;
 
   /**
    * Displays thin progress.
    * @type boolean
    */
-  @Input()
-  set thin(value: boolean) {
-    this._thin = coerceBooleanProperty(value);
-  }
-  get thin(): boolean {
-    return this._thin;
-  }
-  private _thin = false;
+  @Input({ transform: booleanAttribute }) thin: string | boolean = false;
 
   /**
    * Change the default color to white.
    * @type boolean
    */
-  @Input()
-  get white(): boolean {
-    return this._white;
-  }
-  set white(value: boolean) {
-    this._white = coerceBooleanProperty(value);
-  }
-  private _white = false;
+  @Input({ transform: booleanAttribute }) white: string | boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {

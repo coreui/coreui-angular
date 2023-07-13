@@ -1,6 +1,6 @@
 import { Breakpoints } from '../coreui.types';
 
 export interface IContainer {
-  fluid?: boolean;
+  fluid?: string | boolean;
   breakpoint?: Exclude<Breakpoints, 'xs'>;
 }

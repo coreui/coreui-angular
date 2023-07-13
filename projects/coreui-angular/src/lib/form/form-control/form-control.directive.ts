@@ -1,5 +1,4 @@
-import { Directive, ElementRef, HostBinding, Input, OnInit } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Directive, ElementRef, HostBinding, Input, OnInit } from '@angular/core';
 
 import { InputType } from '../../coreui.types';
 
@@ -9,7 +8,10 @@ import { InputType } from '../../coreui.types';
 })
 export class FormControlDirective implements OnInit {
 
-  static ngAcceptInputType_plaintext: BooleanInput;
+  constructor(
+    private hostElement: ElementRef
+  ) {}
+
   /**
    * Size the component small or large.
    * @type {'sm' | 'lg'}
@@ -30,18 +32,7 @@ export class FormControlDirective implements OnInit {
   /**
    * Render the component styled as plain text. Removes the default form field styling and preserve the correct margin and padding. Recommend to use alongside `readonly` [docs]
    */
-  @Input()
-  set plaintext(value: boolean) {
-    this._plaintext = coerceBooleanProperty(value);
-  }
-  get plaintext(): boolean {
-    return this._plaintext;
-  }
-  private _plaintext = false;
-
-  constructor(
-    private hostElement: ElementRef
-  ) {}
+  @Input({ transform: booleanAttribute }) plaintext: string | boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {

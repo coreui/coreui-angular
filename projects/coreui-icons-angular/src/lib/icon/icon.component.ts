@@ -5,6 +5,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HtmlAttributesDirective } from '../shared/html-attr.directive';
 import { IconSetService } from '../icon-set';
 import { IconSize, IIcon } from './icon.interface';
+import { toCamelCase } from './icon.utils';
 
 @Component({
   selector: 'c-icon',
@@ -24,16 +25,7 @@ export class IconComponent implements IIcon, AfterViewInit {
   @Input() width?: string;
   @Input() height?: string;
 
-  @Input()
-  set name(name: string) {
-    this._name = name.includes('-') ? this.toCamelCase(name) : name;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  private _name!: string;
+  @Input({ transform: (value: string) => value.includes('-') ? toCamelCase(value) : value }) name!: string;
 
   @Input()
   set viewBox(viewBox: string) {
@@ -111,9 +103,7 @@ export class IconComponent implements IIcon, AfterViewInit {
     return !!this.customClasses ? this.customClasses : classes;
   }
 
-  toCamelCase(str: string): any {
-    return str.replace(/([-_][a-z0-9])/ig, ($1: string) => {
-      return $1.toUpperCase().replace('-', '');
-    });
+  toCamelCase(str: string): string {
+    return toCamelCase(str);
   }
 }

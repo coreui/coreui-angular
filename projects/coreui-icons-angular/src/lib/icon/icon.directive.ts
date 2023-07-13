@@ -1,8 +1,9 @@
 import { Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IconSetService } from '../icon-set';
 
+import { IconSetService } from '../icon-set';
 import { IconSize, IIcon } from './icon.interface';
+import { toCamelCase } from './icon.utils';
 
 @Directive({
   selector: 'svg[cIcon]',
@@ -18,23 +19,18 @@ export class IconDirective implements IIcon {
   @Input() width?: string;
   @Input() height?: string;
 
-  @Input()
-  set name(name: string) {
-    this._name = name?.includes('-') ? this.toCamelCase(name) : name;
-  }
-  get name(): string {
-    return this._name;
-  }
-  private _name!: string;
+  @Input({ transform: (value: string) => value.includes('-') ? toCamelCase(value) : value }) name!: string;
 
   @HostBinding('attr.viewBox')
   @Input()
   set viewBox(viewBox: string) {
     this._viewBox = viewBox;
   }
+
   get viewBox(): string {
     return this._viewBox ?? this.scale;
   }
+
   private _viewBox!: string;
 
   @HostBinding('attr.xmlns')
@@ -81,11 +77,12 @@ export class IconDirective implements IIcon {
     if (this.iconSet && this.name) {
       return this.iconSet.getIcon(this.name);
     }
-    if (this.name && !this.iconSet?.icons[this.name])
+    if (this.name && !this.iconSet?.icons[this.name]) {
       console.warn(`c-icon component: icon name '${this.name}' does not exist for IconSet service. ` +
         `To use icon by 'name' prop you need to add it to IconSet service. \n`,
         this.name
       );
+    }
     return undefined;
   }
 
@@ -106,9 +103,7 @@ export class IconDirective implements IIcon {
     return !!this.customClasses ? this.customClasses : classes;
   }
 
-  toCamelCase(str: string): any {
-    return str.replace(/([-_][a-z0-9])/ig, ($1: string) => {
-      return $1.toUpperCase().replace('-', '');
-    });
+  toCamelCase(str: string): string {
+    return toCamelCase(str);
   }
 }

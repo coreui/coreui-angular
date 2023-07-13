@@ -1,5 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-form-feedback',
@@ -7,21 +6,16 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
   standalone: true
 })
 export class FormFeedbackComponent {
-  static ngAcceptInputType_tooltip: BooleanInput;
 
   /**
    * If your form layout allows it, you can display validation feedback in a styled tooltip.
+   * @type boolean
    */
-  private _tooltip = false;
-  @Input()
-  set tooltip(value: boolean) {
-    this._tooltip = coerceBooleanProperty(value);
-  }
-  get tooltip(): boolean {
-    return this._tooltip;
-  }
+  @Input({ transform: booleanAttribute }) tooltip: string | boolean = false;
+
   /**
    * Set component validation state to valid.
+   * @type boolean
    */
   @Input() valid?: boolean;
 

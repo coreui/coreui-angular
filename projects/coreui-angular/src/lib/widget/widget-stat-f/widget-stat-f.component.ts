@@ -1,9 +1,16 @@
-import { AfterContentInit, Component, ContentChildren, HostBinding, Input, QueryList } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-
-import { TemplateIdDirective } from '../../shared';
-import { Colors } from '../../coreui.types';
+import {
+  AfterContentInit,
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  HostBinding,
+  Input,
+  QueryList
+} from '@angular/core';
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+
+import { Colors } from '../../coreui.types';
+import { TemplateIdDirective } from '../../shared';
 import { CardBodyComponent, CardFooterComponent } from '../../card';
 
 @Component({
@@ -15,22 +22,24 @@ import { CardBodyComponent, CardFooterComponent } from '../../card';
 })
 export class WidgetStatFComponent implements AfterContentInit {
 
-  static ngAcceptInputType_padding: BooleanInput;
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
   @Input() color?: Colors;
+
   /**
    * Sets the text-color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
   @Input() textColor?: Colors | 'white' | 'muted';
+
   /**
    * Footer for your widget
    * @type string
    */
   @Input() footer?: string;
+
   /**
    * Icon for your widget
    * @type string
@@ -41,22 +50,14 @@ export class WidgetStatFComponent implements AfterContentInit {
    * Set padding of your component.
    * @type boolean
    */
-  @Input()
-  get padding(): boolean {
-    return this._padding;
-  }
-
-  set padding(value: boolean) {
-    this._padding = coerceBooleanProperty(value);
-  }
-
-  private _padding = false;
+  @Input({ transform: booleanAttribute }) padding: string | boolean = false;
 
   /**
    * Title of the widget to display
    * @type string
    */
   @Input() title?: string;
+
   /**
    * Value for your widget to display
    * @type string
