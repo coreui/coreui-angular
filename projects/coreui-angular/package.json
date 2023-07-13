@@ -22,10 +22,10 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/cdk": "^16.0.0",
-    "@angular/common": "^16.0.0",
-    "@angular/core": "^16.0.0",
-    "@angular/router": "^16.0.0"
+    "@angular/cdk": "^16.1.0",
+    "@angular/common": "^16.1.0",
+    "@angular/core": "^16.1.0",
+    "@angular/router": "^16.1.0"
   },
   "repository": {
     "type": "git",
