@@ -1,5 +1,13 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.5.10`
+
+- refactor: @Input() transform option of @angular/core@16.1 instead of @angular/cdk coerce functions (partial)
+- chore: dependencies update (angular v16.1.4)
+- chore: peerDependencies update to Angular 16.1
+
+---
+
 #### `4.5.8`
 
 - fix(toast): show animation not working
