@@ -1,8 +1,16 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.5.13`
+
+- chore(dependencies): update
+
+---
+
 #### `4.5.11`
 
 - chore(dependencies): update
+
+---
 
 #### `4.5.10`
 
