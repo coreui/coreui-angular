@@ -33,7 +33,6 @@ import { INavData } from './sidebar-nav';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
 import { HtmlAttributesDirective } from '../../shared';
-import { IconModule } from '@coreui/icons-angular';
 import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 import { SidebarNavLinkComponent } from './sidebar-nav-link.component';
@@ -41,6 +40,7 @@ import { SidebarNavLabelComponent } from './sidebar-nav-label.component';
 import { SidebarNavTitleComponent } from './sidebar-nav-title.component';
 import { SidebarNavDividerComponent } from './sidebar-nav-divider.component';
 import { SidebarNavItemClassPipe } from './sidebar-nav-item-class.pipe';
+import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
   selector: 'c-sidebar-nav-group',
@@ -50,10 +50,10 @@ import { SidebarNavItemClassPipe } from './sidebar-nav-item-class.pipe';
   standalone: true,
   imports: [
     HtmlAttributesDirective,
+    IconDirective,
     NgTemplateOutlet,
     NgIf,
     NgClass,
-    IconModule,
     SidebarNavIconPipe,
     SidebarNavBadgePipe,
     forwardRef(() => SidebarNavComponent),

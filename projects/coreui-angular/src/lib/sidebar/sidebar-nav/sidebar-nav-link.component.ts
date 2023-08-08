@@ -11,7 +11,7 @@ import { INavData } from './sidebar-nav';
 import { SidebarNavLinkPipe } from './sidebar-nav-link.pipe';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
-import { IconModule } from '@coreui/icons-angular'
+import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
   selector: 'c-sidebar-nav-link-content',
@@ -37,7 +37,16 @@ export class SidebarNavLinkContentComponent {
   templateUrl: './sidebar-nav-link.component.html',
   providers: [SidebarNavHelper],
   standalone: true,
-  imports: [CommonModule, RouterModule, HtmlAttributesDirective, SidebarNavLinkContentComponent, SidebarNavLinkPipe, SidebarNavBadgePipe, SidebarNavIconPipe, IconModule]
+  imports: [
+    CommonModule,
+    RouterModule,
+    HtmlAttributesDirective,
+    IconDirective,
+    SidebarNavLinkContentComponent,
+    SidebarNavLinkPipe,
+    SidebarNavBadgePipe,
+    SidebarNavIconPipe
+  ]
 })
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
 
