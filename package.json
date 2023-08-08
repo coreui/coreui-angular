@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "4.5.13",
+  "version": "4.5.14",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2023 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -67,7 +67,7 @@
     "@coreui/icons": "^3.0.1",
     "@types/jasmine": "~4.3.5",
     "@types/lodash-es": "^4.17.8",
-    "@types/node": "^18.17.3",
+    "@types/node": "^18.17.4",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.46.0",

@@ -1,5 +1,13 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.5.14`
+
+- fix(@coreui/angular): add missing peerDependencies
+- refactor(sidebar-nav): IconDirective imports
+
+---
+
+
 #### `4.5.13`
 
 - chore(dependencies): update
