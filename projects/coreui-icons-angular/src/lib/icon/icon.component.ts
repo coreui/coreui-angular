@@ -25,7 +25,7 @@ export class IconComponent implements IIcon, AfterViewInit {
   @Input() width?: string;
   @Input() height?: string;
 
-  @Input({ transform: (value: string) => value.includes('-') ? toCamelCase(value) : value }) name!: string;
+  @Input({ transform: (value: string) => value && value.includes('-') ? toCamelCase(value) : value }) name!: string;
 
   @Input()
   set viewBox(viewBox: string) {

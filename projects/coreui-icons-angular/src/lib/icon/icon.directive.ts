@@ -19,7 +19,7 @@ export class IconDirective implements IIcon {
   @Input() width?: string;
   @Input() height?: string;
 
-  @Input({ transform: (value: string) => value.includes('-') ? toCamelCase(value) : value }) name!: string;
+  @Input({ transform: (value: string) => value && value.includes('-') ? toCamelCase(value) : value }) name!: string;
 
   @HostBinding('attr.viewBox')
   @Input()
