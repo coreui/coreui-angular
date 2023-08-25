@@ -1,5 +1,13 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.5.15`
+
+- chore(dependencies): update to Angular 16.2 
+- fix(icon): check name value for undefined
+
+---
+
+
 #### `4.5.14`
 
 - fix(@coreui/angular): add missing peerDependencies
