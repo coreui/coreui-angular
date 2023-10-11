@@ -1,5 +1,10 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `4.5.25`
+
+- chore: sync with v4.5.25
+- chore(dependencies): update
+
 #### `4.5.16`
 
 - chore(dependencies): update
