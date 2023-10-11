@@ -6,7 +6,7 @@ import { CollapseDirective } from '../collapse';
 import { Colors } from '../coreui.types';
 
 // todo: fix container prop issue not rendering children
-// todo: workaroud -  use <c-container> component directly in template
+// todo: workaround -  use <c-container> component directly in template
 
 @Component({
   selector: 'c-navbar',

@@ -6,8 +6,7 @@ import { By } from '@angular/platform-browser';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: `
-    <li cListGroupItem></li>`
+  template: `<li cListGroupItem></li>`
 })
 class TestComponent {}
 

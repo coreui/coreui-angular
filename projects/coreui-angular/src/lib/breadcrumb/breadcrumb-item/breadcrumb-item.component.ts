@@ -1,8 +1,8 @@
 import { Component, HostBinding, Input } from '@angular/core';
-import { CommonModule, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { HtmlAttributesDirective, SharedModule } from '../../shared';
+import { HtmlAttributesDirective } from '../../shared';
 import { INavAttributes, INavLinkProps } from './breadcrumb-item';
 
 @Component({

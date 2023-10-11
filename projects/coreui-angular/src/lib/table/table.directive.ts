@@ -1,11 +1,12 @@
 import { booleanAttribute, Directive, ElementRef, HostBinding, Input, OnInit, Renderer2 } from '@angular/core';
 import { Breakpoints, Colors } from '../coreui.types';
+import { ITable } from './table.type';
 
 @Directive({
-  selector: '[cTable]',
+  selector: 'table[cTable]',
   standalone: true
 })
-export class TableDirective implements OnInit {
+export class TableDirective implements ITable, OnInit {
 
   constructor(
     private renderer: Renderer2,

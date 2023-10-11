@@ -50,7 +50,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
   private _activeTabPaneIdx = -1;
 
   /**
-   * Event emited on the active tab pane index change.
+   * Event emitted on the active tab pane index change.
    */
   @Output() activeTabPaneIdxChange: EventEmitter<number> = new EventEmitter<number>();
 

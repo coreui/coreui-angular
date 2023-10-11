@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule, NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 import { HtmlAttributesDirective } from '../../shared';
 import { SidebarNavHelper } from './sidebar-nav.service';

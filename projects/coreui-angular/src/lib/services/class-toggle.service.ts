@@ -19,8 +19,8 @@ export class ClassToggleService {
     const element = document.querySelector(selector);
     if (element) {
       element.classList.contains(className) ?
-      this.renderer.removeClass(element, className) :
-      this.renderer.addClass(element, className);
+        this.renderer.removeClass(element, className) :
+        this.renderer.addClass(element, className);
     }
   }
 }

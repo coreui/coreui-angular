@@ -19,7 +19,7 @@ export class FormControlDirective implements OnInit {
   @Input() sizing?: '' | 'sm' | 'lg' | string = '';
   /**
    * Set component validation state to valid.
-   * @type boolean
+   * @type boolean | undefined
    */
   @Input() valid?: boolean;
 
@@ -57,7 +57,7 @@ export class FormControlDirective implements OnInit {
   ngOnInit(): void {
     const hostTag = this.hostTag.toLowerCase();
     if (hostTag !== 'input' && hostTag !== 'textarea') {
-      console.warn(`CoreUI [cFormControl] works with '<input>' and '<texarea>' - not with '<${hostTag}>'`);
+      console.warn(`CoreUI [cFormControl] works with '<input>' and '<textarea>' - not with '<${hostTag}>'`);
     }
   }
 

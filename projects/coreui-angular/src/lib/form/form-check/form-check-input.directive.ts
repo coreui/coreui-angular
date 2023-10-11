@@ -7,6 +7,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 })
 export class FormCheckInputDirective {
 
+  static ngAcceptInputType_checked: BooleanInput;
   static ngAcceptInputType_indeterminate: BooleanInput;
 
   /**
@@ -23,15 +24,21 @@ export class FormCheckInputDirective {
    */
   @Input()
   set indeterminate(value: boolean) {
-    const newValue = coerceBooleanProperty(value);
-    if (this._indeterminate !== newValue) {
-      this._indeterminate = newValue;
-      this.renderer.setProperty(this.hostElement.nativeElement, 'indeterminate', newValue);
+    const indeterminate = coerceBooleanProperty(value);
+    if (this._indeterminate !== indeterminate) {
+      this._indeterminate = indeterminate;
+      const htmlInputElement = this.hostElement.nativeElement as HTMLInputElement;
+      if (indeterminate) {
+        this.renderer.setProperty(htmlInputElement, 'checked', false);
+      }
+      this.renderer.setProperty(htmlInputElement, 'indeterminate', indeterminate);
     }
   };
+
   get indeterminate() {
     return this._indeterminate;
   }
+
   private _indeterminate = false;
 
   /**
@@ -47,6 +54,15 @@ export class FormCheckInputDirective {
       'is-valid': this.valid === true,
       'is-invalid': this.valid === false
     };
+  }
+
+  @Input()
+  set checked(value: boolean) {
+    const checked = coerceBooleanProperty(value);
+    const htmlInputElement = this.hostElement?.nativeElement as HTMLInputElement;
+    if (htmlInputElement) {
+      this.renderer.setProperty(htmlInputElement, 'checked', checked);
+    }
   }
 
   get checked(): boolean {

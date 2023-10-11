@@ -12,7 +12,6 @@ import { TemplateIdDirective } from './template-id.directive';
     HtmlAttributesDirective,
     TemplateIdDirective
   ],
-  providers: []
 })
 export class SharedModule {
 

@@ -6,7 +6,8 @@ import {
   HostBinding,
   Input,
   OnChanges,
-  Renderer2, SimpleChanges
+  Renderer2,
+  SimpleChanges
 } from '@angular/core';
 
 import { PageLinkDirective } from '../page-link/page-link.directive';

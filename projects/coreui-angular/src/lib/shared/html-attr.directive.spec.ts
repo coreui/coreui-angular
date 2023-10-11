@@ -5,8 +5,7 @@ import { By } from '@angular/platform-browser';
 import { HtmlAttributesDirective } from './html-attr.directive';
 
 @Component({
-  template: `
-    <div [cHtmlAttr]="{class: 'test', style: {backgroundColor: 'red'}, id: 'id-1'}"></div>`
+  template: `<div [cHtmlAttr]="{class: 'test', style: {backgroundColor: 'red'}, id: 'id-1'}"></div>`
 })
 class TestComponent {}
 
