@@ -3,15 +3,11 @@ name: Project lib check
 on:
   push:
     branches:
-      - master
       - main
-      - v4
       - v4.*
   pull_request:
     branches:
-      - master
       - main
-      - v4
       - v4.*
 jobs:
   build:
