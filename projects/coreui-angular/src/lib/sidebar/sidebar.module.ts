@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarService } from './sidebar.service';
@@ -10,8 +8,6 @@ import { SidebarTogglerComponent } from './sidebar-toggler/sidebar-toggler.compo
 import { SidebarHeaderComponent } from './sidebar-header/sidebar-header.component';
 import { SidebarFooterComponent } from './sidebar-footer/sidebar-footer.component';
 import { SidebarNavGroupService } from './sidebar-nav/sidebar-nav-group.service';
-
-import { SharedModule } from '../shared';
 
 import {
   SidebarNavBadgePipe,
@@ -28,13 +24,8 @@ import {
   SidebarNavTitleComponent
 } from './sidebar-nav';
 
-
-
 @NgModule({
   imports: [
-    CommonModule,
-    RouterModule,
-    SharedModule,
     SidebarComponent,
     SidebarBrandComponent,
     SidebarFooterComponent,
@@ -60,12 +51,12 @@ import {
     SidebarBrandComponent,
     SidebarNavComponent,
     SidebarHeaderComponent,
-    SidebarFooterComponent,
+    SidebarFooterComponent
   ],
   providers: [
     SidebarService,
     SidebarNavHelper,
     SidebarNavGroupService
-  ],
+  ]
 })
-export class SidebarModule { }
+export class SidebarModule {}
