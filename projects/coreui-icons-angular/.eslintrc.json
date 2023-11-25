@@ -9,9 +9,6 @@
         "*.ts"
       ],
       "parserOptions": {
-        "project": [
-          "./tsconfig.json"
-        ],
         "createDefaultProgram": true
       },
       "rules": {
@@ -24,7 +21,7 @@
           }
         ],
         "@angular-eslint/component-selector": [
-          "warn",
+          "error",
           {
             "type": "element",
             "prefix": "c",
