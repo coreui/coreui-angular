@@ -95,12 +95,12 @@ export class IconComponent implements IIcon, AfterViewInit {
     return this.size === 'custom' || addCustom ? 'custom-size' : this.size;
   }
 
-  get computedClasses(): any {
+  get computedClasses() {
     const classes = {
       icon: true,
       [`icon-${this.computedSize}`]: !!this.computedSize
     };
-    return !!this.customClasses ? this.customClasses : classes;
+    return !this.customClasses ? classes : this.customClasses;
   }
 
   toCamelCase(str: string): string {
