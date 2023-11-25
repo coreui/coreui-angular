@@ -2,6 +2,18 @@
 
 ---
 
+#### `4.7.0`
+
+- chore(dependencies): update to `Angular 17`
+  - `Angular 17`
+  - `TypeScript ~5.2`
+  - `zone.js ~0.14.2`
+- chore: update tsconfig and eslintrc
+- refactor: minor cleanups - typings, tests
+- chore: update `.github/workfows` for node-version 20
+
+---
+
 #### `4.5.28`
 
 - chore(dependencies): update

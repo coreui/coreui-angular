@@ -35,7 +35,7 @@
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^16.1.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^17.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## Table of contents
 
@@ -59,7 +59,7 @@
 Before you begin, make sure your development environment includes `Node.js®` and `npm` package manager.
 
 ###### Node.js
-[**Angular 16.1**](https://angular.io/guide/what-is-angular) requires `Node.js` LTS version `^16.14` or `^18.10`. 
+[**Angular 17**](https://angular.io/guide/what-is-angular) requires `Node.js` LTS version `^18.13` or `^20.9`. 
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
