@@ -13,7 +13,8 @@ export class IconSetService {
 
   public get iconNames() {
     return this._iconNames;
-  };
+  }
+
   private _iconNames: { [key: string]: string } = {};
 
   get icons(): IIconSet {

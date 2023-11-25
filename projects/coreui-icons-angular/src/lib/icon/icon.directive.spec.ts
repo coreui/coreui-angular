@@ -21,7 +21,6 @@ class TestComponent {
 }
 
 describe('IconDirective', () => {
-  let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let svgEl: DebugElement;
   let renderer: Renderer2;
@@ -36,7 +35,6 @@ describe('IconDirective', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
     svgEl = fixture.debugElement.query(By.css('svg'));
     renderer = fixture.componentRef.injector.get(Renderer2 as Type<Renderer2>);

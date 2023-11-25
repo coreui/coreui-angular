@@ -12,7 +12,6 @@ class TestComponent {}
 
 describe('HtmlAttributesDirective', () => {
 
-  let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let inputEl: DebugElement;
   let renderer: Renderer2;
@@ -23,7 +22,6 @@ describe('HtmlAttributesDirective', () => {
       imports: [HtmlAttributesDirective]
     });
     fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
     inputEl = fixture.debugElement.query(By.css('div'));
     renderer = fixture.componentRef.injector.get(Renderer2 as Type<Renderer2>);
   });
