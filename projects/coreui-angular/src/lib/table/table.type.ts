@@ -52,7 +52,7 @@ export interface ITable {
    * @type boolean
    */
   striped?: boolean | string;
-  attributes?: {[key: string]: any};
+  attributes?: { [key: string]: any };
 }
 
 export interface ITableElementProps {
@@ -60,12 +60,13 @@ export interface ITableElementProps {
    * Set the vertical alignment.
    @type 'bottom' | 'middle' | 'top'
    */
-  align?: ('bottom' | 'middle' | 'top')
+  align?: ('bottom' | 'middle' | 'top');
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  color?: Colors
+  color?: Colors;
+  _attributes?: { [key: string]: any };
 }
 
 export interface ITableRowCellProps extends ITableElementProps {
@@ -73,5 +74,5 @@ export interface ITableRowCellProps extends ITableElementProps {
    * Highlight a table row or cell
    @type boolean
    */
-  active?: boolean
+  active?: boolean;
 }
