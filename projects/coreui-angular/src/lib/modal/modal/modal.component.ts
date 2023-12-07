@@ -148,6 +148,26 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   #visible: WritableSignal<boolean> = signal(false);
 
+  #activeElement: HTMLElement | null = null;
+
+  #visibleEffect = effect(() => {
+    if (this.#visible() && this.#afterViewInit()) {
+      this.#activeElement = this.document.activeElement as HTMLElement;
+      // this.#activeElement?.blur();
+      setTimeout(() => {
+        const focusable = this.modalContentRef.nativeElement.querySelectorAll('[tabindex]:not([tabindex="-1"]), button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
+        this.#focusMonitor.focusVia(focusable[0], 'keyboard');
+      });
+    } else {
+      if (this.document.contains(this.#activeElement)) {
+        setTimeout(() => {
+          this.#activeElement?.focus();
+          this.#activeElement = null;
+        });
+      }
+    }
+  });
+
   /**
    * Event triggered on modal dismiss.
    */
