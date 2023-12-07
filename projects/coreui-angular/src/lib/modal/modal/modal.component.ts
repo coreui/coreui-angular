@@ -1,22 +1,28 @@
+import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import { DOCUMENT } from '@angular/common';
 import {
+  AfterViewInit,
+  booleanAttribute,
   Component,
+  DestroyRef,
+  effect,
   ElementRef,
   EventEmitter,
   HostBinding,
   HostListener,
+  inject,
   Inject,
   Input,
   OnDestroy,
   OnInit,
   Output,
   Renderer2,
-  ViewChild
+  signal,
+  ViewChild,
+  WritableSignal
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { A11yModule } from '@angular/cdk/a11y';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { A11yModule, FocusMonitor } from '@angular/cdk/a11y';
 
 import { ModalService } from '../modal.service';
 import { BackdropService } from '../../backdrop/backdrop.service';
@@ -39,7 +45,7 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
           // display: 'none'
         })
       ),
-      transition('visible <=> *', [animate('300ms')])
+      transition('visible <=> *', [animate('150ms')])
     ])
   ],
   templateUrl: './modal.component.html',
@@ -47,10 +53,10 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
   standalone: true,
   imports: [ModalDialogComponent, ModalContentComponent, A11yModule]
 })
-export class ModalComponent implements OnInit, OnDestroy {
+export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  static ngAcceptInputType_scrollable: BooleanInput;
-  static ngAcceptInputType_visible: BooleanInput;
+  #destroyRef = inject(DestroyRef);
+  #focusMonitor = inject(FocusMonitor);
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -83,7 +89,7 @@ export class ModalComponent implements OnInit, OnDestroy {
    * @type boolean
    * @default true
    */
-  @Input() keyboard = true;
+  @Input({ transform: booleanAttribute }) keyboard = true;
   @Input() id?: string;
   /**
    * Size the component small, large, or extra large.
@@ -92,55 +98,55 @@ export class ModalComponent implements OnInit, OnDestroy {
   /**
    * Remove animation to create modal that simply appear rather than fade in to view.
    */
-  @Input() transition = true;
+  @Input({ transform: booleanAttribute }) transition = true;
   /**
    * Default role for modal. [docs]
    * @type string
    * @default 'dialog'
    */
   @Input() @HostBinding('attr.role') role = 'dialog';
+
   /**
    * Set aria-modal html attr for modal. [docs]
    * @type boolean
-   * @default true
+   * @default null
    */
-  @Input() @HostBinding('attr.aria-modal') ariaModal = true;
+  @Input() @HostBinding('attr.aria-modal')
+  set ariaModal(value: boolean | null) {
+    this.#ariaModal = value;
+  }
+
+  get ariaModal(): boolean | null {
+    return this.visible || this.#ariaModal ? true : null;
+  };
+
+  #ariaModal: boolean | null = null;
 
   /**
    * Create a scrollable modal that allows scrolling the modal body.
    * @type boolean
    */
-  @Input()
-  set scrollable(value: boolean) {
-    this._scrollable = coerceBooleanProperty(value);
-  }
-
-  get scrollable(): boolean {
-    return this._scrollable;
-  }
-
-  private _scrollable = false;
+  @Input({ transform: booleanAttribute }) scrollable: boolean = false;
 
   /**
    * Toggle the visibility of modal component.
    * @type boolean
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set visible(value: boolean) {
-    const newValue = coerceBooleanProperty(value);
-    if (this._visible !== newValue) {
-      this._visible = newValue;
-      this.setBackdrop(this.backdrop !== false && newValue);
-      this.setBodyStyles(newValue);
-      this.visibleChange.emit(newValue);
+    if (this.#visible() !== value) {
+      this.#visible.set(value);
+      this.setBackdrop(this.backdrop !== false && value);
+      this.setBodyStyles(value);
+      this.visibleChange.emit(value);
     }
   }
 
   get visible(): boolean {
-    return this._visible;
+    return this.#visible();
   }
 
-  private _visible!: boolean;
+  #visible: WritableSignal<boolean> = signal(false);
 
   /**
    * Event triggered on modal dismiss.
@@ -148,8 +154,9 @@ export class ModalComponent implements OnInit, OnDestroy {
   @Output() visibleChange = new EventEmitter<boolean>();
 
   @ViewChild(ModalContentComponent, { read: ElementRef }) modalContent!: ElementRef;
-  private activeBackdrop!: any;
-  private stateToggleSubscription!: Subscription;
+  @ViewChild('modalContentRef', { read: ElementRef }) modalContentRef!: ElementRef;
+
+  #activeBackdrop!: any;
 
   // private inBoundingClientRect!: boolean;
 
@@ -189,10 +196,8 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   @HostListener('@showHide.start', ['$event'])
   animateStart(event: AnimationEvent) {
-    const scrollbarWidth = this.backdropService.scrollbarWidth;
     if (event.toState === 'visible') {
-      this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
-      this.renderer.setStyle(this.document.body, 'padding-right', scrollbarWidth);
+      this.backdropService.hideScrollbar();
       this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'block');
     } else {
       if (!this.transition) {
@@ -206,8 +211,6 @@ export class ModalComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       if (event.toState === 'hidden') {
         this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'none');
-        this.renderer.removeStyle(this.document.body, 'overflow');
-        this.renderer.removeStyle(this.document.body, 'padding-right');
       }
     });
     this.show = this.visible;
@@ -255,14 +258,23 @@ export class ModalComponent implements OnInit, OnDestroy {
     this.stateToggleSubscribe();
   }
 
-  ngOnDestroy(): void {
-    this.modalService.toggle({ show: false, modal: this });
-    this.stateToggleSubscribe(false);
+  #afterViewInit = signal(false);
+
+  ngAfterViewInit(): void {
+    this.#afterViewInit.set(true);
   }
 
-  private stateToggleSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      this.stateToggleSubscription = this.modalService.modalState$.subscribe(
+  ngOnDestroy(): void {
+    this.modalService.toggle({ show: false, modal: this });
+    this.#afterViewInit.set(false);
+  }
+
+  private stateToggleSubscribe(): void {
+    this.modalService.modalState$
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe(
         (action) => {
           if (this === action.modal || this.id === action.id) {
             if ('show' in action) {
@@ -275,17 +287,10 @@ export class ModalComponent implements OnInit, OnDestroy {
           }
         }
       );
-    } else {
-      this.stateToggleSubscription?.unsubscribe();
-    }
   }
 
   private setBackdrop(setBackdrop: boolean): void {
-    if (setBackdrop) {
-      this.activeBackdrop = this.backdropService.setBackdrop('modal');
-    } else {
-      this.activeBackdrop = this.backdropService.clearBackdrop(this.activeBackdrop);
-    }
+    this.#activeBackdrop = setBackdrop ? this.backdropService.setBackdrop('modal') : this.backdropService.clearBackdrop(this.#activeBackdrop);
   }
 
   private setBodyStyles(open: boolean): void {

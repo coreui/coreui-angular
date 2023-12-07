@@ -1,4 +1,4 @@
-import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { inject, Injectable, RendererFactory2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Subject } from 'rxjs';
 
@@ -7,53 +7,76 @@ import { Subject } from 'rxjs';
 })
 export class BackdropService {
 
-  private backdropClick = new Subject<boolean>();
-  backdropClick$ = this.backdropClick.asObservable();
+  readonly #backdropClick = new Subject<boolean>();
+  readonly backdropClick$ = this.#backdropClick.asObservable();
 
-  private renderer: Renderer2;
-  private unListen!: () => void;
+  #document = inject(DOCUMENT);
+  #rendererFactory = inject(RendererFactory2);
+  #renderer = this.#rendererFactory.createRenderer(null, null);
+  #unListen!: () => void;
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private rendererFactory: RendererFactory2
-  ) {
-    this.renderer = rendererFactory.createRenderer(null, null);
-  }
+  activeBackdrop: any;
 
-  get scrollbarWidth() {
+  get #scrollbarWidth() {
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth#usage_notes
-    const documentWidth = this.document.documentElement.clientWidth;
+    const documentWidth = this.#document.documentElement.clientWidth;
     const scrollbarWidth = Math.abs((window?.innerWidth ?? documentWidth) - documentWidth);
     return `${scrollbarWidth}px`;
   }
 
+  scrollbarWidth = this.#scrollbarWidth;
+
   setBackdrop(type: string = 'modal'): any {
-    const backdropElement = this.renderer.createElement('div');
-    this.renderer.addClass(backdropElement, `${type}-backdrop`);
-    this.renderer.addClass(backdropElement, 'fade');
-    this.renderer.appendChild(this.document.body, backdropElement);
-    this.unListen = this.renderer.listen(backdropElement, 'click', (e): void => {
+    const backdropElement = this.#renderer.createElement('div');
+    this.#renderer.addClass(backdropElement, `${type}-backdrop`);
+    this.#renderer.addClass(backdropElement, 'fade');
+    this.#renderer.appendChild(this.#document.body, backdropElement);
+    this.#unListen = this.#renderer.listen(backdropElement, 'click', (e): void => {
       this.onClickHandler();
     });
+    this.scrollbarWidth = this.#scrollbarWidth;
     setTimeout(() => {
-      this.renderer.addClass(backdropElement, 'show');
+      this.#renderer.addClass(backdropElement, 'show');
+      // this.hideScrollbar();
     });
+    this.activeBackdrop = backdropElement;
     return backdropElement;
   }
 
-  clearBackdrop(backdrop: any): any {
-    if (backdrop) {
-      this.unListen();
-      this.renderer.removeClass(backdrop, 'show');
+  clearBackdrop(backdropElement: any): any {
+    if (backdropElement) {
+      this.#unListen();
+      this.#renderer.removeClass(backdropElement, 'show');
       setTimeout(() => {
-        this.renderer.removeChild(this.document.body, backdrop);
-        backdrop = undefined;
+        this.#renderer.removeChild(this.#document.body, backdropElement);
+        if (this.activeBackdrop === backdropElement) {
+          this.resetScrollbar();
+        }
+        backdropElement = undefined;
       }, 300);
     }
-    return backdrop;
+    return undefined;
+  }
+
+  get #isRTL() { return this.#document.documentElement.dir === 'rtl' || this.#document.body.dir === 'rtl'; }
+
+  #scrollBarVisible = true;
+
+  hideScrollbar(): void {
+    if (this.#scrollBarVisible) {
+      this.#renderer.setStyle(this.#document.body, 'overflow', 'hidden');
+      this.#renderer.setStyle(this.#document.body, `padding-${this.#isRTL ? 'left' : 'right'}`, this.scrollbarWidth);
+      this.#scrollBarVisible = false;
+    }
+  }
+
+  resetScrollbar(): void {
+    this.#renderer.removeStyle(this.#document.body, 'overflow');
+    this.#renderer.removeStyle(this.#document.body, `padding-${this.#isRTL ? 'left' : 'right'}`);
+    this.#scrollBarVisible = true;
   }
 
   onClickHandler(): void {
-    this.backdropClick.next(true);
+    this.#backdropClick.next(true);
   }
 }
