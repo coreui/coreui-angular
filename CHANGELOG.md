@@ -2,6 +2,16 @@
 
 ---
 
+#### `4.5.29`
+
+- fix(backdrop): add missing export
+- feat(modal): restore focus on modal hide, set focus to visible modal
+- refactor(backdrop, modal, offcanvas): move scrollbar adjustments to offcanvas, cleanups
+- refactor: minor cleanups - typings, tests
+- chore(dependencies): update
+
+---
+
 #### `4.5.28`
 
 - chore(dependencies): update
