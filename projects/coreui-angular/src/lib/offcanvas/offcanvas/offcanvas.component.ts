@@ -1,9 +1,14 @@
+import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
+  booleanAttribute,
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
   HostBinding,
   HostListener,
+  inject,
   Inject,
   Input,
   OnDestroy,
@@ -12,16 +17,14 @@ import {
   PLATFORM_ID,
   Renderer2
 } from '@angular/core';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { A11yModule } from '@angular/cdk/a11y';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { OffcanvasService } from '../offcanvas.service';
-import { A11yModule } from '@angular/cdk/a11y';
 
 let nextId = 0;
 
@@ -52,6 +55,8 @@ let nextId = 0;
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
 
+  #destroyRef = inject(DestroyRef);
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: any,
@@ -62,7 +67,6 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver
   ) {}
 
-  static ngAcceptInputType_scroll: BooleanInput;
   /**
    * Apply a backdrop on body while offcanvas is open.
    * @type boolean | 'static'
@@ -75,7 +79,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
    * @type boolean
    * @default true
    */
-  @Input() keyboard = true;
+  @Input({ transform: booleanAttribute }) keyboard = true;
 
   /**
    * Components placement, there’s no default placement.
@@ -103,46 +107,28 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
    * @type boolean
    * @default true
    */
-  @Input() @HostBinding('attr.aria-modal') ariaModal = true;
-  /**
-   * Event triggered on visible change.
-   */
-  @Output() readonly visibleChange = new EventEmitter<boolean>();
-  #scroll = false;
-  #visible: boolean = false;
+  @Input({ transform: booleanAttribute }) @HostBinding('attr.aria-modal') ariaModal = true;
+
   #activeBackdrop!: HTMLDivElement;
-  #scrollbarWidth!: string;
-  #stateToggleSubscription!: Subscription;
   #backdropClickSubscription!: Subscription;
   #layoutChangeSubscription!: Subscription;
   #show = false;
-
-  get scroll() {
-    return this.#scroll;
-  }
 
   /**
    * Allow body scrolling while offcanvas is visible.
    * @type boolean
    * @default false
    */
-  @Input()
-  set scroll(value: boolean) {
-    this.#scroll = coerceBooleanProperty(value);
-  }
-
-  get visible(): boolean {
-    return this.#visible;
-  }
+  @Input({ transform: booleanAttribute }) scroll: boolean = false;
 
   /**
    * Toggle the visibility of offcanvas component.
    * @type boolean
    * @default false
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set visible(value: boolean) {
-    this.#visible = coerceBooleanProperty(value);
+    this.#visible = value;
     if (this.#visible) {
       this.setBackdrop(this.backdrop);
       this.setFocus();
@@ -152,6 +138,18 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.layoutChangeSubscribe(this.#visible);
     this.visibleChange.emit(value);
   }
+
+  get visible(): boolean {
+    return this.#visible;
+  }
+
+  #visible: boolean = false;
+
+  /**
+   * Event triggered on visible change.
+   * @type EventEmitter<boolean>
+   */
+  @Output() readonly visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -198,11 +196,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   @HostListener('@showHide.start', ['$event'])
   animateStart(event: AnimationEvent) {
-    const scrollbarWidth = this.#scrollbarWidth;
     if (event.toState === 'visible') {
       if (!this.scroll) {
-        this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
-        this.renderer.setStyle(this.document.body, 'padding-right', scrollbarWidth);
+        this.backdropService.hideScrollbar();
       }
       this.renderer.addClass(this.hostElement.nativeElement, 'showing');
     } else {
@@ -238,17 +234,15 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.#scrollbarWidth = this.backdropService.scrollbarWidth;
     this.stateToggleSubscribe();
     setTimeout(() => {
       // hotfix to avoid offcanvas flicker on the first render
       this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'flex');
-    })
+    });
   }
 
   ngOnDestroy(): void {
     this.offcanvasService.toggle({ show: false, id: this.id });
-    this.stateToggleSubscribe(false);
   }
 
   setFocus(): void {
@@ -257,35 +251,37 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  private stateToggleSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      this.#stateToggleSubscription =
-        this.offcanvasService.offcanvasState$.subscribe((action) => {
-          if (this === action.offcanvas || this.id === action.id) {
-            if ('show' in action) {
-              this.visible =
-                action?.show === 'toggle' ? !this.visible : action.show;
-            }
+  private stateToggleSubscribe(): void {
+    this.offcanvasService.offcanvasState$
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe((action) => {
+        if (this === action.offcanvas || this.id === action.id) {
+          if ('show' in action) {
+            this.visible =
+              action?.show === 'toggle' ? !this.visible : action.show;
           }
-        });
-    } else {
-      this.#stateToggleSubscription?.unsubscribe();
-    }
+        }
+      });
   }
 
   private backdropClickSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
       this.#backdropClickSubscription =
-        this.backdropService.backdropClick$.subscribe((clicked) => {
-          this.offcanvasService.toggle({ show: !clicked, id: this.id });
-        });
+        this.backdropService.backdropClick$
+          .pipe(
+            takeUntilDestroyed(this.#destroyRef)
+          )
+          .subscribe((clicked) => {
+            this.offcanvasService.toggle({ show: !clicked, id: this.id });
+          });
     } else {
       this.#backdropClickSubscription?.unsubscribe();
     }
   }
 
   private setBackdrop(setBackdrop: boolean | 'static'): void {
-    this.#scrollbarWidth = this.backdropService.scrollbarWidth;
     this.#activeBackdrop = !!setBackdrop ? this.backdropService.setBackdrop('offcanvas')
                                          : this.backdropService.clearBackdrop(this.#activeBackdrop);
     setBackdrop === true ? this.backdropClickSubscribe()
@@ -306,7 +302,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
       this.#layoutChangeSubscription = layoutChanges
         .pipe(
-          filter(breakpointState => !breakpointState.matches)
+          filter(breakpointState => !breakpointState.matches),
+          takeUntilDestroyed(this.#destroyRef)
         )
         .subscribe(
           (breakpointState: BreakpointState) => {
