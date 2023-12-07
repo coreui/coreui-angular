@@ -2,6 +2,15 @@
 
 ---
 
+#### `4.7.3`
+
+- refactor(backdrop, modal, offcanvas): move scrollbar adjustments to offcanvas, cleanups
+  feat(modal): restore focus on modal hide, set focus to visible modal
+- fix(backdrop): add missing export
+- chore(dependencies): update
+
+---
+
 #### `4.7.0`
 
 - chore(dependencies): update to `Angular 17`
