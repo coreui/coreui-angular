@@ -2,6 +2,12 @@
 
 ---
 
+#### `4.7.6`
+
+- chore(dependencies): update
+
+---
+
 #### `4.7.3`
 
 - refactor(backdrop, modal, offcanvas): move scrollbar adjustments to offcanvas, cleanups
