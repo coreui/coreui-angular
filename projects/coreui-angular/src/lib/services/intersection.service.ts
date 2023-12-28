@@ -1,4 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { ElementRef, inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 export interface IIntersectionObserverInit {
@@ -7,16 +8,18 @@ export interface IIntersectionObserverInit {
   threshold?: number | number[];
 }
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class IntersectionService implements OnDestroy {
 
-  constructor() { }
+  platformId = inject(PLATFORM_ID);
 
-  private intersecting = new BehaviorSubject<boolean>(false);
-  intersecting$ = this.intersecting.asObservable();
+  readonly #intersecting = new BehaviorSubject<boolean>(false);
+  readonly intersecting$ = this.#intersecting.asObservable();
 
   private intersectionObserver!: IntersectionObserver;
-  private hostElement!: { nativeElement: Element; };
+  private hostElement!: ElementRef;
 
   private defaultObserverOptions: IIntersectionObserverInit = {
     root: null,
@@ -24,23 +27,39 @@ export class IntersectionService implements OnDestroy {
     threshold: 0.2
   };
 
-  createIntersectionObserver(hostElement: { nativeElement: Element; }, observerOptions = this.defaultObserverOptions) {
+  hostElementRefs: Map<ElementRef, IntersectionObserver | null> = new Map();
 
+  createIntersectionObserver(hostElement: ElementRef, observerOptions = this.defaultObserverOptions) {
+
+    if (isPlatformServer(this.platformId)) {
+      this.#intersecting.next(true);
+      return;
+    }
+
+    // this.hostElement = hostElement;
     const options = { ...this.defaultObserverOptions, ...observerOptions };
 
-    this.hostElement = hostElement;
-
-    const handleIntersect = (entries: any[], observer: any) => {
+    const handleIntersect = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
       entries.forEach((entry: any) => {
-        this.intersecting.next(entry.isIntersecting);
+        this.#intersecting.next(entry.isIntersecting);
       });
     };
 
-    this.intersectionObserver = new IntersectionObserver(handleIntersect, options);
-    this.intersectionObserver.observe(hostElement.nativeElement);
+    const intersectionObserver: IntersectionObserver = new IntersectionObserver(handleIntersect, options);
+    intersectionObserver.observe(hostElement.nativeElement);
+    this.hostElementRefs.set(hostElement, intersectionObserver);
+
+  }
+
+  unobserve(elementRef: ElementRef) {
+    this.hostElementRefs.get(elementRef)?.unobserve(elementRef.nativeElement);
+    this.hostElementRefs.set(elementRef, null);
+    this.hostElementRefs.delete(elementRef);
   }
 
   ngOnDestroy(): void {
-    this.intersectionObserver?.unobserve(this.hostElement?.nativeElement);
+    this.hostElementRefs.forEach((observer, elementRef) => {
+      observer?.unobserve(elementRef.nativeElement);
+    });
   }
 }

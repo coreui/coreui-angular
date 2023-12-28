@@ -3,14 +3,13 @@ import { TestBed } from '@angular/core/testing';
 import { IntersectionService } from './intersection.service';
 
 describe('IntersectionService', () => {
-  let service: IntersectionService;
+  let service: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [IntersectionService]
+      providers: [IntersectionService]
     });
-    service = new IntersectionService();
-    // service = TestBed.inject(IntersectionService);
+    service = TestBed.inject(IntersectionService);
   });
 
   it('should be created', () => {
