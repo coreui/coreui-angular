@@ -1,16 +1,19 @@
 import {
   AfterContentInit,
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
   HostBinding,
+  inject,
   Inject,
   Input,
   OnDestroy,
   OnInit,
   Output
 } from '@angular/core';
-import { fromEvent, Subscription, withLatestFrom, zipWith } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize, fromEvent, Subscription, withLatestFrom, zipWith } from 'rxjs';
 
 import { IntersectionService } from '../../services/intersection.service';
 import { IListenersConfig, ListenersService } from '../../services/listeners.service';
@@ -24,7 +27,7 @@ import { Triggers } from '../../coreui.types';
   selector: 'c-carousel',
   template: '<ng-content></ng-content>',
   styleUrls: ['./carousel.component.scss'],
-  providers: [CarouselService, CarouselState, CarouselConfig, IntersectionService, ListenersService],
+  providers: [CarouselService, CarouselState, CarouselConfig, ListenersService],
   standalone: true
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
@@ -93,11 +96,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     };
   }
 
-  private carouselIndexSubscription?: Subscription;
   private timerId!: any;
-  private intersectingSubscription?: Subscription;
   private activeItemInterval = 0;
   private swipeSubscription?: Subscription;
+  readonly #destroyRef = inject(DestroyRef);
 
   constructor(
     @Inject(CarouselConfig) private config: CarouselConfig,
@@ -116,13 +118,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   ngOnDestroy(): void {
     this.clearListeners();
-    this.carouselStateSubscribe(false);
-    this.intersectionServiceSubscribe(false);
     this.swipeSubscribe(false);
   }
 
   ngAfterContentInit(): void {
-    this.intersectionService.createIntersectionObserver(this.hostElement);
     this.intersectionServiceSubscribe();
     this.carouselState.state = { activeItemIndex: this.activeIndex, animate: this.animate };
     this.setListeners();
@@ -172,9 +171,12 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     clearTimeout(this.timerId);
   }
 
-  private carouselStateSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      this.carouselIndexSubscription = this.carouselService.carouselIndex$.subscribe((nextItem) => {
+  private carouselStateSubscribe(): void {
+    this.carouselService.carouselIndex$
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe((nextItem) => {
         if ('active' in nextItem) {
           this.itemChange.emit(nextItem.active);
         }
@@ -182,20 +184,21 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
         const isLastItem = ((nextItem.active === nextItem.lastItemIndex) && this.direction === 'next') || ((nextItem.active === 0) && this.direction === 'prev');
         !this.wrap && isLastItem ? this.resetTimer() : this.setTimer();
       });
-    } else {
-      this.carouselIndexSubscription?.unsubscribe();
-    }
   }
 
   private intersectionServiceSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      this.intersectingSubscription = this.intersectionService.intersecting$.subscribe(isIntersecting => {
+    this.intersectionService.createIntersectionObserver(this.hostElement);
+    this.intersectionService.intersecting$
+      .pipe(
+        finalize(() => {
+          this.intersectionService.unobserve(this.hostElement);
+        }),
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe(isIntersecting => {
         this.visible = isIntersecting;
         isIntersecting ? this.setTimer() : this.resetTimer();
       });
-    } else {
-      this.intersectingSubscription?.unsubscribe();
-    }
   }
 
   private swipeSubscribe(subscribe: boolean = true): void {
@@ -204,7 +207,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
       const touchStart$ = fromEvent<TouchEvent>(carouselElement, 'touchstart');
       const touchEnd$ = fromEvent<TouchEvent>(carouselElement, 'touchend');
       const touchMove$ = fromEvent<TouchEvent>(carouselElement, 'touchmove');
-      this.swipeSubscription = touchStart$.pipe(zipWith(touchEnd$.pipe(withLatestFrom(touchMove$))))
+      this.swipeSubscription = touchStart$.pipe(
+        zipWith(touchEnd$.pipe(withLatestFrom(touchMove$))),
+        takeUntilDestroyed(this.#destroyRef)
+      )
         .subscribe(([touchstart, [touchend, touchmove]]) => {
           touchstart.stopPropagation();
           touchmove.stopPropagation();
