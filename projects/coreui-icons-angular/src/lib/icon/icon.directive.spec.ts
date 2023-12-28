@@ -41,10 +41,11 @@ describe('IconDirective', () => {
     sanitizer = fixture.componentRef.injector.get(DomSanitizer);
     iconSetService = fixture.componentRef.injector.get(IconSetService);
   });
-
   it('should create an instance', () => {
-    const directive = new IconDirective(renderer, svgEl, sanitizer, iconSetService);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new IconDirective(renderer, svgEl, sanitizer, iconSetService);
+      expect(directive).toBeTruthy();
+    });
   });
   it('icon classes should be applied', () => {
     expect(svgEl.nativeElement).toBeTruthy();

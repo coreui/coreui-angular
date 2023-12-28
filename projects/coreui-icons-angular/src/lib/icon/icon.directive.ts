@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
+import { afterNextRender, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IconSetService } from '../icon-set';
@@ -51,7 +51,7 @@ export class IconDirective implements IIcon {
     return this.customClasses ?? classes;
   }
 
-  @HostBinding('innerHtml')
+  // @HostBinding('innerHtml')
   get innerHtml() {
     const code = Array.isArray(this.code) ? this.code[1] || this.code[0] : this.code ?? '';
     // todo proper sanitize
@@ -64,7 +64,11 @@ export class IconDirective implements IIcon {
     private elementRef: ElementRef,
     private sanitizer: DomSanitizer,
     private iconSet: IconSetService
-  ) { }
+  ) {
+    afterNextRender(() => {
+      this.elementRef.nativeElement.innerHTML = this.innerHtml;
+    });
+  }
 
   get titleCode(): string {
     return this.title ? `<title>${this.title}</title>` : '';

@@ -12,7 +12,9 @@ import { toCamelCase } from './icon.utils';
   templateUrl: './icon.component.svg',
   styleUrls: ['./icon.component.scss'],
   standalone: true,
-  imports: [NgClass, NgIf, HtmlAttributesDirective]
+  imports: [NgClass, NgIf, HtmlAttributesDirective],
+  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+  host: { ngSkipHydration: 'true' }
 })
 export class IconComponent implements IIcon, AfterViewInit {
 
