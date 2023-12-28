@@ -2,9 +2,11 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   ComponentRef,
+  DestroyRef,
   Directive,
   ElementRef,
   HostBinding,
+  inject,
   Inject,
   Input,
   OnChanges,
@@ -15,9 +17,9 @@ import {
   TemplateRef,
   ViewContainerRef
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DOCUMENT } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, finalize } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
 
 import { Triggers } from '../coreui.types';
@@ -28,7 +30,7 @@ import { IntersectionService } from '../services';
 @Directive({
   selector: '[cPopover]',
   exportAs: 'cPopover',
-  providers: [ListenersService, IntersectionService],
+  providers: [ListenersService],
   standalone: true
 })
 export class PopoverDirective implements OnChanges, OnDestroy, OnInit, AfterViewInit {
@@ -96,7 +98,7 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit, AfterView
     ]
   };
 
-  private intersectingSubscription?: Subscription;
+  readonly #destroyRef = inject(DestroyRef);
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -109,7 +111,6 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit, AfterView
   ) {}
 
   ngAfterViewInit(): void {
-    this.intersectionService.createIntersectionObserver(this.hostElement);
     this.intersectionServiceSubscribe();
   }
 
@@ -122,7 +123,6 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit, AfterView
   ngOnDestroy(): void {
     this.clearListeners();
     this.destroyPopoverElement();
-    this.intersectionServiceSubscribe(false);
   }
 
   ngOnInit(): void {
@@ -154,18 +154,19 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit, AfterView
   }
 
   private intersectionServiceSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      this.intersectingSubscription = this.intersectionService.intersecting$
-        .pipe(
-          debounceTime(100)
-        )
-        .subscribe(isIntersecting => {
-          this.visible = isIntersecting ? this.visible : false;
-          !this.visible && this.removePopoverElement();
-        });
-    } else {
-      this.intersectingSubscription?.unsubscribe();
-    }
+    this.intersectionService.createIntersectionObserver(this.hostElement);
+    this.intersectionService.intersecting$
+      .pipe(
+        debounceTime(100),
+        finalize(() => {
+          this.intersectionService.unobserve(this.hostElement);
+        }),
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe(isIntersecting => {
+        this.visible = isIntersecting ? this.visible : false;
+        !this.visible && this.removePopoverElement();
+      });
   }
 
   private getUID(prefix: string): string {
@@ -241,7 +242,7 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit, AfterView
     this.popoverRef.instance.id = undefined;
     this.changeDetectorRef.markForCheck();
     setTimeout(() => {
-      this.viewContainerRef.detach();
+      this.viewContainerRef?.detach();
     }, 300);
   }
 }
