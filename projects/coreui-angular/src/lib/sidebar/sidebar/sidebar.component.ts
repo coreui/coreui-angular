@@ -9,7 +9,7 @@ import {
   OnInit,
   Output,
   Renderer2,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -40,13 +40,13 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   #stateToggleSubscription!: Subscription;
 
   state: ISidebarAction = {
-    sidebar: this,
+    sidebar: this
   };
 
   #stateInitial = {
     narrow: false,
     visible: false,
-    unfoldable: false,
+    unfoldable: false
   };
 
   /**
@@ -155,11 +155,11 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     }
     this.state = {
       ...this.state,
-      ...newState,
+      ...newState
     };
     this.state.mobile && this.state.visible
-      ? this.backdropService.setBackdrop(this)
-      : this.backdropService.clearBackdrop();
+    ? this.backdropService.setBackdrop(this)
+    : this.backdropService.clearBackdrop();
   }
 
   get sidebarState(): ISidebarAction {
@@ -168,13 +168,8 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   get getMobileBreakpoint(): string {
     const element: Element = this.document.documentElement;
-    const mobileBreakpoint =
-      getComputedStyle(element).getPropertyValue('--cui-mobile-breakpoint') ||
-      'md';
-    const breakpointValue =
-      getComputedStyle(element).getPropertyValue(
-        `--cui-breakpoint-${mobileBreakpoint.trim()}`
-      ) || '768px';
+    const mobileBreakpoint = this.document.defaultView?.getComputedStyle(element)?.getPropertyValue('--cui-mobile-breakpoint') ?? 'md';
+    const breakpointValue = this.document.defaultView?.getComputedStyle(element)?.getPropertyValue(`--cui-breakpoint-${mobileBreakpoint.trim()}`) ?? '768px';
     return `${parseFloat(breakpointValue.trim()) - 0.02}px` || '767.98px';
   }
 
@@ -199,7 +194,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
       'sidebar-overlaid': this.overlaid,
       [`sidebar-${this.size}`]: !!this.size,
       show: visible && this.#onMobile,
-      hide: !visible,
+      hide: !visible
     };
   }
 
@@ -242,11 +237,11 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     this.#stateInitial = {
       narrow: this.narrow,
       visible: this.visible,
-      unfoldable: this.unfoldable,
+      unfoldable: this.unfoldable
     };
     this.sidebarService.toggle({
       ...this.#stateInitial,
-      sidebar: this,
+      sidebar: this
     });
   }
 
@@ -279,7 +274,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
               mobile: isOnMobile,
               unfoldable: isUnfoldable,
               visible: isOnMobile ? !isOnMobile : this.#stateInitial.visible,
-              sidebar: this,
+              sidebar: this
             });
           }
         }

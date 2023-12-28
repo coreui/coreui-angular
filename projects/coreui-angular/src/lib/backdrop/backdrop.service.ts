@@ -20,7 +20,8 @@ export class BackdropService {
   get #scrollbarWidth() {
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth#usage_notes
     const documentWidth = this.#document.documentElement.clientWidth;
-    const scrollbarWidth = Math.abs((window?.innerWidth ?? documentWidth) - documentWidth);
+    // const scrollbarWidth = Math.abs((window?.innerWidth ?? documentWidth) - documentWidth);
+    const scrollbarWidth = Math.abs((this.#document.defaultView?.innerWidth ?? documentWidth) - documentWidth);
     return `${scrollbarWidth}px`;
   }
 

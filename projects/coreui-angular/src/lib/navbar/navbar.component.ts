@@ -66,7 +66,7 @@ export class NavbarComponent implements AfterContentInit {
 
   get breakpoint(): string | boolean {
     if (typeof this.expand === 'string') {
-      return getComputedStyle(this.hostElement.nativeElement).getPropertyValue(`--cui-breakpoint-${this.expand}`);
+      return getComputedStyle(this.hostElement.nativeElement)?.getPropertyValue(`--cui-breakpoint-${this.expand}`) ?? false;
     }
     return false;
   }

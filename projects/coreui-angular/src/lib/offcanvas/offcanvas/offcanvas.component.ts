@@ -51,7 +51,9 @@ let nextId = 0;
   styleUrls: ['./offcanvas.component.scss'],
   exportAs: 'cOffcanvas',
   standalone: true,
-  imports: [A11yModule]
+  imports: [A11yModule],
+  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+  host: { ngSkipHydration: 'true' }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
 
@@ -190,7 +192,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     }
     const element: Element = this.document.documentElement;
     const responsiveBreakpoint = this.responsive;
-    const breakpointValue = getComputedStyle(element).getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) || false;
+    const breakpointValue = getComputedStyle(element)?.getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) ?? false;
     return breakpointValue ? `${parseFloat(breakpointValue.trim()) - 0.02}px` : false;
   }
 
