@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -34,6 +35,8 @@ let nextId = 0;
   exportAs: 'cChart',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
+  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+  // host: { ngSkipHydration: 'true' }
 })
 export class ChartjsComponent<TType extends ChartType = ChartType, TData = DefaultDataPoint<TType>, TLabel = unknown> implements AfterViewInit, OnDestroy, OnChanges {
 
@@ -65,6 +68,7 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
   @ViewChild('canvasElement') canvasElement!: ElementRef;
 
   chart!: Chart<TType, TData, TLabel>;
+  ctx!: CanvasRenderingContext2D;
 
   @HostBinding('class')
   get hostClasses() {
@@ -78,7 +82,12 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     private ngZone: NgZone,
     private renderer: Renderer2,
     private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  ) {
+    afterNextRender(() => {
+      this.ctx = this.canvasElement?.nativeElement?.getContext('2d');
+      this.chartRender();
+    });
+  }
 
   ngAfterViewInit(): void {
     this.chartRender();
@@ -115,17 +124,15 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
   }
 
   public chartRender() {
-    if (!this.canvasElement) {
+    if (!this.canvasElement?.nativeElement || !this.ctx) {
       return;
     }
-
-    const ctx: CanvasRenderingContext2D = this.canvasElement.nativeElement.getContext('2d');
 
     this.ngZone.runOutsideAngular(() => {
       const config = this.chartConfig();
       if (config) {
         setTimeout(() => {
-          this.chart = new Chart(ctx, config);
+          this.chart = new Chart(this.ctx, config);
           this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
           this.changeDetectorRef.markForCheck();
           this.chartRef.emit(this.chart);
