@@ -1,5 +1,6 @@
 import {
   afterNextRender,
+  AfterRenderPhase,
   AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -86,7 +87,7 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     afterNextRender(() => {
       this.ctx = this.canvasElement?.nativeElement?.getContext('2d');
       this.chartRender();
-    });
+    }, { phase: AfterRenderPhase.Read });
   }
 
   ngAfterViewInit(): void {
