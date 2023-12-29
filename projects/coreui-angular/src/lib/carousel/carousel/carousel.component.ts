@@ -13,7 +13,8 @@ import {
   Output
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize, fromEvent, Subscription, withLatestFrom, zipWith } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
+import { filter, finalize, withLatestFrom, zipWith } from 'rxjs/operators';
 
 import { IntersectionService } from '../../services/intersection.service';
 import { IListenersConfig, ListenersService } from '../../services/listeners.service';
@@ -96,7 +97,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     };
   }
 
-  private timerId!: any;
+  private timerId: number | undefined = undefined;
   private activeItemInterval = 0;
   private swipeSubscription?: Subscription;
   readonly #destroyRef = inject(DestroyRef);
@@ -117,6 +118,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   ngOnDestroy(): void {
+    this.resetTimer();
     this.clearListeners();
     this.swipeSubscribe(false);
   }
@@ -169,6 +171,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   resetTimer(): void {
     clearTimeout(this.timerId);
+    this.timerId = undefined;
   }
 
   private carouselStateSubscribe(): void {
@@ -186,19 +189,20 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
       });
   }
 
-  private intersectionServiceSubscribe(subscribe: boolean = true): void {
-    this.intersectionService.createIntersectionObserver(this.hostElement);
+  private intersectionServiceSubscribe(): void {
     this.intersectionService.intersecting$
       .pipe(
+        filter(next => next.hostElement === this.hostElement),
         finalize(() => {
           this.intersectionService.unobserve(this.hostElement);
         }),
         takeUntilDestroyed(this.#destroyRef)
       )
-      .subscribe(isIntersecting => {
-        this.visible = isIntersecting;
-        isIntersecting ? this.setTimer() : this.resetTimer();
+      .subscribe(next => {
+        this.visible = next.isIntersecting;
+        next.isIntersecting ? this.setTimer() : this.resetTimer();
       });
+    this.intersectionService.createIntersectionObserver(this.hostElement);
   }
 
   private swipeSubscribe(subscribe: boolean = true): void {

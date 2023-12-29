@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DOCUMENT } from '@angular/common';
-import { debounceTime, finalize } from 'rxjs/operators';
+import { debounceTime, filter, finalize } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
 
 import { Triggers } from '../coreui.types';
@@ -153,18 +153,19 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit, AfterView
     this.listenersService.clearListeners();
   }
 
-  private intersectionServiceSubscribe(subscribe: boolean = true): void {
+  private intersectionServiceSubscribe(): void {
     this.intersectionService.createIntersectionObserver(this.hostElement);
     this.intersectionService.intersecting$
       .pipe(
+        filter(next => next.hostElement === this.hostElement),
         debounceTime(100),
         finalize(() => {
           this.intersectionService.unobserve(this.hostElement);
         }),
         takeUntilDestroyed(this.#destroyRef)
       )
-      .subscribe(isIntersecting => {
-        this.visible = isIntersecting ? this.visible : false;
+      .subscribe(next => {
+        this.visible = next.isIntersecting ? this.visible : false;
         !this.visible && this.removeTooltipElement();
       });
   }
