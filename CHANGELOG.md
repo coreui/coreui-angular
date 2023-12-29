@@ -2,6 +2,18 @@
 
 ---
 
+#### `4.7.8`
+
+- refactor: allow getComputedStyle() to be undefined for SSR
+- refactor(tooltip): for use with IntersectionService providedIn root
+- refactor(popover): for use with IntersectionService providedIn root
+- refactor(carousel): for use with IntersectionService providedIn root
+- refactor(IntersectionService): providedIn root, allow multiple observers, add unobserve() method
+- refactor(icon): afterNextRender in case of SSR
+- refactor(chartjs): afterNextRender in case of SSR
+
+---
+
 #### `4.7.7`
 
 - chore(dependencies): update
