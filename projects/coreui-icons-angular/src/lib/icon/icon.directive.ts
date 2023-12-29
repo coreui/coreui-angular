@@ -1,4 +1,4 @@
-import { afterNextRender, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
+import { afterNextRender, AfterRenderPhase, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IconSetService } from '../icon-set';
@@ -67,7 +67,7 @@ export class IconDirective implements IIcon {
   ) {
     afterNextRender(() => {
       this.elementRef.nativeElement.innerHTML = this.innerHtml;
-    });
+    }, { phase: AfterRenderPhase.Write });
   }
 
   get titleCode(): string {
