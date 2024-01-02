@@ -16,8 +16,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent, Subscription } from 'rxjs';
 import { filter, finalize, withLatestFrom, zipWith } from 'rxjs/operators';
 
-import { IntersectionService } from '../../services/intersection.service';
-import { IListenersConfig, ListenersService } from '../../services/listeners.service';
+import { IntersectionService } from '../../services';
+import { IListenersConfig, ListenersService } from '../../services';
 
 import { CarouselState } from '../carousel-state';
 import { CarouselService } from '../carousel.service';
@@ -36,12 +36,12 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    * Index of the active item.
    * @type number
    */
-  @Input() activeIndex = 0;
+  @Input() activeIndex: number = 0;
   /**
    * Carousel automatically starts cycle items.
    * @type boolean
    */
-  @Input() animate = true;
+  @Input() animate: boolean = true;
   /**
    * Add darker controls, indicators, and captions.
    * @type boolean
@@ -57,7 +57,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    * @type number
    * @default 0
    */
-  @Input() interval = 0;
+  @Input() interval: number = 0;
   /**
    * Sets which event handlers you’d like provided to your pause prop. You can specify one trigger or an array of them.
    * @type {'hover' | 'focus' | 'click'}
@@ -80,12 +80,12 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    * @type boolean
    * @default true
    */
-  @Input() wrap = true;
+  @Input() wrap: boolean = true;
   /**
    * Event emitted on carousel item change. [docs]
    * @type number
    */
-  @Output() itemChange = new EventEmitter<number>();
+  @Output() itemChange: EventEmitter<number> = new EventEmitter<number>();
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -97,7 +97,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     };
   }
 
-  private timerId: number | undefined = undefined;
+  private timerId: ReturnType<typeof setTimeout> | undefined;
   private activeItemInterval = 0;
   private swipeSubscription?: Subscription;
   readonly #destroyRef = inject(DestroyRef);
