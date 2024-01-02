@@ -6,6 +6,6 @@ export { SidebarTogglerComponent } from './sidebar-toggler/sidebar-toggler.compo
 export { SidebarHeaderComponent } from './sidebar-header/sidebar-header.component';
 export { SidebarFooterComponent } from './sidebar-footer/sidebar-footer.component';
 
-export { SidebarNavComponent, INavData } from './sidebar-nav';
+export { SidebarNavComponent, INavData, SidebarNavHelper } from './sidebar-nav';
 
 export { SidebarModule } from './sidebar.module';
