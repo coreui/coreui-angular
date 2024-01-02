@@ -67,7 +67,7 @@ export class ToastComponent implements OnInit, OnDestroy {
    * Auto hide the toast.
    * @type boolean
    */
-  @Input() autohide = true;
+  @Input() autohide: boolean = true;
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -79,13 +79,13 @@ export class ToastComponent implements OnInit, OnDestroy {
    * Delay hiding the toast (ms).
    * @type number
    */
-  @Input() delay = 5000;
+  @Input() delay: number = 5000;
 
   /**
    * Apply fade transition to the toast.
    * @type boolean
    */
-  @Input() fade = true;
+  @Input() fade: boolean = true;
 
   /**
    * Toggle the visibility of component.
@@ -115,9 +115,9 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   /**
    * Event emitted on visibility change. [docs]
-   * @type boolean
+   * @type EventEmitter<boolean>
    */
-  @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   /**
    * Event emitted on timer tick. [docs]
@@ -125,9 +125,9 @@ export class ToastComponent implements OnInit, OnDestroy {
    */
   @Output() timer: EventEmitter<number> = new EventEmitter();
 
-  private timerId: any;
-  private clockId: any;
-  private clockTimerId: any;
+  private timerId: ReturnType<typeof setTimeout> | undefined;
+  private clockId: ReturnType<typeof setInterval> | undefined;
+  private clockTimerId: ReturnType<typeof setTimeout> | undefined;
 
   private _clock!: number;
 
@@ -188,7 +188,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   setTimer(): void {
     this.clearTimer();
     if (this.autohide && this.visible) {
-      this.timerId = this.delay > 0 ? setTimeout(() => this.onClose(), this.delay) : null;
+      this.timerId = this.delay > 0 ? setTimeout(() => this.onClose(), this.delay) : undefined;
       this.setClock();
     }
   }
@@ -196,7 +196,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   clearTimer(): void {
     this.clearClock();
     clearTimeout(this.timerId);
-    this.timerId = null;
+    this.timerId = undefined;
   }
 
   onClose(): void {
@@ -223,6 +223,6 @@ export class ToastComponent implements OnInit, OnDestroy {
   clearClock(): void {
     clearTimeout(this.clockTimerId);
     clearInterval(this.clockId);
-    this.clockId = null;
+    this.clockId = undefined;
   }
 }
