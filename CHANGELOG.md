@@ -2,6 +2,15 @@
 
 ---
 
+#### `4.7.10`
+
+- fix(toast): types
+- fix(carousel): types
+- fix(sidebar): missing export SidebarNavHelper
+- chore(dependencies): update
+
+---
+
 #### `4.7.8`
 
 - refactor: allow getComputedStyle() to be undefined for SSR
