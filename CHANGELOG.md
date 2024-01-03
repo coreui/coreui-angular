@@ -2,6 +2,7 @@
 
 ##### `v2.15.1`
 
+- chore(e2e): migration to Cypress
 - fix(testapp): remove Ivy incompatible ngx-perfect-scrollbar
 - chore(workflows): update to npm 18, lock googlechrome v114
 - chore(dependencies): update

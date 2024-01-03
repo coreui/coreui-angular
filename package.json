@@ -25,10 +25,12 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prepublish": "ng test coreui-angular --karma-config=projects/coreui-angular/karma.conf.github.js && ng build coreui-angular --configuration production",
-    "publish": "cd dist/coreui-angular/ && npm publish --tag v2-lts-ng-15 --dry-run",
+    "prepublish:lib": "ng test coreui-angular --karma-config=projects/coreui-angular/karma.conf.github.js && ng build coreui-angular --configuration production",
+    "publish:lib": "cd dist/coreui-angular/ && npm publish --tag v2-lts-ng-15 --dry-run",
     "link": "cd dist/coreui-angular/ && npm link",
-    "release-version": "node build/change-version.js"
+    "release-version": "node build/change-version.js",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
@@ -51,6 +53,7 @@
     "@angular/compiler-cli": "^15.2.10",
     "@angular/language-service": "^15.2.10",
     "@coreui/coreui": "^2.1.16",
+    "@cypress/schematic": "^2.5.1",
     "@types/jasmine": "^4.6.4",
     "@types/node": "^18.19.4",
     "jasmine-core": "^4.6.0",
@@ -61,11 +64,11 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
     "ng-packagr": "^15.2.2",
-    "protractor": "~7.0.0",
     "shelljs": "^0.8.5",
     "simple-line-icons": "^2.5.5",
     "ts-node": "^10.9.2",
-    "typescript": "~4.9.5"
+    "typescript": "~4.9.5",
+    "cypress": "latest"
   },
   "engines": {
     "node": "^14.20.0 || ^16.13.0 || ^18.10.0",

@@ -16,9 +16,9 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: project check
@@ -32,18 +32,22 @@ jobs:
 
   e2e-chrome:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Use Node.js 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
       - name: e2e chrome test
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
         run: |
-          choco install googlechrome --version=114.0.5735.199 --ignorechecksum -y
           npm i
+          npm run build-lib:prod
           npm run e2e
         env:
           BROWSER: chrome
