@@ -1,10 +1,14 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.16.0`
+
+- update to `Angular 16` - thanks: @vag1830
+
 ##### `v2.15.1`
 
 - chore(e2e): migration to Cypress
 - fix(testapp): remove Ivy incompatible ngx-perfect-scrollbar
-- chore(workflows): update to npm 18, lock googlechrome v114
+- chore(workflows): update to npm 18
 - chore(dependencies): update
 
 ##### `v2.15.0`

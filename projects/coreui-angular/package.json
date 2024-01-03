@@ -1,7 +1,7 @@
 {
   "name": "@coreui/angular",
-  "version": "2.15.1",
-  "description": "CoreUI Angular 15 Bootstrap 4 components",
+  "version": "2.16.0",
+  "description": "CoreUI Angular 16 Bootstrap 4 components",
   "license": "MIT",
   "homepage": "https://coreui.io/angular",
   "author": {
@@ -20,9 +20,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/common": "^15.0.0",
-    "@angular/core": "^15.0.0",
-    "@angular/router": "^15.0.0"
+    "@angular/common": "^16.0.0",
+    "@angular/core": "^16.0.0",
+    "@angular/router": "^16.0.0"
   },
   "repository": {
     "type": "git",
