@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
@@ -36,13 +36,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 16
+      - name: Use Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: e2e chrome test
         run: |
-          choco install googlechrome
+          choco install googlechrome --version=114.0.5735.199
           npm i
           npm run e2e
         env:

@@ -52,7 +52,6 @@
     "@coreui/coreui": "^2.1.16",
     "@types/jasmine": "^4.6.4",
     "@types/node": "^18.19.4",
-    "chromedriver": "latest",
     "jasmine-core": "^4.6.0",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "^6.4.2",
