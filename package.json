@@ -60,7 +60,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
     "ng-packagr": "^15.2.2",
-    "ngx-perfect-scrollbar": "^10.1.1",
     "protractor": "~7.0.0",
     "shelljs": "^0.8.5",
     "simple-line-icons": "^2.5.5",
