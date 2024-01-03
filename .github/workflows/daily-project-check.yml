@@ -42,7 +42,7 @@ jobs:
           node-version: 18
       - name: e2e chrome test
         run: |
-          choco install googlechrome --version=114.0.5735.199
+          choco install googlechrome --version=114.0.5735.199 --ignorechecksum -y
           npm i
           npm run e2e
         env:
