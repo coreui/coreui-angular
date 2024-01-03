@@ -49,7 +49,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-        run: |
+      - run: |
           npm i
           npm run build-lib:prod
           npm run e2e
