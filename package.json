@@ -1,7 +1,7 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.15.1",
-  "description": "CoreUI Angular 15 Bootstrap 4 components",
+  "version": "2.16.0",
+  "description": "CoreUI Angular 16 Bootstrap 4 components",
   "license": "MIT",
   "author": {
     "name": "Łukasz Holeczek",
@@ -71,7 +71,7 @@
     "cypress": "latest"
   },
   "engines": {
-    "node": "^14.20.0 || ^16.13.0 || ^18.10.0",
+    "node": "^16.14.0 || ^18.10.0",
     "npm": ">= 8"
   }
 }
