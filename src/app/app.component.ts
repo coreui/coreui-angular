@@ -7,7 +7,7 @@ import { Router, NavigationEnd } from '@angular/router';
   template: '<router-outlet></router-outlet>'
 })
 export class AppComponent implements OnInit {
-  title = 'CoreUI 2 for Angular 8';
+  title = 'CoreUI 2 for Angular 15';
   constructor(private router: Router) { }
 
   ngOnInit() {
