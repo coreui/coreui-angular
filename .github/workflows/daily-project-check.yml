@@ -41,13 +41,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+      - run: npm i
       - name: e2e chrome test
         uses: cypress-io/github-action@v6
+        timeout-minutes: 5
         with:
           browser: chrome
-      - run: |
-          npm i
-          npm run build-lib:prod
-          npm run e2e
+          build: npm run build-lib:prod
+          start: npm start
+          wait-on: 'http://localhost:4200'
         env:
           BROWSER: chrome
