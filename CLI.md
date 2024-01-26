@@ -1,6 +1,6 @@
 # Angular
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.11.
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.1.
 
 ## Code scaffolding
 
