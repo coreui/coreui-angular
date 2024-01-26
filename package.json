@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.16.0",
+  "version": "2.17.0",
   "description": "CoreUI Angular 16 Bootstrap 4 components",
   "license": "MIT",
   "author": {
@@ -34,28 +34,29 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^16.2.12",
-    "@angular/common": "^16.2.12",
-    "@angular/compiler": "^16.2.12",
-    "@angular/core": "^16.2.12",
-    "@angular/forms": "^16.2.12",
-    "@angular/localize": "^16.2.12",
-    "@angular/platform-browser": "^16.2.12",
-    "@angular/platform-browser-dynamic": "^16.2.12",
-    "@angular/router": "^16.2.12",
+    "@angular/animations": "^17.1.1",
+    "@angular/common": "^17.1.1",
+    "@angular/compiler": "^17.1.1",
+    "@angular/core": "^17.1.1",
+    "@angular/forms": "^17.1.1",
+    "@angular/localize": "^17.1.1",
+    "@angular/platform-browser": "^17.1.1",
+    "@angular/platform-browser-dynamic": "^17.1.1",
+    "@angular/router": "^17.1.1",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.13.3"
+    "zone.js": "~0.14.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.2.11",
-    "@angular/cli": "^16.2.11",
-    "@angular/compiler-cli": "^16.2.12",
-    "@angular/language-service": "^16.2.12",
+    "@angular-devkit/build-angular": "^17.1.1",
+    "@angular/cli": "^17.1.1",
+    "@angular/compiler-cli": "^17.1.1",
+    "@angular/language-service": "^17.1.1",
     "@coreui/coreui": "^2.1.16",
     "@cypress/schematic": "^2.5.1",
     "@types/jasmine": "^4.6.4",
     "@types/node": "^18.19.4",
+    "cypress": "latest",
     "jasmine-core": "^4.6.0",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "^6.4.2",
@@ -63,15 +64,14 @@
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
-    "ng-packagr": "^16.2.3",
+    "ng-packagr": "^17.1.2",
     "shelljs": "^0.8.5",
     "simple-line-icons": "^2.5.5",
     "ts-node": "^10.9.2",
-    "typescript": "~4.9.5",
-    "cypress": "latest"
+    "typescript": "~5.2.2"
   },
   "engines": {
-    "node": "^16.14.0 || ^18.10.0",
+    "node": "^18.13.0",
     "npm": ">= 8"
   }
 }
