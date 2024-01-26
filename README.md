@@ -1,6 +1,6 @@
 # [@coreui/angular](https://coreui.io/angular)
 
-![angular](https://img.shields.io/badge/angular-^16.0.0-lightgrey.svg?style=flat-square&logo=angular)
+![angular](https://img.shields.io/badge/angular-^17.0.0-lightgrey.svg?style=flat-square&logo=angular)
 [![npm package][npm-coreui-angular-badge-v2]][npm-coreui-angular]
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
@@ -51,10 +51,16 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 
 
 #### Prerequisites
-Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
+Before you begin, make sure your development environment includes the supported version `Typescript` as well as `Node.js®` and an `npm` package manager.
+
+###### Typescript
+Angular 17 requires `Typescript` version `^5.2.0`.
+
+- To check your version, run `tsc -v` in a terminal/console window.
+- To get `Typescript`, go to [www.typescriptlang.org](https://www.typescriptlang.org/).
 
 ###### Node.js
-Angular 16 requires `Node.js` version `^16.14.0` or `^18.10.0`.
+Angular 17 requires `Node.js` version `^18.13.0`.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -62,10 +68,10 @@ Angular 16 requires `Node.js` version `^16.14.0` or `^18.10.0`.
 ###### Angular CLI
 Install the Angular CLI globally using a terminal/console window.
 ```bash
-npm install -g @angular/cli@16
+npm install -g @angular/cli@17
 ```
 
-##### Update to Angular 16
+##### Update to Angular 17
 see: [https://update.angular.io](https://update.angular.io)
 
 ## Installation
