@@ -2,6 +2,13 @@
 
 ---
 
+#### `4.7.12`
+
+- chore(dependencies): update
+- fix(chartjs): use afterRender, afterNextRender fails - temp fix
+
+---
+
 #### `4.7.10`
 
 - fix(toast): types

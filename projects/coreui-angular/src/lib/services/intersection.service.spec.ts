@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { IntersectionService } from './intersection.service';
 
 describe('IntersectionService', () => {
-  let service: any;
+  let service: IntersectionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
