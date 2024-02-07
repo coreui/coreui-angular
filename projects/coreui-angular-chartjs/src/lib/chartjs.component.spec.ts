@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { ChartjsComponent } from './chartjs.component';
-import { Chart, registerables } from 'chart.js';
+import { Chart, ChartData, registerables } from 'chart.js';
 
 describe('ChartjsComponent', () => {
   let component: ChartjsComponent;
@@ -16,7 +16,7 @@ describe('ChartjsComponent', () => {
 
   const labels = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
-  const data = {
+  const data: ChartData = {
     labels: labels,
     datasets: [{
       data: [65, 59, 84, 84, 51, 55, 40],

@@ -1,5 +1,5 @@
 import {
-  afterNextRender,
+  afterRender,
   AfterRenderPhase,
   AfterViewInit,
   booleanAttribute,
@@ -84,10 +84,11 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     private renderer: Renderer2,
     private changeDetectorRef: ChangeDetectorRef
   ) {
-    afterNextRender(() => {
+    // todo: verify afterRender / afterNextRender for chartjs (spec fails with 17.0.10)
+    afterRender(() => {
       this.ctx = this.canvasElement?.nativeElement?.getContext('2d');
       this.chartRender();
-    }, { phase: AfterRenderPhase.Read });
+    }, { phase: AfterRenderPhase.Write });
   }
 
   ngAfterViewInit(): void {
