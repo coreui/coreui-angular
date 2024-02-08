@@ -2,6 +2,13 @@
 
 ---
 
+#### `4.7.13`
+
+- refactor(@coreui/angular): use control flow
+- fix(chartjs): canvas already in use, refactor
+
+---
+
 #### `4.7.12`
 
 - chore(dependencies): update
