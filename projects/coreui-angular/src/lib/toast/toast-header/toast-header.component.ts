@@ -1,5 +1,4 @@
 import { Component, HostBinding, Input, Optional } from '@angular/core';
-import { NgIf } from '@angular/common';
 
 import { ButtonCloseDirective } from '../../button';
 import { ToastComponent } from '../toast/toast.component';
@@ -10,7 +9,7 @@ import { ToastCloseDirective } from '../toast-close.directive';
   templateUrl: './toast-header.component.html',
   exportAs: 'cToastHeader',
   standalone: true,
-  imports: [ToastCloseDirective, ButtonCloseDirective, NgIf]
+  imports: [ToastCloseDirective, ButtonCloseDirective]
 })
 export class ToastHeaderComponent {
 

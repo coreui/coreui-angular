@@ -1,30 +1,34 @@
 <ng-container>
   <c-card-body [ngClass]="bodyClasses">
     <div>
-      <div *ngIf="!!value || templates?.widgetValueTemplate" class="fs-4 fw-semibold">
-        <ng-container *ngTemplateOutlet="templates?.widgetValueTemplate || defaultWidgetValueTemplate"></ng-container>
-      </div>
-      <div *ngIf="!!title || templates?.widgetTitleTemplate">
-        <ng-container *ngTemplateOutlet="templates?.widgetTitleTemplate || defaultWidgetTitleTemplate"></ng-container>
-      </div>
+      @if (!!value || templates?.widgetValueTemplate) {
+        <div class="fs-4 fw-semibold">
+          <ng-container *ngTemplateOutlet="templates?.widgetValueTemplate || defaultWidgetValueTemplate" />
+        </div>
+      }
+      @if (!!title || templates?.widgetTitleTemplate) {
+        <div>
+          <ng-container *ngTemplateOutlet="templates?.widgetTitleTemplate || defaultWidgetTitleTemplate" />
+        </div>
+      }
     </div>
-    <ng-container *ngTemplateOutlet="templates?.widgetActionTemplate || defaultWidgetActionTemplate"></ng-container>
+    <ng-container *ngTemplateOutlet="templates?.widgetActionTemplate || defaultWidgetActionTemplate" />
   </c-card-body>
-  <ng-container *ngTemplateOutlet="templates?.widgetChartTemplate || defaultWidgetChartTemplate"></ng-container>
+  <ng-container *ngTemplateOutlet="templates?.widgetChartTemplate || defaultWidgetChartTemplate" />
 </ng-container>
 
 <ng-template #defaultWidgetTitleTemplate>
-  {{title}}
+  {{ title }}
 </ng-template>
 
 <ng-template #defaultWidgetValueTemplate>
-  {{value}}
+  {{ value }}
 </ng-template>
 
 <ng-template #defaultWidgetChartTemplate>
-  <ng-content select=".chart-wrapper"></ng-content>
+  <ng-content select=".chart-wrapper" />
 </ng-template>
 
 <ng-template #defaultWidgetActionTemplate>
-  <ng-content></ng-content>
+  <ng-content />
 </ng-template>

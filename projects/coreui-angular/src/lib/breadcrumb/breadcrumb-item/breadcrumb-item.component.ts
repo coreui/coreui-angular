@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input } from '@angular/core';
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { HtmlAttributesDirective } from '../../shared';
@@ -10,7 +10,7 @@ import { INavAttributes, INavLinkProps } from './breadcrumb-item';
   templateUrl: './breadcrumb-item.component.html',
   styleUrls: ['./breadcrumb-item.component.scss'],
   standalone: true,
-  imports: [RouterModule, NgIf, NgTemplateOutlet, HtmlAttributesDirective]
+  imports: [RouterModule, NgTemplateOutlet, HtmlAttributesDirective]
 })
 export class BreadcrumbItemComponent {
 

@@ -9,7 +9,7 @@ import {
   Output,
   QueryList
 } from '@angular/core';
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
@@ -25,7 +25,7 @@ type AnimateType = ('hide' | 'show');
   styleUrls: ['./alert.component.scss'],
   exportAs: 'cAlert',
   standalone: true,
-  imports: [NgIf, NgTemplateOutlet, ButtonCloseDirective],
+  imports: [NgTemplateOutlet, ButtonCloseDirective],
   animations: [
     trigger('fadeInOut', [
       state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),

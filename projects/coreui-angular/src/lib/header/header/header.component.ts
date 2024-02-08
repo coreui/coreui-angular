@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 import { Positions } from '../../coreui.types';
 
@@ -9,7 +9,7 @@ type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
   selector: 'c-header, [c-header]',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [NgClass, NgIf]
+  imports: [NgClass]
 })
 export class HeaderComponent {
   /**

@@ -1,10 +1,9 @@
-<ng-container *ngIf="visible || !hide">
-  <ng-template [ngIf]="dismissible">
-    <ng-container *ngTemplateOutlet="templates?.alertButtonCloseTemplate || defaultAlertButtonCloseTemplate">
-    </ng-container>
-  </ng-template>
-  <ng-content></ng-content>
-</ng-container>
+@if (visible || !hide) {
+  @if (dismissible) {
+    <ng-container *ngTemplateOutlet="templates?.alertButtonCloseTemplate || defaultAlertButtonCloseTemplate" />
+  }
+  <ng-content />
+}
 
 <ng-template #defaultAlertButtonCloseTemplate>
   <button (click)="visible=false" aria-label="Close" cButtonClose></button>

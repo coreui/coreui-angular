@@ -10,14 +10,14 @@ import {
 
 import { CardBodyComponent, CardComponent } from '../../card';
 import { TemplateIdDirective } from '../../shared';
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'c-widget-stat-c',
   templateUrl: './widget-stat-c.component.html',
   exportAs: 'cWidgetStatC',
   standalone: true,
-  imports: [CardBodyComponent, NgIf, NgClass, NgTemplateOutlet]
+  imports: [CardBodyComponent, NgClass, NgTemplateOutlet]
 })
 export class WidgetStatCComponent extends CardComponent implements AfterContentInit {
 

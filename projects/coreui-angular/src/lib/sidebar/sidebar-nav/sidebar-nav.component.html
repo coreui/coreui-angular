@@ -1,42 +1,45 @@
-<ng-container *ngFor="let item of navItemsArray">
-  <ng-container [ngSwitch]="helper.itemType(item)">
-    <c-sidebar-nav-group
-      #rla="routerLinkActive"
-      *ngSwitchCase="'group'"
-      [dropdownMode]="dropdownMode"
-      [item]="item"
-      [ngClass]="item | cSidebarNavItemClass"
-      [routerLinkActiveOptions]="{exact: true}"
-      routerLinkActive="show"
-    >
-    </c-sidebar-nav-group>
-    <c-sidebar-nav-divider
-      *ngSwitchCase="'divider'"
-      [cHtmlAttr]="item.attributes ?? {}"
-      [item]="item"
-      [ngClass]="item | cSidebarNavItemClass">
-    </c-sidebar-nav-divider>
-    <c-sidebar-nav-title
-      *ngSwitchCase="'title'"
-      [cHtmlAttr]="item.attributes ?? {}"
-      [item]="item"
-      [ngClass]="item | cSidebarNavItemClass">
-    </c-sidebar-nav-title>
-    <c-sidebar-nav-label
-      *ngSwitchCase="'label'"
-      [item]="item"
-      [ngClass]="item | cSidebarNavItemClass">
-    </c-sidebar-nav-label>
-    <ng-container
-      *ngSwitchCase="'empty'">
-    </ng-container>
-    <c-sidebar-nav-link
-      (linkClick)="hideMobile()"
-      *ngSwitchDefault
-      [item]="item"
-      [ngClass]="item | cSidebarNavItemClass"
-    >
-    </c-sidebar-nav-link>
-  </ng-container>
-</ng-container>
-<ng-content></ng-content>
+@for (item of navItemsArray; track item) {
+  @switch (helper.itemType(item)) {
+    @case ('group') {
+      <c-sidebar-nav-group
+        #rla="routerLinkActive"
+        [dropdownMode]="dropdownMode"
+        [item]="item"
+        [ngClass]="item | cSidebarNavItemClass"
+        [routerLinkActiveOptions]="{exact: true}"
+        routerLinkActive="show"
+      />
+    }
+    @case ('divider') {
+      <c-sidebar-nav-divider
+        [cHtmlAttr]="item.attributes ?? {}"
+        [item]="item"
+        [ngClass]="item | cSidebarNavItemClass"
+      />
+    }
+    @case ('title') {
+      <c-sidebar-nav-title
+        [cHtmlAttr]="item.attributes ?? {}"
+        [item]="item"
+        [ngClass]="item | cSidebarNavItemClass"
+      />
+    }
+    @case ('label') {
+      <c-sidebar-nav-label
+        [item]="item"
+        [ngClass]="item | cSidebarNavItemClass"
+      />
+    }
+    @case ('empty') {
+      <ng-container />
+    }
+    @default {
+      <c-sidebar-nav-link
+        (linkClick)="hideMobile()"
+        [item]="item"
+        [ngClass]="item | cSidebarNavItemClass"
+      />
+    }
+  }
+}
+<ng-content />

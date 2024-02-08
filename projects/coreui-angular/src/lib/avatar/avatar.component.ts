@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input } from '@angular/core';
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
 
@@ -9,8 +9,7 @@ import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
   standalone: true,
   imports: [
     NgTemplateOutlet,
-    NgClass,
-    NgIf
+    NgClass
   ]
 })
 export class AvatarComponent {

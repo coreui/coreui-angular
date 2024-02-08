@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -16,13 +16,12 @@ import { IconDirective } from '@coreui/icons-angular';
 @Component({
   selector: 'c-sidebar-nav-link-content',
   template: `
-    <ng-container *ngIf="true">
-      <ng-container>{{item?.name ?? ''}}</ng-container>
-    </ng-container>
+    @if (true) {
+      <ng-container>{{ item?.name ?? '' }}</ng-container>
+    }
   `,
   providers: [SidebarNavHelper],
-  standalone: true,
-  imports: [NgIf]
+  standalone: true
 })
 export class SidebarNavLinkContentComponent {
   @Input() item?: INavData;
@@ -38,10 +37,11 @@ export class SidebarNavLinkContentComponent {
   providers: [SidebarNavHelper],
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     HtmlAttributesDirective,
     IconDirective,
+    NgClass,
+    NgTemplateOutlet,
     SidebarNavLinkContentComponent,
     SidebarNavLinkPipe,
     SidebarNavBadgePipe,

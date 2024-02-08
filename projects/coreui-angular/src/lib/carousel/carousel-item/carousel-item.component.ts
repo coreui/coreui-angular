@@ -1,5 +1,4 @@
 import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 
@@ -9,8 +8,7 @@ import { CarouselService } from '../carousel.service';
   selector: 'c-carousel-item',
   templateUrl: './carousel-item.component.html',
   styleUrls: ['./carousel-item.component.scss'],
-  standalone: true,
-  imports: [NgIf]
+  standalone: true
 })
 export class CarouselItemComponent implements OnDestroy, AfterViewInit {
 

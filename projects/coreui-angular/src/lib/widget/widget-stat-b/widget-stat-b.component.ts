@@ -1,5 +1,5 @@
 import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 import { Colors } from '../../coreui.types';
 import { CardBodyComponent, CardComponent } from '../../card';
@@ -9,7 +9,7 @@ import { CardBodyComponent, CardComponent } from '../../card';
   templateUrl: './widget-stat-b.component.html',
   exportAs: 'cWidgetStatB',
   standalone: true,
-  imports: [CardBodyComponent, NgIf, NgClass]
+  imports: [CardBodyComponent, NgClass]
 })
 export class WidgetStatBComponent extends CardComponent {
 

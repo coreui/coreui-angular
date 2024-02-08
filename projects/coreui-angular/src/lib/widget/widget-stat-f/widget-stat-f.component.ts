@@ -7,7 +7,7 @@ import {
   Input,
   QueryList
 } from '@angular/core';
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 import { Colors } from '../../coreui.types';
 import { TemplateIdDirective } from '../../shared';
@@ -18,7 +18,7 @@ import { CardBodyComponent, CardFooterComponent } from '../../card';
   templateUrl: './widget-stat-f.component.html',
   exportAs: 'cWidgetStatB',
   standalone: true,
-  imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet, NgIf]
+  imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet]
 })
 export class WidgetStatFComponent implements AfterContentInit {
 

@@ -8,15 +8,13 @@ import {
   Input,
   ViewChild
 } from '@angular/core';
-import { NgIf } from '@angular/common';
 
 import { CarouselState } from '../carousel-state';
 
 @Component({
   selector: 'c-carousel-control',
   templateUrl: './carousel-control.component.html',
-  standalone: true,
-  imports: [NgIf]
+  standalone: true
 })
 export class CarouselControlComponent implements AfterViewInit {
 

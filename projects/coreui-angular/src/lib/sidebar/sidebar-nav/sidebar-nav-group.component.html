@@ -4,7 +4,9 @@
    href>
   <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: item}" />
   <ng-container>{{ item.name }}</ng-container>
-  <span *ngIf="helper.hasBadge(item)" [ngClass]="item | cSidebarNavBadge">{{ item.badge.text }}</span>
+  @if (helper.hasBadge(item)) {
+    <span [ngClass]="item | cSidebarNavBadge">{{ item.badge.text }}</span>
+  }
 </a>
 <c-sidebar-nav
   (@openClose.done)="onAnimationDone($event)"
@@ -17,13 +19,17 @@
 />
 
 <ng-template #iconTemplate let-item>
-  <i *ngIf="item?.icon" [ngClass]="item | cSidebarNavIcon"></i>
-  <ng-template [ngIf]="item?.iconComponent">
+  @if (item?.icon) {
+    <i [ngClass]="item | cSidebarNavIcon"></i>
+  }
+  @if ("item?.iconComponent") {
     <svg
       [cIcon]="item.iconComponent?.content"
       [customClasses]="item | cSidebarNavIcon"
       [name]="item.iconComponent?.name"
     />
-  </ng-template>
-  <span *ngIf="!item?.icon && !item?.iconComponent" [ngClass]="item | cSidebarNavIcon"></span>
+  }
+  @if (!item?.icon && !item?.iconComponent) {
+    <span [ngClass]="item | cSidebarNavIcon"></span>
+  }
 </ng-template>

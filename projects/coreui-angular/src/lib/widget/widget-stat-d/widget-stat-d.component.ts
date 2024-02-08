@@ -2,7 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 import { Colors } from '../../coreui.types';
 import { CardBodyComponent, CardHeaderComponent } from '../../card';
 import { ColComponent, RowDirective } from '../../grid';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 export type WidgetStatDValue = {
   title?: string,
@@ -14,7 +14,7 @@ export type WidgetStatDValue = {
   templateUrl: './widget-stat-d.component.html',
   exportAs: 'cWidgetStatD',
   standalone: true,
-  imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective, NgClass, NgForOf, NgIf]
+  imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective, NgClass]
 })
 export class WidgetStatDComponent {
   constructor() { }

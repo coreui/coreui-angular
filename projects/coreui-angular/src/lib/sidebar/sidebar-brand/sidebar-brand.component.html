@@ -1,13 +1,14 @@
-<ng-template [ngIf]="brandImg">
+@if (brandImg) {
   <a [routerLink]="routerLink">
-    <img *ngIf="brandFull"
-         [cHtmlAttr]="brandFull"
-         [ngClass]="'sidebar-brand-full'">
-    <img *ngIf="brandNarrow"
-         [cHtmlAttr]="brandNarrow"
-         [ngClass]="'sidebar-brand-narrow'">
+    @if (brandFull) {
+      <img [cHtmlAttr]="brandFull"
+           [ngClass]="'sidebar-brand-full'">
+    }
+    @if (brandNarrow) {
+      <img [cHtmlAttr]="brandNarrow"
+           [ngClass]="'sidebar-brand-narrow'">
+    }
   </a>
-</ng-template>
-<ng-template [ngIf]="!brandImg">
-  <ng-content></ng-content>
-</ng-template>
+} @else {
+  <ng-content />
+}

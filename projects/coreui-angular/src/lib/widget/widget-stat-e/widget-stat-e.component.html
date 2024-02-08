@@ -1,5 +1,9 @@
 <c-card-body class="text-center">
-  <div *ngIf="!!title" [ngClass]="titleClasses">{{title}}</div>
-  <div *ngIf="!!value" class="fs-6 fw-semibold py-3">{{value}}</div>
-  <ng-content></ng-content>
+  @if (!!title) {
+    <div [ngClass]="titleClasses">{{ title }}</div>
+  }
+  @if (!!value) {
+    <div class="fs-6 fw-semibold py-3">{{ value }}</div>
+  }
+  <ng-content />
 </c-card-body>
