@@ -22,10 +22,19 @@ import {
 
 import merge from 'lodash-es/merge';
 
-import { Chart, ChartConfiguration, ChartType, DefaultDataPoint, registerables } from 'chart.js';
+import {
+  Chart as ChartJS,
+  ChartConfiguration,
+  ChartData,
+  ChartOptions,
+  ChartType,
+  InteractionItem,
+  Plugin,
+  registerables
+} from 'chart.js';
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
 
-Chart.register(...registerables);
+ChartJS.register(...registerables);
 
 let nextId = 0;
 
@@ -39,26 +48,70 @@ let nextId = 0;
   // eslint-disable-next-line @angular-eslint/no-host-metadata-property
   // host: { ngSkipHydration: 'true' }
 })
-export class ChartjsComponent<TType extends ChartType = ChartType, TData = DefaultDataPoint<TType>, TLabel = unknown> implements AfterViewInit, OnDestroy, OnChanges {
+export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
 
-  @Input() customTooltips = true;
-  @Input() data?: ChartConfiguration<TType, TData, TLabel>['data'];
+  /**
+   * Enables custom html based tooltips instead of standard tooltips.
+   * @type boolean
+   * @default true
+   */
+  @Input({ transform: booleanAttribute }) customTooltips: boolean = true;
 
+  /**
+   * The data object that is passed into the Chart.js chart (more info).
+   */
+  @Input() data?: ChartData;
+
+  /**
+   * Height attribute applied to the rendered canvas.
+   * @type number | undefined
+   * @default 150
+   */
   @HostBinding('style.height.px')
-  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) }) height?: string | number;
+  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) }) height?: number;
 
-  @Input() id = `c-chartjs-${nextId++}`;
-  @Input() options?: ChartConfiguration<TType, TData, TLabel>['options'];
-  @Input() plugins: ChartConfiguration<TType, TData, TLabel>['plugins'] = [];
+  /**
+   * ID attribute applied to the rendered canvas.
+   * @type string
+   */
+  @Input() id: string = `c-chartjs-${nextId++}`;
 
-  @Input({ transform: booleanAttribute }) redraw: string | boolean = false;
+  /**
+   * The options object that is passed into the Chart.js chart.
+   */
+  @Input() options?: ChartOptions = {};
 
-  @Input() type: ChartConfiguration<TType, TData, TLabel>['type'] = 'bar' as TType;
+  /**
+   * The plugins array that is passed into the Chart.js chart
+   */
+  @Input() plugins: Plugin[] = [];
 
+  /**
+   * If true, will tear down and redraw chart on all updates.
+   * @type boolean
+   * @default false
+   */
+  @Input({ transform: booleanAttribute }) redraw: boolean = false;
+
+  /**
+   * Chart.js chart type.
+   * @type {'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'pie' | 'scatter'}
+   */
+  @Input() type: ChartType = 'bar';
+
+  /**
+   * Width attribute applied to the rendered canvas.
+   * @type number | undefined
+   * @default 300
+   */
   @HostBinding('style.width.px')
-  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) }) width?: string | number;
+  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) }) width?: number;
 
-  @Input() wrapper = true;
+  /**
+   * Put the chart into the wrapper div element.
+   * @default true
+   */
+  @Input({ transform: booleanAttribute }) wrapper = true;
 
   @Output() readonly getDatasetAtEvent = new EventEmitter<any>();
   @Output() readonly getElementAtEvent = new EventEmitter<any>();
@@ -68,7 +121,7 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
 
   @ViewChild('canvasElement') canvasElement!: ElementRef;
 
-  chart!: Chart<TType, TData, TLabel>;
+  chart!: ChartJS;
   ctx!: CanvasRenderingContext2D;
 
   @HostBinding('class')
@@ -79,10 +132,9 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
   }
 
   constructor(
-    private elementRef: ElementRef,
-    private ngZone: NgZone,
-    private renderer: Renderer2,
-    private changeDetectorRef: ChangeDetectorRef
+    private readonly ngZone: NgZone,
+    private readonly renderer: Renderer2,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     // todo: verify afterRender / afterNextRender for chartjs (spec fails with 17.0.10)
     afterRender(() => {
@@ -110,13 +162,13 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
       return;
     }
 
-    const datasetAtEvent = this.chart.getElementsAtEventForMode($event, 'dataset', { intersect: true }, false);
+    const datasetAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode($event, 'dataset', { intersect: true }, false);
     this.getDatasetAtEvent.emit(datasetAtEvent);
 
-    const elementAtEvent = this.chart.getElementsAtEventForMode($event, 'nearest', { intersect: true }, false);
+    const elementAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode($event, 'nearest', { intersect: true }, false);
     this.getElementAtEvent.emit(elementAtEvent);
 
-    const elementsAtEvent = this.chart.getElementsAtEventForMode($event, 'index', { intersect: true }, false);
+    const elementsAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode($event, 'index', { intersect: true }, false);
     this.getElementsAtEvent.emit(elementsAtEvent);
   }
 
@@ -126,15 +178,15 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
   }
 
   public chartRender() {
-    if (!this.canvasElement?.nativeElement || !this.ctx) {
+    if (!this.canvasElement?.nativeElement || !this.ctx || this.chart) {
       return;
     }
 
     this.ngZone.runOutsideAngular(() => {
       const config = this.chartConfig();
       if (config) {
-        setTimeout(() => {
-          this.chart = new Chart(this.ctx, config);
+        this.chart = new ChartJS(this.ctx, config);
+        this.ngZone.run(() => {
           this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
           this.changeDetectorRef.markForCheck();
           this.chartRef.emit(this.chart);
@@ -150,13 +202,11 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
 
     if (this.redraw) {
       this.chartDestroy();
-      setTimeout(() => {
-        this.chartRender();
-      });
+      this.chartRender();
       return;
     }
 
-    const config = this.chartConfig();
+    const config: ChartConfiguration = this.chartConfig();
 
     if (this.options) {
       Object.assign(this.chart.options ?? {}, config.options ?? {});
@@ -180,7 +230,9 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     setTimeout(() => {
       this.ngZone.runOutsideAngular(() => {
         this.chart?.update();
-        this.changeDetectorRef.markForCheck();
+        this.ngZone.run(() => {
+          this.changeDetectorRef.markForCheck();
+        });
       });
     });
   }
@@ -189,18 +241,18 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
     return this.chart?.toBase64Image();
   }
 
-  private chartDataConfig(): ChartConfiguration<TType, TData, TLabel>['data'] {
+  private chartDataConfig(): ChartData {
     return {
       labels: this.data?.labels ?? [],
       datasets: this.data?.datasets ?? []
     };
   }
 
-  private chartOptions(): ChartConfiguration<TType, TData, TLabel>['options'] {
-    return this.options;
+  private chartOptions(): ChartOptions {
+    return this.options ?? {};
   }
 
-  private chartConfig(): ChartConfiguration<TType, TData, TLabel> {
+  private chartConfig(): ChartConfiguration {
     this.chartCustomTooltips();
     return {
       data: this.chartDataConfig(),
@@ -213,9 +265,7 @@ export class ChartjsComponent<TType extends ChartType = ChartType, TData = Defau
   private chartCustomTooltips() {
     if (this.customTooltips) {
       const options = this.options;
-      // @ts-ignore
       const plugins = this.options?.plugins;
-      // @ts-ignore
       const tooltip = this.options?.plugins?.tooltip;
       this.options = merge({
         ...options,
