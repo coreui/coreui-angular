@@ -2,6 +2,12 @@
 
 ---
 
+#### `4.7.14`
+
+- chore(dependencies): update to Angular 17.2
+
+---
+
 #### `4.7.13`
 
 - refactor(@coreui/angular): use control flow
