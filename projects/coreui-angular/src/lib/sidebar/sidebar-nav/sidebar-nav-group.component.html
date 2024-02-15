@@ -22,7 +22,7 @@
   @if (item?.icon) {
     <i [ngClass]="item | cSidebarNavIcon"></i>
   }
-  @if ("item?.iconComponent") {
+  @if (item?.iconComponent) {
     <svg
       [cIcon]="item.iconComponent?.content"
       [customClasses]="item | cSidebarNavIcon"
