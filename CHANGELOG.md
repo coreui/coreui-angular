@@ -2,6 +2,13 @@
 
 ---
 
+#### `4.7.15`
+
+- fix(sidebar-nav-group): typo on control flow migration - thanks @meriturva, closes #200
+- chore(workflows): update github actions to v4 - checkout, setup-node
+
+---
+
 #### `4.7.14`
 
 - chore(dependencies): update to Angular 17.2
