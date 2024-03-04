@@ -46,15 +46,15 @@ export class RowDirective implements IRow {
 
     const classes: any = {
       row: true,
-      [`row-cols-${cols}`]: !!cols,
+      [`row-cols-${cols}`]: !!cols
     };
 
     Object.keys(BreakpointInfix).forEach(breakpoint => {
       // @ts-ignore
       const value: any = this[breakpoint];
       if ((typeof value === 'number') || (typeof value === 'string')) {
-        const infix: string = breakpoint === 'xs' ? '' : breakpoint;
-        classes[`row-cols-${infix}-${value}`] = !!value;
+        const infix: string = breakpoint === 'xs' ? '' : `-${breakpoint}`;
+        classes[`row-cols${infix}-${value}`] = !!value;
       }
     });
 
