@@ -2,6 +2,12 @@
 
 ---
 
+#### `4.7.16`
+
+- chore(dependencies): update
+
+---
+
 #### `4.7.15`
 
 - fix(sidebar-nav-group): typo on control flow migration - thanks @meriturva, closes #200
