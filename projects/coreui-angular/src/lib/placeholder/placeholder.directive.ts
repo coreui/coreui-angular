@@ -1,5 +1,4 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: '[cPlaceholder]',
@@ -8,26 +7,15 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 })
 export class PlaceholderDirective {
 
-  static ngAcceptInputType_visible: BooleanInput;
-
-  constructor() { }
-
   /**
    * placeholder toggler
    * @type boolean
    * @default false
    */
-  @Input('cPlaceholder')
-  set visible(value: boolean) {
-    this._visible = coerceBooleanProperty(value);
-  }
-  get visible() {
-    return this._visible;
-  }
-  private _visible: boolean = false;
+  @Input({ alias: 'cPlaceholder', transform: booleanAttribute }) visible: boolean = false;
 
   /**
-   * Size the placeholder extra small, small, large.
+   * Size the placeholder extremely small, small, large.
    */
   @Input('cPlaceholderSize') size?: 'xs' | 'sm' | 'lg';
 
