@@ -52,7 +52,8 @@ export interface ITable {
    * @type boolean
    */
   striped?: boolean | string;
-  attributes?: { [key: string]: any };
+
+  attributes?: Partial<HTMLTableElement>;
 }
 
 export interface ITableElementProps {
@@ -66,7 +67,9 @@ export interface ITableElementProps {
    * @type Colors
    */
   color?: Colors;
-  _attributes?: { [key: string]: any };
+
+  /** @deprecated */
+  _attributes?: Partial<HTMLTableElement>;
 }
 
 export interface ITableRowCellProps extends ITableElementProps {
@@ -75,4 +78,7 @@ export interface ITableRowCellProps extends ITableElementProps {
    @type boolean
    */
   active?: boolean;
+
+  /** @deprecated */
+  _attributes?: Partial<HTMLTableCellElement> | Partial<HTMLTableRowElement>;
 }
