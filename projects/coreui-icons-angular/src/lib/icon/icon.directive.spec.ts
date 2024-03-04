@@ -53,4 +53,12 @@ describe('IconDirective', () => {
     expect(svgEl.nativeElement).toHaveClass('icon-lg');
     expect(svgEl.nativeElement).toHaveClass('test');
   });
+  it('icon attributes should be applied', () => {
+    expect(svgEl.nativeElement.getAttribute('aria-hidden')).toBe('true');
+    expect(svgEl.nativeElement.getAttribute('pointer-events')).toBe('none');
+    expect(svgEl.nativeElement.getAttribute('role')).toBe('img');
+    expect(svgEl.nativeElement.getAttribute('title')).toBe('Test');
+    expect(svgEl.nativeElement.getAttribute('viewBox')).toBeDefined();
+    expect(svgEl.nativeElement.getAttribute('xmlns')).toBe('http://www.w3.org/2000/svg');
+  });
 });

@@ -33,6 +33,8 @@ export class IconDirective implements IIcon {
 
   private _viewBox!: string;
 
+  @HostBinding('attr.aria-hidden') ariaHidden = true;
+
   @HostBinding('attr.xmlns')
   @Input() xmlns = 'http://www.w3.org/2000/svg';
 

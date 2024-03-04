@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -12,7 +12,7 @@ import { toCamelCase } from './icon.utils';
   templateUrl: './icon.component.svg',
   styleUrls: ['./icon.component.scss'],
   standalone: true,
-  imports: [NgClass, NgIf, HtmlAttributesDirective],
+  imports: [NgClass, HtmlAttributesDirective],
   // eslint-disable-next-line @angular-eslint/no-host-metadata-property
   host: { ngSkipHydration: 'true' }
 })
