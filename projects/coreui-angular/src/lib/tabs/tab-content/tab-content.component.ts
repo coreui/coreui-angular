@@ -8,13 +8,13 @@ import {
   EventEmitter,
   HostBinding,
   Input,
+  numberAttribute,
   OnChanges,
   OnDestroy,
   Output,
   QueryList,
   SimpleChanges
 } from '@angular/core';
-import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 
 import { TabPaneComponent } from '../tab-pane/tab-pane.component';
@@ -22,7 +22,7 @@ import { TabService } from '../tab.service';
 
 @Component({
   selector: 'c-tab-content',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content />',
   styleUrls: ['./tab-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   exportAs: 'cTabContent',
@@ -34,9 +34,9 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
    * Set active tabPane index
    * @type number
    */
-  @Input()
+  @Input({ transform: numberAttribute })
   set activeTabPaneIdx(value: number) {
-    const newValue = coerceNumberProperty(value);
+    const newValue = value;
     if (this._activeTabPaneIdx != newValue) {
       this._activeTabPaneIdx = newValue;
       this.activeTabPaneIdxChange.emit(newValue);
@@ -44,9 +44,11 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
       this.changeDetectorRef.detectChanges();
     }
   };
+
   get activeTabPaneIdx() {
     return this._activeTabPaneIdx;
   }
+
   private _activeTabPaneIdx = -1;
 
   /**
@@ -76,7 +78,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
   ngAfterContentChecked(): void {
     this.panes?.forEach((tabPane, index) => {
       tabPane.tabContent = this;
-        tabPane.tabPaneIdx = index;
+      tabPane.tabPaneIdx = index;
     });
     this.refreshTabPaneActive(this.activeTabPaneIdx);
     this.tabService.setActiveTabIdx({ tabContent: this, activeIdx: this.activeTabPaneIdx });

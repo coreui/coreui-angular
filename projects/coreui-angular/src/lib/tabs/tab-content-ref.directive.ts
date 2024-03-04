@@ -1,14 +1,15 @@
 import {
+  booleanAttribute,
   ChangeDetectorRef,
   Directive,
   HostBinding,
   HostListener,
   Input,
+  numberAttribute,
   OnChanges,
   OnDestroy,
   SimpleChanges
 } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 
 import { TabService } from './tab.service';
@@ -26,7 +27,6 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
     this.subscribeTabService();
   }
 
-  static ngAcceptInputType_disabled: BooleanInput;
   private tabServiceSubscription!: Subscription;
 
   /**
@@ -38,10 +38,11 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
   /**
    * Set active state of tab content
    * @type boolean
+   * @default false
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set active(value: boolean) {
-    const newValue = coerceBooleanProperty(value);
+    const newValue = value;
     if (this._active !== newValue) {
       this._active = newValue;
       this.changeDetectorRef.detectChanges();
@@ -58,9 +59,9 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
    * Set disabled state of tab content
    * @type boolean
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
+    this._disabled = value;
   }
 
   get disabled(): boolean {
@@ -73,7 +74,7 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
    * c-tab-pane index respectively
    * @type number
    */
-  @Input() tabPaneIdx = -1;
+  @Input({ transform: numberAttribute }) tabPaneIdx = -1;
 
   @HostBinding('class')
   get hostClasses() {
