@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   Component,
   EventEmitter,
   HostBinding,
@@ -12,7 +13,6 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 
@@ -22,18 +22,11 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
 @Component({
   selector: 'c-sidebar',
   exportAs: 'cSidebar',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   standalone: true
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
-  static ngAcceptInputType_narrow: BooleanInput;
-  static ngAcceptInputType_overlaid: BooleanInput;
-  static ngAcceptInputType_unfoldable: BooleanInput;
-  static ngAcceptInputType_visible: BooleanInput;
 
-  #narrow = false;
-  #overlaid = false;
-  #unfoldable = false;
   #visible = false;
   #onMobile = false;
   #layoutChangeSubscription!: Subscription;
@@ -66,28 +59,16 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   /**
    * Make sidebar narrow. [docs]
    * @type boolean
+   * @default false
    */
-  @Input()
-  set narrow(value: boolean) {
-    this.#narrow = coerceBooleanProperty(value);
-  }
-
-  get narrow() {
-    return this.#narrow;
-  }
+  @Input({ transform: booleanAttribute }) narrow: boolean = false;
 
   /**
    * Set sidebar to overlaid variant.
    * @type boolean
+   * @default false
    */
-  @Input()
-  set overlaid(value: boolean) {
-    this.#overlaid = coerceBooleanProperty(value);
-  }
-
-  get overlaid() {
-    return this.#overlaid;
-  }
+  @Input({ transform: booleanAttribute }) overlaid: boolean = false;
 
   /**
    * Components placement, there’s no default placement. [docs]
@@ -108,22 +89,19 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   /**
    * Expand narrowed sidebar on hover. [docs]
+   * @type boolean
+   * @default false
    */
-  @Input()
-  set unfoldable(value: boolean) {
-    this.#unfoldable = coerceBooleanProperty(value);
-  }
-
-  get unfoldable() {
-    return this.#unfoldable;
-  }
+  @Input({ transform: booleanAttribute }) unfoldable: boolean = false;
 
   /**
    * Toggle the visibility of sidebar component. [docs]
+   * @type boolean
+   * @default false
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set visible(value: boolean) {
-    const visible = coerceBooleanProperty(value);
+    const visible = value;
     if (this.#visible !== visible) {
       this.#visible = visible;
       this.visibleChange.emit(this.#visible);
@@ -192,8 +170,11 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
       'sidebar-narrow': this.narrow && !this.unfoldable,
       'sidebar-narrow-unfoldable': this.unfoldable,
       'sidebar-overlaid': this.overlaid,
+      [`sidebar-${this.placement}`]: !!this.placement,
+      [`sidebar-${this.colorScheme}`]: !!this.colorScheme,
       [`sidebar-${this.size}`]: !!this.size,
-      show: visible && this.#onMobile,
+      show: visible,
+      // show: visible && this.#onMobile, //todo: check
       hide: !visible
     };
   }
@@ -219,7 +200,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     for (const propName in changes) {
       if (propList.includes(propName)) {
         if (changes[propName] && !changes[propName].firstChange) {
-          const value = coerceBooleanProperty(changes[propName].currentValue);
+          const value = booleanAttribute(changes[propName].currentValue);
           if (oldStateMap.get(propName) !== value) {
             newStateMap.set(propName, value);
           }

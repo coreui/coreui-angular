@@ -12,6 +12,7 @@
   (@openClose.done)="onAnimationDone($event)"
   (@openClose.start)="onAnimationStart($event)"
   [@openClose]="open ? 'open' : 'closed'"
+  [compact]="compact"
   [dropdownMode]="dropdownMode"
   [groupItems]="true"
   [navItems]="navItems"
@@ -19,8 +20,11 @@
 />
 
 <ng-template #iconTemplate let-item>
+  <!--  <i *ngIf="item?.icon" [ngClass]="item | cSidebarNavIcon"></i>-->
   @if (item?.icon) {
-    <i [ngClass]="item | cSidebarNavIcon"></i>
+    <span class="nav-icon">
+    <span [ngClass]="item.icon ?? ''"></span>
+  </span>
   }
   @if (item?.iconComponent) {
     <svg

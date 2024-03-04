@@ -4,7 +4,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarService } from './sidebar.service';
 import { SidebarBrandComponent } from './sidebar-brand/sidebar-brand.component';
 import { SidebarToggleDirective } from './sidebar-toggle/sidebar-toggle.directive';
-import { SidebarTogglerComponent } from './sidebar-toggler/sidebar-toggler.component';
+import { SidebarTogglerDirective } from './sidebar-toggler/sidebar-toggler.directive';
 import { SidebarHeaderComponent } from './sidebar-header/sidebar-header.component';
 import { SidebarFooterComponent } from './sidebar-footer/sidebar-footer.component';
 import { SidebarNavGroupService } from './sidebar-nav/sidebar-nav-group.service';
@@ -42,12 +42,12 @@ import {
     SidebarNavLinkPipe,
     SidebarNavTitleComponent,
     SidebarToggleDirective,
-    SidebarTogglerComponent
+    SidebarTogglerDirective
   ],
   exports: [
     SidebarComponent,
     SidebarToggleDirective,
-    SidebarTogglerComponent,
+    SidebarTogglerDirective,
     SidebarBrandComponent,
     SidebarNavComponent,
     SidebarHeaderComponent,

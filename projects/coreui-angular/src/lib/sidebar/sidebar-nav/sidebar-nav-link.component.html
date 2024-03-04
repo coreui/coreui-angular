@@ -1,8 +1,6 @@
 @switch (linkType) {
   @case ('disabled') {
-    <a [ngClass]="item | cSidebarNavLink"
-       [cHtmlAttr]="item.attributes ?? {}"
-    >
+    <a [cHtmlAttr]="item.attributes ?? {}" [ngClass]="item | cSidebarNavLink">
       <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: item}" />
       <c-sidebar-nav-link-content [item]="item" />
       @if (item.badge) {
@@ -11,11 +9,7 @@
     </a>
   }
   @case ('external') {
-    <a [ngClass]="item | cSidebarNavLink"
-       [href]="href"
-       [cHtmlAttr]="item.attributes ?? {}"
-       (click)="linkClicked()"
-    >
+    <a (click)="linkClicked()" [cHtmlAttr]="item.attributes ?? {}" [href]="href" [ngClass]="item | cSidebarNavLink">
       <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: item}" />
       <c-sidebar-nav-link-content [item]="item" />
       @if (item.badge) {
@@ -24,20 +18,20 @@
     </a>
   }
   @default {
-    <a [ngClass]="item | cSidebarNavLink"
+    <a (click)="linkClicked()"
        [cHtmlAttr]="item.attributes ?? {}"
-       [target]="item.attributes?.['target']"
-       [queryParams]="item.linkProps?.queryParams ?? null"
        [fragment]="item.linkProps?.fragment"
-       [queryParamsHandling]="item.linkProps?.queryParamsHandling"
+       [ngClass]="item | cSidebarNavLink"
        [preserveFragment]="item.linkProps?.preserveFragment ?? false"
-       [skipLocationChange]="item.linkProps?.skipLocationChange ?? false"
+       [queryParamsHandling]="item.linkProps?.queryParamsHandling"
+       [queryParams]="item.linkProps?.queryParams ?? null"
        [replaceUrl]="item.linkProps?.replaceUrl ?? false"
-       [state]="item.linkProps?.state ?? {}"
-       [routerLink]="item.url"
-       routerLinkActive="active"
        [routerLinkActiveOptions]="item.linkProps?.routerLinkActiveOptions ?? { exact: false }"
-       (click)="linkClicked()"
+       [routerLink]="item.url"
+       [skipLocationChange]="item.linkProps?.skipLocationChange ?? false"
+       [state]="item.linkProps?.state ?? {}"
+       [target]="item.attributes?.['target']"
+       routerLinkActive="active"
     >
       <!--    [class.active]="linkActive"-->
       <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: item}" />
@@ -48,16 +42,18 @@
     </a>
   }
 }
-
 <ng-template #iconTemplate let-item>
+  <!--  <i *ngIf="item?.icon" [ngClass]="item | cSidebarNavIcon"></i>-->
   @if (item?.icon) {
-    <i [ngClass]="item | cSidebarNavIcon"></i>
+    <span class="nav-icon">
+      <span [ngClass]="item.icon ?? ''"></span>
+    </span>
   }
   @if (item?.iconComponent) {
     <svg
       [cIcon]="item.iconComponent?.content"
-      [name]="item.iconComponent?.name"
       [customClasses]="item | cSidebarNavIcon"
+      [name]="item.iconComponent?.name"
     ></svg>
   }
   @if (!item?.icon && !item?.iconComponent) {

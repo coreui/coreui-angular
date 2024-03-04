@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { IconDirective } from '@coreui/icons-angular';
 
 // import {SidebarService} from '../sidebar.service';
 import { HtmlAttributesDirective } from '../../shared';
@@ -11,7 +12,6 @@ import { INavData } from './sidebar-nav';
 import { SidebarNavLinkPipe } from './sidebar-nav-link.pipe';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
-import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
   selector: 'c-sidebar-nav-link-content',
@@ -40,12 +40,12 @@ export class SidebarNavLinkContentComponent {
     RouterModule,
     HtmlAttributesDirective,
     IconDirective,
-    NgClass,
-    NgTemplateOutlet,
     SidebarNavLinkContentComponent,
     SidebarNavLinkPipe,
     SidebarNavBadgePipe,
-    SidebarNavIconPipe
+    SidebarNavIconPipe,
+    NgTemplateOutlet,
+    NgClass
   ]
 })
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
