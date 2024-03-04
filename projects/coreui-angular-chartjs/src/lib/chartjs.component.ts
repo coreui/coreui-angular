@@ -22,16 +22,8 @@ import {
 
 import merge from 'lodash-es/merge';
 
-import {
-  Chart as ChartJS,
-  ChartConfiguration,
-  ChartData,
-  ChartOptions,
-  ChartType,
-  InteractionItem,
-  Plugin,
-  registerables
-} from 'chart.js';
+import type { ChartConfiguration, ChartData, ChartOptions, ChartType, InteractionItem, Plugin } from 'chart.js';
+import { Chart as ChartJS, registerables } from 'chart.js';
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
 
 ChartJS.register(...registerables);
@@ -61,6 +53,11 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
    * The data object that is passed into the Chart.js chart (more info).
    */
   @Input() data?: ChartData;
+
+  /**
+   * A fallback when the canvas cannot be rendered. Can be used for accessible chart descriptions.
+   */
+  // @Input() fallbackContent?: TemplateRef<any>;
 
   /**
    * Height attribute applied to the rendered canvas.
