@@ -1,24 +1,17 @@
 import { NgModule } from '@angular/core';
-import { BgColorDirective } from './bg-color.directive';
-import { BorderDirective } from './border.directive';
-import { RoundedDirective } from './rounded.directive';
-import { TextColorDirective } from './text-color.directive';
-import { AlignDirective } from './align.directive';
+
+import {
+  AlignDirective,
+  BgColorDirective,
+  BorderDirective,
+  RoundedDirective,
+  ShadowOnScrollDirective,
+  TextColorDirective
+} from './public_api';
+
+const UTILITY_DIRECTIVES = [AlignDirective, BgColorDirective, BorderDirective, RoundedDirective, ShadowOnScrollDirective, TextColorDirective];
 
 @NgModule({
-  imports: [
-    BgColorDirective,
-    BorderDirective,
-    RoundedDirective,
-    TextColorDirective,
-    AlignDirective
-  ],
-  exports: [
-    BgColorDirective,
-    BorderDirective,
-    RoundedDirective,
-    TextColorDirective,
-    AlignDirective
-  ]
+  imports: [...UTILITY_DIRECTIVES], exports: [...UTILITY_DIRECTIVES]
 })
 export class UtilitiesModule {}
