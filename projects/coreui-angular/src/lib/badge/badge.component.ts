@@ -1,10 +1,14 @@
 import { Component, HostBinding, Input } from '@angular/core';
-import { BadgePositions, Colors, Shapes } from '../coreui.types';
+import { BadgePositions, Colors, Shapes, TextColors } from '../coreui.types';
+import { TextColorDirective } from '../utilities';
 
 @Component({
   selector: 'c-badge',
   template: '<ng-content></ng-content>',
-  standalone: true
+  standalone: true,
+  hostDirectives: [{
+    directive: TextColorDirective, inputs: ['cTextColor: textColor']
+  }]
 })
 export class BadgeComponent {
   /**
@@ -26,11 +30,13 @@ export class BadgeComponent {
    * Size the component small.
    */
   @Input() size?: 'sm';
+
   /**
    * Sets the text color of the component to one of CoreUI’s themed colors.
+   * via TextColorDirective
    * @type TextColors
    */
-  @Input() textColor?: string;
+  @Input() textColor?: TextColors;
 
   constructor() {}
 
@@ -48,7 +54,6 @@ export class BadgeComponent {
     return Object.assign({
         badge: true,
         [`bg-${this.color}`]: !!this.color,
-        [`text-${this.textColor}`]: !!this.textColor,
         [`badge-${this.size}`]: !!this.size,
         [`${this.shape}`]: !!this.shape
       }, !!this.position ? positionClasses : {}
