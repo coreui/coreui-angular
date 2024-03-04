@@ -1,10 +1,14 @@
 import { Component, HostBinding, Input } from '@angular/core';
 import { Colors, TextColors } from '../coreui.types';
+import { TextColorDirective } from '../utilities';
 
 @Component({
   selector: 'c-card, [c-card]',
-  template: `<ng-content></ng-content>`,
-  standalone: true
+  template: '<ng-content />',
+  standalone: true,
+  hostDirectives: [{
+    directive: TextColorDirective, inputs: ['cTextColor: textColor']
+  }]
 })
 export class CardComponent {
 
@@ -13,8 +17,10 @@ export class CardComponent {
    * @type Colors
    */
   @Input() color?: Colors;
+
   /**
    * Sets the text color context of the component to one of CoreUI’s themed colors.
+   * via TextColorDirective
    * @type TextColors
    */
   @Input() textColor?: TextColors;
@@ -23,11 +29,7 @@ export class CardComponent {
   get hostClasses(): any {
     return {
       card: true,
-      [`bg-${this.color}`]: !!this.color,
-      [`text-${this.textColor}`]: !!this.textColor,
+      [`bg-${this.color}`]: !!this.color
     };
   }
-
-  constructor() { }
-
 }
