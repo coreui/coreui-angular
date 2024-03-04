@@ -1,11 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Component, HostBinding, inject, Input } from '@angular/core';
 
 import { AccordionService } from '../accordion.service';
 
 @Component({
   selector: 'c-accordion',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content/>',
   styleUrls: ['./accordion.component.scss'],
   exportAs: 'cAccordionItem',
   providers: [AccordionService],
@@ -13,35 +12,33 @@ import { AccordionService } from '../accordion.service';
 })
 export class AccordionComponent {
 
-  static ngAcceptInputType_alwaysOpen: BooleanInput;
+   #accordionService = inject(AccordionService);
 
   /**
    * Removes the default background-color, some borders, and some rounded corners to render accordions edge-to-edge with their parent container.
    * @type boolean
    */
-  @Input() flush?: boolean;
+  @Input({ transform: booleanAttribute }) flush: boolean = false;
+
   /**
    * Make accordion items stay open when another item is opened
    * @type boolean
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set alwaysOpen(value: boolean) {
-    this.accordionService.alwaysOpen = coerceBooleanProperty(value);
+    this.#accordionService.alwaysOpen = value;
   }
+
   get alwaysOpen(): boolean {
-    return this.accordionService.alwaysOpen;
+    return this.#accordionService.alwaysOpen;
   }
 
   @HostBinding('class')
   get hostClasses(): any {
     return {
       accordion: true,
-      'accordion-flush': !!this.flush
+      'accordion-flush': this.flush
     };
   }
-
-  constructor(
-    private accordionService: AccordionService
-  ) {}
 
 }
