@@ -45,7 +45,7 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
    * Invert colors from their default dark shade.
    * @type boolean
    */
-  @Input({ transform: booleanAttribute }) inverse: string | boolean = false;
+  @Input({ transform: booleanAttribute }) inverse: boolean = false;
 
   templates: any = {};
   @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
@@ -53,24 +53,15 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
   @HostBinding('class')
   get hostExtendedClass() {
     return {
-      'high-emphasis-inverse': this.inverse
-    };
-  }
-
-  get iconClasses() {
-    return {
-      'mb-4': !this.textColor,
-      'text-end': true,
-      'text-medium-emphasis': !this.inverse,
-      'text-medium-emphasis-inverse': this.inverse,
-      [`text-${this.textColor}`]: !!this.textColor
+      'text-white': this.inverse
     };
   }
 
   get titleClasses() {
     return {
-      'text-medium-emphasis': !this.inverse,
-      'text-medium-emphasis-inverse': this.inverse,
+      'text-body-secondary': !this.inverse,
+      'text-white': this.inverse,
+      'text-opacity-75': this.inverse,
       [`text-${this.textColor}`]: !!this.textColor
     };
   }
@@ -79,9 +70,16 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
     return {
       'fs-4': !this.textColor,
       'fw-semibold': true,
-      'text-high-emphasis': !this.inverse,
-      'text-high-emphasis-inverse': this.inverse,
-      [`text-${this.textColor}`]: !!this.textColor
+      ...this.titleClasses,
+      'text-opacity-75': false
+    };
+  }
+
+  get iconClasses() {
+    return {
+      'mb-4': !this.textColor,
+      'text-end': true,
+      ...this.titleClasses
     };
   }
 

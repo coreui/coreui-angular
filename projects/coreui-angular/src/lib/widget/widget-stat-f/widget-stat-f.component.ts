@@ -94,7 +94,7 @@ export class WidgetStatFComponent implements AfterContentInit {
 
   get titleClasses() {
     return {
-      'text-medium-emphasis': !this.textColor,
+      'text-body-secondary': !this.textColor,
       'small': true,
       'text-uppercase': true,
       'fw-semibold': true,

@@ -7,7 +7,7 @@
   }
   <ng-content />
   @if (text) {
-    <small [ngClass]="inverse ? 'text-medium-emphasis-inverse' : 'text-medium-emphasis'">
+    <small [ngClass]="inverse ? 'text-white text-opacity-75' : 'text-body-secondary'">
       {{ text }}
     </small>
   }

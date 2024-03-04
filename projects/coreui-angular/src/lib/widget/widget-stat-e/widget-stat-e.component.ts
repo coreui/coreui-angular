@@ -20,6 +20,7 @@ export class WidgetStatEComponent extends CardComponent {
    * @type string
    */
   @Input() title?: string;
+
   /**
    * Value for your widget to display
    * @type string | number
@@ -28,7 +29,7 @@ export class WidgetStatEComponent extends CardComponent {
 
   get titleClasses() {
     return {
-      'text-medium-emphasis': !this.textColor,
+      'text-body-secondary': !this.textColor,
       'small': true,
       'text-uppercase': true,
       'fw-semibold': true,
