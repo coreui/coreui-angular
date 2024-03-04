@@ -14,9 +14,9 @@ export class NavComponent {
   @Input() layout?: 'fill' | 'justified';
   /**
    * Set the nav variant to tabs or pills.
-   * @type {'tabs' | 'pills' | 'underline'}
+   * @type 'tabs' | 'pills' | 'underline' | 'underline-border'
    */
-  @Input() variant?: '' | 'tabs' | 'pills' ;
+  @Input() variant?: '' | 'tabs' | 'pills' | 'underline' | 'underline-border';
 
   @HostBinding('class')
   get hostClasses(): any {
