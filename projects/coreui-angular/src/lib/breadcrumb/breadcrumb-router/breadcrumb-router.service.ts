@@ -11,15 +11,10 @@ import { IBreadcrumbItem } from '../breadcrumb-item/breadcrumb-item';
 export class BreadcrumbRouterService {
   public outlet = 'primary';
 
-  breadcrumbs$: Observable<IBreadcrumbItem[]>;
-  private breadcrumbsBehaviorSubject: BehaviorSubject<IBreadcrumbItem[]>;
+  readonly #breadcrumbsBehaviorSubject = new BehaviorSubject<IBreadcrumbItem[]>(new Array<IBreadcrumbItem>());
+  breadcrumbs$ = this.#breadcrumbsBehaviorSubject.asObservable();
 
   constructor(private router: Router, private route: ActivatedRoute) {
-    this.breadcrumbsBehaviorSubject = new BehaviorSubject<any[]>(
-      new Array<IBreadcrumbItem>()
-    );
-
-    this.breadcrumbs$ = this.breadcrumbsBehaviorSubject.asObservable();
 
     this.router.events
       .pipe(
@@ -39,7 +34,7 @@ export class BreadcrumbRouterService {
               const routeSnapshot = childRoute.snapshot;
               url += '/' + routeSnapshot.url.map((segment) => segment.path).join('/');
               breadcrumbs.push({
-                label: childRoute.snapshot.data['title'] || '',
+                label: routeSnapshot.data['title'] ?? routeSnapshot.title ?? '',
                 url,
                 queryParams: routeSnapshot.queryParams
               });
@@ -48,9 +43,8 @@ export class BreadcrumbRouterService {
           });
         } while (currentRoute);
 
-        this.breadcrumbsBehaviorSubject.next(Object.assign([], breadcrumbs));
+        this.#breadcrumbsBehaviorSubject.next(Object.assign([], breadcrumbs));
 
-        // console.log('breadcrumbs', breadcrumbs);
         return breadcrumbs;
       });
   }
