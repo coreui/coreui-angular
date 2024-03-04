@@ -1,6 +1,7 @@
 import {
   AfterContentInit,
   AfterViewInit,
+  booleanAttribute,
   ChangeDetectorRef,
   Component,
   ContentChild,
@@ -22,12 +23,12 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { createPopper, Instance, Options, Placement } from '@popperjs/core';
 
+import { ThemeDirective } from '../../shared';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from '../dropdown.service';
 
@@ -41,9 +42,6 @@ export abstract class DropdownToken {}
   standalone: true
 })
 export class DropdownToggleDirective implements AfterViewInit {
-
-  static ngAcceptInputType_split: BooleanInput;
-  static ngAcceptInputType_popper: BooleanInput;
 
   constructor(
     public elementRef: ElementRef,
@@ -63,7 +61,7 @@ export class DropdownToggleDirective implements AfterViewInit {
    * @type boolean
    * @default false
    */
-  @Input() disabled?: boolean = false;
+  @Input({ transform: booleanAttribute }) disabled: boolean = false;
 
   /**
    * Enables pseudo element caret on toggler.
@@ -74,17 +72,9 @@ export class DropdownToggleDirective implements AfterViewInit {
   /**
    * Create split button dropdowns with virtually the same markup as single button dropdowns, but with the addition of `.dropdown-toggle-split` class for proper spacing around the dropdown caret.
    * @type boolean
+   * @default false
    */
-  @Input()
-  set split(value: boolean) {
-    this._split = coerceBooleanProperty(value);
-  }
-
-  get split(): boolean {
-    return this._split;
-  }
-
-  private _split = false;
+  @Input({ transform: booleanAttribute }) split: boolean = false;
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -111,16 +101,14 @@ export class DropdownToggleDirective implements AfterViewInit {
 
 @Component({
   selector: 'c-dropdown',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   styleUrls: ['./dropdown.component.scss'],
   exportAs: 'cDropdown',
   providers: [DropdownService],
-  standalone: true
+  standalone: true,
+  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }]
 })
 export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
-
-  static ngAcceptInputType_dark: BooleanInput;
-  static ngAcceptInputType_visible: BooleanInput;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -142,22 +130,6 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
   @Input() autoClose: boolean | 'inside' | 'outside' = true;
 
   /**
-   * Sets a darker color scheme to match a dark navbar.
-   * @type boolean
-   * @default false
-   */
-  @Input()
-  set dark(value: boolean) {
-    this._dark = coerceBooleanProperty(value);
-  };
-
-  get dark() {
-    return this._dark;
-  }
-
-  private _dark = false;
-
-  /**
    * Sets a specified  direction and location of the dropdown menu.
    * @type 'dropup' | 'dropend' | 'dropstart'
    */
@@ -174,16 +146,7 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
    * @type boolean
    * @default true
    */
-  @Input()
-  set popper(value: boolean) {
-    this._popper = coerceBooleanProperty(value);
-  }
-
-  get popper(): boolean {
-    return this._popper;
-  }
-
-  private _popper = true;
+  @Input({ transform: booleanAttribute }) popper: boolean = true;
 
   /**
    * Optional popper Options object, placement prop takes precedence over
@@ -241,9 +204,9 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
    * @type boolean
    * @default false
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set visible(value: boolean) {
-    const _value = coerceBooleanProperty(value);
+    const _value = value;
     if (_value !== this._visible) {
       this.activeTrap = _value;
       this._visible = _value;

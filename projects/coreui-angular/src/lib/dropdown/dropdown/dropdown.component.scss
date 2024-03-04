@@ -2,7 +2,6 @@
 
 :host-context(.dropdown, .dropup):not(.btn-group) {
   display: block;
-  min-width: fit-content;
 }
 
 :host-context(.dropstart, .dropend):not(.btn-group) {

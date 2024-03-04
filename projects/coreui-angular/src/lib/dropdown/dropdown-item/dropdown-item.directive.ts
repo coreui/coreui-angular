@@ -1,4 +1,5 @@
-import { Directive, HostBinding, HostListener, Input, Optional } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener, inject, Input, Optional } from '@angular/core';
+import { FocusableOption, FocusOrigin } from '@angular/cdk/a11y';
 import { DropdownService } from '../dropdown.service';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 
@@ -7,7 +8,7 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
   exportAs: 'cDropdownItem',
   standalone: true
 })
-export class DropdownItemDirective {
+export class DropdownItemDirective implements FocusableOption {
   /**
    * Set active state to a dropdown-item.
    * @type boolean
@@ -27,10 +28,20 @@ export class DropdownItemDirective {
    */
   @Input() disabled?: boolean;
 
+  #elementRef: ElementRef = inject(ElementRef);
+
   constructor(
     private dropdownService: DropdownService,
     @Optional() public dropdown?: DropdownComponent
   ) {
+  }
+
+  focus(origin?: FocusOrigin | undefined): void {
+    this.#elementRef?.nativeElement?.focus();
+  }
+
+  getLabel?(): string {
+    return this.#elementRef?.nativeElement?.textContent.trim();
   }
 
   @HostBinding('attr.aria-current')
@@ -52,9 +63,11 @@ export class DropdownItemDirective {
   set tabIndex(value: string | number | null) {
     this._tabIndex = value;
   }
+
   get tabIndex() {
     return this.disabled ? '-1' : this._tabIndex;
   }
+
   private _tabIndex: string | number | null = null;
 
   @HostBinding('attr.aria-disabled')
