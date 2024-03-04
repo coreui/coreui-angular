@@ -2,6 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
+import { TextColorDirective } from '../utilities';
 
 @Component({
   selector: 'c-avatar',
@@ -10,7 +11,10 @@ import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
   imports: [
     NgTemplateOutlet,
     NgClass
-  ]
+  ],
+  hostDirectives: [{
+    directive: TextColorDirective, inputs: ['cTextColor: textColor']
+  }]
 })
 export class AvatarComponent {
   /**
@@ -38,10 +42,11 @@ export class AvatarComponent {
    * @type Colors
    */
   @Input() status?: Colors;
+
   /**
    * Sets the text color of the component to one of CoreUI’s themed colors.
-   *
-   * @values 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'dark' | 'light' | 'white' | 'muted' | string
+   * via TextColorDirective
+   * @type TextColors
    */
   @Input() textColor?: TextColors;
 
@@ -60,8 +65,7 @@ export class AvatarComponent {
       avatar: true,
       [`avatar-${this.size}`]: !!this.size,
       [`bg-${this.color}`]: !!this.color,
-      [`${this.shape}`]: !!this.shape,
-      [`text-${this.textColor}`]: !!this.textColor
+      [`${this.shape}`]: !!this.shape
     };
   }
 }
