@@ -89,7 +89,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
    * @type boolean
    * @default true
    */
-  @Input({ transform: booleanAttribute }) keyboard = true;
+  @Input({ transform: booleanAttribute }) keyboard: boolean = true;
   @Input() id?: string;
   /**
    * Size the component small, large, or extra large.
@@ -104,8 +104,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
    * @type string
    * @default 'dialog'
    */
-  @Input() @HostBinding('attr.role') role = 'dialog';
-
+  @Input() @HostBinding('attr.role') role: string = 'dialog';
   /**
    * Set aria-modal html attr for modal. [docs]
    * @type boolean
