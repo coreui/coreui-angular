@@ -4,37 +4,37 @@
 
 #### `5.0.0-next.23`
 
-- refactor(sidebar): drop sidebar-toggler component, use directive instead, use control flow, use @Input() transform
+- refactor(sidebar): drop sidebar-toggler component, use directive instead, use control flow, use Input() transform
 - refactor(widget): update to v5
 - fix(tooltip): update offset for v5
-- refactor(toast): use @Input() transform
+- refactor(toast): use Input() transform
 - feat(utilities): shadow-on-scroll directive
-- refactor(tabs): use @Input() transform
+- refactor(tabs): use Input() transform
 - refactor(table.type): Partial attributes
 - feat: ThemeDirective
 - feat(services): v5 color-mode, local-storage, in-memory-storage, script-injector
 - refactor(progress): add progress-stacked component, update testing, rewrite with signals
 - refactor(progress): add progress-bar props for simplified use with [value]
 - fix(popover): update offset for v5
-- refactor(placeholder): use @Input() transform
+- refactor(placeholder): use Input() transform
 - refactor(offcanvas): use ThemeDirective composition for dark prop
 - refactor(navbar): colorScheme prop replaced with ThemeDirective composition
 - fix(row): row-cols-n for xs="n"
-- refactor(form-check-input): use @Input() transform
-- refactor(dropdown): allow to select a dropdown-item with up/down arrows, testing update, use @Input() transform
+- refactor(form-check-input): use Input() transform
+- refactor(dropdown): allow to select a dropdown-item with up/down arrows, testing update, use Input() transform
 - refactor(dropdown): implement FocusableOption interface for items
 - refactor(dropdown): use ThemeDirective composition for dark prop
-- refactor(collapse): use @Input() transform
-- refactor(carousel): control flow, use @Input() transform, ThemeDirective composition for dark prop
+- refactor(collapse): use Input() transform
+- refactor(carousel): control flow, use Input() transform, ThemeDirective composition for dark prop
 - refactor(card): use TextColorDirective composition
 - refactor(button-close): deprecate white input prop, use ThemeDirective composition for dark prop
-- refactor(breadcrumb): cleanups, add routeSnapshot.title as fallback value, use control flow, use @Input() transform
+- refactor(breadcrumb): cleanups, add routeSnapshot.title as fallback value, use control flow, use Input() transform
 - refactor(badge): update TextColors, use TextColorDirective composition
 - chore(backdrop.service): cleanup
 - refactor(avatar): update TextColors, use TextColorDirective composition, use control flow
-- refactor(alert): use @Input() transform, use control flow
+- refactor(alert): use Input() transform, use control flow
 - refactor(coreui.types): update to v5
-- refactor(accordion): use @Input() transform
+- refactor(accordion): use Input() transform
 - refactor(chartjs): update to ChartJS 4.x, types cleanup, use afterRender for SSR
 - refactor(icon): add afterNextRender for SSR, add aria-hidden attribute, improve testing
 
