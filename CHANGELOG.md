@@ -2,8 +2,10 @@
 
 ---
 
-#### `5.0.0-next.23`
+#### `5.0.0-rc.0`
 
+- chore(dependencies): update to `Angular 17.3`
+- chore(dependencies): update to `CoreUI 5`
 - refactor(sidebar): drop sidebar-toggler component, use directive instead, use control flow, use Input() transform
 - refactor(widget): update to v5
 - fix(tooltip): update offset for v5

@@ -11,7 +11,7 @@
 <h2 align="center">CoreUI for Angular</h3>
 
 <p align="center">
-  Angular Components Library built on top of Bootstrap 5 and TypeScript.
+  Angular Components Library built on top of Bootstrap 5.3 and TypeScript.
   <br>
   <a href="https://coreui.io/angular/docs/"><strong>Explore CoreUI for Angular docs »</strong></a>
   <br>
@@ -35,7 +35,7 @@
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^17.2.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^17.3.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## Table of contents
 

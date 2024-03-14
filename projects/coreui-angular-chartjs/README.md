@@ -8,7 +8,7 @@
   </a>
 </p>
 
-<h3 align="center">CoreUI Angular wrapper for Chart.js</h3>
+<h3 align="center">CoreUI Angular wrapper for Chart.js v4</h3>
 
 <p align="center">
   <a href="https://coreui.io/angular/docs/"><strong>Explore @coreui/angular-chartjs docs & examples »</strong></a>
@@ -33,24 +33,35 @@
 [npm-badge-next]: https://img.shields.io/npm/v/@coreui/angular-chartjs/next?style=flat-square&color=red
 [npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
 [npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^17.2.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^17.3.0-lightgrey.svg?style=flat-square&logo=angular
 
 ##### install:
 
 ```bash
-npm install chart.js
+npm install chart.js@4
 npm install @coreui/chartjs@4
-npm install @coreui/angular-chartjs
+npm install @coreui/angular-chartjs@5
 ````
 
 ##### import:
 
 ```ts
+// ng modules
 import { ChartjsModule } from '@coreui/angular-chartjs';
 
 @NgModule({
-  imports: [
-      ChartjsModule,
+    imports: [
+        ChartjsModule,
+...
+```
+```ts
+// standalone components
+  import { ChartjsComponent } from '@coreui/angular-chartjs';
+
+@Component({
+    standalone: true,
+    imports: [
+        ChartjsComponent, 
 ...
 ```
 
