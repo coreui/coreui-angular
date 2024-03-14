@@ -2,6 +2,12 @@
 
 ---
 
+#### `4.7.17`
+
+- chore(dependencies): update to `Angular 17.3`
+
+---
+
 #### `4.7.16`
 
 - chore(dependencies): update
@@ -17,7 +23,7 @@
 
 #### `4.7.14`
 
-- chore(dependencies): update to Angular 17.2
+- chore(dependencies): update to `Angular 17.2`
 
 ---
 

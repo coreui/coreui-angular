@@ -33,7 +33,7 @@
 [npm-badge-next]: https://img.shields.io/npm/v/@coreui/angular-chartjs/next?style=flat-square&color=red
 [npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
 [npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^17.2.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^17.3.0-lightgrey.svg?style=flat-square&logo=angular
 
 ##### install:
 
@@ -46,11 +46,22 @@ npm install @coreui/angular-chartjs
 ##### import:
 
 ```ts
+// ng modules
 import { ChartjsModule } from '@coreui/angular-chartjs';
 
 @NgModule({
   imports: [
       ChartjsModule,
+...
+```
+```ts
+// standalone components
+  import { ChartjsComponent } from '@coreui/angular-chartjs';
+
+@Component({
+    standalone: true,
+    imports: [
+        ChartjsComponent, 
 ...
 ```
 
