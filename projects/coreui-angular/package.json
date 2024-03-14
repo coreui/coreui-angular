@@ -23,11 +23,11 @@
   },
   "sideEffects": false,
   "peerDependencies": {
-    "@angular/animations": "^17.0.0",
-    "@angular/cdk": "^17.0.0",
-    "@angular/common": "^17.0.0",
-    "@angular/core": "^17.0.0",
-    "@angular/router": "^17.0.0",
+    "@angular/animations": "^17.3.0",
+    "@angular/cdk": "^17.2.0",
+    "@angular/common": "^17.3.0",
+    "@angular/core": "^17.3.0",
+    "@angular/router": "^17.3.0",
     "rxjs": "^7.8.1"
   },
   "repository": {

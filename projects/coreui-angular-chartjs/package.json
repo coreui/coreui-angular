@@ -25,9 +25,9 @@
     "url": "https://github.com/coreui/coreui-angular/issues"
   },
   "peerDependencies": {
-    "@angular/cdk": "^17.0.0",
-    "@angular/common": "^17.0.0",
-    "@angular/core": "^17.0.0",
+    "@angular/cdk": "^17.2.0",
+    "@angular/common": "^17.3.0",
+    "@angular/core": "^17.3.0",
     "@coreui/chartjs": "^3.0.0",
     "chart.js": "^3.9.1"
   },
