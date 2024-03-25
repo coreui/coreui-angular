@@ -1,14 +1,15 @@
 import { Component, HostBinding, Input } from '@angular/core';
 import { BadgePositions, Colors, Shapes, TextColors } from '../coreui.types';
-import { TextColorDirective } from '../utilities';
+import { TextBgColorDirective, TextColorDirective } from '../utilities';
 
 @Component({
   selector: 'c-badge',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   standalone: true,
-  hostDirectives: [{
-    directive: TextColorDirective, inputs: ['cTextColor: textColor']
-  }]
+  hostDirectives: [
+    { directive: TextColorDirective, inputs: ['cTextColor: textColor'] },
+    { directive: TextBgColorDirective, inputs: ['cTextBgColor: textBgColor'] }
+  ]
 })
 export class BadgeComponent {
   /**
@@ -38,7 +39,13 @@ export class BadgeComponent {
    */
   @Input() textColor?: TextColors;
 
-  constructor() {}
+  /**
+   * Sets the component's color scheme to one of CoreUI's themed colors, ensuring the text color contrast adheres to the WCAG 4.5:1 contrast ratio standard for accessibility.
+   * via TextBgColorDirective
+   * @type Colors
+   * @since 5.0.0
+   */
+  @Input() textBgColor?: Colors;
 
   @HostBinding('class')
   get hostClasses(): any {
