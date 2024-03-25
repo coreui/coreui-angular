@@ -2,7 +2,7 @@
 
 ---
 
-#### `5.0.0-rc.0`
+#### `5.0.0-rc.1`
 
 - chore(dependencies): update to `Angular 17.3`
 - chore(dependencies): update to `CoreUI 5`
@@ -39,6 +39,9 @@
 - refactor(accordion): use Input() transform
 - refactor(chartjs): update to ChartJS 4.x, types cleanup, use afterRender for SSR
 - refactor(icon): add afterNextRender for SSR, add aria-hidden attribute, improve testing
+- feat(utilities): TextBgColor directive
+- refactor(badge): improve background and text color handling with TextBgColor directive composition api
+- refactor(card): improve background and text color handling with TextBgColor directive composition api
 
 ---
 
