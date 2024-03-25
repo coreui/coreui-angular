@@ -15,7 +15,7 @@ export class PlaceholderDirective {
   @Input({ alias: 'cPlaceholder', transform: booleanAttribute }) visible: boolean = false;
 
   /**
-   * Size the placeholder extremely small, small, large.
+   * Size the placeholder xs, small, large.
    */
   @Input('cPlaceholderSize') size?: 'xs' | 'sm' | 'lg';
 

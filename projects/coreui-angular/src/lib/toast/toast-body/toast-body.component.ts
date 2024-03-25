@@ -3,7 +3,7 @@ import { ToastComponent } from '../toast/toast.component';
 
 @Component({
   selector: 'c-toast-body',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   styleUrls: ['./toast-body.component.scss'],
   exportAs: 'cToastBody',
   standalone: true

@@ -4,7 +4,7 @@ import { ColDirective } from './col.directive';
 
 @Component({
   selector: 'c-col',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   styleUrls: ['./col.component.scss'],
   standalone: true
 })

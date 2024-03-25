@@ -1,12 +1,8 @@
-import {
-  Component,
-  HostBinding,
-  Input,
-} from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-input-group',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content />',
   standalone: true
 })
 export class InputGroupComponent {
@@ -19,10 +15,8 @@ export class InputGroupComponent {
   get hostClasses(): any {
     return {
       'input-group': true,
-      [`input-group-${this.sizing}`]: !!this.sizing,
+      [`input-group-${this.sizing}`]: !!this.sizing
     };
   }
-
-  constructor() {}
 
 }

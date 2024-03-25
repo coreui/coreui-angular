@@ -2,7 +2,7 @@ import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'c-nav-item',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content />',
   styleUrls: ['./nav-item.component.scss'],
   standalone: true
 })

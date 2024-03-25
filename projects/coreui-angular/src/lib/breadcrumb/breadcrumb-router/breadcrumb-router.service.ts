@@ -11,8 +11,8 @@ import { IBreadcrumbItem } from '../breadcrumb-item/breadcrumb-item';
 export class BreadcrumbRouterService {
   public outlet = 'primary';
 
-  readonly #breadcrumbsBehaviorSubject = new BehaviorSubject<IBreadcrumbItem[]>(new Array<IBreadcrumbItem>());
-  breadcrumbs$ = this.#breadcrumbsBehaviorSubject.asObservable();
+  readonly #breadcrumbsBehaviorSubject: BehaviorSubject<IBreadcrumbItem[]> = new BehaviorSubject<IBreadcrumbItem[]>(new Array<IBreadcrumbItem>());
+  readonly breadcrumbs$: Observable<IBreadcrumbItem[]> = this.#breadcrumbsBehaviorSubject.asObservable();
 
   constructor(private router: Router, private route: ActivatedRoute) {
 

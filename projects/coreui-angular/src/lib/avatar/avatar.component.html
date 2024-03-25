@@ -1,5 +1,5 @@
 <ng-container>
-  <ng-container *ngTemplateOutlet="defaultImageTemplate"></ng-container>
+  <ng-container *ngTemplateOutlet="defaultImageTemplate" />
   @if (!!status) {
     <span [ngClass]="statusClass"></span>
   }
@@ -9,9 +9,6 @@
   @if (!!src) {
     <img [src]="src" class="avatar-img" />
   } @else {
-    <ng-content></ng-content>
+    <ng-content />
   }
-  <ng-template #imageContent>
-    <ng-content></ng-content>
-  </ng-template>
 </ng-template>

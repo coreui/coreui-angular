@@ -1,6 +1,6 @@
 <c-breadcrumb class="m-0">
   @for (breadcrumb of breadcrumbs | async; track breadcrumb; let last = $last) {
-    @if(breadcrumb?.label && (breadcrumb?.url?.slice(-1) === '/' || last)) {
+    @if (breadcrumb?.label && (breadcrumb?.url?.slice(-1) === '/' || last)) {
       <c-breadcrumb-item
         [active]="last"
         [url]="breadcrumb?.url"

@@ -8,7 +8,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: `<div cCollapse></div>`
+  template: '<div cCollapse></div>'
 })
 class TestComponent {}
 

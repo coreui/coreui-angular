@@ -2,7 +2,7 @@
   @if (dismissible) {
     <ng-container *ngTemplateOutlet="templates?.alertButtonCloseTemplate || defaultAlertButtonCloseTemplate" />
   }
-  <ng-content></ng-content>
+  <ng-content />
 }
 <ng-template #defaultAlertButtonCloseTemplate>
   <button (click)="visible=false" aria-label="Close" cButtonClose></button>

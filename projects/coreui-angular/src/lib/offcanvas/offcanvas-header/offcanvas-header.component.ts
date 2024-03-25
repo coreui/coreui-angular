@@ -2,7 +2,7 @@ import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'c-offcanvas-header',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content />',
   standalone: true
 })
 export class OffcanvasHeaderComponent {
@@ -10,7 +10,7 @@ export class OffcanvasHeaderComponent {
   @HostBinding('class')
   get hostClasses(): any {
     return {
-      'offcanvas-header': true,
+      'offcanvas-header': true
     };
   }
 
