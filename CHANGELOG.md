@@ -2,7 +2,7 @@
 
 ---
 
-#### `5.0.0-rc.1`
+#### `5.0.0`
 
 - chore(dependencies): update to `Angular 17.3`
 - chore(dependencies): update to `CoreUI 5`
