@@ -2,6 +2,14 @@
 
 ---
 
+#### `5.0.1`
+
+- chore(dependencies): update
+- fix(color-mode.service): afterNextRender() for SSR
+- fix(local-storage.service): provide null for empty Storage.getItem() value
+
+---
+
 #### `5.0.0`
 
 - chore(dependencies): update to `Angular 17.3`

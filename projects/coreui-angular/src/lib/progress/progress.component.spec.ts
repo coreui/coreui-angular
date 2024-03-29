@@ -7,7 +7,7 @@ import { ProgressStackedComponent } from './progress-stacked.component';
 
 @Component({
   template: `
-    <c-progress value="42" color="success"></c-progress>`,
+    <c-progress value="42" color="success" />`,
   selector: 'c-test',
   imports: [
     ProgressComponent,
