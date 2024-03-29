@@ -28,7 +28,7 @@ export class LocalStorageService {
   }
 
   public getItem(key: string): any {
-    const data = JSON.parse(this.#localStorage.getItem(key) ?? 'null');
+    const data = JSON.parse(this.#localStorage.getItem(key) || 'null');
     this.#data$.next({ key, data });
     return data;
   }
