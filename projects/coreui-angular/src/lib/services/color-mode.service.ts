@@ -1,5 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { DestroyRef, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import {
+  afterNextRender,
+  AfterRenderPhase,
+  DestroyRef,
+  effect,
+  inject,
+  Injectable,
+  signal,
+  WritableSignal
+} from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
 import { LocalStorageService } from './local-storage.service';
@@ -30,14 +39,16 @@ export class ColorModeService {
   });
 
   constructor() {
-    this.localStorageItemName$
-      .pipe(
-        tap(params => {
-          this.colorMode.set(this.getDefaultScheme(params));
-        }),
-        takeUntilDestroyed(this.#destroyRef)
-      )
-      .subscribe();
+    afterNextRender(() => {
+      this.localStorageItemName$
+        .pipe(
+          tap(params => {
+            this.colorMode.set(this.getDefaultScheme(params));
+          }),
+          takeUntilDestroyed(this.#destroyRef)
+        )
+        .subscribe();
+    }, { phase: AfterRenderPhase.Read });
   }
 
   getStoredTheme(localStorageItemName: string) {
