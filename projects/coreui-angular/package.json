@@ -1,8 +1,8 @@
 {
   "name": "@coreui/angular",
-  "version": "4.7.18",
-  "description": "CoreUI for Angular UI components library",
-  "copyright": "Copyright 2023 creativeLabs Łukasz Holeczek",
+  "version": "5.0.2",
+  "description": "CoreUI Components Library for Angular",
+  "copyright": "Copyright 2024 creativeLabs Łukasz Holeczek",
   "license": "MIT",
   "homepage": "https://coreui.io/angular",
   "author": {
@@ -18,7 +18,7 @@
     }
   ],
   "dependencies": {
-    "@popperjs/core": "~2.11.6",
+    "@popperjs/core": "~2.11.8",
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
@@ -28,6 +28,8 @@
     "@angular/common": "^17.3.0",
     "@angular/core": "^17.3.0",
     "@angular/router": "^17.3.0",
+    "@coreui/coreui": "~5.0.0",
+    "@coreui/icons-angular": "~5.0.0",
     "rxjs": "^7.8.1"
   },
   "repository": {
@@ -47,7 +49,5 @@
     "component",
     "components"
   ],
-  "eslintConfig": {
-
-  }
+  "eslintConfig": {}
 }

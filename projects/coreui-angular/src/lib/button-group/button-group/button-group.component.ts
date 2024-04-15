@@ -2,7 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-button-group',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content />',
   standalone: true
 })
 export class ButtonGroupComponent {
@@ -30,11 +30,8 @@ export class ButtonGroupComponent {
     return {
       'btn-group': !this.vertical,
       'btn-group-vertical': this.vertical,
-      [`btn-group-${this.size}`]: !!this.size,
+      [`btn-group-${this.size}`]: !!this.size
     };
   }
-
-
-  constructor() { }
 
 }

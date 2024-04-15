@@ -2,7 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-button-toolbar',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content />',
   standalone: true
 })
 export class ButtonToolbarComponent {
@@ -17,10 +17,7 @@ export class ButtonToolbarComponent {
   @HostBinding('class')
   get hostClasses(): any {
     return {
-      'btn-toolbar': true,
+      'btn-toolbar': true
     };
   }
-
-  constructor() { }
-
 }

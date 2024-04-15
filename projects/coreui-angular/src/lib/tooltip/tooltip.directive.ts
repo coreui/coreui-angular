@@ -92,7 +92,7 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit, AfterView
       {
         name: 'offset',
         options: {
-          offset: [0, 0]
+          offset: [0, 5]
         }
       }
     ]

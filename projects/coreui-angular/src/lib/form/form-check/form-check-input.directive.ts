@@ -1,14 +1,10 @@
-import { Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: 'input[cFormCheckInput]',
   standalone: true
 })
 export class FormCheckInputDirective {
-
-  static ngAcceptInputType_checked: BooleanInput;
-  static ngAcceptInputType_indeterminate: BooleanInput;
 
   /**
    * Specifies the type of component.
@@ -21,10 +17,11 @@ export class FormCheckInputDirective {
   /**
    * Set component indeterminate state.
    * @type boolean
+   * @default false
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set indeterminate(value: boolean) {
-    const indeterminate = coerceBooleanProperty(value);
+    const indeterminate = value;
     if (this._indeterminate !== indeterminate) {
       this._indeterminate = indeterminate;
       const htmlInputElement = this.hostElement.nativeElement as HTMLInputElement;
@@ -44,6 +41,7 @@ export class FormCheckInputDirective {
   /**
    * Set component validation state to valid.
    * @type boolean
+   * @default undefined
    */
   @Input() valid?: boolean;
 
@@ -56,9 +54,9 @@ export class FormCheckInputDirective {
     };
   }
 
-  @Input()
+  @Input({ transform: booleanAttribute })
   set checked(value: boolean) {
-    const checked = coerceBooleanProperty(value);
+    const checked = value;
     const htmlInputElement = this.hostElement?.nativeElement as HTMLInputElement;
     if (htmlInputElement) {
       this.renderer.setProperty(htmlInputElement, 'checked', checked);

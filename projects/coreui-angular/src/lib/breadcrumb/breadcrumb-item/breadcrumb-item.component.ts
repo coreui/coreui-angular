@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -18,7 +18,7 @@ export class BreadcrumbItemComponent {
    * Toggle the active state for the component. [docs]
    * @type boolean
    */
-  @Input() active?: boolean;
+  @Input({ transform: booleanAttribute }) active?: boolean;
   /**
    * The `url` prop for the inner `[routerLink]` directive. [docs]
    * @type string

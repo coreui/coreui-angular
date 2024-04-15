@@ -1,6 +1,7 @@
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
+  booleanAttribute,
   Component,
   ElementRef,
   forwardRef,
@@ -80,6 +81,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   @Input() item: any;
   @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
   @Input() show?: boolean;
+  @Input({ transform: booleanAttribute }) compact?: boolean;
 
   @HostBinding('class')
   get hostClasses(): any {
@@ -204,21 +206,22 @@ export class SidebarNavComponent implements OnChanges {
 
   @Input() navItems?: INavData[] = [];
   @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
-  @Input() groupItems?: boolean;
-  @Input() compact?: boolean;
+  @Input({ transform: booleanAttribute }) groupItems?: boolean;
+  @Input({ transform: booleanAttribute }) compact?: boolean;
 
   @HostBinding('class')
   get hostClasses(): any {
     return {
       'sidebar-nav': !this.groupItems,
-      compact: !this.groupItems && !!this.compact
+      'nav-group-items': this.groupItems,
+      compact: this.groupItems && this.compact
     };
   }
 
-  @HostBinding('class.nav-group-items')
-  get sidebarNavGroupItemsClass(): boolean {
-    return !!this.groupItems;
-  }
+  // @HostBinding('class.nav-group-items')
+  // get sidebarNavGroupItemsClass(): boolean {
+  //   return !!this.groupItems;
+  // }
 
   @HostBinding('attr.role') role = 'nav';
 

@@ -1,0 +1,5 @@
+:host-context(.progress-stacked) {
+  &.progress {
+    transition: var(--cui-progress-bar-transition)
+  }
+}

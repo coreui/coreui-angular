@@ -1,0 +1,16 @@
+@if (contentProgressBars.length) {
+  <ng-container *ngTemplateOutlet="defaultContent" />
+} @else if (pbd?.stacked) {
+  <c-progress-bar [animated]="pbd?.animated" [variant]="pbd?.variant" [color]="pbd?.color" stacked>
+    <ng-container *ngTemplateOutlet="defaultContent" />
+  </c-progress-bar>
+} @else {
+  <c-progress-bar [width]="pbd?.percent()" [animated]="pbd?.animated" [variant]="pbd?.variant" [color]="pbd?.color">
+    <ng-container *ngTemplateOutlet="defaultContent" />
+  </c-progress-bar>
+}
+
+<ng-template #defaultContent>
+  <ng-content />
+</ng-template>
+

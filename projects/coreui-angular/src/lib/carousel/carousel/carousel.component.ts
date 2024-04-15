@@ -19,19 +19,34 @@ import { filter, finalize, withLatestFrom, zipWith } from 'rxjs/operators';
 import { IntersectionService } from '../../services';
 import { IListenersConfig, ListenersService } from '../../services';
 
+import { Triggers } from '../../coreui.types';
+import { ThemeDirective } from '../../shared/theme.directive';
 import { CarouselState } from '../carousel-state';
 import { CarouselService } from '../carousel.service';
 import { CarouselConfig } from '../carousel.config';
-import { Triggers } from '../../coreui.types';
 
 @Component({
   selector: 'c-carousel',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   styleUrls: ['./carousel.component.scss'],
   providers: [CarouselService, CarouselState, CarouselConfig, ListenersService],
-  standalone: true
+  standalone: true,
+  hostDirectives: [
+    { directive: ThemeDirective, inputs: ['dark'] }
+  ]
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
+  constructor(
+    @Inject(CarouselConfig) private config: CarouselConfig,
+    private hostElement: ElementRef,
+    private carouselService: CarouselService,
+    private carouselState: CarouselState,
+    private intersectionService: IntersectionService,
+    private listenersService: ListenersService
+  ) {
+    Object.assign(this, config);
+  }
+
   /**
    * Index of the active item.
    * @type number
@@ -42,11 +57,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    * @type boolean
    */
   @Input() animate: boolean = true;
-  /**
-   * Add darker controls, indicators, and captions.
-   * @type boolean
-   */
-  @Input() dark?: boolean;
   /**
    * Carousel direction. [docs]
    * @type {'next' | 'prev'}
@@ -92,7 +102,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     return {
       carousel: true,
       slide: true,
-      'carousel-dark': !!this.dark,
       'carousel-fade': this.transition === 'crossfade'
     };
   }
@@ -101,17 +110,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   private activeItemInterval = 0;
   private swipeSubscription?: Subscription;
   readonly #destroyRef = inject(DestroyRef);
-
-  constructor(
-    @Inject(CarouselConfig) private config: CarouselConfig,
-    private hostElement: ElementRef,
-    private carouselService: CarouselService,
-    private carouselState: CarouselState,
-    private intersectionService: IntersectionService,
-    private listenersService: ListenersService
-  ) {
-    Object.assign(this, config);
-  }
 
   ngOnInit(): void {
     this.carouselStateSubscribe();
@@ -190,6 +188,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   private intersectionServiceSubscribe(): void {
+    this.intersectionService.createIntersectionObserver(this.hostElement);
     this.intersectionService.intersecting$
       .pipe(
         filter(next => next.hostElement === this.hostElement),
@@ -202,7 +201,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
         this.visible = next.isIntersecting;
         next.isIntersecting ? this.setTimer() : this.resetTimer();
       });
-    this.intersectionService.createIntersectionObserver(this.hostElement);
   }
 
   private swipeSubscribe(subscribe: boolean = true): void {

@@ -5,7 +5,7 @@ import { Breakpoints } from '../coreui.types';
 
 @Component({
   selector: 'c-container, [cContainer]',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   styleUrls: ['./container.component.scss'],
   standalone: true
 })

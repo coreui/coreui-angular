@@ -24,6 +24,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { BackdropService } from '../../backdrop/backdrop.service';
+import { ThemeDirective } from '../../shared';
 import { OffcanvasService } from '../offcanvas.service';
 
 let nextId = 0;
@@ -52,6 +53,9 @@ let nextId = 0;
   exportAs: 'cOffcanvas',
   standalone: true,
   imports: [A11yModule],
+  hostDirectives: [
+    { directive: ThemeDirective, inputs: ['dark'] }
+  ],
   // eslint-disable-next-line @angular-eslint/no-host-metadata-property
   host: { ngSkipHydration: 'true' }
 })

@@ -3,7 +3,7 @@ import { Colors } from '../coreui.types';
 
 @Component({
   selector: 'c-callout, [cCallout]',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content />',
   styleUrls: ['./callout.component.scss'],
   standalone: true
 })
@@ -17,13 +17,10 @@ export class CalloutComponent {
 
   @HostBinding('class')
   get hostClasses(): any {
-
     return {
       callout: true,
       [`callout-${this.color}`]: !!this.color
     };
   }
-
-  constructor() { }
 
 }

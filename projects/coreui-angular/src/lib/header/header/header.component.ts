@@ -12,6 +12,7 @@ type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
   imports: [NgClass]
 })
 export class HeaderComponent {
+
   /**
    * Defines optional container wrapping children elements.
    */

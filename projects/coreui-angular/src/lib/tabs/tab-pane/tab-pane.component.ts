@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, HostBinding, OnDestroy } from '@angular/core';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { booleanAttribute, ChangeDetectorRef, Component, HostBinding, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TabContentComponent } from '../tab-content/tab-content.component';
@@ -7,8 +6,7 @@ import { ITabContentState, TabService } from '../tab.service';
 
 @Component({
   selector: 'c-tab-pane',
-  template: `
-    <ng-content></ng-content>`,
+  template: '<ng-content />',
   styleUrls: ['./tab-pane.component.scss'],
   exportAs: 'cTabPane',
   standalone: true
@@ -27,7 +25,7 @@ export class TabPaneComponent implements OnDestroy {
   private tabServiceSubscription!: Subscription;
 
   set active(value: boolean) {
-    const newValue = coerceBooleanProperty(value);
+    const newValue = booleanAttribute(value);
     if (this._active !== newValue) {
       this._active = newValue;
       this.changeDetectorRef.markForCheck();

@@ -2,7 +2,7 @@ import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'c-header-text, [cHeaderText]',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content />',
   standalone: true
 })
 export class HeaderTextComponent {

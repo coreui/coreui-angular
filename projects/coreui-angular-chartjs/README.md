@@ -8,7 +8,7 @@
   </a>
 </p>
 
-<h3 align="center">CoreUI Angular wrapper for Chart.js</h3>
+<h3 align="center">CoreUI Angular wrapper for Chart.js v4</h3>
 
 <p align="center">
   <a href="https://coreui.io/angular/docs/"><strong>Explore @coreui/angular-chartjs docs & examples »</strong></a>
@@ -38,9 +38,9 @@
 ##### install:
 
 ```bash
-npm install chart.js
-npm install @coreui/chartjs@3
-npm install @coreui/angular-chartjs
+npm install chart.js@4
+npm install @coreui/chartjs@4
+npm install @coreui/angular-chartjs@5
 ````
 
 ##### import:
@@ -50,8 +50,18 @@ npm install @coreui/angular-chartjs
 import { ChartjsModule } from '@coreui/angular-chartjs';
 
 @NgModule({
-  imports: [
-      ChartjsModule,
+    imports: [
+        ChartjsModule,
+...
+```
+```ts
+// standalone components
+  import { ChartjsComponent } from '@coreui/angular-chartjs';
+
+@Component({
+    standalone: true,
+    imports: [
+        ChartjsComponent, 
 ...
 ```
 ```ts
@@ -182,4 +192,4 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 ## Copyright and license
 
-Copyright 2023 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2024 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).

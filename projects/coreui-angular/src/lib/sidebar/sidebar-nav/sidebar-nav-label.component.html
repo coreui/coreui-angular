@@ -1,6 +1,6 @@
-<a [ngClass]="getItemClass()"
-   href="{{item.url}}"
-   [cHtmlAttr]="item.attributes">
+<a [cHtmlAttr]="item.attributes"
+   [ngClass]="getItemClass()"
+   href="{{item.url}}">
   @if (helper.hasIcon(item)) {
     <i [ngClass]="getLabelIconClass()"></i>
   }

@@ -4,6 +4,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 
 import { CollapseDirective } from '../collapse';
 import { Colors } from '../coreui.types';
+import { ThemeDirective } from '../shared';
 
 // todo: fix container prop issue not rendering children
 // todo: workaround -  use <c-container> component directly in template
@@ -12,7 +13,10 @@ import { Colors } from '../coreui.types';
   selector: 'c-navbar',
   templateUrl: './navbar.component.html',
   standalone: true,
-  imports: [NgClass, NgTemplateOutlet]
+  imports: [NgClass, NgTemplateOutlet],
+  hostDirectives: [
+    { directive: ThemeDirective, inputs: ['colorScheme'] }
+  ]
 })
 export class NavbarComponent implements AfterContentInit {
   /**
@@ -20,10 +24,6 @@ export class NavbarComponent implements AfterContentInit {
    * @type Colors
    */
   @Input() color?: Colors;
-  /**
-   * Sets if the color of text should be colored for a light or dark dark background.
-   */
-  @Input() colorScheme?: 'dark' | 'light' = 'light';
   /**
    * Defines optional container wrapping children elements.
    */
@@ -52,8 +52,6 @@ export class NavbarComponent implements AfterContentInit {
     const expandClassSuffix: string = this.expand === true ? '' : `-${this.expand}`;
     return {
       navbar: true,
-      'navbar-light': this.colorScheme === 'light',
-      'navbar-dark': this.colorScheme === 'dark',
       [`navbar-expand${expandClassSuffix}`]: !!this.expand,
       [`bg-${this.color}`]: !!this.color,
       [`${this.placement}`]: !!this.placement

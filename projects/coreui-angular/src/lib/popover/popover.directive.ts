@@ -92,7 +92,7 @@ export class PopoverDirective implements OnChanges, OnDestroy, OnInit, AfterView
       {
         name: 'offset',
         options: {
-          offset: [0, 8]
+          offset: [0, 9]
         }
       }
     ]

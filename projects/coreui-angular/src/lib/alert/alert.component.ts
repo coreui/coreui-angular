@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  booleanAttribute,
   Component,
   ContentChildren,
   EventEmitter,
@@ -11,7 +12,6 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import { Colors } from '../coreui.types';
 import { TemplateIdDirective } from '../shared';
@@ -48,10 +48,6 @@ type AnimateType = ('hide' | 'show');
 })
 export class AlertComponent implements AfterContentInit {
 
-  static ngAcceptInputType_dismissible: BooleanInput;
-  static ngAcceptInputType_fade: BooleanInput;
-  static ngAcceptInputType_visible: BooleanInput;
-
   hide!: boolean;
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -79,53 +75,36 @@ export class AlertComponent implements AfterContentInit {
   templates: any = {};
   @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
 
-  private _dismissible = false;
-
   /**
    * Optionally adds a close button to alert and allow it to self dismiss.
    * @type boolean
+   * @default false
    */
-  @Input()
-  get dismissible(): boolean {
-    return this._dismissible;
-  }
-
-  set dismissible(value: boolean) {
-    this._dismissible = coerceBooleanProperty(value);
-  }
-
-  private _fade = false;
+  @Input({ transform: booleanAttribute }) dismissible: boolean = false;
 
   /**
    * Adds animation for dismissible alert.
    * @type boolean
    */
-  @Input()
-  get fade(): boolean {
-    return this._fade;
-  }
-
-  set fade(value: boolean) {
-    this._fade = coerceBooleanProperty(value);
-  }
-
-  private _visible = true;
-
-  get visible() {
-    return this._visible;
-  }
+  @Input({ transform: booleanAttribute }) fade: boolean = false;
 
   /**
    * Toggle the visibility of alert component.
    * @type boolean
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set visible(value: boolean) {
-    if (this._visible !== value) {
-      this._visible = coerceBooleanProperty(value);
+    if (this.#visible !== value) {
+      this.#visible = value;
       this.visibleChange.emit(value);
     }
   };
+
+  get visible() {
+    return this.#visible;
+  }
+
+  #visible: boolean = true;
 
   @HostBinding('@.disabled')
   get animationDisabled(): boolean {

@@ -2,7 +2,7 @@ import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-navbar-nav',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   standalone: true
 })
 export class NavbarNavComponent {

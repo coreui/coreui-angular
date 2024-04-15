@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  booleanAttribute,
   Directive,
   DoCheck,
   ElementRef,
@@ -13,8 +14,6 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { AnimationBuilder, AnimationPlayer, useAnimation } from '@angular/animations';
-
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import {
   collapseAnimation,
@@ -32,65 +31,40 @@ import {
 })
 export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterViewInit {
 
-  static ngAcceptInputType_horizontal: BooleanInput;
-  static ngAcceptInputType_navbar: BooleanInput;
-  static ngAcceptInputType_visible: BooleanInput;
-
   /**
    * @ignore
    */
-  @Input()
-  set animate(value: boolean) {
-    this._animate = value;
-  }
-
-  get animate(): boolean {
-    return this._animate;
-  }
-
-  private _animate = true;
+  @Input({ transform: booleanAttribute }) animate: boolean = true;
 
   /**
    * Set horizontal collapsing to transition the width instead of height.
+   * @type boolean
+   * @default false
    */
-  @Input()
-  set horizontal(value: boolean) {
-    this._horizontal = coerceBooleanProperty(value);
-  }
-
-  get horizontal(): boolean {
-    return this._horizontal;
-  }
-
-  private _horizontal: boolean = false;
+  @Input({ transform: booleanAttribute }) horizontal: boolean = false;
 
   /**
    * Toggle the visibility of collapsible element.
+   * @type boolean
+   * @default false
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set visible(value) {
-    this._visible = coerceBooleanProperty(value);
+    this._visible = value;
   }
 
   get visible(): boolean {
     return this._visible;
   }
 
-  private _visible = false;
+  private _visible: boolean = false;
 
   /**
    * Add `navbar` prop for grouping and hiding navbar contents by a parent breakpoint.
+   * @type boolean
+   * @default false
    */
-  @Input()
-  set navbar(value: boolean) {
-    this._navbar = coerceBooleanProperty(value);
-  };
-
-  get navbar() {
-    return this._navbar;
-  }
-
-  private _navbar = false;
+  @Input({ transform: booleanAttribute }) navbar: boolean = false;
 
   /**
    * @ignore

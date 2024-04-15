@@ -11,7 +11,7 @@
 <h2 align="center">CoreUI for Angular</h3>
 
 <p align="center">
-  Angular Components Library built on top of Bootstrap 5 and TypeScript.
+  Angular Components Library built on top of Bootstrap 5.3 and TypeScript.
   <br>
   <a href="https://coreui.io/angular/docs/"><strong>Explore CoreUI for Angular docs »</strong></a>
   <br>
@@ -40,7 +40,17 @@
 ## Table of contents
 
 - [Status](#status)
+- [Table of contents](#table-of-contents)
 - [Quick start](#quick-start)
+  - [Prerequisites](#prerequisites)
+        - [Node.js](#nodejs)
+        - [Angular CLI](#angular-cli)
+  - [Installation](#installation)
+    - [CoreUI CSS files](#coreui-css-files)
+      - [Installation](#installation-1)
+      - [Basic usage](#basic-usage)
+    - [Bootstrap CSS files](#bootstrap-css-files)
+      - [Installation (optional)](#installation-optional)
 - [Templates](#templates)
 - [Bugs and feature requests](#bugs-and-feature-requests)
 - [Documentation](#documentation)
@@ -209,4 +219,4 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 ## Copyright and license
 
-Copyright 2023 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2024 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).

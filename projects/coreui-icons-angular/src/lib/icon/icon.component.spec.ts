@@ -8,21 +8,20 @@ import { IconSetService } from '../icon-set';
 import { By } from '@angular/platform-browser';
 
 @Component({
-  template: `
-    <div>
-      <c-icon #icon name="cil-list" size="lg" class="test"></c-icon>
-    </div>`
+  template: '<c-icon #icon name="cil-list" size="lg" class="test" />',
+  standalone: true,
+  imports: [IconComponent],
+  providers: [IconSetService]
 })
 class TestComponent {
-  @ViewChild('icon', {read: IconComponent}) iconRef!: IconComponent;
+  @ViewChild('icon', { read: IconComponent }) iconRef!: IconComponent;
 
   constructor(
     public iconSet: IconSetService
   ) {
-    this.iconSet.icons = {cilList};
+    this.iconSet.icons = { cilList };
   }
 }
-
 
 describe('IconComponent', () => {
   let inputEl: DebugElement;
@@ -31,8 +30,7 @@ describe('IconComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [IconComponent, HtmlAttributesDirective],
+      imports: [TestComponent, IconComponent, HtmlAttributesDirective],
       providers: [IconSetService]
     }).compileComponents();
 

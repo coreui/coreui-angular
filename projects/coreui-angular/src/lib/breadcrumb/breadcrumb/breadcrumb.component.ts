@@ -2,7 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-breadcrumb',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   standalone: true
 })
 export class BreadcrumbComponent {
@@ -26,9 +26,6 @@ export class BreadcrumbComponent {
   get hostClasses() {
     return {
       breadcrumb: true
-    }
+    };
   }
-
-  constructor() { }
-
 }

@@ -4,7 +4,7 @@ import { FormCheckLabelDirective } from './form-check-label.directive';
 
 @Component({
   selector: 'c-form-check',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   exportAs: 'cFormCheck',
   standalone: true
 })

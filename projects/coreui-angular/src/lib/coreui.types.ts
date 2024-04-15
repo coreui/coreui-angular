@@ -1,5 +1,7 @@
 import { IsActiveMatchOptions } from '@angular/router';
 
+export type NgCssClass = string | string[] | Set<string> | { [klass: string]: any };
+
 export enum BreakpointInfix {
   xs = 'xs',
   sm = 'sm',
@@ -24,10 +26,19 @@ export type Colors =
   | 'info'
   | 'dark'
   | 'light'
+  | 'primary-gradient'
+  | 'secondary-gradient'
+  | 'success-gradient'
+  | 'danger-gradient'
+  | 'warning-gradient'
+  | 'info-gradient'
+  | 'dark-gradient'
+  | 'light-gradient'
   | string;
 
-export type ColorsGradient =
-  | `${Colors}-gradient`;
+// export type ColorsGradient =
+//   | Colors
+//   | `${Colors}-gradient`;
 
 export type BackgroundColors = Colors | 'body' | 'white' | 'transparent';
 
@@ -35,17 +46,22 @@ export type Directions = 'down' | 'up' | 'start' | 'end' | '';
 
 export type TextColors =
   | Colors
+  | 'primary-emphasis'
+  | 'secondary-emphasis'
+  | 'success-emphasis'
+  | 'danger-emphasis'
+  | 'warning-emphasis'
+  | 'info-emphasis'
+  | 'light-emphasis'
   | 'body'
-  | 'white'
-  | 'muted'
+  | 'body-emphasis'
+  | 'body-secondary'
+  | 'body-tertiary'
+  | 'black'
   | 'black-50'
+  | 'white'
   | 'white-50'
-  | 'high-emphasis'
-  | 'medium-emphasis'
-  | 'disabled'
-  | 'high-emphasis-inverse'
-  | 'medium-emphasis-inverse'
-  | 'disabled-inverse';
+  | string;
 
 export type Alignment =
   | 'baseline'

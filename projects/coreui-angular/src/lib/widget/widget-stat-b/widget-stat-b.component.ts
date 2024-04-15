@@ -1,7 +1,7 @@
 import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
 import { NgClass } from '@angular/common';
 
-import { Colors } from '../../coreui.types';
+import { Colors, TextColors } from '../../coreui.types';
 import { CardBodyComponent, CardComponent } from '../../card';
 
 @Component({
@@ -26,7 +26,7 @@ export class WidgetStatBComponent extends CardComponent {
    * Sets the text-color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() override textColor?: Colors | 'white' | 'muted';
+  @Input() override textColor?: TextColors;
   /**
    * Title of the widget to display
    * @type string
@@ -55,7 +55,7 @@ export class WidgetStatBComponent extends CardComponent {
       'card': true,
       [`bg-${this.color}`]: !!this.color,
       [`text-${this.textColor}`]: !!this.textColor,
-      'text-high-emphasis-inverse': !!this.color
+      'text-white': !!this.inverse
     };
   }
 

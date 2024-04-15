@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -6,6 +7,7 @@ import {
   HostBinding,
   HostListener,
   Input,
+  numberAttribute,
   OnDestroy,
   OnInit,
   Output,
@@ -13,7 +15,6 @@ import {
 } from '@angular/core';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import { Colors } from '../../coreui.types';
 import { ToasterService } from '../toaster/toaster.service';
@@ -23,7 +24,7 @@ type AnimateType = ('hide' | 'show');
 
 @Component({
   selector: 'c-toast',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   styleUrls: ['./toast.component.scss'],
   exportAs: 'cToast',
   standalone: true,
@@ -51,8 +52,6 @@ type AnimateType = ('hide' | 'show');
 })
 export class ToastComponent implements OnInit, OnDestroy {
 
-  static ngAcceptInputType_visible: BooleanInput;
-
   public dynamic!: boolean;
   public placement!: TToasterPlacement;
 
@@ -79,7 +78,7 @@ export class ToastComponent implements OnInit, OnDestroy {
    * Delay hiding the toast (ms).
    * @type number
    */
-  @Input() delay: number = 5000;
+  @Input({ transform: numberAttribute }) delay: number = 5000;
 
   /**
    * Apply fade transition to the toast.
@@ -91,9 +90,9 @@ export class ToastComponent implements OnInit, OnDestroy {
    * Toggle the visibility of component.
    * @type boolean
    */
-  @Input()
+  @Input({ transform: booleanAttribute })
   set visible(value: boolean) {
-    const newValue = coerceBooleanProperty(value);
+    const newValue = value;
     if (this._visible !== newValue) {
       this._visible = newValue;
       newValue ? this.setTimer() : this.clearTimer();
@@ -111,7 +110,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   /**
    * @ignore
    */
-  @Input() index?: number;
+  @Input({ transform: numberAttribute }) index?: number;
 
   /**
    * Event emitted on visibility change. [docs]

@@ -1,3 +1,10 @@
 :host .nav-link:focus {
   outline: 0;
 }
+
+// todo: temp fix for nav-underline-border
+:host.nav-underline-border {
+  column-gap: 0;
+}
+
+

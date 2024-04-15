@@ -38,7 +38,7 @@ export class WidgetStatAComponent implements AfterContentInit {
     return {
       'card': true,
       [`bg-${this.color}`]: !!this.color,
-      'text-high-emphasis-inverse': !!this.color
+      'text-white': !!this.color
     };
   }
 

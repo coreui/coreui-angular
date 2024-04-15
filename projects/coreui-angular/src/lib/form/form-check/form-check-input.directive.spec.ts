@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { FormCheckInputDirective } from './form-check-input.directive';
 
 @Component({
-  template: `<input cFormCheckInput>`
+  template: '<input cFormCheckInput>'
 })
 class TestComponent {}
 
