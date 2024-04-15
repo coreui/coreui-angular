@@ -4,7 +4,7 @@
     [attr.width]="width"
     [attr.height]="height || width"
     [attr.viewBox]="viewBox"
-    [innerHtml]="innerHtml"
+    [innerHtml]="innerHtml()"
     [ngClass]="computedClasses"
     [cHtmlAttr]="attributes"
     aria-hidden="true"
