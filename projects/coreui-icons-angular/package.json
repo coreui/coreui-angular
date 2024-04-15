@@ -1,8 +1,8 @@
 {
   "name": "@coreui/icons-angular",
-  "version": "4.7.18",
+  "version": "4.7.19",
   "description": "CoreUI Icons Angular component and service",
-  "copyright": "Copyright 2023 creativeLabs Łukasz Holeczek",
+  "copyright": "Copyright 2024 creativeLabs Łukasz Holeczek",
   "license": "MIT",
   "homepage": "https://coreui.io/angular",
   "author": {
