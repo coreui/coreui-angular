@@ -5,6 +5,9 @@
 #### `4.7.19`
 
 - chore(dependencies): update
+- downport from `5.0.2`:
+  - fix(icon): cIcon directive [name] binding does not refresh icon for Angular 17, refactor, closes #203, thanks @ProDInfo
+  - test(icons-angular): update
 
 ---
 
