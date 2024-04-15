@@ -1,25 +1,60 @@
-import { afterNextRender, AfterRenderPhase, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
+import {
+  afterNextRender,
+  AfterRenderPhase,
+  computed,
+  Directive,
+  ElementRef,
+  HostBinding,
+  inject,
+  Input,
+  signal
+} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IconSetService } from '../icon-set';
 import { IconSize, IIcon } from './icon.interface';
-import { toCamelCase } from './icon.utils';
+import { transformName } from './icon.utils';
 
 @Directive({
-  selector: 'svg[cIcon]',
   exportAs: 'cIcon',
+  selector: 'svg[cIcon]',
   standalone: true
 })
 export class IconDirective implements IIcon {
 
-  @Input('cIcon') content?: string | string[] | any[];
+  readonly #elementRef = inject(ElementRef);
+  readonly #sanitizer = inject(DomSanitizer);
+  readonly #iconSet = inject(IconSetService);
+
+  constructor() {
+    afterNextRender(() => {
+      this.#elementRef.nativeElement.innerHTML = this.innerHtml();
+    }, { phase: AfterRenderPhase.Write });
+  }
+
+  @Input('cIcon')
+  set content(value: string | string[] | any[]) {
+    this.#content.set(value);
+  };
+
+  readonly #content = signal<string | string[] | any[]>('');
+
+  @Input() customClasses?: string | string[] | Set<string> | { [klass: string]: any };
   @Input() size: IconSize = '';
   @Input() title?: string;
-  @Input() customClasses?: string | string[] | Set<string> | { [klass: string]: any };
-  @Input() width?: string;
   @Input() height?: string;
+  @Input() width?: string;
 
-  @Input({ transform: (value: string) => value && value.includes('-') ? toCamelCase(value) : value }) name!: string;
+  @Input({ transform: transformName })
+  set name(value: string) {
+    this.#name.set(value);
+  };
+
+  get name() {
+    return this.#name();
+  }
+
+  readonly #name = signal('');
 
   @HostBinding('attr.viewBox')
   @Input()
@@ -28,10 +63,12 @@ export class IconDirective implements IIcon {
   }
 
   get viewBox(): string {
-    return this._viewBox ?? this.scale;
+    return this._viewBox ?? this.scale();
   }
 
   private _viewBox!: string;
+
+  @HostBinding('attr.aria-hidden') ariaHidden = true;
 
   @HostBinding('attr.xmlns')
   @Input() xmlns = 'http://www.w3.org/2000/svg';
@@ -44,55 +81,44 @@ export class IconDirective implements IIcon {
 
   @HostBinding('class')
   get hostClasses() {
-    const classes = {
-      icon: true,
-      [`icon-${this.computedSize}`]: !!this.computedSize
-    };
-    return this.customClasses ?? classes;
+    return this.computedClasses;
   }
 
-  // @HostBinding('innerHtml')
-  get innerHtml() {
-    const code = Array.isArray(this.code) ? this.code[1] || this.code[0] : this.code ?? '';
+  @HostBinding('innerHtml')
+  get bindInnerHtml() {
+    return this.innerHtml();
+  }
+
+  readonly innerHtml = computed(() => {
+    const code = Array.isArray(this.code()) ? (this.code()[1] ?? this.code()[0] ?? '') : this.code() || '';
     // todo proper sanitize
     // const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, code);
-    return this.sanitizer.bypassSecurityTrustHtml((this.titleCode + code) ?? '');
-  }
-
-  constructor(
-    private renderer: Renderer2,
-    private elementRef: ElementRef,
-    private sanitizer: DomSanitizer,
-    private iconSet: IconSetService
-  ) {
-    afterNextRender(() => {
-      this.elementRef.nativeElement.innerHTML = this.innerHtml;
-    }, { phase: AfterRenderPhase.Write });
-  }
+    return this.#sanitizer.bypassSecurityTrustHtml((this.titleCode + code) || '');
+  });
 
   get titleCode(): string {
     return this.title ? `<title>${this.title}</title>` : '';
   }
 
-  get code(): string | string[] | undefined {
-    if (this.content) {
-      return this.content;
+  readonly code = computed(() => {
+    if (this.#content()) {
+      return this.#content();
     }
-    if (this.iconSet && this.name) {
-      return this.iconSet.getIcon(this.name);
+    if (this.#iconSet && this.#name()) {
+      return this.#iconSet.getIcon(this.#name());
     }
-    if (this.name && !this.iconSet?.icons[this.name]) {
-      console.warn(`c-icon component: icon name '${this.name}' does not exist for IconSet service. ` +
+    if (this.#name() && !this.#iconSet?.icons[this.#name()]) {
+      console.warn(`c-icon component: icon name '${this.#name()}' does not exist for IconSet service. ` +
         `To use icon by 'name' prop you need to add it to IconSet service. \n`,
-        this.name
+        this.#name()
       );
     }
-    return undefined;
-  }
+    return '';
+  });
 
-  get scale(): string {
-    return Array.isArray(this.code) && this.code.length > 1 ? `0 0 ${this.code[0]}` : '0 0 64 64';
-  }
+  readonly scale = computed(() => {
+    return Array.isArray(this.code()) && this.code().length > 1 ? `0 0 ${this.code()[0]}` : '0 0 64 64';
+  });
 
   get computedSize(): Exclude<IconSize, 'custom'> | undefined {
     const addCustom = !this.size && (this.width || this.height);
@@ -104,10 +130,7 @@ export class IconDirective implements IIcon {
       icon: true,
       [`icon-${this.computedSize}`]: !!this.computedSize
     };
-    return !this.customClasses ? classes : this.customClasses;
+    return this.customClasses ?? classes;
   }
 
-  toCamelCase(str: string): string {
-    return toCamelCase(str);
-  }
 }

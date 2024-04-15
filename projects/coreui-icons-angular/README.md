@@ -56,8 +56,8 @@ For directive description visit [https://coreui.io/angular/docs/](https://coreui
 ### Installation
 
 ```shell
-npm install @coreui/icons
-npm install @coreui/icons-angular
+npm install @coreui/icons@3
+npm install @coreui/icons-angular@4
 ```
 
 ### Usage
@@ -169,5 +169,5 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 ## Copyright and license
 
-Copyright 2023 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2024 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
 
