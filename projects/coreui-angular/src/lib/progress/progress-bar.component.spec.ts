@@ -26,11 +26,11 @@ describe('ProgressBarComponent', () => {
     expect(component).toBeDefined();
   });
 
-  it('should have css class="progress-bar"', () => {
-    expect(fixture.nativeElement.classList.contains('progress-bar')).toBeTruthy();
-    expect(fixture.nativeElement.classList.contains('bg-success')).toBeTruthy();
-    expect(fixture.nativeElement.classList.contains('progress-bar-striped')).toBeTruthy();
-    expect(fixture.nativeElement.classList.contains('progress-bar-animated')).toBeTruthy();
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('progress-bar');
+    expect(fixture.nativeElement).toHaveClass('bg-success');
+    expect(fixture.nativeElement).toHaveClass('progress-bar-striped');
+    expect(fixture.nativeElement).toHaveClass('progress-bar-animated');
   });
 
   it('should have style width %', () => {

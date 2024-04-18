@@ -8,7 +8,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<div cCollapse></div>'
+  template: '<div cCollapse horizontal></div>',
+  standalone: true,
+  imports: [CollapseDirective]
 })
 class TestComponent {}
 
@@ -22,8 +24,7 @@ describe('CollapseDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [CollapseDirective, NoopAnimationsModule],
+      imports: [TestComponent, CollapseDirective, NoopAnimationsModule],
       providers: [
         { provide: ElementRef, useClass: MockElementRef },
         { provide: AnimationBuilder },
@@ -43,4 +44,9 @@ describe('CollapseDirective', () => {
     const directive = new CollapseDirective(elementRef, renderer, animationBuilder);
     expect(directive).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(elementRef.nativeElement).toHaveClass('collapse-horizontal');
+  });
+
 });

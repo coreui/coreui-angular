@@ -1,14 +1,14 @@
 import { ButtonDirective } from './button.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ButtonCloseDirective } from './button-close.directive';
 import { Component, DebugElement, ElementRef } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: `
-    <button cButton></button>`
+  template: '<button cButton color="info" size="lg"></button>',
+  standalone: true,
+  imports: [ButtonDirective]
 })
 class TestComponent {}
 
@@ -16,18 +16,17 @@ describe('ButtonDirective', () => {
 
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
-  let buttonEl: DebugElement;
+  let elementRef: DebugElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [ButtonCloseDirective],
+      imports: [TestComponent, ButtonDirective],
       providers: [{ provide: ElementRef, useClass: MockElementRef }]
     });
 
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
-    buttonEl = fixture.debugElement.query(By.css('button'));
+    elementRef = fixture.debugElement.query(By.directive(ButtonDirective));
 
     fixture.detectChanges(); // initial binding
   });
@@ -36,4 +35,11 @@ describe('ButtonDirective', () => {
     const directive = new ButtonDirective();
     expect(directive).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(elementRef.nativeElement).toHaveClass('btn');
+    expect(elementRef.nativeElement).toHaveClass('btn-lg');
+    expect(elementRef.nativeElement).toHaveClass('btn-info');
+  });
+
 });

@@ -21,4 +21,8 @@ describe('ProgressStackedComponent', () => {
     expect(component).toBeDefined();
     expect(component.stacked).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('progress-stacked');
+  });
 });

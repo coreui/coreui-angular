@@ -22,4 +22,8 @@ describe('ColComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('col');
+  });
 });

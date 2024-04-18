@@ -40,6 +40,7 @@ describe('ChartjsComponent', () => {
     component = fixture.componentInstance;
     component.data = undefined;
     component.type = 'line';
+    component.wrapper = true;
   });
 
   it('chart should create', fakeAsync(() => {
@@ -83,4 +84,9 @@ describe('ChartjsComponent', () => {
     expect(component.chart?.config?.data.labels?.length).toBe(5);
     expect(component.chart?.config?.data.datasets[1]?.data.length).toBe(5);
   }));
+
+  it('should have css classes', () => {
+    fixture.detectChanges();
+    expect(fixture.nativeElement).toHaveClass('chart-wrapper');
+  });
 });

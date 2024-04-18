@@ -22,4 +22,9 @@ describe('TooltipComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('tooltip');
+    expect(fixture.nativeElement).toHaveClass('fade');
+  });
 });

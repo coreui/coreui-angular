@@ -23,4 +23,9 @@ describe('ToasterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('toaster');
+    expect(fixture.nativeElement).toHaveClass('toast-container');
+  });
 });

@@ -22,4 +22,10 @@ describe('PopoverComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('popover');
+    expect(fixture.nativeElement).toHaveClass('fade');
+    expect(fixture.nativeElement).toHaveClass('bs-popover-auto');
+  });
 });

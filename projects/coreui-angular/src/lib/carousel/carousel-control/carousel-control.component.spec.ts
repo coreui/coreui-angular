@@ -29,4 +29,8 @@ describe('CarouselControlComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have css class="carousel-control-next"', () => {
+    expect(fixture.nativeElement).toHaveClass('carousel-control-next');
+  });
 });

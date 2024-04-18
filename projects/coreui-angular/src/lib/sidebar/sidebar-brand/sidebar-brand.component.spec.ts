@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 
 import { SidebarBrandComponent } from './sidebar-brand.component';
 import { HtmlAttributesDirective } from '../../shared';
@@ -13,10 +12,10 @@ describe('SidebarBrandComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule.withRoutes([]),
         HtmlAttributesDirective,
         SidebarBrandComponent
-      ]
+      ],
+      providers: [provideRouter([])]
     })
       .compileComponents();
   }));
@@ -30,5 +29,9 @@ describe('SidebarBrandComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('sidebar-brand');
   });
 });

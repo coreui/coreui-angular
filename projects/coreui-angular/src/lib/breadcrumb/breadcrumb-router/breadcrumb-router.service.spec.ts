@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { BreadcrumbRouterService } from './breadcrumb-router.service';
+import { provideRouter } from '@angular/router';
 
 describe('AppBreadcrumbService', () => {
   let service: BreadcrumbRouterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])]
+      providers: [provideRouter([])]
     });
     service = TestBed.inject(BreadcrumbRouterService);
   });
