@@ -41,8 +41,8 @@ describe('ProgressComponent', () => {
     expect(progress).toBeDefined();
   });
 
-  it('should have css class="progress"', () => {
-    expect(progress?.nativeNode.classList.contains('progress')).toBeTruthy();
+  it('should have css classes', () => {
+    expect(progress?.nativeNode).toHaveClass('progress');
   });
 
   it('should have style width %', () => {

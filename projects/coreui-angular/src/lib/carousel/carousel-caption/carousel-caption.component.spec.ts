@@ -22,4 +22,8 @@ describe('CarouselCaptionComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have css class"', () => {
+    expect(fixture.nativeElement).toHaveClass('carousel-caption');
+  });
 });

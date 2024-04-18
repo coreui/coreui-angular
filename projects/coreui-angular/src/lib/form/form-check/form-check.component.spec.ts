@@ -20,10 +20,16 @@ describe('FormCheckComponent', () => {
     fixture = TestBed.createComponent(FormCheckComponent);
     renderer = fixture.debugElement.injector.get(Renderer2);
     component = fixture.componentInstance;
+    component.switch = true;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('form-switch');
+  });
+
 });

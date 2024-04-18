@@ -8,9 +8,9 @@ describe('CardBodyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ CardBodyComponent ]
+      imports: [CardBodyComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -21,5 +21,9 @@ describe('CardBodyComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('card-body');
   });
 });

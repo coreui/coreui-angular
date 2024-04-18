@@ -11,7 +11,6 @@ class TestComponent {}
 
 describe('HtmlAttributesDirective', () => {
 
-  let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let inputEl: DebugElement;
   let renderer: Renderer2;
@@ -22,7 +21,6 @@ describe('HtmlAttributesDirective', () => {
       imports: [HtmlAttributesDirective]
     });
     fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
     inputEl = fixture.debugElement.query(By.css('div'));
     renderer = fixture.componentRef.injector.get(Renderer2 as Type<Renderer2>);
   });
@@ -34,19 +32,16 @@ describe('HtmlAttributesDirective', () => {
 
   it('should render a class attr', () => {
     fixture.detectChanges();
-    // console.log(inputEl.nativeElement.classList);
-    expect(inputEl.nativeElement.classList.contains('test')).toBeTruthy();
+    expect(inputEl.nativeElement).toHaveClass('test');
   });
 
   it('should render a style attr', () => {
     fixture.detectChanges();
-    // console.log(inputEl.nativeElement.style.backgroundColor);
     expect(inputEl.nativeElement.style.backgroundColor).toBe('red');
   });
 
   it('should render an id attr', () => {
     fixture.detectChanges();
-    // console.log(inputEl.nativeElement.attributes);
     expect(inputEl.nativeElement.getAttribute('id')).toBe('id-1');
   });
 });

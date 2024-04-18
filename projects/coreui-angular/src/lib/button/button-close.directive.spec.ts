@@ -6,7 +6,9 @@ import { By } from '@angular/platform-browser';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<button cButtonClose></button>'
+  template: '<button cButtonClose></button>',
+  standalone: true,
+  imports: [ButtonCloseDirective]
 })
 class TestComponent {}
 
@@ -14,18 +16,17 @@ describe('ButtonCloseDirective', () => {
 
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
-  let buttonEl: DebugElement;
+  let elementRef: DebugElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [ButtonCloseDirective],
+      imports: [TestComponent, ButtonCloseDirective],
       providers: [{ provide: ElementRef, useClass: MockElementRef }]
     });
 
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
-    buttonEl = fixture.debugElement.query(By.css('button'));
+    elementRef = fixture.debugElement.query(By.directive(ButtonCloseDirective));
 
     fixture.detectChanges(); // initial binding
   });
@@ -33,5 +34,10 @@ describe('ButtonCloseDirective', () => {
   it('should create an instance', () => {
     const directive = new ButtonCloseDirective();
     expect(directive).toBeTruthy();
+  });
+
+  it('should have css classes', () => {
+    expect(elementRef.nativeElement).toHaveClass('btn');
+    expect(elementRef.nativeElement).toHaveClass('btn-close');
   });
 });

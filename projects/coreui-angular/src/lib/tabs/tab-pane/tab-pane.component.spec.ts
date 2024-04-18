@@ -22,4 +22,9 @@ describe('TabPaneComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('tab-pane');
+    expect(fixture.nativeElement).toHaveClass('fade');
+  });
 });
