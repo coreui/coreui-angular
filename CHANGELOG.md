@@ -1,6 +1,14 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
 
+
+---
+
+#### `5.0.4`
+
+- chore(dependencies): update
+- fix(tooltip): do not show the tooltip for empty content, refactor with input()
+
 ---
 
 #### `5.0.3`
