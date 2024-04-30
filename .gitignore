@@ -40,6 +40,7 @@ speed-measure-plugin*.json
 /libpeerconnection.log
 testem.log
 /typings
+.nx/
 
 # System files
 .DS_Store
