@@ -4,10 +4,12 @@ import {
   ComponentRef,
   DestroyRef,
   Directive,
+  effect,
   ElementRef,
   HostBinding,
   inject,
   Inject,
+  input,
   Input,
   OnChanges,
   OnDestroy,
@@ -39,7 +41,7 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit, AfterView
    * Content of tooltip
    * @type {string | TemplateRef}
    */
-  @Input('cTooltip') content: string | TemplateRef<any> = '';
+  readonly content = input<string | TemplateRef<any>>('', { alias: 'cTooltip' });
 
   /**
    * Optional popper Options object, takes precedence over cPopoverPlacement prop
@@ -109,6 +111,11 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit, AfterView
     private changeDetectorRef: ChangeDetectorRef,
     private intersectionService: IntersectionService
   ) {}
+
+  contentEffect = effect(() => {
+    this.destroyTooltipElement();
+    this.content() ? this.addTooltipElement() : this.removeTooltipElement();
+  });
 
   ngAfterViewInit(): void {
     this.intersectionServiceSubscribe();
@@ -197,13 +204,17 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit, AfterView
   }
 
   private addTooltipElement(): void {
+    if (!this.content()) {
+      return;
+    }
+
     if (!this.tooltipRef) {
       this.createTooltipElement();
     }
 
     this.tooltipId = this.getUID('tooltip');
     this.tooltipRef.instance.id = this.tooltipId;
-    this.tooltipRef.instance.content = this.content;
+    this.tooltipRef.instance.content = this.content();
 
     this.tooltip = this.tooltipRef.location.nativeElement;
     this.renderer.addClass(this.tooltip, 'd-none');
@@ -227,9 +238,9 @@ export class TooltipDirective implements OnChanges, OnDestroy, OnInit, AfterView
     this.changeDetectorRef.markForCheck();
 
     setTimeout(() => {
-      this.tooltipRef.instance.visible = this.visible;
-      this.popperInstance.forceUpdate();
-      this.changeDetectorRef.markForCheck();
+      this.tooltipRef && (this.tooltipRef.instance.visible = this.visible);
+      this.popperInstance?.forceUpdate();
+      this.changeDetectorRef?.markForCheck();
     }, 100);
 
   }
