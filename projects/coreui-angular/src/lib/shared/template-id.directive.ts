@@ -1,13 +1,10 @@
-import { Directive, Input, TemplateRef } from '@angular/core';
+import { Directive, inject, Input, TemplateRef } from '@angular/core';
 
 @Directive({
   selector: '[cTemplateId]',
-  standalone: true
+  standalone: true,
 })
 export class TemplateIdDirective {
+  public readonly templateRef = inject(TemplateRef);
   @Input('cTemplateId') id!: string;
-
-  constructor(
-    public templateRef: TemplateRef<any>
-  ) { }
 }
