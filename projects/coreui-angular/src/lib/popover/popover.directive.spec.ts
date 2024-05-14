@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { IntersectionService, ListenersService } from '../services';
 import { PopoverDirective } from './popover.directive';
-import { TestBed } from '@angular/core/testing';
 
 describe('PopoverDirective', () => {
   let document: Document;
@@ -11,11 +11,11 @@ describe('PopoverDirective', () => {
   let changeDetectorRef: ChangeDetectorRef;
 
   it('should create an instance', () => {
-    const listenersService = new ListenersService(renderer);
     TestBed.configureTestingModule({
-      providers: [IntersectionService]
+      providers: [IntersectionService, Renderer2, ListenersService],
     });
     const intersectionService = TestBed.inject(IntersectionService);
+    const listenersService = TestBed.inject(ListenersService);
     TestBed.runInInjectionContext(() => {
       const directive = new PopoverDirective(
         document,
@@ -24,7 +24,7 @@ describe('PopoverDirective', () => {
         viewContainerRef,
         listenersService,
         changeDetectorRef,
-        intersectionService
+        intersectionService,
       );
       expect(directive).toBeTruthy();
     });

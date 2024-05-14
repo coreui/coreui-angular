@@ -11,11 +11,11 @@ describe('TooltipDirective', () => {
   let changeDetectorRef: ChangeDetectorRef;
 
   it('should create an instance', () => {
-    const listenersService = new ListenersService(renderer);
     TestBed.configureTestingModule({
-      providers: [IntersectionService]
+      providers: [IntersectionService, Renderer2, ListenersService],
     });
     const intersectionService = TestBed.inject(IntersectionService);
+    const listenersService = TestBed.inject(ListenersService);
     TestBed.runInInjectionContext(() => {
       const directive = new TooltipDirective(
         document,
@@ -24,10 +24,9 @@ describe('TooltipDirective', () => {
         viewContainerRef,
         listenersService,
         changeDetectorRef,
-        intersectionService
+        intersectionService,
       );
       expect(directive).toBeTruthy();
     });
-
   });
 });
