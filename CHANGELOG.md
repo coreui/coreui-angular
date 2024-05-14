@@ -1,6 +1,14 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+---
 
+#### `5.1.0`
+
+- chore(dependencies): update
+- feat: element-ref directive
+- feat(tooltip): reference input for positioning the tooltip on reference element, refactor with signals
+- refactor(listeners.service): add focusin Trigger
+- refactor(template-id.directive): cleanup, add missing test
 
 ---
 
@@ -22,7 +30,7 @@
 
 - chore(dependencies): update
 - fix(icon): cIcon directive [name] binding does not refresh icon in angular 17 #203
-- refactor(icons-angular): use Angular signals 
+- refactor(icons-angular): use Angular signals
 - test(icons-angular): update
 
 ---
@@ -168,9 +176,9 @@
 #### `4.7.0`
 
 - chore(dependencies): update to `Angular 17`
-  - `Angular 17`
-  - `TypeScript ~5.2`
-  - `zone.js ~0.14.2`
+    - `Angular 17`
+    - `TypeScript ~5.2`
+    - `zone.js ~0.14.2`
 - chore: update tsconfig and eslintrc
 - refactor: minor cleanups - typings, tests
 - chore: update `.github/workfows` for node-version 20
@@ -206,7 +214,7 @@ see: [Babel vulnerable to arbitrary code execution when compiling specifically c
 
 #### `4.5.15`
 
-- chore(dependencies): update to Angular 16.2 
+- chore(dependencies): update to Angular 16.2
 - fix(icon): check name value for undefined
 
 ---
@@ -258,8 +266,8 @@ see: [Babel vulnerable to arbitrary code execution when compiling specifically c
 #### `4.5.0`
 
 - chore: dependencies update
-  - `Angular 16`
-  - `TypeScript ~4.9.3`
+    - `Angular 16`
+    - `TypeScript ~4.9.3`
 - refactor(breadcrumb-router.service): router.events takeUntilDestroyed()
 - refactor(toaster): remove ComponentFactoryResolver
 
@@ -287,7 +295,7 @@ see: [Babel vulnerable to arbitrary code execution when compiling specifically c
 ---
 
 #### `4.4.1`
- 
+
 - fix(alert): typo in template
 - refactor(html-attr): cleanup
 - refactor(icon, icon-set): cleanup
@@ -314,28 +322,28 @@ see: [Babel vulnerable to arbitrary code execution when compiling specifically c
 - `@coreui/angular`
 - `@coreui/angular-chartjs`
 - `@coreui/icons-angular`
-  - chore: dependencies update
+    - chore: dependencies update
 
 ---
 
 #### `4.3.16`
 
 - `@coreui/angular`
-  - chore: dependencies update
+    - chore: dependencies update
 - `@coreui/angular-chartjs`
-  - chore: dependencies update
+    - chore: dependencies update
 - `@coreui/icons-angular`
-  - feat(cIcon): standalone directive
-  - chore: dependencies update
+    - feat(cIcon): standalone directive
+    - chore: dependencies update
 
 ---
 
-#### `4.3.15` 
+#### `4.3.15`
 
 - `@coreui/angular-chartjs`
-  - feat(c-chart): emit chartRef on new Chart()
-  - feat(c-chart): standalone component
-  - chore: dependencies update
+    - feat(c-chart): emit chartRef on new Chart()
+    - feat(c-chart): standalone component
+    - chore: dependencies update
 
 ---
 
@@ -347,7 +355,7 @@ see: [Babel vulnerable to arbitrary code execution when compiling specifically c
 
 #### `4.4.0-next.0`
 
-- feat: standalone components (wip) 
+- feat: standalone components (wip)
 
 ---
 
@@ -376,6 +384,7 @@ see: [Babel vulnerable to arbitrary code execution when compiling specifically c
 #### `4.3.7`
 
 update to:
+
 - `Angular 15.1`
 
 ---
@@ -383,8 +392,9 @@ update to:
 #### `4.3.0`
 
 update to:
+
 - `Angular 15`
 - `TypeScript 4.8`
 - `RxJS 7.5`
-    
+
 ---
