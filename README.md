@@ -1,6 +1,6 @@
 # [@coreui/angular](https://coreui.io/angular)
 
-![angular](https://img.shields.io/badge/angular-^16.0.0-lightgrey.svg?style=flat-square&logo=angular)
+![angular](https://img.shields.io/badge/angular-^17.3.0-lightgrey.svg?style=flat-square&logo=angular)
 [![npm package][npm-coreui-angular-badge-v2]][npm-coreui-angular]
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
@@ -11,7 +11,7 @@
  
 
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
-[npm-coreui-angular-badge-v2]: https://img.shields.io/npm/v/@coreui/angular/v2-ng16?style=flat-square&color=red
+[npm-coreui-angular-badge-v2]: https://img.shields.io/npm/v/@coreui/angular/v2-ng17?style=flat-square&color=red
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=red
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red  
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  
@@ -54,7 +54,7 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
 ###### Node.js
-Angular 16 requires `Node.js` version `^16.14.0` or `^18.10.0`.
+Angular 17 requires `Node.js` version `^18.13.0` or newer.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -62,10 +62,10 @@ Angular 16 requires `Node.js` version `^16.14.0` or `^18.10.0`.
 ###### Angular CLI
 Install the Angular CLI globally using a terminal/console window.
 ```bash
-npm install -g @angular/cli@16
+npm install -g @angular/cli@17
 ```
 
-##### Update to Angular 16
+##### Update to Angular 17
 see: [https://update.angular.io](https://update.angular.io)
 
 ## Installation
@@ -81,7 +81,7 @@ $ git clone https://github.com/coreui/coreui-angular.git
 ### NPM
 
 ``` bash
-$ npm install @coreui/angular --save
+$ npm install @coreui/angular@2.17 --save
 ```
 
 ### Yarn
