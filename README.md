@@ -11,7 +11,7 @@
  
 
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
-[npm-coreui-angular-badge-v2]: https://img.shields.io/npm/v/@coreui/angular/v2-lts?style=flat-square&color=red
+[npm-coreui-angular-badge-v2]: https://img.shields.io/npm/v/@coreui/angular/v2-ng16?style=flat-square&color=red
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=red
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red  
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  

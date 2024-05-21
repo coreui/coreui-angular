@@ -1,5 +1,9 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.16.1`
+
+- chore(dependencies): update
+
 ##### `v2.16.0`
 
 - update to `Angular 16` - thanks: @vag1830
