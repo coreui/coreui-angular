@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
   AfterContentInit,
   AfterViewInit,
@@ -5,24 +6,26 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChild,
+  DestroyRef,
   Directive,
   ElementRef,
   EventEmitter,
   forwardRef,
   HostBinding,
   HostListener,
+  inject,
   Inject,
   Input,
   NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
-  Optional,
   Output,
   Renderer2,
+  signal,
   SimpleChanges
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -42,12 +45,11 @@ export abstract class DropdownToken {}
   standalone: true
 })
 export class DropdownToggleDirective implements AfterViewInit {
-
-  constructor(
-    public elementRef: ElementRef,
-    private dropdownService: DropdownService,
-    @Optional() public dropdown?: DropdownToken
-  ) {}
+  // injections
+  readonly #destroyRef = inject(DestroyRef);
+  public readonly elementRef = inject(ElementRef);
+  #dropdownService = inject(DropdownService);
+  public dropdown = inject(DropdownToken, { optional: true });
 
   /**
    * Toggle the disabled state for the toggler.
@@ -70,7 +72,8 @@ export class DropdownToggleDirective implements AfterViewInit {
   @Input() caret = true;
 
   /**
-   * Create split button dropdowns with virtually the same markup as single button dropdowns, but with the addition of `.dropdown-toggle-split` class for proper spacing around the dropdown caret.
+   * Create split button dropdowns with virtually the same markup as single button dropdowns,
+   * but with the addition of `.dropdown-toggle-split` class for proper spacing around the dropdown caret.
    * @type boolean
    * @default false
    */
@@ -85,16 +88,29 @@ export class DropdownToggleDirective implements AfterViewInit {
     };
   }
 
+  #ariaExpanded = signal(false);
+
+  @HostBinding('attr.aria-expanded')
+  get ariaExpanded() {
+    return this.#ariaExpanded();
+  }
+
   @HostListener('click', ['$event'])
   public onClick($event: MouseEvent): void {
     $event.preventDefault();
-    !this.disabled && this.dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+    !this.disabled && this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
   }
 
   ngAfterViewInit(): void {
     if (this.dropdownComponent) {
       this.dropdown = this.dropdownComponent;
-      this.dropdownService = this.dropdownComponent?.dropdownService;
+      this.#dropdownService = this.dropdownComponent?.dropdownService;
+    }
+    if (this.dropdown) {
+      const dropdown = <DropdownComponent>this.dropdown;
+      dropdown?.visibleChange?.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((visible) => {
+        this.#ariaExpanded.set(visible);
+      });
     }
   }
 }
@@ -109,7 +125,6 @@ export class DropdownToggleDirective implements AfterViewInit {
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }]
 })
 export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
-
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
@@ -136,7 +151,8 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
   @Input() direction?: 'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart';
 
   /**
-   * Describes the placement of your component after Popper.js has applied all the modifiers that may have flipped or altered the originally provided placement property.
+   * Describes the placement of your component after Popper.js has applied all the modifiers
+   * that may have flipped or altered the originally provided placement property.
    * @type Placement
    */
   @Input() placement: Placement = 'bottom-start';
@@ -155,7 +171,7 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
   @Input()
   set popperOptions(value: Partial<Options>) {
     this._popperOptions = { ...this._popperOptions, ...value };
-  };
+  }
 
   get popperOptions(): Partial<Options> {
     let placement = this.placement;
@@ -237,12 +253,10 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
   @HostBinding('class')
   get hostClasses(): any {
     return {
-      dropdown:
-        (this.variant === 'dropdown' || this.variant === 'nav-item') &&
-        !this.direction,
+      dropdown: (this.variant === 'dropdown' || this.variant === 'nav-item') && !this.direction,
       [`${this.direction}`]: !!this.direction,
       [`${this.variant}`]: !!this.variant,
-      'dropup': this.direction === 'dropup' || this.direction === 'dropup-center',
+      dropup: this.direction === 'dropup' || this.direction === 'dropup-center',
       show: this.visible
     };
   }
@@ -262,16 +276,15 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
 
   dropdownStateSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.dropdownStateSubscription =
-        this.dropdownService.dropdownState$.pipe(
+      this.dropdownStateSubscription = this.dropdownService.dropdownState$
+        .pipe(
           filter((state) => {
             return this === state.dropdown;
           })
-        ).subscribe((state) => {
+        )
+        .subscribe((state) => {
           if ('visible' in state) {
-            state?.visible === 'toggle'
-            ? this.toggleDropdown()
-            : (this.visible = state.visible);
+            state?.visible === 'toggle' ? this.toggleDropdown() : (this.visible = state.visible);
           }
         });
     } else {

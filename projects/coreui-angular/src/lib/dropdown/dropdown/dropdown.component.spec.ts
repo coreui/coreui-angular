@@ -12,8 +12,7 @@ describe('DropdownComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DropdownComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -41,7 +40,6 @@ class MockElementRef extends ElementRef {}
 class TestComponent {}
 
 describe('DropdownToggleDirective', () => {
-
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let elementRef: DebugElement;
@@ -66,7 +64,9 @@ describe('DropdownToggleDirective', () => {
   });
 
   it('should create an instance', () => {
-    const directive = new DropdownToggleDirective(elementRef, service);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new DropdownToggleDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });
