@@ -11,7 +11,7 @@
 <h2 align="center">CoreUI for Angular</h3>
 
 <p align="center">
-  Angular Components Library built on top of Bootstrap 5 and TypeScript.
+  Angular Components Library built on top of Bootstrap 5.3 and TypeScript.
   <br>
   <a href="https://coreui.io/angular/docs/"><strong>Explore CoreUI for Angular docs »</strong></a>
   <br>

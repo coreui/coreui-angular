@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.1.1`
+
+- chore(dependencies): update
+- fix(dropdown): add aria-expanded attribute, refactor
+
+---
+
 #### `5.1.0`
 
 - chore(dependencies): update

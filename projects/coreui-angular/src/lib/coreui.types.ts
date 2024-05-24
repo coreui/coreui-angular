@@ -8,7 +8,7 @@ export enum BreakpointInfix {
   md = 'md',
   lg = 'lg',
   xl = 'xl',
-  xxl = 'xxl',
+  xxl = 'xxl'
 }
 
 export type BreakpointInfixStrings = keyof typeof BreakpointInfix;
@@ -65,13 +65,7 @@ export type TextColors =
 
 export type Alignment = 'baseline' | 'top' | 'middle' | 'bottom' | 'text-top' | 'text-bottom';
 
-export type BadgePositions =
-  | 'top-start'
-  | 'top-end'
-  | 'bottom-end'
-  | 'bottom-start'
-  | string
-  | undefined;
+export type BadgePositions = 'top-start' | 'top-end' | 'bottom-end' | 'bottom-start' | string | undefined;
 
 export type Placements =
   | 'auto'
