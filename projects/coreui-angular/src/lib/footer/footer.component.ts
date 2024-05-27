@@ -13,13 +13,15 @@ export class FooterComponent {
    * @type Positions
    */
   @Input() position?: Positions;
+
   /**
    * Default role for footer. [docs]
    * @type string
-   * @default 'footer'
+   * @default 'contentinfo'
    */
+  @HostBinding('attr.role')
   @Input()
-  @HostBinding('attr.role') role = 'footer';
+  role = 'contentinfo';
 
   @HostBinding('class')
   get getClasses(): any {
