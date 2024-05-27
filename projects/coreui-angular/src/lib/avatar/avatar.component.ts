@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input } from '@angular/core';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
 import { TextColorDirective } from '../utilities';
@@ -8,13 +8,13 @@ import { TextColorDirective } from '../utilities';
   selector: 'c-avatar',
   templateUrl: './avatar.component.html',
   standalone: true,
-  imports: [
-    NgTemplateOutlet,
-    NgClass
-  ],
-  hostDirectives: [{
-    directive: TextColorDirective, inputs: ['cTextColor: textColor']
-  }]
+  imports: [NgTemplateOutlet, NgClass, NgOptimizedImage],
+  hostDirectives: [
+    {
+      directive: TextColorDirective,
+      inputs: ['cTextColor: textColor']
+    }
+  ]
 })
 export class AvatarComponent {
   /**
@@ -22,21 +22,31 @@ export class AvatarComponent {
    * @type Colors
    */
   @Input() color?: Colors;
+
   /**
    * Select the shape of the component.
    * @type Shapes
    */
   @Input() shape?: Shapes;
+
   /**
    * Size the component small, large, or extra large.
    * @default 'md'
    */
   @Input() size?: Omit<Sizes, 'xxl'> = 'md';
+
+  /**
+   * The alt attribute for the img element alternate text.
+   * @type string
+   */
+  @Input() alt: string = '';
+
   /**
    * The src attribute for the img element.
    * @type string
    */
   @Input() src?: string;
+
   /**
    * Sets the color context of the status indicator to one of CoreUI’s themed colors.
    * @type Colors
@@ -49,8 +59,6 @@ export class AvatarComponent {
    * @type TextColors
    */
   @Input() textColor?: TextColors;
-
-  constructor() { }
 
   get statusClass(): any {
     return {
