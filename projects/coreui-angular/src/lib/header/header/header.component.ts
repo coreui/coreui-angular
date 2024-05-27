@@ -12,7 +12,6 @@ type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
   imports: [NgClass]
 })
 export class HeaderComponent {
-
   /**
    * Defines optional container wrapping children elements.
    */
@@ -24,10 +23,11 @@ export class HeaderComponent {
   /**
    * Default role for header. [docs]
    * @type string
-   * @default 'header'
+   * @default 'banner'
    */
   @HostBinding('attr.role')
-  @Input() role = 'header';
+  @Input()
+  role = 'banner';
 
   @HostBinding('class')
   get getClasses(): any {
