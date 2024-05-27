@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectorRef, Component, HostBinding, OnDestroy } from '@angular/core';
+import { booleanAttribute, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TabContentComponent } from '../tab-content/tab-content.component';
@@ -12,7 +12,6 @@ import { ITabContentState, TabService } from '../tab.service';
   standalone: true
 })
 export class TabPaneComponent implements OnDestroy {
-
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private tabService: TabService
@@ -48,6 +47,10 @@ export class TabPaneComponent implements OnDestroy {
     };
   }
 
+  @Input()
+  @HostBinding('attr.role')
+  role = 'tabpanel';
+
   ngOnDestroy(): void {
     this.subscribeTabService(false);
   }
@@ -56,7 +59,7 @@ export class TabPaneComponent implements OnDestroy {
     if (subscribe) {
       this.tabServiceSubscription = this.tabService.activeTabPaneIdx$.subscribe((tabContentState: ITabContentState) => {
         if (tabContentState.tabContent === this.tabContent) {
-          this.active = (tabContentState.activeIdx === this.tabPaneIdx);
+          this.active = tabContentState.activeIdx === this.tabPaneIdx;
         }
       });
     } else {
