@@ -19,7 +19,6 @@ import { TabService } from './tab.service';
   standalone: true
 })
 export class TabContentRefDirective implements OnChanges, OnDestroy {
-
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private tabService: TabService
@@ -92,7 +91,16 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
   @HostBinding('attr.disabled')
   get attrDisabled() {
     return this.disabled ? '' : null;
-  };
+  }
+
+  @HostBinding('attr.aria-selected')
+  private get ariaSelected() {
+    return this.active;
+  }
+
+  @Input()
+  @HostBinding('attr.role')
+  role = 'tab';
 
   @HostBinding('attr.tabindex')
   get getTabindex(): string | null {
@@ -130,7 +138,7 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
     if (subscribe) {
       this.tabServiceSubscription = this.tabService.activeTabPaneIdx$.subscribe((tabContentState) => {
         if (tabContentState.tabContent === this.tabContentRef) {
-          this.active = (tabContentState.activeIdx === this.tabPaneIdx);
+          this.active = tabContentState.activeIdx === this.tabPaneIdx;
         }
       });
     } else {
