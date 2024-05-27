@@ -52,20 +52,23 @@ import { IconDirective } from '@coreui/icons-angular';
   ],
   animations: [
     trigger('openClose', [
-      state('open', style({
-        height: '*'
-      })),
-      state('closed', style({
-        height: '0px'
-      })),
-      transition('open <=> closed', [
-        animate('.15s ease')
-      ])
+      state(
+        'open',
+        style({
+          height: '*'
+        })
+      ),
+      state(
+        'closed',
+        style({
+          height: '0px'
+        })
+      ),
+      transition('open <=> closed', [animate('.15s ease')])
     ])
   ]
 })
 export class SidebarNavGroupComponent implements OnInit, OnDestroy {
-
   constructor(
     private router: Router,
     private renderer: Renderer2,
@@ -102,7 +105,6 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   public display: any = { display: 'block' };
 
   ngOnInit(): void {
-
     this.navItems = [...this.item.children];
 
     this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
@@ -116,7 +118,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
       this.openGroup(true);
     }
 
-    this.navGroupSubscription = this.sidebarNavGroupService.sidebarNavGroupState$.subscribe(next => {
+    this.navGroupSubscription = this.sidebarNavGroupService.sidebarNavGroupState$.subscribe((next) => {
       if (this.dropdownMode === 'close' && next.sidebarNavGroup && next.sidebarNavGroup !== this) {
         if (next.sidebarNavGroup.item.url.startsWith(this.item.url)) {
           return;
@@ -194,7 +196,6 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   ]
 })
 export class SidebarNavComponent implements OnChanges {
-
   constructor(
     @Optional() public sidebar: SidebarComponent,
     public helper: SidebarNavHelper,
@@ -202,7 +203,7 @@ export class SidebarNavComponent implements OnChanges {
     private renderer: Renderer2,
     private hostElement: ElementRef,
     private sidebarService: SidebarService
-  ) { }
+  ) {}
 
   @Input() navItems?: INavData[] = [];
   @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
@@ -223,7 +224,9 @@ export class SidebarNavComponent implements OnChanges {
   //   return !!this.groupItems;
   // }
 
-  @HostBinding('attr.role') role = 'nav';
+  @HostBinding('attr.role')
+  @Input()
+  role = 'navigation';
 
   public navItemsArray: INavData[] = [];
 
