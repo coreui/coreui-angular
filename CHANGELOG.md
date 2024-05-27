@@ -2,6 +2,18 @@
 
 ---
 
+#### `5.1.2`
+
+- chore(dependencies): update (js-yaml vulnerability)
+- fix(avatar): add `alt` prop for img alternate text
+- fix(footer): set default `role="contentinfo"`
+- fix(header): set default `role="banner"`
+- fix(sidebar-nav): set default `role="navigation"`
+- fix(tab-pane): add default `role="tabpanel"`
+- fix(TabContentRef): add `aria-selected` attribute and default `role="tab"`
+
+---
+
 #### `5.1.1`
 
 - chore(dependencies): update
