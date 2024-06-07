@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.2.0`
+
+- chore(dependencies): update to `Angular 18`
+- chore(dependencies): update to `CoreUI 5.2`
+
+---
+
 #### `5.1.2`
 
 - chore(dependencies): update (js-yaml vulnerability)
