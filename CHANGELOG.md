@@ -2,6 +2,12 @@
 
 ---
 
+#### `4.8.0`
+
+- chore(dependencies): update to `Angular 18`
+
+---
+
 #### `4.7.20`
 
 - chore(dependencies): update
