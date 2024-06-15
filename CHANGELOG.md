@@ -2,6 +2,13 @@
 
 ---
 
+#### `4.7.20`
+
+- chore(dependencies): update
+- fix(modal): attempt to focus when there is no focusable element on modal dialog
+
+---
+
 #### `4.7.19`
 
 - chore(dependencies): update
