@@ -26,16 +26,18 @@
 ## Status
 
 ![angular][angular-badge]
+[![npm-coreui-angular-v4-ng18][npm-coreui-angular-badge-v4-ng18]][npm-coreui-angular]
 [![npm-coreui-angular-latest][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
-[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
+[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
 [![Build](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml)
 
+[npm-coreui-angular-badge-v4-ng18]: https://img.shields.io/npm/v/@coreui/angular/v4-ng18?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^17.3.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^18.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## Table of contents
 
@@ -59,7 +61,7 @@
 Before you begin, make sure your development environment includes `Node.js®` and `npm` package manager.
 
 ###### Node.js
-[**Angular 17**](https://angular.io/guide/what-is-angular) requires `Node.js` LTS version `^18.13` or `^20.9`. 
+[**Angular 18**](https://angular.dev/overview) requires `Node.js` LTS version `^18.19` or newer. 
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -76,8 +78,7 @@ Several quick start options are available (pick one):
 
 - [Download the latest release](https://github.com/coreui/coreui-angular/)
 - Clone the repo: `git clone https://github.com/coreui/coreui-angular.git`
-- Install with [npm](https://www.npmjs.com/): `npm install @coreui/angular`
-- Install with [yarn](https://yarnpkg.com/): `yarn add @coreui/angular`
+- Install with [npm](https://www.npmjs.com/): `npm install @coreui/angular @coreui/icons-angular @coreui/coreui`
 
 Read the [Getting started page](https://coreui.io/angular/docs/) for information on the framework contents, templates and examples, and more.
 
@@ -209,4 +210,4 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 ## Copyright and license
 
-Copyright 2023 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2024 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).

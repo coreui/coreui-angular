@@ -28,15 +28,18 @@
 # CoreUI Icons Angular
 
 ![angular][angular-badge]
-[![NPM](https://img.shields.io/npm/v/@coreui/icons-angular/latest?style=flat-square&color=brightgreen)][coreui-angular-icons-npm]
+[![npm-coreui-angular-v4-ng18][npm-coreui-icons-angular-v4-ng18]][coreui-angular-icons-npm]
+[![npm-coreui-angular-latest][npm-coreui-icons-angular-latest]][coreui-angular-icons-npm]
 [![npm-coreui-angular-next][npm-coreui-icons-angular-next]][coreui-angular-icons-npm]  
 [![Downloads](https://img.shields.io/npm/dm/@coreui/icons-angular.svg?style=flat-square)][coreui-angular-icons-npm]
 [![License](https://img.shields.io/npm/l/@coreui/angular?style=flat-square)][coreui]  
 
 [coreui]: https://coreui.io/icons
 [coreui-angular-icons-npm]: https://www.npmjs.com/package/@coreui/icons-angular
-[npm-coreui-icons-angular-next]: https://img.shields.io/npm/v/@coreui/icons-angular/next.png?style=flat-square&color=red
-[angular-badge]: https://img.shields.io/badge/angular-^17.3.0-lightgrey.svg?style=flat-square&logo=angular
+[npm-coreui-icons-angular-v4-ng18]: https://img.shields.io/npm/v/@coreui/icons-angular/v4-ng18?style=flat-square&color=brightgreen
+[npm-coreui-icons-angular-latest]: https://img.shields.io/npm/v/@coreui/icons-angular/latest?style=flat-square&color=brightgreen
+[npm-coreui-icons-angular-next]: https://img.shields.io/npm/v/@coreui/icons-angular/next?style=flat-square&color=red
+[angular-badge]: https://img.shields.io/badge/angular-^18.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## `cIcon` directive
 
@@ -57,7 +60,7 @@ For directive description visit [https://coreui.io/angular/docs/](https://coreui
 
 ```shell
 npm install @coreui/icons@3
-npm install @coreui/icons-angular@4
+npm install @coreui/icons-angular@4.8
 ```
 
 ### Usage

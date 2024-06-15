@@ -8,7 +8,7 @@
   </a>
 </p>
 
-<h3 align="center">CoreUI Angular wrapper for Chart.js</h3>
+<h3 align="center">CoreUI Angular wrapper for Chart.js v3</h3>
 
 <p align="center">
   <a href="https://coreui.io/angular/docs/"><strong>Explore @coreui/angular-chartjs docs & examples »</strong></a>
@@ -24,23 +24,25 @@
 ## Status
 
 ![angular][angular-badge]
-[![npm package][npm-badge]][npm]
-[![npm package][npm-badge-next]][npm]
+[![npm package][npm-badge-v4-ng18]][npm]
+[![npm package][npm-badge-latest]][npm]
+[![npm package][npm-badge-next]][npm]  
 [![NPM downloads][npm-download]][npm]
 
 
-[npm-badge]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square&color=brightgreen
+[npm-badge-v4-ng18]: https://img.shields.io/npm/v/@coreui/angular-chartjs/v4-ng18?style=flat-square&color=brightgreen
+[npm-badge-latest]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square&color=brightgreen
 [npm-badge-next]: https://img.shields.io/npm/v/@coreui/angular-chartjs/next?style=flat-square&color=red
 [npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
 [npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^17.3.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^18.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ##### install:
 
 ```bash
-npm install chart.js
+npm install chart.js@3
 npm install @coreui/chartjs@3
-npm install @coreui/angular-chartjs
+npm install @coreui/angular-chartjs@4.8
 ````
 
 ##### import:
@@ -182,4 +184,4 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 ## Copyright and license
 
-Copyright 2023 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2024 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
