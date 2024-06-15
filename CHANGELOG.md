@@ -6,6 +6,7 @@
 
 - chore(dependencies): update to `Angular 18`
 - chore(dependencies): update to `CoreUI 5.2`
+- feat(tabs): Angular tabs reimagined structure, keyboard interactions and WAI-ARIA support
 
 ---
 
