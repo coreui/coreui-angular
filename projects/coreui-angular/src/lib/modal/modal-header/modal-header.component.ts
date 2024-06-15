@@ -6,12 +6,10 @@ import { Component, HostBinding } from '@angular/core';
   standalone: true
 })
 export class ModalHeaderComponent {
-
   @HostBinding('class')
   get hostClasses(): any {
     return {
       'modal-header': true
     };
   }
-
 }

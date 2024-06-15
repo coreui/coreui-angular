@@ -54,7 +54,6 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
   imports: [ModalDialogComponent, ModalContentComponent, A11yModule]
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
-
   #destroyRef = inject(DestroyRef);
   #focusMonitor = inject(FocusMonitor);
 
@@ -64,7 +63,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     private hostElement: ElementRef,
     private modalService: ModalService,
     private backdropService: BackdropService
-  ) { }
+  ) {}
 
   /**
    * Align the modal in the center or top of the screen.
@@ -110,14 +109,15 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
    * @type boolean
    * @default null
    */
-  @Input() @HostBinding('attr.aria-modal')
+  @Input()
+  @HostBinding('attr.aria-modal')
   set ariaModal(value: boolean | null) {
     this.#ariaModal = value;
   }
 
   get ariaModal(): boolean | null {
     return this.visible || this.#ariaModal ? true : null;
-  };
+  }
 
   #ariaModal: boolean | null = null;
 
@@ -154,8 +154,12 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.#activeElement = this.document.activeElement as HTMLElement;
       // this.#activeElement?.blur();
       setTimeout(() => {
-        const focusable = this.modalContentRef.nativeElement.querySelectorAll('[tabindex]:not([tabindex="-1"]), button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
-        this.#focusMonitor.focusVia(focusable[0], 'keyboard');
+        const focusable = this.modalContentRef.nativeElement.querySelectorAll(
+          '[tabindex]:not([tabindex="-1"]), button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
+        );
+        if (focusable.length) {
+          this.#focusMonitor.focusVia(focusable[0], 'keyboard');
+        }
       });
     } else {
       if (this.document.contains(this.#activeElement)) {
@@ -191,7 +195,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @HostBinding('attr.aria-hidden')
   get ariaHidden(): boolean | null {
     return this.visible ? null : true;
-  };
+  }
 
   @HostBinding('attr.tabindex')
   get tabIndex(): string | null {
@@ -255,7 +259,6 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener('click', ['$event'])
   public onClickHandler($event: MouseEvent): void {
-
     if (this.mouseDownTarget !== $event.target) {
       this.mouseDownTarget = null;
       return;
@@ -263,7 +266,6 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const targetElement = $event.target;
     if (targetElement === this.hostElement.nativeElement) {
-
       if (this.backdrop === 'static') {
         this.setStaticBackdrop();
         return;
@@ -289,27 +291,23 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private stateToggleSubscribe(): void {
-    this.modalService.modalState$
-      .pipe(
-        takeUntilDestroyed(this.#destroyRef)
-      )
-      .subscribe(
-        (action) => {
-          if (this === action.modal || this.id === action.id) {
-            if ('show' in action) {
-              this.visible = action?.show === 'toggle' ? !this.visible : action.show;
-            }
-          } else {
-            if (this.visible) {
-              this.visible = false;
-            }
-          }
+    this.modalService.modalState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
+      if (this === action.modal || this.id === action.id) {
+        if ('show' in action) {
+          this.visible = action?.show === 'toggle' ? !this.visible : action.show;
         }
-      );
+      } else {
+        if (this.visible) {
+          this.visible = false;
+        }
+      }
+    });
   }
 
   private setBackdrop(setBackdrop: boolean): void {
-    this.#activeBackdrop = setBackdrop ? this.backdropService.setBackdrop('modal') : this.backdropService.clearBackdrop(this.#activeBackdrop);
+    this.#activeBackdrop = setBackdrop
+      ? this.backdropService.setBackdrop('modal')
+      : this.backdropService.clearBackdrop(this.#activeBackdrop);
   }
 
   private setBodyStyles(open: boolean): void {

@@ -9,8 +9,7 @@ describe('ModalBodyComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModalBodyComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -7,11 +7,10 @@ import { Component, HostBinding } from '@angular/core';
   standalone: true
 })
 export class ModalBodyComponent {
-
   @HostBinding('class')
   get hostClasses(): any {
     return {
-      'modal-body': true,
+      'modal-body': true
     };
   }
 }
