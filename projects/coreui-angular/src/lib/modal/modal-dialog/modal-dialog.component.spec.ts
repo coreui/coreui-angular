@@ -9,8 +9,7 @@ describe('ModalDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModalDialogComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +20,9 @@ describe('ModalDialogComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('modal-dialog');
   });
 });

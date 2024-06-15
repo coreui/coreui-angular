@@ -9,8 +9,7 @@ describe('ModalHeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModalHeaderComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +20,9 @@ describe('ModalHeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('modal-header');
   });
 });

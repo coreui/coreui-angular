@@ -9,8 +9,7 @@ describe('ModalContentComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModalContentComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +20,9 @@ describe('ModalContentComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('modal-content');
   });
 });

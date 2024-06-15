@@ -9,8 +9,7 @@ describe('ModalFooterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModalFooterComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +20,9 @@ describe('ModalFooterComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement).toHaveClass('modal-footer');
   });
 });

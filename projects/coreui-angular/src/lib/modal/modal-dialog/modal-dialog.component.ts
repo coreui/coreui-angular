@@ -2,7 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-modal-dialog',
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   styleUrls: ['./modal-dialog.component.scss'],
   standalone: true
 })
