@@ -36,6 +36,7 @@ export * from './lib/sidebar';
 export * from './lib/spinner';
 export * from './lib/table';
 export * from './lib/tabs';
+export * from './lib/tabs-2';
 export * from './lib/toast';
 export * from './lib/tooltip';
 export * from './lib/utilities';
