@@ -24,12 +24,14 @@
 ## Status
 
 ![angular][angular-badge]
-[![npm package][npm-badge]][npm]
-[![npm package][npm-badge-next]][npm]
+[![npm package][npm-badge-v5-ng17]][npm]
+[![npm package][npm-badge-latest]][npm]
+[![npm package][npm-badge-next]][npm]  
 [![NPM downloads][npm-download]][npm]
 
 
-[npm-badge]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square&color=brightgreen
+[npm-badge-v5-ng17]: https://img.shields.io/npm/v/@coreui/angular-chartjs/v5-ng17?style=flat-square&color=brightgreen
+[npm-badge-latest]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square&color=brightgreen
 [npm-badge-next]: https://img.shields.io/npm/v/@coreui/angular-chartjs/next?style=flat-square&color=red
 [npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
 [npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
@@ -40,7 +42,7 @@
 ```bash
 npm install chart.js@4
 npm install @coreui/chartjs@4
-npm install @coreui/angular-chartjs@5
+npm install @coreui/angular-chartjs@5.1
 ````
 
 ##### import:
@@ -52,16 +54,6 @@ import { ChartjsModule } from '@coreui/angular-chartjs';
 @NgModule({
     imports: [
         ChartjsModule,
-...
-```
-```ts
-// standalone components
-  import { ChartjsComponent } from '@coreui/angular-chartjs';
-
-@Component({
-    standalone: true,
-    imports: [
-        ChartjsComponent, 
 ...
 ```
 ```ts

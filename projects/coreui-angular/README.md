@@ -11,7 +11,7 @@
 <h2 align="center">CoreUI for Angular</h3>
 
 <p align="center">
-  Angular Components Library built on top of Bootstrap 5.3 and TypeScript.
+  Angular Components Library built on top of Bootstrap 5.3 and TypeScript 5.4.
   <br>
   <a href="https://coreui.io/angular/docs/"><strong>Explore CoreUI for Angular docs »</strong></a>
   <br>
@@ -26,11 +26,13 @@
 ## Status
 
 ![angular][angular-badge]
+[![npm-coreui-angular-v5-ng17][npm-coreui-angular-badge-v5-ng17]][npm-coreui-angular]
 [![npm-coreui-angular-latest][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
-[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]
+[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
 [![Build](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml)
 
+[npm-coreui-angular-badge-v5-ng17]: https://img.shields.io/npm/v/@coreui/angular/v5-ng17?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
@@ -86,8 +88,7 @@ Several quick start options are available (pick one):
 
 - [Download the latest release](https://github.com/coreui/coreui-angular/)
 - Clone the repo: `git clone https://github.com/coreui/coreui-angular.git`
-- Install with [npm](https://www.npmjs.com/): `npm install @coreui/angular`
-- Install with [yarn](https://yarnpkg.com/): `yarn add @coreui/angular`
+- Install with [npm](https://www.npmjs.com/): `npm install @coreui/angular @coreui/icons-angular @coreui/coreui`
 
 Read the [Getting started page](https://coreui.io/angular/docs/) for information on the framework contents, templates and examples, and more.
 
@@ -128,7 +129,7 @@ The documentation for the CoreUI & CoreUI PRO is hosted at our website [CoreUI f
 
 ## Frameworks
 
-CoreUI supports most popular frameworks.
+CoreUI supports the most popular frameworks.
 
 - [CoreUI for Bootstap(Vanilla JS)](https://github.com/coreui/coreui)
 - [CoreUI for React](https://github.com/coreui/coreui-react)

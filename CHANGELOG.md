@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.1.3`
+
+- fix(modal): attempt to focus when there is no focusable element on modal dialog
+- chore(dependencies): update
+
+---
+
 #### `5.1.2`
 
 - chore(dependencies): update (js-yaml vulnerability)
