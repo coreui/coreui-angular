@@ -4,6 +4,7 @@ import { TabsService } from './tabs.service';
 let nextId = 0;
 
 @Component({
+  exportAs: 'cTabs',
   selector: 'c-tabs',
   standalone: true,
   imports: [],

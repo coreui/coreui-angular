@@ -17,6 +17,7 @@ import { TabDirective } from '../tab/tab.directive';
 import { TabsService } from '../tabs.service';
 
 @Component({
+  exportAs: 'cTabsList',
   selector: 'c-tabs-list',
   standalone: true,
   imports: [TabDirective],

@@ -19,6 +19,7 @@ type AnimateType = 'hide' | 'show';
 type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
 
 @Component({
+  exportAs: 'cTabPanel',
   selector: 'c-tab-panel',
   standalone: true,
   template: '<ng-content />',
