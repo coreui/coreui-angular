@@ -2,6 +2,14 @@
 
 ---
 
+#### `5.2.2`
+
+- chore(dependencies): update
+- fix(tabs2): missing exportAs
+- fix(tab.directive): missing disabled attribute
+
+---
+
 #### `5.2.1`
 
 - chore(dependencies): update 
