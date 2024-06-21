@@ -28,6 +28,7 @@ import { TabsService } from '../tabs.service';
     role: 'tab',
     '[attr.aria-selected]': 'isActive()',
     '[attr.aria-controls]': 'attrAriaControls()',
+    '[attr.disabled]': 'attrDisabled() || null',
     '[id]': 'propId()',
     '[tabindex]': 'isActive() ? 0 : -1'
   }
@@ -52,6 +53,7 @@ export class TabDirective implements FocusableOption {
   }
 
   readonly #disabled = signal(false);
+  readonly attrDisabled = computed(() => this.#disabled() || null);
 
   /**
    * Item key.
@@ -82,7 +84,8 @@ export class TabDirective implements FocusableOption {
 
   readonly hostClasses = computed(() => ({
     'nav-link': true,
-    active: this.isActive()
+    active: this.isActive(),
+    disabled: this.#disabled()
   }));
 
   readonly propId = computed(() => this.id() ?? `${this.#tabsService.id()}-tab-${this.itemKey()}`);
