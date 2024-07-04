@@ -1,14 +1,9 @@
-<ng-container>
-  <ng-container *ngTemplateOutlet="defaultImageTemplate" />
-  @if (!!status) {
-    <span [ngClass]="statusClass"></span>
+<ng-content>
+  @if (src()) {
+    <img [ngSrc]="src() ?? ''" fill class="avatar-img" alt="{{alt()}}" />
   }
-</ng-container>
+</ng-content>
+@if (!!status()) {
+  <span [ngClass]="statusClass()"></span>
+}
 
-<ng-template #defaultImageTemplate>
-  @if (!!src) {
-    <img [ngSrc]="src" fill class="avatar-img" alt="{{alt}}" />
-  } @else {
-    <ng-content />
-  }
-</ng-template>
