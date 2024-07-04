@@ -2,6 +2,20 @@
 
 ---
 
+#### `5.2.3`
+
+- chore(dependencies): update
+- refactor(accordion): minor cleanup, add host class metadata
+- refactor(avatar): template default ng-content, host class metadata, input signals
+- refactor(badge): host class metadata, input signals
+- refactor(card): host class metadata, input signals
+- refactor(text-bg-color): input signals
+- refactor(text-color): input signals
+- refactor(widget-stat-b): input signals
+- refactor(modal): minor syntax cleanup
+
+---
+
 #### `5.2.2`
 
 - chore(dependencies): update
@@ -12,7 +26,7 @@
 
 #### `5.2.1`
 
-- chore(dependencies): update 
+- chore(dependencies): update
 
 ---
 
