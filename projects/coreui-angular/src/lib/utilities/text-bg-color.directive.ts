@@ -1,4 +1,4 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { Directive, HostBinding, input, InputSignal } from '@angular/core';
 import { Colors } from '../coreui.types';
 
 @Directive({
@@ -6,16 +6,15 @@ import { Colors } from '../coreui.types';
   standalone: true
 })
 export class TextBgColorDirective {
-
   /**
    * Set text-bg-color of element
    * @type Colors
    */
-  @Input('cTextBgColor') textBgColor: Colors = '';
+  readonly textBgColor: InputSignal<Colors> = input('', { alias: 'cTextBgColor' });
 
   @HostBinding('class')
   get hostClasses(): any {
-    const color = this.textBgColor;
+    const color = this.textBgColor();
     return {
       [`text-bg-${color}`]: !!color
     };
