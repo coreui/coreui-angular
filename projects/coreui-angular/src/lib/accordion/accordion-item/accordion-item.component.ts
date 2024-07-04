@@ -24,13 +24,11 @@ let nextId = 0;
   styleUrls: ['./accordion-item.component.scss'],
   exportAs: 'cAccordionItem',
   standalone: true,
-  imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective]
+  imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective],
+  host: { class: 'accordion-item' }
 })
 export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentInit {
-
-  constructor(
-    private accordionService: AccordionService
-  ) { }
+  constructor(private accordionService: AccordionService) {}
 
   /**
    * Toggle an accordion item programmatically
@@ -79,4 +77,3 @@ export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentIn
     });
   }
 }
-

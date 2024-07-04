@@ -2,10 +2,10 @@ import { Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: '[cAccordionButton]',
-  standalone: true
+  standalone: true,
+  host: { class: 'accordion-button' }
 })
 export class AccordionButtonDirective {
-
   /**
    * Toggles an accordion button collapsed state. Use in accordionHeaderTemplate. [docs]
    * @type boolean
@@ -13,12 +13,13 @@ export class AccordionButtonDirective {
   @Input() collapsed!: boolean;
 
   /**
-  * Default type for cAccordionButton. [docs]
+   * Default type for cAccordionButton. [docs]
    * @type string
    * @default 'button'
    */
   @HostBinding('attr.type')
-  @Input() type = 'button';
+  @Input()
+  type: string = 'button';
 
   @HostBinding('class')
   get hostClasses(): any {

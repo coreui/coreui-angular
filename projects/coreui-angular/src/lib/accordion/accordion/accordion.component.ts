@@ -4,15 +4,15 @@ import { AccordionService } from '../accordion.service';
 
 @Component({
   selector: 'c-accordion',
-  template: '<ng-content/>',
+  template: '<ng-content />',
   styleUrls: ['./accordion.component.scss'],
   exportAs: 'cAccordionItem',
   providers: [AccordionService],
-  standalone: true
+  standalone: true,
+  host: { class: 'accordion' }
 })
 export class AccordionComponent {
-
-   #accordionService = inject(AccordionService);
+  #accordionService = inject(AccordionService);
 
   /**
    * Removes the default background-color, some borders, and some rounded corners to render accordions edge-to-edge with their parent container.
@@ -40,5 +40,4 @@ export class AccordionComponent {
       'accordion-flush': this.flush
     };
   }
-
 }
