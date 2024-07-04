@@ -1,7 +1,6 @@
-import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, Component, HostBinding, input, InputSignal, InputSignalWithTransform } from '@angular/core';
 import { NgClass } from '@angular/common';
 
-import { Colors, TextColors } from '../../coreui.types';
 import { CardBodyComponent, CardComponent } from '../../card';
 
 @Component({
@@ -12,51 +11,54 @@ import { CardBodyComponent, CardComponent } from '../../card';
   imports: [CardBodyComponent, NgClass]
 })
 export class WidgetStatBComponent extends CardComponent {
-
   constructor() {
     super();
   }
 
   /**
-   * Sets the color context of the component to one of CoreUI’s themed colors.
+   * Sets the color context of the component to one of CoreUI themed colors.
    * @type Colors
    */
-  @Input() override color?: Colors;
+  // override readonly color: InputSignal<Colors | undefined> = input();
+
   /**
-   * Sets the text-color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * Sets the text-color context of the component to one of CoreUI themed colors.
+   * via TextColorDirective
+   * @type TextColors
    */
-  @Input() override textColor?: TextColors;
+  // override readonly textColor: InputSignal<TextColors | undefined> = input();
+
   /**
    * Title of the widget to display
    * @type string
    */
-  @Input() title?: string;
+  readonly title: InputSignal<string | undefined> = input();
+
   /**
    * Helper text for your widget.
    * @type string
    */
-  @Input() text?: string;
+  readonly text: InputSignal<string | undefined> = input();
+
   /**
    * Value for your widget to display
    * @type string
    */
-  @Input() value?: string;
+  readonly value: InputSignal<string | undefined> = input();
 
   /**
    * Invert colors from their default dark shade.
    * @type boolean
    */
-  @Input({ transform: booleanAttribute }) inverse: string | boolean = false;
+  readonly inverse: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   @HostBinding('class')
   override get hostClasses() {
     return {
-      'card': true,
-      [`bg-${this.color}`]: !!this.color,
-      [`text-${this.textColor}`]: !!this.textColor,
-      'text-white': !!this.inverse
+      card: true,
+      [`bg-${this.color()}`]: !!this.color(),
+      [`text-${this.textColor()}`]: !!this.textColor(),
+      'text-white': this.inverse()
     };
   }
-
 }
