@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, input, InputSignal } from '@angular/core';
 import { BadgePositions, Colors, Shapes, TextColors } from '../coreui.types';
 import { TextBgColorDirective, TextColorDirective } from '../utilities';
 
@@ -9,35 +9,40 @@ import { TextBgColorDirective, TextColorDirective } from '../utilities';
   hostDirectives: [
     { directive: TextColorDirective, inputs: ['cTextColor: textColor'] },
     { directive: TextBgColorDirective, inputs: ['cTextBgColor: textBgColor'] }
-  ]
+  ],
+  host: {
+    class: 'badge'
+  }
 })
 export class BadgeComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() color?: Colors;
+  readonly color: InputSignal<Colors | undefined> = input();
   /**
    * Position badge in one of the corners of a link or button.
    * @type BadgePositions
    */
-  @Input() position?: BadgePositions;
+  readonly position: InputSignal<BadgePositions | undefined> = input();
+
   /**
    * Select the shape of the component.
    * @type Shapes
    */
-  @Input() shape?: Shapes;
+  readonly shape: InputSignal<Shapes | undefined> = input();
+
   /**
    * Size the component small.
    */
-  @Input() size?: 'sm';
+  readonly size: InputSignal<'sm' | undefined> = input();
 
   /**
    * Sets the text color of the component to one of CoreUI’s themed colors.
    * via TextColorDirective
    * @type TextColors
    */
-  @Input() textColor?: TextColors;
+  readonly textColor: InputSignal<TextColors | undefined> = input();
 
   /**
    * Sets the component's color scheme to one of CoreUI's themed colors, ensuring the text color contrast adheres to the WCAG 4.5:1 contrast ratio standard for accessibility.
@@ -45,25 +50,28 @@ export class BadgeComponent {
    * @type Colors
    * @since 5.0.0
    */
-  @Input() textBgColor?: Colors;
+  readonly textBgColor: InputSignal<Colors | undefined> = input();
 
   @HostBinding('class')
   get hostClasses(): any {
+    const position = this.position();
     const positionClasses = {
-      'position-absolute': !!this.position,
-      'translate-middle': !!this.position,
-      'top-0': this.position?.includes('top'),
-      'top-100': this.position?.includes('bottom'),
-      'start-100': this.position?.includes('end'),
-      'start-0': this.position?.includes('start')
+      'position-absolute': !!position,
+      'translate-middle': !!position,
+      'top-0': position?.includes('top'),
+      'top-100': position?.includes('bottom'),
+      'start-100': position?.includes('end'),
+      'start-0': position?.includes('start')
     };
 
-    return Object.assign({
+    return Object.assign(
+      {
         badge: true,
-        [`bg-${this.color}`]: !!this.color,
-        [`badge-${this.size}`]: !!this.size,
-        [`${this.shape}`]: !!this.shape
-      }, !!this.position ? positionClasses : {}
+        [`bg-${this.color()}`]: !!this.color(),
+        [`badge-${this.size()}`]: !!this.size(),
+        [`${this.shape()}`]: !!this.shape()
+      },
+      !!position ? positionClasses : {}
     );
   }
 }
