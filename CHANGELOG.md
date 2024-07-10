@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.2.5`
+
+- chore(dependencies): update to Angular 18.1
+
+---
+
 #### `5.2.3`
 
 - chore(dependencies): update
