@@ -1,6 +1,5 @@
 import {
   afterRender,
-  AfterRenderPhase,
   AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -41,7 +40,6 @@ let nextId = 0;
   // host: { ngSkipHydration: 'true' }
 })
 export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
-
   /**
    * Enables custom html based tooltips instead of standard tooltips.
    * @type boolean
@@ -65,7 +63,8 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
    * @default 150
    */
   @HostBinding('style.height.px')
-  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) }) height?: number;
+  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) })
+  height?: number;
 
   /**
    * ID attribute applied to the rendered canvas.
@@ -102,7 +101,8 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
    * @default 300
    */
   @HostBinding('style.width.px')
-  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) }) width?: number;
+  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) })
+  width?: number;
 
   /**
    * Put the chart into the wrapper div element.
@@ -134,10 +134,12 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     // todo: verify afterRender / afterNextRender for chartjs (spec fails with 17.0.10)
-    afterRender(() => {
-      this.ctx = this.canvasElement?.nativeElement?.getContext('2d');
-      this.chartRender();
-    }, { phase: AfterRenderPhase.Write });
+    afterRender({
+      write: () => {
+        this.ctx = this.canvasElement?.nativeElement?.getContext('2d');
+        this.chartRender();
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -159,13 +161,28 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
       return;
     }
 
-    const datasetAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode($event, 'dataset', { intersect: true }, false);
+    const datasetAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode(
+      $event,
+      'dataset',
+      { intersect: true },
+      false
+    );
     this.getDatasetAtEvent.emit(datasetAtEvent);
 
-    const elementAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode($event, 'nearest', { intersect: true }, false);
+    const elementAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode(
+      $event,
+      'nearest',
+      { intersect: true },
+      false
+    );
     this.getElementAtEvent.emit(elementAtEvent);
 
-    const elementsAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode($event, 'index', { intersect: true }, false);
+    const elementsAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode(
+      $event,
+      'index',
+      { intersect: true },
+      false
+    );
     this.getElementsAtEvent.emit(elementsAtEvent);
   }
 
@@ -278,5 +295,5 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
         }
       });
     }
-  };
+  }
 }

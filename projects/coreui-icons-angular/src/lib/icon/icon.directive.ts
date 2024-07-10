@@ -1,14 +1,4 @@
-import {
-  afterNextRender,
-  AfterRenderPhase,
-  computed,
-  Directive,
-  ElementRef,
-  HostBinding,
-  inject,
-  Input,
-  signal
-} from '@angular/core';
+import { afterNextRender, computed, Directive, ElementRef, HostBinding, inject, Input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IconSetService } from '../icon-set';
@@ -21,21 +11,22 @@ import { transformName } from './icon.utils';
   standalone: true
 })
 export class IconDirective implements IIcon {
-
   readonly #elementRef = inject(ElementRef);
   readonly #sanitizer = inject(DomSanitizer);
   readonly #iconSet = inject(IconSetService);
 
   constructor() {
-    afterNextRender(() => {
-      this.#elementRef.nativeElement.innerHTML = this.innerHtml();
-    }, { phase: AfterRenderPhase.Write });
+    afterNextRender({
+      write: () => {
+        this.#elementRef.nativeElement.innerHTML = this.innerHtml();
+      }
+    });
   }
 
   @Input('cIcon')
   set content(value: string | string[] | any[]) {
     this.#content.set(value);
-  };
+  }
 
   readonly #content = signal<string | string[] | any[]>('');
 
@@ -48,7 +39,7 @@ export class IconDirective implements IIcon {
   @Input({ transform: transformName })
   set name(value: string) {
     this.#name.set(value);
-  };
+  }
 
   get name() {
     return this.#name();
@@ -71,13 +62,16 @@ export class IconDirective implements IIcon {
   @HostBinding('attr.aria-hidden') ariaHidden = true;
 
   @HostBinding('attr.xmlns')
-  @Input() xmlns = 'http://www.w3.org/2000/svg';
+  @Input()
+  xmlns = 'http://www.w3.org/2000/svg';
 
   @HostBinding('attr.pointer-events')
-  @Input('pointer-events') pointerEvents = 'none';
+  @Input('pointer-events')
+  pointerEvents = 'none';
 
   @HostBinding('attr.role')
-  @Input() role = 'img';
+  @Input()
+  role = 'img';
 
   @HostBinding('class')
   get hostClasses() {
@@ -90,10 +84,10 @@ export class IconDirective implements IIcon {
   }
 
   readonly innerHtml = computed(() => {
-    const code = Array.isArray(this.code()) ? (this.code()[1] ?? this.code()[0] ?? '') : this.code() || '';
+    const code = Array.isArray(this.code()) ? this.code()[1] ?? this.code()[0] ?? '' : this.code() || '';
     // todo proper sanitize
     // const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, code);
-    return this.#sanitizer.bypassSecurityTrustHtml((this.titleCode + code) || '');
+    return this.#sanitizer.bypassSecurityTrustHtml(this.titleCode + code || '');
   });
 
   get titleCode(): string {
@@ -108,8 +102,9 @@ export class IconDirective implements IIcon {
       return this.#iconSet.getIcon(this.#name());
     }
     if (this.#name() && !this.#iconSet?.icons[this.#name()]) {
-      console.warn(`c-icon component: icon name '${this.#name()}' does not exist for IconSet service. ` +
-        `To use icon by 'name' prop you need to add it to IconSet service. \n`,
+      console.warn(
+        `c-icon component: icon name '${this.#name()}' does not exist for IconSet service. ` +
+          `To use icon by 'name' prop you need to add it to IconSet service. \n`,
         this.#name()
       );
     }
@@ -132,5 +127,4 @@ export class IconDirective implements IIcon {
     };
     return this.customClasses ?? classes;
   }
-
 }

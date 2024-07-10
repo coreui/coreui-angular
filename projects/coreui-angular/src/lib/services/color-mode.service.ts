@@ -1,14 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  afterNextRender,
-  AfterRenderPhase,
-  DestroyRef,
-  effect,
-  inject,
-  Injectable,
-  signal,
-  WritableSignal
-} from '@angular/core';
+import { afterNextRender, DestroyRef, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
 import { LocalStorageService } from './local-storage.service';
@@ -19,7 +10,6 @@ export type ColorMode = 'light' | 'dark' | 'auto' | string | undefined;
   providedIn: 'root'
 })
 export class ColorModeService {
-
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
   readonly #document: Document = inject(DOCUMENT);
   readonly #localStorage: LocalStorageService = inject(LocalStorageService);
@@ -39,16 +29,18 @@ export class ColorModeService {
   });
 
   constructor() {
-    afterNextRender(() => {
-      this.localStorageItemName$
-        .pipe(
-          tap(params => {
-            this.colorMode.set(this.getDefaultScheme(params));
-          }),
-          takeUntilDestroyed(this.#destroyRef)
-        )
-        .subscribe();
-    }, { phase: AfterRenderPhase.Read });
+    afterNextRender({
+      read: () => {
+        this.localStorageItemName$
+          .pipe(
+            tap((params) => {
+              this.colorMode.set(this.getDefaultScheme(params));
+            }),
+            takeUntilDestroyed(this.#destroyRef)
+          )
+          .subscribe();
+      }
+    });
   }
 
   getStoredTheme(localStorageItemName: string) {
@@ -71,23 +63,25 @@ export class ColorModeService {
     const storedTheme = localStorageItemName && this.getStoredTheme(localStorageItemName);
 
     return storedTheme ?? this.getDatasetTheme();
-  };
+  }
 
   getPrefersColorScheme() {
-    return this.#document.defaultView?.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' :
-           this.#document.defaultView?.matchMedia('(prefers-color-scheme: light)').matches ? 'light' :
-           undefined;
+    return this.#document.defaultView?.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : this.#document.defaultView?.matchMedia('(prefers-color-scheme: light)').matches
+        ? 'light'
+        : undefined;
   }
 
   getDatasetTheme(): ColorMode {
-    return <ColorMode>(this.#document.documentElement.dataset['coreuiTheme']);
+    return <ColorMode>this.#document.documentElement.dataset['coreuiTheme'];
   }
 
   #setTheme(colorMode: ColorMode) {
-    this.#document.documentElement.dataset['coreuiTheme'] = (colorMode === 'auto' ? this.getPrefersColorScheme() : colorMode);
+    this.#document.documentElement.dataset['coreuiTheme'] =
+      colorMode === 'auto' ? this.getPrefersColorScheme() : colorMode;
 
     const event = new Event(this.eventName());
     this.#document.documentElement.dispatchEvent(event);
-  };
-
+  }
 }

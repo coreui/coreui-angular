@@ -5,6 +5,7 @@
 #### `5.2.5`
 
 - chore(dependencies): update to Angular 18.1
+- refactor: update calls to `afterRender` with an explicit phase to the new API
 
 ---
 
