@@ -1,6 +1,18 @@
 <ng-content>
   @if (src()) {
-    <img [ngSrc]="src() ?? ''" fill class="avatar-img" alt="{{alt()}}" />
+    @defer (prefetch on idle) {
+      <img [ngSrc]="src() ?? ''" fill="" class="avatar-img" alt="{{alt()}}" />
+    } @placeholder () {
+      <svg aria-label="Avatar placeholder"
+           focusable="false"
+           preserveAspectRatio="xMidYMid slice"
+           role="img"
+           xmlns="http://www.w3.org/2000/svg"
+           class="avatar-img"
+           style="position: absolute; width: 100%; height: 100%; inset: 0;">
+        <rect fill="#868e96" height="100%" width="100%"></rect>
+      </svg>
+    }
   }
 </ng-content>
 @if (!!status()) {

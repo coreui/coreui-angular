@@ -1,5 +1,5 @@
-import { Component, computed, HostBinding, input, InputSignal } from '@angular/core';
 import { NgClass, NgOptimizedImage } from '@angular/common';
+import { Component, computed, HostBinding, input, InputSignal } from '@angular/core';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
 import { TextColorDirective } from '../utilities';
