@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.1.7`
+
+- chore(dependencies): update
+
+---
+
 #### `5.1.3`
 
 - fix(modal): attempt to focus when there is no focusable element on modal dialog
