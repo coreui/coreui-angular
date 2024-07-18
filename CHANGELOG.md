@@ -1,5 +1,9 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `5.2.7`
+
+- chore(dependencies): update
+
 ---
 
 #### `5.2.5`

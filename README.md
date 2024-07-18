@@ -37,7 +37,7 @@
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^18.0.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^18.1.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## Table of contents
 
