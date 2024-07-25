@@ -1,5 +1,12 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+#### `5.2.8`
+
+- feat(schematics): ng-add basic integration 
+- chore(dependencies): update
+
+---
+
 #### `5.2.7`
 
 - chore(dependencies): update
