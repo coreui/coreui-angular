@@ -1,39 +1,59 @@
-import { chain, Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import { addPackageToPackageJson, getPackageVersionFromPackageJson, PackageJson } from './package-config';
+import { addPackageJsonDependency, NodeDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
+import { getPackageVersionFromPackageJson, PackageJson } from './package-config';
 import * as pkgJson from '../../package.json';
-
-export function addCoreUIAngularChartJs(): Rule {
-  return (tree: Tree, context: SchematicContext) => {
-    context.logger.info('Installing @coreui/angular-chartjs ...');
-    context.addTask(new NodePackageInstallTask());
-    return tree;
-  };
-}
 
 export function ngAdd(): Rule {
   return (tree: Tree, context: SchematicContext) => {
+    const pkg = pkgJson as unknown as PackageJson;
+
     context.logger.info(``);
-    context.logger.info('Installing @coreui/angular-chartjs dependencies...');
+    context.logger.info(`Installing ${pkg.name} dependencies...`);
+
     const ngCoreVersionTag = getPackageVersionFromPackageJson(tree, '@angular/core');
     context.logger.info(`@angular/core version ${ngCoreVersionTag}`);
     if (!ngCoreVersionTag) {
       throw new SchematicsException('@angular/core version not found');
     }
-    const pkg = pkgJson as PackageJson;
-    const libPeerDeps: string[] = ['@coreui/chartjs', 'chart.js'];
-    libPeerDeps.forEach((dep: string) => {
-      const version = pkg.peerDependencies[dep];
-      context.logger.info(`Including ${dep} version ${version}`);
-      addPackageToPackageJson(tree, dep, version);
-    });
-    const libDeps: string[] = ['lodash-es'];
-    libDeps.forEach((dep: string) => {
-      const version = pkg.dependencies[dep];
-      context.logger.info(`Including ${dep} version ${version}`);
-      addPackageToPackageJson(tree, dep, version);
+
+    const libraryDeps: NodeDependency[] = [
+      {
+        name: '@coreui/chartjs',
+        type: NodeDependencyType.Default,
+        version: pkg.peerDependencies['@coreui/chartjs'],
+        overwrite: true
+      },
+      {
+        name: 'chart.js',
+        type: NodeDependencyType.Default,
+        version: pkg.peerDependencies['chart.js'],
+        overwrite: true
+      },
+      {
+        name: 'lodash-es',
+        type: NodeDependencyType.Default,
+        version: pkg.dependencies['lodash-es'],
+        overwrite: true
+      }
+    ];
+
+    libraryDeps.forEach((dep) => {
+      addPackageJsonDependency(tree, dep);
+      context.logger.info(`Added dependency: ${dep.name}@${dep.version}`);
     });
 
-    return chain([addCoreUIAngularChartJs()]);
+    const library: NodeDependency = {
+      name: pkg.name,
+      type: NodeDependencyType.Default,
+      version: `~${pkg.version}`,
+      overwrite: true
+    };
+
+    addPackageJsonDependency(tree, library);
+    context.logger.info(`Installing ${library.name}@${library.version}`);
+    context.addTask(new NodePackageInstallTask());
+
+    return tree;
   };
 }

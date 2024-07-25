@@ -16,6 +16,7 @@
     "noUnusedLocals": true,
     "rootDir": "schematics",
     "outDir": "../../dist/coreui-icons-angular/schematics",
+    "resolveJsonModule": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,

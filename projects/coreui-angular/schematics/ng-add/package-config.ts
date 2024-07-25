@@ -10,7 +10,9 @@ import { Tree } from '@angular-devkit/schematics';
 
 export interface PackageJson {
   dependencies: Record<string, string>;
+  name: string;
   peerDependencies: Record<string, string>;
+  version: string;
 }
 
 /**
