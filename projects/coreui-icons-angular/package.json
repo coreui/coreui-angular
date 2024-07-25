@@ -43,5 +43,17 @@
     "layout",
     "component",
     "angular"
-  ]
+  ],
+  "devDependencies": {
+    "copyfiles": "file:../../node_modules/copyfiles",
+    "typescript": "file:../../node_modules/typescript"
+  },
+  "schematics": "./schematics/collection.json",
+  "scripts": {
+    "build": "tsc -p tsconfig.schematics.json",
+    "postbuild": "copyfiles schematics/*/files/** schematics/collection.json ../../dist/coreui-icons-angular/"
+  },
+  "ng-add": {
+    "save": true
+  }
 }

@@ -41,5 +41,17 @@
     "component",
     "chartjs",
     "angular"
-  ]
+  ],
+  "devDependencies": {
+    "copyfiles": "file:../../node_modules/copyfiles",
+    "typescript": "file:../../node_modules/typescript"
+  },
+  "schematics": "./schematics/collection.json",
+  "scripts": {
+    "build": "tsc -p tsconfig.schematics.json",
+    "postbuild": "copyfiles schematics/*/files/** schematics/collection.json ../../dist/coreui-angular-chartjs/"
+  },
+  "ng-add": {
+    "save": true
+  }
 }

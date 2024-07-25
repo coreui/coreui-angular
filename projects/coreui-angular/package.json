@@ -28,8 +28,8 @@
     "@angular/common": "^18.1.0",
     "@angular/core": "^18.1.0",
     "@angular/router": "^18.1.0",
-    "@coreui/coreui": "^5.0.0",
-    "@coreui/icons-angular": "~5.2.0",
+    "@coreui/coreui": "^5.1.0",
+    "@coreui/icons-angular": "~5.2.8",
     "rxjs": "^7.8.1"
   },
   "repository": {
@@ -49,5 +49,17 @@
     "component",
     "components"
   ],
-  "eslintConfig": {}
+  "eslintConfig": {},
+  "devDependencies": {
+    "copyfiles": "file:../../node_modules/copyfiles",
+    "typescript": "file:../../node_modules/typescript"
+  },
+  "schematics": "./schematics/collection.json",
+  "scripts": {
+    "build": "tsc -p tsconfig.schematics.json",
+    "postbuild": "copyfiles schematics/*/files/** schematics/collection.json ../../dist/coreui-angular/"
+  },
+  "ng-add": {
+    "save": true
+  }
 }
