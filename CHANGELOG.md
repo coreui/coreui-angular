@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.1.8`
+
+- feat(schematics): ng-add basic integration
+- chore(dependencies): update
+
+---
+
 #### `5.1.7`
 
 - chore(dependencies): update
