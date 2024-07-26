@@ -85,10 +85,12 @@ npm install -g @angular/cli
 
 ### Installation
 Several quick start options are available (pick one):
-
-- [Download the latest release](https://github.com/coreui/coreui-angular/)
-- Clone the repo: `git clone https://github.com/coreui/coreui-angular.git`
-- Install with [npm](https://www.npmjs.com/): `npm install @coreui/angular @coreui/icons-angular @coreui/coreui`
+- Add CoreUI to your Angular project:
+  - Install with [Angular CLI](https://angular.dev/cli/add): `ng add @coreui/angular`
+  - Install with [npm](https://www.npmjs.com/): `npm install @coreui/angular @coreui/icons-angular @coreui/coreui`
+- Get the source code:
+  - [Download the latest release](https://github.com/coreui/coreui-angular/)
+  - Clone the repo: `git clone https://github.com/coreui/coreui-angular.git`
 
 Read the [Getting started page](https://coreui.io/angular/docs/) for information on the framework contents, templates and examples, and more.
 

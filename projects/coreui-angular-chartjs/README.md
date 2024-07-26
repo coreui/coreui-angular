@@ -39,6 +39,12 @@
 
 ##### install:
 
+- Angular CLI:
+```bash
+ng add @coreui/angular-chartjs
+````
+
+- or npm
 ```bash
 npm install chart.js@4
 npm install @coreui/chartjs@4
@@ -54,16 +60,6 @@ import { ChartjsModule } from '@coreui/angular-chartjs';
 @NgModule({
     imports: [
         ChartjsModule,
-...
-```
-```ts
-// standalone components
-  import { ChartjsComponent } from '@coreui/angular-chartjs';
-
-@Component({
-    standalone: true,
-    imports: [
-        ChartjsComponent, 
 ...
 ```
 ```ts
