@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.2.x`
+
+- chore(karma.conf): add custom chrome launcher with `--disable-search-engine-choice-screen` flag
+
+---
+
 #### `5.2.12`
 
 - chore(dependencies): update

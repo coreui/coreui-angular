@@ -27,17 +27,20 @@ module.exports = function (config) {
     coverageReporter: {
       dir: require('path').join(__dirname, '../../coverage/coreui-icons-angular'),
       subdir: '.',
-      reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
-      ]
+      reporters: [{ type: 'html' }, { type: 'text-summary' }]
     },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    browsers: ['Chrome_Custom'],
+    customLaunchers: {
+      Chrome_Custom: {
+        base: 'Chrome',
+        flags: ['--disable-search-engine-choice-screen']
+      }
+    },
     singleRun: false,
     restartOnFileChange: true
   });
