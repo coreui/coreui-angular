@@ -26,9 +26,7 @@ import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 export class SidebarNavLinkContentComponent {
   @Input() item?: INavData;
 
-  constructor(
-    public helper: SidebarNavHelper
-  ) { }
+  constructor(public helper: SidebarNavHelper) {}
 }
 
 @Component({
@@ -49,8 +47,6 @@ export class SidebarNavLinkContentComponent {
   ]
 })
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
-
-  // tslint:disable-next-line:variable-name
   protected _item: INavData = {};
 
   @Input()
@@ -64,18 +60,13 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
 
   @Output() linkClick = new EventEmitter();
 
-  // @ts-ignore
-  public linkType: string;
-  // @ts-ignore
-  public href: string;
-  // @ts-ignore
-  public linkActive: boolean;
-  // @ts-ignore
-  private url: string;
+  public linkType!: string;
+  public href!: string;
+  public linkActive!: boolean;
+  private url!: string;
 
   private navigationEndObservable: Observable<NavigationEnd>;
-  // @ts-ignore
-  private navSubscription: Subscription;
+  private navSubscription!: Subscription;
 
   constructor(
     public router: Router
@@ -84,19 +75,21 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
     // private sidebarService: SidebarService
   ) {
     this.navigationEndObservable = router.events.pipe(
-      filter(event => {
+      filter((event) => {
         return event instanceof NavigationEnd;
       })
     ) as Observable<NavigationEnd>;
   }
 
   ngOnInit(): void {
-    // @ts-ignore
-    this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url));
+    this.url =
+      typeof this.item.url === 'string'
+        ? this.item.url
+        : this.router.serializeUrl(this.router.createUrlTree(this.item.url as any[]));
     this.linkType = this.getLinkType();
-    this.href = this.isDisabled() ? '' : (this.item.href || this.url);
+    this.href = this.isDisabled() ? '' : this.item.href || this.url;
     this.linkActive = this.router.url.split(/[?#(;]/)[0] === this.href.split(/[?#(;]/)[0];
-    this.navSubscription = this.navigationEndObservable.subscribe(event => {
+    this.navSubscription = this.navigationEndObservable.subscribe((event) => {
       const itemUrlArray = this.href.split(/[?#(;]/)[0].split('/');
       const urlArray = event.urlAfterRedirects.split(/[?#(;]/)[0].split('/');
       this.linkActive = itemUrlArray.every((value, index) => value === urlArray[index]);

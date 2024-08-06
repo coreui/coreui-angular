@@ -53,14 +53,10 @@ let nextId = 0;
   exportAs: 'cOffcanvas',
   standalone: true,
   imports: [A11yModule],
-  hostDirectives: [
-    { directive: ThemeDirective, inputs: ['dark'] }
-  ],
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: { ngSkipHydration: 'true' }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
-
   #destroyRef = inject(DestroyRef);
 
   constructor(
@@ -196,7 +192,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     }
     const element: Element = this.document.documentElement;
     const responsiveBreakpoint = this.responsive;
-    const breakpointValue = getComputedStyle(element)?.getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) ?? false;
+    const breakpointValue =
+      getComputedStyle(element)?.getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) ?? false;
     return breakpointValue ? `${parseFloat(breakpointValue.trim()) - 0.02}px` : false;
   }
 
@@ -229,12 +226,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   onKeyDownHandler(event: KeyboardEvent): void {
-    if (
-      event.key === 'Escape' &&
-      this.keyboard &&
-      this.visible &&
-      this.backdrop !== 'static'
-    ) {
+    if (event.key === 'Escape' && this.keyboard && this.visible && this.backdrop !== 'static') {
       this.offcanvasService.toggle({ show: false, id: this.id });
     }
   }
@@ -258,46 +250,36 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   private stateToggleSubscribe(): void {
-    this.offcanvasService.offcanvasState$
-      .pipe(
-        takeUntilDestroyed(this.#destroyRef)
-      )
-      .subscribe((action) => {
-        if (this === action.offcanvas || this.id === action.id) {
-          if ('show' in action) {
-            this.visible =
-              action?.show === 'toggle' ? !this.visible : action.show;
-          }
+    this.offcanvasService.offcanvasState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
+      if (this === action.offcanvas || this.id === action.id) {
+        if ('show' in action) {
+          this.visible = action?.show === 'toggle' ? !this.visible : action.show;
         }
-      });
+      }
+    });
   }
 
   private backdropClickSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.#backdropClickSubscription =
-        this.backdropService.backdropClick$
-          .pipe(
-            takeUntilDestroyed(this.#destroyRef)
-          )
-          .subscribe((clicked) => {
-            this.offcanvasService.toggle({ show: !clicked, id: this.id });
-          });
+      this.#backdropClickSubscription = this.backdropService.backdropClick$
+        .pipe(takeUntilDestroyed(this.#destroyRef))
+        .subscribe((clicked) => {
+          this.offcanvasService.toggle({ show: !clicked, id: this.id });
+        });
     } else {
       this.#backdropClickSubscription?.unsubscribe();
     }
   }
 
   private setBackdrop(setBackdrop: boolean | 'static'): void {
-    this.#activeBackdrop = !!setBackdrop ? this.backdropService.setBackdrop('offcanvas')
-                                         : this.backdropService.clearBackdrop(this.#activeBackdrop);
-    setBackdrop === true ? this.backdropClickSubscribe()
-                         : this.backdropClickSubscribe(false);
+    this.#activeBackdrop = !!setBackdrop
+      ? this.backdropService.setBackdrop('offcanvas')
+      : this.backdropService.clearBackdrop(this.#activeBackdrop);
+    setBackdrop === true ? this.backdropClickSubscribe() : this.backdropClickSubscribe(false);
   }
 
   private layoutChangeSubscribe(subscribe: boolean = true): void {
-
     if (subscribe) {
-
       if (!this.responsiveBreakpoint) {
         return;
       }
@@ -308,14 +290,12 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
       this.#layoutChangeSubscription = layoutChanges
         .pipe(
-          filter(breakpointState => !breakpointState.matches),
+          filter((breakpointState) => !breakpointState.matches),
           takeUntilDestroyed(this.#destroyRef)
         )
-        .subscribe(
-          (breakpointState: BreakpointState) => {
-            this.visible = breakpointState.matches;
-          }
-        );
+        .subscribe((breakpointState: BreakpointState) => {
+          this.visible = breakpointState.matches;
+        });
     } else {
       this.#layoutChangeSubscription?.unsubscribe();
     }

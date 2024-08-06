@@ -20,7 +20,6 @@ import { IProgressBar } from './progress.type';
   standalone: true
 })
 export class ProgressBarDirective implements IProgressBar {
-
   constructor() {}
 
   readonly #renderer = inject(Renderer2);
@@ -32,13 +31,15 @@ export class ProgressBarDirective implements IProgressBar {
   readonly #width: WritableSignal<number | undefined> = signal(undefined);
 
   readonly percent = computed(() => {
-    return +((((this.#value() ?? this.#width() ?? 0) - this.#min) / (this.#max() - this.#min)) * 100).toFixed(this.precision);
+    return +((((this.#value() ?? this.#width() ?? 0) - this.#min) / (this.#max() - this.#min)) * 100).toFixed(
+      this.precision
+    );
   });
 
   readonly #valuesEffect: EffectRef = effect(() => {
     const host: HTMLElement = this.#hostElement.nativeElement;
     if (this.#value() === undefined || this.#width()) {
-      for (let name of ['aria-valuenow', 'aria-valuemax', 'aria-valuemin', 'role']) {
+      for (const name of ['aria-valuenow', 'aria-valuemax', 'aria-valuemin', 'role']) {
         this.#renderer.removeAttribute(host, name);
       }
     } else {
@@ -118,5 +119,4 @@ export class ProgressBarDirective implements IProgressBar {
    * @type string
    */
   @Input() role: string = 'progressbar';
-
 }

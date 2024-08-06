@@ -24,11 +24,9 @@ import { transformName } from './icon.utils';
   standalone: true,
   styleUrls: ['./icon.component.scss'],
   templateUrl: './icon.component.svg',
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
   host: { ngSkipHydration: 'true' }
 })
 export class IconComponent implements IIcon, AfterViewInit {
-
   readonly #renderer = inject(Renderer2);
   readonly #elementRef = inject(ElementRef);
   readonly #sanitizer = inject(DomSanitizer);
@@ -41,7 +39,7 @@ export class IconComponent implements IIcon, AfterViewInit {
   @Input()
   set content(value: string | string[] | any[]) {
     this.#content.set(value);
-  };
+  }
 
   readonly #content = signal<string | string[] | any[]>('');
 
@@ -56,7 +54,7 @@ export class IconComponent implements IIcon, AfterViewInit {
   @Input({ transform: transformName })
   set name(value: string) {
     this.#name.set(value);
-  };
+  }
 
   get name() {
     return this.#name();
@@ -91,7 +89,7 @@ export class IconComponent implements IIcon, AfterViewInit {
     const code = Array.isArray(this.code()) ? (this.code()[1] ?? this.code()[0] ?? '') : this.code() || '';
     // todo proper sanitize
     // const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, code);
-    return this.#sanitizer.bypassSecurityTrustHtml((this.titleCode + code) || '');
+    return this.#sanitizer.bypassSecurityTrustHtml(this.titleCode + code || '');
   });
 
   get titleCode(): string {
@@ -106,8 +104,9 @@ export class IconComponent implements IIcon, AfterViewInit {
       return this.#iconSet.getIcon(this.#name());
     }
     if (this.#name() && !this.#iconSet?.icons[this.#name()]) {
-      console.warn(`c-icon component: icon name '${this.#name()}' does not exist for IconSet service. ` +
-        `To use icon by 'name' prop you need to add it to IconSet service. \n`,
+      console.warn(
+        `c-icon component: icon name '${this.#name()}' does not exist for IconSet service. ` +
+          `To use icon by 'name' prop you need to add it to IconSet service. \n`,
         this.#name()
       );
     }
@@ -130,5 +129,4 @@ export class IconComponent implements IIcon, AfterViewInit {
     };
     return this.customClasses ?? classes;
   }
-
 }

@@ -36,7 +36,6 @@ let nextId = 0;
   exportAs: 'cChart',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
   // host: { ngSkipHydration: 'true' }
 })
 export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {

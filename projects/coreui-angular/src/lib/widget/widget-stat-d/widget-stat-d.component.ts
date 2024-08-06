@@ -5,9 +5,9 @@ import { ColComponent, RowDirective } from '../../grid';
 import { NgClass } from '@angular/common';
 
 export type WidgetStatDValue = {
-  title?: string,
-  value?: number | string,
-}
+  title?: string;
+  value?: number | string;
+};
 
 @Component({
   selector: 'c-widget-stat-d',
@@ -17,7 +17,7 @@ export type WidgetStatDValue = {
   imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective, NgClass]
 })
 export class WidgetStatDComponent {
-  constructor() { }
+  constructor() {}
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -33,7 +33,7 @@ export class WidgetStatDComponent {
   @HostBinding('class')
   get hostClasses() {
     return {
-      'card': true
+      card: true
     };
   }
 
@@ -46,5 +46,4 @@ export class WidgetStatDComponent {
       [`bg-${this.color}`]: this.color
     };
   }
-
 }

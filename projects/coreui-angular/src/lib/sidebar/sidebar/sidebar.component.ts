@@ -26,7 +26,6 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
   standalone: true
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
-
   #visible = false;
   #onMobile = false;
   #layoutChangeSubscription!: Subscription;
@@ -136,8 +135,8 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
       ...newState
     };
     this.state.mobile && this.state.visible
-    ? this.backdropService.setBackdrop(this)
-    : this.backdropService.clearBackdrop();
+      ? this.backdropService.setBackdrop(this)
+      : this.backdropService.clearBackdrop();
   }
 
   get sidebarState(): ISidebarAction {
@@ -146,9 +145,13 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   get getMobileBreakpoint(): string {
     const element: Element = this.document.documentElement;
-    const mobileBreakpoint = this.document.defaultView?.getComputedStyle(element)?.getPropertyValue('--cui-mobile-breakpoint') ?? 'md';
-    const breakpointValue = this.document.defaultView?.getComputedStyle(element)?.getPropertyValue(`--cui-breakpoint-${mobileBreakpoint.trim()}`) ?? '768px';
-    return `${parseFloat(breakpointValue.trim()) - 0.02}px` || '767.98px';
+    const mobileBreakpoint =
+      this.document.defaultView?.getComputedStyle(element)?.getPropertyValue('--cui-mobile-breakpoint') ?? 'md';
+    const breakpointValue =
+      this.document.defaultView
+        ?.getComputedStyle(element)
+        ?.getPropertyValue(`--cui-breakpoint-${mobileBreakpoint.trim()}`) ?? '768px';
+    return `${parseFloat(breakpointValue.trim()) - 0.02}px`;
   }
 
   constructor(
@@ -228,12 +231,11 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   private stateToggleSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.#stateToggleSubscription =
-        this.sidebarService.sidebarState$.subscribe((state) => {
-          if (this === state.sidebar || this.id === state.id) {
-            this.sidebarState = state;
-          }
-        });
+      this.#stateToggleSubscription = this.sidebarService.sidebarState$.subscribe((state) => {
+        if (this === state.sidebar || this.id === state.id) {
+          this.sidebarState = state;
+        }
+      });
     } else {
       this.#stateToggleSubscription?.unsubscribe();
     }
@@ -245,21 +247,19 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     if (subscribe) {
       const layoutChanges = this.breakpointObserver.observe([onMobile]);
 
-      this.#layoutChangeSubscription = layoutChanges.subscribe(
-        (result: BreakpointState) => {
-          const isOnMobile = result.breakpoints[onMobile];
-          const isUnfoldable = isOnMobile ? false : this.unfoldable;
-          if (this.#onMobile !== isOnMobile) {
-            this.#onMobile = isOnMobile;
-            this.sidebarService.toggle({
-              mobile: isOnMobile,
-              unfoldable: isUnfoldable,
-              visible: isOnMobile ? !isOnMobile : this.#stateInitial.visible,
-              sidebar: this
-            });
-          }
+      this.#layoutChangeSubscription = layoutChanges.subscribe((result: BreakpointState) => {
+        const isOnMobile = result.breakpoints[onMobile];
+        const isUnfoldable = isOnMobile ? false : this.unfoldable;
+        if (this.#onMobile !== isOnMobile) {
+          this.#onMobile = isOnMobile;
+          this.sidebarService.toggle({
+            mobile: isOnMobile,
+            unfoldable: isUnfoldable,
+            visible: isOnMobile ? !isOnMobile : this.#stateInitial.visible,
+            sidebar: this
+          });
         }
-      );
+      });
     } else {
       this.#layoutChangeSubscription?.unsubscribe();
     }

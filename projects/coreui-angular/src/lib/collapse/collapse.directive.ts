@@ -23,14 +23,12 @@ import {
 } from './collapse.animations';
 
 // todo
-// tslint:disable-next-line:no-conflicting-lifecycle
 @Directive({
   selector: '[cCollapse]',
   exportAs: 'cCollapse',
   standalone: true
 })
 export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterViewInit {
-
   /**
    * @ignore
    */

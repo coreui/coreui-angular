@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
 
 import { SidebarNavComponent } from './sidebar-nav.component';
 import { SidebarNavHelper } from './sidebar-nav.service';
@@ -9,24 +8,18 @@ import { SidebarNavHelper } from './sidebar-nav.service';
 describe('SidebarNavComponent', () => {
   let component: SidebarNavComponent;
   let fixture: ComponentFixture<SidebarNavComponent>;
-  let router: Router;
-  let navItems: Array<any>;
+  let navItems: any[];
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        SidebarNavComponent
-      ],
+      imports: [RouterTestingModule.withRoutes([]), SidebarNavComponent],
       declarations: [],
       providers: [SidebarNavHelper]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SidebarNavComponent);
-    router = TestBed.inject(Router);
     component = fixture.componentInstance;
 
     // mock items supplied by the parent component

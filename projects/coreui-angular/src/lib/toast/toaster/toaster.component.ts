@@ -32,7 +32,7 @@ export enum ToasterPlacement {
   MiddleEnd = 'middle-end',
   BottomStart = 'bottom-start',
   BottomCenter = 'bottom-center',
-  BottomEnd = 'bottom-end',
+  BottomEnd = 'bottom-end'
 }
 
 export type TToasterPlacement =
@@ -56,14 +56,13 @@ export type TToasterPlacement =
   imports: [ToasterHostDirective]
 })
 export class ToasterComponent implements OnInit, AfterContentChecked {
-
   readonly #destroyRef = inject(DestroyRef);
 
   constructor(
     private hostElement: ElementRef,
     private renderer: Renderer2,
     private toasterService: ToasterService
-  ) { }
+  ) {}
 
   placements = Object.values(ToasterPlacement);
   toasts!: QueryList<ViewContainerRef>;
@@ -79,7 +78,7 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
    * Toaster position
    * @type (string | 'absolute' | 'fixed' | 'static')
    */
-  @Input() position: (string | 'absolute' | 'fixed' | 'static') = 'absolute';
+  @Input() position: string | 'absolute' | 'fixed' | 'static' = 'absolute';
 
   @ViewChild(ToasterHostDirective, { static: true }) toasterHost!: ToasterHostDirective;
   @ContentChildren(ToastComponent, { read: ViewContainerRef }) contentToasts!: QueryList<ViewContainerRef>;
@@ -110,12 +109,16 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
     this.toasts = this.contentToasts;
   }
 
-  public addToast(toast: any, props: any, options?: {
-    index?: number;
-    injector?: Injector;
-    ngModuleRef?: NgModuleRef<unknown>;
-    projectableNodes?: Node[][];
-  }): ComponentRef<any> {
+  public addToast(
+    toast: any,
+    props: any,
+    options?: {
+      index?: number;
+      injector?: Injector;
+      ngModuleRef?: NgModuleRef<unknown>;
+      projectableNodes?: Node[][];
+    }
+  ): ComponentRef<any> {
     const componentRef: ComponentRef<any> = this.toasterHost.viewContainerRef.createComponent(toast, options);
     this.toastsDynamic.push(componentRef);
     const index = this.toastsDynamic.indexOf(componentRef);
@@ -132,16 +135,16 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
   }
 
   public removeToast(state: IToasterAction): void {
-    this.toastsDynamic?.forEach(item => {
-      if (state.toast?.dynamic && (item.instance === state.toast)) {
+    this.toastsDynamic?.forEach((item) => {
+      if (state.toast?.dynamic && item.instance === state.toast) {
         item.instance.visible = false;
         item.instance['visibleChange'].emit(false);
         item.destroy();
       }
     });
 
-    this.toasts?.forEach(item => {
-      if (state.toast && (item.element.nativeElement === state.toast.hostElement.nativeElement)) {
+    this.toasts?.forEach((item) => {
+      if (state.toast && item.element.nativeElement === state.toast.hostElement.nativeElement) {
         if (!state.toast.dynamic) {
           state.toast.visible = false;
         }
@@ -150,16 +153,13 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
   }
 
   private stateToasterSubscribe(): void {
-    this.toasterService.toasterState$
-      .pipe(
-        takeUntilDestroyed(this.#destroyRef)
-      )
-      .subscribe((state) => {
-        if (state.show === false) {
-          this.removeToast(state);
-        }
-        if (state.show === true && state.toast?.dynamic === undefined) {
-        }
-      });
+    this.toasterService.toasterState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((state) => {
+      if (state.show === false) {
+        this.removeToast(state);
+      }
+      if (state.show === true && state.toast?.dynamic === undefined) {
+        /* empty */
+      }
+    });
   }
 }

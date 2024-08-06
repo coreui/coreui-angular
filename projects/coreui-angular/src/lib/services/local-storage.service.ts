@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { InMemoryStorageService } from './in-memory-storage.service';
 
@@ -7,15 +7,14 @@ import { InMemoryStorageService } from './in-memory-storage.service';
   providedIn: 'root'
 })
 export class LocalStorageService {
+  private platformId = inject(PLATFORM_ID);
+  private document = inject(DOCUMENT);
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(DOCUMENT) private document: Document
-  ) {
+  constructor() {
     this.#localStorage =
       isPlatformBrowser(this.platformId) && this.document.defaultView
-      ? this.document.defaultView?.localStorage
-      : new InMemoryStorageService();
+        ? this.document.defaultView?.localStorage
+        : new InMemoryStorageService();
   }
 
   #localStorage: Storage;

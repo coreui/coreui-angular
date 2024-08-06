@@ -18,11 +18,13 @@ describe('ChartjsComponent', () => {
 
   const data = {
     labels: labels,
-    datasets: [{
-      data: [65, 59, 84, 84, 51, 55, 40],
-      ...colors,
-      fill: { value: 65 }
-    }]
+    datasets: [
+      {
+        data: [65, 59, 84, 84, 51, 55, 40],
+        ...colors,
+        fill: { value: 65 }
+      }
+    ]
   };
 
   beforeEach(async () => {
@@ -30,12 +32,10 @@ describe('ChartjsComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ChartjsComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    // @ts-ignore
     fixture = TestBed.createComponent(ChartjsComponent);
     component = fixture.componentInstance;
     component.data = undefined;
