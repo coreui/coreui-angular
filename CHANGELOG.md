@@ -1,5 +1,15 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+---
+
+#### `5.2.12`
+
+- chore(dependencies): update
+- chore(eslint): update `eslint` to v9, `angular-eslint`, `typescript-eslint`
+- refactor: eslint minor syntax cleanups
+
+---
+
 #### `5.2.11`
 
 - feat(schematics): ng-add basic integration 
