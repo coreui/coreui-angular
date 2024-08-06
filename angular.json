@@ -53,7 +53,8 @@
             "lintFilePatterns": [
               "projects/coreui-angular/**/*.ts",
               "projects/coreui-angular/**/*.html"
-            ]
+            ],
+            "eslintConfig": "projects/coreui-angular/eslint.config.js"
           }
         }
       }
@@ -102,7 +103,8 @@
             "lintFilePatterns": [
               "projects/coreui-angular-chartjs/**/*.ts",
               "projects/coreui-angular-chartjs/**/*.html"
-            ]
+            ],
+            "eslintConfig": "projects/coreui-angular-chartjs/eslint.config.js"
           }
         }
       }
@@ -151,7 +153,8 @@
             "lintFilePatterns": [
               "projects/coreui-icons-angular/**/*.ts",
               "projects/coreui-icons-angular/**/*.html"
-            ]
+            ],
+            "eslintConfig": "projects/coreui-icons-angular/eslint.config.js"
           }
         }
       }
