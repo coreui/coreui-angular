@@ -9,7 +9,8 @@ import { ITabContentState, TabService } from '../tab.service';
   template: '<ng-content />',
   styleUrls: ['./tab-pane.component.scss'],
   exportAs: 'cTabPane',
-  standalone: true
+  standalone: true,
+  host: { class: 'tab-pane' }
 })
 export class TabPaneComponent implements OnDestroy {
   constructor(

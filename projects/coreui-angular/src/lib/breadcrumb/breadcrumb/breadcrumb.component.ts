@@ -3,7 +3,8 @@ import { Component, HostBinding, Input } from '@angular/core';
 @Component({
   selector: 'c-breadcrumb',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'breadcrumb' }
 })
 export class BreadcrumbComponent {
   /**
@@ -12,7 +13,8 @@ export class BreadcrumbComponent {
    * @default 'breadcrumb'
    */
   @HostBinding('attr.aria-label')
-  @Input() ariaLabel = 'breadcrumb';
+  @Input()
+  ariaLabel = 'breadcrumb';
 
   /**
    * Default role for breadcrumb. [docs]
@@ -20,12 +22,6 @@ export class BreadcrumbComponent {
    * @default 'navigation'
    */
   @HostBinding('attr.role')
-  @Input() role = 'navigation';
-
-  @HostBinding('class')
-  get hostClasses() {
-    return {
-      breadcrumb: true
-    };
-  }
+  @Input()
+  role = 'navigation';
 }

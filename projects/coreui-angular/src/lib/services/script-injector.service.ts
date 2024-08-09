@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { inject, Injectable, Renderer2 } from '@angular/core';
 
 export type ReferrerPolicy =
-  ''
+  | ''
   | 'no-referrer'
   | 'no-referrer-when-downgrade'
   | 'origin'
@@ -37,20 +37,17 @@ export interface IScriptConfig {
   providedIn: 'root'
 })
 export class ScriptInjectorService {
-
   document: Document = inject(DOCUMENT);
   renderer: Renderer2 = inject(Renderer2);
 
   #scriptStore = new Map<string, IScriptConfig>();
-
-  constructor() { }
 
   public injectScript(src: string, scriptConfig: IScriptConfig = { elementName: 'head' }) {
     if (this.#scriptStore.has(src) && this.#scriptStore.get(src)?.loaded) {
       return;
     }
     const scriptAttributes: IScriptAttributes = { ...scriptConfig?.attributes, src };
-    this.loadScript(src, scriptConfig = { ...scriptConfig, attributes: scriptAttributes }).then();
+    this.loadScript(src, (scriptConfig = { ...scriptConfig, attributes: scriptAttributes })).then();
   }
 
   loadScript(src: string, scriptConfig: IScriptConfig) {

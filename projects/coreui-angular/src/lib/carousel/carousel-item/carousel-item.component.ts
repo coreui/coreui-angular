@@ -15,10 +15,10 @@ import { CarouselService } from '../carousel.service';
   selector: 'c-carousel-item',
   templateUrl: './carousel-item.component.html',
   styleUrls: ['./carousel-item.component.scss'],
-  standalone: true
+  standalone: true,
+  host: { class: 'carousel-item' }
 })
 export class CarouselItemComponent implements OnDestroy, AfterViewInit {
-
   index?: number;
   private carouselIndexSubscription?: Subscription;
 

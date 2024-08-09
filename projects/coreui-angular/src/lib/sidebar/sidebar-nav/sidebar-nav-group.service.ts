@@ -10,9 +10,6 @@ export interface ISidebarAction {
 
 @Injectable()
 export class SidebarNavGroupService {
-
-  constructor() { }
-
   private sidebarNavGroupState = new BehaviorSubject<ISidebarAction>({});
   sidebarNavGroupState$ = this.sidebarNavGroupState.asObservable();
 

@@ -14,9 +14,8 @@ import { ThemeDirective } from '../shared';
   templateUrl: './navbar.component.html',
   standalone: true,
   imports: [NgClass, NgTemplateOutlet],
-  hostDirectives: [
-    { directive: ThemeDirective, inputs: ['colorScheme'] }
-  ]
+  hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
+  host: { class: 'navbar' }
 })
 export class NavbarComponent implements AfterContentInit {
   /**
@@ -40,7 +39,8 @@ export class NavbarComponent implements AfterContentInit {
   @ContentChild(CollapseDirective) collapse!: CollapseDirective;
 
   @HostBinding('attr.role')
-  @Input() role = 'navigation';
+  @Input()
+  role = 'navigation';
 
   constructor(
     private hostElement: ElementRef,
@@ -64,7 +64,9 @@ export class NavbarComponent implements AfterContentInit {
 
   get breakpoint(): string | boolean {
     if (typeof this.expand === 'string') {
-      return getComputedStyle(this.hostElement.nativeElement)?.getPropertyValue(`--cui-breakpoint-${this.expand}`) ?? false;
+      return (
+        getComputedStyle(this.hostElement.nativeElement)?.getPropertyValue(`--cui-breakpoint-${this.expand}`) ?? false
+      );
     }
     return false;
   }
@@ -72,7 +74,7 @@ export class NavbarComponent implements AfterContentInit {
   ngAfterContentInit(): void {
     if (this.breakpoint) {
       const onBreakpoint = `(min-width: ${this.breakpoint})`;
-      this.breakpointObserver.observe([onBreakpoint]).subscribe(result => {
+      this.breakpointObserver.observe([onBreakpoint]).subscribe((result) => {
         if (this.collapse) {
           const animate = this.collapse.animate;
           this.collapse.toggle(false);

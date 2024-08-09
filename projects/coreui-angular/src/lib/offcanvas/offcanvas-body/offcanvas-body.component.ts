@@ -1,18 +1,10 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-offcanvas-body',
   template: '<ng-content />',
   styleUrls: ['./offcanvas-body.component.scss'],
-  standalone: true
+  standalone: true,
+  host: { class: 'offcanvas-body' }
 })
-export class OffcanvasBodyComponent {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'offcanvas-body': true,
-    };
-  }
-
-}
+export class OffcanvasBodyComponent {}

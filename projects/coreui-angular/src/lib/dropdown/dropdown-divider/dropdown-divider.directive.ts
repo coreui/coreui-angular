@@ -1,16 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cDropdownDivider]',
-  standalone: true
+  standalone: true,
+  host: { class: 'dropdown-divider' }
 })
-export class DropdownDividerDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'dropdown-divider': true
-    };
-  }
-
-}
+export class DropdownDividerDirective {}

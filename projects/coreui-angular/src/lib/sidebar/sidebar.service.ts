@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import {SidebarComponent} from './sidebar/sidebar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 export interface ISidebarAction {
   unfoldable?: boolean | 'toggle';
@@ -17,11 +17,8 @@ export interface ISidebarAction {
   providedIn: 'root'
 })
 export class SidebarService {
-
   private sidebarState = new BehaviorSubject<ISidebarAction>({});
   sidebarState$ = this.sidebarState.asObservable();
-
-  constructor() {}
 
   toggle(action: ISidebarAction): void {
     this.sidebarState.next(action);

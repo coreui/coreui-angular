@@ -1,18 +1,9 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-sidebar-footer',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'sidebar-footer' }
 })
-export class SidebarFooterComponent {
-
-  constructor() { }
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'sidebar-footer': true
-    };
-  }
-}
+export class SidebarFooterComponent {}

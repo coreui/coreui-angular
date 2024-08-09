@@ -1,17 +1,10 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-modal-body',
   template: '<ng-content />',
   styleUrls: ['./modal-body.component.scss'],
-  standalone: true
+  standalone: true,
+  host: { class: 'modal-body' }
 })
-export class ModalBodyComponent {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'modal-body': true,
-    };
-  }
-}
+export class ModalBodyComponent {}

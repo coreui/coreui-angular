@@ -5,14 +5,16 @@ import { ProgressBarDirective } from './progress-bar.directive';
   selector: 'c-progress-bar',
   template: '<ng-content />',
   standalone: true,
-  hostDirectives: [{
-    directive: ProgressBarDirective,
-    inputs: ['animated', 'color', 'max', 'role', 'stacked', 'value', 'variant', 'width']
-  }],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  hostDirectives: [
+    {
+      directive: ProgressBarDirective,
+      inputs: ['animated', 'color', 'max', 'role', 'stacked', 'value', 'variant', 'width']
+    }
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'progress-bar' }
 })
 export class ProgressBarComponent {
-
   readonly #progressBarDirective: ProgressBarDirective | null = inject(ProgressBarDirective, { optional: true });
 
   @HostBinding('class')

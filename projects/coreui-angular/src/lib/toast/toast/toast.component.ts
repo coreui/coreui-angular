@@ -20,7 +20,7 @@ import { Colors } from '../../coreui.types';
 import { ToasterService } from '../toaster/toaster.service';
 import { TToasterPlacement } from '../toaster/toaster.component';
 
-type AnimateType = ('hide' | 'show');
+type AnimateType = 'hide' | 'show';
 
 @Component({
   selector: 'c-toast',
@@ -33,9 +33,7 @@ type AnimateType = ('hide' | 'show');
       state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),
       state('hide', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
       state('void', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
-      transition('show => hide', [
-        animate('{{ time }} {{ easing }}')
-      ], {
+      transition('show => hide', [animate('{{ time }} {{ easing }}')], {
         params: { time: '300ms', easing: 'ease-out' }
       }),
       transition('hide => show', [animate('{{ time }} {{ easing }}')], {
@@ -48,10 +46,10 @@ type AnimateType = ('hide' | 'show');
         params: { time: '300ms', easing: 'ease-in' }
       })
     ])
-  ]
+  ],
+  host: { class: 'toast show' }
 })
 export class ToastComponent implements OnInit, OnDestroy {
-
   public dynamic!: boolean;
   public placement!: TToasterPlacement;
 

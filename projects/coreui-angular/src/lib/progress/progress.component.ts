@@ -22,14 +22,16 @@ import { ProgressStackedComponent } from './progress-stacked.component';
   imports: [ProgressBarComponent, NgTemplateOutlet],
   standalone: true,
   styleUrl: './progress.component.scss',
-  hostDirectives: [{
-    directive: ProgressBarDirective,
-    inputs: ['animated', 'color', 'max', 'role', 'value', 'variant']
-  }],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  hostDirectives: [
+    {
+      directive: ProgressBarDirective,
+      inputs: ['animated', 'color', 'max', 'role', 'value', 'variant']
+    }
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'progress' }
 })
 export class ProgressComponent implements IProgress {
-
   protected readonly pbd: ProgressBarDirective | null = inject(ProgressBarDirective, { optional: true });
   readonly #stacked?: boolean = inject(ProgressStackedComponent, { optional: true })?.stacked;
   readonly #elementRef = inject(ElementRef);
@@ -59,7 +61,8 @@ export class ProgressComponent implements IProgress {
    */
   @Input({ transform: booleanAttribute }) white: boolean = false;
 
-  @HostBinding('class') get hostClasses(): Record<string, boolean> {
+  @HostBinding('class')
+  get hostClasses(): Record<string, boolean> {
     return {
       progress: true,
       'progress-thin': this.thin,
@@ -68,6 +71,6 @@ export class ProgressComponent implements IProgress {
   }
 
   @HostBinding('style.height') get hostStyle(): any {
-    return !!this.height ? `${this.height}px` : this.#elementRef?.nativeElement?.style?.height ?? undefined;
+    return !!this.height ? `${this.height}px` : (this.#elementRef?.nativeElement?.style?.height ?? undefined);
   }
 }

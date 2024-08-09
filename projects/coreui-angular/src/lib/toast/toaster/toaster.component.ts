@@ -53,7 +53,8 @@ export type TToasterPlacement =
   templateUrl: './toaster.component.html',
   exportAs: 'cToaster',
   standalone: true,
-  imports: [ToasterHostDirective]
+  imports: [ToasterHostDirective],
+  host: { class: 'toaster toast-container' }
 })
 export class ToasterComponent implements OnInit, AfterContentChecked {
   readonly #destroyRef = inject(DestroyRef);

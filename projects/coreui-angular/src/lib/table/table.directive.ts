@@ -4,14 +4,14 @@ import { ITable } from './table.type';
 
 @Directive({
   selector: 'table[cTable]',
-  standalone: true
+  standalone: true,
+  host: { class: 'table' }
 })
 export class TableDirective implements ITable, OnInit {
-
   constructor(
     private renderer: Renderer2,
     private hostElement: ElementRef
-  ) { }
+  ) {}
 
   /**
    * Set the vertical alignment.

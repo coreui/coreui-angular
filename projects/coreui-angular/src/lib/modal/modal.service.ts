@@ -12,11 +12,8 @@ export interface IModalAction {
   providedIn: 'root'
 })
 export class ModalService {
-
   private modalState = new Subject<any>();
   modalState$ = this.modalState.asObservable();
-
-  constructor() {}
 
   toggle(action: IModalAction): void {
     this.modalState.next(action);

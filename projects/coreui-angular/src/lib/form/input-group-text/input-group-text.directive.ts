@@ -1,18 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cInputGroupText]',
-  standalone: true
+  standalone: true,
+  host: { class: 'input-group-text' }
 })
-export class InputGroupTextDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'input-group-text': true,
-    };
-  }
-
-  constructor() { }
-
-}
+export class InputGroupTextDirective {}

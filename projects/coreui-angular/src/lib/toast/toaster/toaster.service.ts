@@ -14,11 +14,8 @@ export interface IToasterAction {
   providedIn: 'root'
 })
 export class ToasterService {
-
   private toasterState = new BehaviorSubject<IToasterAction>({});
   toasterState$ = this.toasterState.asObservable();
-
-  constructor() {}
 
   setState(state: IToasterAction): void {
     this.toasterState.next({ ...state });

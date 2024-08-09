@@ -5,10 +5,10 @@ import { Colors } from '../coreui.types';
   selector: 'c-callout, [cCallout]',
   template: '<ng-content />',
   styleUrls: ['./callout.component.scss'],
-  standalone: true
+  standalone: true,
+  host: { class: 'callout' }
 })
 export class CalloutComponent {
-
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
@@ -22,5 +22,4 @@ export class CalloutComponent {
       [`callout-${this.color}`]: !!this.color
     };
   }
-
 }

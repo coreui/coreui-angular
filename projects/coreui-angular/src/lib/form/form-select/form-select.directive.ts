@@ -1,8 +1,9 @@
-import { Directive, HostBinding, Input, OnChanges } from '@angular/core';
+import { Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: 'select[cSelect]',
-  standalone: true
+  standalone: true,
+  host: { class: 'form-select' }
 })
 export class FormSelectDirective {
   /**
@@ -22,10 +23,7 @@ export class FormSelectDirective {
       'form-select': true,
       [`form-select-${this.sizing}`]: !!this.sizing,
       'is-valid': this.valid === true,
-      'is-invalid': this.valid === false,
+      'is-invalid': this.valid === false
     };
   }
-
-  constructor() {}
-
 }

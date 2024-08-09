@@ -4,10 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class InMemoryStorageService implements Storage {
-
   #storage = new Map<string, string>();
-
-  constructor() { }
 
   public setItem(key: string, data: any): void {
     this.#storage.set(key, JSON.stringify(data));

@@ -4,7 +4,8 @@ import { Component, HostBinding, Input } from '@angular/core';
   selector: 'c-nav',
   template: '<ng-content />',
   styleUrls: ['./nav.component.scss'],
-  standalone: true
+  standalone: true,
+  host: { class: 'nav' }
 })
 export class NavComponent {
   /**

@@ -14,10 +14,10 @@ import { PageLinkDirective } from '../page-link/page-link.directive';
 
 @Directive({
   selector: '[cPageItem]',
-  standalone: true
+  standalone: true,
+  host: { class: 'page-item' }
 })
 export class PageItemDirective implements AfterContentInit, OnChanges {
-
   /**
    * Toggle the active state for the component.
    * @type boolean
@@ -39,15 +39,13 @@ export class PageItemDirective implements AfterContentInit, OnChanges {
     return {
       'page-item': true,
       disabled: this.disabled,
-      active: this.active,
+      active: this.active
     };
   }
 
   @ContentChild(PageLinkDirective, { read: ElementRef }) pageLinkElementRef!: ElementRef;
 
-  constructor(
-    private renderer: Renderer2
-  ) { }
+  constructor(private renderer: Renderer2) {}
 
   ngAfterContentInit(): void {
     this.setAttributes();
@@ -61,7 +59,7 @@ export class PageItemDirective implements AfterContentInit, OnChanges {
 
   setAttributes(): void {
     if (!this.pageLinkElementRef) {
-      return
+      return;
     }
     const pageLinkElement = this.pageLinkElementRef.nativeElement;
 

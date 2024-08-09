@@ -51,7 +51,8 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
   templateUrl: './modal.component.html',
   exportAs: 'cModal',
   standalone: true,
-  imports: [ModalDialogComponent, ModalContentComponent, A11yModule]
+  imports: [ModalDialogComponent, ModalContentComponent, A11yModule],
+  host: { class: 'modal' }
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   #destroyRef = inject(DestroyRef);

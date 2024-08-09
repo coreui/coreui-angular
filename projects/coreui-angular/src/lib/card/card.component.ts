@@ -10,9 +10,7 @@ import { TextBgColorDirective, TextColorDirective } from '../utilities';
     { directive: TextColorDirective, inputs: ['cTextColor: textColor'] },
     { directive: TextBgColorDirective, inputs: ['cTextBgColor: textBgColor'] }
   ],
-  host: {
-    class: 'card'
-  }
+  host: { class: 'card' }
 })
 export class CardComponent {
   /**

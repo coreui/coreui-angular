@@ -2,17 +2,18 @@ import { booleanAttribute, Directive, ElementRef, HostBinding, Input, Renderer2 
 
 @Directive({
   selector: 'input[cFormCheckInput]',
-  standalone: true
+  standalone: true,
+  host: { class: 'form-check-input' }
 })
 export class FormCheckInputDirective {
-
   /**
    * Specifies the type of component.
    * @type {'checkbox' | 'radio'}
    * @default 'checkbox'
    */
   @HostBinding('attr.type')
-  @Input() type: ('checkbox' | 'radio') = 'checkbox';
+  @Input()
+  type: 'checkbox' | 'radio' = 'checkbox';
 
   /**
    * Set component indeterminate state.
@@ -30,7 +31,7 @@ export class FormCheckInputDirective {
       }
       this.renderer.setProperty(htmlInputElement, 'indeterminate', indeterminate);
     }
-  };
+  }
 
   get indeterminate() {
     return this._indeterminate;
@@ -70,6 +71,5 @@ export class FormCheckInputDirective {
   constructor(
     private renderer: Renderer2,
     private hostElement: ElementRef
-  ) { }
-
+  ) {}
 }

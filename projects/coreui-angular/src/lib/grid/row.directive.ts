@@ -5,7 +5,8 @@ import { IRow, NumberOfColumns } from './row.type';
 
 @Directive({
   selector: '[cRow]',
-  standalone: true
+  standalone: true,
+  host: { class: 'row' }
 })
 export class RowDirective implements IRow {
   /**
@@ -41,7 +42,6 @@ export class RowDirective implements IRow {
 
   @HostBinding('class')
   get hostClasses(): any {
-
     const cols = this.xs;
 
     const classes: any = {
@@ -49,10 +49,10 @@ export class RowDirective implements IRow {
       [`row-cols-${cols}`]: !!cols
     };
 
-    Object.keys(BreakpointInfix).forEach(breakpoint => {
+    Object.keys(BreakpointInfix).forEach((breakpoint) => {
       // @ts-ignore
       const value: any = this[breakpoint];
-      if ((typeof value === 'number') || (typeof value === 'string')) {
+      if (typeof value === 'number' || typeof value === 'string') {
         const infix: string = breakpoint === 'xs' ? '' : `-${breakpoint}`;
         classes[`row-cols${infix}-${value}`] = !!value;
       }

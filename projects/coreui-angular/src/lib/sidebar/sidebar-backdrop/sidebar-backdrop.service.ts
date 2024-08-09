@@ -7,10 +7,11 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   providedIn: 'root'
 })
 export class SidebarBackdropService {
-
   private backdrop!: HTMLElement;
   renderer!: Renderer2;
-  private clickListener = (): void => {};
+  private clickListener = (): void => {
+    /* empty */
+  };
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -54,5 +55,4 @@ export class SidebarBackdropService {
       this.backdrop = undefined;
     }
   }
-
 }

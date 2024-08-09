@@ -18,10 +18,10 @@ import { CardBodyComponent, CardFooterComponent } from '../../card';
   templateUrl: './widget-stat-f.component.html',
   exportAs: 'cWidgetStatB',
   standalone: true,
-  imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet]
+  imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet],
+  host: { class: 'card' }
 })
 export class WidgetStatFComponent implements AfterContentInit {
-
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
@@ -95,7 +95,7 @@ export class WidgetStatFComponent implements AfterContentInit {
   get titleClasses() {
     return {
       'text-body-secondary': !this.textColor,
-      'small': true,
+      small: true,
       'text-uppercase': true,
       'fw-semibold': true,
       [`text-${this.textColor}`]: !!this.textColor

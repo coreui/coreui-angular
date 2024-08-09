@@ -12,13 +12,10 @@ export class GutterDirective implements IGutter {
   /**
    * Define padding between columns to space and align content responsively in the Bootstrap grid system.
    */
-  @Input() gutter: (IGutterObject | GutterBreakpoints | Gutters) = {};
-
-  constructor() { }
+  @Input() gutter: IGutterObject | GutterBreakpoints | Gutters = {};
 
   @HostBinding('class')
   get hostClasses(): any {
-
     let gutterClass: any;
 
     if (typeof this.gutter === 'number') {
@@ -32,7 +29,7 @@ export class GutterDirective implements IGutter {
       gutterClass = GutterDirective.getGutterClasses({ g, gx, gy });
     }
 
-    Object.keys(BreakpointInfix).forEach(key => {
+    Object.keys(BreakpointInfix).forEach((key) => {
       // @ts-ignore
       const gutter = this.gutter[key] ? { ...this.gutter[key] } : undefined;
       if (gutter) {

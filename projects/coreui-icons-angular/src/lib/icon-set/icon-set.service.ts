@@ -8,9 +8,6 @@ export interface IIconSet {
   providedIn: 'root'
 })
 export class IconSetService {
-
-  constructor() {}
-
   public get iconNames() {
     return this._iconNames;
   }

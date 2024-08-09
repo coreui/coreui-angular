@@ -1,17 +1,9 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-modal-footer',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'modal-footer' }
 })
-export class ModalFooterComponent {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'modal-footer': true,
-    };
-  }
-
-}
+export class ModalFooterComponent {}

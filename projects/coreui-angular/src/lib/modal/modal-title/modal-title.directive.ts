@@ -1,16 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cModalTitle]',
-  standalone: true
+  standalone: true,
+  host: { class: 'modal-title' }
 })
-export class ModalTitleDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'modal-title': true,
-    };
-  }
-
-}
+export class ModalTitleDirective {}

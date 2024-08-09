@@ -1,17 +1,10 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-card-img-overlay',
   template: '<ng-content />',
   styleUrls: ['./card-img-overlay.component.scss'],
-  standalone: true
+  standalone: true,
+  host: { class: 'card-img-overlay' }
 })
-export class CardImgOverlayComponent {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'card-img-overlay': true
-    };
-  }
-}
+export class CardImgOverlayComponent {}

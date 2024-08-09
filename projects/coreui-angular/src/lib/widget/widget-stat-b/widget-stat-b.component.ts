@@ -8,7 +8,8 @@ import { CardBodyComponent, CardComponent } from '../../card';
   templateUrl: './widget-stat-b.component.html',
   exportAs: 'cWidgetStatB',
   standalone: true,
-  imports: [CardBodyComponent, NgClass]
+  imports: [CardBodyComponent, NgClass],
+  host: { class: 'card' }
 })
 export class WidgetStatBComponent extends CardComponent {
   constructor() {

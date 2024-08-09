@@ -14,11 +14,10 @@ export type WidgetStatDValue = {
   templateUrl: './widget-stat-d.component.html',
   exportAs: 'cWidgetStatD',
   standalone: true,
-  imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective, NgClass]
+  imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective, NgClass],
+  host: { class: 'card' }
 })
 export class WidgetStatDComponent {
-  constructor() {}
-
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors

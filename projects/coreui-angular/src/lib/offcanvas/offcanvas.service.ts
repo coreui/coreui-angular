@@ -12,11 +12,8 @@ export interface IOffcanvasAction {
   providedIn: 'root'
 })
 export class OffcanvasService {
-
   private offcanvasState = new Subject<any>();
   offcanvasState$ = this.offcanvasState.asObservable();
-
-  constructor() { }
 
   toggle(action: IOffcanvasAction): void {
     this.offcanvasState.next(action);

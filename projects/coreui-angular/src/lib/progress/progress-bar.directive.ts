@@ -20,8 +20,6 @@ import { IProgressBar } from './progress.type';
   standalone: true
 })
 export class ProgressBarDirective implements IProgressBar {
-  constructor() {}
-
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
 

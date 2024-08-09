@@ -1,15 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cCardSubtitle]',
-  standalone: true
+  standalone: true,
+  host: { class: 'card-subtitle' }
 })
-export class CardSubtitleDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'card-subtitle': true
-    };
-  }
-}
+export class CardSubtitleDirective {}

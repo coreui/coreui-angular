@@ -15,10 +15,10 @@ import {
 @Component({
   selector: 'c-tooltip',
   templateUrl: './tooltip.component.html',
-  standalone: true
+  standalone: true,
+  host: { class: 'tooltip fade bs-tooltip-auto' }
 })
 export class TooltipComponent implements AfterViewInit, OnChanges, OnDestroy {
-
   /**
    * Content of tooltip
    * @type {string | TemplateRef}
@@ -35,12 +35,10 @@ export class TooltipComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('tooltipTemplate', { read: ViewContainerRef }) viewContainerRef!: ViewContainerRef;
   private textNode!: Text;
 
-  constructor(
-    private renderer: Renderer2
-  ) { }
+  constructor(private renderer: Renderer2) {}
 
   @HostBinding('class')
-  get hostClasses(): { [klass: string]: any; } {
+  get hostClasses(): { [klass: string]: any } {
     return {
       tooltip: true,
       fade: true,

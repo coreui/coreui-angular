@@ -1,15 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cPageLink]',
-  standalone: true
+  standalone: true,
+  host: { class: 'page-link' }
 })
-export class PageLinkDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'page-link': true,
-    };
-  }
-}
+export class PageLinkDirective {}

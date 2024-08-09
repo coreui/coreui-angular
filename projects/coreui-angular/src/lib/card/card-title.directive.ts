@@ -1,15 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cCardTitle]',
-  standalone: true
+  standalone: true,
+  host: { class: 'card-title' }
 })
-export class CardTitleDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'card-title': true
-    };
-  }
-}
+export class CardTitleDirective {}

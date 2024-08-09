@@ -3,10 +3,10 @@ import { Sizes } from '../coreui.types';
 
 @Directive({
   selector: '[cListGroup]',
-  standalone: true
+  standalone: true,
+  host: { class: 'list-group' }
 })
 export class ListGroupDirective {
-
   /**
    * Remove some borders and rounded corners to render list group items edge-to-edge in a parent component (e.g., `<CCard>`).
    * @type boolean
@@ -27,6 +27,4 @@ export class ListGroupDirective {
       'list-group-flush': this.flush
     };
   }
-
 }
-

@@ -6,7 +6,6 @@ import {
   Component,
   ContentChildren,
   EventEmitter,
-  HostBinding,
   Input,
   numberAttribute,
   OnChanges,
@@ -26,10 +25,10 @@ import { TabService } from '../tab.service';
   styleUrls: ['./tab-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   exportAs: 'cTabContent',
-  standalone: true
+  standalone: true,
+  host: { class: 'tab-content' }
 })
 export class TabContentComponent implements AfterContentChecked, AfterContentInit, OnChanges, OnDestroy {
-
   /**
    * Set active tabPane index
    * @type number
@@ -43,7 +42,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
       this.changeDetectorRef.markForCheck();
       this.changeDetectorRef.detectChanges();
     }
-  };
+  }
 
   get activeTabPaneIdx() {
     return this._activeTabPaneIdx;
@@ -62,14 +61,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private tabService: TabService
-  ) { }
-
-  @HostBinding('class')
-  get hostClasses() {
-    return {
-      'tab-content': true
-    };
-  }
+  ) {}
 
   ngAfterContentInit(): void {
     this.subscribeTabService();

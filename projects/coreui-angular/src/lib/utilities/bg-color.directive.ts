@@ -6,7 +6,6 @@ import { BackgroundColors } from '../coreui.types';
   standalone: true
 })
 export class BgColorDirective {
-
   /**
    * Set the background of an element to any contextual class
    */
@@ -21,9 +20,7 @@ export class BgColorDirective {
   get hostClasses(): any {
     return {
       [`bg-${this.color}`]: !!this.color,
-      'bg-gradient': this.gradient,
+      'bg-gradient': this.gradient
     };
   }
-
-  constructor() { }
 }

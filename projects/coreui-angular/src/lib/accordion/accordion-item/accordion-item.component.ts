@@ -3,7 +3,6 @@ import {
   booleanAttribute,
   Component,
   ContentChildren,
-  HostBinding,
   Input,
   OnDestroy,
   OnInit,
@@ -45,13 +44,6 @@ export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentIn
 
   get open() {
     return <boolean>this.visible;
-  }
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'accordion-item': true
-    };
   }
 
   contentId = `accordion-item-${nextId++}`;

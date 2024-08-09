@@ -2,10 +2,10 @@ import { Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: '[cLabel]',
-  standalone: true
+  standalone: true,
+  host: { class: 'form-label' }
 })
 export class FormLabelDirective {
-
   /**
    * For horizontal forms set labels to 'col' and make them vertically centered with their associated form controls.
    * @type 'col'
@@ -18,14 +18,10 @@ export class FormLabelDirective {
 
   @HostBinding('class')
   get hostClasses(): any {
-
     return {
       'form-label': true,
       'col-form-label': this.col === 'col',
-      [`col-form-label-${this.sizing}`]: !!this.sizing && this.col === 'col',
+      [`col-form-label-${this.sizing}`]: !!this.sizing && this.col === 'col'
     };
   }
-
-  constructor() {}
-
 }

@@ -24,10 +24,10 @@ import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive'
   selector: '[cDropdownMenu]',
   exportAs: 'cDropdownMenu',
   standalone: true,
-  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }]
+  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
+  host: { class: 'dropdown-menu' }
 })
 export class DropdownMenuDirective implements OnInit, AfterContentInit {
-
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
   public readonly elementRef: ElementRef = inject(ElementRef);
   readonly #dropdownService: DropdownService = inject(DropdownService);
@@ -45,16 +45,20 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
    */
   @Input() visible: boolean = false;
 
-  @HostBinding('class') get hostClasses(): any {
+  @HostBinding('class')
+  get hostClasses(): any {
     return {
-      'dropdown-menu': true, [`dropdown-menu-${this.alignment}`]: !!this.alignment, show: this.visible
+      'dropdown-menu': true,
+      [`dropdown-menu-${this.alignment}`]: !!this.alignment,
+      show: this.visible
     };
   }
 
   @HostBinding('style') get hostStyles() {
     // workaround for popper position calculate (see also: dropdown.component)
     return {
-      visibility: this.visible ? null : '', display: this.visible ? null : ''
+      visibility: this.visible ? null : '',
+      display: this.visible ? null : ''
     };
   }
 
@@ -81,7 +85,8 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
     }
   }
 
-  @ContentChildren(forwardRef(() => DropdownItemDirective), { descendants: true }) dropdownItemsContent!: QueryList<DropdownItemDirective>;
+  @ContentChildren(forwardRef(() => DropdownItemDirective), { descendants: true })
+  dropdownItemsContent!: QueryList<DropdownItemDirective>;
 
   ngAfterContentInit(): void {
     this.focusKeyManagerInit();
@@ -92,7 +97,8 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
           this.focusKeyManagerInit();
         }),
         takeUntilDestroyed(this.#destroyRef)
-      ).subscribe();
+      )
+      .subscribe();
   }
 
   ngOnInit(): void {
@@ -107,7 +113,8 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
           }
         }),
         takeUntilDestroyed(this.#destroyRef)
-      ).subscribe();
+      )
+      .subscribe();
   }
 
   private focusKeyManagerInit(): void {
@@ -115,7 +122,6 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
       .withHomeAndEnd()
       .withPageUpDown()
       .withWrap()
-      .skipPredicate((dropdownItem) => (dropdownItem.disabled === true));
+      .skipPredicate((dropdownItem) => dropdownItem.disabled === true);
   }
-
 }

@@ -17,10 +17,10 @@ import { NgClass } from '@angular/common';
   selector: 'c-popover',
   templateUrl: './popover.component.html',
   standalone: true,
-  imports: [NgClass]
+  imports: [NgClass],
+  host: { class: 'popover fade bs-popover-auto' }
 })
 export class PopoverComponent implements AfterViewInit, OnChanges, OnDestroy {
-
   /**
    * Content of popover
    * @type {string | TemplateRef}
@@ -37,12 +37,10 @@ export class PopoverComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('popoverTemplate', { read: ViewContainerRef }) viewContainerRef!: ViewContainerRef;
   private textNode!: Text;
 
-  constructor(
-    private renderer: Renderer2
-  ) { }
+  constructor(private renderer: Renderer2) {}
 
   @HostBinding('class')
-  get hostClasses(): { [klass: string]: any; } {
+  get hostClasses(): { [klass: string]: any } {
     return {
       popover: true,
       fade: true,

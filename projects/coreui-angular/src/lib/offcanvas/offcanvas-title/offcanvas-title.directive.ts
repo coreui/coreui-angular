@@ -1,16 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cOffcanvasTitle]',
-  standalone: true
+  standalone: true,
+  host: { class: 'offcanvas-title' }
 })
-export class OffcanvasTitleDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'offcanvas-title': true,
-    };
-  }
-
-}
+export class OffcanvasTitleDirective {}

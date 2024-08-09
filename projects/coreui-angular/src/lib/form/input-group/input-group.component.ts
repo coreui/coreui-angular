@@ -3,7 +3,8 @@ import { Component, HostBinding, Input } from '@angular/core';
 @Component({
   selector: 'c-input-group',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'input-group' }
 })
 export class InputGroupComponent {
   /**
@@ -18,5 +19,4 @@ export class InputGroupComponent {
       [`input-group-${this.sizing}`]: !!this.sizing
     };
   }
-
 }

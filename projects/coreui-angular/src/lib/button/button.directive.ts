@@ -5,10 +5,10 @@ import { ButtonType, Colors, Shapes } from '../coreui.types';
 @Directive({
   selector: '[cButton]',
   exportAs: 'cButton',
-  standalone: true
+  standalone: true,
+  host: { class: 'btn' }
 })
 export class ButtonDirective {
-
   /**
    * Toggle the active state for the component. [docs]
    * @type boolean
@@ -43,7 +43,8 @@ export class ButtonDirective {
    * Different browsers may use different default types for the `<button>` element.
    */
   @HostBinding('attr.type')
-  @Input() type: ButtonType = 'button';
+  @Input()
+  type: ButtonType = 'button';
 
   /**
    * Set the button variant to an outlined button or a ghost button.
@@ -68,7 +69,7 @@ export class ButtonDirective {
   @HostBinding('attr.aria-disabled')
   get ariaDisabled() {
     return this.disabled || null;
-  };
+  }
 
   @HostBinding('attr.aria-pressed')
   get isActive(): boolean | null {
@@ -78,7 +79,7 @@ export class ButtonDirective {
   @HostBinding('attr.disabled')
   get attrDisabled() {
     return this.disabled ? '' : null;
-  };
+  }
 
   @HostBinding('attr.tabindex')
   get tabIndex(): string | null {

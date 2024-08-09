@@ -1,17 +1,9 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-offcanvas-header',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'offcanvas-header' }
 })
-export class OffcanvasHeaderComponent {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'offcanvas-header': true
-    };
-  }
-
-}
+export class OffcanvasHeaderComponent {}

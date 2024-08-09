@@ -1,14 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cDropdownItemPlain]',
-  standalone: true
+  standalone: true,
+  host: { class: 'dropdown-item-text' }
 })
-export class DropdownItemPlainDirective {
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'dropdown-item-text': true
-    };
-  }
-}
+export class DropdownItemPlainDirective {}

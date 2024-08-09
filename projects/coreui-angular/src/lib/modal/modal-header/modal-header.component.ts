@@ -1,17 +1,9 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-modal-header',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'modal-header' }
 })
-export class ModalHeaderComponent {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'modal-header': true
-    };
-  }
-
-}
+export class ModalHeaderComponent {}

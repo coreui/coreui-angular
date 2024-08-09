@@ -10,7 +10,8 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
   templateUrl: './widget-stat-a.component.html',
   exportAs: 'cWidgetStatA',
   imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
-  standalone: true
+  standalone: true,
+  host: { class: 'card' }
 })
 export class WidgetStatAComponent implements AfterContentInit {
   /**
@@ -36,7 +37,7 @@ export class WidgetStatAComponent implements AfterContentInit {
   @HostBinding('class')
   get hostClasses() {
     return {
-      'card': true,
+      card: true,
       [`bg-${this.color}`]: !!this.color,
       'text-white': !!this.color
     };

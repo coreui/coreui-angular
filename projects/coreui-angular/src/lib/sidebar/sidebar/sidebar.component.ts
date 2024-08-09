@@ -23,7 +23,8 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
   selector: 'c-sidebar',
   exportAs: 'cSidebar',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'sidebar' }
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   #visible = false;

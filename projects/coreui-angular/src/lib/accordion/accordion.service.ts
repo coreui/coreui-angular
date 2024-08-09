@@ -3,11 +3,8 @@ import { AccordionItemComponent } from './accordion-item/accordion-item.componen
 
 @Injectable()
 export class AccordionService {
-
   items: AccordionItemComponent[] = [];
   alwaysOpen = false;
-
-  constructor() { }
 
   addItem(item: AccordionItemComponent): void {
     this.items.push(item);

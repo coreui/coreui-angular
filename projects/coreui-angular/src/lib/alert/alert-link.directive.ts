@@ -1,19 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cAlertLink]',
-  standalone: true
+  standalone: true,
+  host: { class: 'alert-link' }
 })
-export class AlertLinkDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-
-    return {
-      'alert-link': true,
-    };
-  }
-
-  constructor() { }
-
-}
+export class AlertLinkDirective {}

@@ -16,8 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent, Subscription } from 'rxjs';
 import { filter, finalize, withLatestFrom, zipWith } from 'rxjs/operators';
 
-import { IntersectionService } from '../../services';
-import { IListenersConfig, ListenersService } from '../../services';
+import { IListenersConfig, IntersectionService, ListenersService } from '../../services';
 
 import { Triggers } from '../../coreui.types';
 import { ThemeDirective } from '../../shared/theme.directive';
@@ -31,9 +30,8 @@ import { CarouselConfig } from '../carousel.config';
   styleUrls: ['./carousel.component.scss'],
   providers: [CarouselService, CarouselState, CarouselConfig, ListenersService],
   standalone: true,
-  hostDirectives: [
-    { directive: ThemeDirective, inputs: ['dark'] }
-  ]
+  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
+  host: { class: 'carousel slide' }
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   constructor(
@@ -173,31 +171,30 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   private carouselStateSubscribe(): void {
-    this.carouselService.carouselIndex$
-      .pipe(
-        takeUntilDestroyed(this.#destroyRef)
-      )
-      .subscribe((nextItem) => {
-        if ('active' in nextItem) {
-          this.itemChange.emit(nextItem.active);
-        }
-        this.activeItemInterval = typeof nextItem.interval === 'number' && nextItem.interval > -1 ? nextItem.interval : this.interval;
-        const isLastItem = ((nextItem.active === nextItem.lastItemIndex) && this.direction === 'next') || ((nextItem.active === 0) && this.direction === 'prev');
-        !this.wrap && isLastItem ? this.resetTimer() : this.setTimer();
-      });
+    this.carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextItem) => {
+      if ('active' in nextItem) {
+        this.itemChange.emit(nextItem.active);
+      }
+      this.activeItemInterval =
+        typeof nextItem.interval === 'number' && nextItem.interval > -1 ? nextItem.interval : this.interval;
+      const isLastItem =
+        (nextItem.active === nextItem.lastItemIndex && this.direction === 'next') ||
+        (nextItem.active === 0 && this.direction === 'prev');
+      !this.wrap && isLastItem ? this.resetTimer() : this.setTimer();
+    });
   }
 
   private intersectionServiceSubscribe(): void {
     this.intersectionService.createIntersectionObserver(this.hostElement);
     this.intersectionService.intersecting$
       .pipe(
-        filter(next => next.hostElement === this.hostElement),
+        filter((next) => next.hostElement === this.hostElement),
         finalize(() => {
           this.intersectionService.unobserve(this.hostElement);
         }),
         takeUntilDestroyed(this.#destroyRef)
       )
-      .subscribe(next => {
+      .subscribe((next) => {
         this.visible = next.isIntersecting;
         next.isIntersecting ? this.setTimer() : this.resetTimer();
       });
@@ -209,10 +206,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
       const touchStart$ = fromEvent<TouchEvent>(carouselElement, 'touchstart');
       const touchEnd$ = fromEvent<TouchEvent>(carouselElement, 'touchend');
       const touchMove$ = fromEvent<TouchEvent>(carouselElement, 'touchmove');
-      this.swipeSubscription = touchStart$.pipe(
-        zipWith(touchEnd$.pipe(withLatestFrom(touchMove$))),
-        takeUntilDestroyed(this.#destroyRef)
-      )
+      this.swipeSubscription = touchStart$
+        .pipe(zipWith(touchEnd$.pipe(withLatestFrom(touchMove$))), takeUntilDestroyed(this.#destroyRef))
         .subscribe(([touchstart, [touchend, touchmove]]) => {
           touchstart.stopPropagation();
           touchmove.stopPropagation();

@@ -4,7 +4,8 @@ import { Component, HostBinding, Input } from '@angular/core';
   selector: 'c-modal-dialog',
   template: '<ng-content />',
   styleUrls: ['./modal-dialog.component.scss'],
-  standalone: true
+  standalone: true,
+  host: { class: 'modal-dialog' }
 })
 export class ModalDialogComponent {
   /**

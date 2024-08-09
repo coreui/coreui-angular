@@ -12,8 +12,6 @@ export class CarouselService {
   private carouselIndex = new BehaviorSubject<ICarouselIndex>({});
   carouselIndex$ = this.carouselIndex.asObservable();
 
-  constructor() {}
-
   setIndex(index: ICarouselIndex): void {
     this.carouselIndex.next(index);
   }

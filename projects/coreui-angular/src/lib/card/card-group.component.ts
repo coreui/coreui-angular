@@ -1,16 +1,9 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-card-group, [c-card-group]',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'card-group' }
 })
-export class CardGroupComponent {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'card-group': true
-    };
-  }
-}
+export class CardGroupComponent {}

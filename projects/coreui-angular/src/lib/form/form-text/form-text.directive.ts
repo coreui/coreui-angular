@@ -1,14 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cFormText]',
-  standalone: true
+  standalone: true,
+  host: { class: 'form-text' }
 })
-export class FormTextDirective {
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'form-text': true
-    };
-  }
-}
+export class FormTextDirective {}

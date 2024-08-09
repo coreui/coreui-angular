@@ -1,19 +1,8 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[cAlertHeading]',
-  standalone: true
+  standalone: true,
+  host: { class: 'alert-heading' }
 })
-export class AlertHeadingDirective {
-
-  @HostBinding('class')
-  get hostClasses(): any {
-
-    return {
-      'alert-heading': true,
-    };
-  }
-
-  constructor() { }
-
-}
+export class AlertHeadingDirective {}

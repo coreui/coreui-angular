@@ -6,7 +6,8 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 @Directive({
   selector: '[cDropdownItem]',
   exportAs: 'cDropdownItem',
-  standalone: true
+  standalone: true,
+  host: { class: 'dropdown-item' }
 })
 export class DropdownItemDirective implements FocusableOption {
   /**
@@ -33,8 +34,7 @@ export class DropdownItemDirective implements FocusableOption {
   constructor(
     private dropdownService: DropdownService,
     @Optional() public dropdown?: DropdownComponent
-  ) {
-  }
+  ) {}
 
   focus(origin?: FocusOrigin | undefined): void {
     this.#elementRef?.nativeElement?.focus();

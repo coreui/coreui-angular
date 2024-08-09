@@ -5,7 +5,6 @@ import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
   standalone: true
 })
 export class FormFloatingDirective {
-
   /**
    * Enable floating labels
    * @type boolean
@@ -18,5 +17,4 @@ export class FormFloatingDirective {
       'form-floating': this.floating
     };
   }
-
 }
