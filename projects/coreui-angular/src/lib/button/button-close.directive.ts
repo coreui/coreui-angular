@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, computed, Directive, input, InputSignalWithTransform } from '@angular/core';
 import { ThemeDirective } from '../shared/theme.directive';
 import { ButtonDirective } from './button.directive';
 
@@ -6,7 +6,7 @@ import { ButtonDirective } from './button.directive';
   selector: '[cButtonClose]',
   standalone: true,
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-  host: { class: 'btn btn-close' }
+  host: { class: 'btn btn-close', '[class]': 'hostClasses()', '[attr.type]': 'type()' }
 })
 export class ButtonCloseDirective extends ButtonDirective {
   /**
@@ -14,17 +14,16 @@ export class ButtonCloseDirective extends ButtonDirective {
    * @type boolean
    * @deprecated 5.0.0. Use `cButtonClose.dark` instead.
    */
-  @Input({ transform: booleanAttribute }) white: string | boolean = false;
+  white: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  override get hostClasses(): any {
+  override hostClasses = computed(() => {
     return {
       btn: true,
       'btn-close': true,
-      'btn-close-white': this.white,
-      [`btn-${this.size}`]: !!this.size,
-      disabled: this.disabled,
-      active: this.active
-    };
-  }
+      'btn-close-white': this.white(),
+      [`btn-${this.size()}`]: !!this.size(),
+      disabled: this.disabled(),
+      active: this.active()
+    } as Record<string, boolean>;
+  });
 }

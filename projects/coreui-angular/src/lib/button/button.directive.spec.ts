@@ -13,7 +13,6 @@ class MockElementRef extends ElementRef {}
 class TestComponent {}
 
 describe('ButtonDirective', () => {
-
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let elementRef: DebugElement;
@@ -32,8 +31,10 @@ describe('ButtonDirective', () => {
   });
 
   it('should create an instance', () => {
-    const directive = new ButtonDirective();
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new ButtonDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 
   it('should have css classes', () => {
@@ -41,5 +42,4 @@ describe('ButtonDirective', () => {
     expect(elementRef.nativeElement).toHaveClass('btn-lg');
     expect(elementRef.nativeElement).toHaveClass('btn-info');
   });
-
 });

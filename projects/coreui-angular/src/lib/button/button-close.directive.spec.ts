@@ -13,7 +13,6 @@ class MockElementRef extends ElementRef {}
 class TestComponent {}
 
 describe('ButtonCloseDirective', () => {
-
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let elementRef: DebugElement;
@@ -32,8 +31,10 @@ describe('ButtonCloseDirective', () => {
   });
 
   it('should create an instance', () => {
-    const directive = new ButtonCloseDirective();
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new ButtonCloseDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 
   it('should have css classes', () => {
