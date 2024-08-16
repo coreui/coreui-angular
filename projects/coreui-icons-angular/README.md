@@ -39,7 +39,7 @@
 [npm-coreui-icons-angular-v5-ng18]: https://img.shields.io/npm/v/@coreui/icons-angular/v5-ng18?style=flat-square&color=brightgreen
 [npm-coreui-icons-angular-latest]: https://img.shields.io/npm/v/@coreui/icons-angular/latest?style=flat-square&color=brightgreen
 [npm-coreui-icons-angular-next]: https://img.shields.io/npm/v/@coreui/icons-angular/next?style=flat-square&color=red
-[angular-badge]: https://img.shields.io/badge/angular-^18.1.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^18.2.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## `cIcon` directive
 
