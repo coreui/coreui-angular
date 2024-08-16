@@ -3,7 +3,7 @@
 ---
 
 #### `5.2.14`
-- 
+
 - chore(dependencies): update to Angular `18.2`
 - chore(dependencies): update to typescript `~5.5.4`
 - chore(dependencies): update to typescript-eslint `~8.1.0`
