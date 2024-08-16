@@ -1,12 +1,4 @@
-import {
-  booleanAttribute,
-  computed,
-  Directive,
-  HostBinding,
-  input,
-  InputSignal,
-  InputSignalWithTransform
-} from '@angular/core';
+import { booleanAttribute, computed, Directive, input, InputSignal, InputSignalWithTransform } from '@angular/core';
 
 import { ButtonType, Colors, Shapes } from '../coreui.types';
 
@@ -14,7 +6,15 @@ import { ButtonType, Colors, Shapes } from '../coreui.types';
   selector: '[cButton]',
   exportAs: 'cButton',
   standalone: true,
-  host: { class: 'btn', '[class]': 'hostClasses()', '[attr.type]': 'type()' }
+  host: {
+    class: 'btn',
+    '[class]': 'hostClasses()',
+    '[attr.aria-disabled]': 'ariaDisabled()',
+    '[attr.aria-pressed]': 'isActive()',
+    '[attr.disabled]': 'attrDisabled()',
+    '[attr.tabindex]': 'tabIndex()',
+    '[attr.type]': 'type()'
+  }
 })
 export class ButtonDirective {
   /**
@@ -69,28 +69,26 @@ export class ButtonDirective {
       [`btn-${this.variant()}-${this.color()}`]: !!this.variant() && !!this.color(),
       [`btn-${this.size()}`]: !!this.size(),
       [`${this.shape()}`]: !!this.shape(),
-      disabled: this.disabled(),
-      active: this.active()
+      active: this.active(),
+      disabled: this._disabled()
     } as Record<string, boolean>;
   });
 
-  @HostBinding('attr.aria-disabled')
-  get ariaDisabled() {
-    return this.disabled() || null;
-  }
+  _disabled = computed(() => this.disabled());
 
-  @HostBinding('attr.aria-pressed')
-  get isActive(): boolean | null {
+  ariaDisabled = computed(() => {
+    return this._disabled() ? true : null;
+  });
+
+  attrDisabled = computed(() => {
+    return this._disabled() ? '' : null;
+  });
+
+  tabIndex = computed(() => {
+    return this._disabled() ? '-1' : null;
+  });
+
+  isActive = computed(() => {
     return <boolean>this.active() || null;
-  }
-
-  @HostBinding('attr.disabled')
-  get attrDisabled() {
-    return this.disabled() ? '' : null;
-  }
-
-  @HostBinding('attr.tabindex')
-  get tabIndex(): string | null {
-    return this.disabled() ? '-1' : null;
-  }
+  });
 }
