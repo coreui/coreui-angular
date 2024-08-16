@@ -6,7 +6,15 @@ import { ButtonDirective } from './button.directive';
   selector: '[cButtonClose]',
   standalone: true,
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-  host: { class: 'btn btn-close', '[class]': 'hostClasses()', '[attr.type]': 'type()' }
+  host: {
+    class: 'btn btn-close',
+    '[class]': 'hostClasses()',
+    '[attr.aria-disabled]': 'ariaDisabled()',
+    '[attr.aria-pressed]': 'isActive()',
+    '[attr.disabled]': 'attrDisabled()',
+    '[attr.tabindex]': 'tabIndex()',
+    '[attr.type]': 'type()'
+  }
 })
 export class ButtonCloseDirective extends ButtonDirective {
   /**
@@ -22,8 +30,8 @@ export class ButtonCloseDirective extends ButtonDirective {
       'btn-close': true,
       'btn-close-white': this.white(),
       [`btn-${this.size()}`]: !!this.size(),
-      disabled: this.disabled(),
-      active: this.active()
+      active: this.active(),
+      disabled: this._disabled()
     } as Record<string, boolean>;
   });
 }
