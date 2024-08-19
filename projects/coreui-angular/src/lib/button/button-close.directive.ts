@@ -22,9 +22,9 @@ export class ButtonCloseDirective extends ButtonDirective {
    * @type boolean
    * @deprecated 5.0.0. Use `cButtonClose.dark` instead.
    */
-  white: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly white: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
-  override hostClasses = computed(() => {
+  override readonly hostClasses = computed(() => {
     return {
       btn: true,
       'btn-close': true,
