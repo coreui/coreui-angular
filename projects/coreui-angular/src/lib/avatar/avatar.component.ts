@@ -1,5 +1,5 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { Component, computed, HostBinding, input, InputSignal } from '@angular/core';
+import { Component, computed, input, InputSignal } from '@angular/core';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
 import { TextColorDirective } from '../utilities';
@@ -15,7 +15,7 @@ import { TextColorDirective } from '../utilities';
       inputs: ['cTextColor: textColor']
     }
   ],
-  host: { class: 'avatar' }
+  host: { class: 'avatar', '[class]': 'hostClasses()' }
 })
 export class AvatarComponent {
   /**
@@ -65,16 +65,15 @@ export class AvatarComponent {
     return {
       'avatar-status': true,
       [`bg-${this.status()}`]: !!this.status()
-    };
+    } as Record<string, boolean>;
   });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
       avatar: true,
       [`avatar-${this.size()}`]: !!this.size(),
       [`bg-${this.color()}`]: !!this.color(),
       [`${this.shape()}`]: !!this.shape()
-    };
-  }
+    } as Record<string, boolean>;
+  });
 }
