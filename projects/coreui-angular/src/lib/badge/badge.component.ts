@@ -1,4 +1,4 @@
-import { Component, HostBinding, input, InputSignal } from '@angular/core';
+import { Component, computed, input, InputSignal } from '@angular/core';
 import { BadgePositions, Colors, Shapes, TextColors } from '../coreui.types';
 import { TextBgColorDirective, TextColorDirective } from '../utilities';
 
@@ -11,7 +11,8 @@ import { TextBgColorDirective, TextColorDirective } from '../utilities';
     { directive: TextBgColorDirective, inputs: ['cTextBgColor: textBgColor'] }
   ],
   host: {
-    class: 'badge'
+    class: 'badge',
+    '[class]': 'hostClasses()'
   }
 })
 export class BadgeComponent {
@@ -52,8 +53,7 @@ export class BadgeComponent {
    */
   readonly textBgColor: InputSignal<Colors | undefined> = input();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     const position = this.position();
     const positionClasses = {
       'position-absolute': !!position,
@@ -72,6 +72,6 @@ export class BadgeComponent {
         [`${this.shape()}`]: !!this.shape()
       },
       !!position ? positionClasses : {}
-    );
-  }
+    ) as Record<string, boolean>;
+  });
 }
