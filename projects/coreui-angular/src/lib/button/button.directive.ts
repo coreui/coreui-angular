@@ -21,31 +21,31 @@ export class ButtonDirective {
    * Toggle the active state for the component. [docs]
    * @type InputSignalWithTransform<boolean, unknown>
    */
-  active: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly active: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors. [docs]
    * @type InputSignal<Colors>
    */
-  color: InputSignal<Colors> = input<Colors>('primary');
+  readonly color: InputSignal<Colors> = input<Colors>('primary');
 
   /**
    * Toggle the disabled state for the component.
    * @type InputSignalWithTransform<boolean, unknown>
    */
-  disabled: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly disabled: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   /**
    * Select the shape of the component.
    * @type InputSignal<Shapes>
    */
-  shape: InputSignal<Shapes | undefined> = input<Shapes>();
+  readonly shape: InputSignal<Shapes | undefined> = input<Shapes>();
 
   /**
    * Size the component small or large.
    * @type InputSignal<'sm' | 'lg' | ''>
    */
-  size: InputSignal<'' | 'sm' | 'lg'> = input<'' | 'sm' | 'lg'>('');
+  readonly size: InputSignal<'' | 'sm' | 'lg'> = input<'' | 'sm' | 'lg'>('');
 
   /**
    * Specifies the type of button. Always specify the type attribute for the `<button>` element.
@@ -53,15 +53,15 @@ export class ButtonDirective {
    * @type InputSignal<ButtonType>
    * @default 'button'
    */
-  type: InputSignal<ButtonType> = input<ButtonType>('button');
+  readonly type: InputSignal<ButtonType> = input<ButtonType>('button');
 
   /**
    * Set the button variant to an outlined button or a ghost button.
    * @type InputSignal<'ghost' | 'outline' | undefined>
    */
-  variant: InputSignal<'ghost' | 'outline' | undefined> = input<'ghost' | 'outline'>();
+  readonly variant: InputSignal<'ghost' | 'outline' | undefined> = input<'ghost' | 'outline'>();
 
-  hostClasses = computed(() => {
+  readonly hostClasses = computed(() => {
     return {
       btn: true,
       [`btn-${this.color()}`]: !!this.color() && !this.variant(),
@@ -74,21 +74,21 @@ export class ButtonDirective {
     } as Record<string, boolean>;
   });
 
-  _disabled = computed(() => this.disabled());
+  readonly _disabled = computed(() => this.disabled());
 
-  ariaDisabled = computed(() => {
+  readonly ariaDisabled = computed(() => {
     return this._disabled() ? true : null;
   });
 
-  attrDisabled = computed(() => {
+  readonly attrDisabled = computed(() => {
     return this._disabled() ? '' : null;
   });
 
-  tabIndex = computed(() => {
+  readonly tabIndex = computed(() => {
     return this._disabled() ? '-1' : null;
   });
 
-  isActive = computed(() => {
+  readonly isActive = computed(() => {
     return <boolean>this.active() || null;
   });
 }
