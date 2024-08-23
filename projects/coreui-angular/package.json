@@ -28,8 +28,8 @@
     "@angular/common": "^18.2.0",
     "@angular/core": "^18.2.0",
     "@angular/router": "^18.2.0",
-    "@coreui/coreui": "^5.1.1",
-    "@coreui/icons-angular": "~5.2.14",
+    "@coreui/coreui": "^5.1.2",
+    "@coreui/icons-angular": "~5.2.15",
     "rxjs": "^7.8.1"
   },
   "repository": {
