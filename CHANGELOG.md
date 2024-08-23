@@ -2,6 +2,17 @@
 
 ---
 
+#### `5.2.15`
+
+- refactor(button): input signals, host bindings
+- refactor(button-close): input signals, host bindings
+- refactor(avatar): host bindings
+- refactor(badge): host bindings
+- chore(dependencies): update to Angular `18.2.1`
+- chore(dependencies): update to typescript-eslint `~8.2.0`
+
+---
+
 #### `5.2.14`
 
 - chore(dependencies): update to Angular `18.2`
