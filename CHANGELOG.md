@@ -2,6 +2,18 @@
 
 ---
 
+#### `5.2.16`
+
+- refactor(footer): input signals, host bindings
+- refactor(placeholder): input signals, host bindings
+- chore(dependencies): update `eslint` to `^9.9.1`
+- chore(dependencies): update `typescript-eslint` to `~8.3.0`
+- chore(dependencies): update `tslib` to `^2.7.0`
+- chore(dependencies): update `micromatch` to `4.0.8` 
+  - see vulnerability [Regular Expression Denial of Service (ReDoS) in micromatch](https://github.com/advisories/GHSA-952p-6rrq-rcjv)
+
+---
+
 #### `5.2.15`
 
 - refactor(button): input signals, host bindings
