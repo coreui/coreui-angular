@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, computed, input, InputSignal } from '@angular/core';
 
 import { Positions } from '../coreui.types';
 
@@ -6,29 +6,30 @@ import { Positions } from '../coreui.types';
   selector: 'c-footer, [cFooter]',
   template: '<ng-content />',
   standalone: true,
-  host: { class: 'footer' }
+  host: {
+    class: 'footer',
+    '[class]': 'hostClasses()',
+    '[attr.role]': 'role()'
+  }
 })
 export class FooterComponent {
   /**
    * Place footer in non-static positions. [docs]
    * @type Positions
    */
-  @Input() position?: Positions;
+  readonly position: InputSignal<Positions | undefined> = input();
 
   /**
    * Default role for footer. [docs]
    * @type string
    * @default 'contentinfo'
    */
-  @HostBinding('attr.role')
-  @Input()
-  role = 'contentinfo';
+  readonly role: InputSignal<string> = input('contentinfo');
 
-  @HostBinding('class')
-  get getClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
       footer: true,
-      [`footer-${this.position}`]: !!this.position
-    };
-  }
+      [`footer-${this.position()}`]: !!this.position()
+    } as Record<string, boolean>;
+  });
 }
