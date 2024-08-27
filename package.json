@@ -55,7 +55,7 @@
     "chart.js": "^4.4.4",
     "lodash-es": "^4.17.21",
     "rxjs": "~7.8.1",
-    "tslib": "^2.6.3",
+    "tslib": "^2.7.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
@@ -69,7 +69,7 @@
     "@types/node": "^20.16.1",
     "angular-eslint": "~18.3.0",
     "copyfiles": "^2.4.1",
-    "eslint": "^9.9.0",
+    "eslint": "^9.9.1",
     "jasmine-core": "^5.2.0",
     "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
@@ -79,7 +79,7 @@
     "ng-packagr": "^18.2.1",
     "prettier": "^3.3.3",
     "typescript": "~5.5.4",
-    "typescript-eslint": "~8.2.0"
+    "typescript-eslint": "~8.3.0"
   },
   "keywords": [
     "angular",
