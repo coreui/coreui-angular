@@ -1,34 +1,38 @@
-import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, computed, Directive, input, InputSignalWithTransform } from '@angular/core';
 
 @Directive({
   selector: '[cPlaceholder]',
   exportAs: 'cPlaceholder',
-  standalone: true
+  standalone: true,
+  host: {
+    '[class]': 'hostClasses()',
+    '[attr.aria-hidden]': 'ariaHidden()'
+  }
 })
 export class PlaceholderDirective {
-
   /**
    * placeholder toggler
    * @type boolean
    * @default false
    */
-  @Input({ alias: 'cPlaceholder', transform: booleanAttribute }) visible: boolean = false;
+  readonly visible: InputSignalWithTransform<boolean, unknown> = input<boolean, unknown>(false, {
+    transform: booleanAttribute,
+    alias: 'cPlaceholder'
+  });
 
   /**
    * Size the placeholder xs, small, large.
    */
-  @Input('cPlaceholderSize') size?: 'xs' | 'sm' | 'lg';
+  readonly size = input<'xs' | 'sm' | 'lg' | undefined>(undefined, { alias: 'cPlaceholderSize' });
 
-  @HostBinding('attr.aria-hidden')
-  get ariaHidden(): boolean | null {
-    return this.visible ? null : true;
-  };
+  readonly ariaHidden = computed(() => {
+    return this.visible() ? null : true;
+  });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
-      'placeholder': this.visible,
-      [`placeholder-${this.size}`]: !!this.size
+      placeholder: this.visible(),
+      [`placeholder-${this.size()}`]: !!this.size()
     };
-  }
+  });
 }

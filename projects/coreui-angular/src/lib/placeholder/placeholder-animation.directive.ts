@@ -1,31 +1,28 @@
-import { AfterContentInit, ContentChild, Directive, HostBinding, Input } from '@angular/core';
+import { computed, contentChild, Directive, input, InputSignal } from '@angular/core';
 import { PlaceholderDirective } from './placeholder.directive';
 
 @Directive({
   selector: '[cPlaceholderAnimation]',
-  standalone: true
+  standalone: true,
+  host: {
+    '[class]': 'hostClasses()'
+  }
 })
-export class PlaceholderAnimationDirective implements AfterContentInit {
-
+export class PlaceholderAnimationDirective {
   /**
    * Animation type for placeholder
    * @type 'glow' | 'wave'
    * @default undefined
    */
-  @Input('cPlaceholderAnimation') animation?: 'glow' | 'wave';
+  readonly animation: InputSignal<'glow' | 'wave' | undefined> = input<'glow' | 'wave' | undefined>(undefined, {
+    alias: 'cPlaceholderAnimation'
+  });
 
-  @ContentChild(PlaceholderDirective) placeholder!: PlaceholderDirective;
+  readonly placeholder = contentChild(PlaceholderDirective);
 
-  #animate: boolean = false;
-
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
-      [`placeholder-${this.animation}`]: this.#animate && !!this.animation
+      [`placeholder-${this.animation()}`]: this.placeholder()?.visible() && !!this.animation()
     };
-  }
-
-  ngAfterContentInit() {
-    this.#animate = this.placeholder?.visible;
-  }
+  });
 }
