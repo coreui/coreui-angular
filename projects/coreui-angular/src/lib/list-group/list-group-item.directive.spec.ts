@@ -1,7 +1,6 @@
-import { Component, DebugElement, ElementRef } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListGroupItemDirective } from './list-group-item.directive';
-import { By } from '@angular/platform-browser';
 
 class MockElementRef extends ElementRef {}
 
@@ -11,10 +10,8 @@ class MockElementRef extends ElementRef {}
 class TestComponent {}
 
 describe('ListGroupItemDirective', () => {
-
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
-  let liEl: DebugElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,13 +21,14 @@ describe('ListGroupItemDirective', () => {
     });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
-    liEl = fixture.debugElement.query(By.css('li'));
 
     fixture.detectChanges(); // initial binding
   });
 
   it('should create an instance', () => {
-    const directive = new ListGroupItemDirective(liEl);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new ListGroupItemDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

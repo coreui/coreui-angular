@@ -11,22 +11,22 @@ export class ButtonGroupComponent {
    * Size the component small or large.
    * @type { 'sm' | 'lg' }
    */
-  size: InputSignal<'sm' | 'lg' | undefined> = input();
+  readonly size: InputSignal<'sm' | 'lg' | undefined> = input();
 
   /**
    * Create a set of buttons that appear vertically stacked rather than horizontally. Split button dropdowns are not supported here.
    * @type boolean
    */
-  vertical: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly vertical: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   /**
    * Default role attr for ButtonGroup. [docs]
    * @type InputSignal<string>
    * @default 'group'
    */
-  role: InputSignal<string> = input('group');
+  readonly role: InputSignal<string> = input('group');
 
-  hostClasses = computed(() => {
+  readonly hostClasses = computed(() => {
     return {
       'btn-group': !this.vertical(),
       'btn-group-vertical': this.vertical(),

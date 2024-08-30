@@ -1,30 +1,33 @@
-import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, computed, Directive, input, InputSignalWithTransform } from '@angular/core';
 import { Sizes } from '../coreui.types';
 
 @Directive({
   selector: '[cListGroup]',
   standalone: true,
-  host: { class: 'list-group' }
+  host: {
+    class: 'list-group',
+    '[class]': 'hostClasses()'
+  }
 })
 export class ListGroupDirective {
   /**
    * Remove some borders and rounded corners to render list group items edge-to-edge in a parent component (e.g., `<CCard>`).
    * @type boolean
    */
-  @Input({ transform: booleanAttribute }) flush: string | boolean = false;
+  readonly flush: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   /**
    * Specify horizontal layout type.
    */
-  @Input() horizontal?: boolean | Sizes;
+  readonly horizontal = input<boolean | Sizes>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const horizontal = this.horizontal();
     return {
       'list-group': true,
-      'list-group-horizontal': this.horizontal === true || this.horizontal === '',
-      [`list-group-horizontal-${this.horizontal}`]: !!this.horizontal && typeof this.horizontal !== 'boolean',
-      'list-group-flush': this.flush
-    };
-  }
+      'list-group-horizontal': horizontal === true || horizontal === '',
+      [`list-group-horizontal-${horizontal}`]: !!horizontal && typeof horizontal !== 'boolean',
+      'list-group-flush': this.flush()
+    } as Record<string, boolean>;
+  });
 }

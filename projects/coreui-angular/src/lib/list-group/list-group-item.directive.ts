@@ -1,64 +1,74 @@
-import { booleanAttribute, Directive, ElementRef, HostBinding, Input } from '@angular/core';
+import {
+  booleanAttribute,
+  computed,
+  Directive,
+  ElementRef,
+  inject,
+  input,
+  InputSignal,
+  InputSignalWithTransform
+} from '@angular/core';
 import { Colors } from '../coreui.types';
 
 @Directive({
   selector: '[cListGroupItem], c-list-group-item',
   exportAs: 'cListGroupItem',
-  standalone: true
+  standalone: true,
+  host: {
+    '[class]': 'hostClasses()',
+    '[attr.aria-disabled]': 'ariaDisabled()',
+    '[attr.aria-current]': 'ariaCurrent()',
+    '[attr.disabled]': 'attrDisabled()',
+    '[attr.tabindex]': 'tabIndex()'
+  }
 })
 export class ListGroupItemDirective {
-
-  constructor(
-    private hostElement: ElementRef
-  ) { }
+  readonly hostElement = inject(ElementRef);
 
   /**
    * Toggle the active state for the component.
-   * @type boolean
+   * @type InputSignal<boolean | undefined>
    */
-  @Input() active?: boolean;
+  readonly active: InputSignal<boolean | undefined> = input();
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @type InputSignal<boolean | undefined>
    */
-  @Input() color?: Colors;
+  readonly color: InputSignal<Colors | undefined> = input();
 
   /**
    * Set disabled attr for the host element. [docs]
    * @type boolean
    */
-  @Input({ transform: booleanAttribute }) disabled: string | boolean = false;
+  readonly disabled: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
-  @HostBinding('attr.aria-disabled')
-  get isDisabled(): boolean | null {
-    return <boolean>this.disabled || null;
-  }
-
-  @HostBinding('attr.disabled')
-  get attrDisabled() {
-    return this.disabled ? '' : null;
-  };
-
-  @HostBinding('attr.tabindex')
-  get getTabindex(): string | null {
-    return this.disabled ? '-1' : null;
-  }
-
-  @HostBinding('attr.aria-current') get ariaCurrent(): boolean {
-    return !!this.active;
-  }
-
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     const host: HTMLElement = this.hostElement.nativeElement;
     return {
       'list-group-item': true,
       'list-group-item-action': host.nodeName === 'A' || host.nodeName === 'BUTTON',
-      active: !!this.active,
-      disabled: this.isDisabled,
-      [`list-group-item-${this.color}`]: !!this.color
+      active: !!this.active(),
+      disabled: this._disabled(),
+      [`list-group-item-${this.color()}`]: !!this.color()
     };
-  }
+  });
 
+  readonly _disabled = computed(() => this.disabled());
+
+  readonly ariaDisabled = computed(() => {
+    return this._disabled() ? true : null;
+  });
+
+  readonly attrDisabled = computed(() => {
+    return this._disabled() ? '' : null;
+  });
+
+  readonly tabIndex = computed(() => {
+    return this._disabled() ? '-1' : null;
+  });
+
+  readonly ariaCurrent = computed(() => {
+    return <boolean>this.active() || null;
+  });
 }
