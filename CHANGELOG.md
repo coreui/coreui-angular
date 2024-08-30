@@ -2,6 +2,15 @@
 
 ---
 
+#### `5.2.17`
+
+- refactor(img): input signals, host bindings
+- refactor(list-group): input signals, host bindings
+- chore(dependencies): update to Angular `18.2.2`
+  - see also: vulnerability [Webpack AutoPublicPathRuntimeModule has a DOM Clobbering Gadget that leads to XSS](https://github.com/advisories/GHSA-4vvj-4cpr-p986)
+
+---
+
 #### `5.2.16`
 
 - refactor(footer): input signals, host bindings
@@ -10,7 +19,7 @@
 - chore(dependencies): update `typescript-eslint` to `~8.3.0`
 - chore(dependencies): update `tslib` to `^2.7.0`
 - chore(dependencies): update `micromatch` to `4.0.8` 
-  - see vulnerability [Regular Expression Denial of Service (ReDoS) in micromatch](https://github.com/advisories/GHSA-952p-6rrq-rcjv)
+  - see also: vulnerability [Regular Expression Denial of Service (ReDoS) in micromatch](https://github.com/advisories/GHSA-952p-6rrq-rcjv)
 
 ---
 
