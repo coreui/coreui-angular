@@ -1,22 +1,22 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'c-input-group',
   template: '<ng-content />',
   standalone: true,
-  host: { class: 'input-group' }
+  host: { class: 'input-group', '[class]': 'hostClasses()' }
 })
 export class InputGroupComponent {
   /**
    * Size the component small or large.
    */
-  @Input() sizing: string | 'sm' | 'lg' | '' = '';
+  readonly sizing = input<string | 'sm' | 'lg' | ''>('');
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const sizing = this.sizing();
     return {
       'input-group': true,
-      [`input-group-${this.sizing}`]: !!this.sizing
-    };
-  }
+      [`input-group-${sizing}`]: !!sizing
+    } as Record<string, boolean>;
+  });
 }
