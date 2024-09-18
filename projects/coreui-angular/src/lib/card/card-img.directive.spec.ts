@@ -1,8 +1,11 @@
 import { CardImgDirective } from './card-img.directive';
+import { TestBed } from '@angular/core/testing';
 
 describe('CardImgDirective', () => {
   it('should create an instance', () => {
-    const directive = new CardImgDirective();
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new CardImgDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });
