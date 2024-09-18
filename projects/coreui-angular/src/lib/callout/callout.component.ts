@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { Colors } from '../coreui.types';
 
 @Component({
@@ -6,20 +6,20 @@ import { Colors } from '../coreui.types';
   template: '<ng-content />',
   styleUrls: ['./callout.component.scss'],
   standalone: true,
-  host: { class: 'callout' }
+  host: { class: 'callout', '[class]': 'hostClasses()' }
 })
 export class CalloutComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() color?: Colors;
+  readonly color = input<Colors>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const color = this.color();
     return {
       callout: true,
-      [`callout-${this.color}`]: !!this.color
-    };
-  }
+      [`callout-${color}`]: !!color
+    } as Record<string, boolean>;
+  });
 }
