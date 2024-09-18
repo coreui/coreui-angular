@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, computed, input, InputSignal } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 import { Positions } from '../../coreui.types';
@@ -9,42 +9,42 @@ type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
   selector: 'c-header, [c-header]',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [NgClass]
+  imports: [NgClass],
+  host: { '[attr.role]': 'role()', '[class]': 'hostClasses()' }
 })
 export class HeaderComponent {
   /**
    * Defines optional container wrapping children elements.
    */
-  @Input() container?: Container;
+  readonly container = input<Container>();
   /**
    * Place header in non-static positions.
    */
-  @Input() position?: Positions;
+  readonly position = input<Positions>();
   /**
    * Default role for header. [docs]
    * @type string
    * @default 'banner'
    */
-  @HostBinding('attr.role')
-  @Input()
-  role = 'banner';
+  readonly role: InputSignal<string> = input('banner');
 
-  @HostBinding('class')
-  get getClasses(): any {
-    return !!this.container ? this.containerClasses : this.headerClasses;
-  }
+  readonly hostClasses = computed(() => {
+    return !!this.container() ? this.containerClasses() : this.headerClasses();
+  });
 
-  get headerClasses(): any {
+  readonly headerClasses = computed(() => {
+    const position = this.position();
     return {
       header: true,
-      [`header-${this.position}`]: !!this.position
-    };
-  }
+      [`header-${position}`]: !!position
+    } as Record<string, boolean>;
+  });
 
-  get containerClasses(): any {
+  readonly containerClasses = computed(() => {
+    const container = this.container();
     return {
-      container: this.container === true,
-      [`container-${this.container}`]: typeof this.container === 'string'
-    };
-  }
+      container: container === true,
+      [`container-${container}`]: typeof container === 'string'
+    } as Record<string, boolean>;
+  });
 }
