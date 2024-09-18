@@ -1,12 +1,4 @@
-import {
-  AfterContentInit,
-  booleanAttribute,
-  Component,
-  ContentChildren,
-  HostBinding,
-  Input,
-  QueryList
-} from '@angular/core';
+import { booleanAttribute, Component, computed, contentChildren, effect, input, TemplateRef } from '@angular/core';
 
 import { CardBodyComponent, CardComponent } from '../../card';
 import { TemplateIdDirective } from '../../shared';
@@ -17,10 +9,10 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
   templateUrl: './widget-stat-c.component.html',
   exportAs: 'cWidgetStatC',
   standalone: true,
-  imports: [CardBodyComponent, NgClass, NgTemplateOutlet]
+  imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
+  host: { '[class]': 'hostExtendedClass()' }
 })
-export class WidgetStatCComponent extends CardComponent implements AfterContentInit {
-
+export class WidgetStatCComponent extends CardComponent {
   constructor() {
     super();
   }
@@ -29,63 +21,63 @@ export class WidgetStatCComponent extends CardComponent implements AfterContentI
    * Icon for your component.
    * @type string
    */
-  @Input() icon?: string;
+  readonly icon = input<string>();
+
   /**
    * Title of the widget to display
    * @type string
    */
-  @Input() title?: string;
+  readonly title = input<string>();
+
   /**
    * Value for your widget to display
-   * @type string
+   * @type string|number
    */
-  @Input() value?: string | number;
+  readonly value = input<string | number>();
 
   /**
    * Invert colors from their default dark shade.
    * @type boolean
    */
-  @Input({ transform: booleanAttribute }) inverse: boolean = false;
+  readonly inverse = input(false, { transform: booleanAttribute });
 
-  templates: any = {};
-  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
+  templates: Record<string, TemplateRef<any>> = {};
+  readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
 
-  @HostBinding('class')
-  get hostExtendedClass() {
-    return {
-      'text-white': this.inverse
-    };
-  }
-
-  get titleClasses() {
-    return {
-      'text-body-secondary': !this.inverse,
-      'text-white': this.inverse,
-      'text-opacity-75': this.inverse,
-      [`text-${this.textColor}`]: !!this.textColor
-    };
-  }
-
-  get valueClasses() {
-    return {
-      'fs-4': !this.textColor,
-      'fw-semibold': true,
-      ...this.titleClasses,
-      'text-opacity-75': false
-    };
-  }
-
-  get iconClasses() {
-    return {
-      'mb-4': !this.textColor,
-      'text-end': true,
-      ...this.titleClasses
-    };
-  }
-
-  ngAfterContentInit(): void {
-    this.contentTemplates.forEach((child: TemplateIdDirective) => {
+  readonly contentTemplatesEffect = effect(() => {
+    this.contentTemplates().forEach((child: TemplateIdDirective) => {
       this.templates[child.id] = child.templateRef;
     });
-  }
+  });
+
+  readonly hostExtendedClass = computed(() => {
+    return { ...this.hostClasses(), 'text-white': this.inverse() } as Record<string, boolean>;
+  });
+
+  readonly titleClasses = computed(() => {
+    const inverse = this.inverse();
+    return {
+      'text-body-secondary': !inverse,
+      'text-white': inverse,
+      'text-opacity-75': inverse,
+      [`text-${this.textColor()}`]: !!this.textColor()
+    } as Record<string, boolean>;
+  });
+
+  readonly valueClasses = computed(() => {
+    return {
+      'fs-4': !this.textColor(),
+      'fw-semibold': true,
+      ...this.titleClasses(),
+      'text-opacity-75': false
+    } as Record<string, boolean>;
+  });
+
+  readonly iconClasses = computed(() => {
+    return {
+      'mb-4': !this.textColor(),
+      'text-end': true,
+      ...this.titleClasses()
+    } as Record<string, boolean>;
+  });
 }

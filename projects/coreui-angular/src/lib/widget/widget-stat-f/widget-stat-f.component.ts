@@ -1,17 +1,9 @@
-import {
-  AfterContentInit,
-  booleanAttribute,
-  Component,
-  ContentChildren,
-  HostBinding,
-  Input,
-  QueryList
-} from '@angular/core';
+import { booleanAttribute, Component, computed, contentChildren, effect, input, TemplateRef } from '@angular/core';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 import { Colors } from '../../coreui.types';
 import { TemplateIdDirective } from '../../shared';
-import { CardBodyComponent, CardFooterComponent } from '../../card';
+import { CardBodyComponent, CardComponent, CardFooterComponent } from '../../card';
 
 @Component({
   selector: 'c-widget-stat-f',
@@ -19,100 +11,98 @@ import { CardBodyComponent, CardFooterComponent } from '../../card';
   exportAs: 'cWidgetStatB',
   standalone: true,
   imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet],
-  host: { class: 'card' }
+  host: { class: 'card', '[class]': 'hostClasses()' }
 })
-export class WidgetStatFComponent implements AfterContentInit {
+export class WidgetStatFComponent extends CardComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() color?: Colors;
+  // override readonly color = input<Colors>();
 
   /**
    * Sets the text-color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() textColor?: Colors | 'white' | 'muted';
+  // override readonly textColor = input<TextColors | 'white' | 'muted'>();
 
   /**
    * Footer for your widget
    * @type string
    */
-  @Input() footer?: string;
+  readonly footer = input<string>();
 
   /**
    * Icon for your widget
    * @type string
    */
-  @Input() icon?: string;
+  readonly icon = input<string>();
 
   /**
    * Set padding of your component.
    * @type boolean
    */
-  @Input({ transform: booleanAttribute }) padding: string | boolean = false;
+  readonly padding = input(false, { transform: booleanAttribute });
 
   /**
    * Title of the widget to display
    * @type string
    */
-  @Input() title?: string;
+  readonly title = input<string>();
 
   /**
    * Value for your widget to display
    * @type string
    */
-  @Input() value?: string | number;
+  readonly value = input<string | number>();
 
-  templates: any = {};
-  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
+  templates: Record<string, TemplateRef<any>> = {};
+  readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
 
-  @HostBinding('class')
-  get hostClasses() {
-    return {
-      card: true
-    };
-  }
+  readonly contentTemplatesEffect = effect(() => {
+    this.contentTemplates().forEach((child: TemplateIdDirective) => {
+      this.templates[child.id] = child.templateRef;
+    });
+  });
 
-  get cardBodyClasses() {
+  readonly cardBodyClasses = computed(() => {
     return {
       'd-flex': true,
       'align-items-center': true,
-      'p-0': !this.padding
-    };
-  }
+      'p-0': !this.padding()
+    } as Record<string, boolean>;
+  });
 
-  get iconClasses() {
+  readonly iconClasses = computed(() => {
+    const color = this.color();
+    const padding = this.padding();
+
     return {
-      'me-3': !this.textColor,
+      'me-3': !this.textColor(),
       'text-white': true,
-      [`bg-${this.color}`]: !!this.color,
-      'p-3': this.padding,
-      'p-4': !this.padding
-    };
-  }
+      [`bg-${color}`]: !!color,
+      'p-3': padding,
+      'p-4': !padding
+    } as Record<string, boolean>;
+  });
 
-  get titleClasses() {
+  readonly titleClasses = computed(() => {
+    const textColor = this.textColor();
     return {
-      'text-body-secondary': !this.textColor,
+      'text-body-secondary': !textColor,
       small: true,
       'text-uppercase': true,
       'fw-semibold': true,
-      [`text-${this.textColor}`]: !!this.textColor
-    };
-  }
+      [`text-${textColor}`]: !!textColor
+    } as Record<string, boolean>;
+  });
 
-  get valueClasses() {
+  readonly valueClasses = computed(() => {
+    const textColor = this.textColor();
     return {
-      'fs-6': !this.textColor,
+      'fs-6': !textColor,
       'fw-semibold': true,
-      [`text-${this.textColor}`]: !!this.textColor
-    };
-  }
-
-  ngAfterContentInit(): void {
-    this.contentTemplates.forEach((child: TemplateIdDirective) => {
-      this.templates[child.id] = child.templateRef;
-    });
-  }
+      [`text-${this.textColor}`]: !!textColor
+    } as Record<string, boolean>;
+  });
 }

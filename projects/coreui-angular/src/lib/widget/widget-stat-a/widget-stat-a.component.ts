@@ -1,8 +1,8 @@
-import { AfterContentInit, Component, ContentChildren, HostBinding, Input, QueryList } from '@angular/core';
+import { Component, computed, contentChildren, effect, input, InputSignal, TemplateRef } from '@angular/core';
 
 import { Colors } from '../../coreui.types';
 import { TemplateIdDirective } from '../../shared';
-import { CardBodyComponent } from '../../card';
+import { CardBodyComponent, CardComponent } from '../../card';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
@@ -11,37 +11,45 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
   exportAs: 'cWidgetStatA',
   imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
   standalone: true,
-  host: { class: 'card' }
+  host: { class: 'card', '[class]': 'hostClasses()' }
 })
-export class WidgetStatAComponent implements AfterContentInit {
+export class WidgetStatAComponent extends CardComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() color?: Colors;
+  // override readonly color = input<Colors>();
+
   /**
    * Title of the widget to display
    * @type string
    */
-  @Input() title?: string;
+  readonly title: InputSignal<string | undefined> = input();
+
   /**
    * Value for your widget to display
    * @type string
    */
-  @Input() value?: string;
+  readonly value: InputSignal<string | undefined> = input<string>();
 
-  templates: any = {};
+  templates: Record<string, TemplateRef<any>> = {};
 
-  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
+  readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
 
-  @HostBinding('class')
-  get hostClasses() {
+  readonly contentTemplatesEffect = effect(() => {
+    this.contentTemplates().forEach((child: TemplateIdDirective) => {
+      this.templates[child.id] = child.templateRef;
+    });
+  });
+
+  override readonly hostClasses = computed(() => {
+    const color = this.color();
     return {
       card: true,
-      [`bg-${this.color}`]: !!this.color,
-      'text-white': !!this.color
-    };
-  }
+      [`bg-${color}`]: !!color,
+      'text-white': !!color
+    } as Record<string, boolean>;
+  });
 
   get bodyClasses() {
     return {
@@ -50,11 +58,5 @@ export class WidgetStatAComponent implements AfterContentInit {
       'justify-content-between': true,
       'align-items-start': true
     };
-  }
-
-  ngAfterContentInit(): void {
-    this.contentTemplates.forEach((child: TemplateIdDirective) => {
-      this.templates[child.id] = child.templateRef;
-    });
   }
 }

@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, HostBinding, input, InputSignal, InputSignalWithTransform } from '@angular/core';
+import { booleanAttribute, Component, computed, input, InputSignal, InputSignalWithTransform } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 import { CardBodyComponent, CardComponent } from '../../card';
@@ -9,7 +9,7 @@ import { CardBodyComponent, CardComponent } from '../../card';
   exportAs: 'cWidgetStatB',
   standalone: true,
   imports: [CardBodyComponent, NgClass],
-  host: { class: 'card' }
+  host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatBComponent extends CardComponent {
   constructor() {
@@ -33,19 +33,19 @@ export class WidgetStatBComponent extends CardComponent {
    * Title of the widget to display
    * @type string
    */
-  readonly title: InputSignal<string | undefined> = input();
+  readonly title: InputSignal<string | undefined> = input<string>();
 
   /**
    * Helper text for your widget.
    * @type string
    */
-  readonly text: InputSignal<string | undefined> = input();
+  readonly text: InputSignal<string | undefined> = input<string>();
 
   /**
    * Value for your widget to display
    * @type string
    */
-  readonly value: InputSignal<string | undefined> = input();
+  readonly value: InputSignal<string | undefined> = input<string>();
 
   /**
    * Invert colors from their default dark shade.
@@ -53,13 +53,14 @@ export class WidgetStatBComponent extends CardComponent {
    */
   readonly inverse: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  override get hostClasses() {
+  override readonly hostClasses = computed(() => {
+    const color = this.color();
+    const textColor = this.textColor();
     return {
       card: true,
-      [`bg-${this.color()}`]: !!this.color(),
-      [`text-${this.textColor()}`]: !!this.textColor(),
+      [`bg-${color}`]: !!color,
+      [`text-${textColor}`]: !!textColor,
       'text-white': this.inverse()
-    };
-  }
+    } as Record<string, boolean>;
+  });
 }

@@ -9,8 +9,7 @@ describe('WidgetStatEComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [WidgetStatEComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +20,9 @@ describe('WidgetStatEComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have css class"', () => {
+    expect(fixture.nativeElement).toHaveClass('card');
   });
 });

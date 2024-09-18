@@ -1,8 +1,8 @@
-<c-card-header [ngClass]="headerClasses">
+<c-card-header [ngClass]="headerClasses()">
   <ng-content />
 </c-card-header>
 <c-card-body cRow class="text-center">
-  @for (item of values; track item; let i = $index) {
+  @for (item of values(); track item; let i = $index) {
     @if (i % 2 !== 0) {
       <div class="vr"></div>
     }
