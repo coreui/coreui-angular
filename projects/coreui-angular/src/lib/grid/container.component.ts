@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, Component, computed, input, InputSignal, InputSignalWithTransform } from '@angular/core';
 
 import { IContainer } from './container.type';
 import { Breakpoints } from '../coreui.types';
@@ -7,27 +7,30 @@ import { Breakpoints } from '../coreui.types';
   selector: 'c-container, [cContainer]',
   template: '<ng-content />',
   styleUrls: ['./container.component.scss'],
-  standalone: true
+  standalone: true,
+  host: { '[class]': 'hostClasses()' }
 })
 export class ContainerComponent implements IContainer {
-
   /**
    * Set container 100% wide until a breakpoint.
    */
-  @Input() breakpoint: Exclude<Breakpoints, 'xs'> = '';
+  readonly breakpoint: InputSignal<Exclude<Breakpoints, 'xs'>> = input<Exclude<Breakpoints, 'xs'>>('');
 
   /**
    * Set container 100% wide, spanning the entire width of the viewport.
-   * @type boolean | string
+   * @type InputSignalWithTransform<unknown, boolean>
    */
-  @Input({ transform: booleanAttribute }) fluid: string | boolean = false;
+  readonly fluid: InputSignalWithTransform<unknown, boolean> = input<unknown, boolean>(false, {
+    transform: booleanAttribute
+  });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const breakpoint = this.breakpoint();
+    const fluid = this.fluid();
     return {
-      container: !this.fluid && !this.breakpoint,
-      'container-fluid': !!this.fluid,
-      [`container-${this.breakpoint}`]: !!this.breakpoint
-    };
-  }
+      container: !fluid && !breakpoint,
+      'container-fluid': !!fluid,
+      [`container-${breakpoint}`]: !!breakpoint
+    } as Record<string, boolean>;
+  });
 }
