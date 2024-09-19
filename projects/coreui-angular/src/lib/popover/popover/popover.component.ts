@@ -1,14 +1,14 @@
 import {
-  AfterViewInit,
+  booleanAttribute,
   Component,
-  HostBinding,
-  Input,
-  OnChanges,
+  computed,
+  effect,
+  inject,
+  input,
   OnDestroy,
   Renderer2,
-  SimpleChanges,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef
 } from '@angular/core';
 import { NgClass } from '@angular/common';
@@ -18,57 +18,52 @@ import { NgClass } from '@angular/common';
   templateUrl: './popover.component.html',
   standalone: true,
   imports: [NgClass],
-  host: { class: 'popover fade bs-popover-auto' }
+  host: {
+    class: 'popover fade bs-popover-auto',
+    '[class]': 'hostClasses()',
+    '[attr.role]': 'role()',
+    '[attr.id]': 'id()'
+  }
 })
-export class PopoverComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class PopoverComponent implements OnDestroy {
+  readonly renderer = inject(Renderer2);
+
   /**
    * Content of popover
    * @type {string | TemplateRef}
    */
-  @Input() content: string | TemplateRef<any> = '';
+  readonly content = input<string | TemplateRef<any>>('');
+
+  readonly contentEffect = effect(() => {
+    this.updateView(this.content());
+  });
+
   /**
    * Toggle the visibility of popover component.
    * @type boolean
    */
-  @Input() visible = false;
-  @Input() @HostBinding('attr.id') id?: string;
-  @Input() @HostBinding('attr.role') role = 'tooltip';
+  readonly visible = input(false, { transform: booleanAttribute });
+  readonly id = input<string>();
+  readonly role = input('tooltip');
 
-  @ViewChild('popoverTemplate', { read: ViewContainerRef }) viewContainerRef!: ViewContainerRef;
+  readonly viewContainerRef = viewChild('popoverTemplate', { read: ViewContainerRef });
   private textNode!: Text;
 
-  constructor(private renderer: Renderer2) {}
-
-  @HostBinding('class')
-  get hostClasses(): { [klass: string]: any } {
+  readonly hostClasses = computed<Record<string, boolean>>(() => {
     return {
       popover: true,
       fade: true,
-      show: this.visible,
+      show: this.visible(),
       'bs-popover-auto': true
     };
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.updateView(this.content);
-    });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['content']) {
-      setTimeout(() => {
-        this.updateView(this.content);
-      });
-    }
-  }
+  });
 
   ngOnDestroy(): void {
     this.clear();
   }
 
   private clear(): void {
-    this.viewContainerRef?.clear();
+    this.viewContainerRef()?.clear();
     if (!!this.textNode) {
       this.renderer.removeChild(this.textNode.parentNode, this.textNode);
     }
@@ -82,15 +77,15 @@ export class PopoverComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     if (content instanceof TemplateRef) {
-      this.viewContainerRef.createEmbeddedView(content);
+      this.viewContainerRef()?.createEmbeddedView(content);
     } else {
-      this.textNode = this.renderer.createText(content);
-      const popoverBody = this.renderer.createElement('div');
-      this.renderer.addClass(popoverBody, 'popover-body');
-      this.renderer.appendChild(popoverBody, this.textNode);
+      const textNodeContent = this.renderer.createText(content);
+      this.textNode = this.renderer.createElement('div');
+      this.renderer.addClass(this.textNode, 'popover-body');
+      this.renderer.appendChild(this.textNode, textNodeContent);
 
-      const element = this.viewContainerRef.element.nativeElement;
-      this.renderer.appendChild(element.parentNode, popoverBody);
+      const element = this.viewContainerRef()?.element.nativeElement;
+      this.renderer.appendChild(element.parentNode, this.textNode);
     }
   }
 }
