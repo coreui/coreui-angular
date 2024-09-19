@@ -47,7 +47,10 @@ export class ProgressBarDirective implements IProgressBar {
       this.#renderer.setAttribute(host, 'role', this.role);
     }
     const tagName = host.tagName;
-    if (this.percent() && ((this.stacked && tagName === 'C-PROGRESS') || (!this.stacked && tagName !== 'C-PROGRESS'))) {
+    if (
+      this.percent() >= 0 &&
+      ((this.stacked && tagName === 'C-PROGRESS') || (!this.stacked && tagName !== 'C-PROGRESS'))
+    ) {
       this.#renderer.setStyle(host, 'width', `${this.percent()}%`);
     } else {
       this.#renderer.removeStyle(host, 'width');

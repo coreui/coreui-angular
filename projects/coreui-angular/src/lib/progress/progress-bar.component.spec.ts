@@ -51,7 +51,8 @@ describe('ProgressBarComponent', () => {
     expect(fixture.nativeElement.getAttribute('aria-valuemin')).toBeFalsy();
     expect(fixture.nativeElement.getAttribute('aria-valuemax')).toBeFalsy();
     expect(fixture.nativeElement.getAttribute('role')).toBeFalsy();
-    expect(fixture.nativeElement.style.width).toBeFalsy();
+    // expect(fixture.nativeElement.style.width).toBeFalsy();
+    expect(fixture.nativeElement.style.width).toBe('0%');
   });
 
   it('should not have aria-* attributes', () => {
