@@ -4,7 +4,6 @@ import { IntersectionService, ListenersService } from '../services';
 import { TooltipDirective } from './tooltip.directive';
 
 describe('TooltipDirective', () => {
-  let document: Document;
   let renderer: Renderer2;
   let hostElement: ElementRef;
   let viewContainerRef: ViewContainerRef;
@@ -12,19 +11,18 @@ describe('TooltipDirective', () => {
 
   it('should create an instance', () => {
     TestBed.configureTestingModule({
-      providers: [IntersectionService, Renderer2, ListenersService],
+      providers: [IntersectionService, Renderer2, ListenersService]
     });
     const intersectionService = TestBed.inject(IntersectionService);
     const listenersService = TestBed.inject(ListenersService);
     TestBed.runInInjectionContext(() => {
       const directive = new TooltipDirective(
-        document,
         renderer,
         hostElement,
         viewContainerRef,
         listenersService,
         changeDetectorRef,
-        intersectionService,
+        intersectionService
       );
       expect(directive).toBeTruthy();
     });

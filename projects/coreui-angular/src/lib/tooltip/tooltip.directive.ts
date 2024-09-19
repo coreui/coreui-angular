@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -7,32 +8,30 @@ import {
   Directive,
   effect,
   ElementRef,
-  HostBinding,
   inject,
-  Inject,
   input,
   model,
   OnDestroy,
   OnInit,
   Renderer2,
   TemplateRef,
-  ViewContainerRef,
+  ViewContainerRef
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime, filter, finalize } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
 
 import { Triggers } from '../coreui.types';
-import { TooltipComponent } from './tooltip/tooltip.component';
 import { IListenersConfig, IntersectionService, ListenersService } from '../services';
-import { debounceTime, filter, finalize } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ElementRefDirective } from '../shared';
+import { TooltipComponent } from './tooltip/tooltip.component';
 
 @Directive({
   selector: '[cTooltip]',
   exportAs: 'cTooltip',
   providers: [ListenersService, IntersectionService],
   standalone: true,
+  host: { '[attr.aria-describedby]': 'ariaDescribedBy' }
 })
 export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   /**
@@ -57,7 +56,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     this._popperOptions = {
       ...this._popperOptions,
       placement: this.placement(),
-      ...this.popperOptions(),
+      ...this.popperOptions()
     };
   });
 
@@ -70,18 +69,14 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
    * @type: 'top' | 'bottom' | 'left' | 'right'
    * @default: 'top'
    */
-  readonly placement = input<'top' | 'bottom' | 'left' | 'right'>('top', {
-    alias: 'cTooltipPlacement',
-  });
+  readonly placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'cTooltipPlacement' });
 
   /**
    * ElementRefDirective for positioning the tooltip on reference element
    * @type: ElementRefDirective
    * @default: undefined
    */
-  readonly reference = input<ElementRefDirective | undefined>(undefined, {
-    alias: 'cTooltipRef',
-  });
+  readonly reference = input<ElementRefDirective | undefined>(undefined, { alias: 'cTooltipRef' });
 
   readonly referenceRef = computed(() => this.reference()?.elementRef ?? this.hostElement);
 
@@ -101,7 +96,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     this.visible() ? this.addTooltipElement() : this.removeTooltipElement();
   });
 
-  @HostBinding('attr.aria-describedby') get ariaDescribedBy(): string | null {
+  get ariaDescribedBy(): string | null {
     return this.tooltipId ? this.tooltipId : null;
   }
 
@@ -115,22 +110,22 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
       {
         name: 'offset',
         options: {
-          offset: [0, 5],
-        },
-      },
-    ],
+          offset: [0, 5]
+        }
+      }
+    ]
   };
 
   readonly #destroyRef = inject(DestroyRef);
+  readonly #document = inject(DOCUMENT);
 
   constructor(
-    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private hostElement: ElementRef,
     private viewContainerRef: ViewContainerRef,
     private listenersService: ListenersService,
     private changeDetectorRef: ChangeDetectorRef,
-    private intersectionService: IntersectionService,
+    private intersectionService: IntersectionService
   ) {}
 
   ngAfterViewInit(): void {
@@ -158,7 +153,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
       },
       callbackOn: () => {
         this.visible.set(true);
-      },
+      }
     };
     this.listenersService.setListeners(config);
   }
@@ -176,7 +171,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
         finalize(() => {
           this.intersectionService.unobserve(this.referenceRef());
         }),
-        takeUntilDestroyed(this.#destroyRef),
+        takeUntilDestroyed(this.#destroyRef)
       )
       .subscribe((next) => {
         this.visible.set(next.isIntersecting ? this.visible() : false);
@@ -187,7 +182,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     let uid = prefix ?? 'random-id';
     do {
       uid = `${prefix}-${Math.floor(Math.random() * 1000000).toString(10)}`;
-    } while (this.document.getElementById(uid));
+    } while (this.#document.getElementById(uid));
 
     return uid;
   }
@@ -219,31 +214,30 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
       this.createTooltipElement();
     }
 
-    this.tooltipId = this.getUID('tooltip');
-    this.tooltipRef.instance.id = this.tooltipId;
-    this.tooltipRef.instance.content = this.content() ?? '';
+    this.tooltipRef?.setInput('content', this.content() ?? '');
 
-    this.tooltip = this.tooltipRef.location.nativeElement;
+    this.tooltip = this.tooltipRef?.location.nativeElement;
     this.renderer.addClass(this.tooltip, 'd-none');
     this.renderer.addClass(this.tooltip, 'fade');
 
     this.popperInstance?.destroy();
 
     this.viewContainerRef.insert(this.tooltipRef.hostView);
-    this.renderer.appendChild(this.document.body, this.tooltip);
+    this.renderer.appendChild(this.#document.body, this.tooltip);
 
     this.popperInstance = createPopper(this.referenceRef().nativeElement, this.tooltip, {
-      ...this.popperOptionsComputed(),
+      ...this.popperOptionsComputed()
     });
+
     if (!this.visible()) {
       this.removeTooltipElement();
       return;
     }
-    this.renderer.removeClass(this.tooltip, 'd-none');
-    this.changeDetectorRef.markForCheck();
-
     setTimeout(() => {
-      this.tooltipRef && (this.tooltipRef.instance.visible = this.visible());
+      this.tooltipId = this.getUID('tooltip');
+      this.tooltipRef?.setInput('id', this.tooltipId);
+      this.renderer.removeClass(this.tooltip, 'd-none');
+      this.tooltipRef?.setInput('visible', this.visible());
       this.popperInstance?.forceUpdate();
       this.changeDetectorRef?.markForCheck();
     }, 100);
@@ -254,8 +248,8 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     if (!this.tooltipRef) {
       return;
     }
-    this.tooltipRef.instance.visible = false;
-    this.tooltipRef.instance.id = undefined;
+    this.tooltipRef.setInput('visible', false);
+    this.tooltipRef.setInput('id', undefined);
     this.changeDetectorRef.markForCheck();
     setTimeout(() => {
       this.viewContainerRef?.detach();

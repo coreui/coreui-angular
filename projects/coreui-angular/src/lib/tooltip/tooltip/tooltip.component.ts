@@ -1,14 +1,14 @@
 import {
-  AfterViewInit,
+  booleanAttribute,
   Component,
-  HostBinding,
-  Input,
-  OnChanges,
+  computed,
+  effect,
+  inject,
+  input,
   OnDestroy,
   Renderer2,
-  SimpleChanges,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef
 } from '@angular/core';
 
@@ -16,57 +16,52 @@ import {
   selector: 'c-tooltip',
   templateUrl: './tooltip.component.html',
   standalone: true,
-  host: { class: 'tooltip fade bs-tooltip-auto' }
+  host: {
+    class: 'tooltip fade bs-tooltip-auto',
+    '[class]': 'hostClasses()',
+    '[attr.role]': 'role()',
+    '[attr.id]': 'id()'
+  }
 })
-export class TooltipComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class TooltipComponent implements OnDestroy {
+  readonly renderer = inject(Renderer2);
+
   /**
    * Content of tooltip
    * @type {string | TemplateRef}
    */
-  @Input() content: string | TemplateRef<any> = '';
+  readonly content = input<string | TemplateRef<any>>('');
+
+  readonly contentEffect = effect(() => {
+    this.updateView(this.content());
+  });
+
   /**
    * Toggle the visibility of popover component.
    * @type boolean
    */
-  @Input() visible = false;
-  @Input() @HostBinding('attr.id') id?: string;
-  @Input() @HostBinding('attr.role') role = 'tooltip';
+  readonly visible = input(false, { transform: booleanAttribute });
+  readonly id = input<string>();
+  readonly role = input('tooltip');
 
-  @ViewChild('tooltipTemplate', { read: ViewContainerRef }) viewContainerRef!: ViewContainerRef;
+  readonly viewContainerRef = viewChild('tooltipTemplate', { read: ViewContainerRef });
   private textNode!: Text;
 
-  constructor(private renderer: Renderer2) {}
-
-  @HostBinding('class')
-  get hostClasses(): { [klass: string]: any } {
+  readonly hostClasses = computed<Record<string, boolean>>(() => {
     return {
       tooltip: true,
       fade: true,
-      show: this.visible,
+      show: this.visible(),
       'bs-tooltip-auto': true
     };
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.updateView(this.content);
-    });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['content']) {
-      setTimeout(() => {
-        this.updateView(this.content);
-      });
-    }
-  }
+  });
 
   ngOnDestroy(): void {
     this.clear();
   }
 
   private clear(): void {
-    this.viewContainerRef?.clear();
+    this.viewContainerRef()?.clear();
     if (!!this.textNode) {
       this.renderer.removeChild(this.textNode.parentNode, this.textNode);
     }
@@ -80,11 +75,11 @@ export class TooltipComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     if (content instanceof TemplateRef) {
-      this.viewContainerRef.createEmbeddedView(content);
+      this.viewContainerRef()?.createEmbeddedView(content);
     } else {
       this.textNode = this.renderer.createText(content);
 
-      const element = this.viewContainerRef.element.nativeElement;
+      const element = this.viewContainerRef()?.element.nativeElement;
       this.renderer.appendChild(element.parentNode, this.textNode);
     }
   }
