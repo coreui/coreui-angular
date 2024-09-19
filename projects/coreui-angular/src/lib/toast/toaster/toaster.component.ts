@@ -124,12 +124,12 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
     this.toastsDynamic.push(componentRef);
     const index = this.toastsDynamic.indexOf(componentRef);
     for (const [key, value] of Object.entries(props)) {
-      componentRef.instance[key] = value;
+      componentRef.setInput(key, value);
     }
-    componentRef.instance['placement'] = this.placement;
-    componentRef.instance['dynamic'] = true;
-    componentRef.instance['index'] = index;
-    componentRef.instance['visible'] = true;
+    componentRef.setInput('placement', this.placement);
+    componentRef.setInput('dynamic', true);
+    componentRef.setInput('index', index);
+    componentRef.setInput('visible', true);
     componentRef.instance['visibleChange'].emit(true);
     componentRef.changeDetectorRef?.detectChanges();
     return componentRef;
@@ -137,8 +137,8 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
 
   public removeToast(state: IToasterAction): void {
     this.toastsDynamic?.forEach((item) => {
-      if (state.toast?.dynamic && item.instance === state.toast) {
-        item.instance.visible = false;
+      if (state.toast?.dynamic() && item.instance === state.toast) {
+        item.setInput('visible', false);
         item.instance['visibleChange'].emit(false);
         item.destroy();
       }
@@ -146,8 +146,8 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
 
     this.toasts?.forEach((item) => {
       if (state.toast && item.element.nativeElement === state.toast.hostElement.nativeElement) {
-        if (!state.toast.dynamic) {
-          state.toast.visible = false;
+        if (!state.toast.dynamic()) {
+          state.toast['visible'] = false;
         }
       }
     });
@@ -158,9 +158,9 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
       if (state.show === false) {
         this.removeToast(state);
       }
-      if (state.show === true && state.toast?.dynamic === undefined) {
-        /* empty */
-      }
+      // if (state.show === true && state.toast?.dynamic() === undefined) {
+      //   /* empty */
+      // }
     });
   }
 }

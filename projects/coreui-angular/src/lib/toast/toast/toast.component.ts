@@ -3,14 +3,14 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   HostBinding,
   HostListener,
   Input,
+  input,
   numberAttribute,
   OnDestroy,
   OnInit,
-  Output,
+  output,
   Renderer2
 } from '@angular/core';
 
@@ -50,9 +50,6 @@ type AnimateType = 'hide' | 'show';
   host: { class: 'toast show' }
 })
 export class ToastComponent implements OnInit, OnDestroy {
-  public dynamic!: boolean;
-  public placement!: TToasterPlacement;
-
   constructor(
     public hostElement: ElementRef,
     public renderer: Renderer2,
@@ -60,34 +57,38 @@ export class ToastComponent implements OnInit, OnDestroy {
     public changeDetectorRef: ChangeDetectorRef
   ) {}
 
+  readonly dynamic = input<boolean>();
+  readonly placement = input<TToasterPlacement>();
+
   /**
    * Auto hide the toast.
    * @type boolean
    */
-  @Input() autohide: boolean = true;
+  readonly autohide = input(true);
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() color?: Colors = '';
+  readonly color = input<Colors>('');
 
   /**
    * Delay hiding the toast (ms).
    * @type number
    */
-  @Input({ transform: numberAttribute }) delay: number = 5000;
+  readonly delay = input(5000, { transform: numberAttribute });
 
   /**
    * Apply fade transition to the toast.
    * @type boolean
    */
-  @Input() fade: boolean = true;
+  readonly fade = input(true);
 
   /**
    * Toggle the visibility of component.
    * @type boolean
    */
+
   @Input({ transform: booleanAttribute })
   set visible(value: boolean) {
     const newValue = value;
@@ -108,19 +109,19 @@ export class ToastComponent implements OnInit, OnDestroy {
   /**
    * @ignore
    */
-  @Input({ transform: numberAttribute }) index?: number;
+  readonly index = input(0, { transform: numberAttribute });
 
   /**
    * Event emitted on visibility change. [docs]
-   * @type EventEmitter<boolean>
+   * @type <boolean>
    */
-  @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  readonly visibleChange = output<boolean>();
 
   /**
    * Event emitted on timer tick. [docs]
    * @type number
    */
-  @Output() timer: EventEmitter<number> = new EventEmitter();
+  readonly timer = output<number>();
 
   private timerId: ReturnType<typeof setTimeout> | undefined;
   private clockId: ReturnType<typeof setInterval> | undefined;
@@ -140,7 +141,7 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   @HostBinding('@.disabled')
   get animationDisabled(): boolean {
-    return !this.fade;
+    return !this.fade();
   }
 
   @HostBinding('@fadeInOut')
@@ -161,8 +162,8 @@ export class ToastComponent implements OnInit, OnDestroy {
     return {
       toast: true,
       show: true,
-      [`bg-${this.color}`]: !!this.color,
-      'border-0': !!this.color
+      [`bg-${this.color()}`]: !!this.color(),
+      'border-0': !!this.color()
     };
   }
 
@@ -171,7 +172,7 @@ export class ToastComponent implements OnInit, OnDestroy {
       this.toasterService.setState({
         toast: this,
         show: this.visible,
-        placement: this.placement
+        placement: this.placement()
       });
       this.clearTimer();
       this.setTimer();
@@ -184,8 +185,8 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   setTimer(): void {
     this.clearTimer();
-    if (this.autohide && this.visible) {
-      this.timerId = this.delay > 0 ? setTimeout(() => this.onClose(), this.delay) : undefined;
+    if (this.autohide() && this.visible) {
+      this.timerId = this.delay() > 0 ? setTimeout(() => this.onClose(), this.delay()) : undefined;
       this.setClock();
     }
   }
@@ -201,7 +202,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.toasterService.setState({
       toast: this,
       show: false,
-      placement: this.placement
+      placement: this.placement()
     });
   }
 
@@ -214,7 +215,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     }, 1000);
     this.clockTimerId = setTimeout(() => {
       this.clearClock();
-    }, this.delay);
+    }, this.delay());
   }
 
   clearClock(): void {
