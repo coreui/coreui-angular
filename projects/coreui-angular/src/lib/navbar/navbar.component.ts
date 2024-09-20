@@ -77,8 +77,9 @@ export class NavbarComponent implements AfterContentInit {
       this.breakpointObserver.observe([onBreakpoint]).subscribe((result) => {
         if (this.collapse) {
           const animate = this.collapse.animate;
-          this.collapse.toggle(false);
+          // todo: collapse animate input signal setter
           this.collapse.animate = false;
+          this.collapse.toggle(false);
           setTimeout(() => {
             this.collapse.toggle(result.matches);
             setTimeout(() => {

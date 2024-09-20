@@ -15,7 +15,6 @@ class MockElementRef extends ElementRef {}
 class TestComponent {}
 
 describe('CollapseDirective', () => {
-
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let elementRef: DebugElement;
@@ -25,11 +24,7 @@ describe('CollapseDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestComponent, CollapseDirective, NoopAnimationsModule],
-      providers: [
-        { provide: ElementRef, useClass: MockElementRef },
-        { provide: AnimationBuilder },
-        Renderer2
-      ]
+      providers: [{ provide: ElementRef, useClass: MockElementRef }, { provide: AnimationBuilder }, Renderer2]
     });
 
     fixture = TestBed.createComponent(TestComponent);
@@ -41,12 +36,13 @@ describe('CollapseDirective', () => {
   });
 
   it('should create an instance', () => {
-    const directive = new CollapseDirective(elementRef, renderer, animationBuilder);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new CollapseDirective(elementRef, renderer, animationBuilder);
+      expect(directive).toBeTruthy();
+    });
   });
 
   it('should have css classes', () => {
     expect(elementRef.nativeElement).toHaveClass('collapse-horizontal');
   });
-
 });

@@ -1,15 +1,15 @@
 import {
   AfterViewInit,
   booleanAttribute,
+  computed,
   Directive,
   DoCheck,
   ElementRef,
-  EventEmitter,
-  HostBinding,
   Input,
+  input,
   OnChanges,
   OnDestroy,
-  Output,
+  output,
   Renderer2,
   SimpleChanges
 } from '@angular/core';
@@ -26,11 +26,13 @@ import {
 @Directive({
   selector: '[cCollapse]',
   exportAs: 'cCollapse',
-  standalone: true
+  standalone: true,
+  host: { '[class]': 'hostClasses()' }
 })
-export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterViewInit {
+export class CollapseDirective implements OnDestroy, AfterViewInit, DoCheck, OnChanges {
   /**
    * @ignore
+   * todo: 'animate' input signal for navbar
    */
   @Input({ transform: booleanAttribute }) animate: boolean = true;
 
@@ -39,12 +41,13 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
    * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) horizontal: boolean = false;
+  readonly horizontal = input(false, { transform: booleanAttribute });
 
   /**
    * Toggle the visibility of collapsible element.
    * @type boolean
    * @default false
+   * todo: 'visible' input signal
    */
   @Input({ transform: booleanAttribute })
   set visible(value) {
@@ -62,21 +65,23 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
    * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) navbar: boolean = false;
+  readonly navbar = input(false, { transform: booleanAttribute });
 
   /**
    * @ignore
    */
-  @Input() duration = '350ms';
+  readonly duration = input('350ms');
+
   /**
    * @ignore
    */
-  @Input() transition = 'ease';
+  readonly transition = input('ease');
+
   /**
    * Event emitted on visibility change. [docs]
    * @type string
    */
-  @Output() collapseChange = new EventEmitter<string>();
+  readonly collapseChange = output<string>();
 
   private player!: AnimationPlayer;
   private readonly host: HTMLElement;
@@ -85,21 +90,20 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
   private collapsing: boolean = false;
 
   constructor(
-    private hostElement: ElementRef,
-    private renderer: Renderer2,
-    private animationBuilder: AnimationBuilder
+    private readonly hostElement: ElementRef,
+    private readonly renderer: Renderer2,
+    private readonly animationBuilder: AnimationBuilder
   ) {
     this.host = this.hostElement.nativeElement;
     this.renderer.setStyle(this.host, 'display', 'none');
   }
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
-      'navbar-collapse': this.navbar,
-      'collapse-horizontal': this.horizontal
-    };
-  }
+      'navbar-collapse': this.navbar(),
+      'collapse-horizontal': this.horizontal()
+    } as Record<string, boolean>;
+  });
 
   ngAfterViewInit(): void {
     if (this.visible) {
@@ -143,17 +147,17 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
       this.renderer.removeStyle(this.host, 'display');
     }
 
-    const duration = this.animate ? this.duration : '0ms';
+    const duration = this.animate ? this.duration() : '0ms';
 
-    const expand = this.horizontal ? expandHorizontalAnimation : expandAnimation;
-    const collapse = this.horizontal ? collapseHorizontalAnimation : collapseAnimation;
+    const expand = this.horizontal() ? expandHorizontalAnimation : expandAnimation;
+    const collapse = this.horizontal() ? collapseHorizontalAnimation : collapseAnimation;
 
-    const dimension = this.horizontal ? 'width' : 'height';
+    const dimension = this.horizontal() ? 'width' : 'height';
     const capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
     const scrollSize = `scroll${capitalizedDimension}`;
 
-    const animationFactory = this.animationBuilder.build(
-      useAnimation(visible ? expand : collapse, { params: { time: duration, easing: this.transition } })
+    const animationFactory = this.animationBuilder?.build(
+      useAnimation(visible ? expand : collapse, { params: { time: duration, easing: this.transition() } })
     );
 
     this.player = animationFactory.create(this.host);
@@ -169,8 +173,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
       this.renderer.removeClass(this.host, 'show');
       this.collapsing = true;
       if (visible) {
-        // @ts-ignore
-        this.renderer.setStyle(this.host, dimension, `${this.host[scrollSize]}px`);
+        this.renderer.setStyle(this.host, dimension, `${this.hostElement.nativeElement[scrollSize]}px`);
       } else {
         this.renderer.setStyle(this.host, dimension, '');
       }
@@ -193,7 +196,7 @@ export class CollapseDirective implements OnChanges, OnDestroy, DoCheck, AfterVi
 
   setMaxSize() {
     // setTimeout(() => {
-    if (this.horizontal) {
+    if (this.horizontal()) {
       this.scrollWidth = this.host.scrollWidth;
       this.scrollWidth > 0 && this.renderer.setStyle(this.host, 'maxWidth', `${this.scrollWidth}px`);
       // } else {
