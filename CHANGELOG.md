@@ -2,6 +2,26 @@
 
 ---
 
+#### `5.2.18`
+
+- chore(dependencies): update to Angular `18.2.5`
+- fix(progress-bar): bar animation fails for no style width on 0 percent
+- refactor(popover): use ComponentRef setInput() api, input signals, host bindings
+- refactor(tooltip): use ComponentRef setInput() api, input signals, host bindings
+- refactor(toast): use ComponentRef setInput() api, input signals
+- fix(widget-stat-f): rounded-start-1 bg for icon without padding, text-color for value prop
+- refactor(callout): input signals, host bindings
+- refactor(card-header-actions): host bindings
+- refactor(card-img): input signals, host bindings
+- refactor(card): host bindings
+- refactor(input-group): input signals, host bindings
+- refactor(container): input signals, host bindings
+- refactor(header): input signals, host bindings
+- refactor(widgets): input signals, host bindings
+- refactor(collapse): input signals, host bindings
+
+---
+
 #### `5.2.17`
 
 - refactor(img): input signals, host bindings
