@@ -82,7 +82,8 @@ export class WidgetStatFComponent extends CardComponent {
       'text-white': true,
       [`bg-${color}`]: !!color,
       'p-3': padding,
-      'p-4': !padding
+      'p-4': !padding,
+      'rounded-start-1': !padding
     } as Record<string, boolean>;
   });
 
@@ -102,7 +103,7 @@ export class WidgetStatFComponent extends CardComponent {
     return {
       'fs-6': !textColor,
       'fw-semibold': true,
-      [`text-${this.textColor}`]: !!textColor
+      [`text-${textColor}`]: !!textColor
     } as Record<string, boolean>;
   });
 }
