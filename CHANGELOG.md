@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.2.19`
+
+- chore(dependencies): update to Angular `18.2.6`
+- refactor(spinner): input signals, host bindings, ng-content default fallback content
+
+---
+
 #### `5.2.18`
 
 - chore(dependencies): update to Angular `18.2.5`
