@@ -1,49 +1,55 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 import { Colors } from '../coreui.types';
 
 @Component({
   selector: 'c-spinner',
   templateUrl: './spinner.component.html',
-  standalone: true
+  standalone: true,
+  host: {
+    '[attr.role]': 'role()',
+    '[class]': 'hostClasses()'
+  }
 })
 export class SpinnerComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() color?: Colors;
+  readonly color = input<Colors>();
 
   /**
    * Label for accessibility.
    * @type string
    * @default 'Loading...'
    */
-  @Input() label: string = "Loading...";
+  readonly label = input('Loading...');
 
   /**
    * Size the component small.
    * @type string
    * @values 'sm'
    */
-  @Input() size?: 'sm';
+  readonly size = input<'sm'>();
 
   /**
    * Set the button variant to an outlined button or a ghost button.
    * @values 'border' | 'grow'
    * @default 'border'
    */
-  @Input() variant?: 'border' | 'grow' = 'border';
+  readonly variant = input<'border' | 'grow'>('border');
+  /**
+   * Default role attr for Spinner. [docs]
+   * @type string
+   * @default 'status'
+   */
+  readonly role = input('status');
 
-  @Input()
-  @HostBinding('attr.role') role = 'status';
-
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
-      [`spinner-${this.variant}`]: true,
-      [`text-${this.color}`]: !!this.color,
-      [`spinner-${this.variant}-${this.size}`]: !!this.size
+      [`spinner-${this.variant()}`]: true,
+      [`text-${this.color()}`]: !!this.color(),
+      [`spinner-${this.variant()}-${this.size()}`]: !!this.size()
     };
-  }
+  });
 }
