@@ -1,35 +1,30 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 
 @Directive({
   selector: '[cAccordionButton]',
   standalone: true,
-  host: { class: 'accordion-button' }
+  host: { '[class]': 'hostClasses()', '[attr.type]': 'type()', '[attr.aria-expanded]': 'ariaExpanded()' }
 })
 export class AccordionButtonDirective {
   /**
    * Toggles an accordion button collapsed state. Use in accordionHeaderTemplate. [docs]
    * @type boolean
    */
-  @Input() collapsed!: boolean;
+  readonly collapsed = input<boolean | undefined>(undefined);
 
   /**
    * Default type for cAccordionButton. [docs]
    * @type string
    * @default 'button'
    */
-  @HostBinding('attr.type')
-  @Input()
-  type: string = 'button';
+  readonly type = input('button');
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
       'accordion-button': true,
-      collapsed: this.collapsed
+      collapsed: this.collapsed()
     };
-  }
+  });
 
-  @HostBinding('attr.aria-expanded') get ariaExpanded(): boolean {
-    return !this.collapsed;
-  }
+  readonly ariaExpanded = computed(() => !this.collapsed());
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AccordionItemComponent } from './accordion-item/accordion-item.component';
+import type { AccordionItemComponent } from './accordion-item/accordion-item.component';
 
 @Injectable()
 export class AccordionService {

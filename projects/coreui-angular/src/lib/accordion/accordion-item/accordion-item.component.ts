@@ -1,12 +1,13 @@
 import {
-  AfterContentInit,
   booleanAttribute,
   Component,
-  ContentChildren,
+  computed,
+  contentChildren,
+  inject,
   Input,
   OnDestroy,
   OnInit,
-  QueryList
+  TemplateRef
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -26,15 +27,15 @@ let nextId = 0;
   imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective],
   host: { class: 'accordion-item' }
 })
-export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentInit {
-  constructor(private accordionService: AccordionService) {}
+export class AccordionItemComponent implements OnInit, OnDestroy {
+  readonly #accordionService = inject(AccordionService);
 
   /**
    * Toggle an accordion item programmatically
    * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) visible: string | boolean = false;
+  @Input({ transform: booleanAttribute }) visible: boolean = false;
 
   @Input()
   set open(value: boolean) {
@@ -47,25 +48,32 @@ export class AccordionItemComponent implements OnInit, OnDestroy, AfterContentIn
   }
 
   contentId = `accordion-item-${nextId++}`;
-  itemContext = { $implicit: <boolean>this.visible };
-  templates: any = {};
-  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
+
+  get itemContext() {
+    return { $implicit: <boolean>this.visible };
+  }
+
+  readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
+
+  readonly templates = computed(() => {
+    return this.contentTemplates().reduce(
+      (acc, child) => {
+        acc[child.id] = child.templateRef;
+        return acc;
+      },
+      {} as Record<string, TemplateRef<any>>
+    );
+  });
 
   ngOnInit(): void {
-    this.accordionService.addItem(this);
+    this.#accordionService.addItem(this);
   }
 
   ngOnDestroy(): void {
-    this.accordionService.removeItem(this);
+    this.#accordionService.removeItem(this);
   }
 
   toggleItem(): void {
-    this.accordionService.toggleItem(this);
-  }
-
-  ngAfterContentInit(): void {
-    this.contentTemplates.forEach((child: TemplateIdDirective) => {
-      this.templates[child.id] = child.templateRef;
-    });
+    this.#accordionService.toggleItem(this);
   }
 }

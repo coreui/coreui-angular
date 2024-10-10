@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, HostBinding, inject, Input } from '@angular/core';
+import { booleanAttribute, Component, computed, effect, inject, input } from '@angular/core';
 
 import { AccordionService } from '../accordion.service';
 
@@ -9,35 +9,29 @@ import { AccordionService } from '../accordion.service';
   exportAs: 'cAccordionItem',
   providers: [AccordionService],
   standalone: true,
-  host: { class: 'accordion' }
+  host: { '[class]': 'hostClasses()' }
 })
 export class AccordionComponent {
-  #accordionService = inject(AccordionService);
+  readonly #accordionService = inject(AccordionService);
 
   /**
    * Removes the default background-color, some borders, and some rounded corners to render accordions edge-to-edge with their parent container.
    * @type boolean
    */
-  @Input({ transform: booleanAttribute }) flush: boolean = false;
+  readonly flush = input(false, { transform: booleanAttribute });
 
   /**
    * Make accordion items stay open when another item is opened
    * @type boolean
    */
-  @Input({ transform: booleanAttribute })
-  set alwaysOpen(value: boolean) {
-    this.#accordionService.alwaysOpen = value;
-  }
+  readonly alwaysOpen = input(false, { transform: booleanAttribute });
 
-  get alwaysOpen(): boolean {
-    return this.#accordionService.alwaysOpen;
-  }
+  readonly #alwaysOpenEffect = effect(() => {
+    this.#accordionService.alwaysOpen = this.alwaysOpen();
+  });
 
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      accordion: true,
-      'accordion-flush': this.flush
-    };
-  }
+  readonly hostClasses = computed<Record<string, boolean>>(() => ({
+    accordion: true,
+    'accordion-flush': this.flush()
+  }));
 }
