@@ -2,6 +2,14 @@
 
 ---
 
+#### `5.2.20`
+
+- chore(dependencies): update to Angular `18.2.8`
+- refactor(accordion): input signals, host bindings
+- refactor(toaster.service): readonly props
+
+---
+
 #### `5.2.19`
 
 - chore(dependencies): update to Angular `18.2.6`
