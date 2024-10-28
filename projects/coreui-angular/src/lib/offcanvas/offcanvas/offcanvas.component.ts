@@ -193,7 +193,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     const element: Element = this.document.documentElement;
     const responsiveBreakpoint = this.responsive;
     const breakpointValue =
-      getComputedStyle(element)?.getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) ?? false;
+      this.document.defaultView
+        ?.getComputedStyle(element)
+        ?.getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) ?? false;
     return breakpointValue ? `${parseFloat(breakpointValue.trim()) - 0.02}px` : false;
   }
 
