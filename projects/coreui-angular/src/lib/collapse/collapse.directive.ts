@@ -1,17 +1,15 @@
 import {
-  AfterViewInit,
   booleanAttribute,
   computed,
   Directive,
-  DoCheck,
+  effect,
   ElementRef,
-  Input,
+  inject,
   input,
-  OnChanges,
   OnDestroy,
   output,
   Renderer2,
-  SimpleChanges
+  signal
 } from '@angular/core';
 import { AnimationBuilder, AnimationPlayer, useAnimation } from '@angular/animations';
 
@@ -22,19 +20,31 @@ import {
   expandHorizontalAnimation
 } from './collapse.animations';
 
-// todo
 @Directive({
   selector: '[cCollapse]',
   exportAs: 'cCollapse',
   standalone: true,
-  host: { '[class]': 'hostClasses()' }
+  host: { '[class]': 'hostClasses()', '[style]': '{display: "none"}' }
 })
-export class CollapseDirective implements OnDestroy, AfterViewInit, DoCheck, OnChanges {
+export class CollapseDirective implements OnDestroy {
+  readonly #hostElement = inject(ElementRef);
+  readonly #renderer = inject(Renderer2);
+  readonly #animationBuilder = inject(AnimationBuilder);
+  #player: AnimationPlayer | undefined = undefined;
+
   /**
    * @ignore
-   * todo: 'animate' input signal for navbar
    */
-  @Input({ transform: booleanAttribute }) animate: boolean = true;
+  readonly animateInput = input(true, { transform: booleanAttribute, alias: 'animate' });
+
+  readonly animate = signal(true);
+
+  readonly animateInputEffect = effect(
+    () => {
+      this.animate.set(this.animateInput());
+    },
+    { allowSignalWrites: true }
+  );
 
   /**
    * Set horizontal collapsing to transition the width instead of height.
@@ -47,18 +57,31 @@ export class CollapseDirective implements OnDestroy, AfterViewInit, DoCheck, OnC
    * Toggle the visibility of collapsible element.
    * @type boolean
    * @default false
-   * todo: 'visible' input signal
    */
-  @Input({ transform: booleanAttribute })
-  set visible(value) {
-    this._visible = value;
-  }
+  readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
-  get visible(): boolean {
-    return this._visible;
-  }
+  readonly visibleChange = output<boolean>();
 
-  private _visible: boolean = false;
+  readonly visibleInputEffect = effect(
+    () => {
+      this.visible.set(this.visibleInput());
+    },
+    { allowSignalWrites: true }
+  );
+
+  readonly visible = signal<boolean>(false);
+
+  #init = false;
+
+  readonly visibleEffect = effect(
+    () => {
+      const visible = this.visible();
+
+      (this.#init || visible) && this.createPlayer(visible);
+      this.#init = true;
+    },
+    { allowSignalWrites: true }
+  );
 
   /**
    * Add `navbar` prop for grouping and hiding navbar contents by a parent breakpoint.
@@ -83,21 +106,6 @@ export class CollapseDirective implements OnDestroy, AfterViewInit, DoCheck, OnC
    */
   readonly collapseChange = output<string>();
 
-  private player!: AnimationPlayer;
-  private readonly host: HTMLElement;
-  // private scrollHeight!: number;
-  private scrollWidth!: number;
-  private collapsing: boolean = false;
-
-  constructor(
-    private readonly hostElement: ElementRef,
-    private readonly renderer: Renderer2,
-    private readonly animationBuilder: AnimationBuilder
-  ) {
-    this.host = this.hostElement.nativeElement;
-    this.renderer.setStyle(this.host, 'display', 'none');
-  }
-
   readonly hostClasses = computed(() => {
     return {
       'navbar-collapse': this.navbar(),
@@ -105,49 +113,31 @@ export class CollapseDirective implements OnDestroy, AfterViewInit, DoCheck, OnC
     } as Record<string, boolean>;
   });
 
-  ngAfterViewInit(): void {
-    if (this.visible) {
-      this.toggle();
-    }
-  }
-
   ngOnDestroy(): void {
     this.destroyPlayer();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible']) {
-      if (!changes['visible'].firstChange || !changes['visible'].currentValue) {
-        this.toggle(changes['visible'].currentValue);
-      }
-    }
-  }
-
-  ngDoCheck(): void {
-    if (this._visible !== this.visible) {
-      this.toggle();
-    }
-  }
-
-  toggle(visible = this.visible): void {
-    this.createPlayer(visible);
-    this.player?.play();
+  toggle(visible = !this.visible()): void {
+    this.visible.set(visible);
   }
 
   destroyPlayer(): void {
-    this.player?.destroy();
+    this.#player?.destroy();
+    this.#player = undefined;
   }
 
-  createPlayer(visible: boolean = this.visible): void {
-    if (this.player?.hasStarted()) {
+  createPlayer(visible: boolean = this.visible()): void {
+    if (this.#player?.hasStarted()) {
       this.destroyPlayer();
     }
 
+    const host: HTMLElement = this.#hostElement.nativeElement;
+
     if (visible) {
-      this.renderer.removeStyle(this.host, 'display');
+      this.#renderer.removeStyle(host, 'display');
     }
 
-    const duration = this.animate ? this.duration() : '0ms';
+    const duration = this.animate() ? this.duration() : '0ms';
 
     const expand = this.horizontal() ? expandHorizontalAnimation : expandAnimation;
     const collapse = this.horizontal() ? collapseHorizontalAnimation : collapseAnimation;
@@ -156,53 +146,48 @@ export class CollapseDirective implements OnDestroy, AfterViewInit, DoCheck, OnC
     const capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
     const scrollSize = `scroll${capitalizedDimension}`;
 
-    const animationFactory = this.animationBuilder?.build(
+    const animationFactory = this.#animationBuilder?.build(
       useAnimation(visible ? expand : collapse, { params: { time: duration, easing: this.transition() } })
     );
 
-    this.player = animationFactory.create(this.host);
+    this.#player = animationFactory.create(host);
 
-    this.renderer.setStyle(this.host, dimension, visible ? 0 : `${this.host.getBoundingClientRect()[dimension]}px`);
+    !visible && host.offsetHeight && host.style[dimension] && host.scrollHeight;
 
-    !visible && this.host.offsetHeight;
+    this.#renderer.setStyle(host, dimension, visible ? 0 : `${host.getBoundingClientRect()[dimension]}px`);
 
-    this.player.onStart(() => {
+    this.#player.onStart(() => {
       this.setMaxSize();
-      this.renderer.removeClass(this.host, 'collapse');
-      this.renderer.addClass(this.host, 'collapsing');
-      this.renderer.removeClass(this.host, 'show');
-      this.collapsing = true;
-      if (visible) {
-        this.renderer.setStyle(this.host, dimension, `${this.hostElement.nativeElement[scrollSize]}px`);
-      } else {
-        this.renderer.setStyle(this.host, dimension, '');
-      }
-      this.collapseChange.emit(visible ? 'opening' : 'collapsing');
+      this.#renderer.removeClass(host, 'collapse');
+      this.#renderer.addClass(host, 'collapsing');
+      this.#renderer.removeClass(host, 'show');
+      this.#renderer.setStyle(host, dimension, visible ? `${(host as any)[scrollSize]}px` : '');
+      this.collapseChange?.emit(visible ? 'opening' : 'collapsing');
     });
-    this.player.onDone(() => {
-      this.visible = visible;
-      this.collapsing = false;
-      this.renderer.removeClass(this.host, 'collapsing');
-      this.renderer.addClass(this.host, 'collapse');
+
+    this.#player.onDone(() => {
+      this.#renderer.removeClass(host, 'collapsing');
+      this.#renderer.addClass(host, 'collapse');
       if (visible) {
-        this.renderer.addClass(this.host, 'show');
-        this.renderer.setStyle(this.host, dimension, '');
+        this.#renderer.addClass(host, 'show');
+        this.#renderer.setStyle(host, dimension, '');
       } else {
-        this.renderer.removeClass(this.host, 'show');
+        this.#renderer.removeClass(host, 'show');
       }
-      this.collapseChange.emit(visible ? 'open' : 'collapsed');
+      this.collapseChange?.emit(visible ? 'open' : 'collapsed');
+      this.destroyPlayer();
+      this.visibleChange.emit(visible);
     });
+
+    this.#player?.play();
   }
 
   setMaxSize() {
-    // setTimeout(() => {
+    const host = this.#hostElement.nativeElement;
     if (this.horizontal()) {
-      this.scrollWidth = this.host.scrollWidth;
-      this.scrollWidth > 0 && this.renderer.setStyle(this.host, 'maxWidth', `${this.scrollWidth}px`);
+      host.scrollWidth > 0 && this.#renderer.setStyle(host, 'maxWidth', `${host.scrollWidth}px`);
       // } else {
-      // this.scrollHeight = this.host.scrollHeight;
-      // this.scrollHeight > 0 && this.renderer.setStyle(this.host, 'maxHeight', `${this.scrollHeight}px`);
+      //   host.scrollHeight > 0 && this.#renderer.setStyle(host, 'maxHeight', `${host.scrollHeight}px`);
     }
-    // });
   }
 }
