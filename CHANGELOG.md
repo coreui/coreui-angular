@@ -2,6 +2,17 @@
 
 ---
 
+#### `5.2.22`
+
+- chore(dependencies): update
+- refactor(collapse): input signals, host bindings
+- refactor(navbar): input signals, host bindings
+- refactor(icon.directive): host binding innerHtml
+- refactor(offcanvas): minor fixes
+- refactor(sidebar-nav): minor fixes
+
+---
+
 #### `5.2.21`
 
 - chore(dependencies): update
