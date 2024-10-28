@@ -1,23 +1,22 @@
-import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'c-navbar-nav',
   template: '<ng-content />',
   standalone: true,
-  host: { class: 'navbar-nav' }
+  host: { '[class]': 'hostClasses()' }
 })
 export class NavbarNavComponent {
   /**
    * Enable vertical scrolling of a collapsed navbar toggleable contents.
    * @type boolean
    */
-  @Input({ transform: booleanAttribute }) scroll: string | boolean = false;
+  readonly scroll = input(false, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
       'navbar-nav': true,
-      'navbar-nav-scroll': this.scroll
-    };
-  }
+      'navbar-nav-scroll': this.scroll()
+    } as Record<string, boolean>;
+  });
 }

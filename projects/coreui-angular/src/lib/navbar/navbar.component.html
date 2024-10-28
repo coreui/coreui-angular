@@ -1,7 +1,7 @@
-<ng-container *ngTemplateOutlet="container ? withContainerTemplate : noContainerTemplate" />
+<ng-container *ngTemplateOutlet="container() ? withContainerTemplate : noContainerTemplate" />
 
 <ng-template #withContainerTemplate>
-  <div [ngClass]="containerClass">
+  <div [ngClass]="containerClass()">
     <ng-content />
   </div>
 </ng-template>

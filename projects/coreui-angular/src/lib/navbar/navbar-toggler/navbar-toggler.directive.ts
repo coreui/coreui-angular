@@ -1,55 +1,60 @@
-import { AfterContentInit, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2 } from '@angular/core';
+import { afterNextRender, Directive, ElementRef, HostListener, inject, input, Renderer2 } from '@angular/core';
 import { CollapseDirective } from '../../collapse';
 
 @Directive({
   selector: '[cNavbarToggler]',
-  standalone: true
+  standalone: true,
+  host: {
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.type]': 'type()',
+    class: 'navbar-toggler'
+  }
 })
-export class NavbarTogglerDirective implements AfterContentInit {
+export class NavbarTogglerDirective {
+  readonly #renderer = inject(Renderer2);
+  readonly #hostElement = inject(ElementRef);
+
+  constructor() {
+    afterNextRender({
+      read: () => {
+        const hasContent = this.#hostElement.nativeElement.childNodes.length as boolean;
+        if (!hasContent) {
+          this.addDefaultIcon();
+        }
+      }
+    });
+  }
+
   /**
    * Reference to navbar collapse element (via # template variable) . [docs]
    * @type string
    * @default 'button'
    */
-  @Input('cNavbarToggler') collapseRef?: CollapseDirective;
-  @HostBinding('class.navbar-toggler') navbarToggler = true;
+  readonly collapseRef = input<CollapseDirective | undefined>(undefined, { alias: 'cNavbarToggler' });
+
   /**
    * Default type for navbar-toggler. [docs]
    * @type string
    * @default 'button'
    */
-  @HostBinding('attr.type')
-  @Input() type = 'button';
+  readonly type = input('button');
+
   /**
    * Default aria-label attr for navbar-toggler. [docs]
    * @type string
    * @default 'Toggle navigation'
    */
-  @HostBinding('attr.aria-label')
-  @Input() ariaLabel = 'Toggle navigation';
-
-  private hasContent!: boolean;
-
-  constructor(
-    private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) { }
+  readonly ariaLabel = input('Toggle navigation');
 
   @HostListener('click', ['$event'])
   handleClick() {
-    this.collapseRef?.toggle(!this.collapseRef?.visible);
+    const collapseRef = this.collapseRef();
+    collapseRef?.toggle(!collapseRef?.visible());
   }
 
   addDefaultIcon(): void {
-    const span = this.renderer.createElement('span');
-    this.renderer.addClass(span, 'navbar-toggler-icon');
-    this.renderer.appendChild(this.hostElement.nativeElement, span);
-  }
-
-  ngAfterContentInit(): void {
-    this.hasContent = this.hostElement.nativeElement.childNodes.length as boolean;
-    if (!this.hasContent) {
-      this.addDefaultIcon();
-    }
+    const span = this.#renderer.createElement('span');
+    this.#renderer.addClass(span, 'navbar-toggler-icon');
+    this.#renderer.appendChild(this.#hostElement.nativeElement, span);
   }
 }

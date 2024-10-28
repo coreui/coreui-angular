@@ -1,12 +1,9 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-navbar-text',
   template: '<ng-content />',
-  standalone: true
+  standalone: true,
+  host: { class: 'navbar-text' }
 })
-export class NavbarTextComponent {
-
-  @HostBinding('class.navbar-text') navbarTextClass = true;
-
-}
+export class NavbarTextComponent {}

@@ -1,12 +1,18 @@
-import { NavbarTogglerDirective } from './navbar-toggler.directive';
 import { ElementRef, Renderer2 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { NavbarTogglerDirective } from './navbar-toggler.directive';
 
 describe('NavbarTogglerDirective', () => {
-  let renderer: Renderer2;
-  let hostElement: ElementRef;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [Renderer2, { provide: ElementRef, useValue: { nativeElement: document.createElement('button') } }]
+    });
+  });
 
   it('should create an instance', () => {
-    const directive = new NavbarTogglerDirective(renderer, hostElement);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new NavbarTogglerDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

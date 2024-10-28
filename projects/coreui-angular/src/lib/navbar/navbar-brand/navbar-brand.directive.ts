@@ -1,12 +1,10 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive, input } from '@angular/core';
 
 @Directive({
   selector: '[cNavbarBrand]',
-  standalone: true
+  standalone: true,
+  host: { class: 'navbar-brand', '[attr.role]': 'role()' }
 })
 export class NavbarBrandDirective {
-
-  @HostBinding('class.navbar-brand') navbarBrand = true;
-  @HostBinding('attr.role') role = 'button';
-
+  readonly role = input('button');
 }

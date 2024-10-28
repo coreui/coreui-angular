@@ -1,10 +1,22 @@
-import { AfterContentInit, Component, ContentChild, ElementRef, HostBinding, Input } from '@angular/core';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import {
+  AfterContentInit,
+  afterRender,
+  Component,
+  computed,
+  contentChild,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  signal
+} from '@angular/core';
+import { DOCUMENT, NgClass, NgTemplateOutlet } from '@angular/common';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 import { CollapseDirective } from '../collapse';
 import { Colors } from '../coreui.types';
 import { ThemeDirective } from '../shared';
+import { Subscription } from 'rxjs';
 
 // todo: fix container prop issue not rendering children
 // todo: workaround -  use <c-container> component directly in template
@@ -15,79 +27,106 @@ import { ThemeDirective } from '../shared';
   standalone: true,
   imports: [NgClass, NgTemplateOutlet],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
-  host: { class: 'navbar' }
+  host: { '[class]': 'hostClasses()', '[attr.role]': 'role()' }
 })
-export class NavbarComponent implements AfterContentInit {
+export class NavbarComponent implements AfterContentInit, OnDestroy {
+  readonly #breakpointObserver = inject(BreakpointObserver);
+  readonly #document = inject(DOCUMENT);
+  readonly #hostElement = inject(ElementRef);
+
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @type Colors
    */
-  @Input() color?: Colors;
+  readonly color = input<Colors>();
+
   /**
    * Defines optional container wrapping children elements.
    */
-  @Input() container?: boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
+  readonly container = input<boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid'>();
+
   /**
    * Defines the responsive breakpoint to determine when content collapses.
    */
-  @Input() expand?: boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  readonly expand = input<boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>();
+
   /**
    * Place component in non-static positions.
    */
-  @Input() placement?: 'fixed-top' | 'fixed-bottom' | 'sticky-top';
+  readonly placement = input<'fixed-top' | 'fixed-bottom' | 'sticky-top'>();
 
-  @ContentChild(CollapseDirective) collapse!: CollapseDirective;
+  readonly role = input('navigation');
 
-  @HostBinding('attr.role')
-  @Input()
-  role = 'navigation';
+  readonly collapse = contentChild(CollapseDirective);
 
-  constructor(
-    private hostElement: ElementRef,
-    private breakpointObserver: BreakpointObserver
-  ) {}
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    const expandClassSuffix: string = this.expand === true ? '' : `-${this.expand}`;
+  readonly hostClasses = computed(() => {
+    const color = this.color();
+    const expand = this.expand();
+    const expandClassSuffix: string = expand === true ? '' : `-${expand}`;
+    const placement = this.placement();
     return {
       navbar: true,
-      [`navbar-expand${expandClassSuffix}`]: !!this.expand,
-      [`bg-${this.color}`]: !!this.color,
-      [`${this.placement}`]: !!this.placement
-    };
-  }
+      [`navbar-expand${expandClassSuffix}`]: !!expand,
+      [`bg-${color}`]: !!color,
+      [`${placement}`]: !!placement
+    } as Record<string, boolean>;
+  });
 
-  get containerClass(): string {
-    return `container${this.container !== true ? '-' + this.container : ''}`;
-  }
+  readonly containerClass = computed(() => {
+    const container = this.container();
+    return `container${container !== true ? '-' + container : ''}`;
+  });
 
-  get breakpoint(): string | boolean {
-    if (typeof this.expand === 'string') {
-      return (
-        getComputedStyle(this.hostElement.nativeElement)?.getPropertyValue(`--cui-breakpoint-${this.expand}`) ?? false
-      );
+  readonly computedStyle = signal<string>('');
+
+  readonly afterNextRenderFn = afterRender({
+    read: () => {
+      const expand = this.expand();
+      if (typeof expand === 'string') {
+        const computedStyle =
+          this.#document.defaultView
+            ?.getComputedStyle(this.#hostElement.nativeElement)
+            ?.getPropertyValue(`--cui-breakpoint-${expand}`) ?? false;
+        computedStyle && this.computedStyle.set(computedStyle);
+      }
+    }
+  });
+
+  readonly breakpoint = computed(() => {
+    const expand = this.expand();
+    if (typeof expand === 'string') {
+      return this.computedStyle();
     }
     return false;
-  }
+  });
+
+  #observer!: Subscription;
 
   ngAfterContentInit(): void {
-    if (this.breakpoint) {
-      const onBreakpoint = `(min-width: ${this.breakpoint})`;
-      this.breakpointObserver.observe([onBreakpoint]).subscribe((result) => {
-        if (this.collapse) {
-          const animate = this.collapse.animate;
-          // todo: collapse animate input signal setter
-          this.collapse.animate = false;
-          this.collapse.toggle(false);
-          setTimeout(() => {
-            this.collapse.toggle(result.matches);
+    const breakpoint = this.breakpoint();
+    if (breakpoint) {
+      const onBreakpoint = `(min-width: ${breakpoint})`;
+      this.#observer = this.#breakpointObserver
+        .observe([onBreakpoint])
+        .pipe()
+        .subscribe((result) => {
+          const collapse = this.collapse();
+          if (collapse) {
+            const animate = collapse.animate();
+            collapse.animate.set(false);
+            collapse.toggle(false);
             setTimeout(() => {
-              this.collapse.animate = animate;
+              collapse.toggle(result.matches);
+              setTimeout(() => {
+                collapse.animate.set(animate);
+              });
             });
-          });
-        }
-      });
+          }
+        });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.#observer?.unsubscribe();
   }
 }
