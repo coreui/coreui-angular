@@ -8,7 +8,8 @@ import { transformName } from './icon.utils';
 @Directive({
   exportAs: 'cIcon',
   selector: 'svg[cIcon]',
-  standalone: true
+  standalone: true,
+  host: { ngSkipHydration: 'true', '[innerHtml]': 'innerHtml()' }
 })
 export class IconDirective implements IIcon {
   readonly #elementRef = inject(ElementRef);
@@ -78,13 +79,8 @@ export class IconDirective implements IIcon {
     return this.computedClasses;
   }
 
-  @HostBinding('innerHtml')
-  get bindInnerHtml() {
-    return this.innerHtml();
-  }
-
   readonly innerHtml = computed(() => {
-    const code = Array.isArray(this.code()) ? this.code()[1] ?? this.code()[0] ?? '' : this.code() || '';
+    const code = Array.isArray(this.code()) ? (this.code()[1] ?? this.code()[0] ?? '') : this.code() || '';
     // todo proper sanitize
     // const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, code);
     return this.#sanitizer.bypassSecurityTrustHtml(this.titleCode + code || '');
@@ -103,8 +99,7 @@ export class IconDirective implements IIcon {
     }
     if (this.#name() && !this.#iconSet?.icons[this.#name()]) {
       console.warn(
-        `c-icon component: icon name '${this.#name()}' does not exist for IconSet service. ` +
-          `To use icon by 'name' prop you need to add it to IconSet service. \n`,
+        `cIcon directive: The '${this.#name()}' icon not found. Add it to the IconSet service for use with the 'name' property. \n`,
         this.#name()
       );
     }
@@ -112,7 +107,7 @@ export class IconDirective implements IIcon {
   });
 
   readonly scale = computed(() => {
-    return Array.isArray(this.code()) && this.code().length > 1 ? `0 0 ${this.code()[0]}` : '0 0 64 64';
+    return Array.isArray(this.code()) && (this.code()?.length ?? 0) > 1 ? `0 0 ${this.code()?.[0]}` : '0 0 64 64';
   });
 
   get computedSize(): Exclude<IconSize, 'custom'> | undefined {
