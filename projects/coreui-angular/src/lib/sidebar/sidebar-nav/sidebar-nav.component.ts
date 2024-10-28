@@ -160,22 +160,26 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
   onAnimationStart($event: AnimationEvent) {
     this.display = { display: 'block' };
-    if ($event.toState === 'open') {
-      const host = this.sidebarNav.nativeElement;
-      this.renderer.setStyle(host, 'height', `${host['scrollHeight']}px`);
-    }
+    setTimeout(() => {
+      const host = this.sidebarNav?.nativeElement;
+      if ($event.toState === 'open' && host) {
+        this.renderer.setStyle(host, 'height', `${host['scrollHeight']}px`);
+      }
+    });
   }
 
   onAnimationDone($event: AnimationEvent) {
-    if ($event.toState === 'open') {
-      const host = this.sidebarNav.nativeElement;
-      this.renderer.setStyle(host, 'height', 'auto');
-    }
-    if ($event.toState === 'closed') {
-      setTimeout(() => {
-        this.display = null;
-      });
-    }
+    setTimeout(() => {
+      const host = this.sidebarNav?.nativeElement;
+      if ($event.toState === 'open' && host) {
+        this.renderer.setStyle(host, 'height', 'auto');
+      }
+      if ($event.toState === 'closed') {
+        setTimeout(() => {
+          this.display = null;
+        });
+      }
+    });
   }
 }
 

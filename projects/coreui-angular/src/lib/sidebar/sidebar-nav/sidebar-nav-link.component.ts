@@ -85,7 +85,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
     this.url =
       typeof this.item.url === 'string'
         ? this.item.url
-        : this.router.serializeUrl(this.router.createUrlTree(this.item.url as any[]));
+        : this.router.serializeUrl(this.router.createUrlTree((this.item.url as any[]) ?? ['']));
     this.linkType = this.getLinkType();
     this.href = this.isDisabled() ? '' : this.item.href || this.url;
     this.linkActive = this.router.url.split(/[?#(;]/)[0] === this.href.split(/[?#(;]/)[0];
@@ -110,7 +110,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
 
   public isExternalLink(): boolean {
     const linkPath = Array.isArray(this.item.url) ? this.item.url[0] : this.item.url;
-    return !!this.item.href || linkPath.substring(0, 4) === 'http';
+    return !!this.item.href || linkPath?.substring(0, 4) === 'http';
   }
 
   linkClicked(): void {
