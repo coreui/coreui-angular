@@ -2,6 +2,14 @@
 
 ---
 
+#### `5.2.23`
+
+- chore(dependencies): update
+- refactor(html-attr.directive): signal input, cleanup
+- refactor(icon): signal inputs, host bindings, cleanup
+
+---
+
 #### `5.2.22`
 
 - chore(dependencies): update
