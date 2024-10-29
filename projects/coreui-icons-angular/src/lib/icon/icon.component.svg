@@ -1,30 +1,30 @@
-@if (!use && !!code) {
+@if (!use() && !!code()) {
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    [attr.width]="width"
-    [attr.height]="height || width"
-    [attr.viewBox]="viewBox"
+    [attr.width]="width()"
+    [attr.height]="height() || width()"
+    [attr.viewBox]="viewBox() ?? scale()"
     [innerHtml]="innerHtml()"
-    [ngClass]="computedClasses"
-    [cHtmlAttr]="attributes"
+    [ngClass]="computedClasses()"
+    [cHtmlAttr]="attributes()"
     aria-hidden="true"
     pointer-events="none"
     role="img"
     #svgElement
   >
   </svg>
-} @else if (use) {
+} @else if (use()) {
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    [attr.width]="width"
-    [attr.height]="height || width"
-    [ngClass]="computedClasses"
-    [cHtmlAttr]="attributes"
+    [attr.width]="width()"
+    [attr.height]="height() || width()"
+    [ngClass]="computedClasses()"
+    [cHtmlAttr]="attributes()"
     aria-hidden="true"
     pointer-events="none"
     role="img"
     #svgElement
   >
-    <use [attr.href]="use"></use>
+    <use [attr.href]="use()"></use>
   </svg>
 }

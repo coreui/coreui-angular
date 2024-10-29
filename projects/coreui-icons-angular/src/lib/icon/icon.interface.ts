@@ -1,18 +1,20 @@
+import { InputSignal, InputSignalWithTransform } from '@angular/core';
+
 export interface IIcon {
-  content?: string | string[] | any[];
-  customClasses?: string | string[] | Set<string> | { [klass: string]: any };
-  height?: string;
-  name?: string;
-  pointerEvents?: string;
-  size?: IconSize;
-  title?: string;
-  viewBox?: string;
-  width?: string;
-  xmlns?: string;
+  content?: InputSignal<string | string[] | any[] | undefined>;
+  customClasses?: InputSignal<NgCssClass | undefined>;
+  height?: InputSignal<string | undefined>;
+  name?: InputSignalWithTransform<string, string>;
+  pointerEvents?: InputSignal<IPointerEvents>;
+  size?: InputSignal<IconSize>;
+  title?: InputSignal<string | undefined>;
+  viewBoxInput?: InputSignal<string | undefined>;
+  width: InputSignal<string | undefined>;
+  xmlns?: InputSignal<string>;
 }
 
 export type IconSize =
-  'custom'
+  | 'custom'
   | 'custom-size'
   | 'sm'
   | 'lg'
@@ -26,3 +28,18 @@ export type IconSize =
   | '8xl'
   | '9xl'
   | string;
+
+export type IPointerEvents =
+  | 'auto'
+  | 'bounding-box'
+  | 'visiblePainted'
+  | 'visibleFill'
+  | 'visibleStroke'
+  | 'visible'
+  | 'painted'
+  | 'fill'
+  | 'stroke'
+  | 'all'
+  | 'none';
+
+export type NgCssClass = string | string[] | Set<string> | { [klass: string]: any };

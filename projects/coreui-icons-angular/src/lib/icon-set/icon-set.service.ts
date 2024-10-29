@@ -9,21 +9,23 @@ export interface IIconSet {
 })
 export class IconSetService {
   public get iconNames() {
-    return this._iconNames;
+    return this.#iconNames;
   }
 
-  private _iconNames: { [key: string]: string } = {};
+  #iconNames: Record<string, string> = {};
 
   get icons(): IIconSet {
-    return this._icons;
+    return this.#icons;
   }
+
   set icons(iconSet) {
     for (const iconsKey in iconSet) {
-      this._iconNames[iconsKey] = iconsKey;
+      this.#iconNames[iconsKey] = iconsKey;
     }
-    this._icons = iconSet;
+    this.#icons = iconSet;
   }
-  private _icons: IIconSet = {};
+
+  #icons: IIconSet = {};
 
   public getIcon(name: string): string[] {
     const icon = this.icons[name];

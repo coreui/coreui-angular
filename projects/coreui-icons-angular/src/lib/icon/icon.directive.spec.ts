@@ -26,9 +26,6 @@ describe('IconDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let svgEl: DebugElement;
-  // let renderer: Renderer2;
-  // let sanitizer: DomSanitizer;
-  // let iconSetService: IconSetService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,9 +37,6 @@ describe('IconDirective', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     svgEl = fixture.debugElement.query(By.css('svg'));
-    // renderer = fixture.componentRef.injector.get(Renderer2 as Type<Renderer2>);
-    // sanitizer = fixture.componentRef.injector.get(DomSanitizer);
-    // iconSetService = fixture.componentRef.injector.get(IconSetService);
   });
   it('should create an instance', () => {
     TestBed.runInInjectionContext(() => {

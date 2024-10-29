@@ -1,106 +1,80 @@
-import { afterNextRender, computed, Directive, ElementRef, HostBinding, inject, Input, signal } from '@angular/core';
+import { computed, Directive, inject, input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IconSetService } from '../icon-set';
-import { IconSize, IIcon } from './icon.interface';
+import { IconSize, IIcon, IPointerEvents, NgCssClass } from './icon.interface';
 import { transformName } from './icon.utils';
 
 @Directive({
   exportAs: 'cIcon',
   selector: 'svg[cIcon]',
   standalone: true,
-  host: { ngSkipHydration: 'true', '[innerHtml]': 'innerHtml()' }
+  host: {
+    ngSkipHydration: 'true',
+    '[innerHtml]': 'innerHtml()',
+    '[class]': 'hostClasses()',
+    '[attr.viewBox]': 'viewBox()',
+    '[attr.xmlns]': 'xmlns()',
+    '[attr.pointer-events]': 'pointerEvents()',
+    '[attr.role]': 'role()',
+    '[attr.aria-hidden]': 'true'
+  }
 })
 export class IconDirective implements IIcon {
-  readonly #elementRef = inject(ElementRef);
   readonly #sanitizer = inject(DomSanitizer);
   readonly #iconSet = inject(IconSetService);
 
-  constructor() {
-    afterNextRender({
-      write: () => {
-        this.#elementRef.nativeElement.innerHTML = this.innerHtml();
-      }
-    });
-  }
+  readonly content = input<string | string[] | any[] | undefined>(undefined, { alias: 'cIcon' });
 
-  @Input('cIcon')
-  set content(value: string | string[] | any[]) {
-    this.#content.set(value);
-  }
+  readonly customClasses = input<NgCssClass>();
+  readonly size = input<IconSize>('');
+  readonly title = input<string>();
+  readonly height = input<string>();
+  readonly width = input<string>();
+  readonly name = input('', { transform: transformName });
+  readonly viewBoxInput = input<string | undefined>(undefined, { alias: 'viewBox' });
+  readonly xmlns = input('http://www.w3.org/2000/svg');
+  readonly pointerEvents = input<IPointerEvents>('none', { alias: 'pointer-events' });
+  readonly role = input('img');
 
-  readonly #content = signal<string | string[] | any[]>('');
-
-  @Input() customClasses?: string | string[] | Set<string> | { [klass: string]: any };
-  @Input() size: IconSize = '';
-  @Input() title?: string;
-  @Input() height?: string;
-  @Input() width?: string;
-
-  @Input({ transform: transformName })
-  set name(value: string) {
-    this.#name.set(value);
-  }
-
-  get name() {
-    return this.#name();
-  }
-
-  readonly #name = signal('');
-
-  @HostBinding('attr.viewBox')
-  @Input()
-  set viewBox(viewBox: string) {
-    this._viewBox = viewBox;
-  }
-
-  get viewBox(): string {
-    return this._viewBox ?? this.scale();
-  }
-
-  private _viewBox!: string;
-
-  @HostBinding('attr.aria-hidden') ariaHidden = true;
-
-  @HostBinding('attr.xmlns')
-  @Input()
-  xmlns = 'http://www.w3.org/2000/svg';
-
-  @HostBinding('attr.pointer-events')
-  @Input('pointer-events')
-  pointerEvents = 'none';
-
-  @HostBinding('attr.role')
-  @Input()
-  role = 'img';
-
-  @HostBinding('class')
-  get hostClasses() {
-    return this.computedClasses;
-  }
-
-  readonly innerHtml = computed(() => {
-    const code = Array.isArray(this.code()) ? (this.code()[1] ?? this.code()[0] ?? '') : this.code() || '';
-    // todo proper sanitize
-    // const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, code);
-    return this.#sanitizer.bypassSecurityTrustHtml(this.titleCode + code || '');
+  readonly hostClasses = computed(() => {
+    const computedSize = this.computedSize();
+    const classes = {
+      icon: true,
+      [`icon-${computedSize}`]: !!computedSize
+    };
+    return this.customClasses() ?? classes;
   });
 
-  get titleCode(): string {
-    return this.title ? `<title>${this.title}</title>` : '';
-  }
+  readonly viewBox = computed(() => {
+    return this.viewBoxInput() ?? this.scale();
+  });
+
+  readonly innerHtml = computed(() => {
+    const codeVal = this.code();
+    const code = Array.isArray(codeVal) ? (codeVal?.[1] ?? codeVal?.[0] ?? '') : codeVal || '';
+    // todo proper sanitize
+    // const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, code);
+    return this.#sanitizer.bypassSecurityTrustHtml(this.#titleCode() + code || '');
+  });
+
+  readonly #titleCode = computed(() => {
+    return this.title() ? `<title>${this.title()}</title>` : '';
+  });
 
   readonly code = computed(() => {
-    if (this.#content()) {
-      return this.#content();
+    const content = this.content();
+    if (content) {
+      return content;
     }
-    if (this.#iconSet && this.#name()) {
-      return this.#iconSet.getIcon(this.#name());
+    const name = this.name();
+    if (this.#iconSet && name) {
+      return this.#iconSet.getIcon(name);
     }
-    if (this.#name() && !this.#iconSet?.icons[this.#name()]) {
+    if (name && !this.#iconSet?.icons[name]) {
       console.warn(
-        `cIcon directive: The '${this.#name()}' icon not found. Add it to the IconSet service for use with the 'name' property. \n`,
-        this.#name()
+        `cIcon directive: The '${name}' icon not found. Add it to the IconSet service for use with the 'name' property. \n`,
+        name
       );
     }
     return '';
@@ -110,16 +84,8 @@ export class IconDirective implements IIcon {
     return Array.isArray(this.code()) && (this.code()?.length ?? 0) > 1 ? `0 0 ${this.code()?.[0]}` : '0 0 64 64';
   });
 
-  get computedSize(): Exclude<IconSize, 'custom'> | undefined {
-    const addCustom = !this.size && (this.width || this.height);
-    return this.size === 'custom' || addCustom ? 'custom-size' : this.size;
-  }
-
-  get computedClasses() {
-    const classes = {
-      icon: true,
-      [`icon-${this.computedSize}`]: !!this.computedSize
-    };
-    return this.customClasses ?? classes;
-  }
+  readonly computedSize = computed(() => {
+    const addCustom = !this.size() && (this.width() || this.height());
+    return this.size() === 'custom' || addCustom ? 'custom-size' : this.size();
+  });
 }
