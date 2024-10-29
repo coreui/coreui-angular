@@ -1,20 +1,18 @@
-import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { Directive, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[cHtmlAttr]',
   exportAs: 'cHtmlAttr',
   standalone: true
 })
-export class HtmlAttributesDirective implements OnInit {
-  @Input() cHtmlAttr?: { [key: string]: any };
+export class HtmlAttributesDirective {
+  readonly cHtmlAttr = input<Record<string, any>>();
 
-  constructor(
-    private renderer: Renderer2,
-    private el: ElementRef
-  ) {}
+  readonly #renderer = inject(Renderer2);
+  readonly #elementRef = inject(ElementRef);
 
-  ngOnInit(): void {
-    const attribs = this.cHtmlAttr;
+  readonly attrEffect = effect(() => {
+    const attribs = this.cHtmlAttr();
     for (const attr in attribs) {
       if (attr === 'style' && typeof attribs[attr] === 'object') {
         this.setStyle(attribs[attr]);
@@ -24,12 +22,12 @@ export class HtmlAttributesDirective implements OnInit {
         this.setAttrib(attr, attribs[attr]);
       }
     }
-  }
+  });
 
-  private setStyle(styles: { [x: string]: any }): void {
+  private setStyle(styles: Record<string, any>): void {
     for (const style in styles) {
       if (style) {
-        this.renderer.setStyle(this.el.nativeElement, style, styles[style]);
+        this.#renderer.setStyle(this.#elementRef.nativeElement, style, styles[style]);
       }
     }
   }
@@ -39,13 +37,13 @@ export class HtmlAttributesDirective implements OnInit {
     classArray
       .filter((element) => element.length > 0)
       .forEach((element) => {
-        this.renderer.addClass(this.el.nativeElement, element);
+        this.#renderer.addClass(this.#elementRef.nativeElement, element);
       });
   }
 
   private setAttrib(key: string, value: string | null): void {
     value !== null
-      ? this.renderer.setAttribute(this.el.nativeElement, key, value)
-      : this.renderer.removeAttribute(this.el.nativeElement, key);
+      ? this.#renderer.setAttribute(this.#elementRef.nativeElement, key, value)
+      : this.#renderer.removeAttribute(this.#elementRef.nativeElement, key);
   }
 }
