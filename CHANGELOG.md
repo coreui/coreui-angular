@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.2.24`
+
+- chore(dependencies): update to Angular `18.2.11`
+- refactor(tab-panel): animateChild for optional nested animations
+
+---
+
 #### `5.2.23`
 
 - chore(dependencies): update
