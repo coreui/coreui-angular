@@ -1,4 +1,4 @@
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import { animate, animateChild, AnimationEvent, query, state, style, transition, trigger } from '@angular/animations';
 import {
   Component,
   computed,
@@ -35,7 +35,7 @@ type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
       state('show', style({ opacity: 1 })),
       state('hide', style({ opacity: 0 })),
       state('void', style({ opacity: 0 })),
-      transition('* => *', [animate('150ms linear')])
+      transition('* => *', [query('@*', [animateChild()], { optional: true }), animate('150ms linear')])
     ])
   ]
 })
