@@ -20,7 +20,7 @@ import { TabsService } from '../tabs.service';
   exportAs: 'cTabsList',
   selector: 'c-tabs-list',
   standalone: true,
-  imports: [TabDirective],
+  imports: [],
   template: '<ng-content />',
   host: {
     '[attr.role]': 'role()',
@@ -90,12 +90,15 @@ export class TabsListComponent {
     { allowSignalWrites: true }
   );
 
-  tabsServiceEffect = effect(() => {
-    const activeItemIndex = this.tabs().findIndex(
-      (tab) => untracked(tab.isActive) && untracked(tab.itemKey) === this.tabsService.activeItemKey()
-    );
-    this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
-  });
+  tabsServiceEffect = effect(
+    () => {
+      const activeItemIndex = this.tabs().findIndex(
+        (tab) => untracked(tab.isActive) && untracked(tab.itemKey) === this.tabsService.activeItemKey()
+      );
+      this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
+    },
+    { allowSignalWrites: true }
+  );
 
   @HostListener('keydown', ['$event'])
   onKeydown($event: any) {
