@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.2.25`
+
+- chore(dependencies): update to Angular `18.2.12`
+- fix(tabs-list): allowSignalWrites for tabsService effect
+
+---
+
 #### `5.2.24`
 
 - chore(dependencies): update to Angular `18.2.11`
