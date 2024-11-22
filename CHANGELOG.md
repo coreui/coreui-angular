@@ -1,5 +1,14 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+
+---
+
+#### `5.3.0`
+
+- chore(dependencies): update to `Angular 19`
+- refactor: directives, components and pipes are now standalone by default
+- refactor: remove deprecated 'allowSignalWrites' flag for effect() - writes are allowed by default
+
 ---
 
 #### `5.2.25`

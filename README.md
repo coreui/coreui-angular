@@ -11,7 +11,7 @@
 <h2 align="center">CoreUI for Angular</h3>
 
 <p align="center">
-  Angular Components Library built on top of Bootstrap 5.3 and TypeScript 5.4.
+  Angular Components Library built on top of Bootstrap 5.3 and TypeScript 5.5.
   <br>
   <a href="https://coreui.io/angular/docs/"><strong>Explore CoreUI for Angular docs »</strong></a>
   <br>
@@ -26,18 +26,18 @@
 ## Status
 
 ![angular][angular-badge]
-[![npm-coreui-angular-v5-ng18][npm-coreui-angular-badge-v5-ng18]][npm-coreui-angular]
+[![npm-coreui-angular-v5-ng19][npm-coreui-angular-badge-v5-ng19]][npm-coreui-angular]
 [![npm-coreui-angular-latest][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
 [![Build](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml)
 
-[npm-coreui-angular-badge-v5-ng18]: https://img.shields.io/npm/v/@coreui/angular/v5-ng18?style=flat-square&color=brightgreen
+[npm-coreui-angular-badge-v5-ng19]: https://img.shields.io/npm/v/@coreui/angular/v5-ng19?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^18.2.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^19.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## Table of contents
 
@@ -71,7 +71,7 @@
 Before you begin, make sure your development environment includes `Node.js®` and `npm` package manager.
 
 ###### Node.js
-[**Angular 18**](https://angular.dev/overview) requires `Node.js` LTS version `^18.19` or newer. 
+[**Angular 19**](https://angular.dev/overview) requires `Node.js` LTS version `^18.19` or newer. 
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
