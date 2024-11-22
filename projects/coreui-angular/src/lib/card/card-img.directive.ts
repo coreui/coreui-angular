@@ -2,7 +2,6 @@ import { computed, Directive, input } from '@angular/core';
 
 @Directive({
   selector: '[cCardImg]',
-  standalone: true,
   host: { '[class]': 'hostClasses()' }
 })
 export class CardImgDirective {

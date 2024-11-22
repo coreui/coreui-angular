@@ -21,7 +21,6 @@ import { TabsService } from '../tabs.service';
 @Directive({
   exportAs: 'cTab',
   selector: 'button[cTab]',
-  standalone: true,
   host: {
     '[class]': 'hostClasses()',
     type: 'button',

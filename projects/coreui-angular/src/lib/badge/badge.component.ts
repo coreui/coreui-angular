@@ -5,7 +5,6 @@ import { TextBgColorDirective, TextColorDirective } from '../utilities';
 @Component({
   selector: 'c-badge',
   template: '<ng-content />',
-  standalone: true,
   hostDirectives: [
     { directive: TextColorDirective, inputs: ['cTextColor: textColor'] },
     { directive: TextBgColorDirective, inputs: ['cTextBgColor: textBgColor'] }

@@ -15,7 +15,6 @@ import {
 @Component({
   selector: 'c-tooltip',
   templateUrl: './tooltip.component.html',
-  standalone: true,
   host: {
     class: 'tooltip fade bs-tooltip-auto',
     '[class]': 'hostClasses()',

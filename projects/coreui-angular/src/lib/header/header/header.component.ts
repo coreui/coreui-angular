@@ -6,11 +6,10 @@ import { Positions } from '../../coreui.types';
 type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
 
 @Component({
-  selector: 'c-header, [c-header]',
-  templateUrl: './header.component.html',
-  standalone: true,
-  imports: [NgClass],
-  host: { '[attr.role]': 'role()', '[class]': 'hostClasses()' }
+    selector: 'c-header, [c-header]',
+    templateUrl: './header.component.html',
+    imports: [NgClass],
+    host: { '[attr.role]': 'role()', '[class]': 'hostClasses()' }
 })
 export class HeaderComponent {
   /**

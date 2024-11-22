@@ -1,11 +1,9 @@
 import { AfterContentInit, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[cHeaderToggler]',
-  standalone: true
+  selector: '[cHeaderToggler]'
 })
 export class HeaderTogglerDirective implements AfterContentInit {
-
   @HostBinding('class.header-toggler') headerToggler = true;
   /**
    * Default role for header-toggler. [docs]
@@ -13,21 +11,23 @@ export class HeaderTogglerDirective implements AfterContentInit {
    * @default 'button'
    */
   @HostBinding('attr.type')
-  @Input() type = 'button';
+  @Input()
+  type = 'button';
   /**
    * Default aria-label attr for header-toggler. [docs]
    * @type string
    * @default 'Toggle navigation'
    */
   @HostBinding('attr.aria-label')
-  @Input() ariaLabel = 'Toggle navigation';
+  @Input()
+  ariaLabel = 'Toggle navigation';
 
   private hasContent!: boolean;
 
   constructor(
     private renderer: Renderer2,
     private hostElement: ElementRef
-  ) { }
+  ) {}
 
   addDefaultIcon(): void {
     const span = this.renderer.createElement('span');

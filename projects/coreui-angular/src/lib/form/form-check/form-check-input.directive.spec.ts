@@ -4,7 +4,8 @@ import { By } from '@angular/platform-browser';
 import { FormCheckInputDirective } from './form-check-input.directive';
 
 @Component({
-  template: '<input cFormCheckInput>'
+  template: '<input cFormCheckInput>',
+  imports: [FormCheckInputDirective]
 })
 class TestComponent {}
 
@@ -16,8 +17,7 @@ describe('FormCheckInputDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [FormCheckInputDirective]
+      imports: [FormCheckInputDirective, TestComponent]
     });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;

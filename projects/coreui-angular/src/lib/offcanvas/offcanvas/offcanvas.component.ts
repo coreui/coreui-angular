@@ -30,31 +30,24 @@ import { OffcanvasService } from '../offcanvas.service';
 let nextId = 0;
 
 @Component({
-  selector: 'c-offcanvas',
-  animations: [
-    trigger('showHide', [
-      state(
-        'visible',
-        style({
-          // visibility: 'visible'
-        })
-      ),
-      state(
-        'hidden',
-        style({
-          // visibility: 'hidden'
-        })
-      ),
-      transition('visible <=> *', [animate('300ms')])
-    ])
-  ],
-  templateUrl: './offcanvas.component.html',
-  styleUrls: ['./offcanvas.component.scss'],
-  exportAs: 'cOffcanvas',
-  standalone: true,
-  imports: [A11yModule],
-  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-  host: { ngSkipHydration: 'true' }
+    selector: 'c-offcanvas',
+    animations: [
+        trigger('showHide', [
+            state('visible', style({
+            // visibility: 'visible'
+            })),
+            state('hidden', style({
+            // visibility: 'hidden'
+            })),
+            transition('visible <=> *', [animate('300ms')])
+        ])
+    ],
+    templateUrl: './offcanvas.component.html',
+    styleUrls: ['./offcanvas.component.scss'],
+    exportAs: 'cOffcanvas',
+    imports: [A11yModule],
+    hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
+    host: { ngSkipHydration: 'true' }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
   #destroyRef = inject(DestroyRef);

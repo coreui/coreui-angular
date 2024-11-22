@@ -8,10 +8,9 @@ import { IconSetService } from '../icon-set';
 import { IconComponent } from './icon.component';
 
 @Component({
-  template: '<c-icon #icon name="cil-list" size="lg" class="test" />',
-  standalone: true,
-  imports: [IconComponent],
-  providers: [IconSetService]
+    template: '<c-icon #icon name="cil-list" size="lg" class="test" />',
+    imports: [IconComponent],
+    providers: [IconSetService]
 })
 class TestComponent {
   @ViewChild('icon', { read: IconComponent }) iconRef!: IconComponent;

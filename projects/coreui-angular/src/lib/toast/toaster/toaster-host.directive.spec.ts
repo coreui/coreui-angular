@@ -3,10 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ToasterHostDirective } from './toaster-host.directive';
 
 @Component({
-  template: `
+    template: `
     <div cToasterHost></div>`,
-  standalone: true,
-  imports: [ToasterHostDirective]
+    imports: [ToasterHostDirective]
 })
 class TestComponent {}
 

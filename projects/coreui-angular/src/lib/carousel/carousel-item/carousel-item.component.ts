@@ -15,7 +15,6 @@ import { CarouselService } from '../carousel.service';
   selector: 'c-carousel-item',
   templateUrl: './carousel-item.component.html',
   styleUrls: ['./carousel-item.component.scss'],
-  standalone: true,
   host: { class: 'carousel-item' }
 })
 export class CarouselItemComponent implements OnDestroy, AfterViewInit {

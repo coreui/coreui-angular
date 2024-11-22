@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
   selector: 'c-modal-body',
   template: '<ng-content />',
   styleUrls: ['./modal-body.component.scss'],
-  standalone: true,
   host: { class: 'modal-body' }
 })
 export class ModalBodyComponent {}

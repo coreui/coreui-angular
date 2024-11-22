@@ -7,9 +7,8 @@ import { By } from '@angular/platform-browser';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<div cCollapse horizontal>Test</div>',
-  standalone: true,
-  imports: [CollapseDirective]
+    template: '<div cCollapse horizontal>Test</div>',
+    imports: [CollapseDirective]
 })
 class TestComponent {}
 

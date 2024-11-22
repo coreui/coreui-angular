@@ -5,15 +5,10 @@ import { ToastComponent } from '../toast/toast.component';
   selector: 'c-toast-body',
   template: '<ng-content />',
   styleUrls: ['./toast-body.component.scss'],
-  exportAs: 'cToastBody',
-  standalone: true
+  exportAs: 'cToastBody'
 })
 export class ToastBodyComponent {
-
   @HostBinding('class.toast-body') toastBodyClass = true;
 
-  constructor(
-    @Optional() public toast?: ToastComponent
-  ) { }
-
+  constructor(@Optional() public toast?: ToastComponent) {}
 }

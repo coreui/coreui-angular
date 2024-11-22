@@ -19,7 +19,6 @@ import { TabsService } from '../tabs.service';
 @Component({
   exportAs: 'cTabsList',
   selector: 'c-tabs-list',
-  standalone: true,
   imports: [],
   template: '<ng-content />',
   host: {

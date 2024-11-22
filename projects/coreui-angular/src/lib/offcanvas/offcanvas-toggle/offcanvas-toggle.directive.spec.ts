@@ -7,13 +7,12 @@ import { OffcanvasToggleDirective } from './offcanvas-toggle.directive';
 import { OffcanvasService } from '../offcanvas.service';
 
 @Component({
-  template: `
-    <button cOffcanvasToggle="OffcanvasEnd">OffcanvasToggle Test</button>`
+  template: ` <button cOffcanvasToggle="OffcanvasEnd">OffcanvasToggle Test</button>`,
+  imports: [OffcanvasToggleDirective]
 })
 class TestButtonComponent {}
 
 describe('OffcanvasToggleDirective', () => {
-
   let component: TestButtonComponent;
   let fixture: ComponentFixture<TestButtonComponent>;
   let buttonEl: DebugElement;
@@ -22,8 +21,7 @@ describe('OffcanvasToggleDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, OffcanvasToggleDirective],
-      declarations: [TestButtonComponent],
-      providers: [OffcanvasService]
+      providers: [OffcanvasService, TestButtonComponent]
     });
     fixture = TestBed.createComponent(TestButtonComponent);
     component = fixture.componentInstance;

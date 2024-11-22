@@ -2,7 +2,6 @@ import { booleanAttribute, Directive, ElementRef, HostBinding, Input, Renderer2 
 
 @Directive({
   selector: 'input[cFormCheckInput]',
-  standalone: true,
   host: { class: 'form-check-input' }
 })
 export class FormCheckInputDirective {

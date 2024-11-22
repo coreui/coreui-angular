@@ -1,12 +1,10 @@
 import { Directive, HostBinding, Input } from '@angular/core';
-import { Rounded, RoundedSize } from './rounded.type';
+import { Rounded } from './rounded.type';
 
 @Directive({
-  selector: '[cRounded]',
-  standalone: true
+  selector: '[cRounded]'
 })
 export class RoundedDirective {
-
   /**
    * Set border radius variant and radius size
    * @type Rounded
@@ -15,16 +13,15 @@ export class RoundedDirective {
 
   @HostBinding('class')
   get hostClasses(): any {
-
-    if ( typeof this.rounded === 'boolean' ) {
+    if (typeof this.rounded === 'boolean') {
       return { rounded: true };
     }
-    if ( typeof this.rounded === 'number' || typeof this.rounded === 'string' ) {
+    if (typeof this.rounded === 'number' || typeof this.rounded === 'string') {
       return {
         [`rounded-${this.rounded}`]: true
       };
     }
-    if ( typeof this.rounded === 'object' ) {
+    if (typeof this.rounded === 'object') {
       const roundedObj = {
         top: undefined,
         end: undefined,
@@ -33,12 +30,12 @@ export class RoundedDirective {
         circle: undefined,
         pill: undefined,
         size: undefined,
-        ...this.rounded,
+        ...this.rounded
       };
       // @ts-ignore
-      const keys = Object.keys(roundedObj).filter(key => roundedObj[key] !== undefined );
+      const keys = Object.keys(roundedObj).filter((key) => roundedObj[key] !== undefined);
       const classes = {};
-      keys.forEach(key => {
+      keys.forEach((key) => {
         // @ts-ignore
         const val = roundedObj[key];
         if (typeof val === 'boolean') {
@@ -50,7 +47,7 @@ export class RoundedDirective {
         }
       });
       // console.log('rounded keys', keys, classes);
-      return Object.entries(classes).length === 0 ? {rounded: false} : classes;
+      return Object.entries(classes).length === 0 ? { rounded: false } : classes;
     }
   }
 }

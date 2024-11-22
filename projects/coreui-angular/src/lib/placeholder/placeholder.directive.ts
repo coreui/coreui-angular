@@ -3,7 +3,6 @@ import { booleanAttribute, computed, Directive, input, InputSignalWithTransform 
 @Directive({
   selector: '[cPlaceholder]',
   exportAs: 'cPlaceholder',
-  standalone: true,
   host: {
     '[class]': 'hostClasses()',
     '[attr.aria-hidden]': 'ariaHidden()'

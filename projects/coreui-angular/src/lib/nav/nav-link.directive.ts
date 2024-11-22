@@ -1,11 +1,9 @@
 import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: '[cNavLink]',
-  standalone: true
+  selector: '[cNavLink]'
 })
 export class NavLinkDirective {
-
   /**
    * Sets .nav-link class to the host. [docs]
    * @type boolean
@@ -37,7 +35,7 @@ export class NavLinkDirective {
   @HostBinding('attr.disabled')
   get attrDisabled() {
     return this.disabled ? '' : null;
-  };
+  }
 
   @HostBinding('attr.tabindex')
   get getTabindex(): string | null {

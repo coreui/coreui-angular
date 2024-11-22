@@ -6,7 +6,6 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 @Directive({
   selector: '[cDropdownItem]',
   exportAs: 'cDropdownItem',
-  standalone: true,
   host: { class: 'dropdown-item' }
 })
 export class DropdownItemDirective implements FocusableOption {

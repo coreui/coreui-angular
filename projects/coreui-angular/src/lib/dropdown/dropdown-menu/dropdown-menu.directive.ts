@@ -23,7 +23,6 @@ import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive'
 @Directive({
   selector: '[cDropdownMenu]',
   exportAs: 'cDropdownMenu',
-  standalone: true,
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: { class: 'dropdown-menu' }
 })

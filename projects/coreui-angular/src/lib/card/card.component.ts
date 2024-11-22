@@ -5,7 +5,6 @@ import { TextBgColorDirective, TextColorDirective } from '../utilities';
 @Component({
   selector: 'c-card, [c-card]',
   template: '<ng-content />',
-  standalone: true,
   hostDirectives: [
     { directive: TextColorDirective, inputs: ['cTextColor: textColor'] },
     { directive: TextBgColorDirective, inputs: ['cTextBgColor: textBgColor'] }

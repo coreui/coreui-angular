@@ -1,15 +1,13 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[cVisible]',
-  standalone: true
+  selector: '[cVisible]'
 })
 export class VisibleDirective {
-
   constructor(
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef
-  ) { }
+  ) {}
 
   private hasView!: boolean;
 
@@ -22,5 +20,4 @@ export class VisibleDirective {
       this.hasView = false;
     }
   }
-
 }

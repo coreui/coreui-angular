@@ -4,7 +4,6 @@ import { ProgressBarDirective } from './progress-bar.directive';
 @Component({
   selector: 'c-progress-bar',
   template: '<ng-content />',
-  standalone: true,
   hostDirectives: [
     {
       directive: ProgressBarDirective,

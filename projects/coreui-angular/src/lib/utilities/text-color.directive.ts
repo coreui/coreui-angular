@@ -2,8 +2,7 @@ import { Directive, HostBinding, input, InputSignal } from '@angular/core';
 import { TextColors } from '../coreui.types';
 
 @Directive({
-  selector: '[cTextColor]',
-  standalone: true
+  selector: '[cTextColor]'
 })
 export class TextColorDirective {
   /**

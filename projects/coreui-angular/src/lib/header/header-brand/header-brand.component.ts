@@ -2,8 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-header-brand',
-  template: '<ng-content />',
-  standalone: true
+  template: '<ng-content />'
 })
 export class HeaderBrandComponent {
   /**
@@ -12,7 +11,8 @@ export class HeaderBrandComponent {
    * @default 'button'
    */
   @HostBinding('attr.role')
-  @Input() role = 'button';
+  @Input()
+  role = 'button';
 
   @HostBinding('class.header-brand') headerBrandClass = true;
 }

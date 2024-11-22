@@ -20,31 +20,30 @@ import { ButtonCloseDirective } from '../button';
 type AnimateType = ('hide' | 'show');
 
 @Component({
-  selector: 'c-alert',
-  templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.scss'],
-  exportAs: 'cAlert',
-  standalone: true,
-  imports: [NgTemplateOutlet, ButtonCloseDirective],
-  animations: [
-    trigger('fadeInOut', [
-      state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),
-      state('hide', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
-      state('void', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
-      transition('show => hide', [
-        animate('.3s ease-out')
-      ]),
-      transition('hide => show', [
-        animate('.3s ease-in')
-      ]),
-      transition('show => void', [
-        animate('.3s ease-out')
-      ]),
-      transition('void => show', [
-        animate('.3s ease-in')
-      ])
-    ])
-  ]
+    selector: 'c-alert',
+    templateUrl: './alert.component.html',
+    styleUrls: ['./alert.component.scss'],
+    exportAs: 'cAlert',
+    imports: [NgTemplateOutlet, ButtonCloseDirective],
+    animations: [
+        trigger('fadeInOut', [
+            state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),
+            state('hide', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
+            state('void', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
+            transition('show => hide', [
+                animate('.3s ease-out')
+            ]),
+            transition('hide => show', [
+                animate('.3s ease-in')
+            ]),
+            transition('show => void', [
+                animate('.3s ease-out')
+            ]),
+            transition('void => show', [
+                animate('.3s ease-in')
+            ])
+        ])
+    ]
 })
 export class AlertComponent implements AfterContentInit {
 

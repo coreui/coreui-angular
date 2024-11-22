@@ -6,14 +6,9 @@ import { ProgressBarDirective } from './progress-bar.directive';
 import { ProgressStackedComponent } from './progress-stacked.component';
 
 @Component({
-  template: `
-    <c-progress value="42" color="success" />`,
+  template: ` <c-progress value="42" color="success" />`,
   selector: 'c-test',
-  imports: [
-    ProgressComponent,
-    ProgressStackedComponent
-  ],
-  standalone: true
+  imports: [ProgressComponent, ProgressStackedComponent]
 })
 export class TestComponent {}
 
@@ -30,7 +25,7 @@ describe('ProgressComponent', () => {
     fixture = TestBed.createComponent(TestComponent);
 
     component = fixture.componentInstance;
-    progress = fixture.debugElement.childNodes.find(v => ProgressComponent);
+    progress = fixture.debugElement.childNodes.find((v) => ProgressComponent);
     // let x= fixture.debugElement.queryAll(By.directive(ProgressBarDirective))
     // console.log(x)
     fixture.detectChanges();

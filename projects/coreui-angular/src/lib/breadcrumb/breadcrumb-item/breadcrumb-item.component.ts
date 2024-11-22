@@ -6,11 +6,10 @@ import { HtmlAttributesDirective } from '../../shared';
 import { INavAttributes, INavLinkProps } from './breadcrumb-item';
 
 @Component({
-  selector: 'c-breadcrumb-item',
-  templateUrl: './breadcrumb-item.component.html',
-  styleUrls: ['./breadcrumb-item.component.scss'],
-  standalone: true,
-  imports: [RouterModule, NgTemplateOutlet, HtmlAttributesDirective]
+    selector: 'c-breadcrumb-item',
+    templateUrl: './breadcrumb-item.component.html',
+    styleUrls: ['./breadcrumb-item.component.scss'],
+    imports: [RouterModule, NgTemplateOutlet, HtmlAttributesDirective]
 })
 export class BreadcrumbItemComponent {
 

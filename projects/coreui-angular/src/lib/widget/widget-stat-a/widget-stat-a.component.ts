@@ -6,12 +6,11 @@ import { CardBodyComponent, CardComponent } from '../../card';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'c-widget-stat-a',
-  templateUrl: './widget-stat-a.component.html',
-  exportAs: 'cWidgetStatA',
-  imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
-  standalone: true,
-  host: { class: 'card', '[class]': 'hostClasses()' }
+    selector: 'c-widget-stat-a',
+    templateUrl: './widget-stat-a.component.html',
+    exportAs: 'cWidgetStatA',
+    imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
+    host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatAComponent extends CardComponent {
   /**

@@ -34,7 +34,6 @@ let nextId = 0;
   templateUrl: './chartjs.component.html',
   styleUrls: ['./chartjs.component.scss'],
   exportAs: 'cChart',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
   // host: { ngSkipHydration: 'true' }
 })

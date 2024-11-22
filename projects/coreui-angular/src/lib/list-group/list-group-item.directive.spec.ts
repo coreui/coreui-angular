@@ -5,7 +5,8 @@ import { ListGroupItemDirective } from './list-group-item.directive';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<li cListGroupItem></li>'
+  template: '<li cListGroupItem></li>',
+  imports: [ListGroupItemDirective]
 })
 class TestComponent {}
 
@@ -15,8 +16,7 @@ describe('ListGroupItemDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [ListGroupItemDirective],
+      imports: [ListGroupItemDirective, TestComponent],
       providers: [{ provide: ElementRef, useClass: MockElementRef }]
     });
     fixture = TestBed.createComponent(TestComponent);

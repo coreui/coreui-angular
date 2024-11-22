@@ -5,7 +5,6 @@ import { Colors } from '../coreui.types';
   selector: 'c-callout, [cCallout]',
   template: '<ng-content />',
   styleUrls: ['./callout.component.scss'],
-  standalone: true,
   host: { class: 'callout', '[class]': 'hostClasses()' }
 })
 export class CalloutComponent {

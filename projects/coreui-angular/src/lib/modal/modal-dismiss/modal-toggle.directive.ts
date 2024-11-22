@@ -3,8 +3,7 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { ModalService } from '../modal.service';
 
 @Directive({
-  selector: '[cModalToggle]',
-  standalone: true
+  selector: '[cModalToggle]'
 })
 export class ModalToggleDirective {
   /**
@@ -12,13 +11,11 @@ export class ModalToggleDirective {
    */
   @Input('cModalToggle') id: string | undefined;
 
-  constructor(
-    private modalService: ModalService
-  ) { }
+  constructor(private modalService: ModalService) {}
 
   @HostListener('click', ['$event'])
   dismiss($event: any): void {
     $event.preventDefault();
-    this.modalService.toggle({show: 'toggle', id: this.id});
+    this.modalService.toggle({ show: 'toggle', id: this.id });
   }
 }

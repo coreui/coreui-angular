@@ -22,12 +22,11 @@ import { Subscription } from 'rxjs';
 // todo: workaround -  use <c-container> component directly in template
 
 @Component({
-  selector: 'c-navbar',
-  templateUrl: './navbar.component.html',
-  standalone: true,
-  imports: [NgClass, NgTemplateOutlet],
-  hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
-  host: { '[class]': 'hostClasses()', '[attr.role]': 'role()' }
+    selector: 'c-navbar',
+    templateUrl: './navbar.component.html',
+    imports: [NgClass, NgTemplateOutlet],
+    hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
+    host: { '[class]': 'hostClasses()', '[attr.role]': 'role()' }
 })
 export class NavbarComponent implements AfterContentInit, OnDestroy {
   readonly #breakpointObserver = inject(BreakpointObserver);

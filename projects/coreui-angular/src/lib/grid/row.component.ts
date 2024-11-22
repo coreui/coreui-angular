@@ -4,7 +4,6 @@ import { RowDirective } from './row.directive';
 
 @Component({
   selector: 'c-row',
-  template: '<ng-content />',
-  standalone: true
+  template: '<ng-content />'
 })
 export class RowComponent extends RowDirective {}

@@ -5,7 +5,8 @@ import { By } from '@angular/platform-browser';
 import { HtmlAttributesDirective } from './html-attr.directive';
 
 @Component({
-  template: `<div [cHtmlAttr]="{ class: 'test', style: { backgroundColor: 'red' }, id: 'id-1' }"></div>`
+  template: ` <div [cHtmlAttr]="{ class: 'test', style: { backgroundColor: 'red' }, id: 'id-1' }"></div>`,
+  imports: [HtmlAttributesDirective]
 })
 class TestComponent {}
 
@@ -17,8 +18,7 @@ describe('HtmlAttributesDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [HtmlAttributesDirective],
+      imports: [HtmlAttributesDirective, TestComponent],
       providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }]
     });
     fixture = TestBed.createComponent(TestComponent);

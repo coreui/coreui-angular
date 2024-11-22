@@ -3,7 +3,6 @@ import { booleanAttribute, Component, computed, input } from '@angular/core';
 @Component({
   selector: 'c-navbar-nav',
   template: '<ng-content />',
-  standalone: true,
   host: { '[class]': 'hostClasses()' }
 })
 export class NavbarNavComponent {

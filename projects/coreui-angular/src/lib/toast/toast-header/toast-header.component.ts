@@ -5,11 +5,10 @@ import { ToastComponent } from '../toast/toast.component';
 import { ToastCloseDirective } from '../toast-close.directive';
 
 @Component({
-  selector: 'c-toast-header',
-  templateUrl: './toast-header.component.html',
-  exportAs: 'cToastHeader',
-  standalone: true,
-  imports: [ToastCloseDirective, ButtonCloseDirective]
+    selector: 'c-toast-header',
+    templateUrl: './toast-header.component.html',
+    exportAs: 'cToastHeader',
+    imports: [ToastCloseDirective, ButtonCloseDirective]
 })
 export class ToastHeaderComponent {
 

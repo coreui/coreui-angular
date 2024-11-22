@@ -3,13 +3,12 @@ import { SidebarToggleDirective } from '../sidebar-toggle/sidebar-toggle.directi
 
 @Directive({
   selector: '[cSidebarToggler]',
-  standalone: true,
   hostDirectives: [{ directive: SidebarToggleDirective, inputs: ['cSidebarToggle: cSidebarToggler', 'toggle'] }]
 })
 export class SidebarTogglerDirective {
-
   @HostBinding('attr.role')
-  @Input() role = 'button';
+  @Input()
+  role = 'button';
 
   @HostBinding('class.sidebar-toggler') sidebarTogglerClass = true;
 
@@ -21,5 +20,4 @@ export class SidebarTogglerDirective {
       cursor: 'pointer'
     };
   }
-
 }

@@ -13,7 +13,6 @@ import { Colors } from '../coreui.types';
 @Directive({
   selector: '[cListGroupItem], c-list-group-item',
   exportAs: 'cListGroupItem',
-  standalone: true,
   host: {
     '[class]': 'hostClasses()',
     '[attr.aria-disabled]': 'ariaDisabled()',

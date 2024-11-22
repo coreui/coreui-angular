@@ -2,7 +2,6 @@ import { Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: 'select[cSelect]',
-  standalone: true,
   host: { class: 'form-select' }
 })
 export class FormSelectDirective {

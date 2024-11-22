@@ -8,7 +8,6 @@ import { transformName } from './icon.utils';
 @Directive({
   exportAs: 'cIcon',
   selector: 'svg[cIcon]',
-  standalone: true,
   host: {
     ngSkipHydration: 'true',
     '[innerHtml]': 'innerHtml()',

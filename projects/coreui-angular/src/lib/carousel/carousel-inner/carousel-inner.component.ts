@@ -15,8 +15,7 @@ import { CarouselState } from '../carousel-state';
   selector: 'c-carousel-inner',
   templateUrl: './carousel-inner.component.html',
   styleUrls: ['./carousel-inner.component.scss'],
-  animations: [slideAnimation, fadeAnimation],
-  standalone: true
+  animations: [slideAnimation, fadeAnimation]
 })
 export class CarouselInnerComponent implements AfterContentInit, AfterContentChecked {
   constructor(private carouselState: CarouselState) {}

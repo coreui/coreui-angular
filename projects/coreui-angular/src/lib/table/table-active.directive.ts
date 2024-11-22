@@ -1,11 +1,9 @@
 import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: '[cTableActive]',
-  standalone: true
+  selector: '[cTableActive]'
 })
 export class TableActiveDirective {
-
   /**
    * Highlight a table row or cell
    * @type boolean

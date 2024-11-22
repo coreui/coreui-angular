@@ -5,10 +5,9 @@ import { RouterLink } from '@angular/router';
 import { HtmlAttributesDirective } from '../../shared';
 
 @Component({
-  selector: 'c-sidebar-brand',
-  templateUrl: './sidebar-brand.component.html',
-  standalone: true,
-  imports: [RouterLink, HtmlAttributesDirective, NgClass]
+    selector: 'c-sidebar-brand',
+    templateUrl: './sidebar-brand.component.html',
+    imports: [RouterLink, HtmlAttributesDirective, NgClass]
 })
 export class SidebarBrandComponent implements OnInit {
 

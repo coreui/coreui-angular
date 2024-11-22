@@ -19,13 +19,12 @@ import { AccordionService } from '../accordion.service';
 let nextId = 0;
 
 @Component({
-  selector: 'c-accordion-item',
-  templateUrl: './accordion-item.component.html',
-  styleUrls: ['./accordion-item.component.scss'],
-  exportAs: 'cAccordionItem',
-  standalone: true,
-  imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective],
-  host: { class: 'accordion-item' }
+    selector: 'c-accordion-item',
+    templateUrl: './accordion-item.component.html',
+    styleUrls: ['./accordion-item.component.scss'],
+    exportAs: 'cAccordionItem',
+    imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective],
+    host: { class: 'accordion-item' }
 })
 export class AccordionItemComponent implements OnInit, OnDestroy {
   readonly #accordionService = inject(AccordionService);

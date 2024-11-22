@@ -3,7 +3,6 @@ import { PlaceholderDirective } from './placeholder.directive';
 
 @Directive({
   selector: '[cPlaceholderAnimation]',
-  standalone: true,
   host: {
     '[class]': 'hostClasses()'
   }

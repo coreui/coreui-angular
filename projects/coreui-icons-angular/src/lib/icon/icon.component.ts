@@ -19,13 +19,12 @@ import { IconSize, IIcon, NgCssClass } from './icon.interface';
 import { transformName } from './icon.utils';
 
 @Component({
-  exportAs: 'cIconComponent',
-  imports: [NgClass, HtmlAttributesDirective],
-  selector: 'c-icon',
-  standalone: true,
-  styleUrls: ['./icon.component.scss'],
-  templateUrl: './icon.component.svg',
-  host: { ngSkipHydration: 'true', style: 'display: none' }
+    exportAs: 'cIconComponent',
+    imports: [NgClass, HtmlAttributesDirective],
+    selector: 'c-icon',
+    styleUrls: ['./icon.component.scss'],
+    templateUrl: './icon.component.svg',
+    host: { ngSkipHydration: 'true', style: 'display: none' }
 })
 export class IconComponent implements IIcon {
   readonly #renderer = inject(Renderer2);

@@ -3,7 +3,6 @@ import { booleanAttribute, Component, computed, input, InputSignal, InputSignalW
 @Component({
   selector: 'c-button-group',
   template: '<ng-content />',
-  standalone: true,
   host: { '[attr.role]': 'role()', '[class]': 'hostClasses()' }
 })
 export class ButtonGroupComponent {

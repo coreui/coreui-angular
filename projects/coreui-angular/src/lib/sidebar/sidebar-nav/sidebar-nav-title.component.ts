@@ -2,8 +2,7 @@ import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'c-sidebar-nav-title',
-  template: '',
-  standalone: true
+  template: ''
 })
 export class SidebarNavTitleComponent implements OnInit {
   @Input() item: any;

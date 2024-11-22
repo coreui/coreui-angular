@@ -2,7 +2,6 @@ import { computed, Directive, input } from '@angular/core';
 
 @Directive({
   selector: '[cAccordionButton]',
-  standalone: true,
   host: { '[class]': 'hostClasses()', '[attr.type]': 'type()', '[attr.aria-expanded]': 'ariaExpanded()' }
 })
 export class AccordionButtonDirective {

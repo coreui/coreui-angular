@@ -5,12 +5,11 @@ import { TemplateIdDirective } from '../../shared';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'c-widget-stat-c',
-  templateUrl: './widget-stat-c.component.html',
-  exportAs: 'cWidgetStatC',
-  standalone: true,
-  imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
-  host: { '[class]': 'hostExtendedClass()' }
+    selector: 'c-widget-stat-c',
+    templateUrl: './widget-stat-c.component.html',
+    exportAs: 'cWidgetStatC',
+    imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
+    host: { '[class]': 'hostExtendedClass()' }
 })
 export class WidgetStatCComponent extends CardComponent {
   constructor() {

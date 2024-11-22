@@ -5,8 +5,7 @@ import { GutterBreakpoints, Gutters, IGutter, IGutterObject } from './gutter.typ
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[gutter]',
-  standalone: true
+  selector: '[gutter]'
 })
 export class GutterDirective implements IGutter {
   /**

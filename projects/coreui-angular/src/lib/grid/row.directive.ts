@@ -5,7 +5,6 @@ import { IRow, NumberOfColumns } from './row.type';
 
 @Directive({
   selector: '[cRow]',
-  standalone: true,
   host: { class: 'row' }
 })
 export class RowDirective implements IRow {

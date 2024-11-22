@@ -5,7 +5,6 @@ import { ButtonType, Colors, Shapes } from '../coreui.types';
 @Directive({
   selector: '[cButton]',
   exportAs: 'cButton',
-  standalone: true,
   host: {
     class: 'btn',
     '[class]': 'hostClasses()',

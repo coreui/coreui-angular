@@ -10,12 +10,11 @@ export type WidgetStatDValue = {
 };
 
 @Component({
-  selector: 'c-widget-stat-d',
-  templateUrl: './widget-stat-d.component.html',
-  exportAs: 'cWidgetStatD',
-  standalone: true,
-  imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective, NgClass],
-  host: { class: 'card' }
+    selector: 'c-widget-stat-d',
+    templateUrl: './widget-stat-d.component.html',
+    exportAs: 'cWidgetStatD',
+    imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective, NgClass],
+    host: { class: 'card' }
 })
 export class WidgetStatDComponent extends CardComponent {
   /**

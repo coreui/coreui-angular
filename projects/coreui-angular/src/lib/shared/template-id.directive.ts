@@ -1,8 +1,7 @@
 import { Directive, inject, Input, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[cTemplateId]',
-  standalone: true,
+  selector: '[cTemplateId]'
 })
 export class TemplateIdDirective {
   public readonly templateRef = inject(TemplateRef);

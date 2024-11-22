@@ -4,7 +4,6 @@ import { ButtonDirective } from './button.directive';
 
 @Directive({
   selector: '[cButtonClose]',
-  standalone: true,
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: {
     class: 'btn btn-close',

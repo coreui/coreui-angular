@@ -1,11 +1,9 @@
 import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: 'form[cForm]',
-  standalone: true
+  selector: 'form[cForm]'
 })
 export class FormDirective {
-
   /**
    * Mark a form as validated. If you set it `true`, all validation styles will be applied to the form. [docs]
    * @type boolean

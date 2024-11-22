@@ -5,7 +5,6 @@ import { Colors } from '../coreui.types';
 @Component({
   selector: 'c-spinner',
   templateUrl: './spinner.component.html',
-  standalone: true,
   host: {
     '[attr.role]': 'role()',
     '[class]': 'hostClasses()'

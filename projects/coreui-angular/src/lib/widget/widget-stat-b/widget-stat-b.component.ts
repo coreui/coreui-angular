@@ -4,12 +4,11 @@ import { NgClass } from '@angular/common';
 import { CardBodyComponent, CardComponent } from '../../card';
 
 @Component({
-  selector: 'c-widget-stat-b',
-  templateUrl: './widget-stat-b.component.html',
-  exportAs: 'cWidgetStatB',
-  standalone: true,
-  imports: [CardBodyComponent, NgClass],
-  host: { class: 'card', '[class]': 'hostClasses()' }
+    selector: 'c-widget-stat-b',
+    templateUrl: './widget-stat-b.component.html',
+    exportAs: 'cWidgetStatB',
+    imports: [CardBodyComponent, NgClass],
+    host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatBComponent extends CardComponent {
   constructor() {

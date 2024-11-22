@@ -30,7 +30,6 @@ import { PopoverComponent } from './popover/popover.component';
   selector: '[cPopover]',
   exportAs: 'cPopover',
   providers: [ListenersService, IntersectionService],
-  standalone: true,
   host: { '[attr.aria-describedby]': 'ariaDescribedBy' }
 })
 export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {

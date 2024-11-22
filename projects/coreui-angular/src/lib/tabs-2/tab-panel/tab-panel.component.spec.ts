@@ -8,7 +8,7 @@ import { TabsListComponent } from '../tabs-list/tabs-list.component';
 import { TabPanelComponent } from './tab-panel.component';
 
 @Component({
-  template: `
+    template: `
     <c-tabs activeItemKey="test-0">
       <c-tabs-list>
         <button cTab itemKey="test-0"></button>
@@ -20,8 +20,7 @@ import { TabPanelComponent } from './tab-panel.component';
       </c-tabs-content>
     </c-tabs>
   `,
-  standalone: true,
-  imports: [TabPanelComponent, TabsComponent, TabDirective, TabsContentComponent, TabsListComponent]
+    imports: [TabPanelComponent, TabsComponent, TabDirective, TabsContentComponent, TabsListComponent]
 })
 class TestComponent {}
 

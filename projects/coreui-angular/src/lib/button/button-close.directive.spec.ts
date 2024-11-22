@@ -6,9 +6,8 @@ import { By } from '@angular/platform-browser';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<button cButtonClose></button>',
-  standalone: true,
-  imports: [ButtonCloseDirective]
+    template: '<button cButtonClose></button>',
+    imports: [ButtonCloseDirective]
 })
 class TestComponent {}
 

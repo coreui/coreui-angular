@@ -20,8 +20,7 @@ import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
       <ng-container>{{ item?.name ?? '' }}</ng-container>
     }
   `,
-  providers: [SidebarNavHelper],
-  standalone: true
+  providers: [SidebarNavHelper]
 })
 export class SidebarNavLinkContentComponent {
   @Input() item?: INavData;
@@ -33,7 +32,6 @@ export class SidebarNavLinkContentComponent {
   selector: 'c-sidebar-nav-link',
   templateUrl: './sidebar-nav-link.component.html',
   providers: [SidebarNavHelper],
-  standalone: true,
   imports: [
     RouterModule,
     HtmlAttributesDirective,

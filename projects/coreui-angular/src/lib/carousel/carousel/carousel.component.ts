@@ -29,7 +29,6 @@ import { CarouselConfig } from '../carousel.config';
   template: '<ng-content />',
   styleUrls: ['./carousel.component.scss'],
   providers: [CarouselService, CarouselState, CarouselConfig, ListenersService],
-  standalone: true,
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: { class: 'carousel slide' }
 })

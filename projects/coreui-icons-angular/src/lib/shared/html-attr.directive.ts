@@ -2,8 +2,7 @@ import { Directive, effect, ElementRef, inject, input, Renderer2 } from '@angula
 
 @Directive({
   selector: '[cHtmlAttr]',
-  exportAs: 'cHtmlAttr',
-  standalone: true
+  exportAs: 'cHtmlAttr'
 })
 export class HtmlAttributesDirective {
   readonly cHtmlAttr = input<Record<string, any>>();

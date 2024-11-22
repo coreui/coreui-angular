@@ -3,14 +3,10 @@ import { booleanAttribute, Directive, ElementRef, HostBinding, Input, OnInit } f
 import { InputType } from '../../coreui.types';
 
 @Directive({
-  selector: 'input[cFormControl], textarea[cFormControl]',
-  standalone: true
+  selector: 'input[cFormControl], textarea[cFormControl]'
 })
 export class FormControlDirective implements OnInit {
-
-  constructor(
-    private hostElement: ElementRef
-  ) {}
+  constructor(private hostElement: ElementRef) {}
 
   /**
    * Size the component small or large.
@@ -27,7 +23,8 @@ export class FormControlDirective implements OnInit {
    * Specifies the type of input element.
    */
   @HostBinding('attr.type')
-  @Input() type: Omit<InputType, 'checkbox' | 'radio'> = 'text';
+  @Input()
+  type: Omit<InputType, 'checkbox' | 'radio'> = 'text';
 
   /**
    * Render the component styled as plain text. Removes the default form field styling and preserve the correct margin and padding. Recommend to use alongside `readonly` [docs]
@@ -36,7 +33,6 @@ export class FormControlDirective implements OnInit {
 
   @HostBinding('class')
   get hostClasses(): any {
-
     const isRangeType = this.type === 'range';
 
     return {
@@ -60,5 +56,4 @@ export class FormControlDirective implements OnInit {
       console.warn(`CoreUI [cFormControl] works with '<input>' and '<textarea>' - not with '<${hostTag}>'`);
     }
   }
-
 }

@@ -17,19 +17,18 @@ import { ProgressBarDirective } from './progress-bar.directive';
 import { ProgressStackedComponent } from './progress-stacked.component';
 
 @Component({
-  selector: 'c-progress',
-  templateUrl: './progress.component.html',
-  imports: [ProgressBarComponent, NgTemplateOutlet],
-  standalone: true,
-  styleUrl: './progress.component.scss',
-  hostDirectives: [
-    {
-      directive: ProgressBarDirective,
-      inputs: ['animated', 'color', 'max', 'role', 'value', 'variant']
-    }
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'progress' }
+    selector: 'c-progress',
+    templateUrl: './progress.component.html',
+    imports: [ProgressBarComponent, NgTemplateOutlet],
+    styleUrl: './progress.component.scss',
+    hostDirectives: [
+        {
+            directive: ProgressBarDirective,
+            inputs: ['animated', 'color', 'max', 'role', 'value', 'variant']
+        }
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { class: 'progress' }
 })
 export class ProgressComponent implements IProgress {
   protected readonly pbd: ProgressBarDirective | null = inject(ProgressBarDirective, { optional: true });

@@ -3,7 +3,6 @@ import { Component, HostBinding, Input } from '@angular/core';
 @Component({
   selector: 'c-breadcrumb',
   template: '<ng-content />',
-  standalone: true,
   host: { class: 'breadcrumb' }
 })
 export class BreadcrumbComponent {

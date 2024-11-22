@@ -3,7 +3,6 @@ import { CollapseDirective } from '../../collapse';
 
 @Directive({
   selector: '[cNavbarToggler]',
-  standalone: true,
   host: {
     '[attr.aria-label]': 'ariaLabel()',
     '[attr.type]': 'type()',

@@ -3,7 +3,6 @@ import { Sizes } from '../coreui.types';
 
 @Directive({
   selector: '[cListGroup]',
-  standalone: true,
   host: {
     class: 'list-group',
     '[class]': 'hostClasses()'

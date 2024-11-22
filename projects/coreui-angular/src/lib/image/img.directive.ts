@@ -2,7 +2,6 @@ import { booleanAttribute, computed, Directive, input, InputSignal, InputSignalW
 
 @Directive({
   selector: '[cImg]',
-  standalone: true,
   host: {
     '[class]': 'hostClasses()',
     '[style]': 'hostStyles()'

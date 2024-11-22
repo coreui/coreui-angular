@@ -16,8 +16,7 @@ import { Colors } from '../coreui.types';
 import { IProgressBar } from './progress.type';
 
 @Directive({
-  selector: '[cProgressBar]',
-  standalone: true
+  selector: '[cProgressBar]'
 })
 export class ProgressBarDirective implements IProgressBar {
   readonly #renderer = inject(Renderer2);

@@ -8,10 +8,9 @@ import { BreadcrumbRouterService } from './breadcrumb-router.service';
 import { BreadcrumbItemComponent } from '../breadcrumb-item/breadcrumb-item.component';
 
 @Component({
-  selector: 'c-breadcrumb-router, [cBreadcrumbRouter]',
-  templateUrl: './breadcrumb-router.component.html',
-  standalone: true,
-  imports: [BreadcrumbComponent, BreadcrumbItemComponent, AsyncPipe]
+    selector: 'c-breadcrumb-router, [cBreadcrumbRouter]',
+    templateUrl: './breadcrumb-router.component.html',
+    imports: [BreadcrumbComponent, BreadcrumbItemComponent, AsyncPipe]
 })
 export class BreadcrumbRouterComponent implements OnChanges, OnDestroy, OnInit {
   constructor(

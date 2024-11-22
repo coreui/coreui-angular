@@ -7,7 +7,6 @@ import { Breakpoints } from '../coreui.types';
   selector: 'c-container, [cContainer]',
   template: '<ng-content />',
   styleUrls: ['./container.component.scss'],
-  standalone: true,
   host: { '[class]': 'hostClasses()' }
 })
 export class ContainerComponent implements IContainer {

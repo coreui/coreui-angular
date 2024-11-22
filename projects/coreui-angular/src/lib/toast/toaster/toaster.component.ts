@@ -49,12 +49,11 @@ export type TToasterPlacement =
   | string;
 
 @Component({
-  selector: 'c-toaster',
-  templateUrl: './toaster.component.html',
-  exportAs: 'cToaster',
-  standalone: true,
-  imports: [ToasterHostDirective],
-  host: { class: 'toaster toast-container' }
+    selector: 'c-toaster',
+    templateUrl: './toaster.component.html',
+    exportAs: 'cToaster',
+    imports: [ToasterHostDirective],
+    host: { class: 'toaster toast-container' }
 })
 export class ToasterComponent implements OnInit, AfterContentChecked {
   readonly #destroyRef = inject(DestroyRef);

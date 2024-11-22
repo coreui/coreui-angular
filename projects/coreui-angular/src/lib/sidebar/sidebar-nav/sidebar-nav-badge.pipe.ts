@@ -1,11 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'cSidebarNavBadge',
-  standalone: true
+  name: 'cSidebarNavBadge'
 })
 export class SidebarNavBadgePipe implements PipeTransform {
-
   transform(item: any, args?: any): any {
     const badge = item.badge;
     return {
@@ -17,5 +15,4 @@ export class SidebarNavBadgePipe implements PipeTransform {
       [`${badge.class}`]: !!badge.class
     };
   }
-
 }

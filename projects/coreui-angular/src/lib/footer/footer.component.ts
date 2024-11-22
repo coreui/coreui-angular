@@ -5,7 +5,6 @@ import { Positions } from '../coreui.types';
 @Component({
   selector: 'c-footer, [cFooter]',
   template: '<ng-content />',
-  standalone: true,
   host: {
     class: 'footer',
     '[class]': 'hostClasses()',

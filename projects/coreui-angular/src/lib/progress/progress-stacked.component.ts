@@ -3,14 +3,16 @@ import { IProgressBarStacked } from './progress.type';
 
 @Component({
   selector: 'c-progress-stacked',
-  standalone: true,
   template: '<ng-content />',
-  styles: `:host { display: flex }`,
+  styles: `
+    :host {
+      display: flex;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgressStackedComponent implements IProgressBarStacked {
-
   @Input()
-  @HostBinding('class.progress-stacked') stacked = true;
-
+  @HostBinding('class.progress-stacked')
+  stacked = true;
 }

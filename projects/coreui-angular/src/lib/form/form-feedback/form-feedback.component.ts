@@ -2,11 +2,9 @@ import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'c-form-feedback',
-  template: '<ng-content />',
-  standalone: true
+  template: '<ng-content />'
 })
 export class FormFeedbackComponent {
-
   /**
    * If your form layout allows it, you can display validation feedback in a styled tooltip.
    * @type boolean

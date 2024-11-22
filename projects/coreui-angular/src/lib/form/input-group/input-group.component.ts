@@ -3,7 +3,6 @@ import { Component, computed, input } from '@angular/core';
 @Component({
   selector: 'c-input-group',
   template: '<ng-content />',
-  standalone: true,
   host: { class: 'input-group', '[class]': 'hostClasses()' }
 })
 export class InputGroupComponent {

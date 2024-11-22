@@ -1,9 +1,8 @@
 import { Directive, HostBinding, Input } from '@angular/core';
-import { Border, BorderColor, IBorderElement, BorderWidth } from './border.type';
+import { Border } from './border.type';
 
 @Directive({
-  selector: '[cBorder]',
-  standalone: true
+  selector: '[cBorder]'
 })
 export class BorderDirective {
   /**
@@ -14,31 +13,37 @@ export class BorderDirective {
 
   @HostBinding('class')
   get hostClasses(): any {
-
-    if ( typeof this.border === 'boolean' ) {
+    if (typeof this.border === 'boolean') {
       return { border: true };
     }
-    if ( typeof this.border === 'number' || typeof this.border === 'string' ) {
+    if (typeof this.border === 'number' || typeof this.border === 'string') {
       return {
         border: true,
         [`border-${this.border}`]: true
       };
     }
-    if ( typeof this.border === 'object' ) {
-      const borderObj = { top: undefined, end: undefined, bottom: undefined, start: undefined, color: undefined, ...this.border };
+    if (typeof this.border === 'object') {
+      const borderObj = {
+        top: undefined,
+        end: undefined,
+        bottom: undefined,
+        start: undefined,
+        color: undefined,
+        ...this.border
+      };
       // @ts-ignore
-      const keys = Object.keys(borderObj).filter(key => borderObj[key] !== undefined);
+      const keys = Object.keys(borderObj).filter((key) => borderObj[key] !== undefined);
       const classes = {};
-      keys.forEach(key => {
+      keys.forEach((key) => {
         // @ts-ignore
         const val = borderObj[key];
-        if ( typeof val === 'boolean') {
+        if (typeof val === 'boolean') {
           // @ts-ignore
           classes[`border-${key}`] = true;
-        } else if ( typeof val === 'number' || typeof val === 'string' ) {
+        } else if (typeof val === 'number' || typeof val === 'string') {
           // @ts-ignore
           classes[`border-${key}-${val}`] = true;
-        } else if ( typeof val === 'object' ) {
+        } else if (typeof val === 'object') {
           if ('color' in val) {
             // @ts-ignore
             classes[`border-${key}-${val.color}`] = true;
@@ -49,7 +54,7 @@ export class BorderDirective {
           }
         }
       });
-      return Object.entries(classes).length === 0 ? {border: false} : classes;
+      return Object.entries(classes).length === 0 ? { border: false } : classes;
     }
   }
 }

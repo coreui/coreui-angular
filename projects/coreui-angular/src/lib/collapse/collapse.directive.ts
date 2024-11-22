@@ -23,7 +23,6 @@ import {
 @Directive({
   selector: '[cCollapse]',
   exportAs: 'cCollapse',
-  standalone: true,
   host: { '[class]': 'hostClasses()', '[style]': '{display: "none"}' }
 })
 export class CollapseDirective implements OnDestroy {

@@ -8,7 +8,6 @@ import { AccordionService } from '../accordion.service';
   styleUrls: ['./accordion.component.scss'],
   exportAs: 'cAccordionItem',
   providers: [AccordionService],
-  standalone: true,
   host: { '[class]': 'hostClasses()' }
 })
 export class AccordionComponent {

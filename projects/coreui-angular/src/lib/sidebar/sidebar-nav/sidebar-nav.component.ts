@@ -35,38 +35,31 @@ import { SidebarNavItemClassPipe } from './sidebar-nav-item-class.pipe';
 import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
-  selector: 'c-sidebar-nav-group',
-  templateUrl: './sidebar-nav-group.component.html',
-  styleUrls: ['./sidebar-nav-group.component.scss'],
-  providers: [SidebarNavHelper, SidebarNavGroupService],
-  standalone: true,
-  imports: [
-    HtmlAttributesDirective,
-    IconDirective,
-    NgTemplateOutlet,
-    NgClass,
-    SidebarNavIconPipe,
-    SidebarNavBadgePipe,
-    forwardRef(() => SidebarNavComponent),
-    NgStyle
-  ],
-  animations: [
-    trigger('openClose', [
-      state(
-        'open',
-        style({
-          height: '*'
-        })
-      ),
-      state(
-        'closed',
-        style({
-          height: '0px'
-        })
-      ),
-      transition('open <=> closed', [animate('.15s ease')])
-    ])
-  ]
+    selector: 'c-sidebar-nav-group',
+    templateUrl: './sidebar-nav-group.component.html',
+    styleUrls: ['./sidebar-nav-group.component.scss'],
+    providers: [SidebarNavHelper, SidebarNavGroupService],
+    imports: [
+        HtmlAttributesDirective,
+        IconDirective,
+        NgTemplateOutlet,
+        NgClass,
+        SidebarNavIconPipe,
+        SidebarNavBadgePipe,
+        forwardRef(() => SidebarNavComponent),
+        NgStyle
+    ],
+    animations: [
+        trigger('openClose', [
+            state('open', style({
+                height: '*'
+            })),
+            state('closed', style({
+                height: '0px'
+            })),
+            transition('open <=> closed', [animate('.15s ease')])
+        ])
+    ]
 })
 export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   constructor(
@@ -184,20 +177,19 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'c-sidebar-nav',
-  templateUrl: './sidebar-nav.component.html',
-  standalone: true,
-  imports: [
-    NgClass,
-    HtmlAttributesDirective,
-    SidebarNavLinkComponent,
-    SidebarNavLabelComponent,
-    SidebarNavTitleComponent,
-    SidebarNavDividerComponent,
-    SidebarNavGroupComponent,
-    SidebarNavItemClassPipe,
-    RouterModule
-  ]
+    selector: 'c-sidebar-nav',
+    templateUrl: './sidebar-nav.component.html',
+    imports: [
+        NgClass,
+        HtmlAttributesDirective,
+        SidebarNavLinkComponent,
+        SidebarNavLabelComponent,
+        SidebarNavTitleComponent,
+        SidebarNavDividerComponent,
+        SidebarNavGroupComponent,
+        SidebarNavItemClassPipe,
+        RouterModule
+    ]
 })
 export class SidebarNavComponent implements OnChanges {
   constructor(

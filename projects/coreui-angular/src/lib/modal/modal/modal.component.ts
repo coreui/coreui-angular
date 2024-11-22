@@ -30,29 +30,22 @@ import { ModalContentComponent } from '../modal-content/modal-content.component'
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
 @Component({
-  selector: 'c-modal',
-  animations: [
-    trigger('showHide', [
-      state(
-        'visible',
-        style({
-          // display: 'block'
-        })
-      ),
-      state(
-        'hidden',
-        style({
-          // display: 'none'
-        })
-      ),
-      transition('visible <=> *', [animate('150ms')])
-    ])
-  ],
-  templateUrl: './modal.component.html',
-  exportAs: 'cModal',
-  standalone: true,
-  imports: [ModalDialogComponent, ModalContentComponent, A11yModule],
-  host: { class: 'modal' }
+    selector: 'c-modal',
+    animations: [
+        trigger('showHide', [
+            state('visible', style({
+            // display: 'block'
+            })),
+            state('hidden', style({
+            // display: 'none'
+            })),
+            transition('visible <=> *', [animate('150ms')])
+        ])
+    ],
+    templateUrl: './modal.component.html',
+    exportAs: 'cModal',
+    imports: [ModalDialogComponent, ModalContentComponent, A11yModule],
+    host: { class: 'modal' }
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   #destroyRef = inject(DestroyRef);

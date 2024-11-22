@@ -2,10 +2,9 @@ import { Component, HostBinding, Input } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'c-pagination',
-  templateUrl: './pagination.component.html',
-  standalone: true,
-  imports: [NgClass]
+    selector: 'c-pagination',
+    templateUrl: './pagination.component.html',
+    imports: [NgClass]
 })
 export class PaginationComponent {
 

@@ -1,8 +1,7 @@
 import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: '[cFormFloating]',
-  standalone: true
+  selector: '[cFormFloating]'
 })
 export class FormFloatingDirective {
   /**

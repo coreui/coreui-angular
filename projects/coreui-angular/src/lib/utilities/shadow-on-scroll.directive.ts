@@ -4,11 +4,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent, Subscription } from 'rxjs';
 
 @Directive({
-  selector: '[cShadowOnScroll]',
-  standalone: true
+  selector: '[cShadowOnScroll]'
 })
 export class ShadowOnScrollDirective {
-
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
   readonly #document: Document = inject(DOCUMENT);
   readonly #elementRef: ElementRef = inject(ElementRef);
@@ -33,14 +31,12 @@ export class ShadowOnScrollDirective {
     if (value) {
       this.#shadowClass = value === true ? 'shadow' : `shadow-${value}`;
       this.#observable = fromEvent(this.#document, 'scroll')
-        .pipe(
-          takeUntilDestroyed(this.#destroyRef)
-        )
-        .subscribe(scrolled => {
+        .pipe(takeUntilDestroyed(this.#destroyRef))
+        .subscribe((scrolled) => {
           this.#scrolled.set(this.#document.documentElement.scrollTop > 0);
         });
     } else {
       this.#observable?.unsubscribe();
     }
-  };
+  }
 }

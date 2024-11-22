@@ -13,11 +13,9 @@ import { CarouselState } from '../carousel-state';
 
 @Component({
   selector: 'c-carousel-control',
-  templateUrl: './carousel-control.component.html',
-  standalone: true
+  templateUrl: './carousel-control.component.html'
 })
 export class CarouselControlComponent implements AfterViewInit {
-
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private carouselState: CarouselState

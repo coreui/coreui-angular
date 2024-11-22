@@ -6,10 +6,9 @@ import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 
 @Component({
-  selector: 'c-sidebar-nav-label',
-  templateUrl: './sidebar-nav-label.component.html',
-  standalone: true,
-  imports: [HtmlAttributesDirective, SidebarNavBadgePipe, NgClass]
+    selector: 'c-sidebar-nav-label',
+    templateUrl: './sidebar-nav-label.component.html',
+    imports: [HtmlAttributesDirective, SidebarNavBadgePipe, NgClass]
 })
 export class SidebarNavLabelComponent implements OnInit {
 

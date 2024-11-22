@@ -15,8 +15,7 @@ import { Subscription } from 'rxjs';
 import { TabService } from './tab.service';
 
 @Directive({
-  selector: '[cTabContent]',
-  standalone: true
+  selector: '[cTabContent]'
 })
 export class TabContentRefDirective implements OnChanges, OnDestroy {
   constructor(

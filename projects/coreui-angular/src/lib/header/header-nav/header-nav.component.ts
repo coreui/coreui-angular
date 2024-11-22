@@ -3,8 +3,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 @Component({
   selector: 'c-header-nav',
   template: '<ng-content />',
-  styleUrls: ['./header-nav.component.scss'],
-  standalone: true
+  styleUrls: ['./header-nav.component.scss']
 })
 export class HeaderNavComponent {
   /**
@@ -13,7 +12,8 @@ export class HeaderNavComponent {
    * @default 'navigation'
    */
   @HostBinding('attr.role')
-  @Input() role = 'navigation';
+  @Input()
+  role = 'navigation';
 
   @HostBinding('class.header-nav') headerNavClass = true;
 }

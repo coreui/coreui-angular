@@ -2,8 +2,7 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { Alignment } from '../coreui.types';
 
 @Directive({
-  selector: '[cAlign]',
-  standalone: true
+  selector: '[cAlign]'
 })
 export class AlignDirective {
   /**
@@ -15,8 +14,7 @@ export class AlignDirective {
   @HostBinding('class')
   get hostClasses(): any {
     return {
-      [`align-${this.align}`]: !!this.align,
+      [`align-${this.align}`]: !!this.align
     };
   }
-
 }

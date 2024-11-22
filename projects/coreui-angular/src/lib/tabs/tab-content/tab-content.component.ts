@@ -25,7 +25,6 @@ import { TabService } from '../tab.service';
   styleUrls: ['./tab-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   exportAs: 'cTabContent',
-  standalone: true,
   host: { class: 'tab-content' }
 })
 export class TabContentComponent implements AfterContentChecked, AfterContentInit, OnChanges, OnDestroy {

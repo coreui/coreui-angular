@@ -33,9 +33,8 @@ describe('DropdownComponent', () => {
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<div cDropdownToggle></div>',
-  standalone: true,
-  imports: [DropdownToggleDirective]
+    template: '<div cDropdownToggle></div>',
+    imports: [DropdownToggleDirective]
 })
 class TestComponent {}
 

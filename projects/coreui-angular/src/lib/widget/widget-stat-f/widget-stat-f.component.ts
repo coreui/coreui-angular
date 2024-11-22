@@ -6,12 +6,11 @@ import { TemplateIdDirective } from '../../shared';
 import { CardBodyComponent, CardComponent, CardFooterComponent } from '../../card';
 
 @Component({
-  selector: 'c-widget-stat-f',
-  templateUrl: './widget-stat-f.component.html',
-  exportAs: 'cWidgetStatB',
-  standalone: true,
-  imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet],
-  host: { class: 'card', '[class]': 'hostClasses()' }
+    selector: 'c-widget-stat-f',
+    templateUrl: './widget-stat-f.component.html',
+    exportAs: 'cWidgetStatB',
+    imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet],
+    host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatFComponent extends CardComponent {
   /**

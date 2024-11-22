@@ -5,11 +5,9 @@ import { FormCheckLabelDirective } from './form-check-label.directive';
 @Component({
   selector: 'c-form-check',
   template: '<ng-content />',
-  exportAs: 'cFormCheck',
-  standalone: true
+  exportAs: 'cFormCheck'
 })
 export class FormCheckComponent implements AfterContentInit {
-
   /**
    * Group checkboxes or radios on the same horizontal row.
    * @type boolean
@@ -40,7 +38,6 @@ export class FormCheckComponent implements AfterContentInit {
 
   @HostBinding('class')
   get hostClasses(): any {
-
     return {
       'form-check': this.formCheckClass,
       'form-switch': this.switch,

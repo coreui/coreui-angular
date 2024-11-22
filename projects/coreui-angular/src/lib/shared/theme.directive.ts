@@ -1,11 +1,9 @@
 import { booleanAttribute, Directive, ElementRef, inject, Input, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[cTheme]',
-  standalone: true
+  selector: '[cTheme]'
 })
 export class ThemeDirective {
-
   readonly #hostElement = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
 
@@ -15,7 +13,7 @@ export class ThemeDirective {
    */
   @Input() set colorScheme(scheme: 'dark' | 'light' | undefined) {
     !!scheme ? this.setTheme(scheme) : this.unsetTheme();
-  };
+  }
 
   /**
    * Add dark theme attribute.
@@ -24,7 +22,7 @@ export class ThemeDirective {
   @Input({ transform: booleanAttribute })
   set dark(darkTheme: boolean) {
     darkTheme ? this.setTheme('dark') : this.unsetTheme();
-  };
+  }
 
   setTheme(theme?: string): void {
     if (theme) {
@@ -35,5 +33,4 @@ export class ThemeDirective {
   unsetTheme(): void {
     this.#renderer.removeAttribute(this.#hostElement.nativeElement, 'data-coreui-theme');
   }
-
 }

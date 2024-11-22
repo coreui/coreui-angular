@@ -4,7 +4,6 @@ import { ITable } from './table.type';
 
 @Directive({
   selector: 'table[cTable]',
-  standalone: true,
   host: { class: 'table' }
 })
 export class TableDirective implements ITable, OnInit {
