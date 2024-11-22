@@ -59,45 +59,39 @@ export class TabsListComponent {
   readonly tabs = contentChildren(TabDirective);
   #focusKeyManager!: FocusKeyManager<TabDirective>;
 
-  readonly tabsEffect = effect(
-    () => {
-      if (this.tabs().length === 0) {
-        return;
-      }
-      this.#focusKeyManager = new FocusKeyManager(this.tabs())
-        .skipPredicate((tab) => tab.disabled === true)
-        .withHorizontalOrientation('ltr')
-        .withHomeAndEnd()
-        .withWrap();
+  readonly tabsEffect = effect(() => {
+    if (this.tabs().length === 0) {
+      return;
+    }
+    this.#focusKeyManager = new FocusKeyManager(this.tabs())
+      .skipPredicate((tab) => tab.disabled === true)
+      .withHorizontalOrientation('ltr')
+      .withHomeAndEnd()
+      .withWrap();
 
-      this.#focusKeyManager.change
-        .pipe(
-          tap((value) => {
-            this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
-            this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
-          }),
-          takeUntilDestroyed(this.#destroyRef)
-        )
-        .subscribe();
+    this.#focusKeyManager.change
+      .pipe(
+        tap((value) => {
+          this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
+          this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
+        }),
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe();
 
-      const activeItem = this.tabs().find((tab) => untracked(tab.isActive)) ?? this.tabs().find((tab) => !tab.disabled);
-      const activeItemIndex = this.tabs().findIndex((tab) => tab === activeItem);
-      this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
-      this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
-      this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
-    },
-    { allowSignalWrites: true }
-  );
+    const activeItem = this.tabs().find((tab) => untracked(tab.isActive)) ?? this.tabs().find((tab) => !tab.disabled);
+    const activeItemIndex = this.tabs().findIndex((tab) => tab === activeItem);
+    this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
+    this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
+    this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
+  });
 
-  tabsServiceEffect = effect(
-    () => {
-      const activeItemIndex = this.tabs().findIndex(
-        (tab) => untracked(tab.isActive) && untracked(tab.itemKey) === this.tabsService.activeItemKey()
-      );
-      this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
-    },
-    { allowSignalWrites: true }
-  );
+  tabsServiceEffect = effect(() => {
+    const activeItemIndex = this.tabs().findIndex(
+      (tab) => untracked(tab.isActive) && untracked(tab.itemKey) === this.tabsService.activeItemKey()
+    );
+    this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
+  });
 
   @HostListener('keydown', ['$event'])
   onKeydown($event: any) {

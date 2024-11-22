@@ -38,12 +38,9 @@ export class CollapseDirective implements OnDestroy {
 
   readonly animate = signal(true);
 
-  readonly animateInputEffect = effect(
-    () => {
-      this.animate.set(this.animateInput());
-    },
-    { allowSignalWrites: true }
-  );
+  readonly animateInputEffect = effect(() => {
+    this.animate.set(this.animateInput());
+  });
 
   /**
    * Set horizontal collapsing to transition the width instead of height.
@@ -61,26 +58,20 @@ export class CollapseDirective implements OnDestroy {
 
   readonly visibleChange = output<boolean>();
 
-  readonly visibleInputEffect = effect(
-    () => {
-      this.visible.set(this.visibleInput());
-    },
-    { allowSignalWrites: true }
-  );
+  readonly visibleInputEffect = effect(() => {
+    this.visible.set(this.visibleInput());
+  });
 
   readonly visible = signal<boolean>(false);
 
   #init = false;
 
-  readonly visibleEffect = effect(
-    () => {
-      const visible = this.visible();
+  readonly visibleEffect = effect(() => {
+    const visible = this.visible();
 
-      (this.#init || visible) && this.createPlayer(visible);
-      this.#init = true;
-    },
-    { allowSignalWrites: true }
-  );
+    (this.#init || visible) && this.createPlayer(visible);
+    this.#init = true;
+  });
 
   /**
    * Add `navbar` prop for grouping and hiding navbar contents by a parent breakpoint.

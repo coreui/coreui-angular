@@ -93,26 +93,23 @@ export class TabDirective implements FocusableOption {
     () => this.ariaControls() ?? `${this.#tabsService.id()}-panel-${this.itemKey()}`
   );
 
-  disabledEffect = effect(
-    () => {
-      if (!this.#disabled()) {
-        const click$ = fromEvent<MouseEvent>(this.#elementRef.nativeElement, 'click');
-        const focusIn$ = fromEvent<FocusEvent>(this.#elementRef.nativeElement, 'focusin');
+  disabledEffect = effect(() => {
+    if (!this.#disabled()) {
+      const click$ = fromEvent<MouseEvent>(this.#elementRef.nativeElement, 'click');
+      const focusIn$ = fromEvent<FocusEvent>(this.#elementRef.nativeElement, 'focusin');
 
-        merge(focusIn$, click$)
-          .pipe(
-            filter(($event) => !this.#disabled()),
-            tap(($event) => {
-              this.#tabsService.activeItemKey.set(untracked(this.itemKey));
-            }),
-            takeWhile(() => !this.#disabled()),
-            takeUntilDestroyed(this.#destroyRef)
-          )
-          .subscribe();
-      }
-    },
-    { allowSignalWrites: true }
-  );
+      merge(focusIn$, click$)
+        .pipe(
+          filter(($event) => !this.#disabled()),
+          tap(($event) => {
+            this.#tabsService.activeItemKey.set(untracked(this.itemKey));
+          }),
+          takeWhile(() => !this.#disabled()),
+          takeUntilDestroyed(this.#destroyRef)
+        )
+        .subscribe();
+    }
+  });
 
   focus(origin?: FocusOrigin): void {
     this.#elementRef.nativeElement.focus();
