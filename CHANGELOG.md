@@ -3,6 +3,13 @@
 
 ---
 
+#### `5.3.1`
+
+- chore(dependencies): update 
+- fix(tabs): NG0950 required input is accessed before a value is set tempfix
+
+---
+
 #### `5.3.0`
 
 - chore(dependencies): update to `Angular 19`
