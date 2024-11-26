@@ -60,10 +60,11 @@ export class TabsListComponent {
   #focusKeyManager!: FocusKeyManager<TabDirective>;
 
   readonly tabsEffect = effect(() => {
-    if (this.tabs().length === 0) {
+    const tabs = this.tabs();
+    if (tabs.length === 0) {
       return;
     }
-    this.#focusKeyManager = new FocusKeyManager(this.tabs())
+    this.#focusKeyManager = new FocusKeyManager(tabs)
       .skipPredicate((tab) => tab.disabled === true)
       .withHorizontalOrientation('ltr')
       .withHomeAndEnd()
@@ -79,11 +80,15 @@ export class TabsListComponent {
       )
       .subscribe();
 
-    const activeItem = this.tabs().find((tab) => untracked(tab.isActive)) ?? this.tabs().find((tab) => !tab.disabled);
-    const activeItemIndex = this.tabs().findIndex((tab) => tab === activeItem);
-    this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
-    this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
-    this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
+    untracked(() => {
+      setTimeout(() => {
+        const activeItem = tabs.find((tab) => tab.isActive()) ?? tabs.find((tab) => !tab.disabled);
+        const activeItemIndex = tabs.findIndex((tab) => tab === activeItem);
+        this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
+        this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
+        this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
+      });
+    });
   });
 
   tabsServiceEffect = effect(() => {

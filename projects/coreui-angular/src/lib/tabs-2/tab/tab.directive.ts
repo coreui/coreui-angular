@@ -7,9 +7,12 @@ import {
   effect,
   ElementRef,
   inject,
+  Injector,
   Input,
   input,
   InputSignal,
+  OnInit,
+  runInInjectionContext,
   signal,
   untracked
 } from '@angular/core';
@@ -32,7 +35,8 @@ import { TabsService } from '../tabs.service';
     '[tabindex]': 'isActive() ? 0 : -1'
   }
 })
-export class TabDirective implements FocusableOption {
+export class TabDirective implements FocusableOption, OnInit {
+  readonly #injector = inject(Injector);
   readonly #destroyRef = inject(DestroyRef);
   readonly #elementRef = inject(ElementRef);
   readonly #tabsService = inject(TabsService);
@@ -77,9 +81,7 @@ export class TabDirective implements FocusableOption {
     alias: 'aria-controls'
   });
 
-  readonly isActive = computed<boolean>(
-    () => !this.#disabled() && this.#tabsService.activeItemKey() === this.itemKey()
-  );
+  readonly isActive = signal(false);
 
   readonly hostClasses = computed(() => ({
     'nav-link': true,
@@ -113,5 +115,14 @@ export class TabDirective implements FocusableOption {
 
   focus(origin?: FocusOrigin): void {
     this.#elementRef.nativeElement.focus();
+  }
+
+  ngOnInit(): void {
+    runInInjectionContext(this.#injector, () => {
+      effect(() => {
+        const isActive = !this.#disabled() && this.#tabsService.activeItemKey() === this.itemKey();
+        this.isActive.set(isActive);
+      });
+    });
   }
 }
