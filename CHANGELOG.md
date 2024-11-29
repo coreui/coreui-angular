@@ -3,6 +3,13 @@
 
 ---
 
+#### `5.3.2`
+- chore(dependencies): update
+- chore(workflows): update with npm ci
+- fix(package-lock): rebuild
+
+---
+
 #### `5.3.1`
 
 - chore(dependencies): update 
