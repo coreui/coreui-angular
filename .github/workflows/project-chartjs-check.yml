@@ -25,9 +25,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: project check
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Project check
         run: |
-          npm i
           npm run build:chartjs:prod
           npm run lint:chartjs
           npm run test:chartjs:prod
