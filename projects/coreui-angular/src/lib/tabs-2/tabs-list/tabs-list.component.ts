@@ -91,7 +91,7 @@ export class TabsListComponent {
     });
   });
 
-  tabsServiceEffect = effect(() => {
+  readonly tabsServiceEffect = effect(() => {
     const activeItemIndex = this.tabs().findIndex(
       (tab) => untracked(tab.isActive) && untracked(tab.itemKey) === this.tabsService.activeItemKey()
     );

@@ -20,8 +20,8 @@ describe('OffcanvasToggleDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, OffcanvasToggleDirective],
-      providers: [OffcanvasService, TestButtonComponent]
+      imports: [NoopAnimationsModule, OffcanvasToggleDirective, TestButtonComponent],
+      providers: [OffcanvasService]
     });
     fixture = TestBed.createComponent(TestButtonComponent);
     component = fixture.componentInstance;

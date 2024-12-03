@@ -120,7 +120,6 @@ export class DropdownToggleDirective implements AfterViewInit {
   styleUrls: ['./dropdown.component.scss'],
   exportAs: 'cDropdown',
   providers: [DropdownService],
-
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }]
 })
 export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
