@@ -3,6 +3,15 @@
 
 ---
 
+#### `5.3.3`
+
+- chore(dependencies): update
+- fix(accordion): accordion item not expanded on init when visible=true
+- refactor(avatar): remove NgOptimizedImage directive, add object-fit: cover
+- chore(workflows): update node-version to 22.x
+
+---
+
 #### `5.3.2`
 - chore(dependencies): update
 - chore(workflows): update with npm ci
