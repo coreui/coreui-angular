@@ -1,7 +1,7 @@
 <ng-content>
   @if (src()) {
     @defer (prefetch on idle) {
-      <img [ngSrc]="src() ?? ''" fill="" class="avatar-img" alt="{{alt()}}" />
+      <img src="{{src() ?? ''}}" class="avatar-img" alt="{{alt()}}" />
     } @placeholder () {
       <svg aria-label="Avatar placeholder"
            focusable="false"

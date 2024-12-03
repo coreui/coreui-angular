@@ -1,20 +1,21 @@
-import { NgClass, NgOptimizedImage } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, computed, input, InputSignal } from '@angular/core';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
 import { TextColorDirective } from '../utilities';
 
 @Component({
-    selector: 'c-avatar',
-    templateUrl: './avatar.component.html',
-    imports: [NgClass, NgOptimizedImage],
-    hostDirectives: [
-        {
-            directive: TextColorDirective,
-            inputs: ['cTextColor: textColor']
-        }
-    ],
-    host: { class: 'avatar', '[class]': 'hostClasses()' }
+  selector: 'c-avatar',
+  templateUrl: './avatar.component.html',
+  styleUrls: ['./avatar.component.scss'],
+  imports: [NgClass],
+  hostDirectives: [
+    {
+      directive: TextColorDirective,
+      inputs: ['cTextColor: textColor']
+    }
+  ],
+  host: { class: 'avatar', '[class]': 'hostClasses()' }
 })
 export class AvatarComponent {
   /**
