@@ -3,10 +3,12 @@ import {
   Component,
   computed,
   contentChildren,
+  effect,
   inject,
-  Input,
+  input,
   OnDestroy,
   OnInit,
+  signal,
   TemplateRef
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
@@ -19,12 +21,12 @@ import { AccordionService } from '../accordion.service';
 let nextId = 0;
 
 @Component({
-    selector: 'c-accordion-item',
-    templateUrl: './accordion-item.component.html',
-    styleUrls: ['./accordion-item.component.scss'],
-    exportAs: 'cAccordionItem',
-    imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective],
-    host: { class: 'accordion-item' }
+  selector: 'c-accordion-item',
+  templateUrl: './accordion-item.component.html',
+  styleUrls: ['./accordion-item.component.scss'],
+  exportAs: 'cAccordionItem',
+  imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective],
+  host: { class: 'accordion-item' }
 })
 export class AccordionItemComponent implements OnInit, OnDestroy {
   readonly #accordionService = inject(AccordionService);
@@ -34,22 +36,29 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
    * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) visible: boolean = false;
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
-  @Input()
-  set open(value: boolean) {
-    console.warn('c-accordion-item "open" prop is deprecated, use "visible"  prop instead.');
-    this.visible = value || this.visible;
+  readonly itemVisible = signal(false);
+
+  visibleInputChange = effect(() => {
+    setTimeout(() => {
+      this.itemVisible.set(this.visibleInput());
+    });
+  });
+
+  set visible(value: boolean) {
+    this.itemVisible.set(value);
   }
 
-  get open() {
-    return <boolean>this.visible;
+  get visible() {
+    return <boolean>this.itemVisible();
   }
 
   contentId = `accordion-item-${nextId++}`;
 
   get itemContext() {
-    return { $implicit: <boolean>this.visible };
+    return { $implicit: <boolean>this.itemVisible() };
   }
 
   readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });

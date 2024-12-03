@@ -3,13 +3,13 @@
   <div class="accordion-header">
     <ng-container *ngTemplateOutlet="tmpl['accordionHeaderTemplate'] || defaultAccordionHeaderTemplate; context: itemContext" />
   </div>
-  <div class="accordion-collapse" cCollapse [visible]="visible" [attr.aria-expanded]="visible" [id]="contentId">
+  <div class="accordion-collapse" cCollapse [visible]="itemVisible()" [attr.aria-expanded]="itemVisible()" [id]="contentId">
     <ng-container *ngTemplateOutlet="tmpl['accordionBodyTemplate'] || defaultAccordionBodyTemplate; context: itemContext" />
   </div>
 </ng-container>
 
 <ng-template #defaultAccordionHeaderTemplate>
-  <button cAccordionButton [collapsed]="!visible" [attr.aria-controls]="contentId" (click)="toggleItem()">
+  <button cAccordionButton [collapsed]="!itemVisible()" [attr.aria-controls]="contentId" (click)="toggleItem()">
     <ng-container
       *ngTemplateOutlet="tmpl['accordionHeader'] || defaultAccordionHeaderContentTemplate; context: itemContext">
     </ng-container>

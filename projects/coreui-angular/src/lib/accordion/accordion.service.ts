@@ -18,7 +18,7 @@ export class AccordionService {
   }
 
   toggleItem(item: AccordionItemComponent): void {
-    item.visible = !item.visible;
+    item.itemVisible.update((value) => !value);
     this.closeOtherItems(item);
   }
 
@@ -26,7 +26,7 @@ export class AccordionService {
     if (!this.alwaysOpen) {
       this.items.forEach((item: AccordionItemComponent) => {
         if (item !== openItem) {
-          item.visible = false;
+          item.itemVisible.set(false);
         }
       });
     }
