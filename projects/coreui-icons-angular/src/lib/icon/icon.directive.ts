@@ -9,7 +9,6 @@ import { transformName } from './icon.utils';
   exportAs: 'cIcon',
   selector: 'svg[cIcon]',
   host: {
-    ngSkipHydration: 'true',
     '[innerHtml]': 'innerHtml()',
     '[class]': 'hostClasses()',
     '[attr.viewBox]': 'viewBox()',
