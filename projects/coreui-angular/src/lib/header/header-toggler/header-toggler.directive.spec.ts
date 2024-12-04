@@ -3,19 +3,19 @@ import { ElementRef, Renderer2 } from '@angular/core';
 
 import { HeaderTogglerDirective } from './header-toggler.directive';
 
-describe('HeaderTogglerDirective', () => {
-  let renderer: Renderer2;
-  let hostElement: ElementRef;
+class MockElementRef extends ElementRef {}
 
+describe('HeaderTogglerDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [Renderer2],
-      providers: [Renderer2]
+      providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }]
     });
   });
 
   it('should create an instance', () => {
-    const directive = new HeaderTogglerDirective(renderer, hostElement);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new HeaderTogglerDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

@@ -1,9 +1,12 @@
-import { AfterContentInit, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, HostBinding, inject, Input, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[cHeaderToggler]'
 })
 export class HeaderTogglerDirective implements AfterContentInit {
+  readonly #renderer = inject(Renderer2);
+  readonly #hostElement = inject(ElementRef);
+
   @HostBinding('class.header-toggler') headerToggler = true;
   /**
    * Default role for header-toggler. [docs]
@@ -22,22 +25,17 @@ export class HeaderTogglerDirective implements AfterContentInit {
   @Input()
   ariaLabel = 'Toggle navigation';
 
-  private hasContent!: boolean;
-
-  constructor(
-    private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {}
+  #hasContent!: boolean;
 
   addDefaultIcon(): void {
-    const span = this.renderer.createElement('span');
-    this.renderer.addClass(span, 'header-toggler-icon');
-    this.renderer.appendChild(this.hostElement.nativeElement, span);
+    const span = this.#renderer.createElement('span');
+    this.#renderer.addClass(span, 'header-toggler-icon');
+    this.#renderer.appendChild(this.#hostElement.nativeElement, span);
   }
 
   ngAfterContentInit(): void {
-    this.hasContent = this.hostElement.nativeElement.childNodes.length > 0;
-    if (!this.hasContent) {
+    this.#hasContent = this.#hostElement.nativeElement.childNodes.length > 0;
+    if (!this.#hasContent) {
       this.addDefaultIcon();
     }
   }

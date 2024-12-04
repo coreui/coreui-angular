@@ -1,33 +1,31 @@
-import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'c-sidebar-nav-title',
   template: ''
 })
 export class SidebarNavTitleComponent implements OnInit {
+  readonly #elementRef = inject(ElementRef);
+  readonly #renderer = inject(Renderer2);
+
   @Input() item: any;
 
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2
-  ) {}
-
   ngOnInit(): void {
-    const nativeElement: HTMLElement = this.el.nativeElement;
-    const name = this.renderer.createText(this.item.name);
+    const nativeElement: HTMLElement = this.#elementRef.nativeElement;
+    const name = this.#renderer.createText(this.item.name);
 
     if (this.item.class) {
       const classes = this.item.class;
-      this.renderer.addClass(nativeElement, classes);
+      this.#renderer.addClass(nativeElement, classes);
     }
 
     if (this.item.wrapper) {
-      const wrapper = this.renderer.createElement(this.item.wrapper.element);
+      const wrapper = this.#renderer.createElement(this.item.wrapper.element);
       this.addAttribs(this.item.wrapper.attributes, wrapper);
-      this.renderer.appendChild(wrapper, name);
-      this.renderer.appendChild(nativeElement, wrapper);
+      this.#renderer.appendChild(wrapper, name);
+      this.#renderer.appendChild(nativeElement, wrapper);
     } else {
-      this.renderer.appendChild(nativeElement, name);
+      this.#renderer.appendChild(nativeElement, name);
     }
   }
 
@@ -48,7 +46,7 @@ export class SidebarNavTitleComponent implements OnInit {
   private setStyle(styles: { [x: string]: any }, el: any): void {
     for (const style in styles) {
       if (style) {
-        this.renderer.setStyle(el, style, styles[style]);
+        this.#renderer.setStyle(el, style, styles[style]);
       }
     }
   }
@@ -58,11 +56,11 @@ export class SidebarNavTitleComponent implements OnInit {
     classArray
       .filter((element) => element.length > 0)
       .forEach((element) => {
-        this.renderer.addClass(el, element);
+        this.#renderer.addClass(el, element);
       });
   }
 
   private setAttrib(key: string, value: string, el: any): void {
-    this.renderer.setAttribute(el, key, value);
+    this.#renderer.setAttribute(el, key, value);
   }
 }

@@ -4,6 +4,7 @@ import {
   Directive,
   HostBinding,
   HostListener,
+  inject,
   Input,
   numberAttribute,
   OnChanges,
@@ -18,14 +19,14 @@ import { TabService } from './tab.service';
   selector: '[cTabContent]'
 })
 export class TabContentRefDirective implements OnChanges, OnDestroy {
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private tabService: TabService
-  ) {
+  readonly #changeDetectorRef = inject(ChangeDetectorRef);
+  readonly #tabService = inject(TabService);
+
+  constructor() {
     this.subscribeTabService();
   }
 
-  private tabServiceSubscription!: Subscription;
+  #tabServiceSubscription!: Subscription;
 
   /**
    * Template Ref
@@ -41,17 +42,17 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
   @Input({ transform: booleanAttribute })
   set active(value: boolean) {
     const newValue = value;
-    if (this._active !== newValue) {
-      this._active = newValue;
-      this.changeDetectorRef.detectChanges();
+    if (this.#active !== newValue) {
+      this.#active = newValue;
+      this.#changeDetectorRef.detectChanges();
     }
   }
 
   get active() {
-    return this._active;
+    return this.#active;
   }
 
-  private _active = false;
+  #active = false;
 
   /**
    * Set disabled state of tab content
@@ -59,14 +60,14 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
    */
   @Input({ transform: booleanAttribute })
   set disabled(value: boolean) {
-    this._disabled = value;
+    this.#disabled = value;
   }
 
   get disabled(): boolean {
-    return this._disabled || this.tabPaneIdx >= this.tabContentRef?.panes?.length;
+    return this.#disabled || this.tabPaneIdx >= this.tabContentRef?.panes?.length;
   }
 
-  private _disabled = false;
+  #disabled = false;
 
   /**
    * c-tab-pane index respectively
@@ -122,7 +123,7 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
     setTimeout(() => {
       if (this.tabPaneIdx < this.tabContentRef.panes.length) {
         this.active = true;
-        this.tabService.setActiveTabIdx({ tabContent: this.tabContentRef, activeIdx: this.tabPaneIdx });
+        this.#tabService.setActiveTabIdx({ tabContent: this.tabContentRef, activeIdx: this.tabPaneIdx });
       } else {
         this.active = false;
       }
@@ -135,13 +136,13 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
 
   subscribeTabService(subscribe: boolean = true) {
     if (subscribe) {
-      this.tabServiceSubscription = this.tabService.activeTabPaneIdx$.subscribe((tabContentState) => {
+      this.#tabServiceSubscription = this.#tabService.activeTabPaneIdx$.subscribe((tabContentState) => {
         if (tabContentState.tabContent === this.tabContentRef) {
           this.active = tabContentState.activeIdx === this.tabPaneIdx;
         }
       });
     } else {
-      this.tabServiceSubscription?.unsubscribe();
+      this.#tabServiceSubscription?.unsubscribe();
     }
   }
 }

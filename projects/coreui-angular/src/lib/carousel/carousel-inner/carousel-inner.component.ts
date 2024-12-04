@@ -4,6 +4,7 @@ import {
   Component,
   ContentChildren,
   HostBinding,
+  inject,
   QueryList
 } from '@angular/core';
 
@@ -18,7 +19,7 @@ import { CarouselState } from '../carousel-state';
   animations: [slideAnimation, fadeAnimation]
 })
 export class CarouselInnerComponent implements AfterContentInit, AfterContentChecked {
-  constructor(private carouselState: CarouselState) {}
+  readonly #carouselState = inject(CarouselState);
 
   @HostBinding('class.carousel-inner') carouselInnerClass = true;
   activeIndex?: number;
@@ -26,7 +27,7 @@ export class CarouselInnerComponent implements AfterContentInit, AfterContentChe
   slide = { left: true };
   transition = 'slide';
   @ContentChildren(CarouselItemComponent) private contentItems!: QueryList<CarouselItemComponent>;
-  private prevContentItems!: QueryList<CarouselItemComponent>;
+  #prevContentItems!: QueryList<CarouselItemComponent>;
 
   ngAfterContentInit(): void {
     this.setItems();
@@ -34,7 +35,7 @@ export class CarouselInnerComponent implements AfterContentInit, AfterContentChe
 
   ngAfterContentChecked(): void {
     this.setItems();
-    const state = this.carouselState?.state;
+    const state = this.#carouselState?.state;
     const nextIndex = state?.activeItemIndex;
     const nextDirection = state?.direction;
     if (this.activeIndex !== nextIndex) {
@@ -46,9 +47,9 @@ export class CarouselInnerComponent implements AfterContentInit, AfterContentChe
   }
 
   setItems(): void {
-    if (this.prevContentItems !== this.contentItems) {
-      this.prevContentItems = this.contentItems;
-      this.carouselState.setItems(this.contentItems);
+    if (this.#prevContentItems !== this.contentItems) {
+      this.#prevContentItems = this.contentItems;
+      this.#carouselState.setItems(this.contentItems);
     }
   }
 }

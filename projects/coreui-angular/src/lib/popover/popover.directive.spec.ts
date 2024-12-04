@@ -3,27 +3,22 @@ import { TestBed } from '@angular/core/testing';
 import { IntersectionService, ListenersService } from '../services';
 import { PopoverDirective } from './popover.directive';
 
-describe('PopoverDirective', () => {
-  let renderer: Renderer2;
-  let hostElement: ElementRef;
-  let viewContainerRef: ViewContainerRef;
-  let changeDetectorRef: ChangeDetectorRef;
+class MockElementRef extends ElementRef {}
 
+describe('PopoverDirective', () => {
   it('should create an instance', () => {
     TestBed.configureTestingModule({
-      providers: [IntersectionService, Renderer2, ListenersService]
+      providers: [
+        IntersectionService,
+        Renderer2,
+        ListenersService,
+        { provide: ElementRef, useClass: MockElementRef },
+        ViewContainerRef,
+        ChangeDetectorRef
+      ]
     });
-    const intersectionService = TestBed.inject(IntersectionService);
-    const listenersService = TestBed.inject(ListenersService);
     TestBed.runInInjectionContext(() => {
-      const directive = new PopoverDirective(
-        renderer,
-        hostElement,
-        viewContainerRef,
-        listenersService,
-        changeDetectorRef,
-        intersectionService
-      );
+      const directive = new PopoverDirective();
       expect(directive).toBeTruthy();
     });
   });

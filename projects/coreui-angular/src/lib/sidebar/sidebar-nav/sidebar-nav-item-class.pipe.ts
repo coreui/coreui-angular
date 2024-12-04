@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 
 import { SidebarNavHelper } from './sidebar-nav.service';
 
@@ -6,7 +6,7 @@ import { SidebarNavHelper } from './sidebar-nav.service';
   name: 'cSidebarNavItemClass'
 })
 export class SidebarNavItemClassPipe implements PipeTransform {
-  constructor(public helper: SidebarNavHelper) {}
+  readonly helper = inject(SidebarNavHelper);
 
   // transform(item: any, ...args: any[]): any {
   transform(item: any, args?: any[]): any {

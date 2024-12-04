@@ -49,20 +49,17 @@ export type TToasterPlacement =
   | string;
 
 @Component({
-    selector: 'c-toaster',
-    templateUrl: './toaster.component.html',
-    exportAs: 'cToaster',
-    imports: [ToasterHostDirective],
-    host: { class: 'toaster toast-container' }
+  selector: 'c-toaster',
+  templateUrl: './toaster.component.html',
+  exportAs: 'cToaster',
+  imports: [ToasterHostDirective],
+  host: { class: 'toaster toast-container' }
 })
 export class ToasterComponent implements OnInit, AfterContentChecked {
+  readonly #hostElement = inject(ElementRef);
+  readonly #renderer = inject(Renderer2);
+  readonly #toasterService = inject(ToasterService);
   readonly #destroyRef = inject(DestroyRef);
-
-  constructor(
-    private hostElement: ElementRef,
-    private renderer: Renderer2,
-    private toasterService: ToasterService
-  ) {}
 
   placements = Object.values(ToasterPlacement);
   toasts!: QueryList<ViewContainerRef>;
@@ -153,7 +150,7 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
   }
 
   private stateToasterSubscribe(): void {
-    this.toasterService.toasterState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((state) => {
+    this.#toasterService.toasterState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((state) => {
       if (state.show === false) {
         this.removeToast(state);
       }

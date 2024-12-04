@@ -1,10 +1,13 @@
-import { booleanAttribute, Directive, ElementRef, HostBinding, Input, Renderer2 } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, HostBinding, inject, Input, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: 'input[cFormCheckInput]',
   host: { class: 'form-check-input' }
 })
 export class FormCheckInputDirective {
+  readonly #renderer = inject(Renderer2);
+  readonly #hostElement = inject(ElementRef);
+
   /**
    * Specifies the type of component.
    * @type {'checkbox' | 'radio'}
@@ -24,11 +27,11 @@ export class FormCheckInputDirective {
     const indeterminate = value;
     if (this._indeterminate !== indeterminate) {
       this._indeterminate = indeterminate;
-      const htmlInputElement = this.hostElement.nativeElement as HTMLInputElement;
+      const htmlInputElement = this.#hostElement.nativeElement as HTMLInputElement;
       if (indeterminate) {
-        this.renderer.setProperty(htmlInputElement, 'checked', false);
+        this.#renderer.setProperty(htmlInputElement, 'checked', false);
       }
-      this.renderer.setProperty(htmlInputElement, 'indeterminate', indeterminate);
+      this.#renderer.setProperty(htmlInputElement, 'indeterminate', indeterminate);
     }
   }
 
@@ -57,18 +60,13 @@ export class FormCheckInputDirective {
   @Input({ transform: booleanAttribute })
   set checked(value: boolean) {
     const checked = value;
-    const htmlInputElement = this.hostElement?.nativeElement as HTMLInputElement;
+    const htmlInputElement = this.#hostElement?.nativeElement as HTMLInputElement;
     if (htmlInputElement) {
-      this.renderer.setProperty(htmlInputElement, 'checked', checked);
+      this.#renderer.setProperty(htmlInputElement, 'checked', checked);
     }
   }
 
   get checked(): boolean {
-    return this.hostElement?.nativeElement?.checked;
+    return this.#hostElement?.nativeElement?.checked;
   }
-
-  constructor(
-    private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {}
 }

@@ -1,10 +1,17 @@
-import { ElementRef } from '@angular/core';
 import { FormControlDirective } from './form-control.directive';
+import { TestBed } from '@angular/core/testing';
+import { ElementRef } from '@angular/core';
+
+class MockElementRef extends ElementRef {}
 
 describe('FormControlDirective', () => {
-  let hostElement: ElementRef;
   it('should create an instance', () => {
-    const directive = new FormControlDirective(hostElement);
-    expect(directive).toBeTruthy();
+    TestBed.configureTestingModule({
+      providers: [{ provide: ElementRef, useClass: MockElementRef }]
+    });
+    TestBed.runInInjectionContext(() => {
+      const directive = new FormControlDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

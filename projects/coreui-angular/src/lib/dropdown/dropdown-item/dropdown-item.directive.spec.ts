@@ -1,22 +1,20 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { DropdownService } from '../dropdown.service';
 import { DropdownItemDirective } from './dropdown-item.directive';
+import { DropdownService } from '../dropdown.service';
 
 class MockElementRef extends ElementRef {}
 
 describe('DropdownItemDirective', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: ElementRef, useClass: MockElementRef }]
+      providers: [{ provide: ElementRef, useClass: MockElementRef }, DropdownService]
     });
   });
 
   it('should create an instance', () => {
     TestBed.runInInjectionContext(() => {
-      const dropdownService = new DropdownService();
-      const directive = new DropdownItemDirective(dropdownService);
+      const directive = new DropdownItemDirective();
       expect(directive).toBeTruthy();
     });
   });

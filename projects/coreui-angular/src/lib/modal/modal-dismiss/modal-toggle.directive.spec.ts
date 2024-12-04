@@ -1,10 +1,11 @@
 import { ModalToggleDirective } from './modal-toggle.directive';
-import { ModalService } from '../modal.service';
+import { TestBed } from '@angular/core/testing';
 
 describe('ModalDismissDirective', () => {
   it('should create an instance', () => {
-    const modalService = new ModalService()
-    const directive = new ModalToggleDirective(modalService);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new ModalToggleDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

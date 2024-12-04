@@ -33,8 +33,8 @@ describe('DropdownComponent', () => {
 class MockElementRef extends ElementRef {}
 
 @Component({
-    template: '<div cDropdownToggle></div>',
-    imports: [DropdownToggleDirective]
+  template: '<div cDropdownToggle></div>',
+  imports: [DropdownToggleDirective]
 })
 class TestComponent {}
 
@@ -46,11 +46,13 @@ describe('DropdownToggleDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestComponent, DropdownToggleDirective],
+      imports: [TestComponent],
       providers: [
         { provide: ElementRef, useClass: MockElementRef },
         DropdownService,
         DropdownComponent
+        // Renderer2,
+        // ChangeDetectorRef
       ]
     });
 

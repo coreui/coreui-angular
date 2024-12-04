@@ -1,10 +1,15 @@
-import { DropdownService } from '../dropdown.service';
 import { DropdownCloseDirective } from './dropdown-close.directive';
+import { TestBed } from '@angular/core/testing';
+import { DropdownService } from '../dropdown.service';
 
 describe('DropdownCloseDirective', () => {
   it('should create an instance', () => {
-    const dropdownService = new DropdownService();
-    const directive = new DropdownCloseDirective(dropdownService);
-    expect(directive).toBeTruthy();
+    TestBed.configureTestingModule({
+      providers: [DropdownService]
+    });
+    TestBed.runInInjectionContext(() => {
+      const directive = new DropdownCloseDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

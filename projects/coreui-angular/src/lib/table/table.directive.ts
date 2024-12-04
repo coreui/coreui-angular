@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, ElementRef, HostBinding, Input, OnInit, Renderer2 } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, HostBinding, inject, Input, OnInit, Renderer2 } from '@angular/core';
 import { Breakpoints, Colors } from '../coreui.types';
 import { ITable } from './table.type';
 
@@ -7,10 +7,8 @@ import { ITable } from './table.type';
   host: { class: 'table' }
 })
 export class TableDirective implements ITable, OnInit {
-  constructor(
-    private renderer: Renderer2,
-    private hostElement: ElementRef
-  ) {}
+  readonly #renderer = inject(Renderer2);
+  readonly #hostElement = inject(ElementRef);
 
   /**
    * Set the vertical alignment.
@@ -104,14 +102,14 @@ export class TableDirective implements ITable, OnInit {
   // todo
   setResponsiveWrapper(): void {
     if (!!this.responsive) {
-      const nativeElement: HTMLElement = this.hostElement.nativeElement;
-      const wrapper = this.renderer.createElement('div');
+      const nativeElement: HTMLElement = this.#hostElement.nativeElement;
+      const wrapper = this.#renderer.createElement('div');
       const className = this.responsive === true ? 'table-responsive' : `table-responsive-${this.responsive}`;
-      this.renderer.addClass(wrapper, className);
-      const parentNode = this.renderer.parentNode(nativeElement);
-      this.renderer.appendChild(parentNode, wrapper);
-      this.renderer.insertBefore(parentNode, wrapper, nativeElement);
-      this.renderer.appendChild(wrapper, nativeElement);
+      this.#renderer.addClass(wrapper, className);
+      const parentNode = this.#renderer.parentNode(nativeElement);
+      this.#renderer.appendChild(parentNode, wrapper);
+      this.#renderer.insertBefore(parentNode, wrapper, nativeElement);
+      this.#renderer.appendChild(wrapper, nativeElement);
     }
   }
 }

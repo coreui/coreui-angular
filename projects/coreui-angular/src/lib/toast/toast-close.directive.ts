@@ -1,4 +1,4 @@
-import { Directive, HostListener, Input } from '@angular/core';
+import { Directive, HostListener, inject, Input } from '@angular/core';
 import { ToasterService } from './toaster/toaster.service';
 
 @Directive({
@@ -6,13 +6,13 @@ import { ToasterService } from './toaster/toaster.service';
   exportAs: 'cToastClose'
 })
 export class ToastCloseDirective {
-  @Input('cToastClose') toast: any;
+  readonly #toasterService = inject(ToasterService);
 
-  constructor(private toasterService: ToasterService) {}
+  @Input('cToastClose') toast: any;
 
   @HostListener('click', ['$event'])
   toggleOpen($event: any): void {
     $event.preventDefault();
-    this.toasterService.setState({ show: false, toast: this.toast });
+    this.#toasterService.setState({ show: false, toast: this.toast });
   }
 }

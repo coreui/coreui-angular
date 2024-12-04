@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, ViewChild } from '@angular/core';
+import { Component, DebugElement, ElementRef, ViewChild, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -12,7 +12,9 @@ import { cilList } from '@coreui/icons';
     providers: [IconSetService]
 })
 class TestComponent {
-  constructor(public iconSet: IconSetService) {
+  iconSet = inject(IconSetService);
+
+  constructor() {
     this.iconSet.icons = { cilList };
   }
 

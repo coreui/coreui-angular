@@ -9,7 +9,6 @@ import {
   HostBinding,
   HostListener,
   inject,
-  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -30,37 +29,40 @@ import { OffcanvasService } from '../offcanvas.service';
 let nextId = 0;
 
 @Component({
-    selector: 'c-offcanvas',
-    animations: [
-        trigger('showHide', [
-            state('visible', style({
-            // visibility: 'visible'
-            })),
-            state('hidden', style({
-            // visibility: 'hidden'
-            })),
-            transition('visible <=> *', [animate('300ms')])
-        ])
-    ],
-    templateUrl: './offcanvas.component.html',
-    styleUrls: ['./offcanvas.component.scss'],
-    exportAs: 'cOffcanvas',
-    imports: [A11yModule],
-    hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-    host: { ngSkipHydration: 'true' }
+  selector: 'c-offcanvas',
+  animations: [
+    trigger('showHide', [
+      state(
+        'visible',
+        style({
+          // visibility: 'visible'
+        })
+      ),
+      state(
+        'hidden',
+        style({
+          // visibility: 'hidden'
+        })
+      ),
+      transition('visible <=> *', [animate('300ms')])
+    ])
+  ],
+  templateUrl: './offcanvas.component.html',
+  styleUrls: ['./offcanvas.component.scss'],
+  exportAs: 'cOffcanvas',
+  imports: [A11yModule],
+  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
+  host: { ngSkipHydration: 'true' }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
-  #destroyRef = inject(DestroyRef);
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: any,
-    private renderer: Renderer2,
-    private hostElement: ElementRef,
-    private offcanvasService: OffcanvasService,
-    private backdropService: BackdropService,
-    private breakpointObserver: BreakpointObserver
-  ) {}
+  readonly #document = inject<Document>(DOCUMENT);
+  readonly #platformId = inject(PLATFORM_ID);
+  readonly #renderer = inject(Renderer2);
+  readonly #hostElement = inject(ElementRef);
+  readonly #offcanvasService = inject(OffcanvasService);
+  readonly #backdropService = inject(BackdropService);
+  readonly #breakpointObserver = inject(BreakpointObserver);
+  readonly #destroyRef = inject(DestroyRef);
 
   /**
    * Apply a backdrop on body while offcanvas is open.
@@ -183,10 +185,10 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     if (typeof this.responsive !== 'string') {
       return false;
     }
-    const element: Element = this.document.documentElement;
+    const element: Element = this.#document.documentElement;
     const responsiveBreakpoint = this.responsive;
     const breakpointValue =
-      this.document.defaultView
+      this.#document.defaultView
         ?.getComputedStyle(element)
         ?.getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) ?? false;
     return breakpointValue ? `${parseFloat(breakpointValue.trim()) - 0.02}px` : false;
@@ -196,11 +198,11 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   animateStart(event: AnimationEvent) {
     if (event.toState === 'visible') {
       if (!this.scroll) {
-        this.backdropService.hideScrollbar();
+        this.#backdropService.hideScrollbar();
       }
-      this.renderer.addClass(this.hostElement.nativeElement, 'showing');
+      this.#renderer.addClass(this.#hostElement.nativeElement, 'showing');
     } else {
-      this.renderer.addClass(this.hostElement.nativeElement, 'hiding');
+      this.#renderer.addClass(this.#hostElement.nativeElement, 'hiding');
     }
   }
 
@@ -208,12 +210,12 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   animateDone(event: AnimationEvent) {
     setTimeout(() => {
       if (event.toState === 'visible') {
-        this.renderer.removeClass(this.hostElement.nativeElement, 'showing');
+        this.#renderer.removeClass(this.#hostElement.nativeElement, 'showing');
       }
       if (event.toState === 'hidden') {
-        this.renderer.removeClass(this.hostElement.nativeElement, 'hiding');
-        this.renderer.removeStyle(this.document.body, 'overflow');
-        this.renderer.removeStyle(this.document.body, 'paddingRight');
+        this.#renderer.removeClass(this.#hostElement.nativeElement, 'hiding');
+        this.#renderer.removeStyle(this.#document.body, 'overflow');
+        this.#renderer.removeStyle(this.#document.body, 'paddingRight');
       }
     });
     this.show = this.visible;
@@ -222,7 +224,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   @HostListener('document:keydown', ['$event'])
   onKeyDownHandler(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.keyboard && this.visible && this.backdrop !== 'static') {
-      this.offcanvasService.toggle({ show: false, id: this.id });
+      this.#offcanvasService.toggle({ show: false, id: this.id });
     }
   }
 
@@ -230,22 +232,22 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.stateToggleSubscribe();
     setTimeout(() => {
       // hotfix to avoid offcanvas flicker on the first render
-      this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'flex');
+      this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'flex');
     });
   }
 
   ngOnDestroy(): void {
-    this.offcanvasService.toggle({ show: false, id: this.id });
+    this.#offcanvasService.toggle({ show: false, id: this.id });
   }
 
   setFocus(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => this.hostElement.nativeElement.focus());
+    if (isPlatformBrowser(this.#platformId)) {
+      setTimeout(() => this.#hostElement.nativeElement.focus());
     }
   }
 
   private stateToggleSubscribe(): void {
-    this.offcanvasService.offcanvasState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
+    this.#offcanvasService.offcanvasState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
       if (this === action.offcanvas || this.id === action.id) {
         if ('show' in action) {
           this.visible = action?.show === 'toggle' ? !this.visible : action.show;
@@ -256,10 +258,10 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   private backdropClickSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.#backdropClickSubscription = this.backdropService.backdropClick$
+      this.#backdropClickSubscription = this.#backdropService.backdropClick$
         .pipe(takeUntilDestroyed(this.#destroyRef))
         .subscribe((clicked) => {
-          this.offcanvasService.toggle({ show: !clicked, id: this.id });
+          this.#offcanvasService.toggle({ show: !clicked, id: this.id });
         });
     } else {
       this.#backdropClickSubscription?.unsubscribe();
@@ -268,8 +270,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   private setBackdrop(setBackdrop: boolean | 'static'): void {
     this.#activeBackdrop = !!setBackdrop
-      ? this.backdropService.setBackdrop('offcanvas')
-      : this.backdropService.clearBackdrop(this.#activeBackdrop);
+      ? this.#backdropService.setBackdrop('offcanvas')
+      : this.#backdropService.clearBackdrop(this.#activeBackdrop);
     setBackdrop === true ? this.backdropClickSubscribe() : this.backdropClickSubscribe(false);
   }
 
@@ -281,7 +283,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
       const responsiveBreakpoint = `(max-width: ${this.responsiveBreakpoint})`;
 
-      const layoutChanges = this.breakpointObserver.observe([responsiveBreakpoint]);
+      const layoutChanges = this.#breakpointObserver.observe([responsiveBreakpoint]);
 
       this.#layoutChangeSubscription = layoutChanges
         .pipe(

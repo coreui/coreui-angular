@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, ElementRef, HostBinding, Input, OnInit } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, HostBinding, inject, Input, OnInit } from '@angular/core';
 
 import { InputType } from '../../coreui.types';
 
@@ -6,7 +6,7 @@ import { InputType } from '../../coreui.types';
   selector: 'input[cFormControl], textarea[cFormControl]'
 })
 export class FormControlDirective implements OnInit {
-  constructor(private hostElement: ElementRef) {}
+  readonly #hostElement = inject(ElementRef);
 
   /**
    * Size the component small or large.
@@ -47,7 +47,7 @@ export class FormControlDirective implements OnInit {
   }
 
   get hostTag(): string {
-    return this.hostElement.nativeElement.tagName;
+    return this.#hostElement.nativeElement.tagName;
   }
 
   ngOnInit(): void {

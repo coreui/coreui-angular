@@ -1,26 +1,25 @@
-import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClassToggleService {
+  readonly #document = inject<Document>(DOCUMENT);
+  readonly #rendererFactory = inject(RendererFactory2);
 
-  private renderer: Renderer2;
+  #renderer: Renderer2;
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private rendererFactory: RendererFactory2
-  ) {
-    this.renderer = rendererFactory.createRenderer(null, null);
+  constructor() {
+    this.#renderer = this.#rendererFactory.createRenderer(null, null);
   }
 
   toggle(selector: any, className: string) {
-    const element = document.querySelector(selector);
+    const element = this.#document.querySelector(selector);
     if (element) {
-      element.classList.contains(className) ?
-        this.renderer.removeClass(element, className) :
-        this.renderer.addClass(element, className);
+      element.classList.contains(className)
+        ? this.#renderer.removeClass(element, className)
+        : this.#renderer.addClass(element, className);
     }
   }
 }

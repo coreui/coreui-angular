@@ -1,23 +1,4 @@
-import {
-  afterRender,
-  AfterViewInit,
-  booleanAttribute,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  Input,
-  NgZone,
-  numberAttribute,
-  OnChanges,
-  OnDestroy,
-  Output,
-  Renderer2,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import { afterRender, AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, Input, NgZone, numberAttribute, OnChanges, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild, inject } from '@angular/core';
 
 import merge from 'lodash-es/merge';
 
@@ -38,6 +19,10 @@ let nextId = 0;
   // host: { ngSkipHydration: 'true' }
 })
 export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
+  private readonly ngZone = inject(NgZone);
+  private readonly renderer = inject(Renderer2);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   /**
    * Enables custom html based tooltips instead of standard tooltips.
    * @type boolean
@@ -126,11 +111,7 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
     };
   }
 
-  constructor(
-    private readonly ngZone: NgZone,
-    private readonly renderer: Renderer2,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor() {
     // todo: verify afterRender / afterNextRender for chartjs (spec fails with 17.0.10)
     afterRender({
       write: () => {

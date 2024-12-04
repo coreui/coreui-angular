@@ -3,7 +3,7 @@ import {
   Component,
   EventEmitter,
   HostBinding,
-  Inject,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -26,6 +26,12 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
   host: { class: 'sidebar' }
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
+  readonly #document = inject<Document>(DOCUMENT);
+  readonly #renderer = inject(Renderer2);
+  readonly #breakpointObserver = inject(BreakpointObserver);
+  readonly #sidebarService = inject(SidebarService);
+  readonly #backdropService = inject(SidebarBackdropService);
+
   #visible = false;
   #onMobile = false;
   #layoutChangeSubscription!: Subscription;
@@ -135,8 +141,8 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
       ...newState
     };
     this.state.mobile && this.state.visible
-      ? this.backdropService.setBackdrop(this)
-      : this.backdropService.clearBackdrop();
+      ? this.#backdropService.setBackdrop(this)
+      : this.#backdropService.clearBackdrop();
   }
 
   get sidebarState(): ISidebarAction {
@@ -144,24 +150,18 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   get getMobileBreakpoint(): string {
-    const element: Element = this.document.documentElement;
+    const element: Element = this.#document.documentElement;
     const mobileBreakpoint =
-      this.document.defaultView?.getComputedStyle(element)?.getPropertyValue('--cui-mobile-breakpoint') ?? 'md';
+      this.#document.defaultView?.getComputedStyle(element)?.getPropertyValue('--cui-mobile-breakpoint') ?? 'md';
     const breakpointValue =
-      this.document.defaultView
+      this.#document.defaultView
         ?.getComputedStyle(element)
         ?.getPropertyValue(`--cui-breakpoint-${mobileBreakpoint.trim()}`) ?? '768px';
     return `${parseFloat(breakpointValue.trim()) - 0.02}px`;
   }
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-    private breakpointObserver: BreakpointObserver,
-    private sidebarService: SidebarService,
-    private backdropService: SidebarBackdropService
-  ) {
-    this.backdropService.renderer = renderer;
+  constructor() {
+    this.#backdropService.renderer = this.#renderer;
   }
 
   @HostBinding('class')
@@ -213,7 +213,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
     if (newStateMap.size > 1) {
       const state = Object.fromEntries(newStateMap.entries());
-      this.sidebarService.toggle(state);
+      this.#sidebarService.toggle(state);
     }
   }
 
@@ -223,7 +223,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
       visible: this.visible,
       unfoldable: this.unfoldable
     };
-    this.sidebarService.toggle({
+    this.#sidebarService.toggle({
       ...this.#stateInitial,
       sidebar: this
     });
@@ -231,7 +231,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   private stateToggleSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.#stateToggleSubscription = this.sidebarService.sidebarState$.subscribe((state) => {
+      this.#stateToggleSubscription = this.#sidebarService.sidebarState$.subscribe((state) => {
         if (this === state.sidebar || this.id === state.id) {
           this.sidebarState = state;
         }
@@ -245,14 +245,14 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     const onMobile = `(max-width: ${this.getMobileBreakpoint})`;
 
     if (subscribe) {
-      const layoutChanges = this.breakpointObserver.observe([onMobile]);
+      const layoutChanges = this.#breakpointObserver.observe([onMobile]);
 
       this.#layoutChangeSubscription = layoutChanges.subscribe((result: BreakpointState) => {
         const isOnMobile = result.breakpoints[onMobile];
         const isUnfoldable = isOnMobile ? false : this.unfoldable;
         if (this.#onMobile !== isOnMobile) {
           this.#onMobile = isOnMobile;
-          this.sidebarService.toggle({
+          this.#sidebarService.toggle({
             mobile: isOnMobile,
             unfoldable: isUnfoldable,
             visible: isOnMobile ? !isOnMobile : this.#stateInitial.visible,

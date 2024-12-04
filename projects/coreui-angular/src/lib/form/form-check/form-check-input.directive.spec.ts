@@ -1,7 +1,9 @@
-import { Component, DebugElement, Renderer2, Type } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2, Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormCheckInputDirective } from './form-check-input.directive';
+
+class MockElementRef extends ElementRef {}
 
 @Component({
   template: '<input cFormCheckInput>',
@@ -17,7 +19,8 @@ describe('FormCheckInputDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormCheckInputDirective, TestComponent]
+      imports: [FormCheckInputDirective, TestComponent],
+      providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }]
     });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
@@ -26,7 +29,9 @@ describe('FormCheckInputDirective', () => {
   });
 
   it('should create an instance', () => {
-    const directive = new FormCheckInputDirective(renderer, inputEl);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new FormCheckInputDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

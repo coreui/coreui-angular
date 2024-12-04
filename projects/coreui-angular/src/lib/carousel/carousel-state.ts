@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ICarouselState } from './carousel-state.type';
 import { CarouselService } from './carousel.service';
 import { CarouselItemComponent } from './carousel-item/carousel-item.component';
 
 @Injectable()
 export class CarouselState {
+  readonly #carouselService = inject(CarouselService);
+
   private _state: ICarouselState = {
     activeItemIndex: -1,
     animate: true,
@@ -12,8 +14,6 @@ export class CarouselState {
     direction: 'next',
     transition: 'slide'
   };
-
-  constructor(private carouselService: CarouselService) {}
 
   get state(): ICarouselState {
     return this._state;
@@ -25,8 +25,8 @@ export class CarouselState {
     this._state = nextState;
     if (prevState.activeItemIndex !== nextState.activeItemIndex) {
       const activeItemIndex = this.state.activeItemIndex || 0;
-      const itemInterval = this.state.items && this.state.items[activeItemIndex]?.interval || -1;
-      this.carouselService.setIndex({
+      const itemInterval = (this.state.items && this.state.items[activeItemIndex]?.interval) || -1;
+      this.#carouselService.setIndex({
         active: nextState.activeItemIndex,
         interval: itemInterval,
         lastItemIndex: (nextState.items?.length ?? 0) - 1
@@ -49,7 +49,7 @@ export class CarouselState {
   }
 
   setNextIndex(nextIndex: any): void {
-    this.carouselService.setIndex(nextIndex);
+    this.#carouselService.setIndex(nextIndex);
   }
 
   direction(direction: 'next' | 'prev' = 'next'): number {
@@ -57,9 +57,13 @@ export class CarouselState {
     const { activeItemIndex = -1, items } = this.state;
     const itemsCount = items?.length ?? 0;
     if (itemsCount > 0) {
-      return direction === 'next' ?
-        (activeItemIndex === itemsCount - 1 ? 0 : activeItemIndex + 1) :
-        (activeItemIndex === 0 ? itemsCount - 1 : activeItemIndex - 1);
+      return direction === 'next'
+        ? activeItemIndex === itemsCount - 1
+          ? 0
+          : activeItemIndex + 1
+        : activeItemIndex === 0
+          ? itemsCount - 1
+          : activeItemIndex - 1;
     } else {
       return 0;
     }

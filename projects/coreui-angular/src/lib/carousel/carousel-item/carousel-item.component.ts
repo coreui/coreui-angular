@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   HostBinding,
+  inject,
   Input,
   OnDestroy
 } from '@angular/core';
@@ -18,23 +19,26 @@ import { CarouselService } from '../carousel.service';
   host: { class: 'carousel-item' }
 })
 export class CarouselItemComponent implements OnDestroy, AfterViewInit {
+  readonly #carouselService = inject(CarouselService);
+  readonly #changeDetectorRef = inject(ChangeDetectorRef);
+
   index?: number;
-  private carouselIndexSubscription?: Subscription;
+  #carouselIndexSubscription?: Subscription;
 
   /**
    * @ignore
    */
   @Input({ transform: booleanAttribute })
   set active(value) {
-    this._active = value;
-    this.changeDetectorRef.markForCheck();
+    this.#active = value;
+    this.#changeDetectorRef.markForCheck();
   }
 
   get active(): boolean {
-    return this._active;
+    return this.#active;
   }
 
-  private _active = false;
+  #active = false;
 
   /**
    * Time delay before cycling to next item. If -1, uses carousel interval value.
@@ -51,11 +55,6 @@ export class CarouselItemComponent implements OnDestroy, AfterViewInit {
     };
   }
 
-  constructor(
-    private carouselService: CarouselService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
-
   ngOnDestroy(): void {
     this.carouselStateSubscribe(false);
   }
@@ -68,13 +67,13 @@ export class CarouselItemComponent implements OnDestroy, AfterViewInit {
 
   private carouselStateSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.carouselIndexSubscription = this.carouselService.carouselIndex$.subscribe((nextIndex) => {
+      this.#carouselIndexSubscription = this.#carouselService.carouselIndex$.subscribe((nextIndex) => {
         if ('active' in nextIndex) {
           this.active = nextIndex.active === this.index;
         }
       });
     } else {
-      this.carouselIndexSubscription?.unsubscribe();
+      this.#carouselIndexSubscription?.unsubscribe();
     }
   }
 }

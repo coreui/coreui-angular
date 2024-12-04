@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostBinding,
   HostListener,
+  inject,
   Input,
   input,
   numberAttribute,
@@ -49,12 +50,10 @@ type AnimateType = 'hide' | 'show';
   host: { class: 'toast show' }
 })
 export class ToastComponent implements OnInit, OnDestroy {
-  constructor(
-    public hostElement: ElementRef,
-    public renderer: Renderer2,
-    public toasterService: ToasterService,
-    public changeDetectorRef: ChangeDetectorRef
-  ) {}
+  readonly hostElement = inject(ElementRef);
+  readonly renderer = inject(Renderer2);
+  readonly toasterService = inject(ToasterService);
+  readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   readonly dynamic = input<boolean>();
   readonly placement = input<TToasterPlacement>();
@@ -91,8 +90,8 @@ export class ToastComponent implements OnInit, OnDestroy {
   @Input({ transform: booleanAttribute })
   set visible(value: boolean) {
     const newValue = value;
-    if (this._visible !== newValue) {
-      this._visible = newValue;
+    if (this.#visible !== newValue) {
+      this.#visible = newValue;
       newValue ? this.setTimer() : this.clearTimer();
       this.visibleChange.emit(newValue);
       this.changeDetectorRef.markForCheck();
@@ -100,10 +99,10 @@ export class ToastComponent implements OnInit, OnDestroy {
   }
 
   get visible() {
-    return this._visible;
+    return this.#visible;
   }
 
-  private _visible = false;
+  #visible = false;
 
   /**
    * @ignore

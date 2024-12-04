@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
@@ -8,14 +8,12 @@ import { BreadcrumbRouterService } from './breadcrumb-router.service';
 import { BreadcrumbItemComponent } from '../breadcrumb-item/breadcrumb-item.component';
 
 @Component({
-    selector: 'c-breadcrumb-router, [cBreadcrumbRouter]',
-    templateUrl: './breadcrumb-router.component.html',
-    imports: [BreadcrumbComponent, BreadcrumbItemComponent, AsyncPipe]
+  selector: 'c-breadcrumb-router, [cBreadcrumbRouter]',
+  templateUrl: './breadcrumb-router.component.html',
+  imports: [BreadcrumbComponent, BreadcrumbItemComponent, AsyncPipe]
 })
 export class BreadcrumbRouterComponent implements OnChanges, OnDestroy, OnInit {
-  constructor(
-    public service: BreadcrumbRouterService
-  ) {}
+  readonly service = inject(BreadcrumbRouterService);
 
   /**
    * Optional array of IBreadcrumbItem to override default BreadcrumbRouter behavior. [docs]
@@ -36,13 +34,11 @@ export class BreadcrumbRouterComponent implements OnChanges, OnDestroy, OnInit {
 
   setup(): void {
     if (this.items && this.items.length > 0) {
-      this.breadcrumbs = new Observable<IBreadcrumbItem[]>(
-        (observer: Observer<IBreadcrumbItem[]>) => {
-          if (this.items) {
-            observer.next(this.items);
-          }
+      this.breadcrumbs = new Observable<IBreadcrumbItem[]>((observer: Observer<IBreadcrumbItem[]>) => {
+        if (this.items) {
+          observer.next(this.items);
         }
-      );
+      });
     }
   }
 

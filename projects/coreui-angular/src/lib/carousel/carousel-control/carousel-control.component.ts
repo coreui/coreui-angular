@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostBinding,
   HostListener,
+  inject,
   Input,
   ViewChild
 } from '@angular/core';
@@ -16,24 +17,22 @@ import { CarouselState } from '../carousel-state';
   templateUrl: './carousel-control.component.html'
 })
 export class CarouselControlComponent implements AfterViewInit {
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private carouselState: CarouselState
-  ) {}
+  readonly #changeDetectorRef = inject(ChangeDetectorRef);
+  readonly #carouselState = inject(CarouselState);
 
-  private _caption?: string;
   /**
    * Carousel control caption. [docs]
    * @type string
    */
   @Input()
   set caption(value) {
-    this._caption = value;
+    this.#caption = value;
   }
 
   get caption(): string {
-    return !!this._caption ? this._caption : this.direction === 'prev' ? 'Previous' : 'Next';
+    return !!this.#caption ? this.#caption : this.direction === 'prev' ? 'Previous' : 'Next';
   }
+  #caption?: string;
 
   /**
    * Carousel control direction. [docs]
@@ -79,11 +78,11 @@ export class CarouselControlComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.hasContent = this.content?.nativeElement.childNodes.length ?? false;
-    this.changeDetectorRef.detectChanges();
+    this.#changeDetectorRef.detectChanges();
   }
 
   private play(direction = this.direction): void {
-    const nextIndex = this.carouselState.direction(direction);
-    this.carouselState.state = { activeItemIndex: nextIndex };
+    const nextIndex = this.#carouselState.direction(direction);
+    this.#carouselState.state = { activeItemIndex: nextIndex };
   }
 }

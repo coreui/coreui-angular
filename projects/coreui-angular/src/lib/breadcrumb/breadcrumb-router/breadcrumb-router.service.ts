@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -9,21 +9,25 @@ import { IBreadcrumbItem } from '../breadcrumb-item/breadcrumb-item';
   providedIn: 'root'
 })
 export class BreadcrumbRouterService {
+  readonly #router = inject(Router);
+  readonly #activatedRoute = inject(ActivatedRoute);
+
   public outlet = 'primary';
 
-  readonly #breadcrumbsBehaviorSubject: BehaviorSubject<IBreadcrumbItem[]> = new BehaviorSubject<IBreadcrumbItem[]>(new Array<IBreadcrumbItem>());
+  readonly #breadcrumbsBehaviorSubject: BehaviorSubject<IBreadcrumbItem[]> = new BehaviorSubject<IBreadcrumbItem[]>(
+    new Array<IBreadcrumbItem>()
+  );
   readonly breadcrumbs$: Observable<IBreadcrumbItem[]> = this.#breadcrumbsBehaviorSubject.asObservable();
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-
-    this.router.events
+  constructor() {
+    this.#router.events
       .pipe(
         takeUntilDestroyed(),
         filter((event) => event instanceof NavigationEnd)
       )
       .subscribe((event) => {
         const breadcrumbs: any[] = [];
-        let currentRoute: ActivatedRoute | null = this.route.root;
+        let currentRoute: ActivatedRoute | null = this.#activatedRoute.root;
         let url = '';
         do {
           const childrenRoutes: ActivatedRoute[] = currentRoute.children;

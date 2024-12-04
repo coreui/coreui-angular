@@ -11,7 +11,6 @@ import {
   HostBinding,
   HostListener,
   inject,
-  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -30,34 +29,38 @@ import { ModalContentComponent } from '../modal-content/modal-content.component'
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
 @Component({
-    selector: 'c-modal',
-    animations: [
-        trigger('showHide', [
-            state('visible', style({
-            // display: 'block'
-            })),
-            state('hidden', style({
-            // display: 'none'
-            })),
-            transition('visible <=> *', [animate('150ms')])
-        ])
-    ],
-    templateUrl: './modal.component.html',
-    exportAs: 'cModal',
-    imports: [ModalDialogComponent, ModalContentComponent, A11yModule],
-    host: { class: 'modal' }
+  selector: 'c-modal',
+  animations: [
+    trigger('showHide', [
+      state(
+        'visible',
+        style({
+          // display: 'block'
+        })
+      ),
+      state(
+        'hidden',
+        style({
+          // display: 'none'
+        })
+      ),
+      transition('visible <=> *', [animate('150ms')])
+    ])
+  ],
+  templateUrl: './modal.component.html',
+  exportAs: 'cModal',
+  imports: [ModalDialogComponent, ModalContentComponent, A11yModule],
+  host: { class: 'modal' }
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
-  #destroyRef = inject(DestroyRef);
-  #focusMonitor = inject(FocusMonitor);
+  readonly #document = inject<Document>(DOCUMENT);
+  readonly #renderer = inject(Renderer2);
+  readonly #hostElement = inject(ElementRef);
+  readonly #modalService = inject(ModalService);
+  readonly #backdropService = inject(BackdropService);
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-    private hostElement: ElementRef,
-    private modalService: ModalService,
-    private backdropService: BackdropService
-  ) {}
+  readonly #destroyRef = inject(DestroyRef);
+  readonly #focusMonitor = inject(FocusMonitor);
 
   /**
    * Align the modal in the center or top of the screen.
@@ -144,13 +147,13 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.#visible();
   }
 
-  #visible: WritableSignal<boolean> = signal(false);
+  readonly #visible: WritableSignal<boolean> = signal(false);
 
   #activeElement: HTMLElement | null = null;
 
-  #visibleEffect = effect(() => {
+  readonly #visibleEffect = effect(() => {
     if (this.#visible() && this.#afterViewInit()) {
-      this.#activeElement = this.document.activeElement as HTMLElement;
+      this.#activeElement = this.#document.activeElement as HTMLElement;
       // this.#activeElement?.blur();
       setTimeout(() => {
         const focusable = this.modalContentRef.nativeElement.querySelectorAll(
@@ -161,7 +164,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
     } else {
-      if (this.document.contains(this.#activeElement)) {
+      if (this.#document.contains(this.#activeElement)) {
         setTimeout(() => {
           this.#activeElement?.focus();
           this.#activeElement = null;
@@ -219,11 +222,11 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @HostListener('@showHide.start', ['$event'])
   animateStart(event: AnimationEvent) {
     if (event.toState === 'visible') {
-      this.backdropService.hideScrollbar();
-      this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'block');
+      this.#backdropService.hideScrollbar();
+      this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'block');
     } else {
       if (!this.transition) {
-        this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'none');
+        this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
       }
     }
   }
@@ -232,7 +235,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   animateDone(event: AnimationEvent) {
     setTimeout(() => {
       if (event.toState === 'hidden') {
-        this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'none');
+        this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
       }
     });
     this.show = this.visible;
@@ -244,7 +247,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.backdrop === 'static') {
         this.setStaticBackdrop();
       } else {
-        this.modalService.toggle({ show: false, modal: this });
+        this.#modalService.toggle({ show: false, modal: this });
       }
     }
   }
@@ -264,13 +267,13 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     const targetElement = $event.target;
-    if (targetElement === this.hostElement.nativeElement) {
+    if (targetElement === this.#hostElement.nativeElement) {
       if (this.backdrop === 'static') {
         this.setStaticBackdrop();
         return;
       }
 
-      this.modalService.toggle({ show: false, modal: this });
+      this.#modalService.toggle({ show: false, modal: this });
     }
   }
 
@@ -278,19 +281,19 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.stateToggleSubscribe();
   }
 
-  #afterViewInit = signal(false);
+  readonly #afterViewInit = signal(false);
 
   ngAfterViewInit(): void {
     this.#afterViewInit.set(true);
   }
 
   ngOnDestroy(): void {
-    this.modalService.toggle({ show: false, modal: this });
+    this.#modalService.toggle({ show: false, modal: this });
     this.#afterViewInit.set(false);
   }
 
   private stateToggleSubscribe(): void {
-    this.modalService.modalState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
+    this.#modalService.modalState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
       if (this === action.modal || this.id === action.id) {
         if ('show' in action) {
           this.visible = action?.show === 'toggle' ? !this.visible : action.show;
@@ -305,27 +308,27 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private setBackdrop(setBackdrop: boolean): void {
     this.#activeBackdrop = setBackdrop
-      ? this.backdropService.setBackdrop('modal')
-      : this.backdropService.clearBackdrop(this.#activeBackdrop);
+      ? this.#backdropService.setBackdrop('modal')
+      : this.#backdropService.clearBackdrop(this.#activeBackdrop);
   }
 
   private setBodyStyles(open: boolean): void {
     if (open) {
       if (this.backdrop === true) {
-        this.renderer.addClass(this.document.body, 'modal-open');
+        this.#renderer.addClass(this.#document.body, 'modal-open');
       }
     } else {
-      this.renderer.removeClass(this.document.body, 'modal-open');
+      this.#renderer.removeClass(this.#document.body, 'modal-open');
     }
   }
 
   private setStaticBackdrop(): void {
     if (this.transition) {
-      this.renderer.addClass(this.hostElement.nativeElement, 'modal-static');
-      this.renderer.setStyle(this.hostElement.nativeElement, 'overflow-y', 'hidden');
+      this.#renderer.addClass(this.#hostElement.nativeElement, 'modal-static');
+      this.#renderer.setStyle(this.#hostElement.nativeElement, 'overflow-y', 'hidden');
       setTimeout(() => {
-        this.renderer.removeClass(this.hostElement.nativeElement, 'modal-static');
-        this.renderer.removeStyle(this.hostElement.nativeElement, 'overflow-y');
+        this.#renderer.removeClass(this.#hostElement.nativeElement, 'modal-static');
+        this.#renderer.removeStyle(this.#hostElement.nativeElement, 'overflow-y');
       }, 300);
     }
   }

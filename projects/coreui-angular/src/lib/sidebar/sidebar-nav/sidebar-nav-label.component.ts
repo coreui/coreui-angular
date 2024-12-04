@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 import { HtmlAttributesDirective } from '../../shared';
@@ -6,15 +6,12 @@ import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 
 @Component({
-    selector: 'c-sidebar-nav-label',
-    templateUrl: './sidebar-nav-label.component.html',
-    imports: [HtmlAttributesDirective, SidebarNavBadgePipe, NgClass]
+  selector: 'c-sidebar-nav-label',
+  templateUrl: './sidebar-nav-label.component.html',
+  imports: [HtmlAttributesDirective, SidebarNavBadgePipe, NgClass]
 })
 export class SidebarNavLabelComponent implements OnInit {
-
-  constructor(
-    public helper: SidebarNavHelper
-  ) { }
+  readonly helper = inject(SidebarNavHelper);
 
   @Input() item: any;
 

@@ -31,7 +31,9 @@ describe('OffcanvasToggleDirective', () => {
   });
 
   it('should create an instance', () => {
-    const directive = new OffcanvasToggleDirective(service);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new OffcanvasToggleDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

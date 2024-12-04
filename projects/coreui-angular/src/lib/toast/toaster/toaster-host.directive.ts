@@ -1,9 +1,9 @@
-import { Directive, ViewContainerRef } from '@angular/core';
+import { Directive, inject, ViewContainerRef } from '@angular/core';
 
 @Directive({
   selector: '[cToasterHost]',
   exportAs: 'cToasterHost'
 })
 export class ToasterHostDirective {
-  constructor(public viewContainerRef: ViewContainerRef) {}
+  readonly viewContainerRef = inject(ViewContainerRef);
 }

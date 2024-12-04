@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { ModuleWithProviders, NgModule, inject } from '@angular/core';
 
 import { IconSetService } from './icon-set.service';
 
@@ -6,7 +6,9 @@ import { IconSetService } from './icon-set.service';
   providers: [IconSetService]
 })
 export class IconSetModule {
-  constructor(@Optional() @SkipSelf() parentModule?: IconSetModule) {
+  constructor() {
+    const parentModule = inject(IconSetModule, { optional: true, skipSelf: true });
+
     if (parentModule) {
       throw new Error(
         'CoreUI IconSetModule is already loaded. Import it in the AppModule only');

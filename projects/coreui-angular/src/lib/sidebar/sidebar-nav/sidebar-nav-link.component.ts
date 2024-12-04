@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -23,9 +23,9 @@ import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
   providers: [SidebarNavHelper]
 })
 export class SidebarNavLinkContentComponent {
-  @Input() item?: INavData;
+  readonly helper = inject(SidebarNavHelper);
 
-  constructor(public helper: SidebarNavHelper) {}
+  @Input() item?: INavData;
 }
 
 @Component({
@@ -45,6 +45,8 @@ export class SidebarNavLinkContentComponent {
   ]
 })
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
+  readonly router = inject(Router);
+
   protected _item: INavData = {};
 
   @Input()
@@ -66,12 +68,9 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   private navigationEndObservable: Observable<NavigationEnd>;
   private navSubscription!: Subscription;
 
-  constructor(
-    public router: Router
-    // private renderer: Renderer2,
-    // private hostElement: ElementRef,
-    // private sidebarService: SidebarService
-  ) {
+  constructor() {
+    const router = this.router;
+
     this.navigationEndObservable = router.events.pipe(
       filter((event) => {
         return event instanceof NavigationEnd;

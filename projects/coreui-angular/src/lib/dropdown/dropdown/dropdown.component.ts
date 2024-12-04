@@ -13,8 +13,8 @@ import {
   forwardRef,
   HostBinding,
   HostListener,
-  inject,
   Inject,
+  inject,
   Input,
   NgZone,
   OnChanges,
@@ -87,7 +87,7 @@ export class DropdownToggleDirective implements AfterViewInit {
     };
   }
 
-  #ariaExpanded = signal(false);
+  readonly #ariaExpanded = signal(false);
 
   @HostBinding('attr.aria-expanded')
   get ariaExpanded() {

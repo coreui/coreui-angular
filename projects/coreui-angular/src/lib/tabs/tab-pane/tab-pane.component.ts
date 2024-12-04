@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy } from '@angular/core';
+import { booleanAttribute, ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TabContentComponent } from '../tab-content/tab-content.component';
@@ -12,30 +12,30 @@ import { ITabContentState, TabService } from '../tab.service';
   host: { class: 'tab-pane' }
 })
 export class TabPaneComponent implements OnDestroy {
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private tabService: TabService
-  ) {
+  readonly #changeDetectorRef = inject(ChangeDetectorRef);
+  readonly #tabService = inject(TabService);
+
+  constructor() {
     this.subscribeTabService();
   }
 
   public tabPaneIdx!: number;
   public tabContent!: TabContentComponent;
-  private tabServiceSubscription!: Subscription;
+  #tabServiceSubscription!: Subscription;
 
   set active(value: boolean) {
     const newValue = booleanAttribute(value);
-    if (this._active !== newValue) {
-      this._active = newValue;
-      this.changeDetectorRef.markForCheck();
+    if (this.#active !== newValue) {
+      this.#active = newValue;
+      this.#changeDetectorRef.markForCheck();
     }
   }
 
   get active(): boolean {
-    return this._active;
+    return this.#active;
   }
 
-  private _active: boolean = false;
+  #active: boolean = false;
 
   @HostBinding('class')
   get hostClasses() {
@@ -57,13 +57,15 @@ export class TabPaneComponent implements OnDestroy {
 
   subscribeTabService(subscribe: boolean = true) {
     if (subscribe) {
-      this.tabServiceSubscription = this.tabService.activeTabPaneIdx$.subscribe((tabContentState: ITabContentState) => {
-        if (tabContentState.tabContent === this.tabContent) {
-          this.active = tabContentState.activeIdx === this.tabPaneIdx;
+      this.#tabServiceSubscription = this.#tabService.activeTabPaneIdx$.subscribe(
+        (tabContentState: ITabContentState) => {
+          if (tabContentState.tabContent === this.tabContent) {
+            this.active = tabContentState.activeIdx === this.tabPaneIdx;
+          }
         }
-      });
+      );
     } else {
-      this.tabServiceSubscription?.unsubscribe();
+      this.#tabServiceSubscription?.unsubscribe();
     }
   }
 }

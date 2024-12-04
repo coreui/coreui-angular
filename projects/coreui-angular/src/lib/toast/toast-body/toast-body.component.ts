@@ -1,4 +1,4 @@
-import { Component, HostBinding, Optional } from '@angular/core';
+import { Component, HostBinding, inject } from '@angular/core';
 import { ToastComponent } from '../toast/toast.component';
 
 @Component({
@@ -8,7 +8,7 @@ import { ToastComponent } from '../toast/toast.component';
   exportAs: 'cToastBody'
 })
 export class ToastBodyComponent {
-  @HostBinding('class.toast-body') toastBodyClass = true;
+  toast? = inject(ToastComponent, { optional: true });
 
-  constructor(@Optional() public toast?: ToastComponent) {}
+  @HostBinding('class.toast-body') toastBodyClass = true;
 }

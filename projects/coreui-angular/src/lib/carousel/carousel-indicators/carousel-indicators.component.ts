@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { CarouselState } from '../carousel-state';
@@ -9,14 +9,12 @@ import { CarouselService } from '../carousel.service';
   templateUrl: './carousel-indicators.component.html'
 })
 export class CarouselIndicatorsComponent implements OnInit, OnDestroy {
-  constructor(
-    private carouselService: CarouselService,
-    private carouselState: CarouselState
-  ) {}
+  readonly #carouselService = inject(CarouselService);
+  readonly #carouselState = inject(CarouselState);
 
   items: (number | undefined)[] = [];
   active = 0;
-  private carouselIndexSubscription?: Subscription;
+  #carouselIndexSubscription?: Subscription;
 
   ngOnInit(): void {
     this.carouselStateSubscribe();
@@ -29,20 +27,20 @@ export class CarouselIndicatorsComponent implements OnInit, OnDestroy {
   onClick(index: number): void {
     if (index !== this.active) {
       const direction = index < this.active ? 'prev' : 'next';
-      this.carouselState.state = { direction, activeItemIndex: index };
+      this.#carouselState.state = { direction, activeItemIndex: index };
     }
   }
 
   private carouselStateSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
-      this.carouselIndexSubscription = this.carouselService.carouselIndex$.subscribe((nextIndex) => {
-        this.items = this.carouselState?.state?.items?.map((item) => item.index) ?? [];
+      this.#carouselIndexSubscription = this.#carouselService.carouselIndex$.subscribe((nextIndex) => {
+        this.items = this.#carouselState?.state?.items?.map((item) => item.index) ?? [];
         if ('active' in nextIndex) {
           this.active = nextIndex.active ?? 0;
         }
       });
     } else {
-      this.carouselIndexSubscription?.unsubscribe();
+      this.#carouselIndexSubscription?.unsubscribe();
     }
   }
 }

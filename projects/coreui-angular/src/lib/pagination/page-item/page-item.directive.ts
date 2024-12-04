@@ -4,6 +4,7 @@ import {
   Directive,
   ElementRef,
   HostBinding,
+  inject,
   Input,
   OnChanges,
   Renderer2,
@@ -17,6 +18,8 @@ import { PageLinkDirective } from '../page-link/page-link.directive';
   host: { class: 'page-item' }
 })
 export class PageItemDirective implements AfterContentInit, OnChanges {
+  readonly #renderer = inject(Renderer2);
+
   /**
    * Toggle the active state for the component.
    * @type boolean
@@ -44,8 +47,6 @@ export class PageItemDirective implements AfterContentInit, OnChanges {
 
   @ContentChild(PageLinkDirective, { read: ElementRef }) pageLinkElementRef!: ElementRef;
 
-  constructor(private renderer: Renderer2) {}
-
   ngAfterContentInit(): void {
     this.setAttributes();
   }
@@ -63,11 +64,11 @@ export class PageItemDirective implements AfterContentInit, OnChanges {
     const pageLinkElement = this.pageLinkElementRef.nativeElement;
 
     if (this.disabled) {
-      this.renderer.setAttribute(pageLinkElement, 'aria-disabled', 'true');
-      this.renderer.setAttribute(pageLinkElement, 'tabindex', '-1');
+      this.#renderer.setAttribute(pageLinkElement, 'aria-disabled', 'true');
+      this.#renderer.setAttribute(pageLinkElement, 'tabindex', '-1');
     } else {
-      this.renderer.removeAttribute(pageLinkElement, 'aria-disabled');
-      this.renderer.removeAttribute(pageLinkElement, 'tabindex');
+      this.#renderer.removeAttribute(pageLinkElement, 'aria-disabled');
+      this.#renderer.removeAttribute(pageLinkElement, 'tabindex');
     }
   }
 }

@@ -6,6 +6,7 @@ import {
   Component,
   ContentChildren,
   EventEmitter,
+  inject,
   Input,
   numberAttribute,
   OnChanges,
@@ -28,6 +29,9 @@ import { TabService } from '../tab.service';
   host: { class: 'tab-content' }
 })
 export class TabContentComponent implements AfterContentChecked, AfterContentInit, OnChanges, OnDestroy {
+  readonly #changeDetectorRef = inject(ChangeDetectorRef);
+  readonly #tabService = inject(TabService);
+
   /**
    * Set active tabPane index
    * @type number
@@ -35,19 +39,19 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
   @Input({ transform: numberAttribute })
   set activeTabPaneIdx(value: number) {
     const newValue = value;
-    if (this._activeTabPaneIdx != newValue) {
-      this._activeTabPaneIdx = newValue;
+    if (this.#activeTabPaneIdx != newValue) {
+      this.#activeTabPaneIdx = newValue;
       this.activeTabPaneIdxChange.emit(newValue);
-      this.changeDetectorRef.markForCheck();
-      this.changeDetectorRef.detectChanges();
+      this.#changeDetectorRef.markForCheck();
+      this.#changeDetectorRef.detectChanges();
     }
   }
 
   get activeTabPaneIdx() {
-    return this._activeTabPaneIdx;
+    return this.#activeTabPaneIdx;
   }
 
-  private _activeTabPaneIdx = -1;
+  #activeTabPaneIdx = -1;
 
   /**
    * Event emitted on the active tab pane index change.
@@ -55,12 +59,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
   @Output() activeTabPaneIdxChange: EventEmitter<number> = new EventEmitter<number>();
 
   @ContentChildren(TabPaneComponent) public panes!: QueryList<TabPaneComponent>;
-  private tabServiceSubscription!: Subscription;
-
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private tabService: TabService
-  ) {}
+  #tabServiceSubscription!: Subscription;
 
   ngAfterContentInit(): void {
     this.subscribeTabService();
@@ -72,12 +71,12 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
       tabPane.tabPaneIdx = index;
     });
     this.refreshTabPaneActive(this.activeTabPaneIdx);
-    this.tabService.setActiveTabIdx({ tabContent: this, activeIdx: this.activeTabPaneIdx });
+    this.#tabService.setActiveTabIdx({ tabContent: this, activeIdx: this.activeTabPaneIdx });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['activeTabPaneIdx']?.currentValue) {
-      this.tabService.setActiveTabIdx({ tabContent: this, activeIdx: changes['activeTabPaneIdx'].currentValue });
+      this.#tabService.setActiveTabIdx({ tabContent: this, activeIdx: changes['activeTabPaneIdx'].currentValue });
     }
   }
 
@@ -87,13 +86,13 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
 
   subscribeTabService(subscribe: boolean = true) {
     if (subscribe) {
-      this.tabServiceSubscription = this.tabService.activeTabPaneIdx$.subscribe((tabContentState) => {
+      this.#tabServiceSubscription = this.#tabService.activeTabPaneIdx$.subscribe((tabContentState) => {
         if (this === tabContentState.tabContent) {
           this.activeTabPaneIdx = tabContentState.activeIdx;
         }
       });
     } else {
-      this.tabServiceSubscription?.unsubscribe();
+      this.#tabServiceSubscription?.unsubscribe();
     }
   }
 

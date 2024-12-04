@@ -3,19 +3,19 @@ import { ElementRef, Renderer2 } from '@angular/core';
 
 import { TableDirective } from './table.directive';
 
-describe('TableDirective', () => {
-  let renderer: Renderer2;
-  let hostElement: ElementRef;
+class MockElementRef extends ElementRef {}
 
+describe('TableDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [Renderer2],
-      providers: [Renderer2]
+      providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }]
     });
   });
 
   it('should create an instance', () => {
-    const directive = new TableDirective(renderer, hostElement);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new TableDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostBinding, HostListener, inject, Input, Optional } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener, inject, Input } from '@angular/core';
 import { FocusableOption, FocusOrigin } from '@angular/cdk/a11y';
 import { DropdownService } from '../dropdown.service';
 import { DropdownComponent } from '../dropdown/dropdown.component';
@@ -9,6 +9,10 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
   host: { class: 'dropdown-item' }
 })
 export class DropdownItemDirective implements FocusableOption {
+  readonly #elementRef: ElementRef = inject(ElementRef);
+  readonly #dropdownService = inject(DropdownService);
+  dropdown? = inject(DropdownComponent, { optional: true });
+
   /**
    * Set active state to a dropdown-item.
    * @type boolean
@@ -27,13 +31,6 @@ export class DropdownItemDirective implements FocusableOption {
    * @default undefined
    */
   @Input() disabled?: boolean;
-
-  #elementRef: ElementRef = inject(ElementRef);
-
-  constructor(
-    private dropdownService: DropdownService,
-    @Optional() public dropdown?: DropdownComponent
-  ) {}
 
   focus(origin?: FocusOrigin | undefined): void {
     this.#elementRef?.nativeElement?.focus();
@@ -77,7 +74,7 @@ export class DropdownItemDirective implements FocusableOption {
   @HostListener('click', ['$event'])
   private onClick($event: MouseEvent): void {
     if (this.autoClose) {
-      this.dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+      this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
     }
   }
 
@@ -85,7 +82,7 @@ export class DropdownItemDirective implements FocusableOption {
   private onKeyUp($event: KeyboardEvent): void {
     if ($event.key === 'Enter') {
       if (this.autoClose) {
-        this.dropdownService.toggle({ visible: false, dropdown: this.dropdown });
+        this.#dropdownService.toggle({ visible: false, dropdown: this.dropdown });
       }
     }
   }

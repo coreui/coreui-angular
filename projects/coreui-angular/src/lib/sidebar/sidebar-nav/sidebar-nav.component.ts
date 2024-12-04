@@ -6,11 +6,11 @@ import {
   ElementRef,
   forwardRef,
   HostBinding,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
-  Optional,
   Renderer2,
   SimpleChanges,
   ViewChild
@@ -35,40 +35,48 @@ import { SidebarNavItemClassPipe } from './sidebar-nav-item-class.pipe';
 import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
-    selector: 'c-sidebar-nav-group',
-    templateUrl: './sidebar-nav-group.component.html',
-    styleUrls: ['./sidebar-nav-group.component.scss'],
-    providers: [SidebarNavHelper, SidebarNavGroupService],
-    imports: [
-        HtmlAttributesDirective,
-        IconDirective,
-        NgTemplateOutlet,
-        NgClass,
-        SidebarNavIconPipe,
-        SidebarNavBadgePipe,
-        forwardRef(() => SidebarNavComponent),
-        NgStyle
-    ],
-    animations: [
-        trigger('openClose', [
-            state('open', style({
-                height: '*'
-            })),
-            state('closed', style({
-                height: '0px'
-            })),
-            transition('open <=> closed', [animate('.15s ease')])
-        ])
-    ]
+  selector: 'c-sidebar-nav-group',
+  templateUrl: './sidebar-nav-group.component.html',
+  styleUrls: ['./sidebar-nav-group.component.scss'],
+  providers: [SidebarNavHelper, SidebarNavGroupService],
+  imports: [
+    HtmlAttributesDirective,
+    IconDirective,
+    NgTemplateOutlet,
+    NgClass,
+    SidebarNavIconPipe,
+    SidebarNavBadgePipe,
+    forwardRef(() => SidebarNavComponent),
+    NgStyle
+  ],
+  animations: [
+    trigger('openClose', [
+      state(
+        'open',
+        style({
+          height: '*'
+        })
+      ),
+      state(
+        'closed',
+        style({
+          height: '0px'
+        })
+      ),
+      transition('open <=> closed', [animate('.15s ease')])
+    ])
+  ]
 })
 export class SidebarNavGroupComponent implements OnInit, OnDestroy {
-  constructor(
-    private router: Router,
-    private renderer: Renderer2,
-    private hostElement: ElementRef,
-    public helper: SidebarNavHelper,
-    private sidebarNavGroupService: SidebarNavGroupService
-  ) {
+  readonly #router = inject(Router);
+  readonly #renderer = inject(Renderer2);
+  readonly #hostElement = inject(ElementRef);
+  readonly #sidebarNavGroupService = inject(SidebarNavGroupService);
+  public readonly helper = inject(SidebarNavHelper);
+
+  constructor() {
+    const router = this.#router;
+
     this.navigationEndObservable = router.events.pipe(
       filter((event: any) => event instanceof NavigationEnd)
     ) as Observable<NavigationEnd>;
@@ -107,16 +115,16 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (this.samePath(this.router.routerState.snapshot.url)) {
+    if (this.samePath(this.#router.routerState.snapshot.url)) {
       this.openGroup(true);
     }
 
-    this.navGroupSubscription = this.sidebarNavGroupService.sidebarNavGroupState$.subscribe((next) => {
+    this.navGroupSubscription = this.#sidebarNavGroupService.sidebarNavGroupState$.subscribe((next) => {
       if (this.dropdownMode === 'close' && next.sidebarNavGroup && next.sidebarNavGroup !== this) {
         if (next.sidebarNavGroup.item.url.startsWith(this.item.url)) {
           return;
         }
-        if (this.samePath(this.router.routerState.snapshot.url)) {
+        if (this.samePath(this.#router.routerState.snapshot.url)) {
           this.openGroup(true);
           return;
         }
@@ -143,7 +151,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     $event.preventDefault();
     this.openGroup(!this.open);
     if (this.open) {
-      this.sidebarNavGroupService.toggle({ open: this.open, sidebarNavGroup: this });
+      this.#sidebarNavGroupService.toggle({ open: this.open, sidebarNavGroup: this });
     }
   }
 
@@ -156,7 +164,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const host = this.sidebarNav?.nativeElement;
       if ($event.toState === 'open' && host) {
-        this.renderer.setStyle(host, 'height', `${host['scrollHeight']}px`);
+        this.#renderer.setStyle(host, 'height', `${host['scrollHeight']}px`);
       }
     });
   }
@@ -165,7 +173,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const host = this.sidebarNav?.nativeElement;
       if ($event.toState === 'open' && host) {
-        this.renderer.setStyle(host, 'height', 'auto');
+        this.#renderer.setStyle(host, 'height', 'auto');
       }
       if ($event.toState === 'closed') {
         setTimeout(() => {
@@ -177,29 +185,27 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-    selector: 'c-sidebar-nav',
-    templateUrl: './sidebar-nav.component.html',
-    imports: [
-        NgClass,
-        HtmlAttributesDirective,
-        SidebarNavLinkComponent,
-        SidebarNavLabelComponent,
-        SidebarNavTitleComponent,
-        SidebarNavDividerComponent,
-        SidebarNavGroupComponent,
-        SidebarNavItemClassPipe,
-        RouterModule
-    ]
+  selector: 'c-sidebar-nav',
+  templateUrl: './sidebar-nav.component.html',
+  imports: [
+    NgClass,
+    HtmlAttributesDirective,
+    SidebarNavLinkComponent,
+    SidebarNavLabelComponent,
+    SidebarNavTitleComponent,
+    SidebarNavDividerComponent,
+    SidebarNavGroupComponent,
+    SidebarNavItemClassPipe,
+    RouterModule
+  ]
 })
 export class SidebarNavComponent implements OnChanges {
-  constructor(
-    @Optional() public sidebar: SidebarComponent,
-    public helper: SidebarNavHelper,
-    public router: Router,
-    private renderer: Renderer2,
-    private hostElement: ElementRef,
-    private sidebarService: SidebarService
-  ) {}
+  readonly sidebar = inject(SidebarComponent, { optional: true });
+  readonly helper = inject(SidebarNavHelper);
+  readonly router = inject(Router);
+  readonly #renderer = inject(Renderer2);
+  readonly #hostElement = inject(ElementRef);
+  readonly #sidebarService = inject(SidebarService);
 
   @Input() navItems?: INavData[] = [];
   @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
@@ -233,7 +239,7 @@ export class SidebarNavComponent implements OnChanges {
   public hideMobile(): void {
     // todo: proper scrollIntoView() after NavigationEnd
     if (this.sidebar && this.sidebar.sidebarState.mobile) {
-      this.sidebarService.toggle({ toggle: 'visible', sidebar: this.sidebar });
+      this.#sidebarService.toggle({ toggle: 'visible', sidebar: this.sidebar });
     }
   }
 }

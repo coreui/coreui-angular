@@ -8,13 +8,13 @@ describe('ToastCloseDirective', () => {
     await TestBed.configureTestingModule({
       providers: [ToasterService],
       imports: [ToastModule]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   it('should create an instance', () => {
-    const service = new ToasterService();
-    const directive = new ToastCloseDirective(service);
-    expect(directive).toBeTruthy();
+    TestBed.runInInjectionContext(() => {
+      const directive = new ToastCloseDirective();
+      expect(directive).toBeTruthy();
+    });
   });
 });
