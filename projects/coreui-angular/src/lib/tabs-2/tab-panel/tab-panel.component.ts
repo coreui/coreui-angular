@@ -33,7 +33,7 @@ type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
     trigger('fadeInOut', [
       state('show', style({ opacity: 1 })),
       state('hide', style({ opacity: 0 })),
-      state('void', style({ opacity: 0 })),
+      state('void', style({ opacity: 1 })),
       transition('* => *', [query('@*', [animateChild()], { optional: true }), animate('150ms linear')])
     ])
   ]
