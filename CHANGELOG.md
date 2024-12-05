@@ -3,6 +3,14 @@
 
 ---
 
+#### `5.3.4`
+
+- chore(dependencies): update
+- refactor: migrate constructor-based dependency injection to inject function
+- fix(tab-panel): avoid initial transition
+
+---
+
 #### `5.3.3`
 
 - chore(dependencies): update
