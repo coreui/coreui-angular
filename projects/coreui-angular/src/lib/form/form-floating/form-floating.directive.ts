@@ -1,19 +1,19 @@
-import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, computed, Directive, input } from '@angular/core';
 
 @Directive({
-  selector: '[cFormFloating]'
+  selector: '[cFormFloating]',
+  host: { '[class]': 'hostClasses()' }
 })
 export class FormFloatingDirective {
   /**
    * Enable floating labels
    * @type boolean
    */
-  @Input({ alias: 'cFormFloating', transform: booleanAttribute }) floating: string | boolean = true;
+  readonly floating = input(true, { transform: booleanAttribute, alias: 'cFormFloating' });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
-      'form-floating': this.floating
+      'form-floating': this.floating()
     };
-  }
+  });
 }
