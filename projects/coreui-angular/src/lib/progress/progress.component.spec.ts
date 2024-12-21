@@ -3,12 +3,11 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ProgressComponent } from './progress.component';
 import { ProgressBarDirective } from './progress-bar.directive';
-import { ProgressStackedComponent } from './progress-stacked.component';
 
 @Component({
   template: ` <c-progress value="42" color="success" />`,
   selector: 'c-test',
-  imports: [ProgressComponent, ProgressStackedComponent]
+  imports: [ProgressComponent]
 })
 export class TestComponent {}
 
