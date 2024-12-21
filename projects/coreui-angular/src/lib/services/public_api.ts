@@ -4,3 +4,4 @@ export { ClassToggleService } from './class-toggle.service';
 export { LocalStorageService } from './local-storage.service';
 export { InMemoryStorageService } from './in-memory-storage.service';
 export { ColorModeService, ColorMode } from './color-mode.service';
+export { UIDService } from './uid.service';
