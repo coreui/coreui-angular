@@ -3,6 +3,16 @@
 
 ---
 
+#### `5.3.5`
+
+- chore(dependencies): update
+- feat(services): uid service
+- feat(services): rtl service
+- refactor(form-floating): signal inputs, host bindings, cleanup
+- test(progress): cleanup
+
+---
+
 #### `5.3.4`
 
 - chore(dependencies): update
