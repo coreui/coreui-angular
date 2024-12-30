@@ -1,4 +1,7 @@
+import { AnimationBuilder, AnimationPlayer, useAnimation } from '@angular/animations';
+
 import {
+  afterNextRender,
   booleanAttribute,
   computed,
   Directive,
@@ -11,7 +14,6 @@ import {
   Renderer2,
   signal
 } from '@angular/core';
-import { AnimationBuilder, AnimationPlayer, useAnimation } from '@angular/animations';
 
 import {
   collapseAnimation,
@@ -23,13 +25,21 @@ import {
 @Directive({
   selector: '[cCollapse]',
   exportAs: 'cCollapse',
-  host: { '[class]': 'hostClasses()', '[style]': '{display: "none"}' }
+  host: { '[class]': 'hostClasses()', '[style]': '{ display: "none" }' }
 })
 export class CollapseDirective implements OnDestroy {
   readonly #hostElement = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
   readonly #animationBuilder = inject(AnimationBuilder);
   #player: AnimationPlayer | undefined = undefined;
+
+  constructor() {
+    afterNextRender({
+      read: () => {
+        this.#initialized.set(true);
+      }
+    });
+  }
 
   /**
    * @ignore
@@ -38,7 +48,7 @@ export class CollapseDirective implements OnDestroy {
 
   readonly animate = signal(true);
 
-  readonly animateInputEffect = effect(() => {
+  readonly #animateInputEffect = effect(() => {
     this.animate.set(this.animateInput());
   });
 
@@ -58,19 +68,18 @@ export class CollapseDirective implements OnDestroy {
 
   readonly visibleChange = output<boolean>();
 
-  readonly visibleInputEffect = effect(() => {
+  readonly #visibleInputEffect = effect(() => {
     this.visible.set(this.visibleInput());
   });
 
-  readonly visible = signal<boolean>(false);
+  readonly visible = signal(false);
 
-  #init = false;
+  readonly #initialized = signal(false);
 
-  readonly visibleEffect = effect(() => {
-    const visible = this.visible();
-
-    (this.#init || visible) && this.createPlayer(visible);
-    this.#init = true;
+  readonly #visibleEffect = effect(() => {
+    if (this.#initialized()) {
+      this.createPlayer(this.visible());
+    }
   });
 
   /**
