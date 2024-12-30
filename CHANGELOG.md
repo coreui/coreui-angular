@@ -3,6 +3,14 @@
 
 ---
 
+#### `5.3.7`
+
+- fix(collapse): collapse not expanded when initial visible=true
+- fix(offcanvas): use `inert` attribute instead of `aria-hidden`
+- chore(dependencies): update
+
+---
+
 #### `5.3.5`
 
 - chore(dependencies): update
