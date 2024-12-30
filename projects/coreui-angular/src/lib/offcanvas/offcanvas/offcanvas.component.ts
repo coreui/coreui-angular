@@ -52,7 +52,7 @@ let nextId = 0;
   exportAs: 'cOffcanvas',
   imports: [A11yModule],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-  host: { ngSkipHydration: 'true' }
+  host: { ngSkipHydration: 'true', '[attr.inert]': 'ariaHidden || null' }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly #document = inject<Document>(DOCUMENT);
@@ -158,7 +158,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     };
   }
 
-  @HostBinding('attr.aria-hidden')
+  // @HostBinding('attr.aria-hidden')
   get ariaHidden(): boolean | null {
     return this.visible ? null : true;
   }
