@@ -1,28 +1,30 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 
 @Directive({
   selector: 'select[cSelect]',
-  host: { class: 'form-select' }
+  host: { class: 'form-select', '[class]': 'hostClasses()' }
 })
 export class FormSelectDirective {
   /**
    * Size the component small or large.
+   * @default undefined
    */
-  @Input() sizing?: '' | 'sm' | 'lg' | string = '';
+  readonly sizing = input<'' | 'sm' | 'lg' | string>();
 
   /**
    * Set component validation state to valid.
-   * @type {boolean | undefined}
+   * @default undefined
    */
-  @Input() valid?: boolean;
+  readonly valid = input<boolean>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const sizing = this.sizing();
+    const valid = this.valid();
     return {
       'form-select': true,
-      [`form-select-${this.sizing}`]: !!this.sizing,
-      'is-valid': this.valid === true,
-      'is-invalid': this.valid === false
+      [`form-select-${sizing}`]: !!sizing,
+      'is-valid': valid === true,
+      'is-invalid': valid === false
     };
-  }
+  });
 }
