@@ -1,29 +1,32 @@
-import { booleanAttribute, Component, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'c-form-feedback',
-  template: '<ng-content />'
+  template: '<ng-content />',
+  host: { '[class]': 'hostClasses()' }
 })
 export class FormFeedbackComponent {
   /**
    * If your form layout allows it, you can display validation feedback in a styled tooltip.
-   * @type boolean
+   * @default false
    */
-  @Input({ transform: booleanAttribute }) tooltip: string | boolean = false;
+  readonly tooltip = input(false, { transform: booleanAttribute });
 
   /**
    * Set component validation state to valid.
-   * @type boolean
+   * @default undefined
    */
-  @Input() valid?: boolean;
+  readonly valid = input<boolean>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const status = this.valid() === true ? 'valid' : 'invalid';
+    const type = this.tooltip() ? 'tooltip' : 'feedback';
     return {
-      'valid-feedback': this.valid === true && !this.tooltip,
-      'valid-tooltip': this.valid === true && this.tooltip,
-      'invalid-feedback': this.valid !== true && !this.tooltip,
-      'invalid-tooltip': this.valid !== true && this.tooltip
+      [`${status}-${type}`]: true
+      // 'valid-feedback': valid === true && !tooltip,
+      // 'valid-tooltip': valid === true && tooltip,
+      // 'invalid-feedback': valid !== true && !tooltip,
+      // 'invalid-tooltip': valid !== true && tooltip
     };
-  }
+  });
 }

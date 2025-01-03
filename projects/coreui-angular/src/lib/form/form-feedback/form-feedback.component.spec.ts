@@ -1,21 +1,23 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FormFeedbackComponent } from './form-feedback.component';
+import { ComponentRef } from '@angular/core';
 
 describe('FormFeedbackComponent', () => {
   let component: FormFeedbackComponent;
   let fixture: ComponentFixture<FormFeedbackComponent>;
+  let componentRef: ComponentRef<FormFeedbackComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [FormFeedbackComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormFeedbackComponent);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
     fixture.detectChanges();
   });
 
@@ -24,10 +26,10 @@ describe('FormFeedbackComponent', () => {
   });
 
   it('should have css classes', () => {
-    component.valid = true;
+    componentRef.setInput('valid', true);
     fixture.detectChanges();
     expect(fixture.nativeElement).toHaveClass('valid-feedback');
-    component.valid = false;
+    componentRef.setInput('valid', false);
     fixture.detectChanges();
     expect(fixture.nativeElement).toHaveClass('invalid-feedback');
   });
