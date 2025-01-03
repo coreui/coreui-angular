@@ -1,26 +1,28 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 
 @Directive({
   selector: '[cLabel]',
-  host: { class: 'form-label' }
+  host: { class: 'form-label', '[class]': 'hostClasses()' }
 })
 export class FormLabelDirective {
   /**
    * For horizontal forms set labels to 'col' and make them vertically centered with their associated form controls.
-   * @type 'col'
+   * @default ''
    */
-  @Input('cLabel') col: 'col' | '' = '';
+  readonly col = input<'col' | ''>('', { alias: 'cLabel' });
   /**
    * Size the label small or large.
+   * @default ''
    */
-  @Input() sizing: '' | 'sm' | 'lg' | string = '';
+  readonly sizing = input<'' | 'sm' | 'lg' | string>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const col = this.col();
+    const sizing = this.sizing();
     return {
       'form-label': true,
-      'col-form-label': this.col === 'col',
-      [`col-form-label-${this.sizing}`]: !!this.sizing && this.col === 'col'
-    };
-  }
+      'col-form-label': col === 'col',
+      [`col-form-label-${sizing}`]: !!sizing && col === 'col'
+    } as Record<string, boolean>;
+  });
 }
