@@ -3,6 +3,18 @@
 
 ---
 
+#### `5.3.8-next`
+
+- refactor(form-control): signal inputs, host bindings, cleanup
+- refactor(form-select): signal inputs, host bindings, cleanup
+- refactor(form-label): signal inputs, host bindings, cleanup
+- refactor(form-feedback): signal inputs, host bindings, cleanup
+- refactor(form-check): signal inputs, host bindings, cleanup
+- refactor(form): signal inputs, host bindings, cleanup
+- refactor(input-group): cleanup
+
+---
+
 #### `5.3.7`
 
 - fix(collapse): collapse not expanded when initial visible=true
