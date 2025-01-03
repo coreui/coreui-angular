@@ -1,7 +1,8 @@
-import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, computed, Directive, input } from '@angular/core';
 
 @Directive({
-  selector: 'form[cForm]'
+  selector: 'form[cForm]',
+  host: { '[class]': 'hostClasses()' }
 })
 export class FormDirective {
   /**
@@ -9,12 +10,11 @@ export class FormDirective {
    * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) validated: string | boolean = false;
+  readonly validated = input(false, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
-      'was-validated': this.validated
+      'was-validated': this.validated()
     };
-  }
+  });
 }
