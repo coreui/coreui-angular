@@ -1,50 +1,57 @@
-import { booleanAttribute, Directive, ElementRef, HostBinding, inject, Input, OnInit } from '@angular/core';
+import { booleanAttribute, computed, Directive, ElementRef, inject, input, OnInit } from '@angular/core';
 
 import { InputType } from '../../coreui.types';
 
 @Directive({
-  selector: 'input[cFormControl], textarea[cFormControl]'
+  selector: 'input[cFormControl], textarea[cFormControl]',
+  host: {
+    '[class]': 'hostClasses()',
+    '[attr.type]': 'type()'
+  }
 })
 export class FormControlDirective implements OnInit {
   readonly #hostElement = inject(ElementRef);
 
   /**
    * Size the component small or large.
-   * @type {'sm' | 'lg'}
+   * @default undefined
    */
-  @Input() sizing?: '' | 'sm' | 'lg' | string = '';
+  readonly sizing = input<'' | 'sm' | 'lg' | string>();
+
   /**
    * Set component validation state to valid.
-   * @type boolean | undefined
+   * @default undefined
    */
-  @Input() valid?: boolean;
+  readonly valid = input<boolean>();
 
   /**
    * Specifies the type of input element.
    */
-  @HostBinding('attr.type')
-  @Input()
-  type: Omit<InputType, 'checkbox' | 'radio'> = 'text';
+  readonly type = input<Omit<InputType, 'checkbox' | 'radio'>>('text');
 
   /**
-   * Render the component styled as plain text. Removes the default form field styling and preserve the correct margin and padding. Recommend to use alongside `readonly` [docs]
+   * Render the component styled as plain text. Removes the default form field styling and preserve the correct margin and padding. Recommend to use alongside `readonly`
+   * @default false
    */
-  @Input({ transform: booleanAttribute }) plaintext: string | boolean = false;
+  readonly plaintext = input(false, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  get hostClasses(): any {
-    const isRangeType = this.type === 'range';
+  readonly hostClasses = computed(() => {
+    const type = this.type();
+    const isRange = type === 'range';
+    const plaintext = this.plaintext();
+    const sizing = this.sizing();
+    const valid = this.valid();
 
     return {
-      'form-control': !isRangeType && !this.plaintext,
-      'form-control-plaintext': !isRangeType && this.plaintext,
-      'form-control-color': this.type === 'color',
-      'form-range': isRangeType,
-      [`form-control-${this.sizing}`]: !!this.sizing && !isRangeType,
-      'is-valid': this.valid === true,
-      'is-invalid': this.valid === false
-    };
-  }
+      'form-control': !isRange && !plaintext,
+      'form-control-plaintext': !isRange && plaintext,
+      'form-control-color': type === 'color',
+      'form-range': isRange,
+      [`form-control-${sizing}`]: !!sizing && !isRange,
+      'is-valid': valid === true,
+      'is-invalid': valid === false
+    } as Record<string, boolean>;
+  });
 
   get hostTag(): string {
     return this.#hostElement.nativeElement.tagName;
