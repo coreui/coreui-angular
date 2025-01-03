@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, Renderer2, Type } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormCheckInputDirective } from './form-check-input.directive';
@@ -15,7 +15,7 @@ describe('FormCheckInputDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let inputEl: DebugElement;
-  let renderer: Renderer2;
+  // let renderer: Renderer2;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,8 +24,8 @@ describe('FormCheckInputDirective', () => {
     });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
-    inputEl = fixture.debugElement.query(By.css('input'));
-    renderer = fixture.componentRef.injector.get(Renderer2 as Type<Renderer2>);
+    inputEl = fixture.debugElement.query(By.directive(FormCheckInputDirective));
+    // renderer = fixture.componentRef.injector.get(Renderer2 as Type<Renderer2>);
   });
 
   it('should create an instance', () => {
@@ -33,5 +33,9 @@ describe('FormCheckInputDirective', () => {
       const directive = new FormCheckInputDirective();
       expect(directive).toBeTruthy();
     });
+  });
+
+  it('should have css classes', () => {
+    expect(inputEl.nativeElement).toHaveClass('form-check-input');
   });
 });

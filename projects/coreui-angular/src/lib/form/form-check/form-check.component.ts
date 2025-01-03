@@ -1,60 +1,54 @@
-import { AfterContentInit, booleanAttribute, Component, ContentChild, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, Component, computed, contentChild, input } from '@angular/core';
 
 import { FormCheckLabelDirective } from './form-check-label.directive';
 
 @Component({
   selector: 'c-form-check',
   template: '<ng-content />',
-  exportAs: 'cFormCheck'
+  exportAs: 'cFormCheck',
+  host: { '[class]': 'hostClasses()' }
 })
-export class FormCheckComponent implements AfterContentInit {
+export class FormCheckComponent {
   /**
    * Group checkboxes or radios on the same horizontal row.
-   * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) inline: string | boolean = false;
+  readonly inline = input(false, { transform: booleanAttribute });
 
   /**
    * Put checkboxes or radios on the opposite side.
-   * @type boolean
    * @default false
    * @since 4.4.7
    */
-  @Input({ transform: booleanAttribute }) reverse: string | boolean = false;
+  readonly reverse = input(false, { transform: booleanAttribute });
 
   /**
    * Size the component large or extra large. Works only with `[switch]="true"` [docs]
-   * @type {'lg' | 'xl' | ''}
+   * @default undefined
    */
-  @Input() sizing?: 'lg' | 'xl' | '' = '';
+  readonly sizing = input<'' | 'lg' | 'xl' | string>();
 
   /**
    * Render a toggle switch on for checkbox.
    * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) switch: string | boolean = false;
+  readonly switch = input(false, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly formCheckLabel = contentChild(FormCheckLabelDirective);
+
+  readonly formCheckClass = computed(() => !!this.formCheckLabel());
+
+  readonly hostClasses = computed(() => {
+    const sizing = this.sizing();
+    const isSwitch = this.switch();
+
     return {
-      'form-check': this.formCheckClass,
-      'form-switch': this.switch,
-      [`form-switch-${this.sizing}`]: this.switch && !!this.sizing,
-      'form-check-inline': this.inline,
-      'form-check-reverse': this.reverse
+      'form-check': !!this.formCheckLabel(),
+      'form-switch': isSwitch,
+      [`form-switch-${sizing}`]: isSwitch && !!sizing,
+      'form-check-inline': this.inline(),
+      'form-check-reverse': this.reverse()
     };
-  }
-
-  @ContentChild(FormCheckLabelDirective) formCheckLabel!: FormCheckLabelDirective;
-
-  #formCheckClass = true;
-  get formCheckClass() {
-    return this.#formCheckClass;
-  }
-
-  ngAfterContentInit(): void {
-    this.#formCheckClass = !!this.formCheckLabel;
-  }
+  });
 }
