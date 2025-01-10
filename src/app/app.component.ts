@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
-  // tslint:disable-next-line
-  selector: 'body',
-  template: '<router-outlet></router-outlet>'
+  selector: 'app-root',
+  template: '<router-outlet />',
+  standalone: false
 })
 export class AppComponent implements OnInit {
-  title = 'CoreUI 2 for Angular 15';
-  constructor(private router: Router) { }
+  title = 'CoreUI 2 for Angular 18';
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {
