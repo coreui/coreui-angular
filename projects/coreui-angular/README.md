@@ -1,6 +1,6 @@
 # [@coreui/angular](https://coreui.io/angular)
 
-![angular](https://img.shields.io/badge/angular-^17.3.0-lightgrey.svg?style=flat-square&logo=angular)
+![angular](https://img.shields.io/badge/angular-^18.2.0-lightgrey.svg?style=flat-square&logo=angular)
 [![npm package][npm-coreui-angular-badge-v2]][npm-coreui-angular]
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
@@ -11,7 +11,7 @@
  
 
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
-[npm-coreui-angular-badge-v2]: https://img.shields.io/npm/v/@coreui/angular/v2-ng17?style=flat-square&color=red
+[npm-coreui-angular-badge-v2]: https://img.shields.io/npm/v/@coreui/angular/v2-ng18?style=flat-square&color=red
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=red
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red  
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  
@@ -54,13 +54,13 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 Before you begin, make sure your development environment includes the supported version `Typescript` as well as `Node.js®` and an `npm` package manager.
 
 ###### Typescript
-Angular 17 requires `Typescript` version `^5.2.0`.
+Angular 18 requires `Typescript` version `^5.4.0` or newer.
 
 - To check your version, run `tsc -v` in a terminal/console window.
 - To get `Typescript`, go to [www.typescriptlang.org](https://www.typescriptlang.org/).
 
 ###### Node.js
-Angular 17 requires `Node.js` version `^18.13.0` or newer.
+Angular 18 requires `Node.js` version `^18.19.0` or newer.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -68,11 +68,11 @@ Angular 17 requires `Node.js` version `^18.13.0` or newer.
 ###### Angular CLI
 Install the Angular CLI globally using a terminal/console window.
 ```bash
-npm install -g @angular/cli@17
+npm install -g @angular/cli@18
 ```
 
-##### Update to Angular 17
-see: [https://update.angular.io](https://update.angular.io)
+##### Update to Angular 18
+see: [https://angular.dev/update-guide](https://angular.dev/update-guide?v=17.0-18.0&l=3)
 
 ## Installation
 
@@ -87,13 +87,7 @@ $ git clone https://github.com/coreui/coreui-angular.git
 ### NPM
 
 ``` bash
-$ npm install @coreui/angular@2.17 --save
-```
-
-### Yarn
-
-``` bash
-$ yarn add @coreui/angular
+$ npm install @coreui/angular@2.18 --save
 ```
 
 ## Usage
@@ -218,4 +212,4 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 ## Copyright and license
 
-Copyright 2024 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2025 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).

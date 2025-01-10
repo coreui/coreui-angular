@@ -1,5 +1,9 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.18.0`
+
+- update to `Angular 18`
+
 ##### `v2.17.0`
 
 - update to `Angular 17` - thanks: @vag1830

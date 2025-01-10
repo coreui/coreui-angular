@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-dev",
-  "version": "2.17.0",
+  "version": "2.18.0",
   "description": "CoreUI Angular 17 Bootstrap 4 components",
   "license": "MIT",
   "author": {
@@ -22,11 +22,11 @@
     "test-lib:dev": "ng test coreui-angular",
     "test-lib:prod": "ng test coreui-angular --karma-config=projects/coreui-angular/karma.conf.github.js",
     "start": "ng serve",
-    "test": "ng test",
+    "test": "ng test coreui-demo",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prepublish:lib": "ng test coreui-angular --karma-config=projects/coreui-angular/karma.conf.github.js && ng e2e && ng build coreui-angular --configuration production",
-    "publish:lib": "cd dist/coreui-angular/ && npm publish --tag v2-ng17 --dry-run",
+    "publish:lib": "cd dist/coreui-angular/ && npm publish --tag v2-ng18 --dry-run",
     "link": "cd dist/coreui-angular/ && npm link",
     "release-version": "node build/change-version.js",
     "cypress:open": "cypress open",

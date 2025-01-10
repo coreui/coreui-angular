@@ -43,7 +43,5 @@
   },
   "exclude": [
     "./cypress/**/*.ts",
-    "./cypress/tsconfig.json",
-    "cypress-angular/**/*.ts",
   ],
 }
