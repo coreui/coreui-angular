@@ -1,58 +1,57 @@
-import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, computed, Directive, effect, input } from '@angular/core';
 
 @Directive({
-  selector: '[cNavLink]'
+  selector: '[cNavLink]',
+  host: {
+    '[class]': 'hostClasses()',
+    '[attr.aria-current]': 'ariaCurrent()',
+    '[attr.aria-disabled]': 'ariaDisabled',
+    '[attr.disabled]': 'attrDisabled',
+    '[attr.tabindex]': 'attrTabindex',
+    '[style.cursor]': 'styleCursor'
+  }
 })
 export class NavLinkDirective {
   /**
    * Sets .nav-link class to the host. [docs]
-   * @type boolean
    * @default true
    */
-  @Input({ transform: booleanAttribute }) cNavLink: string | boolean = true;
+  readonly cNavLink = input(true, { transform: booleanAttribute });
 
   /**
    * Toggle the active state for the component. [docs]
-   * @type boolean
+   * @default undefined
    */
-  @Input() active?: boolean;
+  readonly active = input<boolean>();
+
   /**
    * Set disabled attr for the host element. [docs]
-   * @type boolean
+   * @default false
    */
-  @Input({ transform: booleanAttribute }) disabled: string | boolean = false;
+  readonly disabled = input(false, { transform: booleanAttribute });
 
-  @HostBinding('attr.aria-current')
-  get ariaCurrent(): string | null {
-    return this.active ? 'page' : null;
-  }
+  readonly ariaCurrent = computed(() => {
+    return this.active() ? 'page' : null;
+  });
 
-  @HostBinding('attr.aria-disabled')
-  get isDisabled(): boolean | null {
-    return <boolean>this.disabled || null;
-  }
+  ariaDisabled: boolean | null = null;
+  attrDisabled: boolean | string | null = null;
+  attrTabindex: '-1' | null = null;
+  styleCursor: 'pointer' | null = null;
 
-  @HostBinding('attr.disabled')
-  get attrDisabled() {
-    return this.disabled ? '' : null;
-  }
+  readonly disabledEffect = effect(() => {
+    const disabled = this.disabled();
+    this.ariaDisabled = disabled || null;
+    this.attrDisabled = disabled ? '' : null;
+    this.attrTabindex = disabled ? '-1' : null;
+    this.styleCursor = disabled ? null : 'pointer';
+  });
 
-  @HostBinding('attr.tabindex')
-  get getTabindex(): string | null {
-    return this.disabled ? '-1' : null;
-  }
-
-  @HostBinding('style.cursor')
-  get getCursorStyle(): string | null {
-    return this.disabled ? null : 'pointer';
-  }
-
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
-      'nav-link': this.cNavLink,
-      disabled: this.disabled,
-      active: this.active
-    };
-  }
+      'nav-link': this.cNavLink(),
+      disabled: this.disabled(),
+      active: this.active()
+    } as Record<string, boolean>;
+  });
 }

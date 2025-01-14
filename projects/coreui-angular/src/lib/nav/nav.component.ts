@@ -1,29 +1,31 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'c-nav',
   template: '<ng-content />',
   styleUrls: ['./nav.component.scss'],
-  host: { class: 'nav' }
+  host: { class: 'nav', '[class]': 'hostClasses()' }
 })
 export class NavComponent {
   /**
    * Specify a layout type for component.
-   * @type {'fill' | 'justified'}
+   * @default undefined
    */
-  @Input() layout?: 'fill' | 'justified';
+  readonly layout = input<'fill' | 'justified'>();
+
   /**
    * Set the nav variant to tabs or pills.
-   * @type 'tabs' | 'pills' | 'underline' | 'underline-border'
+   * @default undefined
    */
-  @Input() variant?: '' | 'tabs' | 'pills' | 'underline' | 'underline-border';
+  readonly variant = input<'tabs' | 'pills' | 'underline' | 'underline-border' | ''>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const layout = this.layout();
+    const variant = this.variant();
     return {
       nav: true,
-      [`nav-${this.layout}`]: !!this.layout,
-      [`nav-${this.variant}`]: !!this.variant
+      [`nav-${layout}`]: !!layout,
+      [`nav-${variant}`]: !!variant
     };
-  }
+  });
 }
