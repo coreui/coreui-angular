@@ -12,10 +12,10 @@ export interface IModalAction {
   providedIn: 'root'
 })
 export class ModalService {
-  private modalState = new Subject<any>();
-  modalState$ = this.modalState.asObservable();
+  readonly #modalState = new Subject<any>();
+  readonly modalState$ = this.#modalState.asObservable();
 
   toggle(action: IModalAction): void {
-    this.modalState.next(action);
+    this.#modalState.next(action);
   }
 }

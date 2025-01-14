@@ -1,41 +1,48 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'c-modal-dialog',
   template: '<ng-content />',
   styleUrls: ['./modal-dialog.component.scss'],
-  host: { class: 'modal-dialog' }
+  host: { class: 'modal-dialog', '[class]': 'hostClasses()' }
 })
 export class ModalDialogComponent {
   /**
    * Align the modal in the center or top of the screen.
-   * @type {'top' | 'center'}
+   * @default undefined
    */
-  @Input() alignment?: 'top' | 'center';
+  readonly alignment = input<'top' | 'center'>();
+
   /**
    * Set modal to covers the entire user viewport.
-   * @type {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
+   * @return {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
    */
-  @Input() fullscreen?: boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  readonly fullscreen = input<boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>();
+
   /**
    * Does the modal dialog itself scroll, or does the whole dialog scroll within the window.
-   * @type boolean
+   * @default false
+   * @return {boolean}
    */
-  @Input() scrollable?: boolean;
+  readonly scrollable = input(false, { transform: booleanAttribute });
+
   /**
    * Size the component small, large, or extra large.
+   * @default undefined
+   * @return {'sm' | 'lg' | 'xl'}
    */
-  @Input() size?: 'sm' | 'lg' | 'xl';
+  readonly size = input<'sm' | 'lg' | 'xl'>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const fullscreen = this.fullscreen();
+    const size = this.size();
     return {
       'modal-dialog': true,
-      'modal-dialog-centered': this.alignment === 'center',
-      'modal-fullscreen': this.fullscreen === true,
-      [`modal-fullscreen-${this.fullscreen}-down`]: this.fullscreen,
-      'modal-dialog-scrollable': this.scrollable,
-      [`modal-${this.size}`]: this.size
+      'modal-dialog-centered': this.alignment() === 'center',
+      'modal-fullscreen': fullscreen === true,
+      [`modal-fullscreen-${fullscreen}-down`]: typeof fullscreen === 'string',
+      'modal-dialog-scrollable': this.scrollable(),
+      [`modal-${size}`]: !!size
     };
-  }
+  });
 }

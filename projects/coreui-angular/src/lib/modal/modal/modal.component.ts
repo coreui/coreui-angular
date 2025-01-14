@@ -4,20 +4,19 @@ import {
   AfterViewInit,
   booleanAttribute,
   Component,
+  computed,
   DestroyRef,
   effect,
   ElementRef,
-  EventEmitter,
-  HostBinding,
-  HostListener,
   inject,
-  Input,
+  input,
   OnDestroy,
   OnInit,
-  Output,
+  output,
   Renderer2,
   signal,
-  ViewChild,
+  untracked,
+  viewChild,
   WritableSignal
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -50,7 +49,21 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
   templateUrl: './modal.component.html',
   exportAs: 'cModal',
   imports: [ModalDialogComponent, ModalContentComponent, A11yModule],
-  host: { class: 'modal' }
+  host: {
+    class: 'modal',
+    '[class]': 'hostClasses()',
+    '[attr.role]': 'role()',
+    '[attr.inert]': 'ariaHidden',
+    '[attr.id]': 'id',
+    '[attr.aria-modal]': 'ariaModal()',
+    '[attr.tabindex]': '-1',
+    '[@showHide]': 'animateTrigger()',
+    '(@showHide.start)': 'animateStart($event)',
+    '(@showHide.done)': 'animateDone($event)',
+    '(mousedown)': 'onMouseDownHandler($event)',
+    '(click)': 'onClickHandler($event)',
+    '(document:keyup)': 'onKeyUpHandler($event)'
+  }
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly #document = inject<Document>(DOCUMENT);
@@ -64,81 +77,94 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Align the modal in the center or top of the screen.
-   * @type {'top' | 'center'}
+   * @return {'top' | 'center'}
    * @default 'top'
    */
-  @Input() alignment?: 'top' | 'center' = 'top';
+  readonly alignment = input<'top' | 'center'>('top');
+
   /**
    * Apply a backdrop on body while modal is open.
-   * @type boolean | 'static'
+   * @return boolean | 'static'
    * @default true
    */
-  @Input() backdrop: boolean | 'static' = true;
+  readonly backdrop = input<boolean | 'static'>(true);
+
   /**
    * Set modal to cover the entire user viewport.
-   * @type {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
+   * @return {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
    * @default undefined
    */
-  @Input() fullscreen?: boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  readonly fullscreen = input<boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>();
+
   /**
    * Closes the modal when escape key is pressed.
-   * @type boolean
+   * @return boolean
    * @default true
    */
-  @Input({ transform: booleanAttribute }) keyboard: boolean = true;
+  readonly keyboard = input(true, { transform: booleanAttribute });
 
-  @Input() id?: string;
+  readonly attrId = input<string>(undefined, { alias: 'id' });
+
+  get id() {
+    return this.attrId();
+  }
 
   /**
    * Size the component small, large, or extra large.
+   * @return {'sm' | 'lg' | 'xl'}
+   * @default undefined
    */
-  @Input() size?: 'sm' | 'lg' | 'xl';
+  readonly size = input<'sm' | 'lg' | 'xl'>();
 
   /**
    * Remove animation to create modal that simply appear rather than fade in to view.
    */
-  @Input({ transform: booleanAttribute }) transition = true;
+  readonly transition = input(true, { transform: booleanAttribute });
 
   /**
-   * Default role for modal. [docs]
-   * @type string
+   * Default role for modal
+   * @return string
    * @default 'dialog'
    */
-  @Input() @HostBinding('attr.role') role: string = 'dialog';
+  readonly role = input('dialog');
 
   /**
-   * Set aria-modal html attr for modal. [docs]
+   * Set aria-modal html attr for modal
    * @type boolean
    * @default null
    */
-  @Input()
-  @HostBinding('attr.aria-modal')
-  set ariaModal(value: boolean | null) {
-    this.#ariaModal = value;
-  }
+  readonly ariaModalInput = input(false, { transform: booleanAttribute, alias: 'ariaModal' });
 
-  get ariaModal(): boolean | null {
-    return this.visible || this.#ariaModal ? true : null;
-  }
-
-  #ariaModal: boolean | null = null;
+  readonly ariaModal = computed(() => {
+    return this.visible || this.ariaModalInput() ? true : null;
+  });
 
   /**
    * Create a scrollable modal that allows scrolling the modal body.
-   * @type boolean
+   * @return boolean
+   * @default false
    */
-  @Input({ transform: booleanAttribute }) scrollable: boolean = false;
+  readonly scrollable = input(false, { transform: booleanAttribute });
 
   /**
    * Toggle the visibility of modal component.
-   * @type boolean
+   * @return boolean
+   * @default false
    */
-  @Input({ transform: booleanAttribute })
+  readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
+
+  readonly visibleEffect = effect(() => {
+    const visible = this.visibleInput();
+    untracked(() => {
+      this.visible = visible;
+    });
+  });
+
   set visible(value: boolean) {
     if (this.#visible() !== value) {
       this.#visible.set(value);
-      this.setBackdrop(this.backdrop !== false && value);
       this.setBodyStyles(value);
+      this.setBackdrop(this.backdrop() !== false && value);
       this.visibleChange.emit(value);
     }
   }
@@ -149,89 +175,88 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly #visible: WritableSignal<boolean> = signal(false);
 
-  #activeElement: HTMLElement | null = null;
+  readonly #activeElement = signal<HTMLElement | null>(null);
 
   readonly #visibleEffect = effect(() => {
-    if (this.#visible() && this.#afterViewInit()) {
-      this.#activeElement = this.#document.activeElement as HTMLElement;
-      // this.#activeElement?.blur();
-      setTimeout(() => {
-        const focusable = this.modalContentRef.nativeElement.querySelectorAll(
-          '[tabindex]:not([tabindex="-1"]), button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
-        );
-        if (focusable.length) {
-          this.#focusMonitor.focusVia(focusable[0], 'keyboard');
-        }
-      });
-    } else {
-      if (this.#document.contains(this.#activeElement)) {
+    const visible = this.#visible();
+    const afterViewInit = this.#afterViewInit();
+    untracked(() => {
+      if (visible && afterViewInit) {
+        this.#activeElement.set(this.#document.activeElement as HTMLElement);
+        // this.#activeElement()?.blur();
         setTimeout(() => {
-          this.#activeElement?.focus();
-          this.#activeElement = null;
+          const focusable = this.modalContentRef()?.nativeElement.querySelectorAll(
+            '[tabindex]:not([tabindex="-1"]), button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
+          );
+          if (focusable?.length) {
+            this.#focusMonitor.focusVia(focusable[0], 'keyboard');
+          }
         });
+      } else {
+        const activeElement = this.#activeElement();
+        if (activeElement && this.#document.contains(activeElement)) {
+          this.#focusMonitor.focusVia(activeElement, 'keyboard');
+          setTimeout(() => {
+            // this.#activeElement()?.focus();
+            this.#activeElement.set(null);
+          });
+        }
       }
-    }
+    });
   });
 
   /**
    * Event triggered on modal dismiss.
+   * @return boolean
    */
-  @Output() visibleChange = new EventEmitter<boolean>();
+  readonly visibleChange = output<boolean>();
 
-  @ViewChild(ModalContentComponent, { read: ElementRef }) modalContent!: ElementRef;
-  @ViewChild('modalContentRef', { read: ElementRef }) modalContentRef!: ElementRef;
+  // @ViewChild(ModalContentComponent, { read: ElementRef }) modalContent!: ElementRef;
+  // @ViewChild('modalContentRef', { read: ElementRef }) modalContentRef!: ElementRef;
+  // readonly modalContentRef = viewChild(ModalContentComponent, { read: ElementRef });
+  readonly modalContentRef = viewChild('modalContentRef', { read: ElementRef });
 
   #activeBackdrop!: any;
 
   // private inBoundingClientRect!: boolean;
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
       modal: true,
-      fade: this.transition,
+      fade: this.transition(),
       show: this.show
-    };
-  }
+    } as Record<string, boolean>;
+  });
 
-  @HostBinding('attr.aria-hidden')
   get ariaHidden(): boolean | null {
     return this.visible ? null : true;
   }
 
-  @HostBinding('attr.tabindex')
-  get tabIndex(): string | null {
-    return '-1';
-  }
-
-  @HostBinding('@showHide')
-  get animateTrigger(): string {
+  readonly animateTrigger = computed(() => {
     return this.visible ? 'visible' : 'hidden';
-  }
+  });
 
   get show(): boolean {
-    return this.visible && this._show;
+    return this.visible && this.#show();
   }
 
   set show(value: boolean) {
-    this._show = value;
+    this.#show.set(value);
   }
 
-  private _show = true;
+  readonly #show = signal(true);
 
-  @HostListener('@showHide.start', ['$event'])
   animateStart(event: AnimationEvent) {
     if (event.toState === 'visible') {
       this.#backdropService.hideScrollbar();
       this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'block');
     } else {
-      if (!this.transition) {
+      if (!this.transition()) {
         this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
       }
     }
   }
 
-  @HostListener('@showHide.done', ['$event'])
   animateDone(event: AnimationEvent) {
     setTimeout(() => {
       if (event.toState === 'hidden') {
@@ -241,10 +266,9 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.show = this.visible;
   }
 
-  @HostListener('document:keyup', ['$event'])
-  onKeyDownHandler(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this.keyboard && this.visible) {
-      if (this.backdrop === 'static') {
+  onKeyUpHandler(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && this.keyboard() && this.visible) {
+      if (this.backdrop() === 'static') {
         this.setStaticBackdrop();
       } else {
         this.#modalService.toggle({ show: false, modal: this });
@@ -254,12 +278,10 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private mouseDownTarget: EventTarget | null = null;
 
-  @HostListener('mousedown', ['$event'])
   public onMouseDownHandler($event: MouseEvent): void {
     this.mouseDownTarget = $event.target;
   }
 
-  @HostListener('click', ['$event'])
   public onClickHandler($event: MouseEvent): void {
     if (this.mouseDownTarget !== $event.target) {
       this.mouseDownTarget = null;
@@ -268,7 +290,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const targetElement = $event.target;
     if (targetElement === this.#hostElement.nativeElement) {
-      if (this.backdrop === 'static') {
+      if (this.backdrop() === 'static') {
         this.setStaticBackdrop();
         return;
       }
@@ -314,7 +336,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private setBodyStyles(open: boolean): void {
     if (open) {
-      if (this.backdrop === true) {
+      if (this.backdrop() === true) {
         this.#renderer.addClass(this.#document.body, 'modal-open');
       }
     } else {
@@ -323,7 +345,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setStaticBackdrop(): void {
-    if (this.transition) {
+    if (this.transition()) {
       this.#renderer.addClass(this.#hostElement.nativeElement, 'modal-static');
       this.#renderer.setStyle(this.#hostElement.nativeElement, 'overflow-y', 'hidden');
       setTimeout(() => {

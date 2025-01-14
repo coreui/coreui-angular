@@ -1,4 +1,4 @@
-import { Directive, HostListener, inject, Input } from '@angular/core';
+import { Directive, HostListener, inject, input } from '@angular/core';
 
 import { ModalService } from '../modal.service';
 
@@ -10,12 +10,13 @@ export class ModalToggleDirective {
 
   /**
    * Html id attr of modal to dismiss.
+   * @default undefined
    */
-  @Input('cModalToggle') id: string | undefined;
+  readonly toggle = input<string>(undefined, { alias: 'cModalToggle' });
 
   @HostListener('click', ['$event'])
   dismiss($event: any): void {
     $event.preventDefault();
-    this.#modalService.toggle({ show: 'toggle', id: this.id });
+    this.#modalService.toggle({ show: 'toggle', id: this.toggle() });
   }
 }
