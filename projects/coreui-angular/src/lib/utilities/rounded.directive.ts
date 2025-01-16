@@ -4,7 +4,7 @@ import { Rounded } from './rounded.type';
 @Directive({
   selector: '[cRounded]',
   exportAs: 'cRounded',
-  host: { '[class]': 'hostClasses' }
+  host: { '[class]': 'hostClasses()' }
 })
 export class RoundedDirective {
   /**
@@ -13,7 +13,7 @@ export class RoundedDirective {
    */
   readonly cRounded = input<Rounded>(true);
 
-  readonly hostClasses = computed( () => {
+  readonly hostClasses = computed(() => {
     const rounded = this.cRounded();
     if (typeof rounded === 'boolean') {
       return { rounded: true };
