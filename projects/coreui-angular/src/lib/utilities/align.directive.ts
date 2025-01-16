@@ -1,20 +1,22 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 import { Alignment } from '../coreui.types';
 
 @Directive({
-  selector: '[cAlign]'
+  selector: '[cAlign]',
+  exportAs: 'cAlign',
+  host: { '[class]': 'hostClasses()' }
 })
 export class AlignDirective {
   /**
    * Set vertical alignment of inline, inline-block, inline-table, and table cell elements
-   * @type Alignment
+   * @return Alignment
    */
-  @Input('cAlign') align?: Alignment;
+  readonly align = input<Alignment>(undefined, { alias: 'cAlign' });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const align = this.align();
     return {
-      [`align-${this.align}`]: !!this.align
+      [`align-${align}`]: !!align
     };
-  }
+  });
 }
