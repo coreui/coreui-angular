@@ -15,6 +15,6 @@ export class FormDirective {
   readonly hostClasses = computed(() => {
     return {
       'was-validated': this.validated()
-    };
+    } as Record<string, boolean>;
   });
 }

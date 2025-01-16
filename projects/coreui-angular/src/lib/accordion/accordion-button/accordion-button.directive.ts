@@ -22,7 +22,7 @@ export class AccordionButtonDirective {
     return {
       'accordion-button': true,
       collapsed: this.collapsed()
-    };
+    } as Record<string, boolean>;
   });
 
   readonly ariaExpanded = computed(() => !this.collapsed());

@@ -54,7 +54,7 @@ export class TabsListComponent {
     nav: true,
     [`nav-${this.layout()}`]: this.layout(),
     [`nav-${this.variant()}`]: this.variant()
-  }));
+  }) as Record<string, boolean>);
 
   readonly tabs = contentChildren(TabDirective);
   #focusKeyManager!: FocusKeyManager<TabDirective>;

@@ -104,7 +104,7 @@ export class TabPanelComponent {
     fade: this.transition(),
     show: this.show(),
     invisible: this.tabsService.activeItem()?.disabled
-  }));
+  }) as Record<string, boolean>);
 
   @HostBinding('@.disabled')
   get animationDisabled(): boolean {

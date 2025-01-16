@@ -106,7 +106,7 @@ export class TableDirective {
       'table-sm': small,
       'table-striped': striped,
       'table-striped-columns': stripedColumns
-    };
+    } as Record<string, boolean>;
   });
 
   readonly #responsiveWrapperEffect = effect(() => {

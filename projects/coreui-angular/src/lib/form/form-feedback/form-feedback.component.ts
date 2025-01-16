@@ -27,6 +27,6 @@ export class FormFeedbackComponent {
       // 'valid-tooltip': valid === true && tooltip,
       // 'invalid-feedback': valid !== true && !tooltip,
       // 'invalid-tooltip': valid !== true && tooltip
-    };
+    } as Record<string, boolean>;
   });
 }

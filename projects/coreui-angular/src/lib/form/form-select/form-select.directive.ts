@@ -25,6 +25,6 @@ export class FormSelectDirective {
       [`form-select-${sizing}`]: !!sizing,
       'is-valid': valid === true,
       'is-invalid': valid === false
-    };
+    } as Record<string, boolean>;
   });
 }

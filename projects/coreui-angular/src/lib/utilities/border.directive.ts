@@ -13,7 +13,7 @@ export class BorderDirective {
    */
   readonly cBorder = input<Border>(true);
 
-  readonly hostClasses = computed(() =>  {
+  readonly hostClasses = computed<Record<string, boolean>>(() => {
     const border = this.cBorder();
     if (typeof border === 'boolean') {
       return { border: true };

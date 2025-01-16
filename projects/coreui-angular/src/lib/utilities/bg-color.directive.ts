@@ -23,6 +23,6 @@ export class BgColorDirective {
     return {
       [`bg-${color}`]: !!color,
       'bg-gradient': this.gradient()
-    };
+    } as Record<string, boolean>;
   });
 }

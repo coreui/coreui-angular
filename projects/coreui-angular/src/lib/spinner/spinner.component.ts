@@ -49,6 +49,6 @@ export class SpinnerComponent {
       [`spinner-${this.variant()}`]: true,
       [`text-${this.color()}`]: !!this.color(),
       [`spinner-${this.variant()}-${this.size()}`]: !!this.size()
-    };
+    } as Record<string, boolean>;
   });
 }

@@ -14,6 +14,6 @@ export class FormFloatingDirective {
   readonly hostClasses = computed(() => {
     return {
       'form-floating': this.floating()
-    };
+    } as Record<string, boolean>;
   });
 }

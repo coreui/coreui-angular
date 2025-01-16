@@ -26,6 +26,6 @@ export class NavComponent {
       nav: true,
       [`nav-${layout}`]: !!layout,
       [`nav-${variant}`]: !!variant
-    };
+    } as Record<string, boolean>;
   });
 }

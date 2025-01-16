@@ -22,6 +22,6 @@ export class PlaceholderAnimationDirective {
   readonly hostClasses = computed(() => {
     return {
       [`placeholder-${this.animation()}`]: this.placeholder()?.visible() && !!this.animation()
-    };
+    } as Record<string, boolean>;
   });
 }

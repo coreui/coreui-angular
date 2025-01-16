@@ -49,6 +49,6 @@ export class FormCheckComponent {
       [`form-switch-${sizing}`]: isSwitch && !!sizing,
       'form-check-inline': this.inline(),
       'form-check-reverse': this.reverse()
-    };
+    } as Record<string, boolean>;
   });
 }

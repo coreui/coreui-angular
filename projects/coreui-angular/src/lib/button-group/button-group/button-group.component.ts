@@ -30,6 +30,6 @@ export class ButtonGroupComponent {
       'btn-group': !this.vertical(),
       'btn-group-vertical': this.vertical(),
       [`btn-group-${this.size()}`]: !!this.size()
-    };
+    } as Record<string, boolean>;
   });
 }

@@ -43,6 +43,6 @@ export class ModalDialogComponent {
       [`modal-fullscreen-${fullscreen}-down`]: typeof fullscreen === 'string',
       'modal-dialog-scrollable': this.scrollable(),
       [`modal-${size}`]: !!size
-    };
+    } as Record<string, boolean>;
   });
 }

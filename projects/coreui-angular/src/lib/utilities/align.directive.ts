@@ -17,6 +17,6 @@ export class AlignDirective {
     const align = this.align();
     return {
       [`align-${align}`]: !!align
-    };
+    } as Record<string, boolean>;
   });
 }

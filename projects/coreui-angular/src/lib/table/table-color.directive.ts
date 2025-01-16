@@ -13,11 +13,11 @@ export class TableColorDirective {
    * Use contextual color for tables, table rows or individual cells.
    * @return Colors
    */
-  readonly color = input<Colors>(undefined, { alias: "cTableColor" });
+  readonly color = input<Colors>(undefined, { alias: 'cTableColor' });
 
-  readonly hostClasses = computed((): Record<string,boolean> =>  {
+  readonly hostClasses = computed(() => {
     return {
       [`table-${this.color()}`]: !!this.color()
-    };
+    } as Record<string, boolean>;
   });
 }

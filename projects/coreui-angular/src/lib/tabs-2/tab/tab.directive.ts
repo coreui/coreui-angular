@@ -94,7 +94,7 @@ export class TabDirective implements FocusableOption, OnInit {
     'nav-link': true,
     active: this.isActive(),
     disabled: this.#disabled()
-  }));
+  }) as Record<string, boolean>);
 
   readonly propId = computed(() => this.id() ?? `${this.#tabsService.id()}-tab-${this.itemKey()}`);
 

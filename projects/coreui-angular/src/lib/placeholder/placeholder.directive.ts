@@ -32,6 +32,6 @@ export class PlaceholderDirective {
     return {
       placeholder: this.visible(),
       [`placeholder-${this.size()}`]: !!this.size()
-    };
+    } as Record<string, boolean>;
   });
 }

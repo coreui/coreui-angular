@@ -48,13 +48,13 @@ export class PopoverComponent implements OnDestroy {
   readonly viewContainerRef = viewChild('popoverTemplate', { read: ViewContainerRef });
   private textNode!: Text;
 
-  readonly hostClasses = computed<Record<string, boolean>>(() => {
+  readonly hostClasses = computed(() => {
     return {
       popover: true,
       fade: true,
       show: this.visible(),
       'bs-popover-auto': true
-    };
+    } as Record<string, boolean>;
   });
 
   ngOnDestroy(): void {

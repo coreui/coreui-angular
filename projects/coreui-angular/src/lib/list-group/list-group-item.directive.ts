@@ -50,7 +50,7 @@ export class ListGroupItemDirective {
       active: !!this.active(),
       disabled: this._disabled(),
       [`list-group-item-${this.color()}`]: !!this.color()
-    };
+    } as Record<string, boolean>;
   });
 
   readonly _disabled = computed(() => this.disabled());

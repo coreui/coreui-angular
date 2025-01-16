@@ -96,7 +96,7 @@ export class ToasterComponent implements OnInit {
       'translate-middle-x': placement.includes('center') && !placement.includes('middle'),
       'translate-middle-y': placement.includes('middle') && !placement.includes('center'),
       'translate-middle': placement.includes('middle') && placement.includes('center')
-    };
+    } as Record<string, boolean>;
   });
 
   ngOnInit(): void {

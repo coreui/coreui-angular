@@ -46,13 +46,13 @@ export class TooltipComponent implements OnDestroy {
   readonly viewContainerRef = viewChild('tooltipTemplate', { read: ViewContainerRef });
   private textNode!: Text;
 
-  readonly hostClasses = computed<Record<string, boolean>>(() => {
+  readonly hostClasses = computed(() => {
     return {
       tooltip: true,
       fade: true,
       show: this.visible(),
       'bs-tooltip-auto': true
-    };
+    } as Record<string, boolean>;
   });
 
   ngOnDestroy(): void {
