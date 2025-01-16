@@ -1,18 +1,16 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
-import { IProgressBarStacked } from './progress.type';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'c-progress-stacked',
+  exportAs: 'cProgressStacked',
   template: '<ng-content />',
   styles: `
     :host {
       display: flex;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  host: { '[class.progress-stacked]': 'stacked()' }
 })
-export class ProgressStackedComponent implements IProgressBarStacked {
-  @Input()
-  @HostBinding('class.progress-stacked')
-  stacked = true;
+export class ProgressStackedComponent {
+  readonly stacked = input(true);
 }

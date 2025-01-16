@@ -1,56 +1,45 @@
 import {
   booleanAttribute,
-  computed,
   Directive,
   effect,
   EffectRef,
   ElementRef,
   inject,
-  Input,
+  input,
   numberAttribute,
-  Renderer2,
-  signal,
-  WritableSignal
+  Renderer2
 } from '@angular/core';
 import { Colors } from '../coreui.types';
-import { IProgressBar } from './progress.type';
+import { ProgressService } from './progress.service';
 
 @Directive({
-  selector: '[cProgressBar]'
+  selector: '[cProgressBar]',
+  exportAs: 'cProgressBar'
 })
-export class ProgressBarDirective implements IProgressBar {
+export class ProgressBarDirective {
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
-
-  readonly #max = signal(100);
-  readonly #min = 0;
-  readonly #value: WritableSignal<number | undefined> = signal(undefined);
-  readonly #width: WritableSignal<number | undefined> = signal(undefined);
-
-  readonly percent = computed(() => {
-    return +((((this.#value() ?? this.#width() ?? 0) - this.#min) / (this.#max() - this.#min)) * 100).toFixed(
-      this.precision
-    );
-  });
+  readonly #progressService = inject(ProgressService);
 
   readonly #valuesEffect: EffectRef = effect(() => {
     const host: HTMLElement = this.#hostElement.nativeElement;
-    if (this.#value() === undefined || this.#width()) {
+    const value = this.#progressService.value();
+    const percent = this.#progressService.percent();
+    const stacked = this.#progressService.stacked();
+    if (value === undefined) {
       for (const name of ['aria-valuenow', 'aria-valuemax', 'aria-valuemin', 'role']) {
         this.#renderer.removeAttribute(host, name);
       }
     } else {
-      this.#renderer.setAttribute(host, 'aria-valuenow', String(this.#value()));
-      this.#renderer.setAttribute(host, 'aria-valuemin', String(this.#min));
-      this.#renderer.setAttribute(host, 'aria-valuemax', String(this.#max()));
-      this.#renderer.setAttribute(host, 'role', this.role);
+      const { min, max } = this.#progressService;
+      this.#renderer.setAttribute(host, 'aria-valuenow', String(value));
+      this.#renderer.setAttribute(host, 'aria-valuemin', String(min()));
+      this.#renderer.setAttribute(host, 'aria-valuemax', String(max()));
+      this.#renderer.setAttribute(host, 'role', this.role());
     }
     const tagName = host.tagName;
-    if (
-      this.percent() >= 0 &&
-      ((this.stacked && tagName === 'C-PROGRESS') || (!this.stacked && tagName !== 'C-PROGRESS'))
-    ) {
-      this.#renderer.setStyle(host, 'width', `${this.percent()}%`);
+    if (percent >= 0 && ((stacked && tagName === 'C-PROGRESS') || (!stacked && tagName !== 'C-PROGRESS'))) {
+      this.#renderer.setStyle(host, 'width', `${percent}%`);
     } else {
       this.#renderer.removeStyle(host, 'width');
     }
@@ -58,65 +47,50 @@ export class ProgressBarDirective implements IProgressBar {
 
   /**
    * Use to animate the stripes right to left via CSS3 animations.
-   * @type boolean
+   * @return boolean
    */
-  @Input({ transform: booleanAttribute }) animated?: boolean;
+  readonly animated = input<boolean, unknown>(undefined, { transform: booleanAttribute });
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @values 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark', 'light'
    */
-  @Input() color?: Colors;
+  readonly color = input<Colors>();
 
-  // TODO: check if this is necessary.
-  @Input({ transform: numberAttribute }) precision: number = 0;
+  readonly precision = input(0, { transform: numberAttribute });
 
   /**
    * The percent value the ProgressBar.
-   * @type number
+   * @return number
    * @default 0
    */
-  @Input({ transform: numberAttribute })
-  set value(value: number | undefined) {
-    this.#value.set(value);
-  }
-
-  get value() {
-    return this.#value();
-  }
-
-  @Input({ transform: numberAttribute })
-  set width(value: number | undefined) {
-    this.#width.set(value);
-  }
+  readonly value = input(undefined, { transform: numberAttribute });
 
   /**
    * Set the progress bar variant to optional striped.
    * @values 'striped'
    * @default undefined
    */
-  @Input() variant?: 'striped';
+  readonly variant = input<'striped'>();
 
   /**
    * The max value of the ProgressBar.
-   * @type number
+   * @return number
    * @default 100
    */
-  @Input({ transform: numberAttribute })
-  set max(max: number) {
-    this.#max.set(isNaN(max) || max <= 0 ? 100 : max);
-  }
-
-  /**
-   * Stacked ProgressBars.
-   * @type boolean
-   * @default false
-   */
-  @Input({ transform: booleanAttribute }) stacked?: boolean = false;
+  readonly max = input(100, { transform: numberAttribute });
 
   /**
    * Set default html role attribute.
-   * @type string
+   * @return string
    */
-  @Input() role: string = 'progressbar';
+  readonly role = input<string>('progressbar');
+
+  readonly #serviceEffect = effect(() => {
+    this.#progressService.precision.set(this.precision());
+    const max = this.max();
+    this.#progressService.max.set(isNaN(max) || max <= 0 ? 100 : max);
+    const value = this.value();
+    this.#progressService.value.set(value && !isNaN(value) ? value : undefined);
+  });
 }

@@ -26,7 +26,6 @@ describe('ProgressComponent', () => {
     component = fixture.componentInstance;
     progress = fixture.debugElement.childNodes.find((v) => ProgressComponent);
     // let x= fixture.debugElement.queryAll(By.directive(ProgressBarDirective))
-    // console.log(x)
     fixture.detectChanges();
   }));
 

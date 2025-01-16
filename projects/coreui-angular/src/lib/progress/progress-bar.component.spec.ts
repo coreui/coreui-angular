@@ -1,24 +1,31 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
+import { ComponentRef } from '@angular/core';
 import { ProgressBarComponent } from './progress-bar.component';
 import { ProgressBarDirective } from './progress-bar.directive';
+import { ProgressService } from './progress.service';
 
 describe('ProgressBarComponent', () => {
   let component: ProgressBarComponent;
+  let componentRef: ComponentRef<ProgressBarComponent>;
   let fixture: ComponentFixture<ProgressBarComponent>;
+  let directive: ProgressBarDirective;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ProgressBarComponent, ProgressBarDirective]
+      imports: [ProgressBarComponent],
+      providers: [ProgressService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProgressBarComponent);
 
     component = fixture.componentInstance;
-    fixture.debugElement.injector.get(ProgressBarDirective).value = 42;
-    fixture.debugElement.injector.get(ProgressBarDirective).color = 'success';
-    fixture.debugElement.injector.get(ProgressBarDirective).variant = 'striped';
-    fixture.debugElement.injector.get(ProgressBarDirective).animated = true;
+    componentRef = fixture.componentRef;
+    directive = fixture.debugElement.injector.get(ProgressBarDirective);
+    componentRef.setInput('value', 42);
+    componentRef.setInput('color', 'success');
+    componentRef.setInput('variant', 'striped');
+    componentRef.setInput('animated', true);
     fixture.detectChanges();
   }));
 
@@ -45,7 +52,7 @@ describe('ProgressBarComponent', () => {
   });
 
   it('should not have aria-* attributes', () => {
-    fixture.debugElement.injector.get(ProgressBarDirective).value = undefined;
+    componentRef.setInput('value', undefined);
     fixture.detectChanges();
     expect(fixture.nativeElement.getAttribute('aria-valuenow')).toBeFalsy();
     expect(fixture.nativeElement.getAttribute('aria-valuemin')).toBeFalsy();
@@ -53,16 +60,5 @@ describe('ProgressBarComponent', () => {
     expect(fixture.nativeElement.getAttribute('role')).toBeFalsy();
     // expect(fixture.nativeElement.style.width).toBeFalsy();
     expect(fixture.nativeElement.style.width).toBe('0%');
-  });
-
-  it('should not have aria-* attributes', () => {
-    fixture.debugElement.injector.get(ProgressBarDirective).value = undefined;
-    fixture.debugElement.injector.get(ProgressBarDirective).width = 84;
-    fixture.detectChanges();
-    expect(fixture.nativeElement.getAttribute('aria-valuenow')).toBeFalsy();
-    expect(fixture.nativeElement.getAttribute('aria-valuemin')).toBeFalsy();
-    expect(fixture.nativeElement.getAttribute('aria-valuemax')).toBeFalsy();
-    expect(fixture.nativeElement.getAttribute('role')).toBeFalsy();
-    expect(fixture.nativeElement.style.width).toBe('84%');
   });
 });

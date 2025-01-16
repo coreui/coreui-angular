@@ -1,75 +1,84 @@
 import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
-  ChangeDetectionStrategy,
   Component,
-  ContentChildren,
+  computed,
+  contentChildren,
   ElementRef,
-  HostBinding,
   inject,
-  Input,
-  numberAttribute,
-  QueryList
+  input,
+  numberAttribute
 } from '@angular/core';
-import { IProgress } from './progress.type';
 import { ProgressBarComponent } from './progress-bar.component';
 import { ProgressBarDirective } from './progress-bar.directive';
 import { ProgressStackedComponent } from './progress-stacked.component';
+import { ProgressService } from './progress.service';
 
 @Component({
-    selector: 'c-progress',
-    templateUrl: './progress.component.html',
-    imports: [ProgressBarComponent, NgTemplateOutlet],
-    styleUrl: './progress.component.scss',
-    hostDirectives: [
-        {
-            directive: ProgressBarDirective,
-            inputs: ['animated', 'color', 'max', 'role', 'value', 'variant']
-        }
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    host: { class: 'progress' }
+  selector: 'c-progress',
+  exportAs: 'cProgress',
+  templateUrl: './progress.component.html',
+  imports: [ProgressBarComponent, NgTemplateOutlet],
+  styleUrl: './progress.component.scss',
+  hostDirectives: [
+    {
+      directive: ProgressBarDirective,
+      inputs: ['animated', 'color', 'max', 'role', 'value', 'variant']
+    }
+  ],
+  host: {
+    class: 'progress',
+    '[class]': 'hostClasses()',
+    '[style.height]': 'hostStyle()'
+  },
+  providers: [ProgressService]
 })
-export class ProgressComponent implements IProgress {
-  protected readonly pbd: ProgressBarDirective | null = inject(ProgressBarDirective, { optional: true });
-  readonly #stacked?: boolean = inject(ProgressStackedComponent, { optional: true })?.stacked;
-  readonly #elementRef = inject(ElementRef);
+export class ProgressComponent {
+  readonly #hostElement = inject(ElementRef);
+  protected readonly progressBarDirective: ProgressBarDirective | null = inject(ProgressBarDirective, {
+    optional: true
+  });
+  readonly #stacked: boolean = inject(ProgressStackedComponent, { optional: true })?.stacked() ?? false;
+  readonly #progressService = inject(ProgressService);
 
   constructor() {
-    if (this.pbd) {
-      this.pbd.stacked = this.#stacked;
-    }
+    this.#progressService.stacked.set(this.#stacked);
   }
 
-  @ContentChildren(ProgressBarComponent) contentProgressBars!: QueryList<ProgressBarComponent>;
+  readonly stacked = this.#progressService.stacked;
+  readonly percent = this.#progressService.percent;
+  readonly value = this.#progressService.value;
+
+  readonly contentProgressBars = contentChildren(ProgressBarComponent);
+
   /**
    * Sets the height of the component. If you set that value the inner `<CProgressBar>` will automatically resize accordingly.
-   * @type number
+   * @return number
    */
-  @Input({ transform: numberAttribute }) height: number = 0;
+  readonly height = input(0, { transform: numberAttribute });
 
   /**
    * Displays thin progress.
-   * @type boolean
+   * @return boolean
    */
-  @Input({ transform: booleanAttribute }) thin: boolean = false;
+  readonly thin = input(false, { transform: booleanAttribute });
 
   /**
    * Change the default color to white.
-   * @type boolean
+   * @return boolean
    */
-  @Input({ transform: booleanAttribute }) white: boolean = false;
+  readonly white = input(false, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  get hostClasses(): Record<string, boolean> {
+  readonly hostClasses = computed(() => {
     return {
       progress: true,
-      'progress-thin': this.thin,
-      'progress-white': this.white
-    };
-  }
+      'progress-thin': this.thin(),
+      'progress-white': this.white()
+    } as Record<string, boolean>;
+  });
 
-  @HostBinding('style.height') get hostStyle(): any {
-    return !!this.height ? `${this.height}px` : (this.#elementRef?.nativeElement?.style?.height ?? undefined);
-  }
+  readonly hostStyle = computed(() => {
+    const height = this.height();
+    return !!height ? `${height}px` : (this.#hostElement?.nativeElement?.style?.height ?? undefined);
+  });
 }
