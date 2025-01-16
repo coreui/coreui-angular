@@ -10,7 +10,7 @@
     "watch:lib:dev": "ng build coreui-angular --watch --configuration production",
     "build:lib:prod": "ng build coreui-angular",
     "postbuild:lib:prod": "npm run build --prefix projects/coreui-angular",
-    "test:lib:dev": "ng test --no-watch --code-coverage coreui-angular ",
+    "test:lib:dev": "ng test coreui-angular",
     "test:lib:prod": "ng test coreui-angular --karma-config=projects/coreui-angular/karma.conf.github.js",
     "prepublish:lib": "npm run prepublish:icons && ng lint coreui-angular && ng test coreui-angular --watch=false && npm run build:lib:prod",
     "publish:lib": "cd dist/coreui-angular/ && npm publish --tag next --dry-run",
