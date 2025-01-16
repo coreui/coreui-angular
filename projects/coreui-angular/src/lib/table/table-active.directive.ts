@@ -1,19 +1,16 @@
-import { booleanAttribute, Directive, HostBinding, Input } from '@angular/core';
+import { booleanAttribute, Directive, input } from '@angular/core';
 
 @Directive({
-  selector: '[cTableActive]'
+  selector: '[cTableActive]',
+  exportAs: 'cTableActive',
+  host: {
+    '[class.table-active]': 'active()'
+  }
 })
 export class TableActiveDirective {
   /**
    * Highlight a table row or cell
-   * @type boolean
+   * @return boolean
    */
-  @Input({ alias: 'cTableActive', transform: booleanAttribute }) active: string | boolean = false;
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'table-active': this.active
-    };
-  }
+  readonly active = input(false, { alias: "cTableActive", transform: booleanAttribute });
 }
