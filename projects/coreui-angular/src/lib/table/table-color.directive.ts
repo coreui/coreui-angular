@@ -1,20 +1,23 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 import { Colors } from '../coreui.types';
 
 @Directive({
-  selector: '[cTableColor]'
+  selector: '[cTableColor]',
+  exportAs: 'cTableColor',
+  host: {
+    '[class]': 'hostClasses()'
+  }
 })
 export class TableColorDirective {
   /**
    * Use contextual color for tables, table rows or individual cells.
-   * @type Colors
+   * @return Colors
    */
-  @Input('cTableColor') color?: Colors;
+  readonly color = input<Colors>(undefined, { alias: "cTableColor" });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed((): Record<string,boolean> =>  {
     return {
-      [`table-${this.color}`]: !!this.color
+      [`table-${this.color()}`]: !!this.color()
     };
-  }
+  });
 }
