@@ -69,7 +69,11 @@ export class ToasterComponent implements OnInit {
    * Toaster placement
    * @return TToasterPlacement
    */
-  readonly placement = input<TToasterPlacement>(ToasterPlacement.TopEnd);
+  readonly placementInput = input<TToasterPlacement>(ToasterPlacement.TopEnd, { alias: 'placement' });
+
+  get placement() {
+    return this.placementInput();
+  }
 
   /**
    * Toaster position
@@ -81,7 +85,7 @@ export class ToasterComponent implements OnInit {
   readonly contentToasts = contentChildren(ToastComponent, { read: ViewContainerRef });
 
   readonly hostClasses = computed(() => {
-    const placement = this.placement();
+    const placement = this.placement;
     const position = this.position();
     return {
       toaster: true,
@@ -119,7 +123,7 @@ export class ToasterComponent implements OnInit {
     for (const [key, value] of Object.entries(props)) {
       componentRef.setInput(key, value);
     }
-    componentRef.setInput('placement', this.placement());
+    componentRef.setInput('placement', this.placement);
     componentRef.setInput('dynamic', true);
     componentRef.setInput('index', index);
     componentRef.setInput('visible', true);
