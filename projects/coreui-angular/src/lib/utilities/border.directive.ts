@@ -1,35 +1,37 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 import { Border } from './border.type';
 
 @Directive({
-  selector: '[cBorder]'
+  selector: '[cBorder]',
+  exportAs: 'cBorder',
+  host: { '[class]': 'hostClasses()' }
 })
 export class BorderDirective {
   /**
    * Add or remove an element’s borders
-   * @type Border
+   * @return Border
    */
-  @Input('cBorder') border: Border = true;
+  readonly cBorder = input<Border>(true);
 
-  @HostBinding('class')
-  get hostClasses(): any {
-    if (typeof this.border === 'boolean') {
+  readonly hostClasses = computed(() =>  {
+    const border = this.cBorder();
+    if (typeof border === 'boolean') {
       return { border: true };
     }
-    if (typeof this.border === 'number' || typeof this.border === 'string') {
+    if (typeof border === 'number' || typeof border === 'string') {
       return {
         border: true,
-        [`border-${this.border}`]: true
+        [`border-${border}`]: true
       };
     }
-    if (typeof this.border === 'object') {
+    if (typeof border === 'object') {
       const borderObj = {
         top: undefined,
         end: undefined,
         bottom: undefined,
         start: undefined,
         color: undefined,
-        ...this.border
+        ...border
       };
       // @ts-ignore
       const keys = Object.keys(borderObj).filter((key) => borderObj[key] !== undefined);
@@ -56,5 +58,6 @@ export class BorderDirective {
       });
       return Object.entries(classes).length === 0 ? { border: false } : classes;
     }
-  }
+    return { border: false };
+  });
 }
