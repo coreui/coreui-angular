@@ -1,10 +1,11 @@
 import { DOCUMENT } from '@angular/common';
-import { DestroyRef, Directive, effect, ElementRef, inject, Input, signal, WritableSignal } from '@angular/core';
+import { DestroyRef, Directive, effect, ElementRef, inject, input, signal, untracked, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent, Subscription } from 'rxjs';
 
 @Directive({
-  selector: '[cShadowOnScroll]'
+  selector: '[cShadowOnScroll]',
+  exportAs: 'cShadowOnScroll'
 })
 export class ShadowOnScrollDirective {
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
@@ -25,18 +26,22 @@ export class ShadowOnScrollDirective {
     });
   }
 
-  @Input()
-  set cShadowOnScroll(value: 'sm' | 'lg' | 'none' | boolean) {
-    this.#scrolled.set(false);
-    if (value) {
-      this.#shadowClass = value === true ? 'shadow' : `shadow-${value}`;
-      this.#observable = fromEvent(this.#document, 'scroll')
-        .pipe(takeUntilDestroyed(this.#destroyRef))
-        .subscribe((scrolled) => {
-          this.#scrolled.set(this.#document.documentElement.scrollTop > 0);
-        });
-    } else {
-      this.#observable?.unsubscribe();
-    }
-  }
+  readonly cShadowOnScroll = input<'sm' | 'lg' | 'none' | boolean>(true);
+
+  readonly #shadowOnScrollEffect = effect(() => {
+    const value = this.cShadowOnScroll();
+    untracked(() => {
+      this.#scrolled.set(false);
+      if (value) {
+        this.#shadowClass = value === true ? 'shadow' : `shadow-${value}`;
+        this.#observable = fromEvent(this.#document, 'scroll')
+          .pipe(takeUntilDestroyed(this.#destroyRef))
+          .subscribe((scrolled) => {
+            this.#scrolled.set(this.#document.documentElement.scrollTop > 0);
+          });
+      } else {
+        this.#observable?.unsubscribe();
+      }
+    });
+  });
 }
