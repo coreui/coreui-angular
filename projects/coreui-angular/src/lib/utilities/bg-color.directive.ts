@@ -1,25 +1,28 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 import { BackgroundColors } from '../coreui.types';
 
 @Directive({
-  selector: '[cBgColor]'
+  selector: '[cBgColor]',
+  exportAs: 'cBgColor',
+  host: { '[class]': 'hostClasses' }
 })
 export class BgColorDirective {
   /**
    * Set the background of an element to any contextual class
    */
-  @Input('cBgColor') color: BackgroundColors = '';
+  readonly cBgColor = input<BackgroundColors>('');
+
   /**
    * Add linear gradient as background image to the backgrounds.
-   * @type boolean
+   * @return boolean
    */
-  @Input() gradient?: boolean;
+  readonly gradient = input<boolean>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const color = this.cBgColor();
     return {
-      [`bg-${this.color}`]: !!this.color,
-      'bg-gradient': this.gradient
+      [`bg-${color}`]: !!color,
+      'bg-gradient': this.gradient()
     };
-  }
+  });
 }
