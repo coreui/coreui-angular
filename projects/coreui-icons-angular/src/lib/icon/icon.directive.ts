@@ -35,7 +35,7 @@ export class IconDirective implements IIcon {
   readonly pointerEvents = input<IPointerEvents>('none', { alias: 'pointer-events' });
   readonly role = input('img');
 
-  readonly hostClasses = computed(() => {
+  readonly hostClasses = computed<NgCssClass>(() => {
     const computedSize = this.computedSize();
     const classes = {
       icon: true,
