@@ -4,7 +4,7 @@ import { BackgroundColors } from '../coreui.types';
 @Directive({
   selector: '[cBgColor]',
   exportAs: 'cBgColor',
-  host: { '[class]': 'hostClasses' }
+  host: { '[class]': 'hostClasses()' }
 })
 export class BgColorDirective {
   /**
