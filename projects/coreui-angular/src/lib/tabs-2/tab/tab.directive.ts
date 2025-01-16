@@ -8,7 +8,6 @@ import {
   ElementRef,
   inject,
   Injector,
-  Input,
   input,
   InputSignal,
   OnInit,
@@ -43,10 +42,21 @@ export class TabDirective implements FocusableOption, OnInit {
 
   /**
    * Disabled attribute
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute })
+  readonly disabledInput = input(false, { transform: booleanAttribute, alias: 'disabled' });
+
+  readonly #disabled = signal(false);
+  readonly attrDisabled = computed(() => this.#disabled() || null);
+
+  readonly #disabledEffect = effect(() => {
+    const disabled = this.disabledInput();
+    untracked(() => {
+      this.disabled = disabled;
+    });
+  });
+
   set disabled(value: boolean) {
     this.#disabled.set(value);
   }
@@ -54,9 +64,6 @@ export class TabDirective implements FocusableOption, OnInit {
   get disabled() {
     return this.#disabled();
   }
-
-  readonly #disabled = signal(false);
-  readonly attrDisabled = computed(() => this.#disabled() || null);
 
   /**
    * Item key.
@@ -95,18 +102,19 @@ export class TabDirective implements FocusableOption, OnInit {
     () => this.ariaControls() ?? `${this.#tabsService.id()}-panel-${this.itemKey()}`
   );
 
-  disabledEffect = effect(() => {
-    if (!this.#disabled()) {
+  readonly #disabledSignalEffect = effect(() => {
+    const disabled = this.#disabled();
+    if (!disabled) {
       const click$ = fromEvent<MouseEvent>(this.#elementRef.nativeElement, 'click');
       const focusIn$ = fromEvent<FocusEvent>(this.#elementRef.nativeElement, 'focusin');
 
       merge(focusIn$, click$)
         .pipe(
-          filter(($event) => !this.#disabled()),
+          filter(($event) => !disabled),
           tap(($event) => {
             this.#tabsService.activeItemKey.set(untracked(this.itemKey));
           }),
-          takeWhile(() => !this.#disabled()),
+          takeWhile(() => !disabled),
           takeUntilDestroyed(this.#destroyRef)
         )
         .subscribe();
