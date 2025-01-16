@@ -12,6 +12,21 @@
 - refactor(form-check): signal inputs, host bindings, cleanup
 - refactor(form): signal inputs, host bindings, cleanup
 - refactor(input-group): cleanup
+- refactor(nav): signal inputs, host bindings, cleanup, tests
+- refactor(modal): signal inputs, host bindings, cleanup, 
+- refactor(progress): signal inputs, host bindings, cleanup, tests, service introduction
+- refactor(table-active): signal inputs, host bindings, cleanup, tests 
+- refactor(table-color): signal inputs, host bindings, cleanup, tests
+- refactor(table): signal inputs, host bindings, cleanup, tests
+- refactor(tab): signal inputs, host bindings, cleanup, tests
+- refactor(toast): signal inputs, host bindings, cleanup
+- refactor(align): signal inputs, host bindings, cleanup, tests
+- refactor(bg-color): signal inputs, host bindings, cleanup, tests
+- refactor(border): signal inputs, host bindings, cleanup, tests
+- refactor(rounded): signal inputs, host bindings, cleanup, tests
+- refactor(shadow-on-scroll): signal inputs, host bindings, cleanup
+- refactor(visible): signal inputs, cleanup
+- refactor: make EffectRef #private 
 
 ---
 
