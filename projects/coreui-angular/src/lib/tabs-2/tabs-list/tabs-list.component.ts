@@ -59,7 +59,7 @@ export class TabsListComponent {
   readonly tabs = contentChildren(TabDirective);
   #focusKeyManager!: FocusKeyManager<TabDirective>;
 
-  readonly tabsEffect = effect(() => {
+  readonly #tabsEffect = effect(() => {
     const tabs = this.tabs();
     if (tabs.length === 0) {
       return;
@@ -91,7 +91,7 @@ export class TabsListComponent {
     });
   });
 
-  readonly tabsServiceEffect = effect(() => {
+  readonly #tabsServiceEffect = effect(() => {
     const activeItemIndex = this.tabs().findIndex(
       (tab) => untracked(tab.isActive) && untracked(tab.itemKey) === this.tabsService.activeItemKey()
     );

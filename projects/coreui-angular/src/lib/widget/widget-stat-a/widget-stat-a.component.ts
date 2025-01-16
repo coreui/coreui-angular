@@ -6,11 +6,11 @@ import { CardBodyComponent, CardComponent } from '../../card';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
-    selector: 'c-widget-stat-a',
-    templateUrl: './widget-stat-a.component.html',
-    exportAs: 'cWidgetStatA',
-    imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
-    host: { class: 'card', '[class]': 'hostClasses()' }
+  selector: 'c-widget-stat-a',
+  templateUrl: './widget-stat-a.component.html',
+  exportAs: 'cWidgetStatA',
+  imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
+  host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatAComponent extends CardComponent {
   /**
@@ -35,7 +35,7 @@ export class WidgetStatAComponent extends CardComponent {
 
   readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
 
-  readonly contentTemplatesEffect = effect(() => {
+  readonly #contentTemplatesEffect = effect(() => {
     this.contentTemplates().forEach((child: TemplateIdDirective) => {
       this.templates[child.id] = child.templateRef;
     });

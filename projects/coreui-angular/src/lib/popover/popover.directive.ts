@@ -48,7 +48,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cPopover' });
 
-  readonly contentEffect = effect(() => {
+  readonly #contentEffect = effect(() => {
     if (this.content()) {
       this.destroyTooltipElement();
     }
@@ -56,11 +56,11 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Optional popper Options object, takes precedence over cPopoverPlacement prop
-   * @type Partial<Options>
+   * @return Partial<Options>
    */
   readonly popperOptions = input<Partial<Options>>({}, { alias: 'cPopoverOptions' });
 
-  readonly popperOptionsEffect = effect(() => {
+  readonly #popperOptionsEffect = effect(() => {
     this._popperOptions = {
       ...this._popperOptions,
       placement: this.placement(),
@@ -100,7 +100,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
    */
   readonly visible = model(false, { alias: 'cPopoverVisible' });
 
-  readonly visibleEffect = effect(() => {
+  readonly #visibleEffect = effect(() => {
     this.visible() ? this.addTooltipElement() : this.removeTooltipElement();
   });
 

@@ -1,13 +1,13 @@
-import { ButtonCloseDirective } from './button-close.directive';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, DebugElement, ElementRef } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ButtonCloseDirective } from './button-close.directive';
 
 class MockElementRef extends ElementRef {}
 
 @Component({
-    template: '<button cButtonClose></button>',
-    imports: [ButtonCloseDirective]
+  template: '<button cButtonClose></button>',
+  imports: [ButtonCloseDirective]
 })
 class TestComponent {}
 

@@ -19,7 +19,7 @@ export class ColorModeService {
   readonly localStorageItemName$ = toObservable(this.localStorageItemName);
   readonly colorMode: WritableSignal<ColorMode> = signal(undefined);
 
-  readonly colorModeEffect = effect(() => {
+  readonly #colorModeEffect = effect(() => {
     const colorMode = this.colorMode();
     if (colorMode) {
       const localStorageItemName = this.localStorageItemName();

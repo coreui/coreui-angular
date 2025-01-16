@@ -48,7 +48,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cTooltip' });
 
-  readonly contentEffect = effect(() => {
+  readonly #contentEffect = effect(() => {
     if (this.content()) {
       this.destroyTooltipElement();
     }
@@ -60,7 +60,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
    */
   readonly popperOptions = input<Partial<Options>>({}, { alias: 'cTooltipOptions' });
 
-  readonly popperOptionsEffect = effect(() => {
+  readonly #popperOptionsEffect = effect(() => {
     this._popperOptions = {
       ...this._popperOptions,
       placement: this.placement(),
@@ -100,7 +100,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
    */
   readonly visible = model(false, { alias: 'cTooltipVisible' });
 
-  readonly visibleEffect = effect(() => {
+  readonly #visibleEffect = effect(() => {
     this.visible() ? this.addTooltipElement() : this.removeTooltipElement();
   });
 

@@ -10,7 +10,7 @@ export class HtmlAttributesDirective {
   readonly #renderer = inject(Renderer2);
   readonly #elementRef = inject(ElementRef);
 
-  readonly attrEffect = effect(() => {
+  readonly #attrEffect = effect(() => {
     const attribs = this.cHtmlAttr();
     for (const attr in attribs) {
       if (attr === 'style' && typeof attribs[attr] === 'object') {

@@ -31,7 +31,7 @@ export class TooltipComponent implements OnDestroy {
    */
   readonly content = input<string | TemplateRef<any>>('');
 
-  readonly contentEffect = effect(() => {
+  readonly #contentEffect = effect(() => {
     this.updateView(this.content());
   });
 

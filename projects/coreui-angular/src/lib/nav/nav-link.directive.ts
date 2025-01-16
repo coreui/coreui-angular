@@ -39,7 +39,7 @@ export class NavLinkDirective {
   attrTabindex: '-1' | null = null;
   styleCursor: 'pointer' | null = null;
 
-  readonly disabledEffect = effect(() => {
+  readonly #disabledEffect = effect(() => {
     const disabled = this.disabled();
     this.ariaDisabled = disabled || null;
     this.attrDisabled = disabled ? '' : null;

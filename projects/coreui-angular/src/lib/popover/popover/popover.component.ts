@@ -14,15 +14,15 @@ import {
 import { NgClass } from '@angular/common';
 
 @Component({
-    selector: 'c-popover',
-    templateUrl: './popover.component.html',
-    imports: [NgClass],
-    host: {
-        class: 'popover fade bs-popover-auto',
-        '[class]': 'hostClasses()',
-        '[attr.role]': 'role()',
-        '[attr.id]': 'id()'
-    }
+  selector: 'c-popover',
+  templateUrl: './popover.component.html',
+  imports: [NgClass],
+  host: {
+    class: 'popover fade bs-popover-auto',
+    '[class]': 'hostClasses()',
+    '[attr.role]': 'role()',
+    '[attr.id]': 'id()'
+  }
 })
 export class PopoverComponent implements OnDestroy {
   readonly renderer = inject(Renderer2);
@@ -33,7 +33,7 @@ export class PopoverComponent implements OnDestroy {
    */
   readonly content = input<string | TemplateRef<any>>('');
 
-  readonly contentEffect = effect(() => {
+  readonly #contentEffect = effect(() => {
     this.updateView(this.content());
   });
 

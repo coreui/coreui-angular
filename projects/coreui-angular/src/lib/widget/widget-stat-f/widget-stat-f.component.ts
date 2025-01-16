@@ -6,11 +6,11 @@ import { TemplateIdDirective } from '../../shared';
 import { CardBodyComponent, CardComponent, CardFooterComponent } from '../../card';
 
 @Component({
-    selector: 'c-widget-stat-f',
-    templateUrl: './widget-stat-f.component.html',
-    exportAs: 'cWidgetStatB',
-    imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet],
-    host: { class: 'card', '[class]': 'hostClasses()' }
+  selector: 'c-widget-stat-f',
+  templateUrl: './widget-stat-f.component.html',
+  exportAs: 'cWidgetStatB',
+  imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet],
+  host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatFComponent extends CardComponent {
   /**
@@ -58,7 +58,7 @@ export class WidgetStatFComponent extends CardComponent {
   templates: Record<string, TemplateRef<any>> = {};
   readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
 
-  readonly contentTemplatesEffect = effect(() => {
+  readonly #contentTemplatesEffect = effect(() => {
     this.contentTemplates().forEach((child: TemplateIdDirective) => {
       this.templates[child.id] = child.templateRef;
     });

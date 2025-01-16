@@ -194,7 +194,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     SidebarNavLabelComponent,
     SidebarNavTitleComponent,
     SidebarNavDividerComponent,
-    SidebarNavGroupComponent,
+    forwardRef(() => SidebarNavGroupComponent),
     SidebarNavItemClassPipe,
     RouterModule
   ]

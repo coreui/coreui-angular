@@ -153,7 +153,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
-  readonly visibleEffect = effect(() => {
+  readonly #visibleInputEffect = effect(() => {
     const visible = this.visibleInput();
     untracked(() => {
       this.visible = visible;

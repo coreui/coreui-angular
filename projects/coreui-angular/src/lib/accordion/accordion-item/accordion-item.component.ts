@@ -41,7 +41,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
 
   readonly itemVisible = signal(false);
 
-  visibleInputChange = effect(() => {
+  readonly #visibleInputChange = effect(() => {
     setTimeout(() => {
       this.itemVisible.set(this.visibleInput());
     });

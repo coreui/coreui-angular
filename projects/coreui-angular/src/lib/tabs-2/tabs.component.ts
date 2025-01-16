@@ -31,12 +31,12 @@ export class TabsComponent {
   tabsId = `tabs-${nextId++}`;
   readonly id = input<string>(this.tabsId);
 
-  readonly activeItemEffect = effect(() => {
+  readonly #activeItemEffect = effect(() => {
     this.tabsService.id.set(this.id());
     this.tabsService.activeItemKey.set(this.activeItemKey());
   });
 
-  readonly tabsServiceEffect = effect(() => {
+  readonly #tabsServiceEffect = effect(() => {
     this.activeItemKey.set(this.tabsService.activeItemKey());
   });
 }
