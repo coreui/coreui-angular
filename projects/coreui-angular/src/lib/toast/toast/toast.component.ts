@@ -62,7 +62,11 @@ export class ToastComponent implements OnInit, OnDestroy {
   readonly toasterService = inject(ToasterService);
 
   readonly dynamic = input<boolean>();
-  readonly placement = input<TToasterPlacement>();
+  readonly placementInput = input<TToasterPlacement>(undefined, { alias: 'placement' });
+
+  get placement() {
+    return this.placementInput();
+  }
 
   /**
    * Auto hide the toast.
@@ -170,7 +174,7 @@ export class ToastComponent implements OnInit, OnDestroy {
       this.toasterService.setState({
         toast: this,
         show: this.visible,
-        placement: this.placement()
+        placement: this.placement
       });
       this.clearTimer();
       this.setTimer();
@@ -200,7 +204,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.toasterService.setState({
       toast: this,
       show: false,
-      placement: this.placement()
+      placement: this.placement
     });
   }
 
