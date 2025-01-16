@@ -1,4 +1,4 @@
-import { Component, HostBinding, inject, Input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 
 import { ButtonCloseDirective } from '../../button';
 import { ToastComponent } from '../toast/toast.component';
@@ -8,16 +8,19 @@ import { ToastCloseDirective } from '../toast-close.directive';
   selector: 'c-toast-header',
   templateUrl: './toast-header.component.html',
   exportAs: 'cToastHeader',
-  imports: [ToastCloseDirective, ButtonCloseDirective]
+  imports: [ToastCloseDirective, ButtonCloseDirective],
+  host: {
+    class: 'toast-header'
+  }
 })
 export class ToastHeaderComponent {
-  toast? = inject(ToastComponent, { optional: true });
+  readonly #toast = inject(ToastComponent, { optional: true });
+
+  readonly toast = signal(this.#toast ?? undefined);
 
   /**
    * Add close button to a toast header
-   * @type boolean
+   * @return boolean
    */
-  @Input() closeButton = true;
-
-  @HostBinding('class.toast-header') toastHeaderClass = true;
+  readonly closeButton = input(true);
 }

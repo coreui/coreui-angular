@@ -2,11 +2,10 @@ import {
   booleanAttribute,
   ChangeDetectorRef,
   Component,
+  computed,
+  effect,
   ElementRef,
-  HostBinding,
-  HostListener,
   inject,
-  Input,
   input,
   numberAttribute,
   OnDestroy,
@@ -47,47 +46,58 @@ type AnimateType = 'hide' | 'show';
       })
     ])
   ],
-  host: { class: 'toast show' }
+  host: {
+    class: 'toast show',
+    '[class]': 'hostClasses()',
+    '(mouseover)': 'clearTimer()',
+    '(mouseout)': 'setTimer()',
+    '[@fadeInOut]': 'animateType',
+    '[@.disabled]': 'animationDisabled()'
+  }
 })
 export class ToastComponent implements OnInit, OnDestroy {
+  readonly changeDetectorRef = inject(ChangeDetectorRef);
   readonly hostElement = inject(ElementRef);
   readonly renderer = inject(Renderer2);
   readonly toasterService = inject(ToasterService);
-  readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   readonly dynamic = input<boolean>();
   readonly placement = input<TToasterPlacement>();
 
   /**
    * Auto hide the toast.
-   * @type boolean
+   * @return boolean
    */
   readonly autohide = input(true);
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @return Colors
    */
   readonly color = input<Colors>('');
 
   /**
    * Delay hiding the toast (ms).
-   * @type number
+   * @return number
    */
   readonly delay = input(5000, { transform: numberAttribute });
 
   /**
    * Apply fade transition to the toast.
-   * @type boolean
+   * @return boolean
    */
   readonly fade = input(true);
 
   /**
    * Toggle the visibility of component.
-   * @type boolean
+   * @return boolean
    */
+  readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
-  @Input({ transform: booleanAttribute })
+  readonly #visibleInputEffect = effect(() => {
+    this.visible = this.visibleInput();
+  });
+
   set visible(value: boolean) {
     const newValue = value;
     if (this.#visible !== newValue) {
@@ -111,13 +121,13 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   /**
    * Event emitted on visibility change. [docs]
-   * @type <boolean>
+   * @return <boolean>
    */
   readonly visibleChange = output<boolean>();
 
   /**
    * Event emitted on timer tick. [docs]
-   * @type number
+   * @return number
    */
   readonly timer = output<number>();
 
@@ -137,33 +147,23 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck();
   }
 
-  @HostBinding('@.disabled')
-  get animationDisabled(): boolean {
+  readonly animationDisabled = computed(() => {
     return !this.fade();
-  }
+  });
 
-  @HostBinding('@fadeInOut')
   get animateType(): AnimateType {
     return this.visible ? 'show' : 'hide';
   }
 
-  @HostListener('mouseover') onMouseOver(): void {
-    this.clearTimer();
-  }
-
-  @HostListener('mouseout') onMouseOut(): void {
-    this.setTimer();
-  }
-
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const color = this.color();
     return {
       toast: true,
       show: true,
-      [`bg-${this.color()}`]: !!this.color(),
-      'border-0': !!this.color()
-    };
-  }
+      [`bg-${color}`]: !!color,
+      'border-0': !!color
+    } as Record<string, boolean>;
+  });
 
   ngOnInit(): void {
     if (this.visible) {

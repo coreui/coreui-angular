@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { TToasterPlacement } from './toaster.component';
-import { ToastComponent } from '../toast/toast.component';
+import { type ToastComponent } from '../toast/toast.component';
 
 export interface IToasterAction {
   placement?: TToasterPlacement;

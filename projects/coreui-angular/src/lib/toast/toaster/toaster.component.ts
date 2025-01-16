@@ -1,19 +1,17 @@
 import {
-  AfterContentChecked,
   Component,
   ComponentRef,
-  ContentChildren,
+  computed,
+  contentChildren,
   DestroyRef,
   ElementRef,
-  HostBinding,
   inject,
   Injector,
-  Input,
+  input,
   NgModuleRef,
   OnInit,
-  QueryList,
   Renderer2,
-  ViewChild,
+  viewChild,
   ViewContainerRef
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -53,57 +51,56 @@ export type TToasterPlacement =
   templateUrl: './toaster.component.html',
   exportAs: 'cToaster',
   imports: [ToasterHostDirective],
-  host: { class: 'toaster toast-container' }
+  host: {
+    class: 'toaster toast-container',
+    '[class]': 'hostClasses()'
+  }
 })
-export class ToasterComponent implements OnInit, AfterContentChecked {
+export class ToasterComponent implements OnInit {
   readonly #hostElement = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
   readonly #toasterService = inject(ToasterService);
   readonly #destroyRef = inject(DestroyRef);
 
   placements = Object.values(ToasterPlacement);
-  toasts!: QueryList<ViewContainerRef>;
-  toastsDynamic: any[] = [];
+  toastsDynamic: ComponentRef<any>[] = [];
 
   /**
    * Toaster placement
-   * @type TToasterPlacement
+   * @return TToasterPlacement
    */
-  @Input() placement: TToasterPlacement = ToasterPlacement.TopEnd;
+  readonly placement = input<TToasterPlacement>(ToasterPlacement.TopEnd);
 
   /**
    * Toaster position
-   * @type (string | 'absolute' | 'fixed' | 'static')
+   * @return (string | 'absolute' | 'fixed' | 'static')
    */
-  @Input() position: string | 'absolute' | 'fixed' | 'static' = 'absolute';
+  readonly position = input<string | 'absolute' | 'fixed' | 'static'>('absolute');
 
-  @ViewChild(ToasterHostDirective, { static: true }) toasterHost!: ToasterHostDirective;
-  @ContentChildren(ToastComponent, { read: ViewContainerRef }) contentToasts!: QueryList<ViewContainerRef>;
+  readonly toasterHost = viewChild.required(ToasterHostDirective);
+  readonly contentToasts = contentChildren(ToastComponent, { read: ViewContainerRef });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const placement = this.placement();
+    const position = this.position();
     return {
       toaster: true,
       'toast-container': true,
-      [`position-${this.position}`]: !!this.position,
-      'top-0': this.placement.includes('top'),
-      'top-50': this.placement.includes('middle'),
-      'bottom-0': this.placement.includes('bottom'),
-      'start-0': this.placement.includes('start'),
-      'start-50': this.placement.includes('center'),
-      'end-0': this.placement.includes('end'),
-      'translate-middle-x': this.placement.includes('center') && !this.placement.includes('middle'),
-      'translate-middle-y': this.placement.includes('middle') && !this.placement.includes('center'),
-      'translate-middle': this.placement.includes('middle') && this.placement.includes('center')
+      [`position-${position}`]: !!position,
+      'top-0': placement.includes('top'),
+      'top-50': placement.includes('middle'),
+      'bottom-0': placement.includes('bottom'),
+      'start-0': placement.includes('start'),
+      'start-50': placement.includes('center'),
+      'end-0': placement.includes('end'),
+      'translate-middle-x': placement.includes('center') && !placement.includes('middle'),
+      'translate-middle-y': placement.includes('middle') && !placement.includes('center'),
+      'translate-middle': placement.includes('middle') && placement.includes('center')
     };
-  }
+  });
 
   ngOnInit(): void {
     this.stateToasterSubscribe();
-  }
-
-  ngAfterContentChecked(): void {
-    this.toasts = this.contentToasts;
   }
 
   public addToast(
@@ -116,13 +113,13 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
       projectableNodes?: Node[][];
     }
   ): ComponentRef<any> {
-    const componentRef: ComponentRef<any> = this.toasterHost.viewContainerRef.createComponent(toast, options);
+    const componentRef: ComponentRef<any> = this.toasterHost().viewContainerRef.createComponent(toast, options);
     this.toastsDynamic.push(componentRef);
     const index = this.toastsDynamic.indexOf(componentRef);
     for (const [key, value] of Object.entries(props)) {
       componentRef.setInput(key, value);
     }
-    componentRef.setInput('placement', this.placement);
+    componentRef.setInput('placement', this.placement());
     componentRef.setInput('dynamic', true);
     componentRef.setInput('index', index);
     componentRef.setInput('visible', true);
@@ -139,8 +136,7 @@ export class ToasterComponent implements OnInit, AfterContentChecked {
         item.destroy();
       }
     });
-
-    this.toasts?.forEach((item) => {
+    this.contentToasts()?.forEach((item) => {
       if (state.toast && item.element.nativeElement === state.toast.hostElement.nativeElement) {
         if (!state.toast.dynamic()) {
           state.toast['visible'] = false;
