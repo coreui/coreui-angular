@@ -215,11 +215,11 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 ## Copyright and license
 
-Copyright 2024 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Copyright 2025 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
 
 [npm-coreui-angular-badge-v5-ng19]: https://img.shields.io/npm/v/@coreui/angular/v5-ng19?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^19.0.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^19.1.0-lightgrey.svg?style=flat-square&logo=angular

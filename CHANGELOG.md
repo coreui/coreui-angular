@@ -3,8 +3,9 @@
 
 ---
 
-#### `5.3.8-next`
+#### `5.3.8`
 
+- chore(dependencies): update to `Angular 19.1`
 - refactor(form-control): signal inputs, host bindings, cleanup
 - refactor(form-select): signal inputs, host bindings, cleanup
 - refactor(form-label): signal inputs, host bindings, cleanup
