@@ -33,7 +33,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle an accordion item programmatically
-   * @type boolean
+   * @return boolean
    * @default false
    */
   // eslint-disable-next-line @angular-eslint/no-input-rename
@@ -42,9 +42,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
   readonly itemVisible = signal(false);
 
   readonly #visibleInputChange = effect(() => {
-    setTimeout(() => {
-      this.itemVisible.set(this.visibleInput());
-    });
+    this.visible = this.visibleInput();
   });
 
   set visible(value: boolean) {
