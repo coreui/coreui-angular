@@ -1,43 +1,46 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 
 import { BreakpointInfix } from '../coreui.types';
 import { GutterBreakpoints, Gutters, IGutter, IGutterObject } from './gutter.type';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[gutter]'
+  selector: '[gutter]',
+  exportAs: 'gutter',
+  host: {
+    '[class]': 'hostClasses()'
+  }
 })
 export class GutterDirective implements IGutter {
   /**
    * Define padding between columns to space and align content responsively in the Bootstrap grid system.
    */
-  @Input() gutter: IGutterObject | GutterBreakpoints | Gutters = {};
+  readonly gutter = input<IGutterObject | GutterBreakpoints | Gutters>({});
 
-  @HostBinding('class')
-  get hostClasses(): any {
-    let gutterClass: any;
+  readonly hostClasses = computed(() => {
+    let gutterClass: Record<string, boolean>;
+    const gutterInput = this.gutter();
 
-    if (typeof this.gutter === 'number') {
-      gutterClass = GutterDirective.getGutterClasses({ g: this.gutter });
+    if (typeof gutterInput === 'number') {
+      gutterClass = GutterDirective.getGutterClasses({ g: gutterInput });
       return gutterClass;
     }
 
     {
-      // @ts-ignore
-      const { g, gx, gy } = { ...this.gutter };
+      const { g, gx, gy } = { ...(gutterInput as IGutterObject) };
       gutterClass = GutterDirective.getGutterClasses({ g, gx, gy });
     }
 
     Object.keys(BreakpointInfix).forEach((key) => {
       // @ts-ignore
-      const gutter = this.gutter[key] ? { ...this.gutter[key] } : undefined;
+      const gutter: IGutterObject = gutterInput[key] ? { ...gutterInput[key] } : undefined;
       if (gutter) {
         const classes = GutterDirective.getGutterClasses(gutter, key);
         gutterClass = { ...gutterClass, ...classes };
       }
     });
     return gutterClass;
-  }
+  });
 
   private static getGutterClasses(gutter: IGutterObject, breakpoint?: string): any {
     const { g, gx, gy } = { ...gutter };

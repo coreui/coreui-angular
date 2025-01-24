@@ -1,6 +1,4 @@
-import { booleanAttribute, Component, computed, input, InputSignal, InputSignalWithTransform } from '@angular/core';
-
-import { IContainer } from './container.type';
+import { booleanAttribute, Component, computed, input } from '@angular/core';
 import { Breakpoints } from '../coreui.types';
 
 @Component({
@@ -9,19 +7,17 @@ import { Breakpoints } from '../coreui.types';
   styleUrls: ['./container.component.scss'],
   host: { '[class]': 'hostClasses()' }
 })
-export class ContainerComponent implements IContainer {
+export class ContainerComponent {
   /**
    * Set container 100% wide until a breakpoint.
    */
-  readonly breakpoint: InputSignal<Exclude<Breakpoints, 'xs'>> = input<Exclude<Breakpoints, 'xs'>>('');
+  readonly breakpoint = input<Exclude<Breakpoints, 'xs'>>('');
 
   /**
    * Set container 100% wide, spanning the entire width of the viewport.
-   * @type InputSignalWithTransform<unknown, boolean>
+   * @return boolean
    */
-  readonly fluid: InputSignalWithTransform<unknown, boolean> = input<unknown, boolean>(false, {
-    transform: booleanAttribute
-  });
+  readonly fluid = input(false, { transform: booleanAttribute });
 
   readonly hostClasses = computed(() => {
     const breakpoint = this.breakpoint();

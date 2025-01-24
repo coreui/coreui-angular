@@ -1,13 +1,20 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
-
-import { ColOrder, ICol } from './col.type';
+import { booleanAttribute, computed, Directive, input, numberAttribute } from '@angular/core';
+import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { BreakpointInfix } from '../coreui.types';
+import { ColOrder } from './col.type';
+
+export type ColOffsetType = number | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number };
+export type ColOrderType =
+  | ColOrder
+  | { xs?: ColOrder; sm?: ColOrder; md?: ColOrder; lg?: ColOrder; xl?: ColOrder; xxl?: ColOrder };
 
 @Directive({
-  selector: '[cCol]'
+  selector: '[cCol]',
+  host: {
+    '[class]': 'hostClasses()'
+  }
 })
-export class ColDirective implements ICol {
+export class ColDirective {
   static ngAcceptInputType_cCol: BooleanInput | NumberInput;
   static ngAcceptInputType_xs: BooleanInput | NumberInput;
   static ngAcceptInputType_sm: BooleanInput | NumberInput;
@@ -18,142 +25,111 @@ export class ColDirective implements ICol {
 
   /**
    * The number of columns/offset/order on extra small devices (<576px).
-   * @type { 'auto' | number |  boolean }
+   * @return { 'auto' | number |  boolean }
    */
-  @Input()
-  set cCol(value: BooleanInput | NumberInput) {
-    this.xs = this.xs || this.coerceInput(value);
-  }
-  @Input()
-  set xs(value) {
-    this._xs = this.coerceInput(value);
-  }
-  get xs(): BooleanInput | NumberInput {
-    return this._xs;
-  }
-  private _xs: BooleanInput | NumberInput = false;
+  readonly cCol = input(false, { transform: this.coerceInput });
+  readonly xs = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on small devices (<768px).
-   * @type { 'auto' | number |  boolean }
+   * @return { 'auto' | number |  boolean }
    */
-  @Input()
-  set sm(value) {
-    this._sm = this.coerceInput(value);
-  }
-  get sm(): BooleanInput | NumberInput {
-    return this._sm;
-  }
-  private _sm: BooleanInput | NumberInput = false;
+  readonly sm = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on medium devices (<992px).
-   * @type { 'auto' | number |  boolean }
+   * @return { 'auto' | number |  boolean }
    */
-  @Input()
-  set md(value) {
-    this._md = this.coerceInput(value);
-  }
-  get md(): BooleanInput | NumberInput {
-    return this._md;
-  }
-  private _md: BooleanInput | NumberInput = false;
+  readonly md = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on large devices (<1200px).
-   * @type { 'auto' | number |  boolean }
+   * @return { 'auto' | number |  boolean }
    */
-  @Input()
-  set lg(value) {
-    this._lg = this.coerceInput(value);
-  }
-  get lg(): BooleanInput | NumberInput {
-    return this._lg;
-  }
-  private _lg: BooleanInput | NumberInput = false;
+  readonly lg = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on X-Large devices (<1400px).
-   * @type { 'auto' | number |  boolean }
+   * @return { 'auto' | number |  boolean }
    */
-  @Input()
-  set xl(value) {
-    this._xl = this.coerceInput(value);
-  }
-  get xl(): BooleanInput | NumberInput {
-    return this._xl;
-  }
-  private _xl: BooleanInput | NumberInput = false;
+  readonly xl = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on XX-Large devices (≥1400px).
-   * @type { 'auto' | number |  boolean }
+   * @return { 'auto' | number |  boolean }
    */
-  @Input()
-  set xxl(value) {
-    this._xxl = this.coerceInput(value);
-  }
-  get xxl(): BooleanInput | NumberInput {
-    return this._xxl;
-  }
-  private _xxl: BooleanInput | NumberInput = false;
+  readonly xxl = input(false, { transform: this.coerceInput });
 
-  @Input() offset?: number | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number };
-  @Input() order?:
-    | ColOrder
-    | { xs?: ColOrder; sm?: ColOrder; md?: ColOrder; lg?: ColOrder; xl?: ColOrder; xxl?: ColOrder };
+  readonly breakpoints = computed(() => {
+    return {
+      xs: this.xs() || this.cCol(),
+      sm: this.sm(),
+      md: this.md(),
+      lg: this.lg(),
+      xl: this.xl(),
+      xxl: this.xxl()
+    } as Record<string, any>;
+  });
 
-  @HostBinding('class')
-  get hostClasses(): any {
-    const classes: any = {
+  readonly offset = input<ColOffsetType>();
+  readonly order = input<ColOrderType>();
+
+  readonly hostClasses = computed(() => {
+    const classes: Record<string, boolean> = {
       col: true
     };
 
+    const breakpoints = this.breakpoints();
+    const offsetInput = this.offset();
+    const orderInput = this.order();
+
     Object.keys(BreakpointInfix).forEach((breakpoint) => {
-      // @ts-ignore
-      const value: number | string | boolean = this[breakpoint];
+      const value = breakpoints[breakpoint];
       const infix = breakpoint === 'xs' ? '' : `-${breakpoint}`;
       classes[`col${infix}`] = value === true;
       classes[`col${infix}-${value}`] = typeof value === 'number' || typeof value === 'string';
     });
 
-    if (typeof this.offset === 'object') {
-      const offset = { ...this.offset };
+    if (typeof offsetInput === 'object') {
+      const offset = { ...offsetInput };
       Object.entries(offset).forEach((entry) => {
         const [breakpoint, value] = [...entry];
         const infix = breakpoint === 'xs' ? '' : `-${breakpoint}`;
         classes[`offset${infix}-${value}`] = value >= 0 && value <= 11;
       });
     } else {
-      classes[`offset-${this.offset}`] = typeof this.offset === 'number' && this.offset > 0 && this.offset <= 11;
+      const offset = numberAttribute(offsetInput);
+      classes[`offset-${offset}`] = typeof offset === 'number' && offset > 0 && offset <= 11;
     }
 
-    if (typeof this.order === 'object') {
-      const order = { ...this.order };
+    if (typeof orderInput === 'object') {
+      const order = { ...orderInput };
       Object.entries(order).forEach((entry) => {
         const [breakpoint, value] = [...entry];
         const infix = breakpoint === 'xs' ? '' : `-${breakpoint}`;
-        classes[`order${infix}-${value}`] = value;
+        classes[`order${infix}-${value}`] = !!value;
       });
     } else {
-      classes[`order-${this.order}`] = !!this.order;
+      const order = orderInput;
+      classes[`order-${order}`] = !!order;
     }
 
     // if there is no 'col' class, add one
-    classes.col = !Object.entries(classes).filter((i) => i[0].startsWith('col-') && i[1]).length || this.xs === true;
-    return classes;
-  }
+    classes['col'] =
+      !Object.entries(classes).filter((i) => i[0].startsWith('col-') && i[1]).length || breakpoints['xs'] === true;
+    return classes as Record<string, boolean>;
+  });
 
   coerceInput(value: BooleanInput | NumberInput) {
     if (value === 'auto') {
       return value;
     }
     if (value === '' || value === undefined || value === null) {
-      return coerceBooleanProperty(value);
+      return booleanAttribute(value);
     }
     if (typeof value === 'boolean') {
       return value;
     }
-    return coerceNumberProperty(value);
+    return numberAttribute(value);
   }
 }

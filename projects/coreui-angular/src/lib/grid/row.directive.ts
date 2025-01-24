@@ -1,56 +1,63 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 
 import { BreakpointInfix } from '../coreui.types';
-import { IRow, NumberOfColumns } from './row.type';
+import { NumberOfColumns } from './row.type';
 
 @Directive({
   selector: '[cRow]',
-  host: { class: 'row' }
+  host: {
+    class: 'row',
+    '[class]': 'hostClasses()'
+  }
 })
-export class RowDirective implements IRow {
+export class RowDirective {
   /**
    * The number of columns/offset/order on extra small devices (<576px).
-   * @type {{ cols: 'auto' | number }
+   * @return { cols: 'auto' | number }
    */
-  @Input() xs?: NumberOfColumns;
+  readonly xs = input<NumberOfColumns>();
+
   /**
    * The number of columns/offset/order on small devices (<768px).
-   * @type {{ cols: 'auto' | number }
+   * @return { cols: 'auto' | number }
    */
-  @Input() sm?: NumberOfColumns;
+  readonly sm = input<NumberOfColumns>();
+
   /**
    * The number of columns/offset/order on medium devices (<992px).
-   * @type {{ cols: 'auto' | number }
+   * @return { cols: 'auto' | number }
    */
-  @Input() md?: NumberOfColumns;
+  readonly md = input<NumberOfColumns>();
+
   /**
    * The number of columns/offset/order on large devices (<1200px).
-   * @type {{ cols: 'auto' | number }
+   * @return { cols: 'auto' | number }
    */
-  @Input() lg?: NumberOfColumns;
+  readonly lg = input<NumberOfColumns>();
+
   /**
    * The number of columns/offset/order on X-Large devices (<1400px).
-   * @type {{ cols: 'auto' | number }
+   * @return { cols: 'auto' | number }
    */
-  @Input() xl?: NumberOfColumns;
+  readonly xl = input<NumberOfColumns>();
+
   /**
    * The number of columns/offset/order on XX-Large devices (≥1400px).
-   * @type {{ cols: 'auto' | number }
+   * @return { cols: 'auto' | number }
    */
-  @Input() xxl?: NumberOfColumns;
+  readonly xxl = input<NumberOfColumns>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
-    const cols = this.xs;
+  readonly hostClasses = computed(() => {
+    const cols = this.xs();
 
-    const classes: any = {
+    const classes: Record<string, boolean> = {
       row: true,
       [`row-cols-${cols}`]: !!cols
     };
 
     Object.keys(BreakpointInfix).forEach((breakpoint) => {
       // @ts-ignore
-      const value: any = this[breakpoint];
+      const value: any = this[breakpoint]();
       if (typeof value === 'number' || typeof value === 'string') {
         const infix: string = breakpoint === 'xs' ? '' : `-${breakpoint}`;
         classes[`row-cols${infix}-${value}`] = !!value;
@@ -58,5 +65,5 @@ export class RowDirective implements IRow {
     });
 
     return classes;
-  }
+  });
 }
