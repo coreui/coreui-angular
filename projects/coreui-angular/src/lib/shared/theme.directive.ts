@@ -1,7 +1,8 @@
-import { booleanAttribute, Directive, ElementRef, inject, Input, Renderer2 } from '@angular/core';
+import { booleanAttribute, Directive, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[cTheme]'
+  selector: '[cTheme]',
+  exportAs: 'cTheme'
 })
 export class ThemeDirective {
   readonly #hostElement = inject(ElementRef);
@@ -9,20 +10,21 @@ export class ThemeDirective {
 
   /**
    * Add dark theme attribute.
-   * @type 'dark' | 'light' | undefined
+   * @return 'dark' | 'light' | undefined
    */
-  @Input() set colorScheme(scheme: 'dark' | 'light' | undefined) {
-    !!scheme ? this.setTheme(scheme) : this.unsetTheme();
-  }
+  readonly colorScheme = input<'dark' | 'light'>();
 
-  /**
-   * Add dark theme attribute.
-   * @type boolean
-   */
-  @Input({ transform: booleanAttribute })
-  set dark(darkTheme: boolean) {
+  readonly #colorSchemeChange = effect(() => {
+    const colorScheme = this.colorScheme();
+    colorScheme ? this.setTheme(colorScheme) : this.unsetTheme();
+  });
+
+  readonly dark = input(false, { transform: booleanAttribute });
+
+  readonly #darkChange = effect(() => {
+    const darkTheme = this.dark();
     darkTheme ? this.setTheme('dark') : this.unsetTheme();
-  }
+  });
 
   setTheme(theme?: string): void {
     if (theme) {
