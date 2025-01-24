@@ -1,9 +1,10 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-header-divider, [cHeaderDivider]',
-  template: ``
+  template: ``,
+  host: {
+    class: 'header-divider'
+  }
 })
-export class HeaderDividerComponent {
-  @HostBinding('class.header-divider') headerDividerClass = true;
-}
+export class HeaderDividerComponent {}

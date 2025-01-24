@@ -1,18 +1,19 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'c-header-brand',
-  template: '<ng-content />'
+  template: '<ng-content />',
+  exportAs: 'cHeaderBrand',
+  host: {
+    '[attr.role]': 'role()',
+    class: 'header-brand'
+  }
 })
 export class HeaderBrandComponent {
   /**
    * Default role for header-brand. [docs]
-   * @type string
+   * @return string
    * @default 'button'
    */
-  @HostBinding('attr.role')
-  @Input()
-  role = 'button';
-
-  @HostBinding('class.header-brand') headerBrandClass = true;
+  readonly role = input('button');
 }

@@ -9,8 +9,7 @@ describe('HeaderNavComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HeaderNavComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -25,5 +24,9 @@ describe('HeaderNavComponent', () => {
 
   it('should have css classes', () => {
     expect(fixture.nativeElement).toHaveClass('header-nav');
+  });
+
+  it('should have role', () => {
+    expect(fixture.nativeElement.getAttribute('role')).toBe('navigation');
   });
 });

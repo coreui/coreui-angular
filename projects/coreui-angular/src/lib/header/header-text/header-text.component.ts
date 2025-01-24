@@ -1,9 +1,10 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'c-header-text, [cHeaderText]',
-  template: '<ng-content />'
+  template: '<ng-content />',
+  host: {
+    class: 'header-text'
+  }
 })
-export class HeaderTextComponent {
-  @HostBinding('class.header-text') headerTextClass = true;
-}
+export class HeaderTextComponent {}
