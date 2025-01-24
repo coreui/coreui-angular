@@ -7,13 +7,20 @@ class MockElementRef extends ElementRef {}
 describe('ElementRefDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: ElementRef, useClass: MockElementRef }],
+      providers: [{ provide: ElementRef, useClass: MockElementRef }]
     });
   });
   it('should create an instance', () => {
     TestBed.runInInjectionContext(() => {
       const directive = new ElementRefDirective();
       expect(directive).toBeTruthy();
+    });
+  });
+
+  it('should expose elementRef', () => {
+    TestBed.runInInjectionContext(() => {
+      const directive = new ElementRefDirective();
+      expect(directive.elementRef).toBeInstanceOf(ElementRef);
     });
   });
 });
