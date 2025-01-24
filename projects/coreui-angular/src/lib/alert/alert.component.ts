@@ -1,14 +1,13 @@
 import {
-  AfterContentInit,
   booleanAttribute,
   Component,
-  ContentChildren,
-  EventEmitter,
-  HostBinding,
-  HostListener,
-  Input,
-  Output,
-  QueryList
+  computed,
+  contentChildren,
+  effect,
+  input,
+  output,
+  signal,
+  TemplateRef
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
@@ -17,87 +16,84 @@ import { Colors } from '../coreui.types';
 import { TemplateIdDirective } from '../shared';
 import { ButtonCloseDirective } from '../button';
 
-type AnimateType = ('hide' | 'show');
+type AnimateType = 'hide' | 'show';
 
 @Component({
-    selector: 'c-alert',
-    templateUrl: './alert.component.html',
-    styleUrls: ['./alert.component.scss'],
-    exportAs: 'cAlert',
-    imports: [NgTemplateOutlet, ButtonCloseDirective],
-    animations: [
-        trigger('fadeInOut', [
-            state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),
-            state('hide', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
-            state('void', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
-            transition('show => hide', [
-                animate('.3s ease-out')
-            ]),
-            transition('hide => show', [
-                animate('.3s ease-in')
-            ]),
-            transition('show => void', [
-                animate('.3s ease-out')
-            ]),
-            transition('void => show', [
-                animate('.3s ease-in')
-            ])
-        ])
-    ]
+  selector: 'c-alert',
+  templateUrl: './alert.component.html',
+  styleUrls: ['./alert.component.scss'],
+  exportAs: 'cAlert',
+  imports: [NgTemplateOutlet, ButtonCloseDirective],
+  animations: [
+    trigger('fadeInOut', [
+      state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),
+      state('hide', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
+      state('void', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
+      transition('show => hide', [animate('.3s ease-out')]),
+      transition('hide => show', [animate('.3s ease-in')]),
+      transition('show => void', [animate('.3s ease-out')]),
+      transition('void => show', [animate('.3s ease-in')])
+    ])
+  ],
+  host: {
+    '[@.disabled]': '!fade()',
+    '[@fadeInOut]': 'animateType',
+    '[attr.role]': 'role()',
+    '[class]': 'hostClasses()',
+    '(@fadeInOut.start)': 'onAnimationStart($event)',
+    '(@fadeInOut.done)': 'onAnimationDone($event)'
+  }
 })
-export class AlertComponent implements AfterContentInit {
-
-  hide!: boolean;
+export class AlertComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   *
-   * @type Colors
+   * @return Colors
    * @default 'primary'
    */
-  @Input() color: Colors = 'primary';
+  readonly color = input<Colors>('primary');
+
   /**
    * Default role for alert. [docs]
-   * @type string
+   * @return string
    * @default 'alert'
    */
-  @HostBinding('attr.role')
-  @Input() role = 'alert';
+  readonly role = input('alert');
+
   /**
    * Set the alert variant to a solid.
-   * @type string
+   * @return string
    */
-  @Input() variant?: 'solid' | string;
-  /**
-   * Event triggered on the alert dismiss.
-   */
-  @Output() visibleChange: EventEmitter<boolean> = new EventEmitter();
-  templates: any = {};
-  @ContentChildren(TemplateIdDirective, { descendants: true }) contentTemplates!: QueryList<TemplateIdDirective>;
+  readonly variant = input<'solid'>();
 
   /**
    * Optionally adds a close button to alert and allow it to self dismiss.
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) dismissible: boolean = false;
+  readonly dismissible = input(false, { transform: booleanAttribute });
 
   /**
    * Adds animation for dismissible alert.
-   * @type boolean
+   * @return boolean
    */
-  @Input({ transform: booleanAttribute }) fade: boolean = false;
+  readonly fade = input(false, { transform: booleanAttribute });
 
   /**
    * Toggle the visibility of alert component.
-   * @type boolean
+   * @return boolean
    */
-  @Input({ transform: booleanAttribute })
+  readonly visibleInput = input(true, { transform: booleanAttribute, alias: 'visible' });
+
+  readonly #visibleInputEffect = effect(() => {
+    this.visible = this.visibleInput();
+  });
+
   set visible(value: boolean) {
     if (this.#visible !== value) {
       this.#visible = value;
       this.visibleChange.emit(value);
     }
-  };
+  }
 
   get visible() {
     return this.#visible;
@@ -105,51 +101,57 @@ export class AlertComponent implements AfterContentInit {
 
   #visible: boolean = true;
 
-  @HostBinding('@.disabled')
-  get animationDisabled(): boolean {
-    return !this.fade;
-  }
+  readonly hide = signal<boolean>(false);
 
-  @HostBinding('@fadeInOut')
+  /**
+   * Event triggered on the alert dismiss.
+   */
+  readonly visibleChange = output<boolean>();
+
+  readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
+
+  readonly templates = computed(() => {
+    return this.contentTemplates().reduce(
+      (acc, child) => {
+        acc[child.id] = child.templateRef;
+        return acc;
+      },
+      {} as Record<string, TemplateRef<any>>
+    );
+  });
+
   get animateType(): AnimateType {
     return this.visible ? 'show' : 'hide';
   }
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const color = this.color();
+    const variant = this.variant();
     return {
       alert: true,
-      'alert-dismissible': this.dismissible,
-      fade: this.fade,
-      show: !this.hide,
-      [`alert-${this.color}`]: !!this.color && this.variant !== 'solid',
-      [`bg-${this.color}`]: !!this.color && this.variant === 'solid',
-      'text-white': !!this.color && this.variant === 'solid'
-    };
-  }
+      'alert-dismissible': this.dismissible(),
+      fade: this.fade(),
+      show: !this.hide(),
+      [`alert-${color}`]: !!color && variant !== 'solid',
+      [`bg-${color}`]: !!color && variant === 'solid',
+      'text-white': !!color && variant === 'solid'
+    } as Record<string, boolean>;
+  });
 
-  @HostListener('@fadeInOut.start', ['$event'])
   onAnimationStart($event: AnimationEvent): void {
     this.onAnimationEvent($event);
   }
 
-  @HostListener('@fadeInOut.done', ['$event'])
   onAnimationDone($event: AnimationEvent): void {
     this.onAnimationEvent($event);
   }
 
-  ngAfterContentInit(): void {
-    this.contentTemplates.forEach((child: TemplateIdDirective) => {
-      this.templates[child.id] = child.templateRef;
-    });
-  }
-
   onAnimationEvent(event: AnimationEvent): void {
-    this.hide = event.phaseName === 'start' && event.toState === 'show';
+    this.hide.set(event.phaseName === 'start' && event.toState === 'show');
     if (event.phaseName === 'done') {
-      this.hide = (event.toState === 'hide' || event.toState === 'void');
+      this.hide.set(event.toState === 'hide' || event.toState === 'void');
       if (event.toState === 'show') {
-        this.hide = false;
+        this.hide.set(false);
       }
     }
   }

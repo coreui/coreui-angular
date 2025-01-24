@@ -1,6 +1,6 @@
-@if (visible || !hide) {
-  @if (dismissible) {
-    <ng-container *ngTemplateOutlet="templates?.alertButtonCloseTemplate || defaultAlertButtonCloseTemplate" />
+@if (visible || !hide()) {
+  @if (dismissible()) {
+    <ng-container *ngTemplateOutlet="templates()?.['alertButtonCloseTemplate'] || defaultAlertButtonCloseTemplate" />
   }
   <ng-content />
 }
