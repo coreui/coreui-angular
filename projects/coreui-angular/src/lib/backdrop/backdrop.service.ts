@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class BackdropService {
-
   readonly #backdropClick = new Subject<boolean>();
   readonly backdropClick$ = this.#backdropClick.asObservable();
 
@@ -58,7 +57,9 @@ export class BackdropService {
     return undefined;
   }
 
-  get #isRTL() { return this.#document.documentElement.dir === 'rtl' || this.#document.body.dir === 'rtl'; }
+  get #isRTL() {
+    return [this.#document.documentElement.dir, this.#document.body.dir].includes('rtl');
+  }
 
   #scrollBarVisible = true;
 

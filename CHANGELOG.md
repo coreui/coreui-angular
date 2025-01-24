@@ -3,6 +3,20 @@
 
 ---
 
+#### `5.3.9` wip
+
+- fix(accordion): accordion item not expanded when visible=true on init (regression)
+- refactor(alert): signal inputs, host bindings, cleanup, tests
+- refactor(breadcrumb): signal inputs, host bindings, cleanup, tests
+- refactor(grid): signal inputs, host bindings, cleanup, tests
+- refactor(header): signal inputs, host bindings, cleanup, tests
+- refactor(theme.directive): signal inputs, host bindings, cleanup, tests
+- test(accordion): coverage
+- test(element-ref): update
+- test(backdrop): coverage
+
+---
+
 #### `5.3.8`
 
 - chore(dependencies): update to `Angular 19.1`
