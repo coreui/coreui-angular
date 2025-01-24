@@ -6,6 +6,7 @@ interface IBreadcrumbItem {
   attributes?: INavAttributes;
   linkProps?: INavLinkProps;
   class?: string;
+  queryParams?: { [key: string]: any };
 }
 
 export { INavAttributes, INavLinkProps, IBreadcrumbItem };

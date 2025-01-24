@@ -1,26 +1,26 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'c-breadcrumb',
   template: '<ng-content />',
-  host: { class: 'breadcrumb' }
+  host: {
+    class: 'breadcrumb',
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.role]': 'role()'
+  }
 })
 export class BreadcrumbComponent {
   /**
    * Default aria-label for breadcrumb. [docs]
-   * @type string
+   * @return string
    * @default 'breadcrumb'
    */
-  @HostBinding('attr.aria-label')
-  @Input()
-  ariaLabel = 'breadcrumb';
+  readonly ariaLabel = input('breadcrumb');
 
   /**
    * Default role for breadcrumb. [docs]
-   * @type string
+   * @return string
    * @default 'navigation'
    */
-  @HostBinding('attr.role')
-  @Input()
-  role = 'navigation';
+  readonly role = input('navigation');
 }

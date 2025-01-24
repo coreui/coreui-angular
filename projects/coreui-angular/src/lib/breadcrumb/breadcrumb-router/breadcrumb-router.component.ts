@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, effect, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
@@ -12,35 +12,31 @@ import { BreadcrumbItemComponent } from '../breadcrumb-item/breadcrumb-item.comp
   templateUrl: './breadcrumb-router.component.html',
   imports: [BreadcrumbComponent, BreadcrumbItemComponent, AsyncPipe]
 })
-export class BreadcrumbRouterComponent implements OnChanges, OnDestroy, OnInit {
+export class BreadcrumbRouterComponent implements OnDestroy, OnInit {
   readonly service = inject(BreadcrumbRouterService);
 
   /**
    * Optional array of IBreadcrumbItem to override default BreadcrumbRouter behavior. [docs]
-   * @type IBreadcrumbItem[]
+   * @return IBreadcrumbItem[]
    */
-  @Input() items?: IBreadcrumbItem[];
+  readonly items = input<IBreadcrumbItem[]>();
   public breadcrumbs: Observable<IBreadcrumbItem[]> | undefined;
 
   ngOnInit(): void {
     this.breadcrumbs = this.service.breadcrumbs$;
   }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['items']) {
-      this.setup();
-    }
-  }
-
-  setup(): void {
-    if (this.items && this.items.length > 0) {
+  readonly setup = effect(() => {
+    const items = this.items();
+    if (items && items.length > 0) {
       this.breadcrumbs = new Observable<IBreadcrumbItem[]>((observer: Observer<IBreadcrumbItem[]>) => {
-        if (this.items) {
-          observer.next(this.items);
+        const itemsValue = this.items();
+        if (itemsValue) {
+          observer.next(itemsValue);
         }
       });
     }
-  }
+  });
 
   ngOnDestroy(): void {
     this.breadcrumbs = undefined;
