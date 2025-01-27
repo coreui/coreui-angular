@@ -16,6 +16,7 @@
 - test(accordion): coverage
 - test(element-ref): update
 - test(backdrop): coverage
+- test(placeholder): coverage
 
 ---
 
