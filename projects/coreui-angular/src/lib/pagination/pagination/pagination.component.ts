@@ -1,37 +1,39 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
-    selector: 'c-pagination',
-    templateUrl: './pagination.component.html',
-    imports: [NgClass]
+  selector: 'c-pagination',
+  templateUrl: './pagination.component.html',
+  imports: [NgClass],
+  host: {
+    '[attr.role]': 'role()'
+  }
 })
 export class PaginationComponent {
-
   /**
    * Set the alignment of pagination components.
    * @values 'start', 'center', 'end'
    */
-  @Input() align: 'start' | 'center' | 'end' | '' = '';
+  readonly align = input<'start' | 'center' | 'end' | ''>('');
   /**
    * Size the component small or large.
    * @values 'sm', 'lg'
    */
-  @Input() size?: 'sm' | 'lg';
+  readonly size = input<'sm' | 'lg'>();
   /**
    * Default role for pagination. [docs]
-   * @type string
+   * @return string
    * @default 'navigation'
    */
-  @HostBinding('attr.role')
-  @Input() role = 'navigation';
+  readonly role = input<string>('navigation');
 
-  get paginationClass(): any {
+  readonly paginationClass = computed(() => {
+    const size = this.size();
+    const align = this.align();
     return {
       pagination: true,
-      [`pagination-${this.size}`]: !!this.size,
-      [`justify-content-${this.align}`]: !!this.align
-    };
-  }
-
+      [`pagination-${size}`]: !!size,
+      [`justify-content-${align}`]: !!align
+    } as Record<string, boolean>;
+  });
 }

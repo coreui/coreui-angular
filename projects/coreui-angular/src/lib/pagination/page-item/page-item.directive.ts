@@ -1,74 +1,58 @@
-import {
-  AfterContentInit,
-  ContentChild,
-  Directive,
-  ElementRef,
-  HostBinding,
-  inject,
-  Input,
-  OnChanges,
-  Renderer2,
-  SimpleChanges
-} from '@angular/core';
+import { computed, contentChild, Directive, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
 
 import { PageLinkDirective } from '../page-link/page-link.directive';
 
 @Directive({
   selector: '[cPageItem]',
-  host: { class: 'page-item' }
+  host: {
+    class: 'page-item',
+    '[class]': 'hostClasses()',
+    '[attr.aria-current]': 'ariaCurrent()'
+  }
 })
-export class PageItemDirective implements AfterContentInit, OnChanges {
+export class PageItemDirective {
   readonly #renderer = inject(Renderer2);
 
   /**
    * Toggle the active state for the component.
-   * @type boolean
+   * @return boolean
    */
-  @Input() active?: boolean;
+  readonly active = input<boolean>();
+
   /**
    * Toggle the disabled state for the component.
-   * @type boolean
+   * @return boolean
    */
-  @Input() disabled?: boolean;
+  readonly disabled = input<boolean>();
 
-  @HostBinding('attr.aria-current')
-  get ariaCurrent(): string | null {
-    return this.active ? 'page' : null;
-  }
+  readonly ariaCurrent = computed(() => {
+    return this.active() ? 'page' : null;
+  });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
       'page-item': true,
-      disabled: this.disabled,
-      active: this.active
-    };
-  }
+      disabled: this.disabled(),
+      active: this.active()
+    } as Record<string, boolean>;
+  });
 
-  @ContentChild(PageLinkDirective, { read: ElementRef }) pageLinkElementRef!: ElementRef;
+  readonly pageLinkElementRef = contentChild(PageLinkDirective, { read: ElementRef });
 
-  ngAfterContentInit(): void {
-    this.setAttributes();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['disabled']) {
-      this.setAttributes();
-    }
-  }
-
-  setAttributes(): void {
-    if (!this.pageLinkElementRef) {
+  readonly pageLinkElementRefEffect = effect(() => {
+    const pageLinkElementRef = this.pageLinkElementRef();
+    const disabled = this.disabled();
+    if (!pageLinkElementRef) {
       return;
     }
-    const pageLinkElement = this.pageLinkElementRef.nativeElement;
+    const pageLinkElement = pageLinkElementRef.nativeElement;
 
-    if (this.disabled) {
+    if (disabled) {
       this.#renderer.setAttribute(pageLinkElement, 'aria-disabled', 'true');
       this.#renderer.setAttribute(pageLinkElement, 'tabindex', '-1');
     } else {
       this.#renderer.removeAttribute(pageLinkElement, 'aria-disabled');
       this.#renderer.removeAttribute(pageLinkElement, 'tabindex');
     }
-  }
+  });
 }

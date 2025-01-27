@@ -9,8 +9,7 @@ describe('PaginationItemComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PageItemComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
