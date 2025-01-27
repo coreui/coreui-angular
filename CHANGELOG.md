@@ -11,6 +11,7 @@
 - refactor(grid): signal inputs, host bindings, cleanup, tests
 - refactor(header): signal inputs, host bindings, cleanup, tests
 - refactor(theme.directive): signal inputs, host bindings, cleanup, tests
+- refactor(offcanvas): signal inputs, host bindings, cleanup, tests
 - test(accordion): coverage
 - test(element-ref): update
 - test(backdrop): coverage

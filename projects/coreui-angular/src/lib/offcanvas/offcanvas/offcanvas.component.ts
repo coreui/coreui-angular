@@ -3,18 +3,20 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   booleanAttribute,
   Component,
+  computed,
   DestroyRef,
+  effect,
   ElementRef,
   EventEmitter,
-  HostBinding,
-  HostListener,
   inject,
-  Input,
+  input,
   OnDestroy,
   OnInit,
-  Output,
+  output,
   PLATFORM_ID,
-  Renderer2
+  Renderer2,
+  signal,
+  untracked
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { A11yModule } from '@angular/cdk/a11y';
@@ -52,7 +54,19 @@ let nextId = 0;
   exportAs: 'cOffcanvas',
   imports: [A11yModule],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-  host: { ngSkipHydration: 'true', '[attr.inert]': 'ariaHidden || null' }
+  host: {
+    ngSkipHydration: 'true',
+    '[@showHide]': 'animateTrigger',
+    '[attr.id]': 'id()',
+    '[attr.inert]': 'ariaHidden() || null',
+    '[attr.role]': 'role()',
+    '[attr.aria-modal]': 'ariaModal()',
+    '[attr.tabindex]': 'tabIndex',
+    '[class]': 'hostClasses()',
+    '(@showHide.start)': 'animateStart($event)',
+    '(@showHide.done)': 'animateDone($event)',
+    '(document:keydown)': 'onKeyDownHandler($event)'
+  }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly #document = inject<Document>(DOCUMENT);
@@ -66,45 +80,47 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Apply a backdrop on body while offcanvas is open.
-   * @type boolean | 'static'
+   * @return boolean | 'static'
    * @default true
    */
-  @Input() backdrop: boolean | 'static' = true;
+  readonly backdrop = input<boolean | 'static'>(true);
 
   /**
    * Closes the offcanvas when escape key is pressed [docs]
-   * @type boolean
+   * @return boolean
    * @default true
    */
-  @Input({ transform: booleanAttribute }) keyboard = true;
+  readonly keyboard = input(true, { transform: booleanAttribute });
 
   /**
    * Components placement, there’s no default placement.
-   * @type {'start' | 'end' | 'top' | 'bottom'}
+   * @return {'start' | 'end' | 'top' | 'bottom'}
    * @default 'start'
    */
-  @Input() placement: string | 'start' | 'end' | 'top' | 'bottom' = 'start';
+  readonly placement = input<string | 'start' | 'end' | 'top' | 'bottom'>('start');
 
   /**
    * Responsive offcanvas property hides content outside the viewport from a specified breakpoint and down.
-   * @type boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+   * @return boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
    * @default true
    * @since 4.3.10
    */
-  @Input() responsive?: boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' = true;
-  @Input() id = `offcanvas-${this.placement}-${nextId++}`;
+  readonly responsive = input<(boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl') | undefined>(true);
+  readonly id = input(`offcanvas-${this.placement()}-${nextId++}`);
+
   /**
    * Default role for offcanvas. [docs]
-   * @type string
+   * @return string
    * @default 'dialog'
    */
-  @Input() @HostBinding('attr.role') role = 'dialog';
+  readonly role = input<string>('dialog');
+
   /**
    * Set aria-modal html attr for offcanvas. [docs]
-   * @type boolean
+   * @return boolean
    * @default true
    */
-  @Input({ transform: booleanAttribute }) @HostBinding('attr.aria-modal') ariaModal = true;
+  readonly ariaModal = input(true, { transform: booleanAttribute });
 
   #activeBackdrop!: HTMLDivElement;
   #backdropClickSubscription!: Subscription;
@@ -113,68 +129,70 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Allow body scrolling while offcanvas is visible.
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) scroll: boolean = false;
+  readonly scroll = input(false, { transform: booleanAttribute });
 
   /**
    * Toggle the visibility of offcanvas component.
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute })
-  set visible(value: boolean) {
-    this.#visible = value;
-    if (this.#visible) {
-      this.setBackdrop(this.backdrop);
+  readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
+
+  readonly visibleInputEffect = effect(() => {
+    const visible = this.visibleInput();
+    untracked(() => {
+      this.visible.set(visible);
+    });
+  });
+
+  readonly visible = signal(false);
+
+  readonly visibleEffect = effect(() => {
+    const visible = this.visible();
+    if (visible) {
+      this.setBackdrop(this.backdrop());
       this.setFocus();
     } else {
       this.setBackdrop(false);
     }
-    this.layoutChangeSubscribe(this.#visible);
-    this.visibleChange.emit(value);
-  }
-
-  get visible(): boolean {
-    return this.#visible;
-  }
-
-  #visible: boolean = false;
+    this.layoutChangeSubscribe(visible);
+    this.visibleChange.emit(visible);
+  });
 
   /**
    * Event triggered on visible change.
-   * @type EventEmitter<boolean>
+   * @return EventEmitter<boolean>
    */
-  @Output() readonly visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  readonly visibleChange = output<boolean>();
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const responsive = this.responsive();
+    const placement = this.placement();
     return {
-      offcanvas: typeof this.responsive === 'boolean',
-      [`offcanvas-${this.responsive}`]: typeof this.responsive !== 'boolean',
-      [`offcanvas-${this.placement}`]: !!this.placement,
+      offcanvas: typeof responsive === 'boolean',
+      [`offcanvas-${responsive}`]: typeof responsive !== 'boolean',
+      [`offcanvas-${placement}`]: !!placement,
       show: this.show
-    };
-  }
+    } as Record<string, boolean>;
+  });
 
-  // @HostBinding('attr.aria-hidden')
-  get ariaHidden(): boolean | null {
-    return this.visible ? null : true;
-  }
+  readonly ariaHidden = computed(() => {
+    return this.visible() ? null : true;
+  });
 
-  @HostBinding('attr.tabindex')
   get tabIndex(): string | null {
     return '-1';
   }
 
-  @HostBinding('@showHide')
   get animateTrigger(): string {
-    return this.visible ? 'visible' : 'hidden';
+    return this.visible() ? 'visible' : 'hidden';
   }
 
   get show(): boolean {
-    return this.visible && this.#show;
+    return this.visible() && this.#show;
   }
 
   set show(value: boolean) {
@@ -182,22 +200,21 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   get responsiveBreakpoint(): string | false {
-    if (typeof this.responsive !== 'string') {
+    const responsive = this.responsive();
+    if (typeof responsive !== 'string') {
       return false;
     }
     const element: Element = this.#document.documentElement;
-    const responsiveBreakpoint = this.responsive;
     const breakpointValue =
       this.#document.defaultView
         ?.getComputedStyle(element)
-        ?.getPropertyValue(`--cui-breakpoint-${responsiveBreakpoint.trim()}`) ?? false;
+        ?.getPropertyValue(`--cui-breakpoint-${responsive.trim()}`) ?? false;
     return breakpointValue ? `${parseFloat(breakpointValue.trim()) - 0.02}px` : false;
   }
 
-  @HostListener('@showHide.start', ['$event'])
   animateStart(event: AnimationEvent) {
     if (event.toState === 'visible') {
-      if (!this.scroll) {
+      if (!this.scroll()) {
         this.#backdropService.hideScrollbar();
       }
       this.#renderer.addClass(this.#hostElement.nativeElement, 'showing');
@@ -206,7 +223,6 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('@showHide.done', ['$event'])
   animateDone(event: AnimationEvent) {
     setTimeout(() => {
       if (event.toState === 'visible') {
@@ -218,13 +234,12 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
         this.#renderer.removeStyle(this.#document.body, 'paddingRight');
       }
     });
-    this.show = this.visible;
+    this.show = this.visible();
   }
 
-  @HostListener('document:keydown', ['$event'])
   onKeyDownHandler(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this.keyboard && this.visible && this.backdrop !== 'static') {
-      this.#offcanvasService.toggle({ show: false, id: this.id });
+    if (event.key === 'Escape' && this.keyboard() && this.visible() && this.backdrop() !== 'static') {
+      this.#offcanvasService.toggle({ show: false, id: this.id() });
     }
   }
 
@@ -237,7 +252,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.#offcanvasService.toggle({ show: false, id: this.id });
+    this.#offcanvasService.toggle({ show: false, id: this.id() });
   }
 
   setFocus(): void {
@@ -248,9 +263,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   private stateToggleSubscribe(): void {
     this.#offcanvasService.offcanvasState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
-      if (this === action.offcanvas || this.id === action.id) {
+      if (this === action.offcanvas || this.id() === action.id) {
         if ('show' in action) {
-          this.visible = action?.show === 'toggle' ? !this.visible : action.show;
+          this.visible.update((value) => (action?.show === 'toggle' ? !value : action.show));
         }
       }
     });
@@ -261,14 +276,14 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       this.#backdropClickSubscription = this.#backdropService.backdropClick$
         .pipe(takeUntilDestroyed(this.#destroyRef))
         .subscribe((clicked) => {
-          this.#offcanvasService.toggle({ show: !clicked, id: this.id });
+          this.#offcanvasService.toggle({ show: !clicked, id: this.id() });
         });
     } else {
       this.#backdropClickSubscription?.unsubscribe();
     }
   }
 
-  private setBackdrop(setBackdrop: boolean | 'static'): void {
+  protected setBackdrop(setBackdrop: boolean | 'static'): void {
     this.#activeBackdrop = !!setBackdrop
       ? this.#backdropService.setBackdrop('offcanvas')
       : this.#backdropService.clearBackdrop(this.#activeBackdrop);
@@ -291,7 +306,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
           takeUntilDestroyed(this.#destroyRef)
         )
         .subscribe((breakpointState: BreakpointState) => {
-          this.visible = breakpointState.matches;
+          this.visible.set(breakpointState.matches);
         });
     } else {
       this.#layoutChangeSubscription?.unsubscribe();

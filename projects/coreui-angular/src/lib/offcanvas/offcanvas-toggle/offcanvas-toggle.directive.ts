@@ -1,22 +1,24 @@
-import { Directive, HostListener, inject, Input } from '@angular/core';
+import { Directive, inject, input } from '@angular/core';
 
 import { OffcanvasService } from '../offcanvas.service';
 
 @Directive({
-  selector: '[cOffcanvasToggle]'
+  selector: '[cOffcanvasToggle]',
+  host: {
+    '(click)': 'toggleOpen($event)'
+  }
 })
 export class OffcanvasToggleDirective {
   readonly #offcanvasService = inject(OffcanvasService);
 
   /**
    * Html id attr of offcanvas to toggle.
-   * @type string
+   * @return string
    */
-  @Input('cOffcanvasToggle') id?: string;
+  readonly id = input<string>(undefined, { alias: 'cOffcanvasToggle' });
 
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any): void {
+  protected toggleOpen($event: MouseEvent): void {
     $event.preventDefault();
-    this.#offcanvasService.toggle({ show: 'toggle', id: this.id });
+    this.#offcanvasService.toggle({ show: 'toggle', id: this.id() });
   }
 }

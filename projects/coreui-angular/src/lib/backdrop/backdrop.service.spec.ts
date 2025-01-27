@@ -47,7 +47,7 @@ describe('BackdropService', () => {
     expect(document.body.style.overflow).not.toBe('hidden');
   });
 
-  it('should emit backdrop click', fakeAsync(() => {
+  it('should react to backdrop click', fakeAsync(() => {
     backdrop = service.setBackdrop();
     tick();
     service.backdropClick$.subscribe((value) => {

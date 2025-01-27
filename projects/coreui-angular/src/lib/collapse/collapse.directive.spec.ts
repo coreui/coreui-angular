@@ -7,8 +7,8 @@ import { By } from '@angular/platform-browser';
 class MockElementRef extends ElementRef {}
 
 @Component({
-    template: '<div cCollapse horizontal>Test</div>',
-    imports: [CollapseDirective]
+  template: '<div cCollapse horizontal>Test</div>',
+  imports: [CollapseDirective]
 })
 class TestComponent {}
 
@@ -16,7 +16,6 @@ describe('CollapseDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let elementRef: DebugElement;
-  let renderer: Renderer2;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
