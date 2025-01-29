@@ -3,8 +3,8 @@ import {
   Component,
   computed,
   contentChildren,
-  effect,
   input,
+  linkedSignal,
   output,
   signal,
   TemplateRef
@@ -70,7 +70,22 @@ export class AlertComponent {
    * @return boolean
    * @default false
    */
-  readonly dismissible = input(false, { transform: booleanAttribute });
+  readonly dismissibleInput = input(false, { transform: booleanAttribute, alias: 'dismissible' });
+
+  readonly #dismissible = linkedSignal({
+    source: () => this.dismissibleInput(),
+    computation: (value) => {
+      return value;
+    }
+  });
+
+  set dismissible(value: boolean) {
+    this.#dismissible.set(value);
+  }
+
+  get dismissible() {
+    return this.#dismissible();
+  }
 
   /**
    * Adds animation for dismissible alert.
@@ -84,22 +99,23 @@ export class AlertComponent {
    */
   readonly visibleInput = input(true, { transform: booleanAttribute, alias: 'visible' });
 
-  readonly #visibleInputEffect = effect(() => {
-    this.visible = this.visibleInput();
+  readonly #visible = linkedSignal({
+    source: () => this.visibleInput(),
+    computation: (value) => {
+      return value;
+    }
   });
 
   set visible(value: boolean) {
-    if (this.#visible !== value) {
-      this.#visible = value;
+    if (this.#visible() !== value) {
+      this.#visible.set(value);
       this.visibleChange.emit(value);
     }
   }
 
   get visible() {
-    return this.#visible;
+    return this.#visible();
   }
-
-  #visible: boolean = true;
 
   readonly hide = signal<boolean>(false);
 
@@ -129,7 +145,7 @@ export class AlertComponent {
     const variant = this.variant();
     return {
       alert: true,
-      'alert-dismissible': this.dismissible(),
+      'alert-dismissible': this.dismissible,
       fade: this.fade(),
       show: !this.hide(),
       [`alert-${color}`]: !!color && variant !== 'solid',
