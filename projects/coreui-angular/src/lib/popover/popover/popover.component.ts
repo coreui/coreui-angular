@@ -29,7 +29,7 @@ export class PopoverComponent implements OnDestroy {
 
   /**
    * Content of popover
-   * @type {string | TemplateRef}
+   * @return {string | TemplateRef}
    */
   readonly content = input<string | TemplateRef<any>>('');
 
@@ -39,7 +39,7 @@ export class PopoverComponent implements OnDestroy {
 
   /**
    * Toggle the visibility of popover component.
-   * @type boolean
+   * @return boolean
    */
   readonly visible = input(false, { transform: booleanAttribute });
   readonly id = input<string>();

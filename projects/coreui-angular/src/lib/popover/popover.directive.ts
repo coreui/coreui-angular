@@ -44,7 +44,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Content of popover
-   * @type {string | TemplateRef}
+   * @return {string | TemplateRef}
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cPopover' });
 
@@ -74,14 +74,14 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Describes the placement of your component after Popper.js has applied all the modifiers that may have flipped or altered the originally provided placement property.
-   * @type: 'top' | 'bottom' | 'left' | 'right'
+   * @return: 'top' | 'bottom' | 'left' | 'right'
    * @default: 'top'
    */
   readonly placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'cPopoverPlacement' });
 
   /**
    * ElementRefDirective for positioning the tooltip on reference element
-   * @type: ElementRefDirective
+   * @return: ElementRefDirective
    * @default: undefined
    */
   readonly reference = input<ElementRefDirective | undefined>(undefined, { alias: 'cTooltipRef' });
@@ -90,13 +90,13 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Sets which event handlers you’d like provided to your toggle prop. You can specify one trigger or an array of them.
-   * @type: 'Triggers | Triggers[]
+   * @return: Triggers | Triggers[]
    */
   readonly trigger = input<Triggers | Triggers[]>('hover', { alias: 'cPopoverTrigger' });
 
   /**
    * Toggle the visibility of popover component.
-   * @type boolean
+   * @return boolean
    */
   readonly visible = model(false, { alias: 'cPopoverVisible' });
 
@@ -142,7 +142,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
       hostElement: this.#hostElement,
       trigger: this.trigger(),
       callbackToggle: () => {
-        this.visible.set(!this.visible());
+        this.visible.update((visible) => !visible);
       },
       callbackOff: () => {
         this.visible.set(false);
