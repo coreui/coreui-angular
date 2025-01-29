@@ -44,7 +44,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Content of tooltip
-   * @type {string | TemplateRef}
+   * @return {string | TemplateRef}
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cTooltip' });
 
@@ -56,7 +56,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Optional popper Options object, takes precedence over cPopoverPlacement prop
-   * @type Partial<Options>
+   * @return Partial<Options>
    */
   readonly popperOptions = input<Partial<Options>>({}, { alias: 'cTooltipOptions' });
 
@@ -74,14 +74,14 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Describes the placement of your component after Popper.js has applied all the modifiers that may have flipped or altered the originally provided placement property.
-   * @type: 'top' | 'bottom' | 'left' | 'right'
+   * @return: 'top' | 'bottom' | 'left' | 'right'
    * @default: 'top'
    */
   readonly placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'cTooltipPlacement' });
 
   /**
    * ElementRefDirective for positioning the tooltip on reference element
-   * @type: ElementRefDirective
+   * @return: ElementRefDirective
    * @default: undefined
    */
   readonly reference = input<ElementRefDirective | undefined>(undefined, { alias: 'cTooltipRef' });
@@ -90,13 +90,13 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Sets which event handlers you’d like provided to your toggle prop. You can specify one trigger or an array of them.
-   * @type: 'Triggers | Triggers[]
+   * @return: 'Triggers | Triggers[]
    */
   readonly trigger = input<Triggers | Triggers[]>('hover', { alias: 'cTooltipTrigger' });
 
   /**
    * Toggle the visibility of tooltip component.
-   * @type boolean
+   * @return boolean
    */
   readonly visible = model(false, { alias: 'cTooltipVisible' });
 
@@ -142,7 +142,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
       hostElement: this.#hostElement,
       trigger: this.trigger(),
       callbackToggle: () => {
-        this.visible.set(!this.visible());
+        this.visible.update((value) => !value);
       },
       callbackOff: () => {
         this.visible.set(false);
