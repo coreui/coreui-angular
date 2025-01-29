@@ -9,6 +9,7 @@ import {
   ElementRef,
   inject,
   input,
+  linkedSignal,
   OnDestroy,
   output,
   Renderer2,
@@ -46,10 +47,9 @@ export class CollapseDirective implements OnDestroy {
    */
   readonly animateInput = input(true, { transform: booleanAttribute, alias: 'animate' });
 
-  readonly animate = signal(true);
-
-  readonly #animateInputEffect = effect(() => {
-    this.animate.set(this.animateInput());
+  readonly animate = linkedSignal({
+    source: () => this.animateInput(),
+    computation: (value: boolean) => value
   });
 
   /**
@@ -68,17 +68,14 @@ export class CollapseDirective implements OnDestroy {
 
   readonly visibleChange = output<boolean>();
 
-  readonly #visibleInputEffect = effect(() => {
-    this.visible.set(this.visibleInput());
-  });
-
-  readonly visible = signal(false);
+  readonly visible = linkedSignal({ source: () => this.visibleInput(), computation: (value: boolean) => value });
 
   readonly #initialized = signal(false);
 
   readonly #visibleEffect = effect(() => {
+    const visible = this.visible();
     if (this.#initialized()) {
-      this.createPlayer(this.visible());
+      this.createPlayer(visible);
     }
   });
 
