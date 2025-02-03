@@ -3,14 +3,13 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  EventEmitter,
-  HostBinding,
-  inject,
   Inject,
-  Input,
+  inject,
+  input,
+  linkedSignal,
   OnDestroy,
   OnInit,
-  Output
+  output
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent, Subscription } from 'rxjs';
@@ -28,80 +27,109 @@ import { CarouselConfig } from '../carousel.config';
   selector: 'c-carousel',
   template: '<ng-content />',
   styleUrls: ['./carousel.component.scss'],
-  providers: [CarouselService, CarouselState, CarouselConfig, ListenersService],
+  providers: [CarouselService, CarouselState, ListenersService],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-  host: { class: 'carousel slide' }
+  exportAs: 'cCarousel',
+  host: {
+    class: 'carousel slide',
+    '[class.carousel-fade]': 'transition() === "crossfade"'
+  }
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
-  constructor(
-    @Inject(CarouselConfig) private config: CarouselConfig,
-    private hostElement: ElementRef,
-    private carouselService: CarouselService,
-    private carouselState: CarouselState,
-    private intersectionService: IntersectionService,
-    private listenersService: ListenersService
-  ) {
-    Object.assign(this, config);
+  readonly #hostElement = inject(ElementRef);
+  readonly #carouselService = inject(CarouselService);
+  readonly #carouselState = inject(CarouselState);
+  readonly #intersectionService = inject(IntersectionService);
+  readonly #listenersService = inject(ListenersService);
+
+  constructor(@Inject(CarouselConfig) private config: CarouselConfig) {
+    this.loadConfig();
+  }
+
+  loadConfig() {
+    this.activeIndex.set(this.config?.activeIndex ?? this.activeIndex());
+    this.animate.set(this.config?.animate ?? this.animate());
+    this.direction.set(this.config?.direction ?? this.direction());
+    this.interval.set(this.config?.interval ?? this.interval());
   }
 
   /**
    * Index of the active item.
-   * @type number
+   * @return number
    */
-  @Input() activeIndex: number = 0;
+  readonly activeIndexInput = input<number>(0, { alias: 'activeIndex' });
+
+  readonly activeIndex = linkedSignal({
+    source: () => this.activeIndexInput(),
+    computation: (value: number) => value
+  });
+
   /**
    * Carousel automatically starts cycle items.
-   * @type boolean
+   * @return boolean
    */
-  @Input() animate: boolean = true;
+  readonly animateInput = input<boolean>(true, { alias: 'animate' });
+
+  readonly animate = linkedSignal({
+    source: () => this.animateInput(),
+    computation: (value: boolean) => value
+  });
+
   /**
    * Carousel direction. [docs]
-   * @type {'next' | 'prev'}
+   * @return {'next' | 'prev'}
    */
-  @Input() direction: 'next' | 'prev' = 'next';
+  readonly directionInput = input<'next' | 'prev'>('next', { alias: 'direction' });
+
+  readonly direction = linkedSignal({
+    source: () => this.directionInput(),
+    computation: (value: 'next' | 'prev') => value
+  });
+
   /**
    * The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.
-   * @type number
+   * @return number
    * @default 0
    */
-  @Input() interval: number = 0;
+  readonly intervalInput = input<number>(0, { alias: 'interval' });
+
+  readonly interval = linkedSignal({
+    source: () => this.intervalInput(),
+    computation: (value: number) => value
+  });
+
   /**
    * Sets which event handlers you’d like provided to your pause prop. You can specify one trigger or an array of them.
-   * @type {'hover' | 'focus' | 'click'}
+   * @return {'hover' | 'focus' | 'click'}
    */
-  @Input() pause: Triggers | Triggers[] | false = 'hover';
+  readonly pause = input<Triggers | Triggers[] | false>('hover');
+
   /**
    * Support left/right swipe interactions on touchscreen devices.
-   * @type boolean
+   * @return boolean
    * @default true
    */
-  @Input() touch: boolean = true;
+  readonly touch = input<boolean>(true);
+
   /**
    * Set type of the transition.
-   * @type {'slide' | 'crossfade'}
+   * @return {'slide' | 'crossfade'}
    * @default 'slide'
    */
-  @Input() transition: 'slide' | 'crossfade' = 'slide';
+  readonly transition = input<'slide' | 'crossfade'>('slide');
+
   /**
    * Set whether the carousel should cycle continuously or have hard stops.
-   * @type boolean
+   * @return boolean
    * @default true
    */
-  @Input() wrap: boolean = true;
+  readonly wrap = input<boolean>(true);
+
   /**
    * Event emitted on carousel item change. [docs]
-   * @type number
+   * @return number
    */
-  @Output() itemChange: EventEmitter<number> = new EventEmitter<number>();
-
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      carousel: true,
-      slide: true,
-      'carousel-fade': this.transition === 'crossfade'
-    };
-  }
+  readonly itemChange = output<number>();
 
   private timerId: ReturnType<typeof setTimeout> | undefined;
   private activeItemInterval = 0;
@@ -120,15 +148,15 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.intersectionServiceSubscribe();
-    this.carouselState.state = { activeItemIndex: this.activeIndex, animate: this.animate };
+    this.#carouselState.state = { activeItemIndex: this.activeIndex(), animate: this.animate() };
     this.setListeners();
     this.swipeSubscribe();
   }
 
   private setListeners(): void {
     const config: IListenersConfig = {
-      hostElement: this.hostElement,
-      trigger: this.pause || [],
+      hostElement: this.#hostElement,
+      trigger: this.pause() || [],
       callbackOff: () => {
         this.setTimer();
       },
@@ -136,30 +164,31 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
         this.resetTimer();
       }
     };
-    this.listenersService.setListeners(config);
+    this.#listenersService.setListeners(config);
   }
 
   private clearListeners(): void {
-    this.listenersService.clearListeners();
+    this.#listenersService.clearListeners();
   }
 
   set visible(value) {
-    this._visible = value;
+    this.#visible = value;
   }
 
   get visible() {
-    return this._visible;
+    return this.#visible;
   }
 
-  private _visible: boolean = true;
+  #visible: boolean = true;
 
   setTimer(): void {
     const interval = this.activeItemInterval || 0;
+    const direction = this.direction();
     this.resetTimer();
     if (interval > 0) {
       this.timerId = setTimeout(() => {
-        const nextIndex = this.carouselState.direction(this.direction);
-        this.carouselState.state = { activeItemIndex: nextIndex };
+        const nextIndex = this.#carouselState.direction(direction);
+        this.#carouselState.state = { activeItemIndex: nextIndex };
       }, interval);
     }
   }
@@ -170,26 +199,27 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   private carouselStateSubscribe(): void {
-    this.carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextItem) => {
-      if ('active' in nextItem) {
+    this.#carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextItem) => {
+      if ('active' in nextItem && typeof nextItem.active === 'number') {
         this.itemChange.emit(nextItem.active);
       }
       this.activeItemInterval =
-        typeof nextItem.interval === 'number' && nextItem.interval > -1 ? nextItem.interval : this.interval;
+        typeof nextItem.interval === 'number' && nextItem.interval > -1 ? nextItem.interval : this.interval();
+      const direction = this.direction();
       const isLastItem =
-        (nextItem.active === nextItem.lastItemIndex && this.direction === 'next') ||
-        (nextItem.active === 0 && this.direction === 'prev');
-      !this.wrap && isLastItem ? this.resetTimer() : this.setTimer();
+        (nextItem.active === nextItem.lastItemIndex && direction === 'next') ||
+        (nextItem.active === 0 && direction === 'prev');
+      !this.wrap() && isLastItem ? this.resetTimer() : this.setTimer();
     });
   }
 
   private intersectionServiceSubscribe(): void {
-    this.intersectionService.createIntersectionObserver(this.hostElement);
-    this.intersectionService.intersecting$
+    this.#intersectionService.createIntersectionObserver(this.#hostElement);
+    this.#intersectionService.intersecting$
       .pipe(
-        filter((next) => next.hostElement === this.hostElement),
+        filter((next) => next.hostElement === this.#hostElement),
         finalize(() => {
-          this.intersectionService.unobserve(this.hostElement);
+          this.#intersectionService.unobserve(this.#hostElement);
         }),
         takeUntilDestroyed(this.#destroyRef)
       )
@@ -200,8 +230,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   private swipeSubscribe(subscribe: boolean = true): void {
-    if (this.touch && subscribe) {
-      const carouselElement = this.hostElement.nativeElement;
+    if (this.touch() && subscribe) {
+      const carouselElement = this.#hostElement.nativeElement;
       const touchStart$ = fromEvent<TouchEvent>(carouselElement, 'touchstart');
       const touchEnd$ = fromEvent<TouchEvent>(carouselElement, 'touchend');
       const touchMove$ = fromEvent<TouchEvent>(carouselElement, 'touchmove');
@@ -210,10 +240,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
         .subscribe(([touchstart, [touchend, touchmove]]) => {
           touchstart.stopPropagation();
           touchmove.stopPropagation();
-          const distanceX = touchstart.touches[0].clientX - touchmove.touches[0].clientX;
+          const distanceX = touchstart.touches[0]?.clientX - touchmove.touches[0]?.clientX || 0;
           if (Math.abs(distanceX) > 0.3 * carouselElement.clientWidth && touchstart.timeStamp <= touchmove.timeStamp) {
-            const nextIndex = this.carouselState.direction(distanceX > 0 ? 'next' : 'prev');
-            this.carouselState.state = { activeItemIndex: nextIndex };
+            const nextIndex = this.#carouselState.direction(distanceX > 0 ? 'next' : 'prev');
+            this.#carouselState.state = { activeItemIndex: nextIndex };
           }
         });
     } else {

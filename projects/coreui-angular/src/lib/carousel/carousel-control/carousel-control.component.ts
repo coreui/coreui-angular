@@ -1,87 +1,77 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostBinding,
-  HostListener,
-  inject,
-  Input,
-  ViewChild
-} from '@angular/core';
+import { Component, computed, ElementRef, inject, input, linkedSignal, viewChild } from '@angular/core';
 
 import { CarouselState } from '../carousel-state';
 
 @Component({
   selector: 'c-carousel-control',
-  templateUrl: './carousel-control.component.html'
+  templateUrl: './carousel-control.component.html',
+  exportAs: 'cCarouselControl',
+  host: {
+    '[attr.role]': 'role()',
+    '[class]': 'hostClasses()',
+    '(keyup)': 'onKeyUp($event)',
+    '(click)': 'onClick($event)'
+  }
 })
-export class CarouselControlComponent implements AfterViewInit {
-  readonly #changeDetectorRef = inject(ChangeDetectorRef);
+export class CarouselControlComponent {
   readonly #carouselState = inject(CarouselState);
 
   /**
    * Carousel control caption. [docs]
-   * @type string
+   * @return string
    */
-  @Input()
-  set caption(value) {
-    this.#caption = value;
-  }
+  readonly captionInput = input<string | undefined>(undefined, { alias: 'caption' });
 
-  get caption(): string {
-    return !!this.#caption ? this.#caption : this.direction === 'prev' ? 'Previous' : 'Next';
-  }
-  #caption?: string;
+  readonly caption = linkedSignal({
+    source: () => this.captionInput(),
+    computation: (value) => {
+      return !!value ? value : this.direction() === 'prev' ? 'Previous' : 'Next';
+    }
+  });
 
   /**
-   * Carousel control direction. [docs]
-   * @type {'next' | 'prev'}
+   * Carousel control direction.
+   * @return {'next' | 'prev'}
    */
-  @Input() direction: 'prev' | 'next' = 'next';
+  readonly direction = input<'prev' | 'next'>('next');
 
-  @HostBinding('attr.role')
-  get hostRole(): string {
-    return 'button';
-  }
+  /**
+   * Carousel control role.
+   * @return string
+   */
+  readonly role = input('button');
 
-  @HostBinding('class')
-  get hostClasses(): string {
-    return `carousel-control-${this.direction}`;
-  }
+  readonly hostClasses = computed(() => {
+    return `carousel-control-${this.direction()}`;
+  });
 
-  get carouselControlIconClass(): string {
-    return `carousel-control-${this.direction}-icon`;
-  }
+  readonly carouselControlIconClass = computed(() => {
+    return `carousel-control-${this.direction()}-icon`;
+  });
 
-  @ViewChild('content') content?: ElementRef;
+  readonly content = viewChild('content', { read: ElementRef });
 
-  hasContent = true;
+  readonly hasContent = computed(() => {
+    return this.content()?.nativeElement.childNodes.length ?? false;
+  });
 
-  @HostListener('keyup', ['$event'])
   onKeyUp($event: KeyboardEvent): void {
     if ($event.key === 'Enter') {
-      this.play();
+      this.#play();
     }
     if ($event.key === 'ArrowLeft') {
-      this.play('prev');
+      this.#play('prev');
     }
     if ($event.key === 'ArrowRight') {
-      this.play('next');
+      this.#play('next');
     }
   }
 
-  @HostListener('click', ['$event'])
-  public onClick($event: MouseEvent): void {
-    this.play();
+  onClick($event: MouseEvent): void {
+    this.#play();
   }
 
-  ngAfterViewInit(): void {
-    this.hasContent = this.content?.nativeElement.childNodes.length ?? false;
-    this.#changeDetectorRef.detectChanges();
-  }
-
-  private play(direction = this.direction): void {
+  #play(direction = this.direction()): void {
     const nextIndex = this.#carouselState.direction(direction);
     this.#carouselState.state = { activeItemIndex: nextIndex };
   }

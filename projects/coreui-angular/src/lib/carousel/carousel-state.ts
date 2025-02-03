@@ -7,7 +7,7 @@ import { CarouselItemComponent } from './carousel-item/carousel-item.component';
 export class CarouselState {
   readonly #carouselService = inject(CarouselService);
 
-  private _state: ICarouselState = {
+  #state = <ICarouselState>{
     activeItemIndex: -1,
     animate: true,
     items: [],
@@ -16,16 +16,16 @@ export class CarouselState {
   };
 
   get state(): ICarouselState {
-    return this._state;
+    return this.#state;
   }
 
   set state(state) {
-    const prevState = { ...this._state };
-    const nextState = { ...this._state, ...state };
-    this._state = nextState;
+    const prevState = { ...this.#state };
+    const nextState = { ...this.#state, ...state };
+    this.#state = nextState;
     if (prevState.activeItemIndex !== nextState.activeItemIndex) {
       const activeItemIndex = this.state.activeItemIndex || 0;
-      const itemInterval = (this.state.items && this.state.items[activeItemIndex]?.interval) || -1;
+      const itemInterval = (this.state.items && this.state.items[activeItemIndex]?.interval()) || -1;
       this.#carouselService.setIndex({
         active: nextState.activeItemIndex,
         interval: itemInterval,
@@ -36,12 +36,12 @@ export class CarouselState {
 
   setItems(newItems: any): void {
     if (newItems.length) {
-      const itemsArray = newItems.toArray();
+      const itemsArray = newItems;
       itemsArray.forEach((item: CarouselItemComponent, i: number) => {
         item.index = i;
       });
       this.state = {
-        items: itemsArray
+        items: [...itemsArray]
       };
     } else {
       this.reset();

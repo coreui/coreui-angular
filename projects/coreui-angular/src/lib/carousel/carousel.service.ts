@@ -9,10 +9,10 @@ export interface ICarouselIndex {
 
 @Injectable()
 export class CarouselService {
-  private carouselIndex = new BehaviorSubject<ICarouselIndex>({});
-  carouselIndex$ = this.carouselIndex.asObservable();
+  readonly #carouselIndex = new BehaviorSubject<ICarouselIndex>({});
+  readonly carouselIndex$ = this.#carouselIndex.asObservable();
 
   setIndex(index: ICarouselIndex): void {
-    this.carouselIndex.next(index);
+    this.#carouselIndex.next(index);
   }
 }

@@ -1,79 +1,48 @@
-import {
-  AfterViewInit,
-  booleanAttribute,
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  inject,
-  Input,
-  OnDestroy
-} from '@angular/core';
-import { Subscription } from 'rxjs';
+import { booleanAttribute, Component, DestroyRef, inject, input, linkedSignal } from '@angular/core';
 
 import { CarouselService } from '../carousel.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'c-carousel-item',
   templateUrl: './carousel-item.component.html',
   styleUrls: ['./carousel-item.component.scss'],
-  host: { class: 'carousel-item' }
+  exportAs: 'cCarouselItem',
+  host: {
+    class: 'carousel-item',
+    '[class.active]': 'active()'
+  }
 })
-export class CarouselItemComponent implements OnDestroy, AfterViewInit {
+export class CarouselItemComponent {
+  readonly #destroyRef = inject(DestroyRef);
   readonly #carouselService = inject(CarouselService);
-  readonly #changeDetectorRef = inject(ChangeDetectorRef);
 
   index?: number;
-  #carouselIndexSubscription?: Subscription;
 
   /**
    * @ignore
    */
-  @Input({ transform: booleanAttribute })
-  set active(value) {
-    this.#active = value;
-    this.#changeDetectorRef.markForCheck();
-  }
+  readonly activeInput = input(false, { transform: booleanAttribute, alias: 'active' });
 
-  get active(): boolean {
-    return this.#active;
-  }
-
-  #active = false;
+  readonly active = linkedSignal({
+    source: () => this.activeInput(),
+    computation: (value) => {
+      return value;
+    }
+  });
 
   /**
    * Time delay before cycling to next item. If -1, uses carousel interval value.
-   * @type number
+   * @return number
    * @default -1
    */
-  @Input() interval: number = -1;
+  readonly interval = input<number>(-1);
 
-  @HostBinding('class')
-  get hostClasses(): any {
-    return {
-      'carousel-item': true,
-      active: this.active
-    };
-  }
-
-  ngOnDestroy(): void {
-    this.carouselStateSubscribe(false);
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.carouselStateSubscribe();
+  constructor() {
+    this.#carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextIndex) => {
+      if ('active' in nextIndex) {
+        this.active.set(nextIndex.active === this.index);
+      }
     });
-  }
-
-  private carouselStateSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      this.#carouselIndexSubscription = this.#carouselService.carouselIndex$.subscribe((nextIndex) => {
-        if ('active' in nextIndex) {
-          this.active = nextIndex.active === this.index;
-        }
-      });
-    } else {
-      this.#carouselIndexSubscription?.unsubscribe();
-    }
   }
 }

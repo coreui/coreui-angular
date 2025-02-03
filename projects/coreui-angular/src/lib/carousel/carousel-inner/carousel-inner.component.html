@@ -1,7 +1,3 @@
-<div [@slideAnimation]="slide" [@.disabled]="!animate">
+<div [@slideAnimation]="slide()" [@.disabled]="!animate()">
   <ng-content />
 </div>
-<!--todo-->
-<!--<div [@fadeAnimation]="slide" [@.disabled]="!animate" >-->
-<!--  <ng-content />-->
-<!--</div>-->
