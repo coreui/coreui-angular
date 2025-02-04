@@ -5,6 +5,7 @@
 
 #### `5.3.9`
 
+- chore(dependencies): update
 - fix(accordion): accordion item not expanded when visible=true on init (regression)
 - refactor(alert): signal inputs, host bindings, cleanup, tests
 - refactor(breadcrumb): signal inputs, host bindings, cleanup, tests
@@ -14,6 +15,7 @@
 - refactor(offcanvas): signal inputs, host bindings, cleanup, tests
 - refactor(pagination): signal inputs, host bindings, cleanup, tests
 - refactor(carousel): signal inputs, host bindings, cleanup, tests
+- feat(carousel-indicators): allow custom content via TemplateId directive, refactor
 - test(accordion): coverage
 - test(backdrop): coverage
 - test(card-img): coverage
