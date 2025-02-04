@@ -3,7 +3,7 @@
 
 ---
 
-#### `5.3.9` wip
+#### `5.3.9`
 
 - fix(accordion): accordion item not expanded when visible=true on init (regression)
 - refactor(alert): signal inputs, host bindings, cleanup, tests
@@ -13,10 +13,15 @@
 - refactor(theme.directive): signal inputs, host bindings, cleanup, tests
 - refactor(offcanvas): signal inputs, host bindings, cleanup, tests
 - refactor(pagination): signal inputs, host bindings, cleanup, tests
+- refactor(carousel): signal inputs, host bindings, cleanup, tests
 - test(accordion): coverage
-- test(element-ref): update
 - test(backdrop): coverage
+- test(card-img): coverage
+- test(collapse): coverage
+- test(element-ref): update
 - test(placeholder): coverage
+- test(popover): coverage
+- test(tooltip): coverage
 
 ---
 
