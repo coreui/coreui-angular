@@ -47,10 +47,10 @@ export class BackdropService {
       this.#unListen();
       this.#renderer.removeClass(backdropElement, 'show');
       setTimeout(() => {
-        this.#renderer.removeChild(this.#document.body, backdropElement);
         if (this.activeBackdrop === backdropElement) {
           this.resetScrollbar();
         }
+        this.#renderer.removeChild(this.#document.body, backdropElement);
         backdropElement = undefined;
       }, 300);
     }
