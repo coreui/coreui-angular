@@ -3,6 +3,13 @@
 
 ---
 
+#### `5.3.10`
+
+- fix(offcanvas): offcanvas hides on animation.done toState visible, refactor
+- refactor(backdrop): minor cleanups
+
+---
+
 #### `5.3.9`
 
 - chore(dependencies): update
