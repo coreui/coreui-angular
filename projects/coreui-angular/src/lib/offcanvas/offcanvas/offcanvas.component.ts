@@ -7,16 +7,14 @@ import {
   DestroyRef,
   effect,
   ElementRef,
-  EventEmitter,
   inject,
   input,
+  linkedSignal,
   OnDestroy,
   OnInit,
   output,
   PLATFORM_ID,
-  Renderer2,
-  signal,
-  untracked
+  Renderer2
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { A11yModule } from '@angular/cdk/a11y';
@@ -56,7 +54,7 @@ let nextId = 0;
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: {
     ngSkipHydration: 'true',
-    '[@showHide]': 'animateTrigger',
+    '[@showHide]': 'this.visible() ? "visible" : "hidden"',
     '[attr.id]': 'id()',
     '[attr.inert]': 'ariaHidden() || null',
     '[attr.role]': 'role()',
@@ -125,7 +123,6 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #activeBackdrop!: HTMLDivElement;
   #backdropClickSubscription!: Subscription;
   #layoutChangeSubscription!: Subscription;
-  #show = false;
 
   /**
    * Allow body scrolling while offcanvas is visible.
@@ -141,14 +138,10 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
-  readonly visibleInputEffect = effect(() => {
-    const visible = this.visibleInput();
-    untracked(() => {
-      this.visible.set(visible);
-    });
+  readonly visible = linkedSignal({
+    source: () => this.visibleInput(),
+    computation: (value) => value
   });
-
-  readonly visible = signal(false);
 
   readonly visibleEffect = effect(() => {
     const visible = this.visible();
@@ -164,18 +157,19 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Event triggered on visible change.
-   * @return EventEmitter<boolean>
+   * @return <boolean>
    */
   readonly visibleChange = output<boolean>();
 
   readonly hostClasses = computed(() => {
     const responsive = this.responsive();
     const placement = this.placement();
+    const visible = this.visible();
     return {
       offcanvas: typeof responsive === 'boolean',
       [`offcanvas-${responsive}`]: typeof responsive !== 'boolean',
       [`offcanvas-${placement}`]: !!placement,
-      show: this.show
+      show: visible
     } as Record<string, boolean>;
   });
 
@@ -187,16 +181,12 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     return '-1';
   }
 
-  get animateTrigger(): string {
-    return this.visible() ? 'visible' : 'hidden';
-  }
-
   get show(): boolean {
-    return this.visible() && this.#show;
+    return this.visible();
   }
 
   set show(value: boolean) {
-    this.#show = value;
+    this.visible.set(value);
   }
 
   get responsiveBreakpoint(): string | false {
