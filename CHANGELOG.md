@@ -3,6 +3,14 @@
 
 ---
 
+#### `5.3.12`
+
+- fix(carousel): first image slides in for `crossfade` transition, animations refactor, closes #213 - thanks @baloo32
+- fix(carousel): `interval` prop value change should set/reset timer, closes #214 - thanks @baloo32
+- chore(dependencies): update
+
+---
+
 #### `5.3.10`
 
 - fix(offcanvas): offcanvas hides on animation.done toState visible, refactor
