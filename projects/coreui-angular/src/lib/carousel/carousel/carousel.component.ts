@@ -2,6 +2,7 @@ import {
   AfterContentInit,
   Component,
   DestroyRef,
+  effect,
   ElementRef,
   Inject,
   inject,
@@ -96,6 +97,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   readonly interval = linkedSignal({
     source: () => this.intervalInput(),
     computation: (value: number) => value
+  });
+
+  readonly #intervalEffect = effect(() => {
+    this.interval() ? this.setTimer() : this.resetTimer();
   });
 
   /**
