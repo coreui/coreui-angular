@@ -1,16 +1,25 @@
-import { AfterContentChecked, AfterContentInit, Component, contentChildren, inject, signal } from '@angular/core';
-
-import { fadeAnimation, slideAnimation } from '../carousel.animation';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  Component,
+  computed,
+  contentChildren,
+  inject,
+  signal
+} from '@angular/core';
 import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
 import { CarouselState } from '../carousel-state';
+import { carouselPlay } from '../carousel.animation';
 
 @Component({
   selector: 'c-carousel-inner',
-  templateUrl: './carousel-inner.component.html',
   styleUrls: ['./carousel-inner.component.scss'],
-  animations: [slideAnimation, fadeAnimation],
+  animations: [carouselPlay],
+  template: '<ng-content />',
   host: {
-    '[class.carousel-inner]': 'true'
+    class: 'carousel-inner',
+    '[@carouselPlay]': 'slideType()',
+    '[@.disabled]': '!animate()'
   }
 })
 export class CarouselInnerComponent implements AfterContentInit, AfterContentChecked {
@@ -19,7 +28,11 @@ export class CarouselInnerComponent implements AfterContentInit, AfterContentChe
   readonly activeIndex = signal<number | undefined>(undefined);
   readonly animate = signal<boolean>(true);
   readonly slide = signal({ left: true });
-  readonly transition = signal('slide');
+  readonly transition = signal('crossfade');
+
+  readonly slideType = computed(() => {
+    return { left: this.slide().left, type: this.transition() };
+  });
 
   readonly contentItems = contentChildren(CarouselItemComponent);
   readonly #prevContentItems = signal<CarouselItemComponent[]>([]);

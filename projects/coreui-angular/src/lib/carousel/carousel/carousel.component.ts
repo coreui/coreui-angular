@@ -32,7 +32,7 @@ import { CarouselConfig } from '../carousel.config';
   exportAs: 'cCarousel',
   host: {
     class: 'carousel slide',
-    '[class.carousel-fade]': 'transition() === "crossfade"'
+    '[class.carousel-fade]': 'transition() === "crossfade" && animate()'
   }
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
@@ -148,7 +148,11 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.intersectionServiceSubscribe();
-    this.#carouselState.state = { activeItemIndex: this.activeIndex(), animate: this.animate() };
+    this.#carouselState.state = {
+      activeItemIndex: this.activeIndex(),
+      animate: this.animate(),
+      transition: this.transition()
+    };
     this.setListeners();
     this.swipeSubscribe();
   }
