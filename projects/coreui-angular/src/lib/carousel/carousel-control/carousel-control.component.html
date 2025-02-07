@@ -1,8 +1,4 @@
-@if (hasContent()) {
-  <div #content>
-    <ng-content />
-  </div>
-} @else {
-  <span [class]="carouselControlIconClass()" [attr.aria-label]="direction()" [attr.aria-hidden]="true"></span>
+<ng-content>
+  <span [attr.aria-hidden]="true" [class]="carouselControlIconClass()"></span>
   <span class="visually-hidden">{{ caption() }}</span>
-}
+</ng-content>

@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, input, linkedSignal, viewChild } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 
 import { CarouselState } from '../carousel-state';
 
@@ -47,12 +47,6 @@ export class CarouselControlComponent {
 
   readonly carouselControlIconClass = computed(() => {
     return `carousel-control-${this.direction()}-icon`;
-  });
-
-  readonly content = viewChild('content', { read: ElementRef });
-
-  readonly hasContent = computed(() => {
-    return this.content()?.nativeElement.childNodes.length ?? false;
   });
 
   onKeyUp($event: KeyboardEvent): void {
