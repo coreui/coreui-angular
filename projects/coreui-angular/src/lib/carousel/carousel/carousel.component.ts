@@ -100,7 +100,9 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   });
 
   readonly #intervalEffect = effect(() => {
-    this.interval() ? this.setTimer() : this.resetTimer();
+    const interval = this.interval();
+    this.#carouselState.state = { interval: interval };
+    interval ? this.setTimer() : this.resetTimer();
   });
 
   /**
@@ -156,6 +158,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     this.#carouselState.state = {
       activeItemIndex: this.activeIndex(),
       animate: this.animate(),
+      interval: this.interval(),
       transition: this.transition()
     };
     this.setListeners();

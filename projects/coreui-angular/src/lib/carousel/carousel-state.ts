@@ -12,7 +12,8 @@ export class CarouselState {
     animate: true,
     items: [],
     direction: 'next',
-    transition: 'slide'
+    transition: 'slide',
+    interval: 0
   };
 
   get state(): ICarouselState {
@@ -75,7 +76,8 @@ export class CarouselState {
       animate: true,
       items: [],
       direction: 'next',
-      transition: 'slide'
+      transition: 'slide',
+      interval: 0
     };
   }
 }
