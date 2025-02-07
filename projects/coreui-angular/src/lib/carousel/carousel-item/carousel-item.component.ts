@@ -10,7 +10,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   exportAs: 'cCarouselItem',
   host: {
     class: 'carousel-item',
-    '[class.active]': 'active()'
+    '[class.active]': 'active()',
+    '[attr.role]': 'role()'
   }
 })
 export class CarouselItemComponent {
@@ -37,6 +38,13 @@ export class CarouselItemComponent {
    * @default -1
    */
   readonly interval = input<number>(-1);
+
+  /**
+   * Carousel item role.
+   * @return string
+   * @default 'group'
+   */
+  readonly role = input('group');
 
   constructor() {
     this.#carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextIndex) => {
