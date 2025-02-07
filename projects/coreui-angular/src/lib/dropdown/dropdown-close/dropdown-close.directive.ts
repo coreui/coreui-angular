@@ -20,9 +20,9 @@ export class DropdownCloseDirective implements AfterViewInit {
   /**
    * Disables a dropdown-close directive.
    * @return boolean
-   * @default undefined
+   * @default false
    */
-  readonly disabledInput = input(undefined, { transform: booleanAttribute, alias: 'disabled' });
+  readonly disabledInput = input(false, { transform: booleanAttribute, alias: 'disabled' });
 
   readonly disabled = linkedSignal({
     source: this.disabledInput,
