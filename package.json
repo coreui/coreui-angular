@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "5.3.12",
+  "version": "5.3.13",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2025 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -11,6 +11,7 @@
     "build:lib:prod": "ng build coreui-angular",
     "postbuild:lib:prod": "npm run build --prefix projects/coreui-angular",
     "test:lib:dev": "ng test coreui-angular",
+    "test:lib:cov": "ng test --watch --code-coverage coreui-angular ",
     "test:lib:prod": "ng test coreui-angular --karma-config=projects/coreui-angular/karma.conf.github.js",
     "prepublish:lib": "npm run prepublish:icons && ng lint coreui-angular && ng test coreui-angular --watch=false && npm run build:lib:prod",
     "publish:lib": "cd dist/coreui-angular/ && npm publish --tag next --dry-run",

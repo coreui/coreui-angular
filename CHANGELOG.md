@@ -3,6 +3,23 @@
 
 ---
 
+#### `5.3.13`
+
+- fix(carousel): when paused (interval=0) and manually changed slide, it does not restart when interval>0
+- refactor(carousel-item): add attribute role = "group"
+- refactor(carousel-inner): add aria-live "off" for interval > 0, otherwise "polite"
+- fix(carousel-control): allow custom content (regression)
+- refactor(carousel): add interval to carousel state
+- fix(carousel.config): set default interval to 0
+- fix(theme.directive): use colorScheme if dark not set
+- refactor(progress-bar): set default value=0
+- refactor(dropdown): signal inputs, host bindings, cleanup, tests
+- refactor(dropdown-item): set default value of disabled prop to false
+- refactor(dropdown-close): set default value of disabled prop to false
+- chore(dependencies): update
+
+---
+
 #### `5.3.12`
 
 - fix(carousel): first image slides in for `crossfade` transition, animations refactor, closes #213 - thanks @baloo32
