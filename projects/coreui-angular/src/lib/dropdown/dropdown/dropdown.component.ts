@@ -5,27 +5,25 @@ import {
   booleanAttribute,
   ChangeDetectorRef,
   Component,
+  computed,
   ContentChild,
   DestroyRef,
   Directive,
+  effect,
   ElementRef,
-  EventEmitter,
   forwardRef,
-  HostBinding,
-  HostListener,
   Inject,
   inject,
-  Input,
+  input,
+  linkedSignal,
   NgZone,
-  OnChanges,
   OnDestroy,
   OnInit,
-  Output,
+  output,
   Renderer2,
   signal,
-  SimpleChanges
+  untracked
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -41,7 +39,12 @@ export abstract class DropdownToken {}
 @Directive({
   selector: '[cDropdownToggle]',
   providers: [{ provide: DropdownToken, useExisting: forwardRef(() => DropdownComponent) }],
-  exportAs: 'cDropdownToggle'
+  exportAs: 'cDropdownToggle',
+  host: {
+    '[class]': 'hostClasses()',
+    '[attr.aria-expanded]': 'ariaExpanded',
+    '(click)': 'onClick($event)'
+  }
 })
 export class DropdownToggleDirective implements AfterViewInit {
   // injections
@@ -51,63 +54,61 @@ export class DropdownToggleDirective implements AfterViewInit {
   public dropdown = inject(DropdownToken, { optional: true });
 
   /**
-   * Toggle the disabled state for the toggler.
-   * @type DropdownComponent | undefined
+   * Reference to dropdown component.
+   * @return DropdownComponent | undefined
    * @default undefined
    */
-  @Input() dropdownComponent?: DropdownComponent;
+  readonly dropdownComponent = input<DropdownComponent>();
 
   /**
    * Disables the toggler.
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) disabled: boolean = false;
+  readonly disabled = input<boolean, unknown>(false, { transform: booleanAttribute });
 
   /**
    * Enables pseudo element caret on toggler.
-   * @type boolean
+   * @return boolean
    */
-  @Input() caret = true;
+  readonly caret = input(true);
 
   /**
    * Create split button dropdowns with virtually the same markup as single button dropdowns,
    * but with the addition of `.dropdown-toggle-split` class for proper spacing around the dropdown caret.
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) split: boolean = false;
+  readonly split = input<boolean, unknown>(false, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
-      'dropdown-toggle': this.caret,
-      'dropdown-toggle-split': this.split,
-      disabled: this.disabled
-    };
-  }
+      'dropdown-toggle': this.caret(),
+      'dropdown-toggle-split': this.split(),
+      disabled: this.disabled()
+    } as Record<string, boolean>;
+  });
 
   readonly #ariaExpanded = signal(false);
 
-  @HostBinding('attr.aria-expanded')
   get ariaExpanded() {
     return this.#ariaExpanded();
   }
 
-  @HostListener('click', ['$event'])
   public onClick($event: MouseEvent): void {
     $event.preventDefault();
-    !this.disabled && this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+    !this.disabled() && this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
   }
 
   ngAfterViewInit(): void {
-    if (this.dropdownComponent) {
-      this.dropdown = this.dropdownComponent;
-      this.#dropdownService = this.dropdownComponent?.dropdownService;
+    const dropdownComponent = this.dropdownComponent();
+    if (dropdownComponent) {
+      this.dropdown = dropdownComponent;
+      this.#dropdownService = dropdownComponent?.dropdownService;
     }
     if (this.dropdown) {
       const dropdown = <DropdownComponent>this.dropdown;
-      dropdown?.visibleChange?.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((visible) => {
+      dropdown?.visibleChange?.subscribe((visible) => {
         this.#ariaExpanded.set(visible);
       });
     }
@@ -120,9 +121,14 @@ export class DropdownToggleDirective implements AfterViewInit {
   styleUrls: ['./dropdown.component.scss'],
   exportAs: 'cDropdown',
   providers: [DropdownService],
-  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }]
+  hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
+  host: {
+    '[class]': 'hostClasses()',
+    '[style]': 'hostStyle()',
+    '(click)': 'onHostClick($event)'
+  }
 })
-export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy, OnInit {
+export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
@@ -136,44 +142,52 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
 
   /**
    * Set alignment of dropdown menu.
-   * @type {'start' | 'end' | { xs: 'start' | 'end' } | { sm: 'start' | 'end' } | { md: 'start' | 'end' } | { lg: 'start' | 'end' } | { xl: 'start' | 'end'} | { xxl: 'start' | 'end'}}
+   * @return {'start' | 'end' | { xs: 'start' | 'end' } | { sm: 'start' | 'end' } | { md: 'start' | 'end' } | { lg: 'start' | 'end' } | { xl: 'start' | 'end'} | { xxl: 'start' | 'end'}}
    */
-  @Input() alignment?: string;
+  readonly alignment = input<string>();
 
-  @Input() autoClose: boolean | 'inside' | 'outside' = true;
+  /**
+   * Automatically close dropdown when clicking outside the dropdown menu.
+   */
+  readonly autoClose = input<boolean | 'inside' | 'outside'>(true);
 
   /**
    * Sets a specified  direction and location of the dropdown menu.
-   * @type 'dropup' | 'dropend' | 'dropstart'
+   * @return 'dropup' | 'dropend' | 'dropstart'
    */
-  @Input() direction?: 'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart';
+  readonly direction = input<'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart'>();
 
   /**
    * Describes the placement of your component after Popper.js has applied all the modifiers
    * that may have flipped or altered the originally provided placement property.
-   * @type Placement
+   * @return Placement
    */
-  @Input() placement: Placement = 'bottom-start';
+  readonly placement = input<Placement>('bottom-start');
 
   /**
    * If you want to disable dynamic positioning set this property to `false`.
-   * @type boolean
+   * @return boolean
    * @default true
    */
-  @Input({ transform: booleanAttribute }) popper: boolean = true;
+  readonly popper = input<boolean, unknown>(true, { transform: booleanAttribute });
 
   /**
    * Optional popper Options object, placement prop takes precedence over
-   * @type Partial<Options>
+   * @return Partial<Options>
    */
-  @Input()
+  readonly popperOptionsInput = input<Partial<Options>>({}, { alias: 'popperOptions' });
+
+  readonly popperOptionsEffect = effect(() => {
+    this.popperOptions = { ...untracked(this.#popperOptions), ...this.popperOptionsInput() };
+  });
+
   set popperOptions(value: Partial<Options>) {
-    this._popperOptions = { ...this._popperOptions, ...value };
+    this.#popperOptions.update((popperOptions) => ({ ...popperOptions, ...value }));
   }
 
   get popperOptions(): Partial<Options> {
-    let placement = this.placement;
-    switch (this.direction) {
+    let placement = this.placement();
+    switch (this.direction()) {
       case 'dropup': {
         placement = 'top-start';
         break;
@@ -195,49 +209,47 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
         break;
       }
     }
-    if (this.alignment === 'end') {
+    if (this.alignment() === 'end') {
       placement = 'bottom-end';
     }
-    this._popperOptions = { ...this._popperOptions, placement: placement };
-    return this._popperOptions;
+    this.#popperOptions.update((value) => ({ ...value, placement: placement }));
+    return this.#popperOptions();
   }
 
-  private _popperOptions: Partial<Options> = {
-    placement: this.placement,
+  readonly #popperOptions = signal<Partial<Options>>({
+    placement: this.placement(),
     modifiers: [],
     strategy: 'absolute'
-  };
+  });
 
   /**
    * Set the dropdown variant to a btn-group, dropdown, input-group, and nav-item.
    */
-  @Input() variant?: 'btn-group' | 'dropdown' | 'input-group' | 'nav-item' = 'dropdown';
+  readonly variant = input<('btn-group' | 'dropdown' | 'input-group' | 'nav-item') | undefined>('dropdown');
 
   /**
    * Toggle the visibility of dropdown menu component.
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute })
-  set visible(value: boolean) {
-    const _value = value;
-    if (_value !== this._visible) {
-      this.activeTrap = _value;
-      this._visible = _value;
-      _value ? this.createPopperInstance() : this.destroyPopperInstance();
-      this.visibleChange.emit(_value);
-    }
-  }
+  readonly visibleInput = input<boolean, unknown>(false, { transform: booleanAttribute, alias: 'visible' });
 
-  get visible(): boolean {
-    return this._visible;
-  }
+  readonly visible = linkedSignal({
+    source: () => this.visibleInput(),
+    computation: (value) => value
+  });
 
-  private _visible = false;
+  readonly visibleEffect = effect(() => {
+    const visible = this.visible();
+    this.activeTrap = visible;
+    visible ? this.createPopperInstance() : this.destroyPopperInstance();
+    this.setVisibleState(visible);
+    this.visibleChange.emit(visible);
+  });
 
-  @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  readonly visibleChange = output<boolean>();
 
-  dropdownContext = { $implicit: this.visible };
+  dropdownContext = { $implicit: this.visible() };
   @ContentChild(DropdownToggleDirective) _toggler!: DropdownToggleDirective;
   @ContentChild(DropdownMenuDirective) _menu!: DropdownMenuDirective;
   @ContentChild(DropdownMenuDirective, { read: ElementRef }) _menuElementRef!: ElementRef;
@@ -248,27 +260,26 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
   private popperInstance!: Instance | undefined;
   private listeners: (() => void)[] = [];
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const direction = this.direction();
+    const variant = this.variant();
     return {
-      dropdown: (this.variant === 'dropdown' || this.variant === 'nav-item') && !this.direction,
-      [`${this.direction}`]: !!this.direction,
-      [`${this.variant}`]: !!this.variant,
-      dropup: this.direction === 'dropup' || this.direction === 'dropup-center',
-      show: this.visible
-    };
-  }
+      dropdown: (variant === 'dropdown' || variant === 'nav-item') && !direction,
+      [`${direction}`]: !!direction,
+      [`${variant}`]: !!variant,
+      dropup: direction === 'dropup' || direction === 'dropup-center',
+      show: this.visible()
+    } as Record<string, boolean>;
+  });
 
   // todo: find better solution
-  @HostBinding('style')
-  get hostStyle(): any {
-    return this.variant === 'input-group' ? { display: 'contents' } : {};
-  }
+  readonly hostStyle = computed(() => {
+    return this.variant() === 'input-group' ? { display: 'contents' } : {};
+  });
 
   private clickedTarget!: HTMLElement;
 
-  @HostListener('click', ['$event'])
-  private onHostClick($event: MouseEvent): void {
+  onHostClick($event: MouseEvent): void {
     this.clickedTarget = $event.target as HTMLElement;
   }
 
@@ -282,7 +293,7 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
         )
         .subscribe((state) => {
           if ('visible' in state) {
-            state?.visible === 'toggle' ? this.toggleDropdown() : (this.visible = state.visible);
+            state?.visible === 'toggle' ? this.toggleDropdown() : this.visible.set(state.visible);
           }
         });
     } else {
@@ -291,7 +302,7 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
   }
 
   toggleDropdown(): void {
-    this.visible = !this.visible;
+    this.visible.update((visible) => !visible);
   }
 
   onClick(event: any): void {
@@ -301,19 +312,13 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
   }
 
   ngAfterContentInit(): void {
-    if (this.variant === 'nav-item') {
+    if (this.variant() === 'nav-item') {
       this.renderer.addClass(this._toggler.elementRef.nativeElement, 'nav-link');
     }
   }
 
   ngOnInit(): void {
-    this.setVisibleState(this.visible);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible'] && !changes['visible'].firstChange) {
-      this.setVisibleState(changes['visible'].currentValue);
-    }
+    this.setVisibleState(this.visible());
   }
 
   ngOnDestroy(): void {
@@ -333,7 +338,7 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
         // workaround for popper position calculate (see also: dropdown-menu.component)
         this._menu.elementRef.nativeElement.style.visibility = 'hidden';
         this._menu.elementRef.nativeElement.style.display = 'block';
-        if (this.popper) {
+        if (this.popper()) {
           this.popperInstance = createPopper(
             this._toggler.elementRef.nativeElement,
             this._menu.elementRef.nativeElement,
@@ -366,15 +371,16 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
         if (this._toggler?.elementRef.nativeElement.contains(event.target)) {
           return;
         }
-        if (this.autoClose === true) {
+        const autoClose = this.autoClose();
+        if (autoClose === true) {
           this.setVisibleState(false);
           return;
         }
-        if (this.clickedTarget === target && this.autoClose === 'inside') {
+        if (this.clickedTarget === target && autoClose === 'inside') {
           this.setVisibleState(false);
           return;
         }
-        if (this.clickedTarget !== target && this.autoClose === 'outside') {
+        if (this.clickedTarget !== target && autoClose === 'outside') {
           this.setVisibleState(false);
           return;
         }
@@ -382,7 +388,7 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
     );
     this.listeners.push(
       this.renderer.listen(this.elementRef.nativeElement, 'keyup', (event) => {
-        if (event.key === 'Escape' && this.autoClose !== false) {
+        if (event.key === 'Escape' && this.autoClose() !== false) {
           event.stopPropagation();
           this.setVisibleState(false);
           return;
@@ -391,7 +397,11 @@ export class DropdownComponent implements AfterContentInit, OnChanges, OnDestroy
     );
     this.listeners.push(
       this.renderer.listen(this.document, 'keyup', (event) => {
-        if (event.key === 'Tab' && this.autoClose !== false && !this.elementRef.nativeElement.contains(event.target)) {
+        if (
+          event.key === 'Tab' &&
+          this.autoClose() !== false &&
+          !this.elementRef.nativeElement.contains(event.target)
+        ) {
           this.setVisibleState(false);
           return;
         }

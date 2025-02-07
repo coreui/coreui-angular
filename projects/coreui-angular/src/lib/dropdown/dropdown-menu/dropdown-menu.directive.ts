@@ -1,14 +1,14 @@
 import {
   AfterContentInit,
+  computed,
   ContentChildren,
   DestroyRef,
   Directive,
   ElementRef,
   forwardRef,
-  HostBinding,
-  HostListener,
   inject,
-  Input,
+  input,
+  linkedSignal,
   OnInit,
   QueryList
 } from '@angular/core';
@@ -17,14 +17,20 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
 
 import { ThemeDirective } from '../../shared/theme.directive';
-import { DropdownService } from '../dropdown.service';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
+import { DropdownService } from '../dropdown.service';
 
 @Directive({
   selector: '[cDropdownMenu]',
   exportAs: 'cDropdownMenu',
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-  host: { class: 'dropdown-menu' }
+  host: {
+    class: 'dropdown-menu',
+    '[class]': 'hostClasses()',
+    '[style]': 'hostStyles()',
+    '(keydown)': 'onKeyDown($event)',
+    '(keyup)': 'onKeyUp($event)'
+  }
 })
 export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
@@ -34,35 +40,42 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
 
   /**
    * Set alignment of dropdown menu.
-   * @type {'start' | 'end' }
+   * @return 'start' | 'end'
    */
-  @Input() alignment?: 'start' | 'end' | string;
+  readonly alignment = input<'start' | 'end' | string>();
 
   /**
    * Toggle the visibility of dropdown menu component.
-   * @type boolean
+   * @return boolean
    */
-  @Input() visible: boolean = false;
+  readonly visibleInput = input<boolean>(false, { alias: 'visible' });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly visible = linkedSignal({
+    source: () => this.visibleInput(),
+    computation: (value) => value
+  });
+
+  readonly hostClasses = computed(() => {
+    const alignment = this.alignment();
+    const visible = this.visible();
     return {
       'dropdown-menu': true,
-      [`dropdown-menu-${this.alignment}`]: !!this.alignment,
-      show: this.visible
-    };
-  }
+      [`dropdown-menu-${alignment}`]: !!alignment,
+      show: visible
+    } as Record<string, boolean>;
+  });
 
-  @HostBinding('style') get hostStyles() {
+  readonly hostStyles = computed(() => {
     // workaround for popper position calculate (see also: dropdown.component)
+    const visible = this.visible();
     return {
-      visibility: this.visible ? null : '',
-      display: this.visible ? null : ''
-    };
-  }
+      visibility: visible ? null : '',
+      display: visible ? null : ''
+    } as Record<string, any>;
+  });
 
-  @HostListener('keydown', ['$event']) onKeyDown($event: KeyboardEvent): void {
-    if (!this.visible) {
+  onKeyDown($event: KeyboardEvent): void {
+    if (!this.visible()) {
       return;
     }
     if (['Space', 'ArrowDown'].includes($event.code)) {
@@ -71,8 +84,8 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
     this.#focusKeyManager.onKeydown($event);
   }
 
-  @HostListener('keyup', ['$event']) onKeyUp($event: KeyboardEvent): void {
-    if (!this.visible) {
+  onKeyUp($event: KeyboardEvent): void {
+    if (!this.visible()) {
       return;
     }
     if (['Tab'].includes($event.key)) {
@@ -105,8 +118,8 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
       .pipe(
         tap((state) => {
           if ('visible' in state) {
-            this.visible = state.visible === 'toggle' ? !this.visible : state.visible;
-            if (!this.visible) {
+            this.visible.update((visible) => (state.visible === 'toggle' ? !visible : state.visible));
+            if (!this.visible()) {
               this.#focusKeyManager?.setActiveItem(-1);
             }
           }
