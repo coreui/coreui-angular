@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
+import { booleanAttribute, Directive, effect, ElementRef, inject, input, Renderer2, untracked } from '@angular/core';
 
 @Directive({
   selector: '[cTheme]',
@@ -22,7 +22,7 @@ export class ThemeDirective {
   readonly dark = input(false, { transform: booleanAttribute });
 
   readonly #darkChange = effect(() => {
-    const darkTheme = this.dark();
+    const darkTheme = this.dark() || untracked(this.colorScheme) === 'dark';
     darkTheme ? this.setTheme('dark') : this.unsetTheme();
   });
 
