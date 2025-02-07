@@ -64,7 +64,7 @@ export class ProgressBarDirective {
    * @return number
    * @default 0
    */
-  readonly value = input(undefined, { transform: numberAttribute });
+  readonly value = input(0, { transform: numberAttribute });
 
   /**
    * Set the progress bar variant to optional striped.
