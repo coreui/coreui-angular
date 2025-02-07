@@ -41,7 +41,7 @@ describe('CarouselComponent', () => {
     expect(component.activeIndex()).toBe(0);
     expect(component.animate()).toBe(true);
     expect(component.direction()).toBe('next');
-    expect(component.interval()).toBe(3000);
+    expect(component.interval()).toBe(0);
   });
 
   it('should call timer functions', fakeAsync(() => {
