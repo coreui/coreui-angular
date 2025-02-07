@@ -3,7 +3,7 @@
 
 ---
 
-#### `5.3.13`
+#### `5.3.14`
 
 - fix(carousel): when paused (interval=0) and manually changed slide, it does not restart when interval>0
 - refactor(carousel-item): add attribute role = "group"

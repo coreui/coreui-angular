@@ -217,7 +217,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
       }
       this.activeItemInterval =
         typeof nextItem.interval === 'number' && nextItem.interval > -1 ? nextItem.interval : this.interval();
-      console.log('activeItemInterval', nextItem.interval, this.activeItemInterval);
       const direction = this.direction();
       const isLastItem =
         (nextItem.active === nextItem.lastItemIndex && direction === 'next') ||
