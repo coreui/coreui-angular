@@ -6,10 +6,12 @@ import { FormCheckInputDirective } from './form-check-input.directive';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<input cFormCheckInput>',
+  template: '<input cFormCheckInput [indeterminate]="indeterminate" [checked]="true">',
   imports: [FormCheckInputDirective]
 })
-class TestComponent {}
+class TestComponent {
+  indeterminate = false;
+}
 
 describe('FormCheckInputDirective', () => {
   let component: TestComponent;
@@ -21,11 +23,11 @@ describe('FormCheckInputDirective', () => {
     TestBed.configureTestingModule({
       imports: [FormCheckInputDirective, TestComponent],
       providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }]
-    });
+    }).compileComponents();
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     inputEl = fixture.debugElement.query(By.directive(FormCheckInputDirective));
-    // renderer = fixture.componentRef.injector.get(Renderer2 as Type<Renderer2>);
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
@@ -37,5 +39,12 @@ describe('FormCheckInputDirective', () => {
 
   it('should have css classes', () => {
     expect(inputEl.nativeElement).toHaveClass('form-check-input');
+  });
+
+  it('should have indeterminate state', () => {
+    component.indeterminate = true;
+    fixture.detectChanges();
+    expect(inputEl.nativeElement.checked).toBeFalse();
+    expect(inputEl.nativeElement.indeterminate).toBeTrue();
   });
 });
