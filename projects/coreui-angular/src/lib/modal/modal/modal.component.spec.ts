@@ -27,4 +27,14 @@ describe('ModalComponent', () => {
     expect(fixture.nativeElement).toHaveClass('modal');
     expect(fixture.nativeElement).toHaveClass('fade');
   });
+
+  // it('should be visible', fakeAsync(() => {
+  //   fixture.componentRef.setInput('visible', true);
+  //   fixture.detectChanges();
+  //   expect(fixture.nativeElement).toHaveClass('show');
+  // }));
+
+  // it('should call event handling functions', fakeAsync(() => {
+  //
+  // }));
 });
