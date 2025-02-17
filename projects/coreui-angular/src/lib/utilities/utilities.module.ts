@@ -6,13 +6,22 @@ import {
   BorderDirective,
   RoundedDirective,
   ShadowOnScrollDirective,
-  TextColorDirective,
   TextBgColorDirective,
+  TextColorDirective
 } from './public_api';
 
-const UTILITY_DIRECTIVES = [AlignDirective, BgColorDirective, BorderDirective, RoundedDirective, ShadowOnScrollDirective, TextColorDirective, TextBgColorDirective];
+const UTILITY_DIRECTIVES = [
+  AlignDirective,
+  BgColorDirective,
+  BorderDirective,
+  RoundedDirective,
+  ShadowOnScrollDirective,
+  TextColorDirective,
+  TextBgColorDirective
+];
 
 @NgModule({
-  imports: [...UTILITY_DIRECTIVES], exports: [...UTILITY_DIRECTIVES]
+  imports: [...UTILITY_DIRECTIVES],
+  exports: [...UTILITY_DIRECTIVES]
 })
 export class UtilitiesModule {}
