@@ -16,7 +16,7 @@ export class BorderDirective {
   readonly hostClasses = computed<Record<string, boolean>>(() => {
     const border = this.cBorder();
     if (typeof border === 'boolean') {
-      return { border: true };
+      return { border: border };
     }
     if (typeof border === 'number' || typeof border === 'string') {
       return {
