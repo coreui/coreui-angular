@@ -9,8 +9,7 @@ describe('NavbarComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [NavbarComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -25,5 +24,13 @@ describe('NavbarComponent', () => {
 
   it('should have css classes', () => {
     expect(fixture.nativeElement).toHaveClass('navbar');
+  });
+
+  it('should have container class', () => {
+    fixture.componentRef.setInput('expand', 'xl');
+    fixture.componentRef.setInput('container', 'sm');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.containerClass()).toBe('container-sm');
+    expect(fixture.componentInstance.breakpoint()).toBe('');
   });
 });

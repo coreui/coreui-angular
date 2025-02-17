@@ -1,4 +1,4 @@
-import { afterNextRender, Directive, ElementRef, HostListener, inject, input, Renderer2 } from '@angular/core';
+import { afterNextRender, Directive, ElementRef, inject, input, Renderer2 } from '@angular/core';
 import { CollapseDirective } from '../../collapse';
 
 @Directive({
@@ -6,7 +6,8 @@ import { CollapseDirective } from '../../collapse';
   host: {
     '[attr.aria-label]': 'ariaLabel()',
     '[attr.type]': 'type()',
-    class: 'navbar-toggler'
+    class: 'navbar-toggler',
+    '(click)': 'handleClick($event)'
   }
 })
 export class NavbarTogglerDirective {
@@ -45,8 +46,7 @@ export class NavbarTogglerDirective {
    */
   readonly ariaLabel = input('Toggle navigation');
 
-  @HostListener('click', ['$event'])
-  handleClick() {
+  handleClick($event: MouseEvent): void {
     const collapseRef = this.collapseRef();
     collapseRef?.toggle(!collapseRef?.visible());
   }
