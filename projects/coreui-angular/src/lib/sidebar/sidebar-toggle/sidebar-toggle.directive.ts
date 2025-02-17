@@ -1,4 +1,4 @@
-import { Directive, HostListener, inject, Input } from '@angular/core';
+import { Directive, inject, input } from '@angular/core';
 
 import { SidebarService } from '../sidebar.service';
 
@@ -7,28 +7,29 @@ import { SidebarService } from '../sidebar.service';
  */
 @Directive({
   selector: '[cSidebarToggle]',
-  exportAs: 'cSidebarToggle'
+  exportAs: 'cSidebarToggle',
+  host: {
+    '(click)': 'toggleOpen($event)'
+  }
 })
 export class SidebarToggleDirective {
   readonly #sidebarService = inject(SidebarService);
 
   /**
-   * Id of sidebar for toggle action. [docs]
-   *
-   * @type string
+   * Id of sidebar for toggle action.
+   * @return string
    */
-  @Input('cSidebarToggle') id?: string;
+  readonly id = input<string>(undefined, { alias: 'cSidebarToggle' });
   /**
-   * Sidebar property name for toggle action. [docs]
+   * Sidebar property name for toggle action.
    *
-   * @type 'visible' | 'unfoldable'
+   * @return 'visible' | 'unfoldable'
    * @default 'visible'
    */
-  @Input() toggle: 'visible' | 'unfoldable' = 'visible';
+  readonly toggle = input<'visible' | 'unfoldable'>('visible');
 
-  @HostListener('click', ['$event'])
   toggleOpen($event: any): void {
     $event.preventDefault();
-    this.#sidebarService.toggle({ toggle: this.toggle, id: this.id });
+    this.#sidebarService.toggle({ toggle: this.toggle(), id: this.id() });
   }
 }
