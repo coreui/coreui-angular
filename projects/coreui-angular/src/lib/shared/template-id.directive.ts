@@ -1,9 +1,13 @@
-import { Directive, inject, Input, TemplateRef } from '@angular/core';
+import { Directive, inject, input, TemplateRef } from '@angular/core';
 
 @Directive({
   selector: '[cTemplateId]'
 })
 export class TemplateIdDirective {
-  public readonly templateRef = inject(TemplateRef);
-  @Input('cTemplateId') id!: string;
+  readonly templateRef = inject(TemplateRef);
+  readonly cTemplateId = input.required<string>();
+
+  get id() {
+    return this.cTemplateId();
+  }
 }
