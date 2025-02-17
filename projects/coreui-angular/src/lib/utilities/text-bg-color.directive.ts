@@ -1,8 +1,11 @@
-import { Directive, HostBinding, input, InputSignal } from '@angular/core';
+import { computed, Directive, input, InputSignal } from '@angular/core';
 import { Colors } from '../coreui.types';
 
 @Directive({
-  selector: '[cTextBgColor]'
+  selector: '[cTextBgColor]',
+  host: {
+    '[class]': 'hostClasses()'
+  }
 })
 export class TextBgColorDirective {
   /**
@@ -11,11 +14,10 @@ export class TextBgColorDirective {
    */
   readonly textBgColor: InputSignal<Colors> = input('', { alias: 'cTextBgColor' });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     const color = this.textBgColor();
     return {
       [`text-bg-${color}`]: !!color
-    };
-  }
+    } as Record<string, boolean>;
+  });
 }
