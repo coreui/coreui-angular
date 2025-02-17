@@ -1,25 +1,20 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, type UrlTree } from '@angular/router';
 
 import { HtmlAttributesDirective } from '../../shared';
 
 @Component({
-    selector: 'c-sidebar-brand',
-    templateUrl: './sidebar-brand.component.html',
-    imports: [RouterLink, HtmlAttributesDirective, NgClass]
+  selector: 'c-sidebar-brand',
+  templateUrl: './sidebar-brand.component.html',
+  imports: [RouterLink, HtmlAttributesDirective, NgClass],
+  host: { class: 'sidebar-brand' }
 })
-export class SidebarBrandComponent implements OnInit {
+export class SidebarBrandComponent {
+  readonly brandFull = input<any>();
+  readonly brandNarrow = input<any>();
 
-  @Input() brandFull?: any;
-  @Input() brandNarrow?: any;
-  @Input() routerLink?: any[] | string;
+  readonly routerLink = input<string | any[] | UrlTree | null | undefined>();
 
-  @HostBinding('class.sidebar-brand') sidebarBrandClass = true;
-
-  brandImg = false;
-
-  ngOnInit(): void {
-    this.brandImg = Boolean(this.brandFull || this.brandNarrow);
-  }
+  readonly brandImg = computed(() => Boolean(this.brandFull() || this.brandNarrow()));
 }
