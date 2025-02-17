@@ -3,6 +3,35 @@
 
 ---
 
+#### `5.3.15`
+
+- refactor: linkedSignal source cleanup
+- refactor(form): host binding, cleanup, tests
+- refactor(form-floating): host binding, cleanup, tests
+- test(form-select): coverage
+- test(form-check-input): indeterminate coverage
+- refactor(modal-toggle): host binding, cleanup, tests
+- refactor(navbar-toggler): host binding, cleanup, tests
+- refactor(template-id): signal inputs, cleanup, tests
+- test(bg-color): css classes coverage
+- test(border): css classes coverage
+- fix(border): border input boolean
+- test(rounded): css classes coverage
+- fix(rounded): border input boolean
+- refactor(text-bg-color): host binding, cleanup, tests
+- refactor(text-color): host binding, cleanup, tests
+- test(shadow-on-scroll): coverage
+- test(visible): coverage
+- refactor(utilities): module minor cleanups
+- refactor(sidebar-toggler): signal inputs, host bindings, cleanup
+- refactor(sidebar-toggle): signal inputs, host bindings, cleanup
+- refactor(sidebar-nav-link): signal output
+- refactor(sidebar-brand): signal inputs, host bindings, cleanup
+- refactor(sidebar): signal inputs, host bindings, cleanup, use inert attribute
+- chore(dependencies): update
+
+---
+
 #### `5.3.14`
 
 - fix(carousel): when paused (interval=0) and manually changed slide, it does not restart when interval>0
