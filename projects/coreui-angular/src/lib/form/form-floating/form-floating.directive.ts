@@ -1,8 +1,8 @@
-import { booleanAttribute, computed, Directive, input } from '@angular/core';
+import { booleanAttribute, Directive, input } from '@angular/core';
 
 @Directive({
   selector: '[cFormFloating]',
-  host: { '[class]': 'hostClasses()' }
+  host: { '[class.form-floating]': 'floating()' }
 })
 export class FormFloatingDirective {
   /**
@@ -10,10 +10,4 @@ export class FormFloatingDirective {
    * @type boolean
    */
   readonly floating = input(true, { transform: booleanAttribute, alias: 'cFormFloating' });
-
-  readonly hostClasses = computed(() => {
-    return {
-      'form-floating': this.floating()
-    } as Record<string, boolean>;
-  });
 }
