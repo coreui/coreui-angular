@@ -16,7 +16,7 @@ export class RoundedDirective {
   readonly hostClasses = computed<Record<string, boolean>>(() => {
     const rounded = this.cRounded();
     if (typeof rounded === 'boolean') {
-      return { rounded: true };
+      return { rounded: rounded };
     }
     if (typeof rounded === 'number' || typeof rounded === 'string') {
       return {
