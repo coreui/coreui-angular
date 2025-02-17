@@ -48,7 +48,7 @@ export class CollapseDirective implements OnDestroy {
   readonly animateInput = input(true, { transform: booleanAttribute, alias: 'animate' });
 
   readonly animate = linkedSignal({
-    source: () => this.animateInput(),
+    source: this.animateInput,
     computation: (value: boolean) => value
   });
 
@@ -68,7 +68,7 @@ export class CollapseDirective implements OnDestroy {
 
   readonly visibleChange = output<boolean>();
 
-  readonly visible = linkedSignal({ source: () => this.visibleInput(), computation: (value: boolean) => value });
+  readonly visible = linkedSignal({ source: this.visibleInput, computation: (value: boolean) => value });
 
   readonly #initialized = signal(false);
 

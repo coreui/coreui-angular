@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  booleanAttribute,
   computed,
   ContentChildren,
   DestroyRef,
@@ -48,10 +49,10 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
    * Toggle the visibility of dropdown menu component.
    * @return boolean
    */
-  readonly visibleInput = input<boolean>(false, { alias: 'visible' });
+  readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
   readonly visible = linkedSignal({
-    source: () => this.visibleInput(),
+    source: this.visibleInput,
     computation: (value) => value
   });
 

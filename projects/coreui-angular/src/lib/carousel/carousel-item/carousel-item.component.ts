@@ -26,7 +26,7 @@ export class CarouselItemComponent {
   readonly activeInput = input(false, { transform: booleanAttribute, alias: 'active' });
 
   readonly active = linkedSignal({
-    source: () => this.activeInput(),
+    source: this.activeInput,
     computation: (value) => {
       return value;
     }

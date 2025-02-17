@@ -61,7 +61,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   readonly activeIndexInput = input<number>(0, { alias: 'activeIndex' });
 
   readonly activeIndex = linkedSignal({
-    source: () => this.activeIndexInput(),
+    source: this.activeIndexInput,
     computation: (value: number) => value
   });
 
@@ -72,7 +72,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   readonly animateInput = input<boolean>(true, { alias: 'animate' });
 
   readonly animate = linkedSignal({
-    source: () => this.animateInput(),
+    source: this.animateInput,
     computation: (value: boolean) => value
   });
 
@@ -83,7 +83,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   readonly directionInput = input<'next' | 'prev'>('next', { alias: 'direction' });
 
   readonly direction = linkedSignal({
-    source: () => this.directionInput(),
+    source: this.directionInput,
     computation: (value: 'next' | 'prev') => value
   });
 
@@ -95,7 +95,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   readonly intervalInput = input<number>(0, { alias: 'interval' });
 
   readonly interval = linkedSignal({
-    source: () => this.intervalInput(),
+    source: this.intervalInput,
     computation: (value: number) => value
   });
 

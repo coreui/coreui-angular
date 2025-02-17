@@ -73,7 +73,7 @@ export class AlertComponent {
   readonly dismissibleInput = input(false, { transform: booleanAttribute, alias: 'dismissible' });
 
   readonly #dismissible = linkedSignal({
-    source: () => this.dismissibleInput(),
+    source: this.dismissibleInput,
     computation: (value) => {
       return value;
     }
@@ -100,7 +100,7 @@ export class AlertComponent {
   readonly visibleInput = input(true, { transform: booleanAttribute, alias: 'visible' });
 
   readonly #visible = linkedSignal({
-    source: () => this.visibleInput(),
+    source: this.visibleInput,
     computation: (value) => {
       return value;
     }

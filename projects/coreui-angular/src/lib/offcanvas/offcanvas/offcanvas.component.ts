@@ -139,7 +139,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
   readonly visible = linkedSignal({
-    source: () => this.visibleInput(),
+    source: this.visibleInput,
     computation: (value) => value
   });
 

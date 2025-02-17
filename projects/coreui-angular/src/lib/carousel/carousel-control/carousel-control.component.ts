@@ -23,7 +23,7 @@ export class CarouselControlComponent {
   readonly captionInput = input<string | undefined>(undefined, { alias: 'caption' });
 
   readonly caption = linkedSignal({
-    source: () => this.captionInput(),
+    source: this.captionInput,
     computation: (value) => {
       return !!value ? value : this.direction() === 'prev' ? 'Previous' : 'Next';
     }

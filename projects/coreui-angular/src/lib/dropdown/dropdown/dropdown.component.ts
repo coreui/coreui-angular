@@ -232,10 +232,10 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
    * @return boolean
    * @default false
    */
-  readonly visibleInput = input<boolean, unknown>(false, { transform: booleanAttribute, alias: 'visible' });
+  readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
   readonly visible = linkedSignal({
-    source: () => this.visibleInput(),
+    source: this.visibleInput,
     computation: (value) => value
   });
 
