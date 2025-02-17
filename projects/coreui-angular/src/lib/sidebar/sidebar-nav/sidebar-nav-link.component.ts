@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, output } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -58,7 +58,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
     return this._item;
   }
 
-  @Output() linkClick = new EventEmitter();
+  readonly linkClick = output();
 
   public linkType!: string;
   public href!: string;
