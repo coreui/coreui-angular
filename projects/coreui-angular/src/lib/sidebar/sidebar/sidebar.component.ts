@@ -1,15 +1,17 @@
 import {
   booleanAttribute,
   Component,
-  EventEmitter,
-  HostBinding,
+  computed,
+  effect,
   inject,
-  Input,
+  input,
+  linkedSignal,
   OnChanges,
   OnDestroy,
   OnInit,
-  Output,
+  output,
   Renderer2,
+  signal,
   SimpleChanges
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -23,7 +25,11 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
   selector: 'c-sidebar',
   exportAs: 'cSidebar',
   template: '<ng-content />',
-  host: { class: 'sidebar' }
+  host: {
+    class: 'sidebar',
+    '[class]': 'hostClasses()',
+    '[attr.inert]': '!this.sidebarState.visible || null'
+  }
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   readonly #document = inject<Document>(DOCUMENT);
@@ -32,14 +38,13 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   readonly #sidebarService = inject(SidebarService);
   readonly #backdropService = inject(SidebarBackdropService);
 
-  #visible = false;
   #onMobile = false;
   #layoutChangeSubscription!: Subscription;
   #stateToggleSubscription!: Subscription;
 
-  state: ISidebarAction = {
+  readonly state = signal<ISidebarAction>({
     sidebar: this
-  };
+  });
 
   #stateInitial = {
     narrow: false,
@@ -48,105 +53,120 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   };
 
   /**
-   * Sets if the color of text should be colored for a light or dark background. [docs]
-   *
-   * @type 'dark' | 'light'
+   * Sets if the color of text should be colored for a light or dark background.
+   * @return 'dark' | 'light'
    */
-  @Input() colorScheme?: 'dark' | 'light';
+  readonly colorScheme = input<'dark' | 'light'>();
 
   /**
-   * Sets html attribute id. [docs]
-   *
-   * @type string
+   * Sets html attribute id.
+   * @return string
    */
-  @Input() id?: string;
+  readonly id = input<string>();
 
   /**
-   * Make sidebar narrow. [docs]
-   * @type boolean
+   * Make sidebar narrow.
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) narrow: boolean = false;
+  readonly narrowInput = input(false, { transform: booleanAttribute, alias: 'narrow' });
+
+  readonly #narrow = linkedSignal(this.narrowInput);
+
+  set narrow(value) {
+    this.#narrow.set(value);
+  }
+
+  get narrow() {
+    return this.#narrow();
+  }
 
   /**
    * Set sidebar to overlaid variant.
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) overlaid: boolean = false;
+  readonly overlaid = input(false, { transform: booleanAttribute });
 
   /**
-   * Components placement, there’s no default placement. [docs]
-   * @type 'start' | 'end'
+   * Components placement, there’s no default placement.
+   * @return 'start' | 'end'
    */
-  @Input() placement?: 'start' | 'end';
+  readonly placement = input<'start' | 'end'>();
 
   /**
-   * Place sidebar in non-static positions. [docs]
+   * Place sidebar in non-static positions.
+   * @return 'fixed' | 'sticky'
    * @default 'fixed'
    */
-  @Input() position: 'fixed' | 'sticky' = 'fixed';
+  readonly position = input<'fixed' | 'sticky'>('fixed');
 
   /**
-   * Size the component small, large, or extra large. [docs]
+   * Size the component small, large, or extra large.
+   * @return 'sm' | 'lg' | 'xl'
    */
-  @Input() size?: 'sm' | 'lg' | 'xl';
+  readonly size = input<'sm' | 'lg' | 'xl'>();
 
   /**
-   * Expand narrowed sidebar on hover. [docs]
+   * Expand narrowed sidebar on hover.
    * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) unfoldable: boolean = false;
+  readonly unfoldableInput = input(false, { transform: booleanAttribute, alias: 'unfoldable' });
+
+  readonly unfoldable = linkedSignal({
+    source: this.unfoldableInput,
+    computation: (value) => value
+  });
 
   /**
-   * Toggle the visibility of sidebar component. [docs]
+   * Toggle the visibility of sidebar component.
    * @type boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute })
+  readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
+
+  readonly #visible = linkedSignal(this.visibleInput);
+
+  readonly #visibleEffect = effect(() => {
+    this.visibleChange.emit(this.#visible());
+  });
+
   set visible(value: boolean) {
-    const visible = value;
-    if (this.#visible !== visible) {
-      this.#visible = visible;
-      this.visibleChange.emit(this.#visible);
-    }
+    this.#visible.set(value);
   }
 
   get visible() {
-    return this.#visible;
+    return this.#visible();
   }
 
   /**
-   * Event emitted on visibility change. [docs]
-   * @type boolean
+   * Event emitted on visibility change.
+   * @return boolean
    */
-  @Output() visibleChange = new EventEmitter<boolean>();
+  readonly visibleChange = output<boolean>();
 
   set sidebarState(value: ISidebarAction) {
     const newState = value;
     if ('toggle' in newState) {
       if (newState.toggle === 'visible') {
-        newState.visible = !this.state.visible;
-        this.visible = newState.visible;
+        newState.visible = !this.state().visible;
+        this.#visible.set(newState.visible);
       } else if (newState.toggle === 'unfoldable') {
-        newState.unfoldable = !this.state.unfoldable;
-        this.unfoldable = newState.unfoldable;
+        newState.unfoldable = !this.state().unfoldable;
+        this.unfoldable.set(newState.unfoldable);
       }
     } else {
-      this.visible = (newState.visible ?? this.visible) && !this.overlaid;
+      this.#visible.update((visible) => (newState.visible ?? visible) && !this.overlaid());
     }
-    this.state = {
-      ...this.state,
-      ...newState
-    };
-    this.state.mobile && this.state.visible
+    this.state.update((state) => ({ ...state, ...newState }));
+    this.state().mobile && this.state().visible
       ? this.#backdropService.setBackdrop(this)
       : this.#backdropService.clearBackdrop();
   }
 
   get sidebarState(): ISidebarAction {
-    return this.state;
+    return { ...this.state() };
   }
 
   get getMobileBreakpoint(): string {
@@ -164,23 +184,26 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     this.#backdropService.renderer = this.#renderer;
   }
 
-  @HostBinding('class')
-  get getClasses(): any {
-    const { mobile, visible } = this.sidebarState;
+  readonly hostClasses = computed(() => {
+    const { mobile, visible } = { ...this.sidebarState };
+    const unfoldable = this.unfoldable();
+    const placement = this.placement();
+    const colorScheme = this.colorScheme();
+    const size = this.size();
     return {
       sidebar: true,
-      'sidebar-fixed': this.position === 'fixed' && !mobile,
-      'sidebar-narrow': this.narrow && !this.unfoldable,
-      'sidebar-narrow-unfoldable': this.unfoldable,
-      'sidebar-overlaid': this.overlaid,
-      [`sidebar-${this.placement}`]: !!this.placement,
-      [`sidebar-${this.colorScheme}`]: !!this.colorScheme,
-      [`sidebar-${this.size}`]: !!this.size,
+      'sidebar-fixed': this.position() === 'fixed' && !mobile,
+      'sidebar-narrow': this.#narrow() && !unfoldable,
+      'sidebar-narrow-unfoldable': unfoldable,
+      'sidebar-overlaid': this.overlaid(),
+      [`sidebar-${placement}`]: !!placement,
+      [`sidebar-${colorScheme}`]: !!colorScheme,
+      [`sidebar-${size}`]: !!size,
       show: visible,
       // show: visible && this.#onMobile, //todo: check
       hide: !visible
     };
-  }
+  });
 
   ngOnInit(): void {
     this.setInitialState();
@@ -194,7 +217,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const oldStateMap = new Map(Object.entries(this.state));
+    const oldStateMap = new Map(Object.entries(this.state()));
     const newStateMap = new Map();
     newStateMap.set('sidebar', this);
 
@@ -219,9 +242,9 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   setInitialState(): void {
     this.#stateInitial = {
-      narrow: this.narrow,
-      visible: this.visible,
-      unfoldable: this.unfoldable
+      narrow: this.#narrow(),
+      visible: this.#visible(),
+      unfoldable: this.unfoldable()
     };
     this.#sidebarService.toggle({
       ...this.#stateInitial,
@@ -232,8 +255,8 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   private stateToggleSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
       this.#stateToggleSubscription = this.#sidebarService.sidebarState$.subscribe((state) => {
-        if (this === state.sidebar || this.id === state.id) {
-          this.sidebarState = state;
+        if (this === state.sidebar || this.id() === state.id) {
+          this.sidebarState = { ...state };
         }
       });
     } else {
@@ -249,7 +272,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
       this.#layoutChangeSubscription = layoutChanges.subscribe((result: BreakpointState) => {
         const isOnMobile = result.breakpoints[onMobile];
-        const isUnfoldable = isOnMobile ? false : this.unfoldable;
+        const isUnfoldable = isOnMobile ? false : this.unfoldable();
         if (this.#onMobile !== isOnMobile) {
           this.#onMobile = isOnMobile;
           this.#sidebarService.toggle({
