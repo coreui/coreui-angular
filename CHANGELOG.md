@@ -3,6 +3,12 @@
 
 ---
 
+#### `5.3.16`
+
+- chore(dependencies): tilde `~` dependencies for @coreui/* packages to avoid Sass modules mismatch
+
+---
+
 #### `5.3.15`
 
 - refactor: linkedSignal source cleanup
