@@ -3,6 +3,12 @@
 
 ---
 
+#### `5.4.1`
+
+- chore(dependencies): update 
+
+---
+
 #### `5.4.0`
 
 - chore(dependencies): version bump and tilde `~` dependencies for @coreui/* packages with Sass modules 
