@@ -11,7 +11,7 @@
 <h3 align="center">CoreUI Angular wrapper for Chart.js v4</h3>
 
 <p align="center">
-  <a href="https://coreui.io/angular/docs/"><strong>Explore @coreui/angular-chartjs docs & examples »</strong></a>
+  <a href="https://coreui.io/angular/docs/" target="_blank">Explore <strong>@coreui/angular-chartjs docs & examples »</strong></a>
   <br>
   <br>
   <a href="https://github.com/coreui/coreui-angular/issues/new?template=bug_report.md">Report bug</a>
@@ -35,7 +35,7 @@
 [npm-badge-next]: https://img.shields.io/npm/v/@coreui/angular-chartjs/next?style=flat-square&color=red
 [npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
 [npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^19.1.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^19.2.0-lightgrey.svg?style=flat-square&logo=angular
 
 ##### install:
 
@@ -47,8 +47,8 @@ ng add @coreui/angular-chartjs
 - or npm
 ```bash
 npm install chart.js@4
-npm install @coreui/chartjs@4
-npm install @coreui/angular-chartjs@5.2
+npm install @coreui/chartjs@~4.1
+npm install @coreui/angular-chartjs@~5.4
 ````
 
 ##### import:
