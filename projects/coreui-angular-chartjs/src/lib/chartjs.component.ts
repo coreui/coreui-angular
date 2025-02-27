@@ -79,7 +79,11 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
    * ID attribute applied to the rendered canvas.
    * @return string
    */
-  readonly id = input<string>(`c-chartjs-${nextId++}`);
+  readonly idInput = input<string>(`c-chartjs-${nextId++}`, { alias: 'id' });
+
+  get id() {
+    return this.idInput();
+  }
 
   /**
    * The options object that is passed into the Chart.js chart.
