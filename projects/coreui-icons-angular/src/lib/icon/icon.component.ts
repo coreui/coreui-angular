@@ -1,16 +1,5 @@
 import { NgClass } from '@angular/common';
-import {
-  afterNextRender,
-  Component,
-  computed,
-  effect,
-  ElementRef,
-  inject,
-  input,
-  Renderer2,
-  signal,
-  viewChild
-} from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, Renderer2, viewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { HtmlAttributesDirective } from '../shared/html-attr.directive';
@@ -19,25 +8,18 @@ import { IconSize, IIcon, NgCssClass } from './icon.interface';
 import { transformName } from './icon.utils';
 
 @Component({
-    exportAs: 'cIconComponent',
-    imports: [NgClass, HtmlAttributesDirective],
-    selector: 'c-icon',
-    styleUrls: ['./icon.component.scss'],
-    templateUrl: './icon.component.svg',
-    host: { ngSkipHydration: 'true', style: 'display: none' }
+  exportAs: 'cIconComponent',
+  imports: [NgClass, HtmlAttributesDirective],
+  selector: 'c-icon',
+  styleUrls: ['./icon.component.scss'],
+  templateUrl: './icon.component.svg',
+  host: { ngSkipHydration: 'true', style: 'display: none' }
 })
 export class IconComponent implements IIcon {
   readonly #renderer = inject(Renderer2);
   readonly #elementRef = inject(ElementRef);
   readonly #sanitizer = inject(DomSanitizer);
   readonly #iconSet = inject(IconSetService);
-  readonly #hostElement = signal<ElementRef<any> | undefined>(undefined);
-
-  constructor() {
-    afterNextRender(() => {
-      this.#hostElement.set(this.#elementRef);
-    });
-  }
 
   readonly content = input<string | string[] | any[]>();
 
@@ -53,12 +35,12 @@ export class IconComponent implements IIcon {
 
   readonly svgElementRef = viewChild<ElementRef>('svgElement');
 
-  readonly svgElementEffect = effect(() => {
+  readonly #svgElementEffect = effect(() => {
     const svgElementRef = this.svgElementRef();
-    const hostElement = this.#hostElement()?.nativeElement;
+    const hostElement: Element = this.#elementRef.nativeElement;
     if (svgElementRef && hostElement) {
       const svgElement = svgElementRef.nativeElement;
-      hostElement.classList?.values()?.forEach((item: string) => {
+      hostElement.classList?.forEach((item: string) => {
         this.#renderer.addClass(svgElement, item);
       });
       const parentElement = this.#renderer.parentNode(hostElement);
