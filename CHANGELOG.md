@@ -3,6 +3,16 @@
 
 ---
 
+#### `5.4.3`
+
+- chore(dependencies): update to `Angular 19.2`
+- refactor(icon.component): cleanup, classList simplify
+- refactor(chartjs.component): signal inputs, host bindings, cleanup
+- fix(table-color): allow undefined type for color input prop
+- fix(align): allow undefined type for align input prop
+
+---
+
 #### `5.4.1`
 
 - chore(dependencies): update 

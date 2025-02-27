@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://coreui.io/">
+  <a href="https://coreui.io/" target="_blank">
     <img
       src="https://coreui.io/images/brand/coreui-signet.svg"
       alt="CoreUI logo"
@@ -14,21 +14,32 @@
   <a href="https://coreui.io/angular/docs/" target="_blank">Explore <strong>@coreui/angular-chartjs docs & examples »</strong></a>
   <br>
   <br>
-  <a href="https://github.com/coreui/coreui-angular/issues/new?template=bug_report.md">Report bug</a>
+  <a href="https://github.com/coreui/coreui-angular/issues/new?template=bug_report.md" target="_blank">Report bug</a>
   ·
-  <a href="https://github.com/coreui/coreui-angular/issues/new?template=feature_request.md">Request feature</a>
+  <a href="https://github.com/coreui/coreui-angular/issues/new?template=feature_request.md" target="_blank">Request feature</a>
   ·
   <a href="https://blog.coreui.io/">Blog</a>
 </p>
+<hr>
+<p>
+Featured CoreUI for Angular libraries:
+<br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-angular" target="_blank">CoreUI Components for Angular</a>
+<br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-angular-chartjs" target="_blank">CoreUI Angular wrapper for Chart.js v4</a>
+<br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-icons-angular" target="_blank">CoreUI Icons for Angular</a>
+</p>
+<hr>
 
-## Status
+### Status
 
 ![angular][angular-badge]
 [![npm package][npm-badge-v5-ng19]][npm]
 [![npm package][npm-badge-latest]][npm]
-[![npm package][npm-badge-next]][npm]  
-[![NPM downloads][npm-download]][npm]
-
+[![npm package][npm-badge-next]][npm]
+[![NPM downloads][npm-download]][npm]  
+[![Project chartjs check](https://github.com/coreui/coreui-angular/actions/workflows/project-chartjs-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/project-chartjs-check.yml)
 
 [npm-badge-v5-ng19]: https://img.shields.io/npm/v/@coreui/angular-chartjs/v5-ng19?style=flat-square&color=brightgreen
 [npm-badge-latest]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square&color=brightgreen

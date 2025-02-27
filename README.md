@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://coreui.io/">
+  <a href="https://coreui.io/" target="_blank">
     <img
       src="https://coreui.io/images/brand/coreui-signet.svg"
       alt="CoreUI logo"
@@ -8,28 +8,42 @@
   </a>
 </p>
 
-<h2 align="center">CoreUI for Angular</h3>
+<h3 align="center">CoreUI Components for Angular</h3>
 
 <p align="center">
-  Angular Components Library built on top of Bootstrap 5.3 and TypeScript 5.5.
+  Angular Components Library built on top of Bootstrap 5.3 and TypeScript 5.x
   <br>
-  <a href="https://coreui.io/angular/docs/"><strong>Explore CoreUI for Angular docs »</strong></a>
+  <a href="https://coreui.io/angular/docs/" target="_blank">Explore <strong>CoreUI for Angular docs and examples »</strong></a>
   <br>
-  <br>
-  <a href="https://github.com/coreui/coreui-angular/issues/new?template=bug_report.md">Report a bug</a>
+  <a href="https://coreui.io/angular/docs/" target="_blank">CoreUI Docs</a>
   ·
-  <a href="https://github.com/coreui/coreui-angular/issues/new?template=feature_request.md">Request a feature</a>
+  <a href="https://github.com/coreui/coreui-angular/issues/new?template=bug_report.md" target="_blank">Report a bug</a>
   ·
-  <a href="https://blog.coreui.io/">Blog</a>
+  <a href="https://github.com/coreui/coreui-angular/issues/new?template=feature_request.md" target="_blank">Request a feature</a>
+  ·
+  <a href="https://blog.coreui.io/" target="_blank">Blog</a>
 </p>
+<hr>
+<p>
+Featured CoreUI for Angular libraries:
+  <br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-angular" target="_blank">CoreUI Components for Angular</a>
+  <br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-angular-chartjs" target="_blank">CoreUI Angular wrapper for Chart.js v4</a>
+<br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-icons-angular" target="_blank">CoreUI Icons for Angular</a>
+</p>
+<hr>
 
-## Status
 
+### Status
+
+![angular][angular-badge]
 [![npm-coreui-angular-v5-ng19][npm-coreui-angular-badge-v5-ng19]][npm-coreui-angular]
 [![npm-coreui-angular-latest][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
-![angular][angular-badge] [![Build](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml)
+[![Build](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/build-check.yml)
 
 
 ## Table of contents

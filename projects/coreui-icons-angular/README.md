@@ -24,15 +24,27 @@
   ·
   <a href="https://blog.coreui.io/">Blog</a>
 </p>
+<hr>
+<p>
+Featured CoreUI for Angular libraries:
+<br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-angular" target="_blank">CoreUI Components for Angular</a>
+<br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-angular-chartjs" target="_blank">CoreUI Angular wrapper for Chart.js v4</a>
+<br>
+· <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-icons-angular" target="_blank">CoreUI Icons for Angular</a>
+</p>
+<hr>
 
 # CoreUI Icons Angular
 
 ![angular][angular-badge]
 [![npm-coreui-angular-v5-ng19][npm-coreui-icons-angular-v5-ng19]][coreui-angular-icons-npm]
 [![npm-coreui-angular-latest][npm-coreui-icons-angular-latest]][coreui-angular-icons-npm]
-[![npm-coreui-angular-next][npm-coreui-icons-angular-next]][coreui-angular-icons-npm]  
-[![Downloads](https://img.shields.io/npm/dm/@coreui/icons-angular.svg?style=flat-square)][coreui-angular-icons-npm]
-[![License](https://img.shields.io/npm/l/@coreui/angular?style=flat-square)][coreui]  
+[![npm-coreui-angular-next][npm-coreui-icons-angular-next]][coreui-angular-icons-npm]
+[![License](https://img.shields.io/npm/l/@coreui/angular?style=flat-square)][coreui]
+[![Downloads](https://img.shields.io/npm/dm/@coreui/icons-angular.svg?style=flat-square)][coreui-angular-icons-npm]  
+[![Project icons check](https://github.com/coreui/coreui-angular/actions/workflows/project-icons-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/project-icons-check.yml)
 
 [coreui]: https://coreui.io/icons
 [coreui-angular-icons-npm]: https://www.npmjs.com/package/@coreui/icons-angular
