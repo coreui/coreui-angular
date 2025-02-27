@@ -2,6 +2,8 @@ import { ChartType } from 'chart.js/auto';
 import { EventEmitter } from '@angular/core';
 import { ChartConfiguration, DefaultDataPoint } from 'chart.js';
 
+export declare type BooleanInput = string | boolean | null | undefined;
+
 export interface IChartjs<TType extends ChartType = ChartType, TData = DefaultDataPoint<TType>, TLabel = unknown> {
   /**
    * Enables custom html based tooltips instead of standard tooltips.
@@ -81,5 +83,4 @@ export interface IChartjs<TType extends ChartType = ChartType, TData = DefaultDa
    * Emits the chart reference
    */
   chartRef: EventEmitter<any>;
-
 }

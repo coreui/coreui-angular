@@ -1,10 +1,31 @@
-import { afterRender, AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, Input, NgZone, numberAttribute, OnChanges, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild, inject } from '@angular/core';
+import {
+  afterRenderEffect,
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  linkedSignal,
+  NgZone,
+  numberAttribute,
+  OnChanges,
+  OnDestroy,
+  output,
+  Renderer2,
+  SimpleChanges,
+  untracked,
+  viewChild
+} from '@angular/core';
 
 import merge from 'lodash-es/merge';
 
 import type { ChartConfiguration, ChartData, ChartOptions, ChartType, InteractionItem, Plugin } from 'chart.js';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
+import { BooleanInput } from './chartjs.interface';
 
 ChartJS.register(...registerables);
 
@@ -15,25 +36,32 @@ let nextId = 0;
   templateUrl: './chartjs.component.html',
   styleUrls: ['./chartjs.component.scss'],
   exportAs: 'cChart',
-  changeDetection: ChangeDetectionStrategy.OnPush
-  // host: { ngSkipHydration: 'true' }
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class]': 'hostClasses()',
+    '[style.height.px]': 'height()',
+    '[style.width.px]': 'width()'
+  }
 })
-export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
+export class ChartjsComponent implements OnDestroy, OnChanges {
+  //
+  static ngAcceptInputType_redraw: BooleanInput;
+
   private readonly ngZone = inject(NgZone);
   private readonly renderer = inject(Renderer2);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   /**
    * Enables custom html based tooltips instead of standard tooltips.
-   * @type boolean
+   * @return boolean
    * @default true
    */
-  @Input({ transform: booleanAttribute }) customTooltips: boolean = true;
+  readonly customTooltips = input<boolean, unknown>(true, { transform: booleanAttribute });
 
   /**
    * The data object that is passed into the Chart.js chart (more info).
    */
-  @Input() data?: ChartData;
+  readonly data = input<ChartData>();
 
   /**
    * A fallback when the canvas cannot be rendered. Can be used for accessible chart descriptions.
@@ -42,87 +70,80 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   /**
    * Height attribute applied to the rendered canvas.
-   * @type number | undefined
-   * @default 150
+   * @return number | undefined
+   * @default null
    */
-  @HostBinding('style.height.px')
-  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) })
-  height?: number;
+  readonly height = input(null, { transform: (value) => numberAttribute(value, undefined) });
 
   /**
    * ID attribute applied to the rendered canvas.
-   * @type string
+   * @return string
    */
-  @Input() id: string = `c-chartjs-${nextId++}`;
+  readonly id = input<string>(`c-chartjs-${nextId++}`);
 
   /**
    * The options object that is passed into the Chart.js chart.
    */
-  @Input() options?: ChartOptions = {};
+  readonly optionsInput = input<ChartOptions | undefined>({}, { alias: 'options' });
+
+  readonly options = linkedSignal(this.optionsInput);
 
   /**
    * The plugins array that is passed into the Chart.js chart
    */
-  @Input() plugins: Plugin[] = [];
+  readonly plugins = input<Plugin[]>([]);
 
   /**
    * If true, will tear down and redraw chart on all updates.
-   * @type boolean
+   * @return boolean
    * @default false
    */
-  @Input({ transform: booleanAttribute }) redraw: boolean = false;
+  readonly redraw = input(false, { transform: booleanAttribute });
 
   /**
    * Chart.js chart type.
-   * @type {'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'pie' | 'scatter'}
+   * @return {'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'pie' | 'scatter'}
    */
-  @Input() type: ChartType = 'bar';
+  readonly type = input<ChartType>('bar');
 
   /**
    * Width attribute applied to the rendered canvas.
-   * @type number | undefined
-   * @default 300
+   * @return number | undefined
+   * @default null
    */
-  @HostBinding('style.width.px')
-  @Input({ transform: (value: string | number) => numberAttribute(value, undefined) })
-  width?: number;
+  readonly width = input(null, { transform: (value) => numberAttribute(value, undefined) });
 
   /**
    * Put the chart into the wrapper div element.
    * @default true
    */
-  @Input({ transform: booleanAttribute }) wrapper = true;
+  readonly wrapper = input(true, { transform: booleanAttribute });
 
-  @Output() readonly getDatasetAtEvent = new EventEmitter<any>();
-  @Output() readonly getElementAtEvent = new EventEmitter<any>();
-  @Output() readonly getElementsAtEvent = new EventEmitter<any>();
+  readonly getDatasetAtEvent = output<InteractionItem[]>();
+  readonly getElementAtEvent = output<InteractionItem[]>();
+  readonly getElementsAtEvent = output<InteractionItem[]>();
 
-  @Output() readonly chartRef = new EventEmitter<any>();
+  readonly chartRef = output<any>();
 
-  @ViewChild('canvasElement') canvasElement!: ElementRef;
+  readonly canvasElement = viewChild.required<ElementRef>('canvasElement');
 
   chart!: ChartJS;
   ctx!: CanvasRenderingContext2D;
 
-  @HostBinding('class')
-  get hostClasses() {
+  readonly hostClasses = computed(() => {
     return {
-      'chart-wrapper': this.wrapper
+      'chart-wrapper': this.wrapper()
     };
-  }
+  });
 
   constructor() {
-    // todo: verify afterRender / afterNextRender for chartjs (spec fails with 17.0.10)
-    afterRender({
-      write: () => {
-        this.ctx = this.canvasElement?.nativeElement?.getContext('2d');
+    afterRenderEffect({
+      read: () => {
+        const canvasElement = this.canvasElement();
+        this.ctx = canvasElement?.nativeElement?.getContext('2d');
         this.chartRender();
       }
     });
-  }
-
-  ngAfterViewInit(): void {
-    this.chartRender();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -171,7 +192,8 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   public chartRender() {
-    if (!this.canvasElement?.nativeElement || !this.ctx || this.chart) {
+    const canvasElement = this.canvasElement();
+    if (!canvasElement?.nativeElement || !this.ctx || this.chart) {
       return;
     }
 
@@ -180,7 +202,7 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
       if (config) {
         this.chart = new ChartJS(this.ctx, config);
         this.ngZone.run(() => {
-          this.renderer.setStyle(this.canvasElement.nativeElement, 'display', 'block');
+          this.renderer.setStyle(canvasElement.nativeElement, 'display', 'block');
           this.changeDetectorRef.markForCheck();
           this.chartRef.emit(this.chart);
         });
@@ -193,7 +215,7 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
       return;
     }
 
-    if (this.redraw) {
+    if (this.redraw()) {
       this.chartDestroy();
       this.chartRender();
       return;
@@ -201,7 +223,7 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     const config: ChartConfiguration = this.chartConfig();
 
-    if (this.options) {
+    if (this.options()) {
       Object.assign(this.chart.options ?? {}, config.options ?? {});
     }
 
@@ -234,44 +256,47 @@ export class ChartjsComponent implements AfterViewInit, OnDestroy, OnChanges {
     return this.chart?.toBase64Image();
   }
 
-  private chartDataConfig(): ChartData {
+  private chartDataConfig = computed<ChartData>(() => {
+    const { labels, datasets } = { ...this.data() };
     return {
-      labels: this.data?.labels ?? [],
-      datasets: this.data?.datasets ?? []
+      labels: labels ?? [],
+      datasets: datasets ?? []
     };
-  }
+  });
 
-  private chartOptions(): ChartOptions {
-    return this.options ?? {};
-  }
+  readonly chartOptions = computed<ChartOptions>(() => this.options() ?? {});
 
-  private chartConfig(): ChartConfiguration {
+  readonly chartConfig = computed<ChartConfiguration>(() => {
     this.chartCustomTooltips();
     return {
       data: this.chartDataConfig(),
       options: this.chartOptions(),
-      plugins: this.plugins,
-      type: this.type
+      plugins: this.plugins(),
+      type: this.type()
     };
-  }
+  });
 
   private chartCustomTooltips() {
-    if (this.customTooltips) {
-      const options = this.options;
-      const plugins = this.options?.plugins;
-      const tooltip = this.options?.plugins?.tooltip;
-      this.options = merge({
-        ...options,
-        plugins: {
-          ...plugins,
-          tooltip: {
-            ...tooltip,
-            enabled: false,
-            mode: 'index',
-            position: 'nearest',
-            external: cuiCustomTooltips
-          }
-        }
+    if (this.customTooltips()) {
+      const options = this.options();
+      const plugins = options?.plugins;
+      const tooltip = options?.plugins?.tooltip;
+      untracked(() => {
+        this.options.set(
+          merge({
+            ...options,
+            plugins: {
+              ...plugins,
+              tooltip: {
+                ...tooltip,
+                enabled: false,
+                mode: 'index',
+                position: 'nearest',
+                external: cuiCustomTooltips
+              }
+            }
+          })
+        );
       });
     }
   }

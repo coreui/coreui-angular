@@ -1,9 +1,9 @@
 <canvas
   #canvasElement
   (click)="handleClick($event)"
-  [height]="height"
-  [id]="id"
-  [width]="width"
+  [height]="height() || null"
+  [id]="id()"
+  [width]="width() || null"
   role="img"
   style="display: none;"
 >
