@@ -3,6 +3,13 @@
 
 ---
 
+#### `5.4.5`
+
+- chore(dependencies): update
+- refactor(coreui.types): add BooleanInput and NumberInput types
+
+---
+
 #### `5.4.3`
 
 - chore(dependencies): update to `Angular 19.2`
