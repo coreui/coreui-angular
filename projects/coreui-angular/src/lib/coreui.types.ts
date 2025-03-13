@@ -1,5 +1,8 @@
 import { IsActiveMatchOptions } from '@angular/router';
 
+export declare type BooleanInput = string | boolean | null | undefined;
+export declare type NumberInput = string | number | null | undefined;
+
 export type NgCssClass = string | string[] | Set<string> | { [klass: string]: any };
 
 export enum BreakpointInfix {
