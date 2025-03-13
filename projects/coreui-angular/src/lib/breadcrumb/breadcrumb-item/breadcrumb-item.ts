@@ -1,4 +1,4 @@
-import {INavAttributes, INavLinkProps} from '../../coreui.types';
+import { INavAttributes, INavLinkProps } from '../../coreui.types';
 
 interface IBreadcrumbItem {
   label: string;
@@ -9,4 +9,4 @@ interface IBreadcrumbItem {
   queryParams?: { [key: string]: any };
 }
 
-export { INavAttributes, INavLinkProps, IBreadcrumbItem };
+export type { INavAttributes, INavLinkProps, IBreadcrumbItem };
