@@ -1,8 +1,9 @@
+import { FocusKeyManager } from '@angular/cdk/a11y';
 import {
   AfterContentInit,
   booleanAttribute,
   computed,
-  ContentChildren,
+  contentChildren,
   DestroyRef,
   Directive,
   ElementRef,
@@ -10,11 +11,9 @@ import {
   inject,
   input,
   linkedSignal,
-  OnInit,
-  QueryList
+  OnInit
 } from '@angular/core';
-import { FocusKeyManager } from '@angular/cdk/a11y';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
 
 import { ThemeDirective } from '../../shared/theme.directive';
@@ -98,13 +97,17 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
     }
   }
 
-  @ContentChildren(forwardRef(() => DropdownItemDirective), { descendants: true })
-  dropdownItemsContent!: QueryList<DropdownItemDirective>;
+  readonly dropdownItemsContent = contentChildren<DropdownItemDirective>(
+    forwardRef(() => DropdownItemDirective),
+    { descendants: true }
+  );
+
+  readonly items$ = toObservable(this.dropdownItemsContent);
 
   ngAfterContentInit(): void {
     this.focusKeyManagerInit();
 
-    this.dropdownItemsContent.changes
+    this.items$
       .pipe(
         tap((change) => {
           this.focusKeyManagerInit();
@@ -131,7 +134,7 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
   }
 
   private focusKeyManagerInit(): void {
-    this.#focusKeyManager = new FocusKeyManager(this.dropdownItemsContent)
+    this.#focusKeyManager = new FocusKeyManager(this.dropdownItemsContent())
       .withHomeAndEnd()
       .withPageUpDown()
       .withWrap()
