@@ -1,18 +1,16 @@
 import { DOCUMENT } from '@angular/common';
 import {
-  AfterContentInit,
   AfterViewInit,
   booleanAttribute,
   ChangeDetectorRef,
   Component,
   computed,
-  ContentChild,
+  contentChild,
   DestroyRef,
   Directive,
   effect,
   ElementRef,
   forwardRef,
-  Inject,
   inject,
   input,
   linkedSignal,
@@ -24,7 +22,7 @@ import {
   signal,
   untracked
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
 
 import { createPopper, Instance, Options, Placement } from '@popperjs/core';
@@ -128,15 +126,16 @@ export class DropdownToggleDirective implements AfterViewInit {
     '(click)': 'onHostClick($event)'
   }
 })
-export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-    private ngZone: NgZone,
-    private changeDetectorRef: ChangeDetectorRef,
-    public dropdownService: DropdownService
-  ) {
+export class DropdownComponent implements OnDestroy, OnInit {
+  readonly #destroyRef = inject(DestroyRef);
+  readonly #document = inject(DOCUMENT);
+  readonly #elementRef = inject(ElementRef);
+  readonly #renderer = inject(Renderer2);
+  readonly #ngZone = inject(NgZone);
+  readonly #changeDetectorRef = inject(ChangeDetectorRef);
+  readonly dropdownService = inject(DropdownService);
+
+  constructor() {
     this.dropdownStateSubscribe();
   }
 
@@ -177,7 +176,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
    */
   readonly popperOptionsInput = input<Partial<Options>>({}, { alias: 'popperOptions' });
 
-  readonly popperOptionsEffect = effect(() => {
+  readonly #popperOptionsEffect = effect(() => {
     this.popperOptions = { ...untracked(this.#popperOptions), ...this.popperOptionsInput() };
   });
 
@@ -239,7 +238,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     computation: (value) => value
   });
 
-  readonly visibleEffect = effect(() => {
+  readonly #visibleEffect = effect(() => {
     const visible = this.visible();
     this.activeTrap = visible;
     visible ? this.createPopperInstance() : this.destroyPopperInstance();
@@ -250,13 +249,12 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   readonly visibleChange = output<boolean>();
 
   dropdownContext = { $implicit: this.visible() };
-  @ContentChild(DropdownToggleDirective) _toggler!: DropdownToggleDirective;
-  @ContentChild(DropdownMenuDirective) _menu!: DropdownMenuDirective;
-  @ContentChild(DropdownMenuDirective, { read: ElementRef }) _menuElementRef!: ElementRef;
+  readonly _toggler = contentChild(DropdownToggleDirective);
+  readonly _menu = contentChild(DropdownMenuDirective);
+  readonly _menuElementRef = contentChild(DropdownMenuDirective, { read: ElementRef });
 
   public activeTrap = false;
 
-  private dropdownStateSubscription!: Subscription;
   private popperInstance!: Instance | undefined;
   private listeners: (() => void)[] = [];
 
@@ -283,22 +281,19 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     this.clickedTarget = $event.target as HTMLElement;
   }
 
-  dropdownStateSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      this.dropdownStateSubscription = this.dropdownService.dropdownState$
-        .pipe(
-          filter((state) => {
-            return this === state.dropdown;
-          })
-        )
-        .subscribe((state) => {
-          if ('visible' in state) {
-            state?.visible === 'toggle' ? this.toggleDropdown() : this.visible.set(state.visible);
-          }
-        });
-    } else {
-      this.dropdownStateSubscription?.unsubscribe();
-    }
+  dropdownStateSubscribe(): void {
+    this.dropdownService.dropdownState$
+      .pipe(
+        filter((state) => {
+          return this === state.dropdown;
+        }),
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe((state) => {
+        if ('visible' in state) {
+          state?.visible === 'toggle' ? this.toggleDropdown() : this.visible.set(state.visible);
+        }
+      });
   }
 
   toggleDropdown(): void {
@@ -306,16 +301,18 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   onClick(event: any): void {
-    if (!this._toggler?.elementRef.nativeElement.contains(event.target?.closest('[cDropdownToggle]'))) {
+    if (!this._toggler()?.elementRef.nativeElement.contains(event.target?.closest('[cDropdownToggle]'))) {
       this.toggleDropdown();
     }
   }
 
-  ngAfterContentInit(): void {
-    if (this.variant() === 'nav-item') {
-      this.renderer.addClass(this._toggler.elementRef.nativeElement, 'nav-link');
+  readonly #togglerEffect = effect(() => {
+    const variant = this.variant();
+    const _toggler = this._toggler();
+    if (variant === 'nav-item' && _toggler) {
+      this.#renderer.addClass(_toggler.elementRef.nativeElement, 'nav-link');
     }
-  }
+  });
 
   ngOnInit(): void {
     this.setVisibleState(this.visible());
@@ -323,7 +320,6 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
 
   ngOnDestroy(): void {
     this.clearListeners();
-    this.dropdownStateSubscribe(false);
     this.destroyPopperInstance();
   }
 
@@ -333,22 +329,22 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
 
   // todo: turn off popper in navbar-nav
   createPopperInstance(): void {
-    if (this._toggler && this._menu) {
-      this.ngZone.runOutsideAngular(() => {
+    const _toggler = this._toggler();
+    const _menu = this._menu();
+    if (_toggler && _menu) {
+      this.#ngZone.runOutsideAngular(() => {
         // workaround for popper position calculate (see also: dropdown-menu.component)
-        this._menu.elementRef.nativeElement.style.visibility = 'hidden';
-        this._menu.elementRef.nativeElement.style.display = 'block';
+        _menu.elementRef.nativeElement.style.visibility = 'hidden';
+        _menu.elementRef.nativeElement.style.display = 'block';
         if (this.popper()) {
-          this.popperInstance = createPopper(
-            this._toggler.elementRef.nativeElement,
-            this._menu.elementRef.nativeElement,
-            { ...this.popperOptions }
-          );
+          this.popperInstance = createPopper(_toggler.elementRef.nativeElement, _menu.elementRef.nativeElement, {
+            ...this.popperOptions
+          });
         }
-        this.ngZone.run(() => {
+        this.#ngZone.run(() => {
           this.setListeners();
-          this.changeDetectorRef.markForCheck();
-          this.changeDetectorRef.detectChanges();
+          this.#changeDetectorRef.markForCheck();
+          this.#changeDetectorRef.detectChanges();
         });
       });
     }
@@ -358,17 +354,17 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
     this.clearListeners();
     this.popperInstance?.destroy();
     this.popperInstance = undefined;
-    this.changeDetectorRef.markForCheck();
+    this.#changeDetectorRef.markForCheck();
   }
 
   private setListeners(): void {
     this.listeners.push(
-      this.renderer.listen(this.document, 'click', (event) => {
+      this.#renderer.listen(this.#document, 'click', (event) => {
         const target = event.target as HTMLElement;
-        if (this._menuElementRef?.nativeElement.contains(event.target)) {
+        if (this._menuElementRef()?.nativeElement.contains(event.target)) {
           this.clickedTarget = target;
         }
-        if (this._toggler?.elementRef.nativeElement.contains(event.target)) {
+        if (this._toggler()?.elementRef.nativeElement.contains(event.target)) {
           return;
         }
         const autoClose = this.autoClose();
@@ -387,7 +383,7 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
       })
     );
     this.listeners.push(
-      this.renderer.listen(this.elementRef.nativeElement, 'keyup', (event) => {
+      this.#renderer.listen(this.#elementRef.nativeElement, 'keyup', (event) => {
         if (event.key === 'Escape' && this.autoClose() !== false) {
           event.stopPropagation();
           this.setVisibleState(false);
@@ -396,11 +392,11 @@ export class DropdownComponent implements AfterContentInit, OnDestroy, OnInit {
       })
     );
     this.listeners.push(
-      this.renderer.listen(this.document, 'keyup', (event) => {
+      this.#renderer.listen(this.#document, 'keyup', (event) => {
         if (
           event.key === 'Tab' &&
           this.autoClose() !== false &&
-          !this.elementRef.nativeElement.contains(event.target)
+          !this.#elementRef.nativeElement.contains(event.target)
         ) {
           this.setVisibleState(false);
           return;
