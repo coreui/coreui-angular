@@ -3,6 +3,15 @@
 
 ---
 
+#### `5.4.6`
+
+- chore(dependencies): update
+- refactor(dropdown): migrate to contendChild(), constructor-based dependency injection to inject(), cleanup
+- refactor(dropdown-item): add default role prop, cleanup 
+- refactor(dropdown-menu): migrate to contendChildren(), cleanup
+
+---
+
 #### `5.4.5`
 
 - chore(dependencies): update
