@@ -1,6 +1,6 @@
 # [@coreui/angular](https://coreui.io/angular)
 
-![angular](https://img.shields.io/badge/angular-^18.2.0-lightgrey.svg?style=flat-square&logo=angular)
+![angular](https://img.shields.io/badge/angular-^19.2.0-lightgrey.svg?style=flat-square&logo=angular)
 [![npm package][npm-coreui-angular-badge-v2]][npm-coreui-angular]
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
@@ -54,13 +54,13 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 Before you begin, make sure your development environment includes the supported version `Typescript` as well as `Node.js®` and an `npm` package manager.
 
 ###### Typescript
-Angular 18 requires `Typescript` version `^5.4.0` or newer.
+Angular 19 requires `Typescript` version `>=5.5.0 <5.9.0`.
 
 - To check your version, run `tsc -v` in a terminal/console window.
 - To get `Typescript`, go to [www.typescriptlang.org](https://www.typescriptlang.org/).
 
 ###### Node.js
-Angular 18 requires `Node.js` version `^18.19.0` or newer.
+Angular 19 requires `Node.js` version `^18.19.1 || ^20.11.1 || ^22.0.0` or newer.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -68,11 +68,11 @@ Angular 18 requires `Node.js` version `^18.19.0` or newer.
 ###### Angular CLI
 Install the Angular CLI globally using a terminal/console window.
 ```bash
-npm install -g @angular/cli@18
+npm install -g @angular/cli@19
 ```
 
-##### Update to Angular 18
-see: [https://angular.dev/update-guide](https://angular.dev/update-guide?v=17.0-18.0&l=3)
+##### Update to Angular 19
+see: [https://angular.dev/update-guide](https://angular.dev/update-guide?v=18.0-19.0&l=3)
 
 ## Installation
 
@@ -87,7 +87,7 @@ $ git clone https://github.com/coreui/coreui-angular.git
 ### NPM
 
 ``` bash
-$ npm install @coreui/angular@2.18 --save
+$ npm install @coreui/angular@2.19 --save
 ```
 
 ## Usage
