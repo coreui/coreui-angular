@@ -6,11 +6,10 @@ import { Observable } from 'rxjs';
 import { AppBreadcrumbService } from './app-breadcrumb.service';
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'cui-breadcrumb',
-  templateUrl: './cui-breadcrumb.component.html',
-  standalone: true,
-  imports: [NgIf, NgClass, RouterLink, AsyncPipe, NgForOf]
+    // tslint:disable-next-line:component-selector
+    selector: 'cui-breadcrumb',
+    templateUrl: './cui-breadcrumb.component.html',
+    imports: [NgIf, NgClass, RouterLink, AsyncPipe, NgForOf]
 })
 export class CuiBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed?: boolean;

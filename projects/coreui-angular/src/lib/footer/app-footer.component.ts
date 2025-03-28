@@ -3,7 +3,7 @@ import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-footer, cui-footer',
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
   standalone: true
 })
 export class AppFooterComponent implements OnInit, OnDestroy {

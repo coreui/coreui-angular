@@ -3,7 +3,7 @@
      [ngClass]="item | appSidebarNavLink"
      [appHtmlAttr]="item.attributes"
   >
-    <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
+    <app-sidebar-nav-link-content [item]="item" />
   </a>
   <a *ngSwitchCase="'external'"
      [ngClass]="item | appSidebarNavLink"
@@ -11,7 +11,7 @@
      [appHtmlAttr]="item.attributes"
      (click)="linkClicked()"
   >
-    <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
+    <app-sidebar-nav-link-content [item]="item" />
   </a>
   <a *ngSwitchDefault
      [ngClass]="item | appSidebarNavLink"
@@ -30,6 +30,6 @@
      [class.active]="linkActive && !item.linkProps?.routerLinkActiveOptions"
      (click)="linkClicked()"
   >
-    <app-sidebar-nav-link-content [item]="item"></app-sidebar-nav-link-content>
+    <app-sidebar-nav-link-content [item]="item" />
   </a>
 </ng-container>

@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { DOCUMENT, NgClass, NgIf } from '@angular/common';
+import {AsyncPipe, DOCUMENT, NgClass, NgForOf, NgIf} from '@angular/common';
 
 import { AppBreadcrumbService } from './app-breadcrumb.service';
 import { Replace } from '../shared';
@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-breadcrumb',
-  template: `
+    selector: 'app-breadcrumb',
+    template: `
     <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
       <li class="breadcrumb-item"
           *ngIf="breadcrumb.label.title && (breadcrumb.url.slice(-1) == '/' || last)"
@@ -18,8 +18,7 @@ import { RouterLink } from '@angular/router';
       </li>
     </ng-template>
   `,
-  standalone: true,
-  imports: [NgIf, NgClass, RouterLink]
+  imports: [NgIf, NgClass, RouterLink, NgForOf, AsyncPipe]
 })
 export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed?: boolean;

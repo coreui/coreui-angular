@@ -12,8 +12,7 @@ export class AppSidebarNavTitleComponent implements OnInit {
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     const nativeElement: HTMLElement = this.el.nativeElement;

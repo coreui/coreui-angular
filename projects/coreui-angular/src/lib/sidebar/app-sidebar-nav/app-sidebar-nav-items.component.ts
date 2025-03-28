@@ -1,5 +1,5 @@
 import { Component, Inject, Input, Renderer2, forwardRef } from '@angular/core';
-import { Router } from '@angular/router';
+import {Router, RouterLinkActive} from '@angular/router';
 import { DOCUMENT, NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 
 import { SidebarNavHelper } from '../app-sidebar-nav.service';
@@ -19,8 +19,8 @@ import { NavDropdownToggleDirective, NavDropdownDirective } from '../app-sidebar
 export abstract class DropdownToken { }
 
 @Component({
-  selector: 'app-sidebar-nav-items, cui-sidebar-nav-items',
-  template: `
+    selector: 'app-sidebar-nav-items, cui-sidebar-nav-items',
+    template: `
     <ng-container *ngFor="let item of items">
       <ng-container [ngSwitch]="helper.itemType(item)">
         <app-sidebar-nav-dropdown
@@ -78,9 +78,9 @@ export abstract class DropdownToken { }
     AppSidebarNavLabelComponent,
     AppSidebarNavTitleComponent,
     AppSidebarNavDividerComponent,
-    NavDropdownToggleDirective,
-    NavDropdownDirective
-  ],
+    NavDropdownDirective,
+    RouterLinkActive
+  ]
 })
 export class AppSidebarNavItemsComponent {
 
@@ -98,7 +98,7 @@ export class AppSidebarNavItemsComponent {
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     public router: Router,
-    public helper: SidebarNavHelper, 
+    public helper: SidebarNavHelper,
 
   ) { }
 
@@ -110,8 +110,8 @@ export class AppSidebarNavItemsComponent {
 }
 
 @Component({
-  selector: 'app-sidebar-nav-dropdown, cui-sidebar-nav-dropdown',
-  template: `
+    selector: 'app-sidebar-nav-dropdown, cui-sidebar-nav-dropdown',
+    template: `
     <a class="nav-link nav-dropdown-toggle"
        appNavDropdownToggle
        [appHtmlAttr]="item.attributes">

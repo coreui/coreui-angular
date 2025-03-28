@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { INavData } from './app-sidebar-nav';
-import { Router } from '@angular/router';
 
 @Injectable()
 export abstract class SidebarNavService {

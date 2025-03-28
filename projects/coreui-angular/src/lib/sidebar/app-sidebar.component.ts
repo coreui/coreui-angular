@@ -7,7 +7,7 @@ import { AppSidebarService } from './app-sidebar.service';
 
 @Component({
   selector: 'app-sidebar, cui-sidebar',
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
   standalone: true
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {

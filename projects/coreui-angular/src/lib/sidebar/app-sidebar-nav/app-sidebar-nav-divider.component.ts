@@ -8,6 +8,4 @@ import { INavData } from '../app-sidebar-nav';
 })
 export class AppSidebarNavDividerComponent {
   @Input() item?: INavData;
-
-  constructor() { }
 }
