@@ -34,7 +34,7 @@ export class AvatarComponent {
    * Size the component small, large, or extra large.
    * @default 'md'
    */
-  readonly size: InputSignal<Omit<Sizes, 'xxl'>> = input<Omit<Sizes, 'xxl'>>('md');
+  readonly size: InputSignal<Omit<Sizes, 'xxl'>> = input<Omit<Sizes, 'xxl'>>('');
 
   /**
    * The alt attribute for the img element alternate text.
