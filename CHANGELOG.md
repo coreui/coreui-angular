@@ -1,5 +1,11 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+---
+
+#### `5.4.7`
+
+- fix(avatar): default size should be '' not `md`
+- chore(dependencies): update
 
 ---
 
