@@ -6,10 +6,10 @@ import {
   ElementRef,
   inject,
   input,
-  Renderer2,
-  signal,
-  untracked
+  linkedSignal,
+  Renderer2
 } from '@angular/core';
+import { BooleanInput } from '@angular/cdk/coercion';
 
 @Directive({
   selector: 'input[cFormCheckInput]',
@@ -20,6 +20,8 @@ import {
   }
 })
 export class FormCheckInputDirective {
+  static ngAcceptInputType_indeterminate: BooleanInput;
+
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
 
@@ -35,23 +37,22 @@ export class FormCheckInputDirective {
    */
   readonly indeterminateInput = input(false, { transform: booleanAttribute, alias: 'indeterminate' });
 
+  readonly #indeterminate = linkedSignal(this.indeterminateInput);
+
   readonly #indeterminateEffect = effect(() => {
-    const indeterminate = this.indeterminateInput();
-    if (untracked(this.#indeterminate) !== indeterminate) {
+    if (this.type() === 'checkbox') {
+      const indeterminate = this.#indeterminate();
       const htmlInputElement = this.#hostElement.nativeElement as HTMLInputElement;
       if (indeterminate) {
         this.#renderer.setProperty(htmlInputElement, 'checked', false);
       }
       this.#renderer.setProperty(htmlInputElement, 'indeterminate', indeterminate);
-      this.#indeterminate.set(indeterminate);
     }
   });
 
   get indeterminate() {
     return this.#indeterminate();
   }
-
-  readonly #indeterminate = signal(false);
 
   /**
    * Set component validation state to valid.
@@ -66,20 +67,6 @@ export class FormCheckInputDirective {
       'is-valid': valid === true,
       'is-invalid': valid === false
     } as Record<string, boolean>;
-  });
-
-  /**
-   * Set component checked state.
-   * @default false
-   */
-  readonly checkedInput = input(false, { transform: booleanAttribute, alias: 'checked' });
-
-  readonly #checkedEffect = effect(() => {
-    const checked = this.checkedInput();
-    const htmlInputElement = this.#hostElement?.nativeElement as HTMLInputElement;
-    if (htmlInputElement) {
-      this.#renderer.setProperty(htmlInputElement, 'checked', checked);
-    }
   });
 
   get checked(): boolean {

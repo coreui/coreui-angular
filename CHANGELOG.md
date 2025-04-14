@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.4.8` next
+
+- fix(form-check-input): checked prop overwrites checked from writeValue in ReactiveForms
+
+---
+
 #### `5.4.7`
 
 - fix(avatar): default size should be '' not `md`
