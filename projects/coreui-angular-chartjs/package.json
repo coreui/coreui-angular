@@ -27,7 +27,7 @@
   "peerDependencies": {
     "@angular/core": "^19.2.0",
     "@coreui/chartjs": "~4.0.0 || ~4.1.0",
-    "chart.js": "^4.4.8"
+    "chart.js": "^4.4.9"
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
