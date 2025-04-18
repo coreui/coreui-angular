@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.4.9`
+
+- chore(dependencies): update
+
+---
+
 #### `5.4.8`
 
 - fix(form-check-input): checked prop overwrites checked from writeValue in ReactiveForms
