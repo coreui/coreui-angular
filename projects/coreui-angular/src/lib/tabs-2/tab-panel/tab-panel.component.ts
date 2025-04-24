@@ -2,8 +2,6 @@ import { animate, animateChild, AnimationEvent, query, state, style, transition,
 import {
   Component,
   computed,
-  HostBinding,
-  HostListener,
   inject,
   input,
   InputSignal,
@@ -27,7 +25,10 @@ type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
     '[tabindex]': 'visible() ? tabindex(): -1',
     '[attr.aria-labelledby]': 'attrAriaLabelledBy()',
     '[id]': 'propId()',
-    role: 'tabpanel'
+    '[attr.role]': 'role()',
+    '[@.disabled]': '!transition()',
+    '[@fadeInOut]': 'visible() ? "show" : "hide"',
+    '(@fadeInOut.done)': 'onAnimationDone($event)'
   },
   animations: [
     trigger('fadeInOut', [
@@ -65,6 +66,13 @@ export class TabPanelComponent {
   readonly itemKey: InputSignal<string | number> = input.required();
 
   /**
+   * Element role.
+   * @type string
+   * @default 'tabpanel'
+   */
+  readonly role: InputSignal<string> = input('tabpanel');
+
+  /**
    * tabindex attribute.
    * @type number
    * @default 0
@@ -98,25 +106,17 @@ export class TabPanelComponent {
     () => this.ariaLabelledBy() ?? `${this.tabsService.id()}-tab-${this.itemKey()}`
   );
 
-  readonly hostClasses = computed(() => ({
-    'tab-pane': true,
-    active: this.show(),
-    fade: this.transition(),
-    show: this.show(),
-    invisible: this.tabsService.activeItem()?.disabled
-  }) as Record<string, boolean>);
+  readonly hostClasses = computed(
+    () =>
+      ({
+        'tab-pane': true,
+        active: this.show(),
+        fade: this.transition(),
+        show: this.show(),
+        invisible: this.tabsService.activeItem()?.disabled
+      }) as Record<string, boolean>
+  );
 
-  @HostBinding('@.disabled')
-  get animationDisabled(): boolean {
-    return !this.transition();
-  }
-
-  @HostBinding('@fadeInOut')
-  get animateType(): AnimateType {
-    return this.visible() ? 'show' : 'hide';
-  }
-
-  @HostListener('@fadeInOut.done', ['$event'])
   onAnimationDone($event: AnimationEvent): void {
     this.show.set(this.visible());
   }

@@ -5,7 +5,6 @@ import {
   contentChildren,
   DestroyRef,
   effect,
-  HostListener,
   inject,
   input,
   InputSignal,
@@ -19,11 +18,11 @@ import { TabsService } from '../tabs.service';
 @Component({
   exportAs: 'cTabsList',
   selector: 'c-tabs-list',
-  imports: [],
   template: '<ng-content />',
   host: {
     '[attr.role]': 'role()',
-    '[class]': 'hostClasses()'
+    '[class]': 'hostClasses()',
+    '(keydown)': 'onKeyDown($event)'
   }
 })
 export class TabsListComponent {
@@ -50,11 +49,14 @@ export class TabsListComponent {
    */
   readonly role = input('tablist');
 
-  readonly hostClasses = computed(() => ({
-    nav: true,
-    [`nav-${this.layout()}`]: this.layout(),
-    [`nav-${this.variant()}`]: this.variant()
-  }) as Record<string, boolean>);
+  readonly hostClasses = computed(
+    () =>
+      ({
+        nav: true,
+        [`nav-${this.layout()}`]: this.layout(),
+        [`nav-${this.variant()}`]: this.variant()
+      }) as Record<string, boolean>
+  );
 
   readonly tabs = contentChildren(TabDirective);
   #focusKeyManager!: FocusKeyManager<TabDirective>;
@@ -98,8 +100,7 @@ export class TabsListComponent {
     this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
   });
 
-  @HostListener('keydown', ['$event'])
-  onKeydown($event: any) {
+  onKeyDown($event: any) {
     if (['ArrowLeft', 'ArrowRight'].includes($event.key)) {
       this.#focusKeyManager.onKeydown($event);
       return;
