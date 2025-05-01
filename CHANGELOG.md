@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.4.11`
+
+- chore(dependencies): update
+
+---
+
 #### `5.4.10`
 
 - refactor(tabs-2): host bindings, host listeners, cleanup
