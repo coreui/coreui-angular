@@ -1,5 +1,5 @@
 import { Component, Inject, Input, Renderer2, forwardRef } from '@angular/core';
-import {Router, RouterLinkActive} from '@angular/router';
+import { Router } from '@angular/router';
 import { DOCUMENT, NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 
 import { SidebarNavHelper } from '../app-sidebar-nav.service';
@@ -28,8 +28,7 @@ export abstract class DropdownToken { }
           [item]="item"
           [class.open]="helper.isActive(router, item)"
           [ngClass]="item | appSidebarNavItemClass"
-          appNavDropdown
-          routerLinkActive="open">
+          appNavDropdown>
         </app-sidebar-nav-dropdown>
         <app-sidebar-nav-divider
           *ngSwitchCase="'divider'"
@@ -79,7 +78,6 @@ export abstract class DropdownToken { }
     AppSidebarNavTitleComponent,
     AppSidebarNavDividerComponent,
     NavDropdownDirective,
-    RouterLinkActive
   ]
 })
 export class AppSidebarNavItemsComponent {
