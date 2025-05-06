@@ -1,5 +1,10 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.19.1`
+
+- fix(app-sidebar-nav-items): dropdown closes on item click, close #222, thanks @marcoscg
+- chore(dependencies): update
+
 ##### `v2.19.0`
 
 - update to `Angular 19`
