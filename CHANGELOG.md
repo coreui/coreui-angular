@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.4.13`
+
+- fix(modal): scrollbar disappears on backdrop=false, closes #224 - thanks @tturbs
+- chore(dependencies): update
+
+---
+
 #### `5.4.12`
 
 - chore(dependencies): update
