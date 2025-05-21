@@ -261,6 +261,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     setTimeout(() => {
       if (event.toState === 'hidden') {
         this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
+        this.#backdropService.resetScrollbar();
       }
     });
     this.show = this.visible;
