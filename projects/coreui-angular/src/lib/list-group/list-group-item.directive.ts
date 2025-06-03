@@ -6,9 +6,10 @@ import {
   inject,
   input,
   InputSignal,
-  InputSignalWithTransform
+  InputSignalWithTransform,
+  numberAttribute
 } from '@angular/core';
-import { Colors } from '../coreui.types';
+import { BooleanInput, Colors } from '../coreui.types';
 
 @Directive({
   selector: '[cListGroupItem], c-list-group-item',
@@ -22,13 +23,16 @@ import { Colors } from '../coreui.types';
   }
 })
 export class ListGroupItemDirective {
+  static ngAcceptInputType_active: BooleanInput;
+  static ngAcceptInputType_disabled: BooleanInput;
+
   readonly hostElement = inject(ElementRef);
 
   /**
    * Toggle the active state for the component.
-   * @type InputSignal<boolean | undefined>
+   * @type InputSignalWithTransform<boolean, unknown>
    */
-  readonly active: InputSignal<boolean | undefined> = input();
+  readonly active: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -42,12 +46,17 @@ export class ListGroupItemDirective {
    */
   readonly disabled: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
+  /**
+   * The tabindex attribute specifies the tab order of an element (when the "tab" button is used for navigating).
+   */
+  readonly tabindex = input(undefined, { transform: numberAttribute });
+
   readonly hostClasses = computed(() => {
     const host: HTMLElement = this.hostElement.nativeElement;
     return {
       'list-group-item': true,
       'list-group-item-action': host.nodeName === 'A' || host.nodeName === 'BUTTON',
-      active: !!this.active(),
+      active: this.active(),
       disabled: this._disabled(),
       [`list-group-item-${this.color()}`]: !!this.color()
     } as Record<string, boolean>;
@@ -64,10 +73,10 @@ export class ListGroupItemDirective {
   });
 
   readonly tabIndex = computed(() => {
-    return this._disabled() ? '-1' : null;
+    return this._disabled() ? '-1' : (this.tabindex() ?? null);
   });
 
   readonly ariaCurrent = computed(() => {
-    return <boolean>this.active() || null;
+    return this.active() || null;
   });
 }
