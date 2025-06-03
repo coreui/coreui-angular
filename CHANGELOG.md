@@ -2,6 +2,16 @@
 
 ---
 
+#### `5.4.14`
+
+- fix(button): cButton directive loosing tabindex attribute, refactor; close #228 - thanks @bernik1980
+- fix(list-group-item): cListGroupItem directive loosing tabindex attribute, refactor
+- fix(nav-link): cNavLink directive loosing tabindex attribute, refactor
+- refactor(form): minor cleanups
+- chore(dependencies): update
+
+---
+
 #### `5.4.13`
 
 - fix(modal): scrollbar disappears on backdrop=false, closes #224 - thanks @tturbs
