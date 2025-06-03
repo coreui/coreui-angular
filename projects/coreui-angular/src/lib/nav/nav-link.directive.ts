@@ -1,4 +1,5 @@
-import { booleanAttribute, computed, Directive, effect, input } from '@angular/core';
+import { booleanAttribute, computed, Directive, effect, input, numberAttribute } from '@angular/core';
+import { BooleanInput } from '../coreui.types';
 
 @Directive({
   selector: '[cNavLink]',
@@ -12,6 +13,8 @@ import { booleanAttribute, computed, Directive, effect, input } from '@angular/c
   }
 })
 export class NavLinkDirective {
+  static ngAcceptInputType_disabled: BooleanInput;
+
   /**
    * Sets .nav-link class to the host. [docs]
    * @default true
@@ -30,20 +33,25 @@ export class NavLinkDirective {
    */
   readonly disabled = input(false, { transform: booleanAttribute });
 
+  /**
+   * The tabindex attribute specifies the tab order of an element (when the "tab" button is used for navigating).
+   */
+  readonly tabindex = input(undefined, { transform: numberAttribute });
+
   readonly ariaCurrent = computed(() => {
     return this.active() ? 'page' : null;
   });
 
   ariaDisabled: boolean | null = null;
   attrDisabled: boolean | string | null = null;
-  attrTabindex: '-1' | null = null;
+  attrTabindex: number | null = null;
   styleCursor: 'pointer' | null = null;
 
   readonly #disabledEffect = effect(() => {
     const disabled = this.disabled();
     this.ariaDisabled = disabled || null;
     this.attrDisabled = disabled ? '' : null;
-    this.attrTabindex = disabled ? '-1' : null;
+    this.attrTabindex = disabled ? -1 : (this.tabindex() ?? null);
     this.styleCursor = disabled ? null : 'pointer';
   });
 
