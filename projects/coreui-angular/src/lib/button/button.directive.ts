@@ -1,6 +1,14 @@
-import { booleanAttribute, computed, Directive, input, InputSignal, InputSignalWithTransform } from '@angular/core';
+import {
+  booleanAttribute,
+  computed,
+  Directive,
+  input,
+  InputSignal,
+  InputSignalWithTransform,
+  numberAttribute
+} from '@angular/core';
 
-import { ButtonType, Colors, Shapes } from '../coreui.types';
+import { BooleanInput, ButtonType, Colors, Shapes } from '../coreui.types';
 
 @Directive({
   selector: '[cButton]',
@@ -16,6 +24,9 @@ import { ButtonType, Colors, Shapes } from '../coreui.types';
   }
 })
 export class ButtonDirective {
+  static ngAcceptInputType_active: BooleanInput;
+  static ngAcceptInputType_disabled: BooleanInput;
+
   /**
    * Toggle the active state for the component. [docs]
    * @type InputSignalWithTransform<boolean, unknown>
@@ -45,6 +56,11 @@ export class ButtonDirective {
    * @type InputSignal<'sm' | 'lg' | ''>
    */
   readonly size: InputSignal<'' | 'sm' | 'lg'> = input<'' | 'sm' | 'lg'>('');
+
+  /**
+   * The tabindex attribute specifies the tab order of an element (when the "tab" button is used for navigating).
+   */
+  readonly tabindex = input(undefined, { transform: numberAttribute });
 
   /**
    * Specifies the type of button. Always specify the type attribute for the `<button>` element.
@@ -84,7 +100,7 @@ export class ButtonDirective {
   });
 
   readonly tabIndex = computed(() => {
-    return this._disabled() ? '-1' : null;
+    return this._disabled() ? '-1' : (this.tabindex() ?? null);
   });
 
   readonly isActive = computed(() => {
