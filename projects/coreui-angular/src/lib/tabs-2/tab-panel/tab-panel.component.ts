@@ -22,7 +22,7 @@ type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
   template: '<ng-content />',
   host: {
     '[class]': 'hostClasses()',
-    '[tabindex]': 'visible() ? tabindex(): -1',
+    '[tabindex]': 'visible() ? tabindex() : -1',
     '[attr.aria-labelledby]': 'attrAriaLabelledBy()',
     '[id]': 'propId()',
     '[attr.role]': 'role()',
