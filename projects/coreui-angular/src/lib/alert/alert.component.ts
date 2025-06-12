@@ -109,7 +109,7 @@ export class AlertComponent {
   set visible(value: boolean) {
     if (this.#visible() !== value) {
       this.#visible.set(value);
-      this.visibleChange.emit(value);
+      this.visibleChange?.emit(value);
     }
   }
 

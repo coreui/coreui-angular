@@ -165,7 +165,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.#visible.set(value);
       this.setBodyStyles(value);
       this.setBackdrop(this.backdrop() !== false && value);
-      this.visibleChange.emit(value);
+      this.visibleChange?.emit(value);
     }
   }
 

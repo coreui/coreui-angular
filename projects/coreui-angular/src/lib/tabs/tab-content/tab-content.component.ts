@@ -41,7 +41,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
     const newValue = value;
     if (this.#activeTabPaneIdx != newValue) {
       this.#activeTabPaneIdx = newValue;
-      this.activeTabPaneIdxChange.emit(newValue);
+      this.activeTabPaneIdxChange?.emit(newValue);
       this.#changeDetectorRef.markForCheck();
       this.#changeDetectorRef.detectChanges();
     }

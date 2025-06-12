@@ -111,7 +111,7 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   }
 
   linkClicked(): void {
-    this.linkClick.emit();
+    this.linkClick?.emit();
   }
 
   // public hideMobile() {

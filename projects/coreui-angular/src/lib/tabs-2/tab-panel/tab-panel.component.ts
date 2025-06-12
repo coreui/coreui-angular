@@ -96,7 +96,7 @@ export class TabPanelComponent {
 
   readonly visible = computed(() => {
     const visible = this.tabsService.activeItemKey() === this.itemKey() && !this.tabsService.activeItem()?.disabled;
-    this.visibleChange.emit({ itemKey: this.itemKey(), visible });
+    this.visibleChange?.emit({ itemKey: this.itemKey(), visible });
     return visible;
   });
 

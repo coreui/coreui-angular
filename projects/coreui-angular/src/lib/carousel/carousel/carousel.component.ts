@@ -213,7 +213,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   private carouselStateSubscribe(): void {
     this.#carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextItem) => {
       if ('active' in nextItem && typeof nextItem.active === 'number') {
-        this.itemChange.emit(nextItem.active);
+        this.itemChange?.emit(nextItem.active);
       }
       this.activeItemInterval =
         typeof nextItem.interval === 'number' && nextItem.interval > -1 ? nextItem.interval : this.interval();

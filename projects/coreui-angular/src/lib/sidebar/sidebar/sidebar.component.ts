@@ -129,7 +129,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   readonly #visible = linkedSignal(this.visibleInput);
 
   readonly #visibleEffect = effect(() => {
-    this.visibleChange.emit(this.#visible());
+    this.visibleChange?.emit(this.#visible());
   });
 
   set visible(value: boolean) {

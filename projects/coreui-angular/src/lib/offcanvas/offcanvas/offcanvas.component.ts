@@ -153,7 +153,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       this.setBackdrop(false);
     }
     this.layoutChangeSubscribe(visible);
-    this.visibleChange.emit(visible);
+    this.visibleChange?.emit(visible);
   });
 
   /**

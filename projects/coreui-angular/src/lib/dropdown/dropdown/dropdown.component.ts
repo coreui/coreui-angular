@@ -243,7 +243,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
     this.activeTrap = visible;
     visible ? this.createPopperInstance() : this.destroyPopperInstance();
     this.setVisibleState(visible);
-    this.visibleChange.emit(visible);
+    this.visibleChange?.emit(visible);
   });
 
   readonly visibleChange = output<boolean>();

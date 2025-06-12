@@ -107,7 +107,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     if (this.#visible !== newValue) {
       this.#visible = newValue;
       newValue ? this.setTimer() : this.clearTimer();
-      this.visibleChange.emit(newValue);
+      this.visibleChange?.emit(newValue);
       this.changeDetectorRef.markForCheck();
     }
   }
@@ -147,7 +147,7 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   set clock(value) {
     this._clock = value;
-    this.timer.emit(this._clock);
+    this.timer?.emit(this._clock);
     this.changeDetectorRef.markForCheck();
   }
 

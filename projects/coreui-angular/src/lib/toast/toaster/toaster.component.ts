@@ -127,7 +127,7 @@ export class ToasterComponent implements OnInit {
     componentRef.setInput('dynamic', true);
     componentRef.setInput('index', index);
     componentRef.setInput('visible', true);
-    componentRef.instance['visibleChange'].emit(true);
+    componentRef.instance['visibleChange']?.emit(true);
     componentRef.changeDetectorRef?.detectChanges();
     return componentRef;
   }
