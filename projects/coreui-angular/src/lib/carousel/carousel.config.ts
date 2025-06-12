@@ -9,5 +9,5 @@ export class CarouselConfig {
   /* Default direction of auto changing of slides */
   direction: 'next' | 'prev' = 'next';
   /* Default interval of auto changing of slides */
-  interval = 0;
+  interval?: number;
 }

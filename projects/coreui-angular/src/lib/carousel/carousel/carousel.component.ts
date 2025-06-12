@@ -4,10 +4,10 @@ import {
   DestroyRef,
   effect,
   ElementRef,
-  Inject,
   inject,
   input,
   linkedSignal,
+  numberAttribute,
   OnDestroy,
   OnInit,
   output
@@ -37,28 +37,30 @@ import { CarouselConfig } from '../carousel.config';
   }
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
+  private config = inject<CarouselConfig>(CarouselConfig);
+
   readonly #hostElement = inject(ElementRef);
   readonly #carouselService = inject(CarouselService);
   readonly #carouselState = inject(CarouselState);
   readonly #intersectionService = inject(IntersectionService);
   readonly #listenersService = inject(ListenersService);
 
-  constructor(@Inject(CarouselConfig) private config: CarouselConfig) {
+  constructor() {
     this.loadConfig();
   }
 
   loadConfig() {
-    this.activeIndex.set(this.config?.activeIndex ?? this.activeIndex());
-    this.animate.set(this.config?.animate ?? this.animate());
-    this.direction.set(this.config?.direction ?? this.direction());
-    this.interval.set(this.config?.interval ?? this.interval());
+    this.activeIndex.update((activeIndex) => this.config?.activeIndex ?? activeIndex);
+    this.animate.update((animate) => this.config?.animate ?? animate);
+    this.direction.update((direction) => this.config?.direction ?? direction);
+    this.interval.update((interval) => this.config?.interval ?? interval);
   }
 
   /**
    * Index of the active item.
    * @return number
    */
-  readonly activeIndexInput = input<number>(0, { alias: 'activeIndex' });
+  readonly activeIndexInput = input(0, { alias: 'activeIndex', transform: numberAttribute });
 
   readonly activeIndex = linkedSignal({
     source: this.activeIndexInput,
@@ -92,7 +94,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    * @return number
    * @default 0
    */
-  readonly intervalInput = input<number>(0, { alias: 'interval' });
+  readonly intervalInput = input(-1, { alias: 'interval', transform: numberAttribute });
 
   readonly interval = linkedSignal({
     source: this.intervalInput,
