@@ -29,9 +29,9 @@ import {
   host: { '[class]': 'hostClasses()', '[style]': '{ display: "none" }' }
 })
 export class CollapseDirective implements OnDestroy {
+  readonly #animationBuilder = inject(AnimationBuilder);
   readonly #hostElement = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
-  readonly #animationBuilder = inject(AnimationBuilder);
   #player: AnimationPlayer | undefined = undefined;
 
   constructor() {
@@ -158,7 +158,9 @@ export class CollapseDirective implements OnDestroy {
       this.#renderer.addClass(host, 'collapsing');
       this.#renderer.removeClass(host, 'show');
       this.#renderer.setStyle(host, dimension, visible ? `${(host as any)[scrollSize]}px` : '');
-      this.collapseChange?.emit(visible ? 'opening' : 'collapsing');
+      if (this.#player) {
+        this.collapseChange?.emit(visible ? 'opening' : 'collapsing');
+      }
     });
 
     this.#player.onDone(() => {
@@ -170,9 +172,11 @@ export class CollapseDirective implements OnDestroy {
       } else {
         this.#renderer.removeClass(host, 'show');
       }
-      this.collapseChange?.emit(visible ? 'open' : 'collapsed');
+      if (this.#player) {
+        this.collapseChange?.emit(visible ? 'open' : 'collapsed');
+        this.visibleChange?.emit(visible);
+      }
       this.destroyPlayer();
-      this.visibleChange.emit(visible);
     });
 
     this.#player?.play();
