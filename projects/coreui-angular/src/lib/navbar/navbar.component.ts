@@ -1,7 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import {
   AfterContentInit,
-  afterRender,
+  afterEveryRender,
   Component,
   computed,
   contentChild,
@@ -23,11 +23,11 @@ import { ThemeDirective } from '../shared';
 // todo: workaround -  use <c-container> component directly in template
 
 @Component({
-    selector: 'c-navbar',
-    templateUrl: './navbar.component.html',
-    imports: [NgClass, NgTemplateOutlet],
-    hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
-    host: { '[class]': 'hostClasses()', '[attr.role]': 'role()' }
+  selector: 'c-navbar',
+  templateUrl: './navbar.component.html',
+  imports: [NgClass, NgTemplateOutlet],
+  hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
+  host: { '[class]': 'hostClasses()', '[attr.role]': 'role()' }
 })
 export class NavbarComponent implements AfterContentInit, OnDestroy {
   readonly #breakpointObserver = inject(BreakpointObserver);
@@ -79,7 +79,7 @@ export class NavbarComponent implements AfterContentInit, OnDestroy {
 
   readonly computedStyle = signal<string>('');
 
-  readonly afterNextRenderFn = afterRender({
+  readonly #afterEveryRenderFn = afterEveryRender({
     read: () => {
       const expand = this.expand();
       if (typeof expand === 'string') {
