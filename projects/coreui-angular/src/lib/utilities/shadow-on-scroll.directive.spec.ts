@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [ShadowOnScrollDirective],
-  template: '<div cShadowOnScroll></div>'
+  template: '<div [cShadowOnScroll]="true"></div>'
 })
 class TestComponent {}
 

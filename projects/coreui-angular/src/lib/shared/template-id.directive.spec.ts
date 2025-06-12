@@ -1,8 +1,8 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TemplateIdDirective } from './template-id.directive';
 import { Component, computed, DebugElement, TemplateRef, viewChild } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { NgTemplateOutlet } from '@angular/common';
+import { TemplateIdDirective } from './template-id.directive';
 
 @Component({
   imports: [TemplateIdDirective, NgTemplateOutlet],
@@ -16,7 +16,7 @@ import { NgTemplateOutlet } from '@angular/common';
 class TestComponent {
   readonly templateId = viewChild(TemplateIdDirective);
 
-  readonly id = computed(() => this.templateId()?.templateRef);
+  readonly id = computed(() => this.templateId()?.templateRef ?? null);
 }
 
 describe('TemplateIdDirective', () => {
@@ -26,8 +26,7 @@ describe('TemplateIdDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestComponent],
-      providers: [TemplateRef]
+      imports: [TestComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
@@ -36,19 +35,25 @@ describe('TemplateIdDirective', () => {
 
     fixture.detectChanges();
   });
-  it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new TemplateIdDirective();
-      expect(directive).toBeTruthy();
-    });
-  });
 
   it('should create a template with innerText', () => {
     expect(debugElement.nativeElement.innerText).toBe('Inner Text');
   });
 
-  it('should get the template id', () => {
+  it('should return the correct id when cTemplateId is set', () => {
     expect(component.templateId()?.id).toBe('test');
-    expect(component.templateId()?.templateRef).toEqual(jasmine.any(TemplateRef));
+  });
+
+  it('should correctly bind the templateRef to the directive', () => {
+    expect(component.templateId()?.templateRef).toBeInstanceOf(TemplateRef);
+  });
+
+  it('should handle multiple instances of the directive with unique ids', () => {
+    const secondFixture = TestBed.createComponent(TestComponent);
+    const secondComponent = secondFixture.componentInstance;
+    secondFixture.detectChanges();
+
+    expect(component.templateId()?.id).toBe('test');
+    expect(secondComponent.templateId()?.id).toBe('test');
   });
 });

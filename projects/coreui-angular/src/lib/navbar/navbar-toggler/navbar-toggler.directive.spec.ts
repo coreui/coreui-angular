@@ -11,7 +11,7 @@ class MockElementRef extends ElementRef {}
   imports: [NavbarTogglerDirective, CollapseDirective],
   template: `
     <button [cNavbarToggler]="collapseRef"></button>
-    <div #collapseRef="cCollapse" navbar cCollapse></div>
+    <div #collapseRef="cCollapse" navbar cCollapse>test</div>
   `
 })
 class TestComponent {}

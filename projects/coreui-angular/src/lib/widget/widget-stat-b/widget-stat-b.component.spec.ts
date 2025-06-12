@@ -10,9 +10,7 @@ describe('WidgetStatBComponent', () => {
     await TestBed.configureTestingModule({
       imports: [WidgetStatBComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(WidgetStatBComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
