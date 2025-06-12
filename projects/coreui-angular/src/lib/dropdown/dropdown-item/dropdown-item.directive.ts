@@ -12,7 +12,7 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
     '[attr.tabindex]': 'tabIndex()',
     '[attr.aria-current]': 'ariaCurrent()',
     '[attr.aria-disabled]': 'disabled || null',
-    '[role]': 'role()',
+    '[attr.role]': 'role()',
     '(click)': 'onClick($event)',
     '(keyup)': 'onKeyUp($event)'
   }
