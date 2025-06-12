@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "5.4.14",
+  "version": "5.5.0",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2025 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -103,10 +103,10 @@
     "url": "git+https://github.com/coreui/coreui-angular.git"
   },
   "config": {
-    "version_short": "5.4"
+    "version_short": "5.5"
   },
   "engines": {
-    "node": "^20.11.1 || ^22.0.0",
+    "node": "^20.19.0 || ^22.12.0 || ^24.0.0",
     "npm": ">=9"
   }
 }

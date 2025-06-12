@@ -11,7 +11,7 @@
 <h3 align="center">CoreUI Components for Angular</h3>
 
 <p align="center">
-  Angular Components Library built on top of Bootstrap 5.3 and TypeScript 5.x
+  Angular Components Library built on top of Bootstrap 5.3 and TypeScript 5.8
   <br>
   <a href="https://coreui.io/angular/docs/" target="_blank">Explore <strong>CoreUI for Angular docs and examples »</strong></a>
   <br>
@@ -26,9 +26,9 @@
 <hr>
 <p>
 Featured CoreUI for Angular libraries:
-  <br>
+<br>
 · <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-angular" target="_blank">CoreUI Components for Angular</a>
-  <br>
+<br>
 · <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-angular-chartjs" target="_blank">CoreUI Angular wrapper for Chart.js v4</a>
 <br>
 · <a href="https://github.com/coreui/coreui-angular/tree/main/projects/coreui-icons-angular" target="_blank">CoreUI Icons for Angular</a>
@@ -39,7 +39,7 @@ Featured CoreUI for Angular libraries:
 ### Status
 
 ![angular][angular-badge]
-[![npm-coreui-angular-v5-ng19][npm-coreui-angular-badge-v5-ng19]][npm-coreui-angular]
+[![npm-coreui-angular-v5-ng20][npm-coreui-angular-badge-v5-ng20]][npm-coreui-angular]
 [![npm-coreui-angular-latest][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
@@ -78,7 +78,7 @@ Featured CoreUI for Angular libraries:
 Before you begin, make sure your development environment includes `Node.js®` and `npm` package manager.
 
 ###### Node.js
-[**Angular 19**](https://angular.dev/overview) requires `Node.js` LTS version `^18.19`, `^20.11` or `^22.0`. 
+[**Angular 20**](https://angular.dev/overview) requires `Node.js` LTS version `^20.19`, `^22.12` or `^24.0`. 
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -231,9 +231,9 @@ Thanks to all the backers and sponsors! Support this project by [becoming a back
 
 Copyright 2025 creativeLabs Łukasz Holeczek. Code released under the [MIT License](https://github.com/coreui/coreui-angular/blob/main/LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
 
-[npm-coreui-angular-badge-v5-ng19]: https://img.shields.io/npm/v/@coreui/angular/v5-ng19?style=flat-square&color=brightgreen
+[npm-coreui-angular-badge-v5-ng20]: https://img.shields.io/npm/v/@coreui/angular/v5-ng20?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=brightgreen
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^19.2.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^20.0.0-lightgrey.svg?style=flat-square&logo=angular

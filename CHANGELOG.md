@@ -2,6 +2,16 @@
 
 ---
 
+#### `5.5.0`
+
+- chore(dependencies): update to `Angular 20`
+- chore(migration): import `DOCUMENT` from `@angular/core`
+- chore(migration): rename the `afterRender` lifecycle hook to `afterEveryRender`
+- fix(collapse): NG0953: Unexpected emit for destroyed `OutputRef`. The owning directive/component is destroyed.
+- refactor(carousel): carousel.config migrate to inject()
+
+---
+
 #### `5.4.14`
 
 - fix(button): cButton directive loosing tabindex attribute, refactor; close #228 - thanks @bernik1980
