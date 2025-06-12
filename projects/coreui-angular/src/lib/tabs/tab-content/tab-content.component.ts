@@ -5,13 +5,12 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChildren,
-  EventEmitter,
   inject,
   Input,
   numberAttribute,
   OnChanges,
   OnDestroy,
-  Output,
+  output,
   QueryList,
   SimpleChanges
 } from '@angular/core';
@@ -56,7 +55,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
   /**
    * Event emitted on the active tab pane index change.
    */
-  @Output() activeTabPaneIdxChange: EventEmitter<number> = new EventEmitter<number>();
+  readonly activeTabPaneIdxChange = output<number>();
 
   @ContentChildren(TabPaneComponent) public panes!: QueryList<TabPaneComponent>;
   #tabServiceSubscription!: Subscription;
