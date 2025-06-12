@@ -1,5 +1,4 @@
-import { inject, Injectable, Renderer2 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, inject, Injectable, Renderer2 } from '@angular/core';
 import { SidebarService } from '../sidebar.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 

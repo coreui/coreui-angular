@@ -1,8 +1,7 @@
-import { Component, DebugElement, ElementRef } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShadowOnScrollDirective } from './shadow-on-scroll.directive';
 import { By } from '@angular/platform-browser';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
   imports: [ShadowOnScrollDirective],

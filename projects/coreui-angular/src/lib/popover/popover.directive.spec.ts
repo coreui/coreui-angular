@@ -1,9 +1,9 @@
-import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
   ComponentRef,
   DebugElement,
+  DOCUMENT,
   ElementRef,
   Renderer2,
   ViewContainerRef

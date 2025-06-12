@@ -1,10 +1,13 @@
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { A11yModule } from '@angular/cdk/a11y';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { isPlatformBrowser } from '@angular/common';
 import {
   booleanAttribute,
   Component,
   computed,
   DestroyRef,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -17,8 +20,6 @@ import {
   Renderer2
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { A11yModule } from '@angular/cdk/a11y';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

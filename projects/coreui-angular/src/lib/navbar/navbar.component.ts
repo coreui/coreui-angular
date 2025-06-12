@@ -1,22 +1,23 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import {
   AfterContentInit,
   afterRender,
   Component,
   computed,
   contentChild,
+  DOCUMENT,
   ElementRef,
   inject,
   input,
   OnDestroy,
   signal
 } from '@angular/core';
-import { DOCUMENT, NgClass, NgTemplateOutlet } from '@angular/common';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 import { CollapseDirective } from '../collapse';
 import { Colors } from '../coreui.types';
 import { ThemeDirective } from '../shared';
-import { Subscription } from 'rxjs';
 
 // todo: fix container prop issue not rendering children
 // todo: workaround -  use <c-container> component directly in template

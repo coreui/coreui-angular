@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { inject, Injectable, Renderer2 } from '@angular/core';
+import { DOCUMENT, inject, Injectable, Renderer2 } from '@angular/core';
 
 export type ReferrerPolicy =
   | ''

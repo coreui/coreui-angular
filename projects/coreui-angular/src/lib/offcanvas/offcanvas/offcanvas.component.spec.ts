@@ -1,9 +1,8 @@
+import { ComponentRef, DOCUMENT } from '@angular/core';
 import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed, tick } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { OffcanvasComponent } from './offcanvas.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentRef } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 
 describe('OffcanvasComponent', () => {
   let component: OffcanvasComponent;

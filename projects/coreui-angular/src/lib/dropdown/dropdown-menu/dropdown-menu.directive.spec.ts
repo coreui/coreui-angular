@@ -1,10 +1,9 @@
-import { Component, DebugElement, ElementRef, Renderer2, viewChild } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef, Renderer2, viewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { DropdownService } from '../dropdown.service';
 import { DropdownMenuDirective } from './dropdown-menu.directive';
 import { DropdownComponent, DropdownToggleDirective } from '../dropdown/dropdown.component';
-import { DOCUMENT } from '@angular/common';
-import { By } from '@angular/platform-browser';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
 import { ButtonDirective } from '../../button';
 

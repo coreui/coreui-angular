@@ -1,5 +1,15 @@
-import { DOCUMENT } from '@angular/common';
-import { DestroyRef, Directive, effect, ElementRef, inject, input, signal, untracked, WritableSignal } from '@angular/core';
+import {
+  DestroyRef,
+  Directive,
+  DOCUMENT,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  untracked,
+  WritableSignal
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent, Subscription } from 'rxjs';
 

@@ -1,7 +1,7 @@
+import { DOCUMENT } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { BackdropService } from './backdrop.service';
-import { DOCUMENT } from '@angular/common';
 
 describe('BackdropService', () => {
   let service: BackdropService;

@@ -2,6 +2,7 @@ import {
   booleanAttribute,
   Component,
   computed,
+  DOCUMENT,
   effect,
   inject,
   input,
@@ -14,7 +15,6 @@ import {
   signal,
   SimpleChanges
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 

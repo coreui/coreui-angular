@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
   booleanAttribute,
@@ -8,6 +7,7 @@ import {
   contentChild,
   DestroyRef,
   Directive,
+  DOCUMENT,
   effect,
   ElementRef,
   forwardRef,

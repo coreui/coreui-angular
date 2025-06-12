@@ -1,10 +1,9 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
-import { Component, DebugElement, ElementRef } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef } from '@angular/core';
 import { DropdownService } from '../dropdown.service';
 import { By } from '@angular/platform-browser';
-import { DOCUMENT } from '@angular/common';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
 

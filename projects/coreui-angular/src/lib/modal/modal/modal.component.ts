@@ -1,11 +1,12 @@
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { DOCUMENT } from '@angular/common';
+import { A11yModule, FocusMonitor } from '@angular/cdk/a11y';
 import {
   AfterViewInit,
   booleanAttribute,
   Component,
   computed,
   DestroyRef,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -20,7 +21,6 @@ import {
   WritableSignal
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { A11yModule, FocusMonitor } from '@angular/cdk/a11y';
 
 import { ModalService } from '../modal.service';
 import { BackdropService } from '../../backdrop/backdrop.service';

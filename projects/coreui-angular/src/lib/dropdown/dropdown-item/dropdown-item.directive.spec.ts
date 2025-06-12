@@ -1,12 +1,11 @@
-import { Component, DebugElement, ElementRef, Renderer2, viewChild } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef, Renderer2, viewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { DropdownItemDirective } from './dropdown-item.directive';
 import { DropdownService } from '../dropdown.service';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
-import { By } from '@angular/platform-browser';
-import { DOCUMENT } from '@angular/common';
 
 class MockElementRef extends ElementRef {}
 

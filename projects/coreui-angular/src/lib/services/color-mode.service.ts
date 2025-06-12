@@ -1,5 +1,13 @@
-import { DOCUMENT } from '@angular/common';
-import { afterNextRender, DestroyRef, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import {
+  afterNextRender,
+  DestroyRef,
+  DOCUMENT,
+  effect,
+  inject,
+  Injectable,
+  signal,
+  WritableSignal
+} from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
 import { LocalStorageService } from './local-storage.service';

@@ -1,5 +1,5 @@
-import { inject, Injectable, RendererFactory2 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { inject, Injectable, RendererFactory2, DOCUMENT } from '@angular/core';
+
 import { Subject } from 'rxjs';
 
 @Injectable({
