@@ -2,7 +2,7 @@
   <ng-container *ngTemplateOutlet="defaultContent" />
 } @else {
   @let pbd = progressBarDirective;
-  <c-progress-bar [animated]="pbd?.animated()" [variant]="pbd?.variant()" [color]="pbd?.color()" [value]="value()">
+  <c-progress-bar [animated]="pbd?.animated()" [variant]="pbd?.variant()" [color]="pbd?.color()" [value]="barValue()">
     <ng-container *ngTemplateOutlet="defaultContent" />
   </c-progress-bar>
 }

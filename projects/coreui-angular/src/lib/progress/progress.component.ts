@@ -47,7 +47,7 @@ export class ProgressComponent {
 
   readonly stacked = this.#progressService.stacked;
   readonly percent = this.#progressService.percent;
-  readonly value = this.#progressService.value;
+  readonly barValue = this.#progressService.value;
 
   readonly contentProgressBars = contentChildren(ProgressBarComponent);
 

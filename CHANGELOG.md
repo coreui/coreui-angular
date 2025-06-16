@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.5.1`
+
+- fix(progress): TS2540: Cannot assign to `value` because it is a read-only property - conflicting on directive composition with ProgressBarDirective
+
+---
+
 #### `5.5.0`
 
 - chore(dependencies): update to `Angular 20`
