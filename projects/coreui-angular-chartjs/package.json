@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-chartjs",
-  "version": "5.5.0",
+  "version": "5.5.1",
   "description": "Angular wrapper component for Chart.js",
   "copyright": "Copyright 2025 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -27,7 +27,7 @@
   "peerDependencies": {
     "@angular/core": "^20.0.3",
     "@coreui/chartjs": "^4.1.0",
-    "chart.js": "^4.4.9"
+    "chart.js": "^4.4.8"
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
