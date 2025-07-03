@@ -8,9 +8,12 @@ export class RtlService {
 
   isRTL(element?: HTMLElement | null): boolean {
     if (element) {
-      return element.closest('[dir="rtl"]') !== null;
+      return (
+        element.closest('[dir="rtl"]') !== null ||
+        this.#document.defaultView?.getComputedStyle(element).direction === 'rtl'
+      );
     }
 
-    return this.#document?.documentElement?.dir === 'rtl' || this.#document?.body?.dir === 'rtl';
+    return [this.#document?.documentElement?.dir, this.#document?.body?.dir].includes('rtl');
   }
 }
