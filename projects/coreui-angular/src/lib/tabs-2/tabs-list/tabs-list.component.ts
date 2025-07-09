@@ -1,19 +1,23 @@
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import {
+  afterEveryRender,
   Component,
   computed,
   contentChildren,
   DestroyRef,
   effect,
+  ElementRef,
   inject,
   input,
   InputSignal,
+  signal,
   untracked
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
 import { TabDirective } from '../tab/tab.directive';
 import { TabsService } from '../tabs.service';
+import { RtlService } from '../../services';
 
 @Component({
   exportAs: 'cTabsList',
@@ -27,7 +31,18 @@ import { TabsService } from '../tabs.service';
 })
 export class TabsListComponent {
   readonly #destroyRef = inject(DestroyRef);
+  readonly #elementRef = inject(ElementRef);
   readonly tabsService = inject(TabsService);
+  readonly #rtlService = inject(RtlService);
+  readonly #isRtl = signal(false);
+
+  constructor() {
+    afterEveryRender({
+      read: () => {
+        this.#isRtl.set(this.#rtlService.isRTL(this.#elementRef.nativeElement));
+      }
+    });
+  }
 
   /**
    * Specify a layout type for component.
@@ -66,9 +81,12 @@ export class TabsListComponent {
     if (tabs.length === 0) {
       return;
     }
+
+    const isRtl = this.#isRtl();
+
     this.#focusKeyManager = new FocusKeyManager(tabs)
       .skipPredicate((tab) => tab.disabled === true)
-      .withHorizontalOrientation('ltr')
+      .withHorizontalOrientation(isRtl ? 'rtl' : 'ltr')
       .withHomeAndEnd()
       .withWrap();
 
