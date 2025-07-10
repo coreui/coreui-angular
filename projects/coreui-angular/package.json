@@ -23,13 +23,13 @@
   },
   "sideEffects": false,
   "peerDependencies": {
-    "@angular/animations": "^20.0.6",
-    "@angular/cdk": "^20.0.5",
-    "@angular/common": "^20.0.6",
-    "@angular/core": "^20.0.6",
-    "@angular/router": "^20.0.6",
+    "@angular/animations": "^20.1.0",
+    "@angular/cdk": "^20.1.0",
+    "@angular/common": "^20.1.0",
+    "@angular/core": "^20.1.0",
+    "@angular/router": "^20.1.0",
     "@coreui/coreui": "~5.4.1",
-    "@coreui/icons-angular": "~5.5.3",
+    "@coreui/icons-angular": "~5.5.4",
     "rxjs": "^7.8.2"
   },
   "repository": {
