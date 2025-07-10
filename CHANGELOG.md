@@ -2,6 +2,14 @@
 
 ---
 
+#### `5.5.4`
+
+- chore(dependencies): update to `Angular 20.1`
+- fix(tab-list): keyboard arrows handle for `rtl`
+- refactor(rtl.service): ensure RTL detection works regardless of HTML attribute or CSS property direction (computed style check)
+
+---
+
 #### `5.5.3`
 
 - chore(dependencies): update
