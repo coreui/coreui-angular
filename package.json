@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "5.5.4",
+  "version": "5.5.5",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2025 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -67,7 +67,7 @@
     "@angular/language-service": "^20.1.0",
     "@types/jasmine": "^5.1.8",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.16.2",
+    "@types/node": "^22.16.3",
     "angular-eslint": "^20.1.1",
     "copyfiles": "^2.4.1",
     "eslint": "^9.30.1",

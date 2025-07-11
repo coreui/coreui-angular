@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.5.5`
+
+- refactor(breadcrumb-router): migrate breadcrumbs$ toSignal, use `attrib` prop for breadcrumb-item, test update, cleanup
+- fix(breadcrumb-item): remove `attributes` input conflicting with Element's readonly property, use `attribs` instead
+
+---
+
 #### `5.5.4`
 
 - chore(dependencies): update to `Angular 20.1`
