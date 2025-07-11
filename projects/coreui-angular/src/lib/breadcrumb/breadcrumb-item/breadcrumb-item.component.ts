@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, input } from '@angular/core';
+import { booleanAttribute, Component, computed, effect, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -25,19 +25,26 @@ export class BreadcrumbItemComponent {
 
   /**
    * The `url` prop for the inner `[routerLink]` directive. [docs]
-   * @type string
+   * @return string
    */
   readonly url = input<string | any[]>();
 
   /**
    * Additional html attributes for link. [docs]
-   * @type INavAttributes
+   * @return INavAttributes
    */
-  readonly attributes = input<INavAttributes>();
+  readonly attribs = input<INavAttributes>();
+  protected readonly _attributes = input<INavAttributes>(undefined, { alias: 'attributes' });
+
+  readonly #attributesEffect = effect(() => {
+    if (this._attributes()) {
+      console.error('c-breadcrumb-item: [attributes] prop is removed, use [attribs] instead:', this._attributes());
+    }
+  });
 
   /**
    * Some `NavigationExtras` props for the inner `[routerLink]` directive and `routerLinkActiveOptions`. [docs]
-   * @type INavLinkProps
+   * @return INavLinkProps
    */
   readonly linkProps = input<INavLinkProps>();
 
