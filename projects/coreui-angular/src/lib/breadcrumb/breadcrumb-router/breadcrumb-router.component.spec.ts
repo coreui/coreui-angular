@@ -2,7 +2,6 @@ import { ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideRouter, Route } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { take } from 'rxjs';
 
 import { BreadcrumbRouterComponent } from './breadcrumb-router.component';
 import { BreadcrumbRouterService } from './breadcrumb-router.service';
@@ -40,33 +39,25 @@ describe('BreadcrumbComponent', () => {
   });
 
   it('should have breadcrumbs', () => {
-    expect(component.breadcrumbs).toBeDefined();
+    expect(component.breadcrumbs()).toBeDefined();
   });
 
   it('should get breadcrumbs from service', async () => {
     const comp = await harness.navigateByUrl('/home');
-    component.breadcrumbs?.pipe(take(1)).subscribe((breadcrumbs) => {
-      expect(breadcrumbs).toEqual([{ label: 'Home', url: '/home', queryParams: {} }]);
-    });
+    expect(component.breadcrumbs()).toEqual([{ label: 'Home', url: '/home', queryParams: {} }]);
   });
   it('should get breadcrumbs from service', async () => {
     const comp = await harness.navigateByUrl('/color?id=1&test=2');
-    component.breadcrumbs?.pipe(take(1)).subscribe((breadcrumbs) => {
-      expect(breadcrumbs).toEqual([{ label: 'Color', url: '/color', queryParams: { id: '1', test: '2' } }]);
-    });
+    expect(component.breadcrumbs()).toEqual([{ label: 'Color', url: '/color', queryParams: { id: '1', test: '2' } }]);
   });
   it('should get breadcrumbs from service', async () => {
     const comp = await harness.navigateByUrl('/');
-    component.breadcrumbs?.pipe(take(1)).subscribe((breadcrumbs) => {
-      expect(breadcrumbs).toEqual([{ label: '', url: '/', queryParams: {} }]);
-    });
+    expect(component.breadcrumbs()).toEqual([{ label: '', url: '/', queryParams: {} }]);
   });
 
   it('should emit breadcrumbs on items change', () => {
-    componentRef.setInput('items', [{ label: 'test' }]);
+    componentRef.setInput('items', [{ label: 'test', url: '/color', attributes: { title: 'test' } }]);
     fixture.detectChanges();
-    component.breadcrumbs?.pipe(take(1)).subscribe((breadcrumbs) => {
-      expect(breadcrumbs).toEqual([{ label: 'test' }]);
-    });
+    expect(component.breadcrumbs()).toEqual([{ label: 'test', url: '/color', attributes: { title: 'test' } }]);
   });
 });
