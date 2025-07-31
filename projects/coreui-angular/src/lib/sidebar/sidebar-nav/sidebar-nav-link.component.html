@@ -1,43 +1,45 @@
+@let linkItem = item() ?? {};
+
 @switch (linkType) {
   @case ('disabled') {
-    <a [cHtmlAttr]="item.attributes ?? {}" [ngClass]="item | cSidebarNavLink">
-      <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: item}" />
-      <c-sidebar-nav-link-content [item]="item" />
-      @if (item.badge) {
-        <span [ngClass]="item | cSidebarNavBadge">{{ item.badge?.text }}</span>
+    <a [cHtmlAttr]="linkItem.attributes ?? {}" [ngClass]="linkItem | cSidebarNavLink">
+      <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: linkItem}" />
+      <c-sidebar-nav-link-content [item]="linkItem" />
+      @if (linkItem.badge) {
+        <span [ngClass]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
       }
     </a>
   }
   @case ('external') {
-    <a (click)="linkClicked()" [cHtmlAttr]="item.attributes ?? {}" [href]="href" [ngClass]="item | cSidebarNavLink">
-      <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: item}" />
-      <c-sidebar-nav-link-content [item]="item" />
-      @if (item.badge) {
-        <span [ngClass]="item | cSidebarNavBadge">{{ item.badge?.text }}</span>
+    <a (click)="linkClicked()" [cHtmlAttr]="linkItem.attributes ?? {}" [href]="href" [ngClass]="linkItem | cSidebarNavLink">
+      <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: linkItem}" />
+      <c-sidebar-nav-link-content [item]="linkItem" />
+      @if (linkItem.badge) {
+        <span [ngClass]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
       }
     </a>
   }
   @default {
     <a (click)="linkClicked()"
-       [cHtmlAttr]="item.attributes ?? {}"
-       [fragment]="item.linkProps?.fragment"
-       [ngClass]="item | cSidebarNavLink"
-       [preserveFragment]="item.linkProps?.preserveFragment ?? false"
-       [queryParamsHandling]="item.linkProps?.queryParamsHandling"
-       [queryParams]="item.linkProps?.queryParams ?? null"
-       [replaceUrl]="item.linkProps?.replaceUrl ?? false"
-       [routerLinkActiveOptions]="item.linkProps?.routerLinkActiveOptions ?? { exact: false }"
-       [routerLink]="item.url"
-       [skipLocationChange]="item.linkProps?.skipLocationChange ?? false"
-       [state]="item.linkProps?.state ?? {}"
-       [target]="item.attributes?.['target']"
+       [cHtmlAttr]="linkItem.attributes ?? {}"
+       [fragment]="linkItem.linkProps?.fragment"
+       [ngClass]="linkItem | cSidebarNavLink"
+       [preserveFragment]="linkItem.linkProps?.preserveFragment ?? false"
+       [queryParamsHandling]="linkItem.linkProps?.queryParamsHandling"
+       [queryParams]="linkItem.linkProps?.queryParams ?? null"
+       [replaceUrl]="linkItem.linkProps?.replaceUrl ?? false"
+       [routerLinkActiveOptions]="linkItem.linkProps?.routerLinkActiveOptions ?? { exact: false }"
+       [routerLink]="linkItem.url"
+       [skipLocationChange]="linkItem.linkProps?.skipLocationChange ?? false"
+       [state]="linkItem.linkProps?.state ?? {}"
+       [target]="linkItem.attributes?.['target']"
        routerLinkActive="active"
     >
       <!--    [class.active]="linkActive"-->
-      <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: item}" />
-      <c-sidebar-nav-link-content [item]="item" />
-      @if (item.badge) {
-        <span [ngClass]="item | cSidebarNavBadge">{{ item.badge?.text }}</span>
+      <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: linkItem}" />
+      <c-sidebar-nav-link-content [item]="linkItem" />
+      @if (linkItem.badge) {
+        <span [ngClass]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
       }
     </a>
   }

@@ -1,10 +1,11 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, inject, Input, OnDestroy, OnInit, output } from '@angular/core';
+import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { IconDirective } from '@coreui/icons-angular';
 
+import { IconDirective } from '@coreui/icons-angular';
 // import {SidebarService} from '../sidebar.service';
 import { HtmlAttributesDirective } from '../../shared';
 import { SidebarNavHelper } from './sidebar-nav.service';
@@ -16,8 +17,9 @@ import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 @Component({
   selector: 'c-sidebar-nav-link-content',
   template: `
-    @if (true) {
-      <ng-container>{{ item?.name ?? '' }}</ng-container>
+    @let itemLinkContent = item();
+    @if (itemLinkContent) {
+      <ng-container>{{ itemLinkContent?.name ?? '' }}</ng-container>
     }
   `,
   providers: [SidebarNavHelper]
@@ -25,7 +27,7 @@ import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 export class SidebarNavLinkContentComponent {
   readonly helper = inject(SidebarNavHelper);
 
-  @Input() item?: INavData;
+  readonly item = input<INavData>({});
 }
 
 @Component({
@@ -47,16 +49,7 @@ export class SidebarNavLinkContentComponent {
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   readonly router = inject(Router);
 
-  protected _item: INavData = {};
-
-  @Input()
-  set item(item: INavData) {
-    this._item = JSON.parse(JSON.stringify(item));
-  }
-
-  get item(): INavData {
-    return this._item;
-  }
+  readonly item = input<INavData>();
 
   readonly linkClick = output();
 
@@ -74,17 +67,19 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
     this.navigationEndObservable = router.events.pipe(
       filter((event) => {
         return event instanceof NavigationEnd;
-      })
+      }),
+      takeUntilDestroyed()
     ) as Observable<NavigationEnd>;
   }
 
   ngOnInit(): void {
+    const item = this.item() ?? {};
     this.url =
-      typeof this.item.url === 'string'
-        ? this.item.url
-        : this.router.serializeUrl(this.router.createUrlTree((this.item.url as any[]) ?? ['']));
+      typeof item.url === 'string'
+        ? item.url
+        : this.router.serializeUrl(this.router.createUrlTree((item.url as any[]) ?? ['']));
     this.linkType = this.getLinkType();
-    this.href = this.isDisabled() ? '' : this.item.href || this.url;
+    this.href = this.isDisabled() ? '' : item.href || this.url;
     this.linkActive = this.router.url.split(/[?#(;]/)[0] === this.href.split(/[?#(;]/)[0];
     this.navSubscription = this.navigationEndObservable.subscribe((event) => {
       const itemUrlArray = this.href.split(/[?#(;]/)[0].split('/');
@@ -102,12 +97,13 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   }
 
   public isDisabled(): boolean {
-    return this.item?.attributes?.['disabled'];
+    return this.item()?.attributes?.['disabled'];
   }
 
   public isExternalLink(): boolean {
-    const linkPath = Array.isArray(this.item.url) ? this.item.url[0] : this.item.url;
-    return !!this.item.href || linkPath?.substring(0, 4) === 'http';
+    const item = this.item() ?? {};
+    const linkPath = Array.isArray(item.url) ? item.url[0] : item.url;
+    return !!item.href || linkPath?.substring(0, 4) === 'http';
   }
 
   linkClicked(): void {

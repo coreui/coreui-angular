@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 
 import { SidebarNavLinkComponent } from './sidebar-nav-link.component';
 import { HtmlAttributesDirective } from '../../shared';
+import { By } from '@angular/platform-browser';
 
 describe('SidebarNavLinkComponent', () => {
   let component: SidebarNavLinkComponent;
@@ -13,12 +13,9 @@ describe('SidebarNavLinkComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]),
-        HtmlAttributesDirective,
-        SidebarNavLinkComponent
-      ]
-    })
-      .compileComponents();
+      imports: [HtmlAttributesDirective, SidebarNavLinkComponent],
+      providers: [provideRouter([])]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -31,11 +28,11 @@ describe('SidebarNavLinkComponent', () => {
       url: '/dashboard',
       icon: 'cil-speedometer',
       badge: {
-        variant: 'info',
+        color: 'info',
         text: 'NEW'
       }
     };
-    component.item = item;
+    fixture.componentRef.setInput('item', item);
 
     // router.initialNavigation();
     fixture.detectChanges();
@@ -43,5 +40,26 @@ describe('SidebarNavLinkComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have item with name "Dashboard"', () => {
+    const link = fixture.debugElement.query(By.css('a')).nativeElement;
+    expect(link.textContent).toContain('Dashboard');
+  });
+
+  it('should have correct URL', () => {
+    const link = fixture.debugElement.query(By.css('a')).nativeElement;
+    expect(link.getAttribute('href')).toBe('/dashboard');
+  });
+
+  it('should have correct icon class', () => {
+    const icon = fixture.debugElement.query(By.css('.cil-speedometer')).nativeElement;
+    expect(icon).toBeTruthy();
+  });
+
+  it('should have badge with text "NEW"', () => {
+    const badge = fixture.debugElement.query(By.css('.badge')).nativeElement;
+    expect(badge.textContent).toContain('NEW');
+    expect(badge.classList).toContain('bg-info');
   });
 });
