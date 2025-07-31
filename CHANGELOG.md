@@ -2,6 +2,16 @@
 
 ---
 
+#### `5.5.6`
+
+- chore(dependencies): update to `Angular 20.1.4`
+- refactor(sidebar-nav-divider): signal inputs, test
+- refactor(sidebar-nav-label): signal inputs, test 
+- refactor(sidebar-nav-title): signal inputs, test
+- refactor(sidebar-nav-link): signal inputs, test
+
+---
+
 #### `5.5.5`
 
 - refactor(breadcrumb-router): migrate breadcrumbs$ toSignal, use `attrib` prop for breadcrumb-item, test update, cleanup
