@@ -1,35 +1,39 @@
-import { Component, ElementRef, inject, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
+import { INavData } from './sidebar-nav';
 
 @Component({
   selector: 'c-sidebar-nav-title',
   template: ''
 })
-export class SidebarNavTitleComponent implements OnInit {
+export class SidebarNavTitleComponent {
   readonly #elementRef = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
 
-  @Input() item: any;
+  readonly item = input<INavData>();
 
-  ngOnInit(): void {
-    const nativeElement: HTMLElement = this.#elementRef.nativeElement;
-    const name = this.#renderer.createText(this.item.name);
+  readonly #itemEffect = effect(() => {
+    const item = this.item();
+    if (item?.name) {
+      const nativeElement: HTMLElement = this.#elementRef.nativeElement;
+      const name = this.#renderer.createText(item.name);
 
-    if (this.item.class) {
-      const classes = this.item.class;
-      this.#renderer.addClass(nativeElement, classes);
+      if (item?.class) {
+        const classes = item.class;
+        this.#renderer.addClass(nativeElement, classes);
+      }
+
+      if (item?.wrapper) {
+        const wrapper = this.#renderer.createElement(item.wrapper.element);
+        this.addAttribs(item.wrapper.attributes, wrapper);
+        this.#renderer.appendChild(wrapper, name);
+        this.#renderer.appendChild(nativeElement, wrapper);
+      } else {
+        this.#renderer.appendChild(nativeElement, name);
+      }
     }
+  });
 
-    if (this.item.wrapper) {
-      const wrapper = this.#renderer.createElement(this.item.wrapper.element);
-      this.addAttribs(this.item.wrapper.attributes, wrapper);
-      this.#renderer.appendChild(wrapper, name);
-      this.#renderer.appendChild(nativeElement, wrapper);
-    } else {
-      this.#renderer.appendChild(nativeElement, name);
-    }
-  }
-
-  private addAttribs(attribs: { [x: string]: any }, element: any): void {
+  private addAttribs(attribs: { [x: string]: any }, element: HTMLElement): void {
     if (attribs) {
       for (const attr in attribs) {
         if (attr === 'style' && typeof attribs[attr] === 'object') {

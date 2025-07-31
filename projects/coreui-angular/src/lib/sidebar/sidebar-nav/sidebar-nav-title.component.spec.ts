@@ -10,8 +10,7 @@ describe('SidebarNavTitleComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [SidebarNavTitleComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,7 +21,7 @@ describe('SidebarNavTitleComponent', () => {
       title: true,
       name: 'Theme'
     };
-    component.item = item;
+    fixture.componentRef.setInput('item', item);
 
     fixture.detectChanges();
   });
