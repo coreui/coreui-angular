@@ -10,8 +10,7 @@ describe('SidebarNavDividerComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [SidebarNavDividerComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -21,7 +20,7 @@ describe('SidebarNavDividerComponent', () => {
     item = {
       divider: true
     };
-    component.item = item;
+    fixture.componentRef.setInput('item', item);
 
     fixture.detectChanges();
   });
