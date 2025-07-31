@@ -1,11 +1,12 @@
-<a [cHtmlAttr]="item.attributes"
-   [ngClass]="getItemClass()"
-   href="{{item.url}}">
-  @if (helper.hasIcon(item)) {
-    <i [ngClass]="getLabelIconClass()"></i>
+@let labelItem = item();
+<a [cHtmlAttr]="labelItem.attributes"
+   [ngClass]="itemClass()"
+   href="{{labelItem.url}}">
+  @if (helper.hasIcon(labelItem)) {
+    <i [ngClass]="labelIconClass()"></i>
   }
-  <ng-container>{{ item.name }}</ng-container>
-  @if (helper.hasBadge(item)) {
-    <span [ngClass]="item | cSidebarNavBadge">{{ item.badge.text }}</span>
+  <ng-container>{{ labelItem.name }}</ng-container>
+  @if (helper.hasBadge(labelItem)) {
+    <span [ngClass]="labelItem | cSidebarNavBadge">{{ labelItem.badge?.text ?? '' }}</span>
   }
 </a>
