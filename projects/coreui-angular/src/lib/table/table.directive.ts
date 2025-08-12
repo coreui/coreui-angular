@@ -1,4 +1,13 @@
-import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
+import {
+  afterRenderEffect,
+  booleanAttribute,
+  computed,
+  Directive,
+  ElementRef,
+  inject,
+  input,
+  Renderer2
+} from '@angular/core';
 import { Breakpoints, Colors } from '../coreui.types';
 
 @Directive({
@@ -109,17 +118,21 @@ export class TableDirective {
     } as Record<string, boolean>;
   });
 
-  readonly #responsiveWrapperEffect = effect(() => {
-    const responsive = this.responsive();
-    if (!!responsive) {
-      const nativeElement: HTMLElement = this.#hostElement.nativeElement;
-      const wrapper = this.#renderer.createElement('div');
-      const className = responsive === true ? 'table-responsive' : `table-responsive-${responsive}`;
-      this.#renderer.addClass(wrapper, className);
-      const parentNode = this.#renderer.parentNode(nativeElement);
-      this.#renderer.appendChild(parentNode, wrapper);
-      this.#renderer.insertBefore(parentNode, wrapper, nativeElement);
-      this.#renderer.appendChild(wrapper, nativeElement);
+  readonly #responsiveWrapperEffect = afterRenderEffect({
+    // this fixes RuntimeError: NG0500: During hydration Angular expected <abc> but found <xyz>.
+    // Find more at https://angular.dev/errors/NG0500
+    write: () => {
+      const responsive = this.responsive();
+      if (!!responsive) {
+        const nativeElement: HTMLElement = this.#hostElement.nativeElement;
+        const wrapper = this.#renderer.createElement('div');
+        const className = responsive === true ? 'table-responsive' : `table-responsive-${responsive}`;
+        this.#renderer.addClass(wrapper, className);
+        const parentNode = this.#renderer.parentNode(nativeElement);
+        this.#renderer.appendChild(parentNode, wrapper);
+        this.#renderer.insertBefore(parentNode, wrapper, nativeElement);
+        this.#renderer.appendChild(wrapper, nativeElement);
+      }
     }
   });
 }
