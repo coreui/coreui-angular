@@ -1,3 +1,4 @@
+import { BooleanInput } from '@angular/cdk/coercion';
 import {
   afterRenderEffect,
   booleanAttribute,
@@ -19,6 +20,13 @@ import { Breakpoints, Colors } from '../coreui.types';
   }
 })
 export class TableDirective {
+  static ngAcceptInputType_bordered: BooleanInput;
+  static ngAcceptInputType_borderless: BooleanInput;
+  static ngAcceptInputType_hover: BooleanInput;
+  static ngAcceptInputType_small: BooleanInput;
+  static ngAcceptInputType_striped: BooleanInput;
+  static ngAcceptInputType_stripedColumns: BooleanInput;
+
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
 
