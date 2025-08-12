@@ -10,6 +10,7 @@ import {
   Injector,
   input,
   InputSignal,
+  linkedSignal,
   OnInit,
   runInInjectionContext,
   signal,
@@ -47,15 +48,8 @@ export class TabDirective implements FocusableOption, OnInit {
    */
   readonly disabledInput = input(false, { transform: booleanAttribute, alias: 'disabled' });
 
-  readonly #disabled = signal(false);
+  readonly #disabled = linkedSignal(this.disabledInput);
   readonly attrDisabled = computed(() => this.#disabled() || null);
-
-  readonly #disabledEffect = effect(() => {
-    const disabled = this.disabledInput();
-    untracked(() => {
-      this.disabled = disabled;
-    });
-  });
 
   set disabled(value: boolean) {
     this.#disabled.set(value);
@@ -90,11 +84,13 @@ export class TabDirective implements FocusableOption, OnInit {
 
   readonly isActive = signal(false);
 
-  readonly hostClasses = computed(() => ({
-    'nav-link': true,
-    active: this.isActive(),
-    disabled: this.#disabled()
-  }) as Record<string, boolean>);
+  readonly hostClasses = computed(() => {
+    return {
+      'nav-link': true,
+      active: this.isActive(),
+      disabled: this.#disabled()
+    } as Record<string, boolean>;
+  });
 
   readonly propId = computed(() => this.id() ?? `${this.#tabsService.id()}-tab-${this.itemKey()}`);
 
