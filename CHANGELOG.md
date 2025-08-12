@@ -2,6 +2,17 @@
 
 ---
 
+#### `5.5.7`
+
+- chore(dependencies): update to `Angular 20.1.6`
+- fix(popover): use afterRenderEffect() instead of effect() to avoid NG0500: During hydration expected...
+- fix(tooltip): use afterRenderEffect() instead of effect() to avoid NG0500: During hydration expected...
+- fix(table): use afterRenderEffect() instead of effect() to avoid NG0500: During hydration expected...
+- refactor(table): static ngAcceptInputType_ for boolean inputs
+- refactor(tab.directive): migrate disabled to linkedSignal
+
+---
+
 #### `5.5.6`
 
 - chore(dependencies): update to `Angular 20.1.4`
