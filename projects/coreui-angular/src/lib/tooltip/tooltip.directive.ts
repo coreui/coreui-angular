@@ -1,4 +1,5 @@
 import {
+  afterRenderEffect,
   AfterViewInit,
   ChangeDetectorRef,
   ComponentRef,
@@ -100,8 +101,12 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
    */
   readonly visible = model(false, { alias: 'cTooltipVisible' });
 
-  readonly #visibleEffect = effect(() => {
-    this.visible() ? this.addTooltipElement() : this.removeTooltipElement();
+  readonly #visibleEffect = afterRenderEffect({
+    // this fixes RuntimeError: NG0500: During hydration Angular expected <abc> but found <xyz>.
+    // Find more at https://angular.dev/errors/NG0500
+    write: () => {
+      this.visible() ? this.addTooltipElement() : this.removeTooltipElement();
+    }
   });
 
   get ariaDescribedBy(): string | null {
