@@ -7,6 +7,7 @@ import {
   ElementRef,
   inject,
   input,
+  linkedSignal,
   numberAttribute,
   OnDestroy,
   OnInit,
@@ -98,25 +99,22 @@ export class ToastComponent implements OnInit, OnDestroy {
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
-  readonly #visibleInputEffect = effect(() => {
-    this.visible = this.visibleInput();
+  readonly #visible = linkedSignal(this.visibleInput);
+
+  readonly #visibleEffect = effect(() => {
+    const newValue = this.#visible();
+    newValue ? this.setTimer() : this.clearTimer();
+    this.visibleChange?.emit(newValue);
+    this.changeDetectorRef.markForCheck();
   });
 
   set visible(value: boolean) {
-    const newValue = value;
-    if (this.#visible !== newValue) {
-      this.#visible = newValue;
-      newValue ? this.setTimer() : this.clearTimer();
-      this.visibleChange?.emit(newValue);
-      this.changeDetectorRef.markForCheck();
-    }
+    this.#visible.set(value);
   }
 
-  get visible() {
-    return this.#visible;
+  get visible(): boolean {
+    return this.#visible();
   }
-
-  #visible = false;
 
   /**
    * @ignore
