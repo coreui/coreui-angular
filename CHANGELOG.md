@@ -2,6 +2,15 @@
 
 ---
 
+#### `5.5.8`
+
+- fix(toaster): Unexpected state: no hydration info available for a given TNode, which represents a view container. [Expected=> null != undefined <=Actual] - ensure that the contentToasts is available before accessing it - tempfix
+- refactor(toaster): provide ToasterService for ToasterComponent instead of root
+- refactor(toast): migrate visible to linkedSignal
+- chore(dependencies): update 
+
+---
+
 #### `5.5.7`
 
 - chore(dependencies): update to `Angular 20.1.6`
