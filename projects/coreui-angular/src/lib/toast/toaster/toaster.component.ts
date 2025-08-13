@@ -4,6 +4,7 @@ import {
   computed,
   contentChildren,
   DestroyRef,
+  effect,
   ElementRef,
   inject,
   Injector,
@@ -84,6 +85,12 @@ export class ToasterComponent implements OnInit {
   readonly toasterHost = viewChild.required(ToasterHostDirective);
   readonly contentToasts = contentChildren(ToastComponent, { read: ViewContainerRef });
 
+  readonly #contentToastsEffect = effect(() => {
+    // Ensure that the contentToasts is available before accessing it
+    // temp fix for: ASSERTION ERROR: Unexpected state: no hydration info available for a given TNode, which represents a view container. [Expected=> null != undefined <=Actual]
+    this.contentToasts();
+  });
+
   readonly hostClasses = computed(() => {
     const placement = this.placement;
     const position = this.position();
@@ -143,7 +150,7 @@ export class ToasterComponent implements OnInit {
     this.contentToasts()?.forEach((item) => {
       if (state.toast && item.element.nativeElement === state.toast.hostElement.nativeElement) {
         if (!state.toast.dynamic()) {
-          state.toast['visible'] = false;
+          state.toast.visible = false;
         }
       }
     });
