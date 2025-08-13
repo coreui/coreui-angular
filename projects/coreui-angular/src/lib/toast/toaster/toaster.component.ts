@@ -55,7 +55,8 @@ export type TToasterPlacement =
   host: {
     class: 'toaster toast-container',
     '[class]': 'hostClasses()'
-  }
+  },
+  providers: [ToasterService]
 })
 export class ToasterComponent implements OnInit {
   readonly #hostElement = inject(ElementRef);
