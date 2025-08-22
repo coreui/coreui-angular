@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.5.9`
+
+- chore(dependencies): update
+
+---
+
 #### `5.5.8`
 
 - fix(toaster): Unexpected state: no hydration info available for a given TNode, which represents a view container. [Expected=> null != undefined <=Actual] - ensure that the contentToasts is available before accessing it - tempfix
