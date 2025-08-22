@@ -30,7 +30,7 @@ module.exports = tseslint.config(
           style: 'kebab-case'
         }
       ],
-      '@angular-eslint/no-input-rename': 'warn',
+      '@angular-eslint/no-input-rename': 'off',
       '@angular-eslint/no-output-rename': 'warn',
       '@typescript-eslint/consistent-indexed-object-style': 'off',
       '@typescript-eslint/no-explicit-any': 'off',

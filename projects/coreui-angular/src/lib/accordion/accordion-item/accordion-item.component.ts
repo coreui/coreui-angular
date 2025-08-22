@@ -36,7 +36,6 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
    * @return boolean
    * @default false
    */
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
   readonly itemVisible = signal(false);
