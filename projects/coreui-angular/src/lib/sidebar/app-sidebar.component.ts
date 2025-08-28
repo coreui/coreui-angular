@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
+
+import { Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output, Renderer2, DOCUMENT } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { sidebarCssClasses } from '../shared';

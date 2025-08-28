@@ -1,5 +1,5 @@
-import { Directive, ElementRef, HostListener, Inject, Input, OnInit, Renderer2 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Directive, ElementRef, HostListener, Inject, Input, OnInit, Renderer2, DOCUMENT } from '@angular/core';
+
 
 import { asideMenuCssClasses, sidebarCssClasses } from '../classes';
 import { ClassToggler } from '../toggle-classes';

@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import {AsyncPipe, DOCUMENT, NgClass, NgForOf, NgIf} from '@angular/common';
+import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, DOCUMENT } from '@angular/core';
+import { AsyncPipe, NgClass } from '@angular/common';
 
 import { AppBreadcrumbService } from './app-breadcrumb.service';
 import { Replace } from '../shared';
@@ -9,16 +9,21 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'app-breadcrumb',
     template: `
-    <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
-      <li class="breadcrumb-item"
-          *ngIf="breadcrumb.label.title && (breadcrumb.url.slice(-1) == '/' || last)"
+    @for (breadcrumb of breadcrumbs | async; track breadcrumb; let last = $last) {
+      @if (breadcrumb.label.title && (breadcrumb.url.slice(-1) == '/' || last)) {
+        <li class="breadcrumb-item"
           [ngClass]="{active: last}">
-        <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</a>
-        <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</span>
-      </li>
-    </ng-template>
-  `,
-  imports: [NgIf, NgClass, RouterLink, NgForOf, AsyncPipe]
+          @if (!last) {
+            <a [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</a>
+          }
+          @if (last) {
+            <span [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</span>
+          }
+        </li>
+      }
+    }
+    `,
+  imports: [NgClass, RouterLink, AsyncPipe]
 })
 export class AppBreadcrumbComponent implements OnInit, OnDestroy {
   @Input() fixed?: boolean;

@@ -1,5 +1,5 @@
-import { Inject, Injectable, Renderer2 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, Renderer2, DOCUMENT } from '@angular/core';
+
 
 const RemoveClasses = (NewClassNames: string[]) => {
   const MatchClasses = NewClassNames.map((Class) => document.body.classList.contains(Class));

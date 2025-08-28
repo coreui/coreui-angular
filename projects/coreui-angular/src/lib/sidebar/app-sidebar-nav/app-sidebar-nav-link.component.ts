@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -14,15 +14,19 @@ import { HtmlAttributesDirective } from '../../shared';
 @Component({
   selector: 'app-sidebar-nav-link-content, cui-sidebar-nav-link-content',
   template: `
-    <ng-container *ngIf="true">
-      <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
+    @if (true) {
+      @if (helper.hasIcon(item)) {
+        <i [ngClass]="item | appSidebarNavIcon"></i>
+      }
       <ng-container>{{item.name}}</ng-container>
-      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge?.text }}</span>
-    </ng-container>
-  `,
+      @if (helper.hasBadge(item)) {
+        <span [ngClass]="item | appSidebarNavBadge">{{ item.badge?.text }}</span>
+      }
+    }
+    `,
   providers: [SidebarNavHelper],
   standalone: true,
-  imports: [NgIf, NgClass, AppSidebarNavIconPipe, AppSidebarNavBadgePipe]
+  imports: [NgClass, AppSidebarNavIconPipe, AppSidebarNavBadgePipe]
 })
 export class AppSidebarNavLinkContentComponent {
   @Input() item: INavData = {};
@@ -37,7 +41,7 @@ export class AppSidebarNavLinkContentComponent {
   templateUrl: './app-sidebar-nav-link.component.html',
   providers: [SidebarNavHelper],
   standalone: true,
-  imports: [NgSwitch, NgSwitchCase, NgSwitchDefault, NgClass, AppSidebarNavLinkPipe, HtmlAttributesDirective, AppSidebarNavLinkContentComponent, RouterModule]
+  imports: [NgClass, AppSidebarNavLinkPipe, HtmlAttributesDirective, AppSidebarNavLinkContentComponent, RouterModule]
 })
 export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
 

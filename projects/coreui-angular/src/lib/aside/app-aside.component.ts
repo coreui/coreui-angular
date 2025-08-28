@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding, DOCUMENT } from '@angular/core';
+
 
 import { asideMenuCssClasses } from '../shared';
 

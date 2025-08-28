@@ -1,5 +1,5 @@
-import { Component, HostBinding, Inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Component, HostBinding, Inject, Input, OnDestroy, OnInit, Renderer2, DOCUMENT } from '@angular/core';
+
 
 @Component({
   selector: 'app-footer, cui-footer',

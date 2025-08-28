@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding } from '@angular/core';
-import { DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding, DOCUMENT } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AsideToggleDirective, HtmlAttributesDirective, SidebarToggleDirective } from '../shared';
 
@@ -7,7 +7,7 @@ import { AsideToggleDirective, HtmlAttributesDirective, SidebarToggleDirective }
   selector: 'app-header, cui-header',
   templateUrl: './app-header.component.html',
   standalone: true,
-  imports: [RouterLink, NgIf, NgClass, SidebarToggleDirective, HtmlAttributesDirective, AsideToggleDirective]
+  imports: [RouterLink, NgClass, SidebarToggleDirective, HtmlAttributesDirective, AsideToggleDirective]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
 
