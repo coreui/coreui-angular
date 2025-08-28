@@ -20,9 +20,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/common": "^19.2.0",
-    "@angular/core": "^19.2.0",
-    "@angular/router": "^19.2.0"
+    "@angular/common": "^20.2.0",
+    "@angular/core": "^20.2.0",
+    "@angular/router": "^20.2.0"
   },
   "repository": {
     "type": "git",
