@@ -1,6 +1,6 @@
 # [@coreui/angular](https://coreui.io/angular)
 
-![angular](https://img.shields.io/badge/angular-^19.2.0-lightgrey.svg?style=flat-square&logo=angular)
+![angular](https://img.shields.io/badge/angular-^20.2.0-lightgrey.svg?style=flat-square&logo=angular)
 [![npm package][npm-coreui-angular-badge-v2]][npm-coreui-angular]
 [![npm package][npm-coreui-angular-badge-latest]][npm-coreui-angular]
 [![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
@@ -11,7 +11,7 @@
  
 
 [npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
-[npm-coreui-angular-badge-v2]: https://img.shields.io/npm/v/@coreui/angular/v2-ng19?style=flat-square&color=red
+[npm-coreui-angular-badge-v2]: https://img.shields.io/npm/v/@coreui/angular/v2-ng20?style=flat-square&color=red
 [npm-coreui-angular-badge-latest]: https://img.shields.io/npm/v/@coreui/angular/latest?style=flat-square&color=red
 [npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red  
 [npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  
@@ -54,13 +54,13 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 Before you begin, make sure your development environment includes the supported version `Typescript` as well as `Node.js®` and an `npm` package manager.
 
 ###### Typescript
-Angular 19 requires `Typescript` version `>=5.5.0 <5.9.0`.
+Angular 20 requires `Typescript` version `>=5.9.0 <6.0.0`.
 
 - To check your version, run `tsc -v` in a terminal/console window.
 - To get `Typescript`, go to [www.typescriptlang.org](https://www.typescriptlang.org/).
 
 ###### Node.js
-Angular 19 requires `Node.js` version `^18.19.1 || ^20.11.1 || ^22.0.0` or newer.
+Angular 20 requires `Node.js` version `^20.19.0 || ^22.12.0 || ^24.0.0` or newer.
 
 - To check your version, run `node -v` in a terminal/console window.
 - To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
@@ -68,11 +68,11 @@ Angular 19 requires `Node.js` version `^18.19.1 || ^20.11.1 || ^22.0.0` or newer
 ###### Angular CLI
 Install the Angular CLI globally using a terminal/console window.
 ```bash
-npm install -g @angular/cli@19
+npm install -g @angular/cli@20
 ```
 
-##### Update to Angular 19
-see: [https://angular.dev/update-guide](https://angular.dev/update-guide?v=18.0-19.0&l=3)
+##### Update to Angular 20
+see: [https://angular.dev/update-guide](https://angular.dev/update-guide?v=19.0-20.0&l=3)
 
 ## Installation
 
@@ -87,7 +87,7 @@ $ git clone https://github.com/coreui/coreui-angular.git
 ### NPM
 
 ``` bash
-$ npm install @coreui/angular@2.19 --save
+$ npm install @coreui/angular@2.20 --save
 ```
 
 ## Usage
