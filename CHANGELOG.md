@@ -2,6 +2,30 @@
 
 ---
 
+#### `5.5.12`
+
+- chore(dependencies): update to `Angular 20.2.4`
+  - `@angular-devkit/schematics@"20.2.2"` (was "20.2.1")
+  - `@angular/build@"20.2.2"` (was "20.2.1")
+  - `@angular/cli@"20.2.2"` (was "20.2.1")
+  - `@angular/compiler-cli@"20.2.4"` (was "20.2.2")
+  - `@angular/language-service@"20.2.4"` (was "20.2.2")
+  - `@angular/animations@"20.2.4"` (was "20.2.2")
+  - `@angular/cdk@"20.2.2"` (was "20.2.1")
+  - `@angular/common@"20.2.4"` (was "20.2.2")
+  - `@angular/compiler@"20.2.4"` (was "20.2.2")
+  - `@angular/core@"20.2.4"` (was "20.2.2")
+  - `@angular/forms@"20.2.4"` (was "20.2.2")
+  - `@angular/localize@"20.2.4"` (was "20.2.2")
+  - `@angular/platform-browser@"20.2.4"` (was "20.2.2")
+  - `@angular/platform-browser-dynamic@"20.2.4"` (was "20.2.2")
+  - `@angular/router@"20.2.4"` (was "20.2.2")
+  - `@types/node@"22.18.1"` (was "22.18.0")
+  - `jasmine-core@"5.10.0"` (was "5.9.0")
+  - `typescript-eslint@"8.42.0"` (was "8.41.0")
+
+---
+
 #### `5.5.11`
 
 - chore(dependencies): update to `Angular 20.2.2`
