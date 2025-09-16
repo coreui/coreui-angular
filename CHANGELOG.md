@@ -2,6 +2,33 @@
 
 ---
 
+#### `5.5.13`
+
+- chore(dependencies): update to `Angular 20.3.0`
+
+  - `@angular-devkit/schematics` @ "20.3.1" (was "20.2.2")
+  - `@angular/build` @ "20.3.1" (was "20.2.2")
+  - `@angular/cli` @ "20.3.1" (was "20.2.2")
+  - `@angular/compiler-cli` @ "20.3.0" (was "20.2.4")
+  - `@angular/language-service` @ "20.3.0" (was "20.2.4")
+  - `@angular/animations` @ "20.3.0" (was "20.2.4")
+  - `@angular/cdk` @ "20.2.3" (was "20.2.2")
+  - `@angular/common` @ "20.3.0" (was "20.2.4")
+  - `@angular/compiler` @ "20.3.0" (was "20.2.4")
+  - `@angular/core` @ "20.3.0" (was "20.2.4")
+  - `@angular/forms` @ "20.3.0" (was "20.2.4")
+  - `@angular/localize` @ "20.3.0" (was "20.2.4")
+  - `@angular/platform-browser` @ "20.3.0" (was "20.2.4")
+  - `@angular/platform-browser-dynamic` @ "20.3.0" (was "20.2.4")
+  - `@angular/router` @ "20.3.0" (was "20.2.4")
+  - `@types/node` @ "22.18.4" (was "22.18.1")
+  - `ng-packagr` @ "20.3.0" (was "20.2.0")
+  - `angular-eslint` @ "20.3.0" (was "20.2.0")
+  - `eslint` @ "9.35.0" (was "9.34.0")
+  - `typescript-eslint` @ "8.44.0" (was "8.42.0")
+
+---
+
 #### `5.5.12`
 
 - chore(dependencies): update to `Angular 20.2.4`
