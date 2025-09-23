@@ -2,6 +2,31 @@
 
 ---
 
+#### `5.5.14`
+
+- chore(dependencies): update to `Angular 20.3.1`
+  - "@angular/animations": "^20.3.1"
+  - "@angular/cdk": "^20.2.4"
+  - "@angular/common": "^20.3.1"
+  - "@angular/compiler": "^20.3.1"
+  - "@angular/core": "^20.3.1"
+  - "@angular/forms": "^20.3.1"
+  - "@angular/localize": "^20.3.1"
+  - "@angular/platform-browser": "^20.3.1"
+  - "@angular/platform-browser-dynamic": "^20.3.1"
+  - "@angular/router": "^20.3.1"
+  - "@angular-devkit/schematics": "^20.3.2"
+  - "@angular/build": "^20.3.2"
+  - "@angular/cli": "^20.3.2"
+  - "@angular/compiler-cli": "^20.3.1"
+  - "@angular/language-service": "^20.3.1"
+  - "@types/node": "^22.18.6"
+  - "eslint": "^9.36.0"
+  - "typescript": "~5.9.2"
+  - "typescript-eslint": "^8.44.1"
+
+---
+
 #### `5.5.13`
 
 - chore(dependencies): update to `Angular 20.3.0`
