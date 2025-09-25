@@ -2,6 +2,27 @@
 
 ---
 
+#### `5.5.16`
+
+- chore(dependencies): update to `Angular 20.3.2`
+  - `@angular-devkit/schematics` @ "20.3.3" (was "20.3.2")
+  - `@angular/build` @ "20.3.3" (was "20.3.2")
+  - `@angular/cli` @ "20.3.3" (was "20.3.2")
+  - `@angular/compiler-cli` @ "20.3.2" (was "20.3.1")
+  - `@angular/language-service` @ "20.3.2" (was "20.3.1")
+  - `@angular/animations` @ "20.3.2" (was "20.3.1")
+  - `@angular/cdk` @ "20.2.5" (was "20.2.4")
+  - `@angular/common` @ "20.3.2" (was "20.3.1")
+  - `@angular/compiler` @ "20.3.2" (was "20.3.1")
+  - `@angular/core` @ "20.3.2" (was "20.3.1")
+  - `@angular/forms` @ "20.3.2" (was "20.3.1")
+  - `@angular/localize` @ "20.3.2" (was "20.3.1")
+  - `@angular/platform-browser` @ "20.3.2" (was "20.3.1")
+  - `@angular/platform-browser-dynamic` @ "20.3.2" (was "20.3.1")
+  - `@angular/router` @ "20.3.2" (was "20.3.1")
+
+---
+
 #### `5.5.15`
 
 - chore(dependencies): update
