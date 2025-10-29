@@ -2,6 +2,34 @@
 
 ---
 
+#### `5.5.18`
+
+- chore(dependencies): update to `Angular 20.3.7`
+  - `@angular-devkit/schematics` @ "20.3.7" (was "20.3.4")
+  - `@angular/build` @ "20.3.7" (was "20.3.4")
+  - `@angular/cli` @ "20.3.7" (was "20.3.4")
+  - `@angular/compiler-cli` @ "20.3.7" (was "20.3.3")
+  - `@angular/language-service` @ "20.3.7" (was "20.3.3")
+  - `@angular/animations` @ "20.3.7" (was "20.3.3")
+  - `@angular/cdk` @ "20.2.10" (was "20.2.7")
+  - `@angular/common` @ "20.3.7" (was "20.3.3")
+  - `@angular/compiler` @ "20.3.7" (was "20.3.3")
+  - `@angular/core` @ "20.3.7" (was "20.3.3")
+  - `@angular/forms` @ "20.3.7" (was "20.3.3")
+  - `@angular/localize` @ "20.3.7" (was "20.3.3")
+  - `@angular/platform-browser` @ "20.3.7" (was "20.3.3")
+  - `@angular/platform-browser-dynamic` @ "20.3.7" (was "20.3.3")
+  - `@angular/router` @ "20.3.7" (was "20.3.3")
+  - `@types/jasmine` @ "5.1.12" (was "5.1.9")
+  - `@types/node` @ "22.18.13" (was "22.18.8")
+  - `angular-eslint` @ "20.5.0" (was "20.3.0")
+  - `chart.js` @ "4.5.1" (was "4.5.0")
+  - `eslint` @ "9.38.0" (was "9.36.0")
+  - `jasmine-core` @ "5.12.0" (was "5.11.0")
+  - `typescript-eslint` @ "8.46.2" (was "8.45.0")
+
+---
+
 #### `5.5.17`
 
 - chore(dependencies): update to `Angular 20.3.3`
