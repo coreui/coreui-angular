@@ -2,6 +2,26 @@
 
 ---
 
+#### `5.5.19`
+
+- chore(dependencies): update to `Angular 20.3.9`
+  - `@angular-devkit/schematics` @ "20.3.8" (was "20.3.7")
+  - `@angular/build` @ "20.3.8" (was "20.3.7")
+  - `@angular/cli` @ "20.3.8" (was "20.3.7")
+  - `@angular/compiler-cli` @ "20.3.9" (was "20.3.7")
+  - `@angular/language-service` @ "20.3.9" (was "20.3.7")
+  - `@angular/animations` @ "20.3.9" (was "20.3.7")
+  - `@angular/common` @ "20.3.9" (was "20.3.7")
+  - `@angular/compiler` @ "20.3.9" (was "20.3.7")
+  - `@angular/core` @ "20.3.9" (was "20.3.7")
+  - `@angular/forms` @ "20.3.9" (was "20.3.7")
+  - `@angular/localize` @ "20.3.9" (was "20.3.7")
+  - `@angular/platform-browser` @ "20.3.9" (was "20.3.7")
+  - `@angular/platform-browser-dynamic` @ "20.3.9" (was "20.3.7")
+  - `@angular/router` @ "20.3.9" (was "20.3.7")
+  - `jasmine-core` @ "5.12.1" (was "5.12.0")
+---
+
 #### `5.5.18`
 
 - chore(dependencies): update to `Angular 20.3.7`
