@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.5.20`
+
+- refactor: `size` and `sizing` prop types, hostClasses cleanup
+
+---
+
 #### `5.5.19`
 
 - chore(dependencies): update to `Angular 20.3.9`
