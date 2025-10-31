@@ -143,6 +143,7 @@ export class AlertComponent {
   readonly hostClasses = computed(() => {
     const color = this.color();
     const variant = this.variant();
+
     return {
       alert: true,
       'alert-dismissible': this.dismissible,

@@ -64,14 +64,16 @@ export class TabsListComponent {
    */
   readonly role = input('tablist');
 
-  readonly hostClasses = computed(
-    () =>
-      ({
-        nav: true,
-        [`nav-${this.layout()}`]: this.layout(),
-        [`nav-${this.variant()}`]: this.variant()
-      }) as Record<string, boolean>
-  );
+  readonly hostClasses = computed(() => {
+    const layout = this.layout();
+    const variant = this.variant();
+
+    return {
+      nav: true,
+      [`nav-${layout}`]: layout,
+      [`nav-${variant}`]: variant
+    } as Record<string, boolean>;
+  });
 
   readonly tabs = contentChildren(TabDirective);
   #focusKeyManager!: FocusKeyManager<TabDirective>;

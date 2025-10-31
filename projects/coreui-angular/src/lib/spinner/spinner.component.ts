@@ -26,7 +26,7 @@ export class SpinnerComponent {
 
   /**
    * Size the component small.
-   * @type string
+   * @return string
    * @values 'sm'
    */
   readonly size = input<'sm'>();
@@ -45,10 +45,14 @@ export class SpinnerComponent {
   readonly role = input('status');
 
   readonly hostClasses = computed(() => {
+    const color = this.color();
+    const size = this.size();
+    const variant = this.variant();
+
     return {
-      [`spinner-${this.variant()}`]: true,
-      [`text-${this.color()}`]: !!this.color(),
-      [`spinner-${this.variant()}-${this.size()}`]: !!this.size()
+      [`spinner-${variant}`]: true,
+      [`text-${color}`]: !!color,
+      [`spinner-${variant}-${size}`]: !!size
     } as Record<string, boolean>;
   });
 }

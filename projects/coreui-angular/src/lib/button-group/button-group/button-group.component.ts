@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, input, InputSignal, InputSignalWithTransform } from '@angular/core';
+import { booleanAttribute, Component, computed, input, InputSignalWithTransform } from '@angular/core';
 
 @Component({
   selector: 'c-button-group',
@@ -8,9 +8,9 @@ import { booleanAttribute, Component, computed, input, InputSignal, InputSignalW
 export class ButtonGroupComponent {
   /**
    * Size the component small or large.
-   * @type { 'sm' | 'lg' }
+   * @return { 'sm' | 'lg' }
    */
-  readonly size: InputSignal<'sm' | 'lg' | undefined> = input();
+  readonly size = input<'' | 'sm' | 'lg' | string>();
 
   /**
    * Create a set of buttons that appear vertically stacked rather than horizontally. Split button dropdowns are not supported here.
@@ -20,16 +20,18 @@ export class ButtonGroupComponent {
 
   /**
    * Default role attr for ButtonGroup. [docs]
-   * @type InputSignal<string>
+   * @return string
    * @default 'group'
    */
-  readonly role: InputSignal<string> = input('group');
+  readonly role = input<string>('group');
 
   readonly hostClasses = computed(() => {
+    const size = this.size();
+    const vertical = this.vertical();
     return {
-      'btn-group': !this.vertical(),
-      'btn-group-vertical': this.vertical(),
-      [`btn-group-${this.size()}`]: !!this.size()
+      'btn-group': !vertical,
+      'btn-group-vertical': vertical,
+      [`btn-group-${size}`]: !!size
     } as Record<string, boolean>;
   });
 }

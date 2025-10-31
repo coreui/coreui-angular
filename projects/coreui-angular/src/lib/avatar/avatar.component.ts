@@ -34,7 +34,7 @@ export class AvatarComponent {
    * Size the component small, large, or extra large.
    * @default 'md'
    */
-  readonly size: InputSignal<Omit<Sizes, 'xxl'>> = input<Omit<Sizes, 'xxl'>>('');
+  readonly size = input<Omit<Sizes, 'xxl'>>('');
 
   /**
    * The alt attribute for the img element alternate text.
@@ -69,11 +69,15 @@ export class AvatarComponent {
   });
 
   readonly hostClasses = computed(() => {
+    const size = this.size();
+    const color = this.color();
+    const shape = this.shape();
+
     return {
       avatar: true,
-      [`avatar-${this.size()}`]: !!this.size(),
-      [`bg-${this.color()}`]: !!this.color(),
-      [`${this.shape()}`]: !!this.shape()
+      [`avatar-${size}`]: !!size,
+      [`bg-${color}`]: !!color,
+      [`${shape}`]: !!shape
     } as Record<string, boolean>;
   });
 }

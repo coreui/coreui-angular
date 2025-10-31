@@ -16,6 +16,7 @@ export class CalloutComponent {
 
   readonly hostClasses = computed(() => {
     const color = this.color();
+
     return {
       callout: true,
       [`callout-${color}`]: !!color

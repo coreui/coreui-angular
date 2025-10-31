@@ -35,6 +35,7 @@ export class CardComponent {
 
   readonly hostClasses = computed(() => {
     const color = this.color();
+
     return {
       card: true,
       [`bg-${color}`]: !!color

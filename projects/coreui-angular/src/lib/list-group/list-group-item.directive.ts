@@ -53,12 +53,14 @@ export class ListGroupItemDirective {
 
   readonly hostClasses = computed(() => {
     const host: HTMLElement = this.hostElement.nativeElement;
+    const color = this.color();
+
     return {
       'list-group-item': true,
       'list-group-item-action': host.nodeName === 'A' || host.nodeName === 'BUTTON',
       active: this.active(),
       disabled: this._disabled(),
-      [`list-group-item-${this.color()}`]: !!this.color()
+      [`list-group-item-${color}`]: !!color
     } as Record<string, boolean>;
   });
 

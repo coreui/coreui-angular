@@ -58,6 +58,7 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly hostClasses = computed(() => {
     const alignment = this.alignment();
     const visible = this.visible();
+
     return {
       'dropdown-menu': true,
       [`dropdown-menu-${alignment}`]: !!alignment,

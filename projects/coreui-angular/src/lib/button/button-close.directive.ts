@@ -24,11 +24,13 @@ export class ButtonCloseDirective extends ButtonDirective {
   readonly white: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   override readonly hostClasses = computed(() => {
+    const size = this.size();
+
     return {
       btn: true,
       'btn-close': true,
       'btn-close-white': this.white(),
-      [`btn-${this.size()}`]: !!this.size(),
+      [`btn-${size}`]: !!size,
       active: this.active(),
       disabled: this._disabled()
     } as Record<string, boolean>;

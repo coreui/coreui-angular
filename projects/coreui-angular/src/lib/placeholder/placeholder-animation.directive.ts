@@ -20,8 +20,9 @@ export class PlaceholderAnimationDirective {
   readonly placeholder = contentChild(PlaceholderDirective);
 
   readonly hostClasses = computed(() => {
+    const animation = this.animation();
     return {
-      [`placeholder-${this.animation()}`]: this.placeholder()?.visible() && !!this.animation()
+      [`placeholder-${animation}`]: this.placeholder()?.visible() && !!animation
     } as Record<string, boolean>;
   });
 }

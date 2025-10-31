@@ -22,16 +22,17 @@ export class PlaceholderDirective {
   /**
    * Size the placeholder xs, small, large.
    */
-  readonly size = input<'xs' | 'sm' | 'lg' | undefined>(undefined, { alias: 'cPlaceholderSize' });
+  readonly size = input<'xs' | 'sm' | 'lg'>(undefined, { alias: 'cPlaceholderSize' });
 
   readonly ariaHidden = computed(() => {
     return this.visible() ? null : true;
   });
 
   readonly hostClasses = computed(() => {
+    const size = this.size();
     return {
       placeholder: this.visible(),
-      [`placeholder-${this.size()}`]: !!this.size()
+      [`placeholder-${size}`]: !!size
     } as Record<string, boolean>;
   });
 }

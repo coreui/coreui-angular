@@ -35,7 +35,7 @@ export class BadgeComponent {
   /**
    * Size the component small.
    */
-  readonly size: InputSignal<'sm' | undefined> = input();
+  readonly size = input<'sm'>();
 
   /**
    * Sets the text color of the component to one of CoreUI’s themed colors.
@@ -63,12 +63,16 @@ export class BadgeComponent {
       'start-0': position?.includes('start')
     };
 
+    const color = this.color();
+    const size = this.size();
+    const shape = this.shape();
+
     return Object.assign(
       {
         badge: true,
-        [`bg-${this.color()}`]: !!this.color(),
-        [`badge-${this.size()}`]: !!this.size(),
-        [`${this.shape()}`]: !!this.shape()
+        [`bg-${color}`]: !!color,
+        [`badge-${size}`]: !!size,
+        [`${shape}`]: !!shape
       },
       !!position ? positionClasses : {}
     ) as Record<string, boolean>;

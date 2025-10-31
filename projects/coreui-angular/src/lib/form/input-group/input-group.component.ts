@@ -9,7 +9,7 @@ export class InputGroupComponent {
   /**
    * Size the component small or large.
    */
-  readonly sizing = input<string | 'sm' | 'lg' | ''>();
+  readonly sizing = input<'' | 'sm' | 'lg' | string>();
 
   readonly hostClasses = computed(() => {
     const sizing = this.sizing();

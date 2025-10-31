@@ -47,15 +47,15 @@ export class ButtonDirective {
 
   /**
    * Select the shape of the component.
-   * @type InputSignal<Shapes>
+   * @return Shapes
    */
-  readonly shape: InputSignal<Shapes | undefined> = input<Shapes>();
+  readonly shape = input<Shapes>();
 
   /**
    * Size the component small or large.
-   * @type InputSignal<'sm' | 'lg' | ''>
+   * @return  sm' | 'lg' | ''
    */
-  readonly size: InputSignal<'' | 'sm' | 'lg'> = input<'' | 'sm' | 'lg'>('');
+  readonly size = input<'' | 'sm' | 'lg' | string>('');
 
   /**
    * The tabindex attribute specifies the tab order of an element (when the "tab" button is used for navigating).
@@ -77,13 +77,18 @@ export class ButtonDirective {
   readonly variant: InputSignal<'ghost' | 'outline' | undefined> = input<'ghost' | 'outline'>();
 
   readonly hostClasses = computed(() => {
+    const color = this.color();
+    const variant = this.variant();
+    const size = this.size();
+    const shape = this.shape();
+
     return {
       btn: true,
-      [`btn-${this.color()}`]: !!this.color() && !this.variant(),
-      [`btn-${this.variant()}`]: !!this.variant() && !this.color(),
-      [`btn-${this.variant()}-${this.color()}`]: !!this.variant() && !!this.color(),
-      [`btn-${this.size()}`]: !!this.size(),
-      [`${this.shape()}`]: !!this.shape(),
+      [`btn-${color}`]: !!color && !variant,
+      [`btn-${variant}`]: !!variant && !color,
+      [`btn-${variant}-${color}`]: !!variant && !!color,
+      [`btn-${size}`]: !!size,
+      [`${shape}`]: !!shape,
       active: this.active(),
       disabled: this._disabled()
     } as Record<string, boolean>;

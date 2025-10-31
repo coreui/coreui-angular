@@ -20,15 +20,16 @@ export class FooterComponent {
 
   /**
    * Default role for footer. [docs]
-   * @type string
+   * @return string
    * @default 'contentinfo'
    */
-  readonly role: InputSignal<string> = input('contentinfo');
+  readonly role = input<string>('contentinfo');
 
   readonly hostClasses = computed(() => {
+    const position = this.position();
     return {
       footer: true,
-      [`footer-${this.position()}`]: !!this.position()
+      [`footer-${position}`]: !!position
     } as Record<string, boolean>;
   });
 }

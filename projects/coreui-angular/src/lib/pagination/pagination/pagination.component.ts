@@ -19,7 +19,7 @@ export class PaginationComponent {
    * Size the component small or large.
    * @values 'sm', 'lg'
    */
-  readonly size = input<'sm' | 'lg'>();
+  readonly size = input<'' | 'sm' | 'lg' | string>();
   /**
    * Default role for pagination. [docs]
    * @return string
