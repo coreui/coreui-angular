@@ -2,6 +2,31 @@
 
 ---
 
+#### `5.5.21`
+
+- chore(dependencies): update to `Angular 20.3.10`
+  - `@angular-devkit/schematics` @ "20.3.9" (was "20.3.8")
+  - `@angular/build` @ "20.3.9" (was "20.3.8")
+  - `@angular/cli` @ "20.3.9" (was "20.3.8")
+  - `@angular/compiler-cli` @ "20.3.10" (was "20.3.9")
+  - `@angular/language-service` @ "20.3.10" (was "20.3.9")
+  - `@angular/animations` @ "20.3.10" (was "20.3.9")
+  - `@angular/cdk` @ "20.2.12" (was "20.2.10")
+  - `@angular/common` @ "20.3.10" (was "20.3.9")
+  - `@angular/compiler` @ "20.3.10" (was "20.3.9")
+  - `@angular/core` @ "20.3.10" (was "20.3.9")
+  - `@angular/forms` @ "20.3.10" (was "20.3.9")
+  - `@angular/localize` @ "20.3.10" (was "20.3.9")
+  - `@angular/platform-browser` @ "20.3.10" (was "20.3.9")
+  - `@angular/platform-browser-dynamic` @ "20.3.10" (was "20.3.9")
+  - `@angular/router` @ "20.3.10" (was "20.3.9")
+  - `@types/node` @ "22.19.0" (was "22.18.13")
+  - `angular-eslint` @ "20.5.1" (was "20.5.0")
+  - `eslint` @ "9.39.1" (was "9.38.0")
+  - `typescript-eslint` @ "8.46.3" (was "8.46.2")
+
+---
+
 #### `5.5.20`
 
 - refactor: `size` and `sizing` prop types, hostClasses cleanup
