@@ -1,4 +1,15 @@
-import { computed, contentChild, Directive, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
+import {
+  booleanAttribute,
+  computed,
+  contentChild,
+  Directive,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  Renderer2
+} from '@angular/core';
+import { BooleanInput } from '@angular/cdk/coercion';
 
 import { PageLinkDirective } from '../page-link/page-link.directive';
 
@@ -11,6 +22,8 @@ import { PageLinkDirective } from '../page-link/page-link.directive';
   }
 })
 export class PageItemDirective {
+  static ngAcceptInputType_disabled: BooleanInput;
+
   readonly #renderer = inject(Renderer2);
 
   /**
@@ -23,7 +36,7 @@ export class PageItemDirective {
    * Toggle the disabled state for the component.
    * @return boolean
    */
-  readonly disabled = input<boolean>();
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly ariaCurrent = computed(() => {
     return this.active() ? 'page' : null;

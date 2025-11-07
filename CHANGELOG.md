@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.5.22` next
+
+- refactor(pagination): input transform for disabled prop, cleanups
+
+---
+
 #### `5.5.21`
 
 - chore(dependencies): update to `Angular 20.3.10`
