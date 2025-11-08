@@ -2,9 +2,11 @@
 
 ---
 
-#### `5.5.22` next
+#### `5.5.22` 
 
 - refactor(pagination): input transform for disabled prop, cleanups
+- chore(dependencies): update 
+  - `angular-eslint` @ "20.5.2" (was "20.5.1")
 
 ---
 
