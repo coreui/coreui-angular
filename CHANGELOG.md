@@ -2,6 +2,32 @@
 
 ---
 
+#### `5.5.23` 
+
+- chore(dependencies): update to `Angular 20.3.13`
+  - `@angular-devkit/schematics` @ "20.3.11" (was "20.3.9")
+  - `@angular/build` @ "20.3.11" (was "20.3.9")
+  - `@angular/cli` @ "20.3.11" (was "20.3.9")
+  - `@angular/compiler-cli` @ "20.3.13" (was "20.3.10")
+  - `@angular/language-service` @ "20.3.13" (was "20.3.10")
+  - `@angular/animations` @ "20.3.13" (was "20.3.10")
+  - `@angular/cdk` @ "20.2.14" (was "20.2.12")
+  - `@angular/common` @ "20.3.13" (was "20.3.10")
+  - `@angular/compiler` @ "20.3.13" (was "20.3.10")
+  - `@angular/core` @ "20.3.13" (was "20.3.10")
+  - `@angular/forms` @ "20.3.13" (was "20.3.10")
+  - `@angular/localize` @ "20.3.13" (was "20.3.10")
+  - `@angular/platform-browser` @ "20.3.13" (was "20.3.10")
+  - `@angular/platform-browser-dynamic` @ "20.3.13" (was "20.3.10")
+  - `@angular/router` @ "20.3.13" (was "20.3.10")
+  - `ng-packagr` @ "20.3.2" (was "20.3.0")
+  - `@types/jasmine` @ "5.1.13" (was "5.1.12")
+  - `@types/node` @ "22.19.1" (was "22.19.0")
+  - `angular-eslint` @ "20.7.0" (was "20.5.2")
+  - `typescript-eslint` @ "8.48.0" (was "8.46.3")
+
+---
+
 #### `5.5.22` 
 
 - refactor(pagination): input transform for disabled prop, cleanups
