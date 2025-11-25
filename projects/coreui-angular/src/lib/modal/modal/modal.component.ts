@@ -1,5 +1,6 @@
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule, FocusMonitor } from '@angular/cdk/a11y';
+import { BooleanInput } from '@angular/cdk/coercion';
 import {
   AfterViewInit,
   booleanAttribute,
@@ -11,14 +12,14 @@ import {
   ElementRef,
   inject,
   input,
+  linkedSignal,
   OnDestroy,
   OnInit,
   output,
   Renderer2,
   signal,
   untracked,
-  viewChild,
-  WritableSignal
+  viewChild
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -66,6 +67,10 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
   }
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
+  static ngAcceptInputType_ariaModalInput: BooleanInput;
+  static ngAcceptInputType_scrollable: BooleanInput;
+  static ngAcceptInputType_visibleInput: BooleanInput;
+
   readonly #document = inject<Document>(DOCUMENT);
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
@@ -136,7 +141,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly ariaModalInput = input(false, { transform: booleanAttribute, alias: 'ariaModal' });
 
   readonly ariaModal = computed(() => {
-    return this.visible || this.ariaModalInput() ? true : null;
+    return this.visible() || this.ariaModalInput() ? true : null;
   });
 
   /**
@@ -153,32 +158,21 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
+  readonly visible = linkedSignal(this.visibleInput);
+
   readonly #visibleInputEffect = effect(() => {
-    const visible = this.visibleInput();
+    const visible = this.visible();
     untracked(() => {
-      this.visible = visible;
+      this.setBodyStyles(visible);
+      this.setBackdrop(this.backdrop() !== false && visible);
+      this.visibleChange?.emit(visible);
     });
   });
-
-  set visible(value: boolean) {
-    if (this.#visible() !== value) {
-      this.#visible.set(value);
-      this.setBodyStyles(value);
-      this.setBackdrop(this.backdrop() !== false && value);
-      this.visibleChange?.emit(value);
-    }
-  }
-
-  get visible(): boolean {
-    return this.#visible();
-  }
-
-  readonly #visible: WritableSignal<boolean> = signal(false);
 
   readonly #activeElement = signal<HTMLElement | null>(null);
 
   readonly #visibleEffect = effect(() => {
-    const visible = this.#visible();
+    const visible = this.visible();
     const afterViewInit = this.#afterViewInit();
     untracked(() => {
       if (visible && afterViewInit) {
@@ -229,15 +223,15 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   });
 
   get ariaHidden(): boolean | null {
-    return this.visible ? null : true;
+    return this.visible() ? null : true;
   }
 
   readonly animateTrigger = computed(() => {
-    return this.visible ? 'visible' : 'hidden';
+    return this.visible() ? 'visible' : 'hidden';
   });
 
   get show(): boolean {
-    return this.visible && this.#show();
+    return this.visible() && this.#show();
   }
 
   set show(value: boolean) {
@@ -264,11 +258,11 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
         this.#backdropService.resetScrollbar();
       }
     });
-    this.show = this.visible;
+    this.show = this.visible();
   }
 
   onKeyUpHandler(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this.keyboard() && this.visible) {
+    if (event.key === 'Escape' && this.keyboard() && this.visible()) {
       if (this.backdrop() === 'static') {
         this.setStaticBackdrop();
       } else {
@@ -319,11 +313,11 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.#modalService.modalState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
       if (this === action.modal || this.id === action.id) {
         if ('show' in action) {
-          this.visible = action?.show === 'toggle' ? !this.visible : action.show;
+          this.visible.update((visible) => (action?.show === 'toggle' ? !visible : action.show));
         }
       } else {
-        if (this.visible) {
-          this.visible = false;
+        if (this.visible()) {
+          this.visible.set(false);
         }
       }
     });
