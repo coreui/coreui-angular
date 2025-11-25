@@ -2,6 +2,16 @@
 
 ---
 
+#### `5.5.24` 
+
+- refactor(modal): visible signal, cleanup
+- chore(devDependencies): update 
+  - `@angular-devkit/schematics` @ "20.3.12" (was "20.3.11")
+  - `@angular/build` @ "20.3.12" (was "20.3.11")
+  - `@angular/cli` @ "20.3.12" (was "20.3.11")
+
+---
+
 #### `5.5.23` 
 
 - chore(dependencies): update to `Angular 20.3.13`
