@@ -1,4 +1,4 @@
-import { inject, Injectable, RendererFactory2, DOCUMENT } from '@angular/core';
+import { DOCUMENT, inject, Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
@@ -9,10 +9,7 @@ export class BackdropService {
   readonly #backdropClick = new Subject<boolean>();
   readonly backdropClick$ = this.#backdropClick.asObservable();
 
-  #document = inject(DOCUMENT);
-  #rendererFactory = inject(RendererFactory2);
-  #renderer = this.#rendererFactory.createRenderer(null, null);
-  #unListen!: () => void;
+  readonly #document = inject(DOCUMENT);
 
   activeBackdrop: any;
 
@@ -25,33 +22,40 @@ export class BackdropService {
 
   scrollbarWidth = this.#scrollbarWidth;
 
-  setBackdrop(type: string = 'modal'): any {
-    const backdropElement = this.#renderer.createElement('div');
-    this.#renderer.addClass(backdropElement, `${type}-backdrop`);
-    this.#renderer.addClass(backdropElement, 'fade');
-    this.#renderer.appendChild(this.#document.body, backdropElement);
-    this.#unListen = this.#renderer.listen(backdropElement, 'click', (e): void => {
+  setBackdrop(type: string = 'modal'): HTMLDivElement {
+    const backdropElement = this.#document.createElement('div');
+    backdropElement.classList.add(`${type}-backdrop`);
+    backdropElement.classList.add('fade');
+    this.#document.body.appendChild(backdropElement);
+
+    const clickHandler = () => {
       this.onClickHandler();
-    });
+    };
+    (backdropElement as any).__backdropClickHandler = clickHandler;
+    backdropElement.addEventListener('click', clickHandler);
+
     this.scrollbarWidth = this.#scrollbarWidth;
     setTimeout(() => {
-      this.#renderer.addClass(backdropElement, 'show');
+      backdropElement.classList.add('show');
       // this.hideScrollbar();
     });
     this.activeBackdrop = backdropElement;
     return backdropElement;
   }
 
-  clearBackdrop(backdropElement: any): any {
+  clearBackdrop(backdropElement: HTMLElement): any {
     if (backdropElement) {
-      this.#unListen();
-      this.#renderer.removeClass(backdropElement, 'show');
+      const storedHandler = (backdropElement as any).__backdropClickHandler;
+      if (storedHandler) {
+        backdropElement.removeEventListener('click', storedHandler);
+        delete (backdropElement as any).__backdropClickHandler;
+      }
+      backdropElement.classList.remove('show');
       setTimeout(() => {
         if (this.activeBackdrop === backdropElement) {
           this.resetScrollbar();
         }
-        this.#renderer.removeChild(this.#document.body, backdropElement);
-        backdropElement = undefined;
+        this.#document.body.removeChild(backdropElement);
       }, 300);
     }
     return undefined;
@@ -61,19 +65,23 @@ export class BackdropService {
     return [this.#document.documentElement.dir, this.#document.body.dir].includes('rtl');
   }
 
+  get #padding() {
+    return `padding-${this.#isRTL ? 'left' : 'right'}`;
+  }
+
   #scrollBarVisible = true;
 
   hideScrollbar(): void {
     if (this.#scrollBarVisible) {
-      this.#renderer.setStyle(this.#document.body, 'overflow', 'hidden');
-      this.#renderer.setStyle(this.#document.body, `padding-${this.#isRTL ? 'left' : 'right'}`, this.scrollbarWidth);
+      this.#document.body.style.setProperty('overflow', 'hidden');
+      this.#document.body.style.setProperty(this.#padding, this.scrollbarWidth);
       this.#scrollBarVisible = false;
     }
   }
 
   resetScrollbar(): void {
-    this.#renderer.removeStyle(this.#document.body, 'overflow');
-    this.#renderer.removeStyle(this.#document.body, `padding-${this.#isRTL ? 'left' : 'right'}`);
+    this.#document.body.style.removeProperty('overflow');
+    this.#document.body.style.removeProperty(this.#padding);
     this.#scrollBarVisible = true;
   }
 
