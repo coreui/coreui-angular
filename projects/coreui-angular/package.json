@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular",
-  "version": "5.5.24",
+  "version": "5.5.25",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2025 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -23,13 +23,13 @@
   },
   "sideEffects": false,
   "peerDependencies": {
-    "@angular/animations": "^20.3.0",
-    "@angular/cdk": "^20.2.12",
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0",
-    "@angular/router": "^20.3.0",
+    "@angular/animations": "^20.3.14",
+    "@angular/cdk": "^20.2.14",
+    "@angular/common": "^20.3.14",
+    "@angular/core": "^20.3.14",
+    "@angular/router": "^20.3.14",
     "@coreui/coreui": "^5.4.3",
-    "@coreui/icons-angular": "~5.5.24",
+    "@coreui/icons-angular": "~5.5.25",
     "rxjs": "^7.8.2"
   },
   "repository": {

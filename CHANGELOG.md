@@ -2,6 +2,24 @@
 
 ---
 
+#### `5.5.25` 
+
+- fix(backdrop): modal backdrop not removed on zoneless - close #240 - thanks @anyplin
+- chore(dependencies): update to `Angular 20.3.14`
+  - `@angular/compiler-cli` @ "20.3.14" (was "20.3.13")
+  - `@angular/language-service` @ "20.3.14" (was "20.3.13")
+  - `@angular/animations` @ "20.3.14" (was "20.3.13")
+  - `@angular/common` @ "20.3.14" (was "20.3.13")
+  - `@angular/compiler` @ "20.3.14" (was "20.3.13")
+  - `@angular/core` @ "20.3.14" (was "20.3.13")
+  - `@angular/forms` @ "20.3.14" (was "20.3.13")
+  - `@angular/localize` @ "20.3.14" (was "20.3.13")
+  - `@angular/platform-browser` @ "20.3.14" (was "20.3.13")
+  - `@angular/platform-browser-dynamic` @ "20.3.14" (was "20.3.13")
+  - `@angular/router` @ "20.3.14" (was "20.3.13")
+
+---
+
 #### `5.5.24` 
 
 - refactor(modal): visible signal, cleanup
