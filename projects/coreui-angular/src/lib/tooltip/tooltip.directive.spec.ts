@@ -6,6 +6,7 @@ import {
   DOCUMENT,
   ElementRef,
   Renderer2,
+  signal,
   ViewContainerRef
 } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
@@ -15,13 +16,14 @@ import { Triggers } from '../coreui.types';
 import { ListenersService } from '../services';
 
 @Component({
-  template: '<button cTooltip="content" [(cTooltipVisible)]="visible" [cTooltipTrigger]="trigger" >Test</button>',
+  template:
+    '<button cTooltip="content" [(cTooltipVisible)]="visible" [cTooltipTrigger]="trigger" >{{content()}}</button>',
   imports: [TooltipDirective]
 })
 export class TestComponent {
-  content = 'Test';
-  visible = false;
-  trigger: Triggers[] = ['hover', 'click'];
+  readonly content = signal('Test');
+  readonly visible = signal(false);
+  readonly trigger: Triggers[] = ['hover', 'click'];
 }
 
 class MockElementRef extends ElementRef {}
@@ -61,11 +63,11 @@ describe('TooltipDirective', () => {
 
   it('should have css classes', fakeAsync(() => {
     expect(document.querySelector('.tooltip.show')).toBeNull();
-    component.visible = true;
+    component.visible.set(true);
     fixture.detectChanges();
     tick(500);
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
-    component.visible = false;
+    component.visible.set(false);
     fixture.detectChanges();
     tick(500);
     expect(document.querySelector('.tooltip.show')).toBeNull();
@@ -73,7 +75,7 @@ describe('TooltipDirective', () => {
 
   it('should set popover on and off', fakeAsync(() => {
     fixture.autoDetectChanges();
-    component.visible = false;
+    component.visible.set(false);
     expect(document.querySelector('.tooltip.show')).toBeNull();
     debugElement.nativeElement.dispatchEvent(new Event('mouseenter'));
     tick(500);
@@ -85,7 +87,7 @@ describe('TooltipDirective', () => {
 
   it('should toggle popover', fakeAsync(() => {
     fixture.autoDetectChanges();
-    component.visible = false;
+    component.visible.set(false);
     expect(document.querySelector('.tooltip.show')).toBeNull();
     debugElement.nativeElement.dispatchEvent(new Event('click'));
     tick(500);

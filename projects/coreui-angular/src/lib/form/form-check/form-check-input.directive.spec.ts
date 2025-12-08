@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormCheckInputDirective } from './form-check-input.directive';
@@ -6,11 +6,11 @@ import { FormCheckInputDirective } from './form-check-input.directive';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<input cFormCheckInput [indeterminate]="indeterminate" [checked]="true">',
+  template: '<input cFormCheckInput [indeterminate]="indeterminate()" [checked]="true">',
   imports: [FormCheckInputDirective]
 })
 class TestComponent {
-  indeterminate = false;
+  readonly indeterminate = signal(false);
 }
 
 describe('FormCheckInputDirective', () => {
@@ -42,7 +42,7 @@ describe('FormCheckInputDirective', () => {
   });
 
   it('should have indeterminate state', () => {
-    component.indeterminate = true;
+    component.indeterminate.set(true);
     fixture.detectChanges();
     expect(inputEl.nativeElement.checked).toBeFalse();
     expect(inputEl.nativeElement.indeterminate).toBeTrue();

@@ -1,5 +1,5 @@
 import { CollapseDirective } from './collapse.directive';
-import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2, signal } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
@@ -7,12 +7,12 @@ import { By } from '@angular/platform-browser';
 class MockElementRef extends ElementRef {}
 
 @Component({
-  template: '<div cCollapse [horizontal]="horizontal" [(visible)]="visible" [animate]="false">Test</div>',
+  template: '<div cCollapse [horizontal]="horizontal()" [(visible)]="visible" [animate]="false">Test</div>',
   imports: [CollapseDirective]
 })
 class TestComponent {
-  horizontal = false;
-  visible = false;
+  readonly horizontal = signal(false);
+  readonly visible = signal(false);
 }
 
 describe('CollapseDirective', () => {
@@ -29,7 +29,7 @@ describe('CollapseDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     elementRef = fixture.debugElement.query(By.directive(CollapseDirective));
-    component.visible = false;
+    component.visible.set(false);
     fixture.detectChanges(); // initial binding
   });
 
@@ -43,13 +43,13 @@ describe('CollapseDirective', () => {
   it('should have css classes', fakeAsync(() => {
     expect(elementRef.nativeElement.style.display).toContain('none');
     expect(elementRef.nativeElement).not.toHaveClass('collapse-horizontal');
-    component.horizontal = true;
-    component.visible = true;
+    component.horizontal.set(true);
+    component.visible.set(true);
     fixture.detectChanges();
     expect(elementRef.nativeElement).toHaveClass('collapse-horizontal');
     expect(elementRef.nativeElement.style.display).toBe('');
-    component.horizontal = false;
-    component.visible = false;
+    component.horizontal.set(false);
+    component.visible.set(false);
     fixture.detectChanges();
     expect(elementRef.nativeElement).not.toHaveClass('collapse-horizontal');
   }));

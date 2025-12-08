@@ -1,14 +1,14 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TableActiveDirective } from './table-active.directive';
 
 @Component({
   imports: [TableActiveDirective],
-  template: ` <tr [cTableActive]="active"></tr>`
+  template: ` <tr [cTableActive]="active()"></tr>`
 })
 class TestComponent {
-  active = false;
+  readonly active = input(false);
 }
 
 describe('TableActiveDirective', () => {
@@ -35,13 +35,13 @@ describe('TableActiveDirective', () => {
   });
 
   it('should add class "table-active" when active is true', () => {
-    fixture.componentInstance.active = true;
+    fixture.componentRef.setInput('active', true);
     fixture.detectChanges();
     expect(debugElement.nativeElement.classList).toContain('table-active');
   });
 
   it('should not add class "table-active" when active is false', () => {
-    fixture.componentInstance.active = false;
+    fixture.componentRef.setInput('active', false);
     fixture.detectChanges();
     expect(debugElement.nativeElement.classList).not.toContain('table-active');
   });

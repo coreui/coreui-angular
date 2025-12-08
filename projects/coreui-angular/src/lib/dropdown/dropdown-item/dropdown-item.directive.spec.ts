@@ -1,4 +1,4 @@
-import { Component, DebugElement, DOCUMENT, ElementRef, Renderer2, viewChild } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -14,7 +14,7 @@ class MockElementRef extends ElementRef {}
     <c-dropdown #dropdown="cDropdown" visible>
       <ul cDropdownMenu>
         <li>
-          <button cDropdownItem [active]="active" [disabled]="disabled" tabIndex="0" #item="cDropdownItem">
+          <button cDropdownItem [active]="active()" [disabled]="disabled()" tabIndex="0" #item="cDropdownItem">
             Action
           </button>
         </li>
@@ -24,8 +24,8 @@ class MockElementRef extends ElementRef {}
   imports: [DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
 })
 class TestComponent {
-  disabled = false;
-  active = false;
+  readonly disabled = signal(false);
+  readonly active = signal(false);
   readonly dropdown = viewChild(DropdownComponent);
   readonly item = viewChild(DropdownItemDirective);
 }
@@ -46,7 +46,7 @@ describe('DropdownItemDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     elementRef = fixture.debugElement.query(By.directive(DropdownItemDirective));
-    component.disabled = false;
+    component.disabled.set(false);
     fixture.detectChanges(); // initial binding
   });
 
@@ -62,8 +62,8 @@ describe('DropdownItemDirective', () => {
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBeNull();
     expect(elementRef.nativeElement.getAttribute('aria-current')).toBeNull();
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('0');
-    component.disabled = true;
-    component.active = true;
+    component.disabled.set(true);
+    component.active.set(true);
     fixture.detectChanges();
     expect(elementRef.nativeElement).toHaveClass('disabled');
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBe('true');

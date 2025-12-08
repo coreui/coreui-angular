@@ -5,7 +5,9 @@ import {
   DebugElement,
   DOCUMENT,
   ElementRef,
+  input,
   Renderer2,
+  signal,
   ViewContainerRef
 } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
@@ -15,13 +17,14 @@ import { PopoverDirective } from './popover.directive';
 import { Triggers } from '../coreui.types';
 
 @Component({
-  template: '<button cPopover="content" [(cPopoverVisible)]="visible" [cPopoverTrigger]="trigger" >Test</button>',
+  template:
+    '<button cPopover="content" [(cPopoverVisible)]="visible" [cPopoverTrigger]="trigger" >{{content}}</button>',
   imports: [PopoverDirective]
 })
 export class TestComponent {
-  content = 'Test';
-  visible = false;
-  trigger: Triggers[] = ['hover', 'click'];
+  readonly content = input('Test');
+  readonly visible = signal(false);
+  readonly trigger: Triggers[] = ['hover', 'click'];
 }
 
 class MockElementRef extends ElementRef {}
@@ -61,11 +64,11 @@ describe('PopoverDirective', () => {
 
   it('should have css classes', fakeAsync(() => {
     expect(document.querySelector('.popover.show')).toBeNull();
-    component.visible = true;
+    fixture.componentInstance.visible.set(true);
     fixture.detectChanges();
     tick(500);
     expect(document.querySelector('.popover.show')).toBeTruthy();
-    component.visible = false;
+    fixture.componentInstance.visible.set(false);
     fixture.detectChanges();
     tick(500);
     expect(document.querySelector('.popover.show')).toBeNull();
@@ -73,7 +76,7 @@ describe('PopoverDirective', () => {
 
   it('should set popover on and off', fakeAsync(() => {
     fixture.autoDetectChanges();
-    component.visible = false;
+    fixture.componentInstance.visible.set(false);
     expect(document.querySelector('.popover.show')).toBeNull();
     debugElement.nativeElement.dispatchEvent(new Event('mouseenter'));
     tick(500);
@@ -85,7 +88,7 @@ describe('PopoverDirective', () => {
 
   it('should toggle popover', fakeAsync(() => {
     fixture.autoDetectChanges();
-    component.visible = false;
+    fixture.componentInstance.visible.set(false);
     expect(document.querySelector('.popover.show')).toBeNull();
     debugElement.nativeElement.dispatchEvent(new Event('click'));
     tick(500);

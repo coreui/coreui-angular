@@ -1,4 +1,4 @@
-import { Component, ComponentRef, DebugElement } from '@angular/core';
+import { Component, ComponentRef, DebugElement, signal } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormCheckComponent } from './form-check.component';
 import { FormCheckInputDirective } from './form-check-input.directive';
@@ -7,7 +7,7 @@ import { By } from '@angular/platform-browser';
 
 @Component({
   template: `
-    <c-form-check [inline]="inline" [reverse]="reverse" [switch]="switch" [sizing]="'xl'">
+    <c-form-check [inline]="inline()" [reverse]="reverse()" [switch]="switch()" [sizing]="'xl'">
       <input cFormCheckInput id="check1" type="checkbox" />
       <label cFormCheckLabel for="check1">Label</label>
     </c-form-check>
@@ -15,9 +15,9 @@ import { By } from '@angular/platform-browser';
   imports: [FormCheckInputDirective, FormCheckComponent, FormCheckLabelDirective]
 })
 class TestComponent {
-  inline = true;
-  reverse = true;
-  switch = false;
+  readonly inline = signal(true);
+  readonly reverse = signal(true);
+  readonly switch = signal(false);
 }
 
 describe('FormCheckComponent', () => {
@@ -65,9 +65,9 @@ describe('FormCheckComponent Test', () => {
     expect(debugElement.nativeElement).not.toHaveClass('form-switch-xl');
     expect(debugElement.nativeElement).toHaveClass('form-check-inline');
     expect(debugElement.nativeElement).toHaveClass('form-check-reverse');
-    testFixture.componentInstance.switch = true;
-    testFixture.componentInstance.inline = false;
-    testFixture.componentInstance.reverse = false;
+    testFixture.componentInstance.switch.set(true);
+    testFixture.componentInstance.inline.set(false);
+    testFixture.componentInstance.reverse.set(false);
     testFixture.detectChanges();
     expect(debugElement.nativeElement).toHaveClass('form-switch');
     expect(debugElement.nativeElement).toHaveClass('form-switch-xl');

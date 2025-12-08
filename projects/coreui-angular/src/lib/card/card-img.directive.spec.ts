@@ -1,14 +1,14 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CardImgDirective } from './card-img.directive';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [CardImgDirective],
-  template: ` <div [cCardImg]="orientation"></div> `
+  template: ` <div [cCardImg]="orientation()"></div> `
 })
 export class TestComponent {
-  orientation: 'top' | 'bottom' | 'start' | 'end' | undefined = undefined;
+  readonly orientation = input<'top' | 'bottom' | 'start' | 'end' | undefined>(undefined);
 }
 
 describe('CardImgDirective', () => {
@@ -34,16 +34,16 @@ describe('CardImgDirective', () => {
   });
 
   it('should have css classes', () => {
-    component.orientation = 'start';
+    fixture.componentRef.setInput('orientation', 'start');
     fixture.detectChanges();
     expect(debugElement.nativeElement).toHaveClass('rounded-start');
-    component.orientation = 'end';
+    fixture.componentRef.setInput('orientation', 'end');
     fixture.detectChanges();
     expect(debugElement.nativeElement).toHaveClass('rounded-end');
-    component.orientation = 'top';
+    fixture.componentRef.setInput('orientation', 'top');
     fixture.detectChanges();
     expect(debugElement.nativeElement).toHaveClass('card-img-top');
-    component.orientation = 'bottom';
+    fixture.componentRef.setInput('orientation', 'bottom');
     fixture.detectChanges();
     expect(debugElement.nativeElement).toHaveClass('card-img-bottom');
   });

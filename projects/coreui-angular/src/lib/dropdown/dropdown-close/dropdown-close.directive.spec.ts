@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, Renderer2, viewChild } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DropdownService } from '../dropdown.service';
@@ -13,14 +13,20 @@ class MockElementRef extends ElementRef {}
   template: `
     <c-dropdown #dropdown="cDropdown" visible>
       <div cDropdownMenu>
-        <button cButtonClose cDropdownClose [disabled]="disabled" [dropdownComponent]="dropdown" tabIndex="0"></button>
+        <button
+          cButtonClose
+          cDropdownClose
+          [disabled]="disabled()"
+          [dropdownComponent]="dropdown"
+          tabIndex="0"
+        ></button>
       </div>
     </c-dropdown>
   `,
   imports: [ButtonCloseDirective, DropdownComponent, DropdownMenuDirective, DropdownCloseDirective]
 })
 class TestComponent {
-  disabled = false;
+  readonly disabled = signal(false);
   readonly dropdown = viewChild(DropdownComponent);
 }
 
@@ -38,7 +44,7 @@ describe('DropdownCloseDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     elementRef = fixture.debugElement.query(By.directive(DropdownCloseDirective));
-    component.disabled = false;
+    component.disabled.set(false);
     fixture.detectChanges(); // initial binding
   });
 
@@ -53,7 +59,7 @@ describe('DropdownCloseDirective', () => {
     expect(elementRef.nativeElement).not.toHaveClass('disabled');
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBeNull();
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('0');
-    component.disabled = true;
+    component.disabled.set(true);
     fixture.detectChanges();
     expect(elementRef.nativeElement).toHaveClass('disabled');
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBe('true');

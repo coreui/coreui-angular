@@ -1,14 +1,14 @@
-import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
+import { Component, DebugElement, ElementRef, input, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ThemeDirective } from './theme.directive';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [ThemeDirective],
-  template: '<div cTheme [colorScheme]="theme"></div>'
+  template: '<div cTheme [colorScheme]="theme()"></div>'
 })
 export class TestComponent {
-  theme!: 'dark' | 'light' | undefined;
+  readonly theme = input<'dark' | 'light' | undefined>();
 }
 
 class MockElementRef extends ElementRef {}
@@ -36,13 +36,13 @@ describe('ThemeDirective', () => {
   it('should set data-coreui-theme attribute', () => {
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
-    fixture.componentInstance.theme = 'dark';
+    fixture.componentRef.setInput('theme', 'dark');
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
-    fixture.componentInstance.theme = 'light';
+    fixture.componentRef.setInput('theme', 'light');
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
-    fixture.componentInstance.theme = undefined;
+    fixture.componentRef.setInput('theme', undefined);
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
   });
