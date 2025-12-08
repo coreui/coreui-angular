@@ -39,17 +39,17 @@
     "link:icons": "cd dist/coreui-icons-angular/ && npm link"
   },
   "private": true,
+  "packageManager": "npm@11.6.4",
   "dependencies": {
-    "@angular/animations": "^20.3.14",
-    "@angular/cdk": "^20.2.14",
-    "@angular/common": "^20.3.14",
-    "@angular/compiler": "^20.3.14",
-    "@angular/core": "^20.3.14",
-    "@angular/forms": "^20.3.14",
-    "@angular/localize": "^20.3.14",
-    "@angular/platform-browser": "^20.3.14",
-    "@angular/platform-browser-dynamic": "^20.3.14",
-    "@angular/router": "^20.3.14",
+    "@angular/animations": "^21.0.3",
+    "@angular/cdk": "^21.0.2",
+    "@angular/common": "^21.0.3",
+    "@angular/compiler": "^21.0.3",
+    "@angular/core": "^21.0.3",
+    "@angular/forms": "^21.0.3",
+    "@angular/localize": "^21.0.3",
+    "@angular/platform-browser": "^21.0.3",
+    "@angular/router": "^21.0.3",
     "@coreui/chartjs": "~4.1.0",
     "@coreui/icons": "^3.0.1",
     "@popperjs/core": "~2.11.8",
@@ -57,30 +57,30 @@
     "lodash-es": "^4.17.21",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",
-    "zone.js": "~0.15.1"
+    "zone.js": "~0.16.0"
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "^20.3.12",
-    "@angular/build": "^20.3.12",
-    "@angular/cli": "^20.3.12",
-    "@angular/compiler-cli": "^20.3.14",
-    "@angular/language-service": "^20.3.14",
+    "@angular-devkit/schematics": "^21.0.2",
+    "@angular/build": "^21.0.2",
+    "@angular/cli": "^21.0.2",
+    "@angular/compiler-cli": "^21.0.3",
+    "@angular/language-service": "^21.0.3",
     "@types/jasmine": "^5.1.13",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.19.1",
-    "angular-eslint": "^20.7.0",
+    "@types/node": "^24.10.1",
+    "angular-eslint": "^21.1.0",
     "copyfiles": "^2.4.1",
     "eslint": "^9.39.1",
-    "jasmine-core": "^5.12.1",
+    "jasmine-core": "^5.13.0",
     "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
     "karma-coverage": "^2.2.1",
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
-    "ng-packagr": "^20.3.2",
-    "prettier": "^3.6.2",
+    "ng-packagr": "^21.0.0",
+    "prettier": "^3.7.4",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.48.0"
+    "typescript-eslint": "^8.48.1"
   },
   "keywords": [
     "angular",
@@ -103,10 +103,10 @@
     "url": "git+https://github.com/coreui/coreui-angular.git"
   },
   "config": {
-    "version_short": "5.5"
+    "version_short": "5.6"
   },
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || ^24.0.0",
-    "npm": ">=9"
+    "npm": ">=10"
   }
 }
