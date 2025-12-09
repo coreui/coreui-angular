@@ -10,15 +10,16 @@ export abstract class SidebarNavService {
   abstract getSidebarNavItemsConfig(): INavData[];
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SidebarNavHelper {
-
   itemType(item: INavData): string {
     if (item.divider) {
       return 'divider';
     } else if (item.title) {
       return 'title';
-    } else if (item.children && item.children.length > 0 ) {
+    } else if (item.children && item.children.length > 0) {
       return 'group';
     } else if (item.label) {
       return 'label';
@@ -33,9 +34,9 @@ export class SidebarNavHelper {
     return router.isActive(item.url, false);
   }
 
-  public hasBadge = (item: INavData) => Boolean(item.badge);
-  public hasIcon = (item: INavData) => Boolean(item.icon) || item.icon === '';
-  public hasIconComponent = (item: INavData) => Boolean(item.iconComponent);
+  public hasBadge = (item: INavData) => Boolean(item?.badge);
+  public hasIcon = (item: INavData) => Boolean(item?.icon) || item?.icon === '';
+  public hasIconComponent = (item: INavData) => Boolean(item?.iconComponent);
 
   public getIconClass(item: INavData): any {
     const classes = {
