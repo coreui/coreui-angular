@@ -1,5 +1,5 @@
+import { RouterModule } from '@angular/router';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { SidebarNavComponent } from './sidebar-nav.component';
 import { SidebarNavHelper } from './sidebar-nav.service';
@@ -12,7 +12,7 @@ describe('SidebarNavComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), SidebarNavComponent],
+      imports: [SidebarNavComponent, RouterModule.forRoot([])],
       declarations: [],
       providers: [SidebarNavHelper]
     }).compileComponents();

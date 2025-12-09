@@ -1,12 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router, Routes } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
 
 import { SidebarNavHelper } from './sidebar-nav.service';
 
 describe('SidebarNavHelper', () => {
   let service: SidebarNavHelper;
-  let router: RouterTestingModule;
+  let router: RouterModule;
   const routes: Routes = [
     { path: 'dashboard', redirectTo: 'home', pathMatch: 'full' },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
@@ -14,7 +13,7 @@ describe('SidebarNavHelper', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
+      imports: [RouterModule.forRoot(routes)],
       providers: [SidebarNavHelper]
     });
 
@@ -28,21 +27,26 @@ describe('SidebarNavHelper', () => {
   it('should return itemType', () => {
     expect(service.itemType({ divider: true })).toEqual('divider');
     expect(service.itemType({ title: true })).toEqual('title');
-    expect(service.itemType({
-      children: [{
-        name: 'Dropdown',
-        url: '/dashboard'
-      }]
-    })).toEqual('group');
+    expect(
+      service.itemType({
+        children: [
+          {
+            name: 'Dropdown',
+            url: '/dashboard'
+          }
+        ]
+      })
+    ).toEqual('group');
     expect(service.itemType({ label: { variant: 'info' } })).toEqual('label');
     expect(service.itemType({})).toEqual('empty');
-    expect(service.itemType({
+    expect(
+      service.itemType({
         name: 'Disabled',
         url: '/dashboard',
         icon: 'icon-ban',
         attributes: { disabled: true }
-      }
-    )).toEqual('link');
+      })
+    ).toEqual('link');
   });
 
   it('should be active', () => {
@@ -60,10 +64,12 @@ describe('SidebarNavHelper', () => {
   });
 
   it('should return icon class object', () => {
-    expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(jasmine.objectContaining({
-      'nav-icon': true,
-      'icon-ban': true
-    }));
+    expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(
+      jasmine.objectContaining({
+        'nav-icon': true,
+        'icon-ban': true
+      })
+    );
     expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(jasmine.objectContaining({ 'nav-icon': true }));
     expect(service.getIconClass({ icon: '' })).toEqual(jasmine.objectContaining({ 'nav-icon': true }));
   });
