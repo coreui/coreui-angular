@@ -3,17 +3,18 @@ import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   Component,
+  computed,
   ElementRef,
   forwardRef,
-  HostBinding,
   inject,
-  Input,
+  input,
   OnChanges,
   OnDestroy,
   OnInit,
   Renderer2,
+  signal,
   SimpleChanges,
-  ViewChild
+  viewChild
 } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -65,7 +66,10 @@ import { IconDirective } from '@coreui/icons-angular';
       ),
       transition('open <=> closed', [animate('.15s ease')])
     ])
-  ]
+  ],
+  host: {
+    '[class]': 'hostClasses()'
+  }
 })
 export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   readonly #router = inject(Router);
@@ -82,34 +86,36 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     ) as Observable<NavigationEnd>;
   }
 
-  @Input() item: any;
-  @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
-  @Input() show?: boolean;
-  @Input({ transform: booleanAttribute }) compact?: boolean;
+  readonly item = input<INavData>();
+  readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
+  readonly show = input<boolean>();
+  readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
     return {
       'nav-group': true,
-      show: this.open
+      show: this.open()
     };
-  }
+  });
 
-  @ViewChild(forwardRef(() => SidebarNavComponent), { read: ElementRef }) sidebarNav!: ElementRef;
+  readonly sidebarNav = viewChild.required(
+    forwardRef(() => SidebarNavComponent),
+    { read: ElementRef }
+  );
 
   navigationEndObservable: Observable<NavigationEnd>;
   navSubscription!: Subscription;
   navGroupSubscription!: Subscription;
 
-  public open!: boolean;
-  public navItems: INavData[] = [];
-  public display: any = { display: 'block' };
+  readonly open = signal<boolean | undefined>(undefined);
+  readonly navItems = signal<INavData[]>([]);
+  readonly display = signal<any>({ display: 'block' });
 
   ngOnInit(): void {
-    this.navItems = [...this.item.children];
+    this.navItems.set([...(this.item()?.children ?? [])]);
 
     this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
-      if (this.dropdownMode !== 'none') {
+      if (this.dropdownMode() !== 'none') {
         const samePath = this.samePath(event.url);
         this.openGroup(samePath);
       }
@@ -120,8 +126,12 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     }
 
     this.navGroupSubscription = this.#sidebarNavGroupService.sidebarNavGroupState$.subscribe((next) => {
-      if (this.dropdownMode === 'close' && next.sidebarNavGroup && next.sidebarNavGroup !== this) {
-        if (next.sidebarNavGroup.item.url.startsWith(this.item.url)) {
+      if (this.dropdownMode() === 'close' && next.sidebarNavGroup && next.sidebarNavGroup !== this) {
+        const url = next.sidebarNavGroup.item()?.url ?? [];
+        const normUrl = Array.isArray(url) ? this.#router.createUrlTree(url).toString() : url;
+        const itemUrl = this.item()?.url ?? [];
+        const normItemUrl = Array.isArray(normUrl) ? this.#router.createUrlTree(normUrl).toString() : normUrl;
+        if (normUrl.startsWith(normItemUrl)) {
           return;
         }
         if (this.samePath(this.#router.routerState.snapshot.url)) {
@@ -135,7 +145,8 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
   samePath(url: string): boolean {
     // console.log('item:', this.item.name, this.item.url, 'url:', url);
-    const itemArray = this.item.url?.split('/');
+    const itemUrl = this.item()?.url ?? [];
+    const itemArray = Array.isArray(itemUrl) ? itemUrl : itemUrl.split('/');
     const urlArray = url.split('/');
     return itemArray?.every((value: string, index: number) => {
       // console.log(value === urlArray[index], 'value:', value, 'index:', index, urlArray[index], url);
@@ -144,14 +155,14 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   openGroup(open: boolean): void {
-    this.open = open;
+    this.open.set(open);
   }
 
   toggleGroup($event: any): void {
     $event.preventDefault();
-    this.openGroup(!this.open);
-    if (this.open) {
-      this.#sidebarNavGroupService.toggle({ open: this.open, sidebarNavGroup: this });
+    this.openGroup(!this.open());
+    if (this.open()) {
+      this.#sidebarNavGroupService.toggle({ open: this.open(), sidebarNavGroup: this });
     }
   }
 
@@ -160,9 +171,9 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   onAnimationStart($event: AnimationEvent) {
-    this.display = { display: 'block' };
+    this.display.set({ display: 'block' });
     setTimeout(() => {
-      const host = this.sidebarNav?.nativeElement;
+      const host = this.sidebarNav()?.nativeElement;
       if ($event.toState === 'open' && host) {
         this.#renderer.setStyle(host, 'height', `${host['scrollHeight']}px`);
       }
@@ -171,13 +182,13 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
   onAnimationDone($event: AnimationEvent) {
     setTimeout(() => {
-      const host = this.sidebarNav?.nativeElement;
+      const host = this.sidebarNav()?.nativeElement;
       if ($event.toState === 'open' && host) {
         this.#renderer.setStyle(host, 'height', 'auto');
       }
       if ($event.toState === 'closed') {
         setTimeout(() => {
-          this.display = null;
+          this.display.set(null);
         });
       }
     });
@@ -197,7 +208,11 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     forwardRef(() => SidebarNavGroupComponent),
     SidebarNavItemClassPipe,
     RouterModule
-  ]
+  ],
+  host: {
+    '[class]': 'hostClasses()',
+    '[attr.role]': 'role()'
+  }
 })
 export class SidebarNavComponent implements OnChanges {
   readonly sidebar = inject(SidebarComponent, { optional: true });
@@ -207,33 +222,31 @@ export class SidebarNavComponent implements OnChanges {
   readonly #hostElement = inject(ElementRef);
   readonly #sidebarService = inject(SidebarService);
 
-  @Input() navItems?: INavData[] = [];
-  @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
-  @Input({ transform: booleanAttribute }) groupItems?: boolean;
-  @Input({ transform: booleanAttribute }) compact?: boolean;
+  readonly navItems = input<INavData[] | undefined>([]);
+  readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
+  readonly groupItems = input<boolean, unknown>(undefined, { transform: booleanAttribute });
+  readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
+  readonly role = input('navigation');
 
-  @HostBinding('class')
-  get hostClasses(): any {
+  readonly hostClasses = computed(() => {
+    const groupItems = this.groupItems();
     return {
-      'sidebar-nav': !this.groupItems,
-      'nav-group-items': this.groupItems,
-      compact: this.groupItems && this.compact
+      'sidebar-nav': !groupItems,
+      'nav-group-items': groupItems,
+      compact: groupItems && this.compact()
     };
-  }
+  });
 
   // @HostBinding('class.nav-group-items')
   // get sidebarNavGroupItemsClass(): boolean {
   //   return !!this.groupItems;
   // }
 
-  @HostBinding('attr.role')
-  @Input()
-  role = 'navigation';
-
-  public navItemsArray: INavData[] = [];
+  readonly navItemsArray = signal<INavData[]>([]);
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this.navItemsArray = Array.isArray(this.navItems) ? this.navItems.slice() : [];
+    const navItems = this.navItems();
+    this.navItemsArray.set(Array.isArray(navItems) ? navItems.slice() : []);
   }
 
   public hideMobile(): void {

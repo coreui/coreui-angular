@@ -35,7 +35,7 @@ describe('SidebarNavComponent', () => {
         }
       }
     ];
-    component.navItems = navItems;
+    fixture.componentRef.setInput('navItems', navItems);
 
     fixture.detectChanges();
   });

@@ -1,34 +1,34 @@
-@for (item of navItemsArray; track item) {
-  @switch (helper.itemType(item)) {
+@for (nItem of navItemsArray(); track nItem) {
+  @switch (helper.itemType(nItem)) {
     @case ('group') {
       <c-sidebar-nav-group
         #rla="routerLinkActive"
-        [dropdownMode]="dropdownMode"
-        [item]="item"
-        [ngClass]="item | cSidebarNavItemClass"
+        [dropdownMode]="dropdownMode()"
+        [item]="nItem"
+        [ngClass]="nItem | cSidebarNavItemClass"
         [routerLinkActiveOptions]="{exact: true}"
         routerLinkActive="show"
-        [compact]="compact"
+        [compact]="compact()"
       />
     }
     @case ('divider') {
       <c-sidebar-nav-divider
-        [cHtmlAttr]="item.attributes ?? {}"
-        [item]="item"
-        [ngClass]="item | cSidebarNavItemClass"
+        [cHtmlAttr]="nItem.attributes ?? {}"
+        [item]="nItem"
+        [ngClass]="nItem | cSidebarNavItemClass"
       />
     }
     @case ('title') {
       <c-sidebar-nav-title
-        [cHtmlAttr]="item.attributes ?? {}"
-        [item]="item"
-        [ngClass]="item | cSidebarNavItemClass"
+        [cHtmlAttr]="nItem.attributes ?? {}"
+        [item]="nItem"
+        [ngClass]="nItem | cSidebarNavItemClass"
       />
     }
     @case ('label') {
       <c-sidebar-nav-label
-        [item]="item"
-        [ngClass]="item | cSidebarNavItemClass"
+        [item]="nItem"
+        [ngClass]="nItem | cSidebarNavItemClass"
       />
     }
     @case ('empty') {
@@ -37,8 +37,8 @@
     @default {
       <c-sidebar-nav-link
         (linkClick)="hideMobile()"
-        [item]="item"
-        [ngClass]="item | cSidebarNavItemClass"
+        [item]="nItem"
+        [ngClass]="nItem | cSidebarNavItemClass"
       />
     }
   }

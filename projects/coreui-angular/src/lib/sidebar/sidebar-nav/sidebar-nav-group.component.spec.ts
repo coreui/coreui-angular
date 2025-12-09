@@ -11,13 +11,9 @@ describe('SidebarNavGroupComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        NoopAnimationsModule,
-        SidebarNavGroupComponent
-      ],
+      imports: [NoopAnimationsModule, SidebarNavGroupComponent],
       providers: [provideRouter([])]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -46,7 +42,7 @@ describe('SidebarNavGroupComponent', () => {
         }
       ]
     };
-    component.item = item;
+    fixture.componentRef.setInput('item', item);
 
     fixture.detectChanges();
   });

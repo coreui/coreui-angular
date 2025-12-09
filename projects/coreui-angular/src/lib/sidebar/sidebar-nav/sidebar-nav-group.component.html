@@ -1,22 +1,23 @@
+@let grpItem = item();
 <a (click)="toggleGroup($event)"
-   [cHtmlAttr]="item.attributes"
+   [cHtmlAttr]="grpItem?.attributes"
    class="nav-link nav-group-toggle"
    href>
-  <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: item}" />
-  <ng-container>{{ item.name }}</ng-container>
-  @if (helper.hasBadge(item)) {
-    <span [ngClass]="item | cSidebarNavBadge">{{ item.badge.text }}</span>
+  <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: grpItem}" />
+  <ng-container>{{ grpItem?.name }}</ng-container>
+  @if (grpItem?.badge) {
+    <span [ngClass]="item | cSidebarNavBadge">{{ grpItem?.badge?.text }}</span>
   }
 </a>
 <c-sidebar-nav
   (@openClose.done)="onAnimationDone($event)"
   (@openClose.start)="onAnimationStart($event)"
-  [@openClose]="open ? 'open' : 'closed'"
-  [compact]="compact"
-  [dropdownMode]="dropdownMode"
+  [@openClose]="open() ? 'open' : 'closed'"
+  [compact]="compact()"
+  [dropdownMode]="dropdownMode()"
   [groupItems]="true"
-  [navItems]="navItems"
-  [ngStyle]="display"
+  [navItems]="navItems()"
+  [ngStyle]="display()"
 />
 
 <ng-template #iconTemplate let-item>
