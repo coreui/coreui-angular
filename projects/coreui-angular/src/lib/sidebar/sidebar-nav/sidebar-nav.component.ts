@@ -1,5 +1,5 @@
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   Component,
@@ -46,9 +46,8 @@ import { IconDirective } from '@coreui/icons-angular';
     NgTemplateOutlet,
     SidebarNavIconPipe,
     SidebarNavBadgePipe,
-    forwardRef(() => SidebarNavComponent),
-    NgStyle
-  ],
+    forwardRef(() => SidebarNavComponent)
+],
   animations: [
     trigger('openClose', [
       state(

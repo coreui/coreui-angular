@@ -6,7 +6,7 @@
   <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: grpItem}" />
   <ng-container>{{ grpItem?.name }}</ng-container>
   @if (grpItem?.badge) {
-    <span [class]="item | cSidebarNavBadge">{{ grpItem?.badge?.text }}</span>
+    <span [class]="grpItem | cSidebarNavBadge">{{ grpItem?.badge?.text }}</span>
   }
 </a>
 <c-sidebar-nav
@@ -17,7 +17,7 @@
   [dropdownMode]="dropdownMode()"
   [groupItems]="true"
   [navItems]="navItems()"
-  [ngStyle]="display()"
+  [style]="display()"
 />
 
 <ng-template #iconTemplate let-item>
