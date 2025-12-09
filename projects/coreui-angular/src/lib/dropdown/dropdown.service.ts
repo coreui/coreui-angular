@@ -6,13 +6,14 @@ export interface IDropdownState {
   dropdown?: any;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DropdownService {
-
-  private dropdownState = new BehaviorSubject<any>({});
-  dropdownState$ = this.dropdownState.asObservable();
+  readonly #dropdownState = new BehaviorSubject<any>({});
+  readonly dropdownState$ = this.#dropdownState.asObservable();
 
   toggle(state: IDropdownState): void {
-    this.dropdownState.next(state);
+    this.#dropdownState.next(state);
   }
 }
