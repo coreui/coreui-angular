@@ -17,10 +17,10 @@ export interface ISidebarAction {
   providedIn: 'root'
 })
 export class SidebarService {
-  private sidebarState = new BehaviorSubject<ISidebarAction>({});
-  sidebarState$ = this.sidebarState.asObservable();
+  readonly #sidebarState = new BehaviorSubject<ISidebarAction>({});
+  readonly sidebarState$ = this.#sidebarState.asObservable();
 
   toggle(action: ISidebarAction): void {
-    this.sidebarState.next(action);
+    this.#sidebarState.next(action);
   }
 }
