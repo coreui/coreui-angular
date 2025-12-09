@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { Component, computed, input, InputSignal } from '@angular/core';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
@@ -8,7 +7,6 @@ import { TextColorDirective } from '../utilities';
   selector: 'c-avatar',
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss'],
-  imports: [NgClass],
   hostDirectives: [
     {
       directive: TextColorDirective,

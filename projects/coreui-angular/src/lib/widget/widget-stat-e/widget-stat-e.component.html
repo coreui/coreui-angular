@@ -1,6 +1,6 @@
 <c-card-body class="text-center">
   @if (!!title()) {
-    <div [ngClass]="titleClasses()">{{ title() }}</div>
+    <div [class]="titleClasses()">{{ title() }}</div>
   }
   @if (!!value()) {
     <div class="fs-6 fw-semibold py-3">{{ value() }}</div>

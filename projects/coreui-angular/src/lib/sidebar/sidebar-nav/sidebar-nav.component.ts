@@ -1,5 +1,5 @@
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   Component,
@@ -44,7 +44,6 @@ import { IconDirective } from '@coreui/icons-angular';
     HtmlAttributesDirective,
     IconDirective,
     NgTemplateOutlet,
-    NgClass,
     SidebarNavIconPipe,
     SidebarNavBadgePipe,
     forwardRef(() => SidebarNavComponent),
@@ -199,7 +198,6 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   selector: 'c-sidebar-nav',
   templateUrl: './sidebar-nav.component.html',
   imports: [
-    NgClass,
     HtmlAttributesDirective,
     SidebarNavLinkComponent,
     SidebarNavLabelComponent,

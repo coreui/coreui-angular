@@ -2,13 +2,13 @@ import { booleanAttribute, Component, computed, contentChildren, effect, input, 
 
 import { CardBodyComponent, CardComponent } from '../../card';
 import { TemplateIdDirective } from '../../shared';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'c-widget-stat-c',
   templateUrl: './widget-stat-c.component.html',
   exportAs: 'cWidgetStatC',
-  imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
+  imports: [CardBodyComponent, NgTemplateOutlet],
   host: { '[class]': 'hostExtendedClass()' }
 })
 export class WidgetStatCComponent extends CardComponent {

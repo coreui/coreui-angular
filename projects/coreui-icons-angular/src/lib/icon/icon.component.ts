@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { Component, computed, effect, ElementRef, inject, input, Renderer2, viewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -9,7 +8,7 @@ import { transformName } from './icon.utils';
 
 @Component({
   exportAs: 'cIconComponent',
-  imports: [NgClass, HtmlAttributesDirective],
+  imports: [HtmlAttributesDirective],
   selector: 'c-icon',
   styleUrls: ['./icon.component.scss'],
   templateUrl: './icon.component.svg',

@@ -11,12 +11,11 @@ import {
   viewChild,
   ViewContainerRef
 } from '@angular/core';
-import { NgClass } from '@angular/common';
+
 
 @Component({
   selector: 'c-popover',
   templateUrl: './popover.component.html',
-  imports: [NgClass],
   host: {
     class: 'popover fade bs-popover-auto',
     '[class]': 'hostClasses()',

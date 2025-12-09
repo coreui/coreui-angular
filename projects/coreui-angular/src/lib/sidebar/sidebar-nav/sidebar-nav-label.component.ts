@@ -1,5 +1,4 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { NgClass } from '@angular/common';
 
 import { HtmlAttributesDirective } from '../../shared';
 import { SidebarNavHelper } from './sidebar-nav.service';
@@ -9,7 +8,7 @@ import { INavData } from './sidebar-nav';
 @Component({
   selector: 'c-sidebar-nav-label',
   templateUrl: './sidebar-nav-label.component.html',
-  imports: [HtmlAttributesDirective, SidebarNavBadgePipe, NgClass]
+  imports: [HtmlAttributesDirective, SidebarNavBadgePipe]
 })
 export class SidebarNavLabelComponent {
   readonly helper = inject(SidebarNavHelper);

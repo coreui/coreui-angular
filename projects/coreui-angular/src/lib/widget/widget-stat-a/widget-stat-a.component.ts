@@ -3,13 +3,13 @@ import { Component, computed, contentChildren, effect, input, InputSignal, Templ
 import { Colors } from '../../coreui.types';
 import { TemplateIdDirective } from '../../shared';
 import { CardBodyComponent, CardComponent } from '../../card';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'c-widget-stat-a',
   templateUrl: './widget-stat-a.component.html',
   exportAs: 'cWidgetStatA',
-  imports: [CardBodyComponent, NgClass, NgTemplateOutlet],
+  imports: [CardBodyComponent, NgTemplateOutlet],
   host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatAComponent extends CardComponent {

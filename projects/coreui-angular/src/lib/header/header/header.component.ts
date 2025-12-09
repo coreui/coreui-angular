@@ -1,5 +1,4 @@
 import { Component, computed, input, InputSignal } from '@angular/core';
-import { NgClass } from '@angular/common';
 
 import { Positions } from '../../coreui.types';
 
@@ -8,7 +7,6 @@ type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
 @Component({
   selector: 'c-header, [c-header]',
   templateUrl: './header.component.html',
-  imports: [NgClass],
   exportAs: 'cHeader',
   host: { '[attr.role]': 'role()', '[class]': 'hostClasses()' }
 })

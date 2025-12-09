@@ -2,7 +2,6 @@ import { Component, computed, input } from '@angular/core';
 import { Colors } from '../../coreui.types';
 import { CardBodyComponent, CardComponent, CardHeaderComponent } from '../../card';
 import { ColComponent, RowDirective } from '../../grid';
-import { NgClass } from '@angular/common';
 
 export type WidgetStatDValue = {
   title?: string;
@@ -10,11 +9,11 @@ export type WidgetStatDValue = {
 };
 
 @Component({
-    selector: 'c-widget-stat-d',
-    templateUrl: './widget-stat-d.component.html',
-    exportAs: 'cWidgetStatD',
-    imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective, NgClass],
-    host: { class: 'card' }
+  selector: 'c-widget-stat-d',
+  templateUrl: './widget-stat-d.component.html',
+  exportAs: 'cWidgetStatD',
+  imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective],
+  host: { class: 'card' }
 })
 export class WidgetStatDComponent extends CardComponent {
   /**

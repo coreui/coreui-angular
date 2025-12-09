@@ -5,7 +5,7 @@
         #rla="routerLinkActive"
         [dropdownMode]="dropdownMode()"
         [item]="nItem"
-        [ngClass]="nItem | cSidebarNavItemClass"
+        [class]="nItem | cSidebarNavItemClass"
         [routerLinkActiveOptions]="{exact: true}"
         routerLinkActive="show"
         [compact]="compact()"
@@ -15,20 +15,20 @@
       <c-sidebar-nav-divider
         [cHtmlAttr]="nItem.attributes ?? {}"
         [item]="nItem"
-        [ngClass]="nItem | cSidebarNavItemClass"
+        [class]="nItem | cSidebarNavItemClass"
       />
     }
     @case ('title') {
       <c-sidebar-nav-title
         [cHtmlAttr]="nItem.attributes ?? {}"
         [item]="nItem"
-        [ngClass]="nItem | cSidebarNavItemClass"
+        [class]="nItem | cSidebarNavItemClass"
       />
     }
     @case ('label') {
       <c-sidebar-nav-label
         [item]="nItem"
-        [ngClass]="nItem | cSidebarNavItemClass"
+        [class]="nItem | cSidebarNavItemClass"
       />
     }
     @case ('empty') {
@@ -38,7 +38,7 @@
       <c-sidebar-nav-link
         (linkClick)="hideMobile()"
         [item]="nItem"
-        [ngClass]="nItem | cSidebarNavItemClass"
+        [class]="nItem | cSidebarNavItemClass"
       />
     }
   }

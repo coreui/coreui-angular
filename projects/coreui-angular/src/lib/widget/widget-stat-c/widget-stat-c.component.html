@@ -1,16 +1,16 @@
 <c-card-body>
   @if (icon() || templates?.['widgetIconTemplate']) {
-    <div [ngClass]="iconClasses()">
+    <div [class]="iconClasses()">
       <ng-container *ngTemplateOutlet="templates?.['widgetIconTemplate'] || defaultWidgetIconTemplate" />
     </div>
   }
   @if (!!value()) {
-    <div [ngClass]="valueClasses()">
+    <div [class]="valueClasses()">
       {{ value() }}
     </div>
   }
   @if (!!title()) {
-    <div [ngClass]="titleClasses()">
+    <div [class]="titleClasses()">
       {{ title() }}
     </div>
   }

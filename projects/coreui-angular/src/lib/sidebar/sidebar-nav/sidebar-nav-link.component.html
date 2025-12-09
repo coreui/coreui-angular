@@ -2,20 +2,20 @@
 
 @switch (linkType) {
   @case ('disabled') {
-    <a [cHtmlAttr]="linkItem.attributes ?? {}" [ngClass]="linkItem | cSidebarNavLink">
+    <a [cHtmlAttr]="linkItem.attributes ?? {}" [class]="linkItem | cSidebarNavLink">
       <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: linkItem}" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
-        <span [ngClass]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
+        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
       }
     </a>
   }
   @case ('external') {
-    <a (click)="linkClicked()" [cHtmlAttr]="linkItem.attributes ?? {}" [href]="href" [ngClass]="linkItem | cSidebarNavLink">
+    <a (click)="linkClicked()" [cHtmlAttr]="linkItem.attributes ?? {}" [href]="href" [class]="linkItem | cSidebarNavLink">
       <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: linkItem}" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
-        <span [ngClass]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
+        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
       }
     </a>
   }
@@ -23,7 +23,7 @@
     <a (click)="linkClicked()"
        [cHtmlAttr]="linkItem.attributes ?? {}"
        [fragment]="linkItem.linkProps?.fragment"
-       [ngClass]="linkItem | cSidebarNavLink"
+       [class]="linkItem | cSidebarNavLink"
        [preserveFragment]="linkItem.linkProps?.preserveFragment ?? false"
        [queryParamsHandling]="linkItem.linkProps?.queryParamsHandling"
        [queryParams]="linkItem.linkProps?.queryParams ?? null"
@@ -39,16 +39,16 @@
       <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: linkItem}" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
-        <span [ngClass]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
+        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
       }
     </a>
   }
 }
 <ng-template #iconTemplate let-item>
-  <!--  <i *ngIf="item?.icon" [ngClass]="item | cSidebarNavIcon"></i>-->
+  <!--  <i *ngIf="item?.icon" [class]="item | cSidebarNavIcon"></i>-->
   @if (item?.icon) {
     <span class="nav-icon">
-      <span [ngClass]="item.icon ?? ''"></span>
+      <span [class]="item.icon ?? ''"></span>
     </span>
   }
   @if (item?.iconComponent) {
@@ -59,6 +59,6 @@
     ></svg>
   }
   @if (!item?.icon && !item?.iconComponent) {
-    <span [ngClass]="item | cSidebarNavIcon"></span>
+    <span [class]="item | cSidebarNavIcon"></span>
   }
 </ng-template>

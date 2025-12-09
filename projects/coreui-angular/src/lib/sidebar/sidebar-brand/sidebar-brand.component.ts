@@ -1,5 +1,4 @@
 import { Component, computed, input } from '@angular/core';
-import { NgClass } from '@angular/common';
 import { RouterLink, type UrlTree } from '@angular/router';
 
 import { HtmlAttributesDirective } from '../../shared';
@@ -7,7 +6,7 @@ import { HtmlAttributesDirective } from '../../shared';
 @Component({
   selector: 'c-sidebar-brand',
   templateUrl: './sidebar-brand.component.html',
-  imports: [RouterLink, HtmlAttributesDirective, NgClass],
+  imports: [RouterLink, HtmlAttributesDirective],
   host: { class: 'sidebar-brand' }
 })
 export class SidebarBrandComponent {

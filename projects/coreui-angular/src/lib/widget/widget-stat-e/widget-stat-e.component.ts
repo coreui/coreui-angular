@@ -1,12 +1,11 @@
 import { Component, computed, input } from '@angular/core';
-import { NgClass } from '@angular/common';
 import { CardBodyComponent, CardComponent } from '../../card';
 
 @Component({
-    selector: 'c-widget-stat-e',
-    templateUrl: './widget-stat-e.component.html',
-    exportAs: 'cWidgetStatE',
-    imports: [CardBodyComponent, NgClass]
+  selector: 'c-widget-stat-e',
+  templateUrl: './widget-stat-e.component.html',
+  exportAs: 'cWidgetStatE',
+  imports: [CardBodyComponent]
 })
 export class WidgetStatEComponent extends CardComponent {
   constructor() {

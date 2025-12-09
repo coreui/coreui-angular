@@ -12,7 +12,7 @@ import {
   OnDestroy,
   signal
 } from '@angular/core';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { Subscription } from 'rxjs';
 
 import { CollapseDirective } from '../collapse';
@@ -25,7 +25,7 @@ import { ThemeDirective } from '../shared';
 @Component({
   selector: 'c-navbar',
   templateUrl: './navbar.component.html',
-  imports: [NgClass, NgTemplateOutlet],
+  imports: [NgTemplateOutlet],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
   host: { '[class]': 'hostClasses()', '[attr.role]': 'role()' }
 })

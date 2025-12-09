@@ -1,10 +1,8 @@
 import { Component, computed, input } from '@angular/core';
-import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'c-pagination',
   templateUrl: './pagination.component.html',
-  imports: [NgClass],
   host: {
     '[attr.role]': 'role()'
   }

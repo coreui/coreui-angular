@@ -6,7 +6,7 @@
   <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: grpItem}" />
   <ng-container>{{ grpItem?.name }}</ng-container>
   @if (grpItem?.badge) {
-    <span [ngClass]="item | cSidebarNavBadge">{{ grpItem?.badge?.text }}</span>
+    <span [class]="item | cSidebarNavBadge">{{ grpItem?.badge?.text }}</span>
   }
 </a>
 <c-sidebar-nav
@@ -21,10 +21,10 @@
 />
 
 <ng-template #iconTemplate let-item>
-  <!--  <i *ngIf="item?.icon" [ngClass]="item | cSidebarNavIcon"></i>-->
+  <!--  <i *ngIf="item?.icon" [class]="item | cSidebarNavIcon"></i>-->
   @if (item?.icon) {
     <span class="nav-icon">
-    <span [ngClass]="item.icon ?? ''"></span>
+    <span [class]="item.icon ?? ''"></span>
   </span>
   }
   @if (item?.iconComponent) {
@@ -35,6 +35,6 @@
     />
   }
   @if (!item?.icon && !item?.iconComponent) {
-    <span [ngClass]="item | cSidebarNavIcon"></span>
+    <span [class]="item | cSidebarNavIcon"></span>
   }
 </ng-template>

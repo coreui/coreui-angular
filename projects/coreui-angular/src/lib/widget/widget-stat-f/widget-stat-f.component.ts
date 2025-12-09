@@ -1,5 +1,5 @@
 import { booleanAttribute, Component, computed, contentChildren, effect, input, TemplateRef } from '@angular/core';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 
 import { Colors } from '../../coreui.types';
 import { TemplateIdDirective } from '../../shared';
@@ -9,7 +9,7 @@ import { CardBodyComponent, CardComponent, CardFooterComponent } from '../../car
   selector: 'c-widget-stat-f',
   templateUrl: './widget-stat-f.component.html',
   exportAs: 'cWidgetStatB',
-  imports: [CardBodyComponent, CardFooterComponent, NgClass, NgTemplateOutlet],
+  imports: [CardBodyComponent, CardFooterComponent, NgTemplateOutlet],
   host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatFComponent extends CardComponent {

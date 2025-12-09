@@ -1,10 +1,10 @@
 @if (brandImg()) {
   <a [routerLink]="routerLink()">
     @if (brandFull()) {
-      <img [cHtmlAttr]="brandFull()" [ngClass]="'sidebar-brand-full'">
+      <img [cHtmlAttr]="brandFull()" [class]="'sidebar-brand-full'">
     }
     @if (brandNarrow()) {
-      <img [cHtmlAttr]="brandNarrow()" [ngClass]="'sidebar-brand-narrow'">
+      <img [cHtmlAttr]="brandNarrow()" [class]="'sidebar-brand-narrow'">
     }
   </a>
 } @else {

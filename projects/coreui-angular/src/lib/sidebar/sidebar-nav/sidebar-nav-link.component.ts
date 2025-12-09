@@ -1,4 +1,4 @@
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
@@ -42,8 +42,7 @@ export class SidebarNavLinkContentComponent {
     SidebarNavLinkPipe,
     SidebarNavBadgePipe,
     SidebarNavIconPipe,
-    NgTemplateOutlet,
-    NgClass
+    NgTemplateOutlet
   ]
 })
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
