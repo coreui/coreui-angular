@@ -33,6 +33,7 @@ speed-measure-plugin*.json
 .history/*
 
 # Miscellaneous
+.npmrc
 /.angular/cache
 .sass-cache/
 /connect.lock

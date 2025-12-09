@@ -2,6 +2,42 @@
 
 ---
 
+#### `5.6.0`
+
+- chore(dependencies): update to `Angular 21`
+  - `@angular-devkit/schematics` @ "21.0.2" (was "20.3.12")
+  - `@angular/build` @ "21.0.2" (was "20.3.12")
+  - `@angular/cli` @ "21.0.2" (was "20.3.12")
+  - `@angular/compiler-cli` @ "21.0.3" (was "20.3.14")
+  - `@angular/language-service` @ "21.0.3" (was "20.3.14")
+  - `@angular/animations` @ "21.0.3" (was "20.3.14")
+  - `@angular/cdk` @ "21.0.2" (was "20.2.14")
+  - `@angular/common` @ "21.0.3" (was "20.3.14")
+  - `@angular/compiler` @ "21.0.3" (was "20.3.14")
+  - `@angular/core` @ "21.0.3" (was "20.3.14")
+  - `@angular/forms` @ "21.0.3" (was "20.3.14")
+  - `@angular/localize` @ "21.0.3" (was "20.3.14")
+  - `@angular/platform-browser` @ "21.0.3" (was "20.3.14")
+  - `@angular/router` @ "21.0.3" (was "20.3.14")
+  - `ng-packagr` @ "21.0.0" (was "20.3.2")
+  - `zone.js` @ "0.16.0" (was "0.15.1")
+  - `@types/node` @ "24.10.2" (was "22.19.1")
+  - `angular-eslint` @ "21.1.0" (was "20.7.0")
+  - `jasmine-core` @ "5.13.0" (was "5.12.1")
+  - `prettier` @ "3.7.4" (was "3.6.2")
+  - `typescript-eslint` @ "8.49.0" (was "8.48.0")
+  - remove `@angular/platform-browser-dynamic`
+  - test: updates, cleanups and fixes
+  - refactor(sidebar.service): cleanup
+  - refactor(dropdown.service): cleanup
+  - refactor(sidebar-nav): signal inputs, test
+  - refactor(sidebar-nav.service): SidebarNavHelper providedIn: root
+  - refactor: migration from NgClass to class bindings
+  - refactor: migration from NgStyle to style bindings
+  - test: RouterTestingModule migration
+
+---
+
 #### `5.5.25` 
 
 - fix(backdrop): modal backdrop not removed on zoneless - close #240 - thanks @anyplin
