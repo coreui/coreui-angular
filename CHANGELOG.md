@@ -26,15 +26,15 @@
   - `jasmine-core` @ "5.13.0" (was "5.12.1")
   - `prettier` @ "3.7.4" (was "3.6.2")
   - `typescript-eslint` @ "8.49.0" (was "8.48.0")
-  - remove `@angular/platform-browser-dynamic`
-  - test: updates, cleanups and fixes
-  - refactor(sidebar.service): cleanup
-  - refactor(dropdown.service): cleanup
-  - refactor(sidebar-nav): signal inputs, test
-  - refactor(sidebar-nav.service): SidebarNavHelper providedIn: root
-  - refactor: migration from NgClass to class bindings
-  - refactor: migration from NgStyle to style bindings
-  - test: RouterTestingModule migration
+- remove `@angular/platform-browser-dynamic`
+- test: updates, cleanups and fixes
+- refactor(sidebar.service): cleanup
+- refactor(dropdown.service): cleanup
+- refactor(sidebar-nav): signal inputs, test
+- refactor(sidebar-nav.service): SidebarNavHelper providedIn: root
+- refactor: migration from NgClass to class bindings
+- refactor: migration from NgStyle to style bindings
+- test: RouterTestingModule migration
 
 ---
 
