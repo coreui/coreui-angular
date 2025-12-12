@@ -10,9 +10,7 @@
 
 <ng-template #defaultAccordionHeaderTemplate>
   <button cAccordionButton [collapsed]="!itemVisible()" [attr.aria-controls]="contentId" (click)="toggleItem()">
-    <ng-container
-      *ngTemplateOutlet="tmpl['accordionHeader'] || defaultAccordionHeaderContentTemplate; context: itemContext">
-    </ng-container>
+    <ng-container *ngTemplateOutlet="tmpl['accordionHeader'] || defaultAccordionHeaderContentTemplate; context: itemContext" />
   </button>
 </ng-template>
 
@@ -22,9 +20,7 @@
 
 <ng-template #defaultAccordionBodyTemplate>
   <div class="accordion-body">
-    <ng-container
-      *ngTemplateOutlet="tmpl['accordionBody'] || defaultAccordionBodyContentTemplate; context: itemContext">
-    </ng-container>
+    <ng-container *ngTemplateOutlet="tmpl['accordionBody'] || defaultAccordionBodyContentTemplate; context: itemContext" />
   </div>
 </ng-template>
 

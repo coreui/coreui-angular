@@ -12,7 +12,6 @@ import {
   ViewContainerRef
 } from '@angular/core';
 
-
 @Component({
   selector: 'c-popover',
   templateUrl: './popover.component.html',

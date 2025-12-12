@@ -47,7 +47,7 @@ import { IconDirective } from '@coreui/icons-angular';
     SidebarNavIconPipe,
     SidebarNavBadgePipe,
     forwardRef(() => SidebarNavComponent)
-],
+  ],
   animations: [
     trigger('openClose', [
       state(
