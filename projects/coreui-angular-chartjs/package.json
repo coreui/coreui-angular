@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular-chartjs",
-  "version": "5.6.0",
+  "version": "5.6.1",
   "description": "Angular wrapper component for Chart.js",
   "copyright": "Copyright 2025 creativeLabs Łukasz Holeczek",
   "license": "MIT",

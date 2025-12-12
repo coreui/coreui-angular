@@ -2,6 +2,29 @@
 
 ---
 
+#### `5.6.1`
+
+- fix(dropdown): potential infinite loop setting listeners
+- chore(dependencies): update to `Angular 21.0.5`
+  - `@angular-devkit/schematics` @ "21.0.3" (was "21.0.2")
+  - `@angular/build` @ "21.0.3" (was "21.0.2")
+  - `@angular/cli` @ "21.0.3" (was "21.0.2")
+  - `@angular/compiler-cli` @ "21.0.5" (was "21.0.3")
+  - `@angular/language-service` @ "21.0.5" (was "21.0.3")
+  - `@angular/animations` @ "21.0.5" (was "21.0.3")
+  - `@angular/cdk` @ "21.0.3" (was "21.0.2")
+  - `@angular/common` @ "21.0.5" (was "21.0.3")
+  - `@angular/compiler` @ "21.0.5" (was "21.0.3")
+  - `@angular/core` @ "21.0.5" (was "21.0.3")
+  - `@angular/forms` @ "21.0.5" (was "21.0.3")
+  - `@angular/localize` @ "21.0.5" (was "21.0.3")
+  - `@angular/platform-browser` @ "21.0.5" (was "21.0.3")
+  - `@angular/router` @ "21.0.5" (was "21.0.3")
+  - `@types/node` @ "24.10.3" (was "24.10.2")
+
+---
+
+
 #### `5.6.0`
 
 - chore(dependencies): update to `Angular 21`
