@@ -2,6 +2,16 @@
 
 ---
 
+#### `5.6.2`
+
+- chore(dependencies): update
+  - `ng-packagr` @ "21.0.1" (was "21.0.0")
+  - `eslint` @ "9.39.2" (was "9.39.1")
+  - `typescript-eslint` @ "^8.50.0" (was "8.49.0")
+  - `@types/node` @ "24.10.4" (was "24.10.3")
+
+---
+
 #### `5.6.1`
 
 - fix(dropdown): potential infinite loop setting listeners
