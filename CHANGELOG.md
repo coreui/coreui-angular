@@ -1,5 +1,27 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+
+---
+
+#### `5.6.4`
+
+- chore(dependencies): update
+  - `@angular-devkit/schematics` @ "21.0.4" (was "21.0.3")
+  - `@angular/build` @ "21.0.4" (was "21.0.3")
+  - `@angular/cli` @ "21.0.4" (was "21.0.3")
+  - `@angular/compiler-cli` @ "21.0.6" (was "21.0.5")
+  - `@angular/language-service` @ "21.0.6" (was "21.0.5")
+  - `@angular/animations` @ "21.0.6" (was "21.0.5")
+  - `@angular/cdk` @ "21.0.5" (was "21.0.3")
+  - `@angular/common` @ "21.0.6" (was "21.0.5")
+  - `@angular/compiler` @ "21.0.6" (was "21.0.5")
+  - `@angular/core` @ "21.0.6" (was "21.0.5")
+  - `@angular/forms` @ "21.0.6" (was "21.0.5")
+  - `@angular/localize` @ "21.0.6" (was "21.0.5")
+  - `@angular/platform-browser` @ "21.0.6" (was "21.0.5")
+  - `@angular/router` @ "21.0.6" (was "21.0.5")
+  - `lodash-es` @ "4.17.22" (was "4.17.21")
+
 ---
 
 #### `5.6.2`
