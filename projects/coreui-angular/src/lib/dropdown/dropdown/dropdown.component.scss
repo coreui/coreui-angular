@@ -8,85 +8,41 @@
   display: inline-flex;
 }
 
-:host-context(html:not([dir=rtl])) {
-  :host-context(.input-group) {
-    :host {
-      &:first-child {
-        &::ng-deep :first-child {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-
-        &::ng-deep :not(:first-child):not(.dropdown-menu) {
-          margin-left: -1px;
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-
-          &:not(:only-of-type) {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-          }
-        }
-      }
-
-      &:last-child {
-        &::ng-deep :first-child {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-
-          &:not(:only-of-type) {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-          }
-        }
-
-        &::ng-deep :not(:first-child):not(.dropdown-menu) {
-          margin-left: -1px;
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-        }
-      }
-    }
-  }
-}
-
-:host-context([dir=rtl] .input-group) {
-  :host {
-    direction: rtl;
-
+:host-context(.input-group) {
+  :host.dropdown {
     &:first-child {
       &::ng-deep :first-child {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
+        border-start-end-radius: 0;
+        border-end-end-radius: 0;
       }
 
       &::ng-deep :not(:first-child):not(.dropdown-menu) {
-        margin-right: -1px;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+        margin-left: -1px;
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
 
         &:not(:only-of-type) {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
+          border-start-end-radius: 0;
+          border-end-end-radius: 0;
         }
       }
     }
 
     &:last-child {
       &::ng-deep :first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
 
         &:not(:only-of-type) {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
+          border-start-end-radius: 0;
+          border-end-end-radius: 0;
         }
       }
 
       &::ng-deep :not(:first-child):not(.dropdown-menu) {
-        margin-right: -1px;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+        margin-left: -1px;
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
       }
     }
   }
