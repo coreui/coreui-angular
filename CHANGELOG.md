@@ -2,6 +2,27 @@
 
 ---
 
+#### `5.6.6`
+
+- refactor(dropdown): border radius cleanup
+- chore(dependencies): update
+  - `@angular/compiler-cli` @ "21.0.8" (was "21.0.7")
+  - `@angular/language-service` @ "21.0.8" (was "21.0.7")
+  - `@angular/animations` @ "21.0.8" (was "21.0.7")
+  - `@angular/cdk` @ "21.0.6" (was "21.0.5")
+  - `@angular/common` @ "21.0.8" (was "21.0.7")
+  - `@angular/compiler` @ "21.0.8" (was "21.0.7")
+  - `@angular/core` @ "21.0.8" (was "21.0.7")
+  - `@angular/forms` @ "21.0.8" (was "21.0.7")
+  - `@angular/localize` @ "21.0.8" (was "21.0.7")
+  - `@angular/platform-browser` @ "21.0.8" (was "21.0.7")
+  - `@angular/router` @ "21.0.8" (was "21.0.7")
+  - `@types/jasmine` @ "5.1.15" (was "5.1.13")
+  - `@types/node` @ "24.10.8" (was "24.10.4")
+  - `typescript-eslint` @ "8.53.0" (was "8.52.0")
+
+---
+
 #### `5.6.5`
 
 - chore(dependencies): update
