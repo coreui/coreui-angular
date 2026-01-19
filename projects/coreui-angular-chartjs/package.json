@@ -25,12 +25,12 @@
     "url": "https://github.com/coreui/coreui-angular/issues"
   },
   "peerDependencies": {
-    "@angular/core": "^21.0.0",
+    "@angular/core": "^21.1.0",
     "@coreui/chartjs": "^4.1.0",
     "chart.js": "^4.5.0"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.22",
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
