@@ -2,6 +2,13 @@
 
 ---
 
+#### `5.6.8`
+
+- fix(tooltip): tooltip trigger failure on quick double-entry mouse hover movements
+- fix(popover): popover trigger failure on quick double-entry mouse hover movements
+
+---
+
 #### `5.6.7` 
 
 - chore(dependencies): update to `Angular 21.1`
