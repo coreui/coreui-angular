@@ -2,6 +2,30 @@
 
 ---
 
+#### `5.6.7` 
+
+- chore(dependencies): update to `Angular 21.1`
+    - `@angular-devkit/schematics` @ "21.1.0" (was "21.0.5")
+    - `@angular/build` @ "21.1.0" (was "21.0.5")
+    - `@angular/cli` @ "21.1.0" (was "21.0.5")
+    - `@angular/compiler-cli` @ "21.1.0" (was "21.0.8")
+    - `@angular/language-service` @ "21.1.0" (was "21.0.8")
+    - `@angular/animations` @ "21.1.0" (was "21.0.8")
+    - `@angular/cdk` @ "21.1.0" (was "21.0.6")
+    - `@angular/common` @ "21.1.0" (was "21.0.8")
+    - `@angular/compiler` @ "21.1.0" (was "21.0.8")
+    - `@angular/core` @ "21.1.0" (was "21.0.8")
+    - `@angular/forms` @ "21.1.0" (was "21.0.8")
+    - `@angular/localize` @ "21.1.0" (was "21.0.8")
+    - `@angular/platform-browser` @ "21.1.0" (was "21.0.8")
+    - `@angular/router` @ "21.1.0" (was "21.0.8")
+    - `@types/node` @ "24.10.9" (was "24.10.8")
+    - `ng-packagr` @ "21.1.0" (was "21.0.1")
+    - `prettier` @ "3.8.0" (was "3.7.4")
+- chore(dependencies): overrides `undici` version to `^7.18.2` to mitigate 2 [low severity vulnerabilities](https://github.com/advisories/GHSA-g9mf-h72j-4rw9)
+
+---
+
 #### `5.6.6`
 
 - refactor(dropdown): border radius cleanup
