@@ -42,6 +42,8 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   readonly #intersectionService = inject(IntersectionService);
   readonly #destroyRef = inject(DestroyRef);
   readonly #document = inject(DOCUMENT);
+  #timerId1: ReturnType<typeof setTimeout> | undefined;
+  #timerId2: ReturnType<typeof setTimeout> | undefined;
 
   /**
    * Content of tooltip
@@ -234,14 +236,18 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
       this.removeTooltipElement();
       return;
     }
-    setTimeout(() => {
+
+    clearTimeout(this.#timerId2);
+    clearTimeout(this.#timerId1);
+    this.#timerId1 = setTimeout(() => {
       this.tooltipId = this.getUID('tooltip');
       this.tooltipRef?.setInput('id', this.tooltipId);
       this.#renderer.removeClass(this.tooltip, 'd-none');
       this.tooltipRef?.setInput('visible', this.visible());
       this.popperInstance?.forceUpdate();
       this.#changeDetectorRef?.markForCheck();
-    }, 100);
+      this.#timerId1 = undefined;
+    }, 150);
   }
 
   private removeTooltipElement(): void {
@@ -249,11 +255,15 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     if (!this.tooltipRef) {
       return;
     }
+
+    clearTimeout(this.#timerId2);
+    this.#timerId2 = setTimeout(() => {
+      this.#viewContainerRef?.detach();
+      this.#timerId2 = undefined;
+    }, 300);
+
     this.tooltipRef.setInput('visible', false);
     this.tooltipRef.setInput('id', undefined);
     this.#changeDetectorRef.markForCheck();
-    setTimeout(() => {
-      this.#viewContainerRef?.detach();
-    }, 300);
   }
 }
