@@ -2,6 +2,32 @@
 
 ---
 
+#### `5.6.9`
+
+- chore(dependencies): update to `Angular 21.1.1`
+  - `@angular-devkit/schematics` @ "21.1.1" (was "21.1.0")
+  - `@angular/build` @ "21.1.1" (was "21.1.0")
+  - `@angular/cli` @ "21.1.1" (was "21.1.0")
+  - `@angular/compiler-cli` @ "21.1.1" (was "21.1.0")
+  - `@angular/language-service` @ "21.1.1" (was "21.1.0")
+  - `@angular/animations` @ "21.1.1" (was "21.1.0")
+  - `@angular/cdk` @ "21.1.1" (was "21.1.0")
+  - `@angular/common` @ "21.1.1" (was "21.1.0")
+  - `@angular/compiler` @ "21.1.1" (was "21.1.0")
+  - `@angular/core` @ "21.1.1" (was "21.1.0")
+  - `@angular/forms` @ "21.1.1" (was "21.1.0")
+  - `@angular/localize` @ "21.1.1" (was "21.1.0")
+  - `@angular/platform-browser` @ "21.1.1" (was "21.1.0")
+  - `@angular/router` @ "21.1.1" (was "21.1.0")
+  - `lodash-es` @ "4.17.23" (was "4.17.22")
+  - `prettier` @ "3.8.1" (was "3.8.0")
+  - `typescript-eslint` @ "8.54.0" (was "8.53.0")
+- chore(dependencies): tar vulnerability https://github.com/advisories/GHSA-r6q2-hw4h-h46w
+- chore(dependencies): lodash vulnerability https://github.com/advisories/GHSA-xxjr-mmjv-4gpg
+- chore(dependencies): remove overrides `undici` version to `^7.18.2`
+
+---
+
 #### `5.6.8`
 
 - fix(tooltip): tooltip trigger failure on quick double-entry mouse hover movements
