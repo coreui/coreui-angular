@@ -2,6 +2,31 @@
 
 ---
 
+#### `5.6.10`
+
+- chore(dependencies): update jasmine to v6
+- chore(dependencies): update to `Angular 21.1.2`
+  - `@angular-devkit/schematics` @ "21.1.2" (was "21.1.1")
+  - `@angular/build` @ "21.1.2" (was "21.1.1")
+  - `@angular/cli` @ "21.1.2" (was "21.1.1")
+  - `@angular/cdk` @ "21.1.2" (was "21.1.1")
+  - `@angular/compiler-cli` @ "21.1.2" (was "21.1.1")
+  - `@angular/language-service` @ "21.1.2" (was "21.1.1")
+  - `@angular/animations` @ "21.1.2" (was "21.1.1")
+  - `@angular/common` @ "21.1.2" (was "21.1.1")
+  - `@angular/compiler` @ "21.1.2" (was "21.1.1")
+  - `@angular/core` @ "21.1.2" (was "21.1.1")
+  - `@angular/forms` @ "21.1.2" (was "21.1.1")
+  - `@angular/localize` @ "21.1.2" (was "21.1.1")
+  - `@angular/platform-browser` @ "21.1.2" (was "21.1.1")
+  - `@angular/router` @ "21.1.2" (was "21.1.1")
+  - `@types/jasmine` @ "6.0.0" (was "5.1.15")
+  - `jasmine-core` @ "6.0.1" (was "5.13.0")
+  - `karma-jasmine-html-reporter` @ "2.2.0" (was "2.1.0")
+
+
+---
+
 #### `5.6.9`
 
 - chore(dependencies): update to `Angular 21.1.1`
