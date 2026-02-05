@@ -108,5 +108,10 @@
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || ^24.0.0",
     "npm": ">=10"
+  },
+  "overrides": {
+    "@angular/cli": {
+      "@modelcontextprotocol/sdk": "^1.26.0"
+    }
   }
 }
