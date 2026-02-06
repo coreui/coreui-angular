@@ -307,6 +307,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.#modalService.toggle({ show: false, modal: this });
     this.#afterViewInit.set(false);
+    this.setBackdrop(false);
   }
 
   private stateToggleSubscribe(): void {
@@ -331,7 +332,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private setBodyStyles(open: boolean): void {
     if (open) {
-      if (this.backdrop() === true) {
+      if (this.backdrop() === true || this.backdrop() === 'static') {
         this.#renderer.addClass(this.#document.body, 'modal-open');
       }
     } else {
