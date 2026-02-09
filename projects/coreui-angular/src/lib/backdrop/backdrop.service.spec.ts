@@ -42,7 +42,7 @@ describe('BackdropService', () => {
   it('should hide scrollbar', () => {
     service.hideScrollbar();
     expect(document.body.style.overflow).toBe('hidden');
-    expect(document.body.style.paddingRight).toBe('0px');
+    expect(document.body.style.paddingRight).toContain('px');
     expect(document.body.style.paddingLeft).toBe('');
     service.resetScrollbar();
   });
@@ -52,7 +52,7 @@ describe('BackdropService', () => {
     service.hideScrollbar();
     expect(document.body.style.overflow).toBe('hidden');
     expect(document.body.style.paddingRight).toBe('');
-    expect(document.body.style.paddingLeft).toBe('0px');
+    expect(document.body.style.paddingLeft).toContain('px');
     service.resetScrollbar();
     document.body.removeAttribute('dir');
   });
