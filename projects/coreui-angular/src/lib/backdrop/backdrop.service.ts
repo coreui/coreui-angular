@@ -55,7 +55,9 @@ export class BackdropService {
         if (this.activeBackdrop === backdropElement) {
           this.resetScrollbar();
         }
-        this.#document.body.removeChild(backdropElement);
+        if (backdropElement.parentElement === this.#document.body) {
+          this.#document.body.removeChild(backdropElement);
+        }
       }, 300);
     }
     return undefined;
