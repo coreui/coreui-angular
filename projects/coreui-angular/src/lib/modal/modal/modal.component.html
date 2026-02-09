@@ -1,11 +1,11 @@
+@let isVisible = visible();
 <c-modal-dialog
   [alignment]="alignment()"
   [fullscreen]="fullscreen()"
   [scrollable]="scrollable()"
   [size]="size()">
   <c-modal-content>
-    @let isVisible = visible();
-    <div [cdkTrapFocus]="isVisible" [cdkTrapFocusAutoCapture]="isVisible" style="display: contents;" #modalContentRef>
+    <div #modalContentRef [cdkTrapFocusAutoCapture]="isVisible" [cdkTrapFocus]="isVisible" style="display: contents;">
       <ng-content />
     </div>
   </c-modal-content>

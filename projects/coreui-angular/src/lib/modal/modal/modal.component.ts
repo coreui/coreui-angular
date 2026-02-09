@@ -1,4 +1,3 @@
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule, FocusMonitor } from '@angular/cdk/a11y';
 import { BooleanInput } from '@angular/cdk/coercion';
 import {
@@ -30,37 +29,18 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
 @Component({
   selector: 'c-modal',
-  animations: [
-    trigger('showHide', [
-      state(
-        'visible',
-        style({
-          // display: 'block'
-        })
-      ),
-      state(
-        'hidden',
-        style({
-          // display: 'none'
-        })
-      ),
-      transition('visible <=> *', [animate('150ms')])
-    ])
-  ],
   templateUrl: './modal.component.html',
   exportAs: 'cModal',
   imports: [ModalDialogComponent, ModalContentComponent, A11yModule],
   host: {
     class: 'modal',
     '[class]': 'hostClasses()',
-    '[attr.role]': 'role()',
-    '[attr.inert]': 'ariaHidden',
+    '[attr.role]': 'visible() ? role() : null',
+    '[attr.inert]': 'ariaHidden()',
     '[attr.id]': 'id',
     '[attr.aria-modal]': 'ariaModal()',
+    '[attr.aria-hidden]': 'ariaHidden()',
     '[attr.tabindex]': '-1',
-    '[@showHide]': 'animateTrigger()',
-    '(@showHide.start)': 'animateStart($event)',
-    '(@showHide.done)': 'animateDone($event)',
     '(mousedown)': 'onMouseDownHandler($event)',
     '(click)': 'onClickHandler($event)',
     '(document:keyup)': 'onKeyUpHandler($event)'
@@ -163,6 +143,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly #visibleInputEffect = effect(() => {
     const visible = this.visible();
     untracked(() => {
+      this.animateStart();
       this.setBodyStyles(visible);
       this.setBackdrop(this.backdrop() !== false && visible);
       this.visibleChange?.emit(visible);
@@ -209,6 +190,28 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   // @ViewChild('modalContentRef', { read: ElementRef }) modalContentRef!: ElementRef;
   // readonly modalContentRef = viewChild(ModalContentComponent, { read: ElementRef });
   readonly modalContentRef = viewChild('modalContentRef', { read: ElementRef });
+  readonly modalDialogRef = viewChild.required(ModalDialogComponent, { read: ElementRef });
+
+  readonly #modalDialogEffect = effect((OnCleanup) => {
+    const modalDialogElement = this.modalDialogRef().nativeElement;
+
+    const removeEventListeners = () => {
+      modalDialogElement?.removeEventListener('transitionend', this.#handleTransitionEnd);
+    };
+
+    OnCleanup(removeEventListeners);
+
+    modalDialogElement?.addEventListener('transitionend', this.#handleTransitionEnd);
+  });
+
+  readonly #handleTransitionEnd = (event: TransitionEvent) => {
+    const modalDialogElement = this.modalDialogRef().nativeElement;
+    if (event.target === modalDialogElement && event.propertyName === 'transform') {
+      if (!this.visible()) {
+        this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
+      }
+    }
+  };
 
   #activeBackdrop!: any;
 
@@ -218,30 +221,16 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     return {
       modal: true,
       fade: this.transition(),
-      show: this.show
+      show: this.visible()
     } as Record<string, boolean>;
   });
 
-  get ariaHidden(): boolean | null {
+  readonly ariaHidden = computed(() => {
     return this.visible() ? null : true;
-  }
-
-  readonly animateTrigger = computed(() => {
-    return this.visible() ? 'visible' : 'hidden';
   });
 
-  get show(): boolean {
-    return this.visible() && this.#show();
-  }
-
-  set show(value: boolean) {
-    this.#show.set(value);
-  }
-
-  readonly #show = signal(true);
-
-  animateStart(event: AnimationEvent) {
-    if (event.toState === 'visible') {
+  animateStart() {
+    if (this.visible()) {
       this.#backdropService.hideScrollbar();
       this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'block');
     } else {
@@ -249,16 +238,6 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
         this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
       }
     }
-  }
-
-  animateDone(event: AnimationEvent) {
-    setTimeout(() => {
-      if (event.toState === 'hidden') {
-        this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
-        this.#backdropService.resetScrollbar();
-      }
-    });
-    this.show = this.visible();
   }
 
   onKeyUpHandler(event: KeyboardEvent): void {
@@ -332,7 +311,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private setBodyStyles(open: boolean): void {
     if (open) {
-      if (this.backdrop() === true || this.backdrop() === 'static') {
+      if (!!this.backdrop()) {
         this.#renderer.addClass(this.#document.body, 'modal-open');
       }
     } else {
