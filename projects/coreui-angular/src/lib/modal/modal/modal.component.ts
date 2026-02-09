@@ -221,13 +221,23 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     return {
       modal: true,
       fade: this.transition(),
-      show: this.visible()
+      show: this.show
     } as Record<string, boolean>;
   });
 
   readonly ariaHidden = computed(() => {
     return this.visible() ? null : true;
   });
+
+  get show(): boolean {
+    return this.visible() && this.#show();
+  }
+
+  set show(value: boolean) {
+    this.#show.set(value);
+  }
+
+  readonly #show = signal(false);
 
   animateStart() {
     if (this.visible()) {
@@ -238,6 +248,9 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
         this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
       }
     }
+    setTimeout(() => {
+      this.show = this.visible();
+    });
   }
 
   onKeyUpHandler(event: KeyboardEvent): void {
