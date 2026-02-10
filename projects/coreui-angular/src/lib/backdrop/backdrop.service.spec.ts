@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/core';
-import { fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 
 import { BackdropService } from './backdrop.service';
 
@@ -47,15 +47,16 @@ describe('BackdropService', () => {
     service.resetScrollbar();
   });
 
-  it('should hide scrollbar for rtl', () => {
+  it('should hide scrollbar for rtl', fakeAsync(() => {
     document.body.setAttribute('dir', 'rtl');
     service.hideScrollbar();
+    tick();
     expect(document.body.style.overflow).toBe('hidden');
     expect(document.body.style.paddingRight).toBe('');
     expect(document.body.style.paddingLeft).toContain('px');
     service.resetScrollbar();
     document.body.removeAttribute('dir');
-  });
+  }));
 
   it('should reset scrollbar', () => {
     service.resetScrollbar();
