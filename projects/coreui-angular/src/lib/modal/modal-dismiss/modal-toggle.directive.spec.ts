@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ModalToggleDirective } from './modal-toggle.directive';
 
 @Component({
-  template: '<button cModalToggle></button>',
+  template: '<button cModalToggle>Dismiss</button>',
   imports: [ModalToggleDirective]
 })
 class TestComponent {}
@@ -34,11 +34,11 @@ describe('ModalDismissDirective', () => {
 
   it('should handle click', fakeAsync(() => {
     const directive = debugElement.injector.get(ModalToggleDirective);
-    const spy = spyOn(directive, 'dismiss');
-    debugElement.nativeElement.dispatchEvent(new Event('click'));
-    directive.dismiss(new Event('click'));
+    const spy = spyOn(directive, 'dismiss').and.callThrough();
+    debugElement.nativeElement.click();
     tick();
     fixture.detectChanges();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(jasmine.any(MouseEvent));
   }));
 });

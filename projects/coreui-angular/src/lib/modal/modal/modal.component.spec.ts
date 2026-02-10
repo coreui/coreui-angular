@@ -1,5 +1,4 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ModalComponent } from './modal.component';
 import { DOCUMENT } from '@angular/core';
@@ -11,7 +10,7 @@ describe('ModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ModalComponent]
+      imports: [ModalComponent]
     }).compileComponents();
     document = TestBed.inject(DOCUMENT);
     fixture = TestBed.createComponent(ModalComponent);
@@ -98,5 +97,65 @@ describe('ModalComponent', () => {
     fixture.detectChanges();
     tick(300);
     expect(document.body).toHaveClass('modal-open');
+  }));
+
+  it('should not close modal when clicking on modal backdrop (static)', fakeAsync(() => {
+    fixture.componentRef.setInput('backdrop', 'static');
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    tick(300);
+    expect(component.visible()).toBe(true);
+
+    const mouseDownEvent = fixture.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    const clickEvent = fixture.nativeElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(component.visible()).toBe(true);
+  }));
+
+  it('should close modal when clicking on modal backdrop', fakeAsync(() => {
+    fixture.componentRef.setInput('backdrop', true);
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    tick(300);
+    expect(component.visible()).toBe(true);
+
+    const mouseDownEvent = fixture.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    const clickEvent = fixture.nativeElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(component.visible()).toBe(false);
+  }));
+
+  it('should not close modal when clicking inside modal dialog', fakeAsync(() => {
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    tick(300);
+    expect(component.visible()).toBe(true);
+
+    const dialogElement = fixture.nativeElement.querySelector('.modal-dialog');
+    component.onMouseDownHandler(new MouseEvent('mousedown', { bubbles: true }));
+    const clickEvent = new MouseEvent('click', { bubbles: true });
+    Object.defineProperty(clickEvent, 'target', { value: dialogElement, enumerable: true });
+    component.onClickHandler(clickEvent);
+    fixture.detectChanges();
+    tick(300);
+
+    expect(component.visible()).toBe(true);
+  }));
+
+  it('should not close modal when mousedown and click targets differ', fakeAsync(() => {
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    tick(300);
+    expect(component.visible()).toBe(true);
+
+    const mouseDownEvent = new MouseEvent('mousedown', { bubbles: true });
+    Object.defineProperty(mouseDownEvent, 'target', { value: document.body, enumerable: true });
+    component.onMouseDownHandler(mouseDownEvent);
+
+    const clickEvent = new MouseEvent('click', { bubbles: true });
+    Object.defineProperty(clickEvent, 'target', { value: fixture.nativeElement, enumerable: true });
+    component.onClickHandler(clickEvent);
+    fixture.detectChanges();
+    tick(300);
+
+    expect(component.visible()).toBe(true);
   }));
 });
