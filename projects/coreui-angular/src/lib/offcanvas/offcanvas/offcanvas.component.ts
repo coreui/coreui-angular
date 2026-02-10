@@ -1,4 +1,3 @@
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule } from '@angular/cdk/a11y';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { isPlatformBrowser } from '@angular/common';
@@ -31,23 +30,6 @@ let nextId = 0;
 
 @Component({
   selector: 'c-offcanvas',
-  animations: [
-    trigger('showHide', [
-      state(
-        'visible',
-        style({
-          // visibility: 'visible'
-        })
-      ),
-      state(
-        'hidden',
-        style({
-          // visibility: 'hidden'
-        })
-      ),
-      transition('visible <=> *', [animate('300ms')])
-    ])
-  ],
   templateUrl: './offcanvas.component.html',
   styleUrls: ['./offcanvas.component.scss'],
   exportAs: 'cOffcanvas',
@@ -55,15 +37,12 @@ let nextId = 0;
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: {
     ngSkipHydration: 'true',
-    '[@showHide]': 'this.visible() ? "visible" : "hidden"',
     '[attr.id]': 'id()',
     '[attr.inert]': 'ariaHidden() || null',
     '[attr.role]': 'role()',
     '[attr.aria-modal]': 'ariaModal()',
     '[attr.tabindex]': 'tabIndex',
     '[class]': 'hostClasses()',
-    '(@showHide.start)': 'animateStart($event)',
-    '(@showHide.done)': 'animateDone($event)',
     '(document:keydown)': 'onKeyDownHandler($event)'
   }
 })
@@ -146,6 +125,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   readonly visibleEffect = effect(() => {
     const visible = this.visible();
+    this.animateStart(visible);
     if (visible) {
       this.setBackdrop(this.backdrop());
       this.setFocus();
@@ -203,29 +183,17 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     return breakpointValue ? `${parseFloat(breakpointValue.trim()) - 0.02}px` : false;
   }
 
-  animateStart(event: AnimationEvent) {
-    if (event.toState === 'visible') {
+  animateStart(visible: boolean = this.visible()): void {
+    if (visible) {
       if (!this.scroll()) {
         this.#backdropService.hideScrollbar();
       }
+      this.#renderer.removeClass(this.#hostElement.nativeElement, 'hiding');
       this.#renderer.addClass(this.#hostElement.nativeElement, 'showing');
     } else {
+      this.#renderer.removeClass(this.#hostElement.nativeElement, 'showing');
       this.#renderer.addClass(this.#hostElement.nativeElement, 'hiding');
     }
-  }
-
-  animateDone(event: AnimationEvent) {
-    setTimeout(() => {
-      if (event.toState === 'visible') {
-        this.#renderer.removeClass(this.#hostElement.nativeElement, 'showing');
-      }
-      if (event.toState === 'hidden') {
-        this.#renderer.removeClass(this.#hostElement.nativeElement, 'hiding');
-        this.#renderer.removeStyle(this.#document.body, 'overflow');
-        this.#renderer.removeStyle(this.#document.body, 'paddingRight');
-      }
-    });
-    this.show = this.visible();
   }
 
   onKeyDownHandler(event: KeyboardEvent): void {
@@ -240,11 +208,31 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       // hotfix to avoid offcanvas flicker on the first render
       this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'flex');
     });
+
+    this.#hostElement.nativeElement.addEventListener('transitionend', this.#handleTransitionEnd);
   }
 
   ngOnDestroy(): void {
     this.#offcanvasService.toggle({ show: false, id: this.id() });
+    this.#removeEventListeners();
   }
+
+  readonly #removeEventListeners = () => {
+    this.#hostElement.nativeElement.removeEventListener('transitionend', this.#handleTransitionEnd);
+  };
+
+  readonly #handleTransitionEnd = (event: TransitionEvent) => {
+    const offcanvasElement = this.#hostElement.nativeElement;
+    if (event.target === offcanvasElement && event.propertyName === 'transform') {
+      if (this.visible()) {
+        this.#renderer.removeClass(offcanvasElement, 'showing');
+      } else {
+        this.#renderer.removeClass(offcanvasElement, 'hiding');
+        this.#renderer.removeStyle(this.#document.body, 'overflow');
+        this.#renderer.removeStyle(this.#document.body, 'paddingRight');
+      }
+    }
+  };
 
   setFocus(): void {
     if (isPlatformBrowser(this.#platformId)) {
