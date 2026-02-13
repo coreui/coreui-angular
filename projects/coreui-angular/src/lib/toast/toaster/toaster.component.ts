@@ -129,7 +129,11 @@ export class ToasterComponent implements OnInit {
     this.toastsDynamic.push(componentRef);
     const index = this.toastsDynamic.indexOf(componentRef);
     for (const [key, value] of Object.entries(props)) {
+      try {
       componentRef.setInput(key, value);
+      } catch (error) {
+        console.error('Toast input error:', error);
+      }
     }
     componentRef.setInput('placement', this.placement);
     componentRef.setInput('dynamic', true);
