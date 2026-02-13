@@ -1,4 +1,42 @@
-:host {
-  display: block;
+.toast.toast {
+  display: grid;
   overflow: hidden;
+  opacity: 0;
+  border: 0;
+  grid-template-rows: 0fr;
+  transition: opacity 300ms ease-out,
+  grid-template-rows 300ms ease-out,
+  margin 300ms ease-out,
+  border 300ms ease-out;
+
+  @starting-style {
+    margin: 0;
+  }
+
+  &.show {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    border: var(--cui-toast-border-width) solid var(--cui-toast-border-color);
+    transition-timing-function: ease-in;
+
+    &:not(:last-of-type) {
+      //margin-bottom: var(--cui-toast-spacing);
+    }
+  }
+
+  &:not(.show) {
+    margin: 0;
+  }
+
+  &:not(.fade) {
+    transition: none;
+    animation: none;
+  }
+
+  /* must be min-height: 0, to make grid animation work */
+  .toast-content {
+    display: grid;
+    min-height: 0;
+  }
 }
