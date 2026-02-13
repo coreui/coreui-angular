@@ -132,7 +132,7 @@ export class ToasterComponent implements OnInit {
     const index = this.toastsDynamic.indexOf(componentRef);
     for (const [key, value] of Object.entries(props)) {
       try {
-      componentRef.setInput(key, value);
+        componentRef.setInput(key, value);
       } catch (error) {
         console.error('Toast input error:', error);
       }
@@ -142,7 +142,7 @@ export class ToasterComponent implements OnInit {
     componentRef.setInput('index', index);
     componentRef.setInput('visible', true);
     componentRef.instance['visibleChange']?.emit(true);
-    componentRef.changeDetectorRef?.detectChanges();
+    componentRef.changeDetectorRef?.markForCheck();
     return componentRef;
   }
 
