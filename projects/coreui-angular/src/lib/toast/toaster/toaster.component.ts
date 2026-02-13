@@ -9,6 +9,7 @@ import {
   inject,
   Injector,
   input,
+  MAX_ANIMATION_TIMEOUT,
   NgModuleRef,
   OnInit,
   Renderer2,
@@ -63,6 +64,7 @@ export class ToasterComponent implements OnInit {
   readonly #renderer = inject(Renderer2);
   readonly #toasterService = inject(ToasterService);
   readonly #destroyRef = inject(DestroyRef);
+  readonly #maxAnimationTimeout = inject(MAX_ANIMATION_TIMEOUT);
 
   placements = Object.values(ToasterPlacement);
   toastsDynamic: ComponentRef<any>[] = [];
@@ -149,7 +151,9 @@ export class ToasterComponent implements OnInit {
       if (state.toast?.dynamic() && item.instance === state.toast) {
         item.setInput('visible', false);
         item.instance['visibleChange'].emit(false);
-        item.destroy();
+        setTimeout(() => {
+          item?.destroy();
+        }, this.#maxAnimationTimeout);
       }
     });
     this.contentToasts()?.forEach((item) => {
