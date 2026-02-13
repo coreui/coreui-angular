@@ -38,6 +38,7 @@ import { ToastContentComponent } from './toast-content.component';
   host: {
     class: 'toast',
     '[class]': 'hostClasses()',
+    '[inert]': '!visible || null',
     '(animate.enter)': 'handleEnter($event)',
     '(animate.leave)': 'handleLeave($event)',
     '(mouseover)': 'clearTimer()',
