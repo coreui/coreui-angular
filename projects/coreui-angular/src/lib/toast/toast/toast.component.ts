@@ -37,6 +37,8 @@ import { ToastContentComponent } from './toast-content.component';
   exportAs: 'cToast',
   host: {
     class: 'toast',
+    '[attr.role]': 'role() || null',
+    '[aria-atomic]': 'visible || null',
     '[class]': 'hostClasses()',
     '[inert]': '!visible || null',
     '(animate.enter)': 'handleEnter($event)',
@@ -84,6 +86,12 @@ export class ToastComponent implements OnInit, OnDestroy {
    * @return boolean
    */
   readonly fade = input(true);
+
+  /**
+   * ARIA role attribute.
+   * @return string
+   */
+  readonly role = input('alert');
 
   /**
    * Toggle the visibility of component.
