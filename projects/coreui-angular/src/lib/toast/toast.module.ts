@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ToastComponent } from './toast/toast.component';
+import { ToastContentComponent } from './toast/toast-content.component';
 import { ToastHeaderComponent } from './toast-header/toast-header.component';
 import { ToastBodyComponent } from './toast-body/toast-body.component';
 import { ToasterComponent } from './toaster/toaster.component';
@@ -11,6 +12,7 @@ import { ToastCloseDirective } from './toast-close.directive';
   imports: [
     ToastBodyComponent,
     ToastComponent,
+    ToastContentComponent,
     ToastCloseDirective,
     ToastHeaderComponent,
     ToasterComponent,
@@ -20,11 +22,11 @@ import { ToastCloseDirective } from './toast-close.directive';
   exports: [
     ToastBodyComponent,
     ToastComponent,
+    ToastContentComponent,
     ToastCloseDirective,
     ToastHeaderComponent,
     ToasterComponent,
     ToasterHostDirective
   ]
 })
-export class ToastModule {
-}
+export class ToastModule {}
