@@ -92,10 +92,11 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   readonly #visible = linkedSignal(this.visibleInput);
 
+  readonly #visible$ = toObservable(this.#visible);
+
   readonly #visibleEffect = effect(() => {
-    const newValue = this.#visible();
-    newValue ? this.setTimer() : this.clearTimer();
-    this.visibleChange?.emit(newValue);
+    const visible = this.#visible();
+    visible ? this.setTimer() : this.clearTimer();
     this.changeDetectorRef.markForCheck();
   });
 
@@ -162,6 +163,16 @@ export class ToastComponent implements OnInit, OnDestroy {
       this.clearTimer();
       this.setTimer();
     }
+
+    // skip the first emission if the initial value is false to prevent emitting visibleChange on init
+    this.#visible$
+      .pipe(
+        skipWhile((value, index) => !value && index === 0),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((visible) => {
+        this.visibleChange.emit(visible);
+      });
   }
 
   ngOnDestroy(): void {
