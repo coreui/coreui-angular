@@ -2,6 +2,38 @@
 
 ---
 
+#### `5.6.13`
+
+- refactor(modal): migrate to native CSS animations
+- fix(modal): firefox show animation timing issue
+- fix(modal): remove backdrop OnDestroy
+- test(modal): add missing tests
+- refactor(offcanvas): migrate to native CSS animations	
+- test(offcanvas): update tests
+- fix(backdrop.service): remove backdrop element if present on the body
+- test(backdrop.service): add missing tests
+- chore(dependencies): update to `Angular 21.1.4`
+  - `@angular-devkit/schematics` @ "21.1.4" (was "21.1.2")
+  - `@angular/build` @ "21.1.4" (was "21.1.2")
+  - `@angular/cli` @ "21.1.4" (was "21.1.2")
+  - `@angular/compiler-cli` @ "21.1.4" (was "21.1.3")
+  - `@angular/language-service` @ "21.1.4" (was "21.1.3")
+  - `@angular/animations` @ "21.1.4" (was "21.1.3")
+  - `@angular/cdk` @ "21.1.4" (was "21.1.3")
+  - `@angular/common` @ "21.1.4" (was "21.1.3")
+  - `@angular/compiler` @ "21.1.4" (was "21.1.3")
+  - `@angular/core` @ "21.1.4" (was "21.1.3")
+  - `@angular/forms` @ "21.1.4" (was "21.1.3")
+  - `@angular/localize` @ "21.1.4" (was "21.1.3")
+  - `@angular/platform-browser` @ "21.1.4" (was "21.1.3")
+  - `@angular/router` @ "21.1.4" (was "21.1.3")
+  - `@types/node` @ "24.10.13" (was "24.10.10")
+  - `typescript-eslint` @ "8.55.0" (was "8.54.0")
+- chore(devDependencies): remove `copyfiles`, use `native-copyfiles` instead
+- chore(dependencies): remove overrides `@modelcontextprotocol/sdk` version to `^1.26.0`
+
+---
+
 #### `5.6.12`
 
 - chore(dependencies): update to `Angular 21.1.3`
@@ -20,7 +52,6 @@
   - `angular-eslint` @ "21.2.0" (was "21.1.0")
 - chore(dependencies): `@isaacs/brace-expansion` vulnerability https://github.com/advisories/GHSA-7h2j-956f-4vf2
 - chore(dependencies): `@modelcontextprotocol/sdk` vulnerability https://github.com/advisories/GHSA-345p-7cg4-v4c7
-
 
 ---
 
@@ -45,7 +76,6 @@
   - `@types/jasmine` @ "6.0.0" (was "5.1.15")
   - `jasmine-core` @ "6.0.1" (was "5.13.0")
   - `karma-jasmine-html-reporter` @ "2.2.0" (was "2.1.0")
-
 
 ---
 
