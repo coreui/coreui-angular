@@ -1,5 +1,5 @@
 import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavbarTogglerDirective } from './navbar-toggler.directive';
 import { By } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -43,7 +43,7 @@ describe('NavbarTogglerDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).toHaveClass('navbar-toggler');
+    expect(debugElement.nativeElement.classList.contains('navbar-toggler')).toBe(true);
   });
 
   it('should have default aria-label', () => {
@@ -54,15 +54,15 @@ describe('NavbarTogglerDirective', () => {
     expect(debugElement.nativeElement.getAttribute('type')).toBe('button');
   });
 
-  it('should toggle collapse on click', fakeAsync(() => {
+  it('should toggle collapse on click', async () => {
     const collapseRef = debugElementCollapse.injector.get(CollapseDirective);
-    expect(collapseRef.visible()).toBeFalse();
+    expect(collapseRef.visible()).toBe(false);
     fixture.autoDetectChanges();
     debugElement.nativeElement.dispatchEvent(new Event('click'));
-    expect(collapseRef.visible()).toBeTrue();
+    expect(collapseRef.visible()).toBe(true);
     debugElement.nativeElement.dispatchEvent(new Event('click'));
-    expect(collapseRef.visible()).toBeFalse();
-  }));
+    expect(collapseRef.visible()).toBe(false);
+  });
 
   it('should add default icon', () => {
     const directive = debugElement.injector.get(NavbarTogglerDirective);
@@ -70,6 +70,6 @@ describe('NavbarTogglerDirective', () => {
     const renderer = debugElement.injector.get(Renderer2);
     const span = debugElement.nativeElement.querySelector('span');
     expect(span).toBeTruthy();
-    expect(span.classList.contains('navbar-toggler-icon')).toBeTrue();
+    expect(span.classList.contains('navbar-toggler-icon')).toBe(true);
   });
 });

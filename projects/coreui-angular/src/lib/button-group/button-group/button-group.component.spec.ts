@@ -9,12 +9,11 @@ describe('ButtonGroupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ButtonGroupComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ButtonGroupComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('ButtonGroupComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('btn-group');
+    expect(fixture.nativeElement.classList.contains('btn-group')).toBe(true);
   });
 });

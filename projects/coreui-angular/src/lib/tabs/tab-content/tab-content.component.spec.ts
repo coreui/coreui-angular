@@ -9,12 +9,11 @@ describe('TabContentComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TabContentComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TabContentComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('TabContentComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('tab-content');
+    expect(fixture.nativeElement.classList.contains('tab-content')).toBe(true);
   });
 });

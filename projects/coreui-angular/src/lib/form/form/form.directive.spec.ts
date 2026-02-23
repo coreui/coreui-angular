@@ -4,45 +4,45 @@ import { By } from '@angular/platform-browser';
 import { FormDirective } from './form.directive';
 
 @Component({
-  imports: [FormDirective],
-  template: '<form cForm [validated]="validated()"></form>'
+    imports: [FormDirective],
+    template: '<form cForm [validated]="validated()"></form>'
 })
 class TestComponent {
-  readonly validated = input(false);
+    readonly validated = input(false);
 }
 
 describe('FormDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
-  let componentRef: ComponentRef<TestComponent>;
+    let component: TestComponent;
+    let fixture: ComponentFixture<TestComponent>;
+    let debugElement: DebugElement;
+    let componentRef: ComponentRef<TestComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent]
-    }).compileComponents();
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [TestComponent]
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    componentRef = fixture.componentRef;
-    debugElement = fixture.debugElement.query(By.directive(FormDirective));
-    fixture.detectChanges();
-  });
-
-  it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new FormDirective();
-      expect(directive).toBeTruthy();
+        fixture = TestBed.createComponent(TestComponent);
+        component = fixture.componentInstance;
+        componentRef = fixture.componentRef;
+        debugElement = fixture.debugElement.query(By.directive(FormDirective));
+        fixture.detectChanges();
     });
-  });
 
-  it('should have css classes', () => {
-    expect(debugElement.nativeElement).not.toHaveClass('was-validated');
-    componentRef.setInput('validated', true);
-    fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('was-validated');
-    componentRef.setInput('validated', false);
-    fixture.detectChanges();
-    expect(debugElement.nativeElement).not.toHaveClass('was-validated');
-  });
+    it('should create an instance', () => {
+        TestBed.runInInjectionContext(() => {
+            const directive = new FormDirective();
+            expect(directive).toBeTruthy();
+        });
+    });
+
+    it('should have css classes', () => {
+        expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(false);
+        componentRef.setInput('validated', true);
+        fixture.detectChanges();
+        expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(true);
+        componentRef.setInput('validated', false);
+        fixture.detectChanges();
+        expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(false);
+    });
 });

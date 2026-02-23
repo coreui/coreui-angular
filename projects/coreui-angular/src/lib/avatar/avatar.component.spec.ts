@@ -9,12 +9,11 @@ describe('AvatarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AvatarComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(AvatarComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('AvatarComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('avatar');
+    expect(fixture.nativeElement.classList.contains('avatar')).toBe(true);
   });
 });

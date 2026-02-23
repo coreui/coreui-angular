@@ -9,12 +9,11 @@ describe('ModalContentComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModalContentComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ModalContentComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('ModalContentComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('modal-content');
+    expect(fixture.nativeElement.classList.contains('modal-content')).toBe(true);
   });
 });

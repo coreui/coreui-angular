@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 
 import { SidebarNavLinkComponent } from './sidebar-nav-link.component';
@@ -11,15 +11,15 @@ describe('SidebarNavLinkComponent', () => {
   let router: Router;
   let item: any;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [HtmlAttributesDirective, SidebarNavLinkComponent],
       providers: [provideRouter([])]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SidebarNavLinkComponent);
+    await fixture.whenStable();
+
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
 

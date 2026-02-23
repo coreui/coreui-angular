@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 
 import { SidebarBrandComponent } from './sidebar-brand.component';
@@ -9,19 +9,15 @@ describe('SidebarBrandComponent', () => {
   let fixture: ComponentFixture<SidebarBrandComponent>;
   let router: Router;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HtmlAttributesDirective,
-        SidebarBrandComponent
-      ],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HtmlAttributesDirective, SidebarBrandComponent],
       providers: [provideRouter([])]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SidebarBrandComponent);
+    await fixture.whenStable();
+
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -32,6 +28,6 @@ describe('SidebarBrandComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('sidebar-brand');
+    expect(fixture.nativeElement.classList.contains('sidebar-brand')).toBe(true);
   });
 });

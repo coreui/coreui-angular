@@ -1,4 +1,6 @@
-import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
+/// <reference types="vitest/globals" />
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import { CarouselComponent } from './carousel.component';
 import { CarouselService } from '../carousel.service';
@@ -8,18 +10,22 @@ describe('CarouselComponent', () => {
   let fixture: ComponentFixture<CarouselComponent>;
   let service: CarouselService;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [CarouselComponent]
-    }).compileComponents();
-  }));
+  beforeEach(async () => {
+    // // Mock IntersectionObserver for jsdom
+    // (globalThis as any).IntersectionObserver = class IntersectionObserver {
+    //   observe = vi.fn();
+    //   unobserve = vi.fn();
+    //   disconnect = vi.fn();
+    //   takeRecords = vi.fn().mockReturnValue([]);
+    // };
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [CarouselComponent],
       providers: [CarouselService]
     }).compileComponents();
     fixture = TestBed.createComponent(CarouselComponent);
+    await fixture.whenStable();
+
     service = TestBed.inject(CarouselService);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -30,11 +36,11 @@ describe('CarouselComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('carousel');
-    expect(fixture.nativeElement).toHaveClass('slide');
+    expect(fixture.nativeElement.classList.contains('carousel')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('slide')).toBe(true);
     fixture.componentRef.setInput('transition', 'crossfade');
     fixture.detectChanges();
-    expect(fixture.nativeElement).toHaveClass('carousel-fade');
+    expect(fixture.nativeElement.classList.contains('carousel-fade')).toBe(true);
   });
 
   it('should have default values', () => {
@@ -44,12 +50,12 @@ describe('CarouselComponent', () => {
     expect(component.interval()).toBe(-1);
   });
 
-  it('should call timer functions', fakeAsync(() => {
-    const spySet = spyOn(component, 'setTimer');
-    const spyReset = spyOn(component, 'resetTimer');
+  it('should call timer functions', async () => {
+    const spySet = vi.spyOn(component, 'setTimer');
+    const spyReset = vi.spyOn(component, 'resetTimer');
     fixture.nativeElement.dispatchEvent(new Event('mouseenter'));
     fixture.nativeElement.dispatchEvent(new Event('mouseleave'));
     expect(spySet).toHaveBeenCalled();
     expect(spyReset).toHaveBeenCalled();
-  }));
+  });
 });

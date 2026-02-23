@@ -64,13 +64,16 @@ describe('SidebarNavHelper', () => {
   });
 
   it('should return icon class object', () => {
-    expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(
-      jasmine.objectContaining({
-        'nav-icon': true,
-        'icon-ban': true
-      })
-    );
-    expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(jasmine.objectContaining({ 'nav-icon': true }));
-    expect(service.getIconClass({ icon: '' })).toEqual(jasmine.objectContaining({ 'nav-icon': true }));
+    const expected = {
+      'nav-icon': true,
+      'icon-ban': true
+    };
+    expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(expected);
+
+    const expectedEmpty = {
+      'nav-icon': true,
+      '': true
+    };
+    expect(service.getIconClass({ icon: '' })).toEqual(expectedEmpty);
   });
 });

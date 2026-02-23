@@ -1,8 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentRef } from '@angular/core';
+import { Chart, registerables } from 'chart.js';
+import { describe, expect, it, vi } from 'vitest';
 
 import { ChartjsComponent } from './chartjs.component';
-import { Chart, registerables } from 'chart.js';
-import { ComponentRef } from '@angular/core';
 
 describe('ChartjsComponent', () => {
   let component: ChartjsComponent;
@@ -47,21 +48,21 @@ describe('ChartjsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('chart should create', fakeAsync(() => {
+  it('chart should create', async () => {
     expect(component).toBeTruthy();
     expect(component.chart).toBeDefined();
-  }));
+  });
 
-  it('chart should receive data', fakeAsync(() => {
+  it('chart should receive data', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
     // tick();
     expect(component.chart?.config.data.labels?.length).toBe(7);
     expect(component.chart?.config.data.labels).toEqual(labels);
     expect(component.chart?.config.data.datasets[0]?.data.length).toBe(7);
-  }));
+  });
 
-  it('chart to Base64Image', fakeAsync(() => {
+  it('chart to Base64Image', async () => {
     componentRef.setInput('height', 100);
     componentRef.setInput('width', 100);
     componentRef.setInput('data', { ...data });
@@ -71,11 +72,13 @@ describe('ChartjsComponent', () => {
     expect(image).toBeDefined();
     expect(typeof image).toBe('string');
     expect(image).toContain('data:image/png;base64,');
-  }));
+  });
 
-  it('chart should update on data change', fakeAsync(() => {
+  it('chart should update on data change', async () => {
+    vi.useFakeTimers();
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
+    await fixture.whenStable();
     // tick();
     expect(component.chart?.config.data.labels?.length).toBe(7);
     expect(component.chart?.config.data.labels).toEqual(labels);
@@ -91,15 +94,18 @@ describe('ChartjsComponent', () => {
       ]
     });
     fixture.detectChanges();
-    // component.chartUpdate();
-    // tick();
+    await fixture.whenStable();
+    // await new Promise((resolve) => setTimeout(resolve, 500));
+    vi.runAllTimers();
+
     expect(component.chart?.config?.data.labels?.length).toBe(5);
     expect(component.chart?.config.data.labels).toEqual(months);
     expect(component.chart?.config?.data.datasets[1]?.data.length).toBe(5);
-  }));
+    vi.useRealTimers();
+  });
 
   it('should have css classes', () => {
     fixture.detectChanges();
-    expect(fixture.nativeElement).toHaveClass('chart-wrapper');
+    expect(fixture.nativeElement.classList.contains('chart-wrapper')).toBe(true);
   });
 });

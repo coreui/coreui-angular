@@ -10,10 +10,10 @@ describe('BreadcrumbComponent', () => {
     await TestBed.configureTestingModule({
       imports: [BreadcrumbComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(BreadcrumbComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,7 +23,7 @@ describe('BreadcrumbComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('breadcrumb');
+    expect(fixture.nativeElement.classList.contains('breadcrumb')).toBe(true);
   });
 
   it('should have aria-label attribute', () => {

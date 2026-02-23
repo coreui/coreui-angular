@@ -10,10 +10,10 @@ describe('PaginationItemComponent', () => {
     await TestBed.configureTestingModule({
       imports: [PageItemComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PageItemComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,6 +23,6 @@ describe('PaginationItemComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('page-item');
+    expect(fixture.nativeElement.classList.contains('page-item')).toBe(true);
   });
 });

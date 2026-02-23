@@ -11,8 +11,8 @@
     "build:lib:prod": "ng build coreui-angular",
     "postbuild:lib:prod": "npm run build --prefix projects/coreui-angular",
     "test:lib:dev": "ng test coreui-angular",
-    "test:lib:cov": "ng test --watch --code-coverage coreui-angular ",
-    "test:lib:prod": "ng test coreui-angular --watch=false --karma-config=projects/coreui-angular/karma.conf.github.js",
+    "test:lib:cov": "ng test --watch --coverage coreui-angular ",
+    "test:lib:prod": "ng test coreui-angular --watch=false",
     "prepublish:lib": "npm run prepublish:icons && ng lint coreui-angular && ng test coreui-angular --watch=false && npm run build:lib:prod",
     "publish:lib": "cd dist/coreui-angular/ && npm publish --tag next --dry-run",
     "lint:lib": "ng lint coreui-angular",
@@ -22,7 +22,7 @@
     "build:chartjs:prod": "ng build coreui-angular-chartjs",
     "postbuild:chartjs:prod": "npm run build --prefix projects/coreui-angular-chartjs",
     "test:chartjs:dev": "ng test coreui-angular-chartjs",
-    "test:chartjs:prod": "ng test coreui-angular-chartjs --watch=false --karma-config=projects/coreui-angular-chartjs/karma.conf.github.js",
+    "test:chartjs:prod": "ng test coreui-angular-chartjs --watch=false",
     "prepublish:chartjs": "ng lint coreui-angular-chartjs && ng test coreui-angular-chartjs --watch=false && npm run build:chartjs:prod",
     "publish:chartjs": "cd dist/coreui-angular-chartjs/ && npm publish --tag next --dry-run",
     "lint:chartjs": "ng lint coreui-angular-chartjs",
@@ -32,7 +32,8 @@
     "build:icons:prod": "ng build coreui-icons-angular",
     "postbuild:icons:prod": "npm run build --prefix projects/coreui-icons-angular",
     "test:icons:dev": "ng test coreui-icons-angular",
-    "test:icons:prod": "ng test coreui-icons-angular --watch=false --karma-config=projects/coreui-icons-angular/karma.conf.github.js",
+    "test:icons:cov": "ng test --watch --coverage coreui-icons-angular",
+    "test:icons:prod": "ng test coreui-icons-angular --watch=false",
     "prepublish:icons": "ng lint coreui-icons-angular && ng test coreui-icons-angular --watch=false && npm run build:icons:prod",
     "publish:icons": "cd dist/coreui-icons-angular/ && npm publish --tag next --dry-run",
     "lint:icons": "ng lint coreui-icons-angular",
@@ -41,15 +42,15 @@
   "private": true,
   "packageManager": "npm@11.6.4",
   "dependencies": {
-    "@angular/animations": "^21.1.4",
-    "@angular/cdk": "^21.1.4",
-    "@angular/common": "^21.1.4",
-    "@angular/compiler": "^21.1.4",
-    "@angular/core": "^21.1.4",
-    "@angular/forms": "^21.1.4",
-    "@angular/localize": "^21.1.4",
-    "@angular/platform-browser": "^21.1.4",
-    "@angular/router": "^21.1.4",
+    "@angular/animations": "^21.1.5",
+    "@angular/cdk": "^21.1.5",
+    "@angular/common": "^21.1.5",
+    "@angular/compiler": "^21.1.5",
+    "@angular/core": "^21.1.5",
+    "@angular/forms": "^21.1.5",
+    "@angular/localize": "^21.1.5",
+    "@angular/platform-browser": "^21.1.5",
+    "@angular/router": "^21.1.5",
     "@coreui/chartjs": "~4.1.0",
     "@coreui/icons": "^3.0.1",
     "@popperjs/core": "~2.11.8",
@@ -57,30 +58,29 @@
     "lodash-es": "^4.17.23",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",
-    "zone.js": "~0.16.0"
+    "zone.js": "~0.16.1"
   },
   "devDependencies": {
     "@angular-devkit/schematics": "^21.1.4",
     "@angular/build": "^21.1.4",
     "@angular/cli": "^21.1.4",
-    "@angular/compiler-cli": "^21.1.4",
-    "@angular/language-service": "^21.1.4",
+    "@angular/compiler-cli": "^21.1.5",
+    "@angular/language-service": "^21.1.5",
     "@types/jasmine": "^6.0.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.10.13",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
     "angular-eslint": "^21.2.0",
-    "eslint": "^9.39.2",
-    "jasmine-core": "^6.0.1",
-    "karma": "^6.4.4",
-    "karma-chrome-launcher": "^3.2.0",
-    "karma-coverage": "^2.2.1",
-    "karma-jasmine": "^5.1.0",
-    "karma-jasmine-html-reporter": "^2.2.0",
+    "eslint": "^9.39.3",
+    "jasmine-core": "^6.1.0",
+    "jsdom": "^28.1.0",
     "native-copyfiles": "^2.0.1",
     "ng-packagr": "^21.1.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.55.0"
+    "typescript-eslint": "^8.56.0",
+    "vitest": "^4.0.18"
   },
   "keywords": [
     "angular",
@@ -108,5 +108,21 @@
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || ^24.0.0",
     "npm": ">=10"
+  },
+  "overrides": {
+    "@angular-devkit/schematics": {
+      "ajv": "^8.18.0"
+    },
+    "@angular/cli": {
+      "ajv": "^8.18.0",
+      "hono": "^4.11.10"
+    },
+    "ng-packagr": {
+      "ajv": "^8.18.0"
+    },
+    "eslint": {
+      "ajv": "^6.14.0"
+    },
+    "mimimatch": "^10.2.1"
   }
 }

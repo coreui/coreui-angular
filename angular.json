@@ -35,11 +35,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/coreui-angular/src/test.ts",
             "tsConfig": "projects/coreui-angular/tsconfig.spec.json",
-            "karmaConfig": "projects/coreui-angular/karma.conf.js"
+            "browsers": ["ChromiumHeadless"],
+            "runnerConfig": true
           }
         },
         "lint": {
@@ -78,11 +78,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/coreui-angular-chartjs/src/test.ts",
             "tsConfig": "projects/coreui-angular-chartjs/tsconfig.spec.json",
-            "karmaConfig": "projects/coreui-angular-chartjs/karma.conf.js"
+            "browsers": ["ChromiumHeadless"],
+            "runnerConfig": true
           }
         },
         "lint": {
@@ -124,11 +124,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/coreui-icons-angular/src/test.ts",
             "tsConfig": "projects/coreui-icons-angular/tsconfig.spec.json",
-            "karmaConfig": "projects/coreui-icons-angular/karma.conf.js"
+            "browsers": ["ChromiumHeadless"],
+            "runnerConfig": true
           }
         },
         "lint": {

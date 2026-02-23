@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CalloutComponent } from './callout.component';
 
@@ -6,15 +6,14 @@ describe('CalloutComponent', () => {
   let component: CalloutComponent;
   let fixture: ComponentFixture<CalloutComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [CalloutComponent]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CalloutComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('CalloutComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('callout');
+    expect(fixture.nativeElement.classList.contains('callout')).toBe(true);
   });
 });

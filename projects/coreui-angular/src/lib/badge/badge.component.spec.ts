@@ -9,12 +9,11 @@ describe('BadgeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BadgeComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(BadgeComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('BadgeComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('badge');
+    expect(fixture.nativeElement.classList.contains('badge')).toBe(true);
   });
 });

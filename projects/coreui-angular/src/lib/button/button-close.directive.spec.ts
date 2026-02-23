@@ -3,41 +3,43 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ButtonCloseDirective } from './button-close.directive';
 
-class MockElementRef extends ElementRef {}
+class MockElementRef extends ElementRef {
+}
 
 @Component({
-  template: '<button cButtonClose></button>',
-  imports: [ButtonCloseDirective]
+    template: '<button cButtonClose></button>',
+    imports: [ButtonCloseDirective]
 })
-class TestComponent {}
+class TestComponent {
+}
 
 describe('ButtonCloseDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let elementRef: DebugElement;
+    let component: TestComponent;
+    let fixture: ComponentFixture<TestComponent>;
+    let elementRef: DebugElement;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent, ButtonCloseDirective],
-      providers: [{ provide: ElementRef, useClass: MockElementRef }]
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [TestComponent, ButtonCloseDirective],
+            providers: [{ provide: ElementRef, useClass: MockElementRef }]
+        });
+
+        fixture = TestBed.createComponent(TestComponent);
+        component = fixture.componentInstance;
+        elementRef = fixture.debugElement.query(By.directive(ButtonCloseDirective));
+
+        fixture.detectChanges(); // initial binding
     });
 
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    elementRef = fixture.debugElement.query(By.directive(ButtonCloseDirective));
-
-    fixture.detectChanges(); // initial binding
-  });
-
-  it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new ButtonCloseDirective();
-      expect(directive).toBeTruthy();
+    it('should create an instance', () => {
+        TestBed.runInInjectionContext(() => {
+            const directive = new ButtonCloseDirective();
+            expect(directive).toBeTruthy();
+        });
     });
-  });
 
-  it('should have css classes', () => {
-    expect(elementRef.nativeElement).toHaveClass('btn');
-    expect(elementRef.nativeElement).toHaveClass('btn-close');
-  });
+    it('should have css classes', () => {
+        expect(elementRef.nativeElement.classList.contains('btn')).toBe(true);
+        expect(elementRef.nativeElement.classList.contains('btn-close')).toBe(true);
+    });
 });

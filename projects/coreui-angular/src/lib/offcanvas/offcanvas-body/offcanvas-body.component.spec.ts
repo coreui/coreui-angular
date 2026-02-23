@@ -9,12 +9,11 @@ describe('OffcanvasBodyComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OffcanvasBodyComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(OffcanvasBodyComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('OffcanvasBodyComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('offcanvas-body');
+    expect(fixture.nativeElement.classList.contains('offcanvas-body')).toBe(true);
   });
 });

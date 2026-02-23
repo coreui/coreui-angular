@@ -15,10 +15,9 @@ describe('AccordionItemComponent', () => {
       providers: [AccordionService],
       imports: [NoopAnimationsModule, AccordionButtonDirective, AccordionItemComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(AccordionItemComponent);
+    await fixture.whenStable();
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     fixture.detectChanges();
@@ -29,14 +28,14 @@ describe('AccordionItemComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('accordion-item');
+    expect(fixture.nativeElement.classList.contains('accordion-item')).toBe(true);
   });
 
   it('should toggle item', () => {
-    expect(component.visible).toBeFalse();
+    expect(component.visible).toBe(false);
     component.toggleItem();
-    expect(component.visible).toBeTrue();
+    expect(component.visible).toBe(true);
     component.toggleItem();
-    expect(component.visible).toBeFalse();
+    expect(component.visible).toBe(false);
   });
 });

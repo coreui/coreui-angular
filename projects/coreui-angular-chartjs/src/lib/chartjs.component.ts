@@ -248,7 +248,11 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
   private chartUpdateOutsideAngular() {
     setTimeout(() => {
       this.ngZone.runOutsideAngular(() => {
-        this.chart?.update();
+        try {
+          this.chart?.update();
+        } catch (error) {
+          console.warn('Error on chart.update():', error);
+        }
         this.ngZone.run(() => {
           this.changeDetectorRef.markForCheck();
         });

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToastHeaderComponent } from './toast-header.component';
 import { ToastModule } from '../toast.module';
@@ -7,15 +7,14 @@ describe('ToastHeaderComponent', () => {
   let component: ToastHeaderComponent;
   let fixture: ComponentFixture<ToastHeaderComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [ToastModule]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ToastHeaderComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -25,6 +24,6 @@ describe('ToastHeaderComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('toast-header');
+    expect(fixture.nativeElement.classList.contains('toast-header')).toBe(true);
   });
 });

@@ -6,7 +6,7 @@
       <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: linkItem}" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
-        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
+        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge.text }}</span>
       }
     </a>
   }
@@ -15,7 +15,7 @@
       <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: linkItem}" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
-        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
+        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge.text }}</span>
       }
     </a>
   }
@@ -39,7 +39,7 @@
       <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: linkItem}" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
-        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
+        <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge.text }}</span>
       }
     </a>
   }

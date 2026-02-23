@@ -9,12 +9,11 @@ describe('PopoverComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PopoverComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PopoverComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,8 +23,8 @@ describe('PopoverComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('popover');
-    expect(fixture.nativeElement).toHaveClass('fade');
-    expect(fixture.nativeElement).toHaveClass('bs-popover-auto');
+    expect(fixture.nativeElement.classList.contains('popover')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('fade')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('bs-popover-auto')).toBe(true);
   });
 });

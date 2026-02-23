@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CarouselIndicatorsComponent } from './carousel-indicators.component';
 import { CarouselService } from '../carousel.service';
@@ -10,20 +10,24 @@ describe('CarouselIndicatorsComponent', () => {
   let service: CarouselService;
   let state: CarouselState;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [CarouselIndicatorsComponent],
       providers: [CarouselService, CarouselState]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CarouselIndicatorsComponent);
+    await fixture.whenStable();
+
     service = TestBed.inject(CarouselService);
     state = TestBed.inject(CarouselState);
-    state.setItems([]);
     component = fixture.componentInstance;
-    component.items = [0, 1, 2, 3];
+    state.setItems([
+      { index: 0, interval: () => 5000 } as any,
+      { index: 1, interval: () => 5000 } as any,
+      { index: 2, interval: () => 5000 } as any,
+      { index: 3, interval: () => 5000 } as any
+    ]);
     fixture.detectChanges();
   });
 

@@ -1,5 +1,5 @@
 import { Component, DebugElement, DOCUMENT, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { DropdownItemDirective } from './dropdown-item.directive';
@@ -57,22 +57,22 @@ describe('DropdownItemDirective', () => {
     });
   });
 
-  it('should have css classes and attributes', fakeAsync(() => {
-    expect(elementRef.nativeElement).not.toHaveClass('disabled');
+  it('should have css classes and attributes', async () => {
+    expect(elementRef.nativeElement.classList.contains('disabled')).toBe(false);
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBeNull();
     expect(elementRef.nativeElement.getAttribute('aria-current')).toBeNull();
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('0');
     component.disabled.set(true);
     component.active.set(true);
     fixture.detectChanges();
-    expect(elementRef.nativeElement).toHaveClass('disabled');
+    expect(elementRef.nativeElement.classList.contains('disabled')).toBe(true);
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBe('true');
     expect(elementRef.nativeElement.getAttribute('aria-current')).toBe('true');
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('-1');
-  }));
+  });
 
-  it('should call event handling functions', fakeAsync(() => {
-    expect(component.dropdown()?.visible()).toBeTrue();
+  it('should call event handling functions', async () => {
+    expect(component.dropdown()?.visible()).toBe(true);
     elementRef.nativeElement.dispatchEvent(new Event('click'));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
@@ -83,5 +83,5 @@ describe('DropdownItemDirective', () => {
     expect(label).toBe('Action');
     component.item()?.focus();
     expect(document.activeElement).toBe(elementRef.nativeElement);
-  }));
+  });
 });

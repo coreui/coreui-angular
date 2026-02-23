@@ -38,10 +38,10 @@ describe('OffcanvasToggleDirective', () => {
     });
   });
 
-  it('should toggle offcanvas on click', fakeAsync(() => {
+  it('should toggle offcanvas on click', async () => {
     service.offcanvasState$.pipe(take(1)).subscribe((value) => {
       expect(value).toEqual({ show: 'toggle', id: 'OffcanvasEnd' });
     });
     debugElement.nativeElement.dispatchEvent(new MouseEvent('click'));
-  }));
+  });
 });

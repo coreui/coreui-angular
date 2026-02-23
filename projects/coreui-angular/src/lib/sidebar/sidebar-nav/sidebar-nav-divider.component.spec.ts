@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarNavDividerComponent } from './sidebar-nav-divider.component';
 
@@ -7,14 +7,14 @@ describe('SidebarNavDividerComponent', () => {
   let fixture: ComponentFixture<SidebarNavDividerComponent>;
   let item: any;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [SidebarNavDividerComponent]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SidebarNavDividerComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
 
     item = {

@@ -24,24 +24,25 @@ describe('TemplateIdDirective', () => {
   let component: TestComponent;
   let debugElement: DebugElement;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [TestComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
+    fixture.detectChanges();
+
     debugElement = fixture.debugElement.query(By.css('.test'));
     component = fixture.componentInstance;
-
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create a template with innerText', () => {
-    expect(debugElement.nativeElement.innerText).toBe('Inner Text');
+    expect(debugElement.nativeElement.textContent.trim()).toBe('Inner Text');
   });
 
   it('should return the correct id when cTemplateId is set', () => {
-    expect(component.templateId()?.id).toBe('test');
+    expect(component.templateId()?.id)?.toBe('test');
   });
 
   it('should correctly bind the templateRef to the directive', () => {

@@ -10,10 +10,10 @@ describe('WidgetStatFComponent', () => {
     await TestBed.configureTestingModule({
       imports: [WidgetStatFComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(WidgetStatFComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,6 +23,6 @@ describe('WidgetStatFComponent', () => {
   });
 
   it('should have css class"', () => {
-    expect(fixture.nativeElement).toHaveClass('card');
+    expect(fixture.nativeElement.classList.contains('card')).toBe(true);
   });
 });

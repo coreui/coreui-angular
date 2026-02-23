@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
 import { Component, DebugElement, DOCUMENT, ElementRef, signal } from '@angular/core';
@@ -15,10 +15,10 @@ describe('DropdownComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DropdownComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(DropdownComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -28,7 +28,7 @@ describe('DropdownComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('dropdown');
+    expect(fixture.nativeElement.classList.contains('dropdown')).toBe(true);
   });
 });
 
@@ -92,43 +92,43 @@ describe('DropdownToggleDirective', () => {
     });
   });
 
-  it('should have css classes and attributes', fakeAsync(() => {
-    expect(elementRef.nativeElement).not.toHaveClass('disabled');
-    expect(elementRef.nativeElement).toHaveClass('dropdown-toggle');
-    expect(elementRef.nativeElement).not.toHaveClass('dropdown-toggle-split');
+  it('should have css classes and attributes', async () => {
+    expect(elementRef.nativeElement.classList.contains('disabled')).toBe(false);
+    expect(elementRef.nativeElement.classList.contains('dropdown-toggle')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('dropdown-toggle-split')).toBe(false);
     component.variant.set('input-group');
     component.disabled = true;
     component.split = true;
     component.caret = false;
     fixture.detectChanges();
-    expect(elementRef.nativeElement).toHaveClass('disabled');
-    expect(elementRef.nativeElement).not.toHaveClass('dropdown-toggle');
-    expect(elementRef.nativeElement).toHaveClass('dropdown-toggle-split');
+    expect(elementRef.nativeElement.classList.contains('disabled')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('dropdown-toggle')).toBe(false);
+    expect(elementRef.nativeElement.classList.contains('dropdown-toggle-split')).toBe(true);
     expect(elementRef.nativeElement.getAttribute('aria-expanded')).toBe('false');
     component.variant.set('nav-item');
     component.visible.set(true);
     fixture.detectChanges();
     expect(elementRef.nativeElement.getAttribute('aria-expanded')).toBe('true');
-  }));
+  });
 
-  it('should call event handling functions', fakeAsync(() => {
-    expect(component.visible()).toBeFalse();
+  it('should call event handling functions', async () => {
+    expect(component.visible()).toBe(false);
     elementRef.nativeElement.dispatchEvent(new MouseEvent('click'));
     fixture.detectChanges();
-    expect(component.visible()).toBeTrue();
+    expect(component.visible()).toBe(true);
     elementRef.nativeElement.dispatchEvent(new MouseEvent('click'));
     fixture.detectChanges();
-    expect(component.visible()).toBeFalse();
+    expect(component.visible()).toBe(false);
     elementRef.nativeElement.dispatchEvent(new MouseEvent('click'));
     fixture.detectChanges();
-    expect(component.visible()).toBeTrue();
+    expect(component.visible()).toBe(true);
     dropdownRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape' }));
     fixture.detectChanges();
-    expect(component.visible()).toBeFalse();
+    expect(component.visible()).toBe(false);
     component.visible.set(true);
     fixture.detectChanges();
     document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab' }));
     fixture.detectChanges();
-    expect(component.visible()).toBeFalse();
-  }));
+    expect(component.visible()).toBe(false);
+  });
 });

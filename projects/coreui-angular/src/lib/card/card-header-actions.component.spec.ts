@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CardHeaderActionsComponent } from './card-header-actions.component';
 
@@ -6,15 +6,14 @@ describe('CardHeaderActionsComponent', () => {
   let component: CardHeaderActionsComponent;
   let fixture: ComponentFixture<CardHeaderActionsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [CardHeaderActionsComponent]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CardHeaderActionsComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('CardHeaderActionsComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('card-header-actions');
+    expect(fixture.nativeElement.classList.contains('card-header-actions')).toBe(true);
   });
 });

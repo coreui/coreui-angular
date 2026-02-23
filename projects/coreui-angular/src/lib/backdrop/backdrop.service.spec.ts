@@ -1,5 +1,6 @@
+/// <reference types="vitest/globals" />
 import { DOCUMENT } from '@angular/core';
-import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { BackdropService } from './backdrop.service';
 
@@ -8,36 +9,38 @@ describe('BackdropService', () => {
   let document: Document;
   let backdrop: any;
 
-  beforeEach(fakeAsync(() => {
+  beforeEach(async () => {
+    vi.useFakeTimers();
     TestBed.configureTestingModule({});
     service = TestBed.inject(BackdropService);
     document = TestBed.inject(DOCUMENT);
     backdrop = null;
     backdrop = service.setBackdrop('modal');
-    flush();
-  }));
+    await vi.runAllTimersAsync();
+  });
 
-  afterEach(fakeAsync(() => {
+  afterEach(async () => {
     if (backdrop) {
       service.clearBackdrop(backdrop);
-      flush();
+      await vi.runAllTimersAsync();
     }
-  }));
+    vi.useRealTimers();
+  });
 
   it('should be created', () => {
     expect(backdrop).toBeTruthy();
     expect(service).toBeTruthy();
   });
 
-  it('should set backdrop', fakeAsync(() => {
+  it('should set backdrop', async () => {
     expect(document.querySelector('.modal-backdrop')).not.toBeNull();
-    expect(backdrop).toHaveClass('modal-backdrop');
-    expect(backdrop).toHaveClass('fade');
-    expect(backdrop).toHaveClass('show');
+    expect(backdrop.classList.contains('modal-backdrop')).toBe(true);
+    expect(backdrop.classList.contains('fade')).toBe(true);
+    expect(backdrop.classList.contains('show')).toBe(true);
     service.clearBackdrop(service.activeBackdrop);
-    flush();
-    expect(backdrop).not.toHaveClass('show');
-  }));
+    await vi.runAllTimersAsync();
+    expect(backdrop.classList.contains('show')).toBe(false);
+  });
 
   it('should hide scrollbar', () => {
     service.hideScrollbar();
@@ -47,38 +50,38 @@ describe('BackdropService', () => {
     service.resetScrollbar();
   });
 
-  it('should hide scrollbar for rtl', fakeAsync(() => {
+  it('should hide scrollbar for rtl', async () => {
     document.body.setAttribute('dir', 'rtl');
     service.hideScrollbar();
-    tick();
+    await vi.runAllTimersAsync();
     expect(document.body.style.overflow).toBe('hidden');
     expect(document.body.style.paddingRight).toBe('');
     expect(document.body.style.paddingLeft).toContain('px');
     service.resetScrollbar();
     document.body.removeAttribute('dir');
-  }));
+  });
 
   it('should reset scrollbar', () => {
     service.resetScrollbar();
     expect(document.body.style.overflow).not.toBe('hidden');
   });
 
-  it('should react to backdrop click', fakeAsync(() => {
+  it('should react to backdrop click', async () => {
     let backdropClicked = false;
     service.backdropClick$.subscribe((value) => {
       backdropClicked = true;
-      expect(value).toBeTrue();
+      expect(value).toBe(true);
       service.clearBackdrop(service.activeBackdrop);
     });
-    expect(backdropClicked).toBeFalse();
-    expect(backdrop).toHaveClass('modal-backdrop');
-    expect(backdrop).toHaveClass('fade');
-    expect(backdrop).toHaveClass('show');
+    expect(backdropClicked).toBe(false);
+    expect(backdrop.classList.contains('modal-backdrop')).toBe(true);
+    expect(backdrop.classList.contains('fade')).toBe(true);
+    expect(backdrop.classList.contains('show')).toBe(true);
     backdrop.dispatchEvent(new MouseEvent('click'));
-    flush();
-    expect(backdropClicked).toBeTrue();
-    expect(backdrop).toHaveClass('modal-backdrop');
-    expect(backdrop).toHaveClass('fade');
-    expect(backdrop).not.toHaveClass('show');
-  }));
+    await vi.runAllTimersAsync();
+    expect(backdropClicked).toBe(true);
+    expect(backdrop.classList.contains('modal-backdrop')).toBe(true);
+    expect(backdrop.classList.contains('fade')).toBe(true);
+    expect(backdrop.classList.contains('show')).toBe(false);
+  });
 });

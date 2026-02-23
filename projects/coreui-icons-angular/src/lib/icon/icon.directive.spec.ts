@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, DebugElement, ElementRef, inject, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,9 +7,9 @@ import { IconSetService } from '../icon-set';
 import { cilList } from '@coreui/icons';
 
 @Component({
-    template: '<svg [cIcon]="this.iconSet.icons.cilList" size="lg" class="test" title="Test"></svg>',
-    imports: [IconDirective],
-    providers: [IconSetService]
+  template: `<svg [cIcon]="this.iconSet.icons['cilList']" size="lg" class="test" title="Test"></svg>`,
+  imports: [IconDirective],
+  providers: [IconSetService]
 })
 class TestComponent {
   iconSet = inject(IconSetService);
@@ -18,7 +18,8 @@ class TestComponent {
     this.iconSet.icons = { cilList };
   }
 
-  @ViewChild(IconDirective, { read: IconDirective }) public iconRef!: IconDirective;
+  @ViewChild(IconDirective, { read: IconDirective })
+  public iconRef!: IconDirective;
 }
 
 class MockElementRef extends ElementRef {}
@@ -57,9 +58,9 @@ describe('IconDirective', () => {
 
   it('icon classes should be applied', () => {
     expect(svgEl.nativeElement).toBeTruthy();
-    expect(svgEl.nativeElement).toHaveClass('icon');
-    expect(svgEl.nativeElement).toHaveClass('icon-lg');
-    expect(svgEl.nativeElement).toHaveClass('test');
+    expect(svgEl.nativeElement.classList.contains('icon')).toBe(true);
+    expect(svgEl.nativeElement.classList.contains('icon-lg')).toBe(true);
+    expect(svgEl.nativeElement.classList.contains('test')).toBe(true);
   });
 
   it('icon attributes should be applied', () => {

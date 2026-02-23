@@ -9,7 +9,7 @@ import {
   signal,
   ViewContainerRef
 } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TooltipDirective } from './tooltip.directive';
 import { Triggers } from '../coreui.types';
@@ -35,8 +35,18 @@ describe('TooltipDirective', () => {
   let debugElement: DebugElement;
   let document: Document;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    // // Mock IntersectionObserver for jsdom
+    // (globalThis as any).IntersectionObserver = class IntersectionObserver {
+    //   observe = vi.fn();
+    //   unobserve = vi.fn();
+    //   disconnect = vi.fn();
+    //   takeRecords = vi.fn().mockReturnValue([]);
+    // };
+
+    vi.useFakeTimers();
+
+    await TestBed.configureTestingModule({
       imports: [TestComponent],
       providers: [
         // IntersectionService,
@@ -49,9 +59,14 @@ describe('TooltipDirective', () => {
     }).compileComponents();
     document = TestBed.inject(DOCUMENT);
     fixture = TestBed.createComponent(TestComponent);
+    fixture.whenStable();
     component = fixture.componentInstance;
     debugElement = fixture.debugElement.query(By.directive(TooltipDirective));
     fixture.autoDetectChanges();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('should create an instance', () => {
@@ -61,39 +76,39 @@ describe('TooltipDirective', () => {
     });
   });
 
-  it('should have css classes', fakeAsync(() => {
+  it('should have css classes', async () => {
     expect(document.querySelector('.tooltip.show')).toBeNull();
     component.visible.set(true);
     fixture.detectChanges();
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
     component.visible.set(false);
     fixture.detectChanges();
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeNull();
-  }));
+  });
 
-  it('should set popover on and off', fakeAsync(() => {
+  it('should set popover on and off', async () => {
     fixture.autoDetectChanges();
     component.visible.set(false);
     expect(document.querySelector('.tooltip.show')).toBeNull();
     debugElement.nativeElement.dispatchEvent(new Event('mouseenter'));
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
     debugElement.nativeElement.dispatchEvent(new Event('mouseleave'));
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeNull();
-  }));
+  });
 
-  it('should toggle popover', fakeAsync(() => {
+  it('should toggle popover', async () => {
     fixture.autoDetectChanges();
     component.visible.set(false);
     expect(document.querySelector('.tooltip.show')).toBeNull();
     debugElement.nativeElement.dispatchEvent(new Event('click'));
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
     debugElement.nativeElement.dispatchEvent(new Event('click'));
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeNull();
-  }));
+  });
 });

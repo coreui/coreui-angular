@@ -1,7 +1,7 @@
 <c-card-body>
-  @if (icon() || templates?.['widgetIconTemplate']) {
+  @if (icon() || templates['widgetIconTemplate']) {
     <div [class]="iconClasses()">
-      <ng-container *ngTemplateOutlet="templates?.['widgetIconTemplate'] || defaultWidgetIconTemplate" />
+      <ng-container *ngTemplateOutlet="templates['widgetIconTemplate'] || defaultWidgetIconTemplate" />
     </div>
   }
   @if (!!value()) {
@@ -14,8 +14,8 @@
       {{ title() }}
     </div>
   }
-  @if (templates?.['widgetProgressTemplate']) {
-    <ng-container *ngTemplateOutlet="templates?.['widgetProgressTemplate'] || defaultWidgetProgressTemplate" />
+  @if (templates['widgetProgressTemplate']) {
+    <ng-container *ngTemplateOutlet="templates['widgetProgressTemplate'] || defaultWidgetProgressTemplate" />
   }
 </c-card-body>
 

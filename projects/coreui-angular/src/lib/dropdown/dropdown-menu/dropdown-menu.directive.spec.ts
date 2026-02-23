@@ -1,5 +1,5 @@
 import { Component, DebugElement, DOCUMENT, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DropdownService } from '../dropdown.service';
 import { DropdownMenuDirective } from './dropdown-menu.directive';
@@ -60,32 +60,32 @@ describe('DropdownMenuDirective', () => {
     });
   });
 
-  it('should have css classes', fakeAsync(() => {
+  it('should have css classes', async () => {
     component.visible.set(false);
     fixture.detectChanges();
-    expect(dropdownRef.nativeElement).not.toHaveClass('show');
-    expect(elementRef.nativeElement).toHaveClass('dropdown-menu');
-    expect(elementRef.nativeElement).not.toHaveClass('dropdown-menu-end');
-    expect(elementRef.nativeElement).not.toHaveClass('dropdown-menu-start');
-    expect(elementRef.nativeElement).not.toHaveClass('show');
+    expect(dropdownRef.nativeElement.classList.contains('show')).toBe(false);
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(false);
+    expect(elementRef.nativeElement.classList.contains('show')).toBe(false);
     component.visible.set(true);
     component.alignment.set('end');
     fixture.detectChanges();
-    expect(dropdownRef.nativeElement).toHaveClass('show');
-    expect(elementRef.nativeElement).toHaveClass('dropdown-menu-end');
-    expect(elementRef.nativeElement).not.toHaveClass('dropdown-menu-start');
-    expect(elementRef.nativeElement).toHaveClass('show');
+    expect(dropdownRef.nativeElement.classList.contains('show')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(false);
+    expect(elementRef.nativeElement.classList.contains('show')).toBe(true);
     component.alignment.set('start');
     fixture.detectChanges();
-    expect(elementRef.nativeElement).not.toHaveClass('dropdown-menu-end');
-    expect(elementRef.nativeElement).toHaveClass('dropdown-menu-start');
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(true);
     component.alignment.set('');
     fixture.detectChanges();
-    expect(elementRef.nativeElement).not.toHaveClass('dropdown-menu-end');
-    expect(elementRef.nativeElement).not.toHaveClass('dropdown-menu-start');
-  }));
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(false);
+  });
 
-  it('should call event handling functions', fakeAsync(() => {
+  it('should call event handling functions', async () => {
     expect(document.activeElement).not.toEqual(elementRef.nativeElement);
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab' }));
@@ -96,5 +96,5 @@ describe('DropdownMenuDirective', () => {
     elementRef.nativeElement.focus();
     fixture.detectChanges();
     expect(document.activeElement).toEqual(itemRef.nativeElement);
-  }));
+  });
 });

@@ -1,7 +1,7 @@
+/// <reference types="vitest/globals" />
 import {
   ChangeDetectorRef,
   Component,
-  ComponentRef,
   DebugElement,
   DOCUMENT,
   ElementRef,
@@ -10,7 +10,7 @@ import {
   signal,
   ViewContainerRef
 } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ListenersService } from '../services';
 import { PopoverDirective } from './popover.directive';
@@ -18,7 +18,7 @@ import { Triggers } from '../coreui.types';
 
 @Component({
   template:
-    '<button cPopover="content" [(cPopoverVisible)]="visible" [cPopoverTrigger]="trigger" >{{content}}</button>',
+    '<button cPopover="content" [(cPopoverVisible)]="visible" [cPopoverTrigger]="trigger" >{{content()}}</button>',
   imports: [PopoverDirective]
 })
 export class TestComponent {
@@ -31,12 +31,21 @@ class MockElementRef extends ElementRef {}
 
 describe('PopoverDirective', () => {
   let component: TestComponent;
-  let componentRef: ComponentRef<TestComponent>;
   let fixture: ComponentFixture<TestComponent>;
   let debugElement: DebugElement;
   let document: Document;
 
   beforeEach(() => {
+    // // Mock IntersectionObserver for jsdom
+    // (globalThis as any).IntersectionObserver = class IntersectionObserver {
+    //   observe = vi.fn();
+    //   unobserve = vi.fn();
+    //   disconnect = vi.fn();
+    //   takeRecords = vi.fn().mockReturnValue([]);
+    // };
+
+    vi.useFakeTimers();
+
     TestBed.configureTestingModule({
       imports: [TestComponent],
       providers: [
@@ -55,6 +64,10 @@ describe('PopoverDirective', () => {
     fixture.autoDetectChanges();
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should create an instance', () => {
     TestBed.runInInjectionContext(() => {
       const directive = new PopoverDirective();
@@ -62,39 +75,39 @@ describe('PopoverDirective', () => {
     });
   });
 
-  it('should have css classes', fakeAsync(() => {
+  it('should have css classes', async () => {
     expect(document.querySelector('.popover.show')).toBeNull();
     fixture.componentInstance.visible.set(true);
     fixture.detectChanges();
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.popover.show')).toBeTruthy();
     fixture.componentInstance.visible.set(false);
     fixture.detectChanges();
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.popover.show')).toBeNull();
-  }));
+  });
 
-  it('should set popover on and off', fakeAsync(() => {
+  it('should set popover on and off', async () => {
     fixture.autoDetectChanges();
     fixture.componentInstance.visible.set(false);
     expect(document.querySelector('.popover.show')).toBeNull();
     debugElement.nativeElement.dispatchEvent(new Event('mouseenter'));
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.popover.show')).toBeTruthy();
     debugElement.nativeElement.dispatchEvent(new Event('mouseleave'));
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.popover.show')).toBeNull();
-  }));
+  });
 
-  it('should toggle popover', fakeAsync(() => {
+  it('should toggle popover', async () => {
     fixture.autoDetectChanges();
     fixture.componentInstance.visible.set(false);
     expect(document.querySelector('.popover.show')).toBeNull();
     debugElement.nativeElement.dispatchEvent(new Event('click'));
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.popover.show')).toBeTruthy();
     debugElement.nativeElement.dispatchEvent(new Event('click'));
-    tick(500);
+    await vi.runAllTimersAsync();
     expect(document.querySelector('.popover.show')).toBeNull();
-  }));
+  });
 });

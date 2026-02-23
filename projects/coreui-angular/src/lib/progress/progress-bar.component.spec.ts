@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ComponentRef } from '@angular/core';
 import { ProgressBarComponent } from './progress-bar.component';
@@ -11,13 +11,14 @@ describe('ProgressBarComponent', () => {
   let fixture: ComponentFixture<ProgressBarComponent>;
   let directive: ProgressBarDirective;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [ProgressBarComponent],
       providers: [ProgressService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProgressBarComponent);
+    await fixture.whenStable();
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
@@ -27,17 +28,17 @@ describe('ProgressBarComponent', () => {
     componentRef.setInput('variant', 'striped');
     componentRef.setInput('animated', true);
     fixture.detectChanges();
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeDefined();
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('progress-bar');
-    expect(fixture.nativeElement).toHaveClass('bg-success');
-    expect(fixture.nativeElement).toHaveClass('progress-bar-striped');
-    expect(fixture.nativeElement).toHaveClass('progress-bar-animated');
+    expect(fixture.nativeElement.classList.contains('progress-bar')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('bg-success')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('progress-bar-striped')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('progress-bar-animated')).toBe(true);
   });
 
   it('should have style width %', () => {

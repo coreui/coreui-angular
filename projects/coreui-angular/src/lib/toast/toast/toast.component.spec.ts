@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastComponent } from './toast.component';
@@ -8,15 +8,14 @@ describe('ToastComponent', () => {
   let component: ToastComponent;
   let fixture: ComponentFixture<ToastComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, ToastComponent, ToastCloseDirective]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ToastComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -26,7 +25,7 @@ describe('ToastComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('toast');
-    expect(fixture.nativeElement).toHaveClass('show');
+    expect(fixture.nativeElement.classList.contains('toast')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('show')).toBe(true);
   });
 });

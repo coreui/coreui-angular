@@ -9,12 +9,11 @@ describe('ButtonToolbarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ButtonToolbarComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ButtonToolbarComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('ButtonToolbarComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('btn-toolbar');
+    expect(fixture.nativeElement.classList.contains('btn-toolbar')).toBe(true);
   });
 });

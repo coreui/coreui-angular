@@ -1,4 +1,5 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+/// <reference types="vitest/globals" />
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, ComponentRef, DebugElement, input, Renderer2 } from '@angular/core';
 import { provideRouter, RouterLink } from '@angular/router';
 
@@ -26,13 +27,15 @@ describe('PageItemDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let debugElement: DebugElement;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [TestComponent],
       providers: [Renderer2, provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     debugElement = fixture.debugElement.query(By.directive(PageLinkDirective));
@@ -45,16 +48,16 @@ describe('PageItemDirective', () => {
     });
   });
 
-  it('should toggle disable state for the component', fakeAsync(() => {
+  it('should toggle disable state for the component', async () => {
     expect(debugElement.nativeElement.getAttribute('aria-disabled')).toBeNull();
     expect(debugElement.nativeElement.getAttribute('tabindex')).toBeNull();
     componentRef.setInput('disabled', true);
-    tick();
+    await fixture.whenStable();
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('aria-disabled')).toBe('true');
     expect(debugElement.nativeElement.getAttribute('tabindex')).toBe('-1');
     componentRef.setInput('disabled', false);
-    tick();
+    await fixture.whenStable();
     fixture.detectChanges();
-  }));
+  });
 });
