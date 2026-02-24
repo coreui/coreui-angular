@@ -2,6 +2,33 @@
 
 ---
 
+#### `5.6.15`
+
+- refactor(chartjs): remove ngOnChanges and afterRenderEffect, use effects instead, cleanups
+- test(chartjs): add missing tests for input, event emissions, configuration etc
+- chore(dependencies): update to `Angular 21.1.5`
+  - `@angular-devkit/schematics` @ "21.1.5" (was "21.1.4")
+  - `@angular/build` @ "21.1.5" (was "21.1.4")
+  - `@angular/cli` @ "21.1.5" (was "21.1.4")
+  - `@angular/compiler-cli` @ "21.1.5" (was "21.1.4")
+  - `@angular/language-service` @ "21.1.5" (was "21.1.4")
+  - `@angular/animations` @ "21.1.5" (was "21.1.4")
+  - `@angular/cdk` @ "21.1.5" (was "21.1.4")
+  - `@angular/common` @ "21.1.5" (was "21.1.4")
+  - `@angular/compiler` @ "21.1.5" (was "21.1.4")
+  - `@angular/core` @ "21.1.5" (was "21.1.4")
+  - `@angular/forms` @ "21.1.5" (was "21.1.4")
+  - `@angular/localize` @ "21.1.5" (was "21.1.4")
+  - `@angular/platform-browser` @ "21.1.5" (was "21.1.4")
+  - `@angular/router` @ "21.1.5" (was "21.1.4")
+  - `zone.js` @ "0.16.1" (was "0.16.0")
+  - `jasmine-core` @ "6.1.0" (was "6.0.1")
+  - `typescript-eslint` @ "8.56.1" (was "8.55.0")
+- chore(dependencies): patch `minimatch` vulnerability https://github.com/isaacs/minimatch/security/advisories/GHSA-3ppc-4f35-3m26 (including legacy versions) - npm audit false positive
+- ci(github): update node version to 24.x in workflows configuration files
+
+---
+
 #### `5.6.13`
 
 - refactor(modal): migrate to native CSS animations
