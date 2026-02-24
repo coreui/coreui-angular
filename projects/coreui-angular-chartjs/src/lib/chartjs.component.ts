@@ -1,26 +1,24 @@
 import {
-  afterRenderEffect,
   booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   input,
   linkedSignal,
   NgZone,
   numberAttribute,
-  OnChanges,
   OnDestroy,
   output,
   Renderer2,
-  SimpleChanges,
   untracked,
   viewChild
 } from '@angular/core';
 
-import merge from 'lodash-es/merge';
+import { merge } from 'lodash-es';
 
 import type { ChartConfiguration, ChartData, ChartOptions, ChartType, InteractionItem, Plugin } from 'chart.js';
 import { Chart as ChartJS, registerables } from 'chart.js';
@@ -38,12 +36,12 @@ let nextId = 0;
   exportAs: 'cChart',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class]': 'hostClasses()',
+    '[class.chart-wrapper]': 'wrapper()',
     '[style.height.px]': 'height()',
     '[style.width.px]': 'width()'
   }
 })
-export class ChartjsComponent implements OnDestroy, OnChanges {
+export class ChartjsComponent implements OnDestroy {
   //
   static ngAcceptInputType_redraw: BooleanInput;
 
@@ -56,10 +54,12 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
    * @return boolean
    * @default true
    */
-  readonly customTooltips = input<boolean, unknown>(true, { transform: booleanAttribute });
+  readonly customTooltips = input(true, { transform: booleanAttribute });
 
   /**
    * The data object that is passed into the Chart.js chart (more info).
+   * @returns ChartData
+   * @default { labels: [], datasets: [] }
    */
   readonly data = input<ChartData>();
 
@@ -77,7 +77,8 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
 
   /**
    * ID attribute applied to the rendered canvas.
-   * @return string
+   * @returns string
+   * @default 'c-chartjs-' + nextId
    */
   readonly idInput = input<string>(`c-chartjs-${nextId++}`, { alias: 'id' });
 
@@ -87,6 +88,8 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
 
   /**
    * The options object that is passed into the Chart.js chart.
+   * @returns ChartOptions | undefined
+   * @default {}
    */
   readonly optionsInput = input<ChartOptions | undefined>({}, { alias: 'options' });
 
@@ -94,19 +97,22 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
 
   /**
    * The plugins array that is passed into the Chart.js chart
+   * @returns Plugin[]
+   * @default []
    */
   readonly plugins = input<Plugin[]>([]);
 
   /**
    * If true, will tear down and redraw chart on all updates.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly redraw = input(false, { transform: booleanAttribute });
 
   /**
    * Chart.js chart type.
-   * @return {'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'pie' | 'scatter'}
+   * @returns {'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'pie' | 'scatter'}
+   * @default 'bar'
    */
   readonly type = input<ChartType>('bar');
 
@@ -119,75 +125,91 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
 
   /**
    * Put the chart into the wrapper div element.
+   * @return boolean
    * @default true
    */
   readonly wrapper = input(true, { transform: booleanAttribute });
 
+  /** Event emitted on click of a chart element. Contains an array of the clicked elements.
+   * @returns InteractionItem[]
+   * @see https://www.chartjs.org/docs/latest/developers/api.html#getelementsateventformode
+   */
   readonly getDatasetAtEvent = output<InteractionItem[]>();
+
+  /** Event emitted on click of a chart element. Contains an array of the clicked element.
+   * @returns InteractionItem[]
+   * @see https://www.chartjs.org/docs/latest/developers/api.html#getelementsateventformode
+   */
   readonly getElementAtEvent = output<InteractionItem[]>();
+
+  /** Event emitted on click of a chart element. Contains an array of the clicked elements.
+   * @returns InteractionItem[]
+   * @see https://www.chartjs.org/docs/latest/developers/api.html#getelementsateventformode
+   */
   readonly getElementsAtEvent = output<InteractionItem[]>();
 
-  readonly chartRef = output<any>();
+  /** Emits the Chart.js chart instance after it is created. Can be used to access Chart.js directly on the chart instance.
+   * @returns ChartJS | undefined
+   * @see https://www.chartjs.org/docs/latest/developers/api.html#chart-instance-methods
+   */
+  readonly chartRef = output<ChartJS | undefined>();
 
-  readonly canvasElement = viewChild.required<ElementRef>('canvasElement');
+  readonly canvasElement = viewChild.required<ElementRef<HTMLCanvasElement>>('canvasElement');
 
-  chart!: ChartJS;
-  ctx!: CanvasRenderingContext2D;
-
-  readonly hostClasses = computed(() => {
-    return {
-      'chart-wrapper': this.wrapper()
-    };
-  });
+  chart: ChartJS | undefined;
+  readonly ctx = computed(() => this.canvasElement()?.nativeElement.getContext('2d'));
 
   constructor() {
-    afterRenderEffect({
-      read: () => {
-        const canvasElement = this.canvasElement();
-        this.ctx = canvasElement?.nativeElement?.getContext('2d');
+    effect(() => {
+      const ctx = this.ctx();
+      if (ctx && !this.chart) {
         this.chartRender();
       }
     });
-  }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] && !changes['data'].firstChange) {
-      this.chartUpdate();
-    }
+    effect(() => {
+      const data = this.data();
+      untracked(() => {
+        if (this.chart && data) {
+          this.chartUpdate();
+        }
+      });
+    });
   }
 
   ngOnDestroy(): void {
     this.chartDestroy();
   }
 
-  public handleClick($event: MouseEvent) {
+  public handleClick($event: MouseEvent): void {
     if (!this.chart) {
       return;
     }
 
-    const datasetAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode(
-      $event,
-      'dataset',
-      { intersect: true },
-      false
-    );
-    this.getDatasetAtEvent.emit(datasetAtEvent);
+    this.emitDatasetAtEvent($event);
+    this.emitElementAtEvent($event);
+    this.emitElementsAtEvent($event);
+  }
 
-    const elementAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode(
-      $event,
-      'nearest',
-      { intersect: true },
-      false
-    );
-    this.getElementAtEvent.emit(elementAtEvent);
+  private emitDatasetAtEvent($event: MouseEvent): void {
+    const datasetAtEvent = this.chart?.getElementsAtEventForMode($event, 'dataset', { intersect: true }, false);
+    if (datasetAtEvent) {
+      this.getDatasetAtEvent.emit(datasetAtEvent);
+    }
+  }
 
-    const elementsAtEvent: InteractionItem[] = this.chart.getElementsAtEventForMode(
-      $event,
-      'index',
-      { intersect: true },
-      false
-    );
-    this.getElementsAtEvent.emit(elementsAtEvent);
+  private emitElementAtEvent($event: MouseEvent): void {
+    const elementAtEvent = this.chart?.getElementsAtEventForMode($event, 'nearest', { intersect: true }, false);
+    if (elementAtEvent) {
+      this.getElementAtEvent.emit(elementAtEvent);
+    }
+  }
+
+  private emitElementsAtEvent($event: MouseEvent): void {
+    const elementsAtEvent = this.chart?.getElementsAtEventForMode($event, 'index', { intersect: true }, false);
+    if (elementsAtEvent) {
+      this.getElementsAtEvent.emit(elementsAtEvent);
+    }
   }
 
   public chartDestroy() {
@@ -197,14 +219,15 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
 
   public chartRender() {
     const canvasElement = this.canvasElement();
-    if (!canvasElement?.nativeElement || !this.ctx || this.chart) {
+    if (!canvasElement?.nativeElement || !this.ctx() || this.chart) {
       return;
     }
 
     this.ngZone.runOutsideAngular(() => {
       const config = this.chartConfig();
-      if (config) {
-        this.chart = new ChartJS(this.ctx, config);
+      const ctx = this.ctx();
+      if (config && ctx) {
+        this.chart = new ChartJS(ctx, config);
         this.ngZone.run(() => {
           this.renderer.setStyle(canvasElement.nativeElement, 'display', 'block');
           this.changeDetectorRef.markForCheck();
@@ -214,7 +237,7 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
     });
   }
 
-  chartUpdate() {
+  public chartUpdate() {
     if (!this.chart) {
       return;
     }
@@ -248,7 +271,11 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
   private chartUpdateOutsideAngular() {
     setTimeout(() => {
       this.ngZone.runOutsideAngular(() => {
-        this.chart?.update();
+        try {
+          this.chart?.update();
+        } catch (error) {
+          console.warn('Error on chart.update():', error);
+        }
         this.ngZone.run(() => {
           this.changeDetectorRef.markForCheck();
         });
@@ -260,7 +287,7 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
     return this.chart?.toBase64Image();
   }
 
-  private chartDataConfig = computed<ChartData>(() => {
+  readonly chartDataConfig = computed<ChartData>(() => {
     const { labels, datasets } = { ...this.data() };
     return {
       labels: labels ?? [],
@@ -281,27 +308,28 @@ export class ChartjsComponent implements OnDestroy, OnChanges {
   });
 
   private chartCustomTooltips() {
-    if (this.customTooltips()) {
-      const options = this.options();
-      const plugins = options?.plugins;
-      const tooltip = options?.plugins?.tooltip;
-      untracked(() => {
-        this.options.set(
-          merge({
-            ...options,
-            plugins: {
-              ...plugins,
-              tooltip: {
-                ...tooltip,
-                enabled: false,
-                mode: 'index',
-                position: 'nearest',
-                external: cuiCustomTooltips
-              }
-            }
-          })
-        );
-      });
+    if (!this.customTooltips()) {
+      return;
     }
+    const options = this.options();
+    const plugins = options?.plugins;
+    const tooltip = options?.plugins?.tooltip;
+    untracked(() => {
+      this.options.set(
+        merge({
+          ...options,
+          plugins: {
+            ...plugins,
+            tooltip: {
+              ...tooltip,
+              enabled: false,
+              mode: 'index',
+              position: 'nearest',
+              external: cuiCustomTooltips
+            }
+          }
+        })
+      );
+    });
   }
 }
