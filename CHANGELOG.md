@@ -2,6 +2,15 @@
 
 ---
 
+#### `5.6.16`
+
+- fix(chartjs.component): TypeError: Cannot read properties of null (reading 'ownerDocument')
+- chore(dependencies): update eslint to 9.39.3
+- ci(github): update actions/checkout and actions/setup-node to v6
+
+
+---
+
 #### `5.6.15`
 
 - refactor(chartjs): remove ngOnChanges and afterRenderEffect, use effects instead, cleanups
