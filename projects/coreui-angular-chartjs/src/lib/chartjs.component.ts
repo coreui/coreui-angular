@@ -272,7 +272,9 @@ export class ChartjsComponent implements OnDestroy {
     setTimeout(() => {
       this.ngZone.runOutsideAngular(() => {
         try {
-          this.chart?.update();
+          if (this.chart?.canvas) {
+            this.chart?.update();
+          }
         } catch (error) {
           console.warn('Error on chart.update():', error);
         }
