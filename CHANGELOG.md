@@ -2,12 +2,34 @@
 
 ---
 
+#### `5.6.17`
+
+- chore(dependencies): update to `Angular 21.2.0`
+  - `@angular-devkit/schematics` @ "21.2.0" (was "21.1.5")
+  - `@angular/build` @ "21.2.0" (was "21.1.5")
+  - `@angular/cli` @ "21.2.0" (was "21.1.5")
+  - `@angular/compiler-cli` @ "21.2.0" (was "21.1.5")
+  - `@angular/language-service` @ "21.2.0" (was "21.1.5")
+  - `@angular/animations` @ "21.2.0" (was "21.1.5")
+  - `@angular/cdk` @ "21.2.0" (was "21.1.5")
+  - `@angular/common` @ "21.2.0" (was "21.1.5")
+  - `@angular/compiler` @ "21.2.0" (was "21.1.5")
+  - `@angular/core` @ "21.2.0" (was "21.1.5")
+  - `@angular/forms` @ "21.2.0" (was "21.1.5")
+  - `@angular/localize` @ "21.2.0" (was "21.1.5")
+  - `@angular/platform-browser` @ "21.2.0" (was "21.1.5")
+  - `@angular/router` @ "21.2.0" (was "21.1.5")
+  - `ng-packagr` @ "21.2.0" (was "21.1.0")
+  - `@types/node` @ "24.10.15" (was "24.10.13")
+- fix(chartjs.component): side chart animation issue, rollback to afterRenderEffect
+
+---
+
 #### `5.6.16`
 
 - fix(chartjs.component): TypeError: Cannot read properties of null (reading 'ownerDocument')
 - chore(dependencies): update eslint to 9.39.3
 - ci(github): update actions/checkout and actions/setup-node to v6
-
 
 ---
 
