@@ -1,4 +1,5 @@
 import {
+  afterRenderEffect,
   booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -160,10 +161,12 @@ export class ChartjsComponent implements OnDestroy {
   readonly ctx = computed(() => this.canvasElement()?.nativeElement.getContext('2d'));
 
   constructor() {
-    effect(() => {
-      const ctx = this.ctx();
-      if (ctx && !this.chart) {
-        this.chartRender();
+    afterRenderEffect({
+      read: () => {
+        const ctx = this.ctx();
+        if (ctx && !this.chart) {
+          this.chartRender();
+        }
       }
     });
 
