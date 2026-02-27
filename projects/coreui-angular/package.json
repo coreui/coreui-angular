@@ -51,7 +51,7 @@
   ],
   "eslintConfig": {},
   "devDependencies": {
-    "copyfiles": "file:../../node_modules/copyfiles",
+    "native-copyfiles": "file:../../node_modules/native-copyfiles",
     "typescript": "file:../../node_modules/typescript"
   },
   "schematics": "./schematics/collection.json",
