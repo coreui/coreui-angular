@@ -2,6 +2,28 @@
 
 ---
 
+#### `5.6.18`
+
+- chore(dependencies): update to `Angular 21.2.1`
+  - `@angular/compiler-cli` @ "21.2.1" (was "21.2.0")
+  - `@angular/language-service` @ "21.2.1" (was "21.2.0")
+  - `@angular/animations` @ "21.2.1" (was "21.2.0")
+  - `@angular/cdk` @ "21.2.1" (was "21.2.0")
+  - `@angular/common` @ "21.2.1" (was "21.2.0")
+  - `@angular/compiler` @ "21.2.1" (was "21.2.0")
+  - `@angular/core` @ "21.2.1" (was "21.2.0")
+  - `@angular/forms` @ "21.2.1" (was "21.2.0")
+  - `@angular/localize` @ "21.2.1" (was "21.2.0")
+  - `@angular/platform-browser` @ "21.2.1" (was "21.2.0")
+  - `@angular/router` @ "21.2.1" (was "21.2.0")
+  - `@types/node` @ "24.11.0" (was "24.10.15")
+- chore(dependencies): patch `@hono/node-server` vulnerability https://github.com/advisories/GHSA-wc8c-qw6v-h7f6
+- chore(dependencies): patch `hono` vulnerabilities https://github.com/advisories/GHSA-5pq2-9x2x-5p6w https://github.com/advisories/GHSA-p6xx-57qc-3wxr https://github.com/advisories/GHSA-q5qw-h33p-qvwr
+- chore(dependencies): patch `immutable` vulnerability https://github.com/advisories/GHSA-wf6x-7x77-mvgw
+- chore(dependencies): patch `tar` vulnerability https://github.com/advisories/GHSA-qffp-2rhf-9h96
+
+---
+
 #### `5.6.17`
 
 - chore(dependencies): update to `Angular 21.2.0`
