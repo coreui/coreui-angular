@@ -36,7 +36,8 @@ module.exports = tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-inferrable-types': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
-      'no-unused-private-class-members': 'warn'
+      'no-unused-private-class-members': 'warn',
+      'no-useless-assignment': 'warn'
     }
   },
   {
