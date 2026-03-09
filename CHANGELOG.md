@@ -2,16 +2,16 @@
 
 ---
 
-#### `5.6.19` next
+#### `5.6.19` 
 
 - chore(devDependencies): cli update to `Angular 21.2.1`
   - `@angular-devkit/schematics` @ "21.2.1" (was "21.2.0")
   - `@angular/build` @ "21.2.1" (was "21.2.0")
   - `@angular/cli` @ "21.2.1" (was "21.2.0")
   - `@types/node` @ "24.12.0" (was "24.11.0")
-- chore(devDependencies): eslint update to `10.0.2`
+- chore(devDependencies): eslint update to `10.0.3`
   - `angular-eslint` @ "21.3.0" (was "21.2.0")
-  - `eslint` @ "10.0.2" (was "9.39.3")
+  - `eslint` @ "10.0.3" (was "9.39.3")
   - `@eslint/js` @ "10.0.1" 
 
 ---
