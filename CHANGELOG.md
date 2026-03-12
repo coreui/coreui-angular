@@ -2,6 +2,28 @@
 
 ---
 
+#### `5.6.20`
+
+- chore(dependencies): update to `Angular 21.2.3`
+  - `@angular-devkit/schematics` @ "21.2.2" (was "21.2.1")
+  - `@angular/build` @ "21.2.2" (was "21.2.1")
+  - `@angular/cli` @ "21.2.2" (was "21.2.1")
+  - `@angular/compiler-cli` @ "21.2.3" (was "21.2.1")
+  - `@angular/language-service` @ "21.2.3" (was "21.2.1")
+  - `typescript-eslint` @ "8.57.0" (was "8.56.1")
+  - `@angular/animations` @ "21.2.3" (was "21.2.1")
+  - `@angular/cdk` @ "21.2.2" (was "21.2.1")
+  - `@angular/common` @ "21.2.3" (was "21.2.1")
+  - `@angular/compiler` @ "21.2.3" (was "21.2.1")
+  - `@angular/core` @ "21.2.3" (was "21.2.1")
+  - `@angular/forms` @ "21.2.3" (was "21.2.1")
+  - `@angular/localize` @ "21.2.3" (was "21.2.1")
+  - `@angular/platform-browser` @ "21.2.3" (was "21.2.1")
+  - `@angular/router` @ "21.2.3" (was "21.2.1")
+- chore(dependencies): patch `hono` vulnerabilities https://github.com/advisories/GHSA-v8w9-8mx6-g223
+
+---
+
 #### `5.6.19` 
 
 - chore(devDependencies): cli update to `Angular 21.2.1`
