@@ -2,6 +2,39 @@
 
 ---
 
+#### `5.6.21`
+
+- chore(dependencies): update to `Angular 21.2.5`
+  - `@angular-devkit/schematics` @ "21.2.3" (was "21.2.2")
+  - `@angular/build` @ "21.2.3" (was "21.2.2")
+  - `@angular/cli` @ "21.2.3" (was "21.2.2")
+  - `@angular/compiler-cli` @ "21.2.5" (was "21.2.3")
+  - `@angular/language-service` @ "21.2.5" (was "21.2.3")
+  - `@angular/animations` @ "21.2.5" (was "21.2.3")
+  - `@angular/cdk` @ "21.2.3" (was "21.2.2")
+  - `@angular/common` @ "21.2.5" (was "21.2.3")
+  - `@angular/compiler` @ "21.2.5" (was "21.2.3")
+  - `@angular/core` @ "21.2.5" (was "21.2.3")
+  - `@angular/forms` @ "21.2.5" (was "21.2.3")
+  - `@angular/localize` @ "21.2.5" (was "21.2.3")
+  - `@angular/platform-browser` @ "21.2.5" (was "21.2.3")
+  - `@angular/router` @ "21.2.5" (was "21.2.3")
+  - `ng-packagr` @ "21.2.1" (was "21.2.0")
+  - `angular-eslint` @ "21.3.1" (was "21.3.0")
+  - `eslint` @ "10.1.0" (was "10.0.3")
+  - `typescript-eslint` @ "8.57.1" (was "8.57.0")
+- chore(dependencies): patch `flatted` vulnerability https://github.com/advisories/GHSA-rf6f-7fwh-wjgh
+- chore(dependencies): patch `socket.io-parser` vulnerability https://github.com/advisories/GHSA-677m-j7p3-52f9
+- chore(dependencies): overrides `undici` version to `^7.24.2` to mitigate vulnerabilities
+  - Undici Malicious WebSocket 64-bit length overflows parser and crashes the client - https://github.com/advisories/GHSA-f269-vfmq-vjvj
+  - Undici has an HTTP Request/Response Smuggling issue - https://github.com/advisories/GHSA-2mjp-6q6p-2qxm
+  - Undici has Unbounded Memory Consumption in WebSocket permessage-deflate Decompression - https://github.com/advisories/GHSA-vrm6-8vpv-qv8q
+  - Undici has Unhandled Exception in WebSocket Client Due to Invalid server_max_window_bits Validation - https://github.com/advisories/GHSA-v9p9-hfj2-hcw8
+  - Undici has CRLF Injection in undici via `upgrade` option - https://github.com/advisories/GHSA-4992-7rv2-5pvq
+  - Undici has Unbounded Memory Consumption in its DeduplicationHandler via Response Buffering that leads to DoS - https://github.com/advisories/GHSA-phc3-fgpg-7m6h
+
+---
+
 #### `5.6.20`
 
 - chore(dependencies): update to `Angular 21.2.3`
