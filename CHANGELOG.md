@@ -2,6 +2,52 @@
 
 ---
 
+#### `5.6.22`
+
+- chore(dependencies): update to `Angular 21.2.10`
+  - `@angular/animations` @ "21.2.10" (was "21.2.5")
+  - `@angular/cdk` @ "21.2.8" (was "21.2.3")
+  - `@angular/common` @ "21.2.10" (was "21.2.5")
+  - `@angular/compiler` @ "21.2.10" (was "21.2.5")
+  - `@angular/core` @ "21.2.10" (was "21.2.5")
+  - `@angular/forms` @ "21.2.10" (was "21.2.5")
+  - `@angular/localize` @ "21.2.10" (was "21.2.5")
+  - `@angular/platform-browser` @ "21.2.10" (was "21.2.5")
+  - `@angular/router` @ "21.2.10" (was "21.2.5")
+  - `@angular-devkit/schematics` @ "21.2.8" (was "21.2.3")
+  - `@angular/build` @ "21.2.8" (was "21.2.3")
+  - `@angular/cli` @ "21.2.8" (was "21.2.3")
+  - `@angular/compiler-cli` @ "21.2.10" (was "21.2.5")
+  - `@angular/language-service` @ "21.2.10" (was "21.2.5")
+  - `eslint` @ "10.2.1" (was "10.1.0")
+  - `jasmine-core` @ "6.2.0" (was "6.1.0")
+  - `ng-packagr` @ "21.2.3" (was "21.2.1")
+  - `prettier` @ "3.8.3" (was "3.8.1")
+  - `typescript-eslint` @ "8.59.0" (was "8.57.1")
+  - `lodash-es` @ "4.18.1" (was "4.17.23")
+- chore(dependencies): patch vulnerabilities:
+  - `@hono/node-server`: https://github.com/advisories/GHSA-92pp-h63x-v22m
+  - `brace-expansion`: https://github.com/advisories/GHSA-f886-m6hf-6m8v
+  - `follow-redirects`: https://github.com/advisories/GHSA-r4q5-vmmm-2653
+  - `hono`: 
+    - https://github.com/advisories/GHSA-26pp-8wgv-hjvm
+    - https://github.com/advisories/GHSA-r5rp-j6wh-rvv4
+    - https://github.com/advisories/GHSA-xpcf-pg52-r92g
+    - https://github.com/advisories/GHSA-xf4j-xp2r-rqqx
+    - https://github.com/advisories/GHSA-wmmm-f939-6g9c
+    - https://github.com/advisories/GHSA-458j-xx4x-4375
+  - `lodash`:
+    - https://github.com/advisories/GHSA-r5fr-rjxr-66jc
+    - https://github.com/advisories/GHSA-f23m-r3pf-42rh
+  - `path-to-regexp`:
+    - https://github.com/advisories/GHSA-j3q9-mxjg-w52f
+    - https://github.com/advisories/GHSA-27v5-c462-wpq7
+  - `picomatch`:
+    - https://github.com/advisories/GHSA-3v7f-55p6-f55p
+    - https://github.com/advisories/GHSA-c2c7-rcm5-vvqj
+
+---
+
 #### `5.6.21`
 
 - chore(dependencies): update to `Angular 21.2.5`
