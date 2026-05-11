@@ -1,6 +1,30 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
 ---
+#### `5.6.23`
+
+- test(backdrop): fix paddingRight testing issue
+- chore(dependencies): update to `Angular 21.2.12`
+  - `@angular-devkit/schematics` @ "21.2.10" (was "21.2.8")
+  - `@angular/build` @ "21.2.10" (was "21.2.8")
+  - `@angular/cli` @ "21.2.10" (was "21.2.8")
+  - `@angular/compiler-cli` @ "21.2.12" (was "21.2.10")
+  - `@angular/language-service` @ "21.2.12" (was "21.2.10")
+  - `@angular/animations` @ "21.2.12" (was "21.2.10")
+  - `@angular/cdk` @ "21.2.10" (was "21.2.8")
+  - `@angular/common` @ "21.2.12" (was "21.2.10")
+  - `@angular/compiler` @ "21.2.12" (was "21.2.10")
+  - `@angular/core` @ "21.2.12" (was "21.2.10")
+  - `@angular/forms` @ "21.2.12" (was "21.2.10")
+  - `@angular/localize` @ "21.2.12" (was "21.2.10")
+  - `@angular/platform-browser` @ "21.2.12" (was "21.2.10")
+  - `@angular/router` @ "21.2.12" (was "21.2.10")
+  - `zone.js` @ "0.16.2" (was "0.16.1")
+  - `@types/node` @ "24.12.3" (was "24.12.2")
+  - `eslint` @ "10.3.0" (was "10.2.1")
+  - `typescript-eslint` @ "8.59.2" (was "8.59.0")
+
+---
 
 #### `5.6.22`
 
