@@ -25,9 +25,9 @@
     "url": "https://github.com/coreui/coreui-angular/issues"
   },
   "peerDependencies": {
-    "@angular/common": "^21.2.10",
-    "@angular/core": "^21.2.10",
-    "@angular/platform-browser": "^21.2.10"
+    "@angular/common": "^21.2.12",
+    "@angular/core": "^21.2.12",
+    "@angular/platform-browser": "^21.2.12"
   },
   "dependencies": {
     "tslib": "^2.3.0"
