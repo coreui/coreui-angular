@@ -1,6 +1,31 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
 ---
+#### `5.6.24`
+
+- fix(sidebar-nav-group): does not get `show` class when child router link is active; close #251 - thanks @ghdevacct
+- fix(sidebar-nav): `dropdownMode="close"` fails to close opened inactive sidebar-nav-group; move SidebarNavGroupService provider to SidebarNav
+- chore(dependencies): update to `Angular 21.2.14`
+  - `@angular-devkit/schematics` @ "21.2.12" (was "21.2.10")
+  - `@angular/build` @ "21.2.12" (was "21.2.10")
+  - `@angular/cli` @ "21.2.12" (was "21.2.10")
+  - `@angular/compiler-cli` @ "21.2.14" (was "21.2.12")
+  - `@angular/language-service` @ "21.2.14" (was "21.2.12")
+  - `@angular/animations` @ "21.2.14" (was "21.2.12")
+  - `@angular/cdk` @ "21.2.12" (was "21.2.10")
+  - `@angular/common` @ "21.2.14" (was "21.2.12")
+  - `@angular/compiler` @ "21.2.14" (was "21.2.12")
+  - `@angular/core` @ "21.2.14" (was "21.2.12")
+  - `@angular/forms` @ "21.2.14" (was "21.2.12")
+  - `@angular/localize` @ "21.2.14" (was "21.2.12")
+  - `@angular/platform-browser` @ "21.2.14" (was "21.2.12")
+  - `@angular/router` @ "21.2.14" (was "21.2.12")
+  - `@types/node` @ "24.12.4" (was "24.12.3")
+  - `angular-eslint` @ "21.4.0" (was "21.3.1")
+  - `eslint` @ "10.4.0" (was "10.3.0")
+  - `typescript-eslint` @ "8.59.4" (was "8.59.2")
+
+---
 #### `5.6.23`
 
 - test(backdrop): fix paddingRight testing issue
