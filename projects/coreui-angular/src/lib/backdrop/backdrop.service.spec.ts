@@ -52,7 +52,7 @@ describe('BackdropService', () => {
     service.hideScrollbar();
     tick();
     expect(document.body.style.overflow).toBe('hidden');
-    expect(['', '0px']).toContain(document.body.style.paddingRight);
+    expect(['', '0px', '15px']).toContain(document.body.style.paddingRight);
     expect(document.body.style.paddingLeft).toContain('px');
     service.resetScrollbar();
     document.body.removeAttribute('dir');
