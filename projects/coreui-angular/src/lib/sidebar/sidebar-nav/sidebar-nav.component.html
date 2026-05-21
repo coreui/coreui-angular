@@ -2,12 +2,9 @@
   @switch (helper.itemType(nItem)) {
     @case ('group') {
       <c-sidebar-nav-group
-        #rla="routerLinkActive"
         [dropdownMode]="dropdownMode()"
         [item]="nItem"
         [class]="nItem | cSidebarNavItemClass"
-        [routerLinkActiveOptions]="{exact: true}"
-        routerLinkActive="show"
         [compact]="compact()"
       />
     }
