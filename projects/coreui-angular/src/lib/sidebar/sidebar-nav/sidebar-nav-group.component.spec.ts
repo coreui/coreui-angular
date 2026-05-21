@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
 import { SidebarNavGroupComponent } from './sidebar-nav.component';
+import { SidebarNavGroupService } from './sidebar-nav-group.service';
 
 describe('SidebarNavGroupComponent', () => {
   let component: SidebarNavGroupComponent;
@@ -12,7 +13,7 @@ describe('SidebarNavGroupComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, SidebarNavGroupComponent],
-      providers: [provideRouter([])]
+      providers: [provideRouter([]), SidebarNavGroupService]
     }).compileComponents();
   }));
 
