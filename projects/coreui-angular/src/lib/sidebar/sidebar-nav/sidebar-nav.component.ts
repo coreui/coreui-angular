@@ -39,7 +39,7 @@ import { IconDirective } from '@coreui/icons-angular';
   selector: 'c-sidebar-nav-group',
   templateUrl: './sidebar-nav-group.component.html',
   styleUrls: ['./sidebar-nav-group.component.scss'],
-  providers: [SidebarNavHelper, SidebarNavGroupService],
+  providers: [SidebarNavHelper],
   imports: [
     HtmlAttributesDirective,
     IconDirective,
@@ -125,16 +125,10 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
     this.navGroupSubscription = this.#sidebarNavGroupService.sidebarNavGroupState$.subscribe((next) => {
       if (this.dropdownMode() === 'close' && next.sidebarNavGroup && next.sidebarNavGroup !== this) {
-        const url = next.sidebarNavGroup.item()?.url ?? [];
-        const normUrl = Array.isArray(url) ? this.#router.createUrlTree(url).toString() : url;
-        const itemUrl = this.item()?.url ?? [];
-        const normItemUrl = Array.isArray(normUrl) ? this.#router.createUrlTree(normUrl).toString() : normUrl;
-        if (normUrl.startsWith(normItemUrl)) {
-          return;
-        }
         if (this.samePath(this.#router.routerState.snapshot.url)) {
-          this.openGroup(true);
-          return;
+          if (this.open()) {
+            return;
+          }
         }
         this.openGroup(false);
       }
@@ -209,7 +203,8 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   host: {
     '[class]': 'hostClasses()',
     '[attr.role]': 'role()'
-  }
+  },
+  providers: [SidebarNavGroupService]
 })
 export class SidebarNavComponent implements OnChanges {
   readonly sidebar = inject(SidebarComponent, { optional: true });
