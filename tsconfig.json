@@ -4,15 +4,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "coreui-angular": [
-        "./dist/coreui-angular"
-      ],
-      "coreui-angular-chartjs": [
-        "./dist/coreui-angular-chartjs"
-      ],
-      "@coreui/icons-angular": [
-        "./dist/coreui-icons-angular"
-      ],
+      "coreui-angular": ["./dist/coreui-angular"],
+      "coreui-angular-chartjs": ["./dist/coreui-angular-chartjs"],
+      "@coreui/icons-angular": ["./dist/coreui-icons-angular"],
       "*": ["./*"]
     },
     "outDir": "./dist/out-tsc",
@@ -24,18 +18,16 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "declaration": false,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "typeRoots": ["node_modules/@types"],
     "rootDir": "./projects"
   },
   "angularCompilerOptions": {

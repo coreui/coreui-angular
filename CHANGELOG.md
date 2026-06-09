@@ -1,6 +1,14 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
 ---
+
+#### `5.7.1`
+
+- chore(dependencies): add angular aria package
+- chore: minor config updates and cleanups
+
+---
+
 #### `5.7.0`
 
 - chore(dependencies): update to `Angular 22.0.0`
