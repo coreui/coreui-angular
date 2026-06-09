@@ -2,14 +2,14 @@
 
 ---
 
-#### `5.7.1`
+#### `5.7.1` for Angular 22
 
 - chore(dependencies): add angular aria package
 - chore: minor config updates and cleanups
 
 ---
 
-#### `5.7.0`
+#### `5.7.0` for Angular 22
 
 - chore(dependencies): update to `Angular 22.0.0`
   - `@angular-devkit/schematics` @ "22.0.0" (was "21.2.12")
