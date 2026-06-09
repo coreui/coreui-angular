@@ -1,6 +1,41 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
 ---
+#### `5.7.0`
+
+- chore(dependencies): update to `Angular 22.0.0`
+  - `@angular-devkit/schematics` @ "22.0.0" (was "21.2.12")
+  - `@angular/build` @ "22.0.0" (was "21.2.12")
+  - `@angular/cli` @ "22.0.0" (was "21.2.12")
+  - `@angular/compiler-cli` @ "22.0.0" (was "21.2.14")
+  - `@angular/language-service` @ "22.0.0" (was "21.2.14")
+  - `@angular/animations` @ "22.0.0" (was "21.2.14")
+  - `@angular/cdk` @ "22.0.0" (was "21.2.12")
+  - `@angular/common` @ "22.0.0" (was "21.2.14")
+  - `@angular/compiler` @ "22.0.0" (was "21.2.14")
+  - `@angular/core` @ "22.0.0" (was "21.2.14")
+  - `@angular/forms` @ "22.0.0" (was "21.2.14")
+  - `@angular/localize` @ "22.0.0" (was "21.2.14")
+  - `@angular/platform-browser` @ "22.0.0" (was "21.2.14")
+  - `@angular/router` @ "22.0.0" (was "21.2.14")
+  - `@types/node` @ "24.13.1" (was "24.12.4")
+  - `angular-eslint` @ "22.0.0" (was "21.4.0")
+  - `eslint` @ "10.4.1" (was "10.4.0")
+  - `jasmine-core` @ "6.3.0" (was "6.2.0")
+  - `native-copyfiles` @ "2.0.3" (was "2.0.1")
+  - `ng-packagr` @ "22.0.0" (was "21.2.3")
+  - `typescript` @ "6.0.3" (was "5.9.3")
+  - `typescript-eslint` @ "8.61.0" (was "8.59.4")
+- chore: add 'istanbul-lib-instrument' to 'devDependencies' for Karma unit testing
+  - `istanbul-lib-instrument` @ "6.0.3"
+- chore: add `ChangeDetectionStrategy.Eager` to applicable components
+- chore(tsconfig): disable the `nullishCoalescingNotNullable` & `optionalChainNotNullable` extended diagnostics
+- chore(dependencies): tmp <0.2.6 vulnerability
+- chore(tsconfig): migrate baseUrl to TS6
+- chore(tsconfig): migrate rootDir to TS6
+- chore(schematics): migrate `module` and `moduleResolution` to `nodenext` 
+
+---
 #### `5.6.24`
 
 - fix(sidebar-nav-group): does not get `show` class when child router link is active; close #251 - thanks @ghdevacct

@@ -35,18 +35,18 @@ Featured CoreUI for Angular libraries:
 ### Status
 
 ![angular][angular-badge]
-[![npm package][npm-badge-v5-ng21]][npm]
+[![npm package][npm-badge-v5-ng22]][npm]
 [![npm package][npm-badge-latest]][npm]
 [![npm package][npm-badge-next]][npm]
 [![NPM downloads][npm-download]][npm]  
 [![Project chartjs check](https://github.com/coreui/coreui-angular/actions/workflows/project-chartjs-check.yml/badge.svg)](https://github.com/coreui/coreui-angular/actions/workflows/project-chartjs-check.yml)
 
-[npm-badge-v5-ng21]: https://img.shields.io/npm/v/@coreui/angular-chartjs/v5-ng21?style=flat-square&color=brightgreen
+[npm-badge-v5-ng22]: https://img.shields.io/npm/v/@coreui/angular-chartjs/v5-ng22?style=flat-square&color=brightgreen
 [npm-badge-latest]: https://img.shields.io/npm/v/@coreui/angular-chartjs/latest?style=flat-square&color=brightgreen
 [npm-badge-next]: https://img.shields.io/npm/v/@coreui/angular-chartjs/next?style=flat-square&color=red
 [npm]: https://www.npmjs.com/package/@coreui/angular-chartjs
 [npm-download]: https://img.shields.io/npm/dm/@coreui/angular-chartjs.svg?style=flat-square
-[angular-badge]: https://img.shields.io/badge/angular-^21.2.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^22.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ##### install:
 
