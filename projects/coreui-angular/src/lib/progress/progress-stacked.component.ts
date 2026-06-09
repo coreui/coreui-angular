@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'c-progress-stacked',
@@ -9,6 +9,7 @@ import { Component, input } from '@angular/core';
       display: flex;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[class.progress-stacked]': 'stacked()' }
 })
 export class ProgressStackedComponent {

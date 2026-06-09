@@ -1,13 +1,14 @@
 import { ButtonDirective } from './button.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, ElementRef } from '@angular/core';
+import { Component, DebugElement, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 class MockElementRef extends ElementRef {}
 
 @Component({
-    template: '<button cButton color="info" size="lg"></button>',
-    imports: [ButtonDirective]
+  template: '<button cButton color="info" size="lg"></button>',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [ButtonDirective]
 })
 class TestComponent {}
 

@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
+import { Component, inject, input, OnDestroy, OnInit, output, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -22,6 +22,7 @@ import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
       <ng-container>{{ itemLinkContent?.name ?? '' }}</ng-container>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [SidebarNavHelper]
 })
 export class SidebarNavLinkContentComponent {
@@ -34,6 +35,7 @@ export class SidebarNavLinkContentComponent {
   selector: 'c-sidebar-nav-link',
   templateUrl: './sidebar-nav-link.component.html',
   providers: [SidebarNavHelper],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
     HtmlAttributesDirective,

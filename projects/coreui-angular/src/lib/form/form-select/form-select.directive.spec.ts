@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ComponentRef, DebugElement, input } from '@angular/core';
+import { Component, ComponentRef, DebugElement, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormSelectDirective } from './form-select.directive';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [FormSelectDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: ` <select cSelect [sizing]="sizing()" [valid]="valid()"></select> `
 })
 class TestComponent {

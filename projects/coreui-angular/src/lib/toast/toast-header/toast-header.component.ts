@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ButtonCloseDirective } from '../../button';
 import { ToastComponent } from '../toast/toast.component';
@@ -9,6 +9,7 @@ import { ToastCloseDirective } from '../toast-close.directive';
   templateUrl: './toast-header.component.html',
   exportAs: 'cToastHeader',
   imports: [ToastCloseDirective, ButtonCloseDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'toast-header'
   }

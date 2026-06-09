@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, inject, ViewChild } from '@angular/core';
+import { Component, DebugElement, inject, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { cilList } from '@coreui/icons';
@@ -10,6 +10,7 @@ import { IconComponent } from './icon.component';
 @Component({
   template: `<c-icon #icon name="cil-list" size="lg" class="test" />`,
   imports: [IconComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [IconSetService]
 })
 class TestComponent {

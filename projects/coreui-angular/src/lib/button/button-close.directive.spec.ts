@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef } from '@angular/core';
+import { Component, DebugElement, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ButtonCloseDirective } from './button-close.directive';
@@ -7,6 +7,7 @@ class MockElementRef extends ElementRef {}
 
 @Component({
   template: '<button cButtonClose></button>',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ButtonCloseDirective]
 })
 class TestComponent {}

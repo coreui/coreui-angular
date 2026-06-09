@@ -9,7 +9,8 @@ import {
   numberAttribute,
   output,
   OutputEmitterRef,
-  signal
+  signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { TabsService } from '../tabs.service';
 
@@ -30,6 +31,7 @@ type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
     '[@fadeInOut]': 'visible() ? "show" : "hide"',
     '(@fadeInOut.done)': 'onAnimationDone($event)'
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [
     trigger('fadeInOut', [
       state('show', style({ opacity: 1 })),

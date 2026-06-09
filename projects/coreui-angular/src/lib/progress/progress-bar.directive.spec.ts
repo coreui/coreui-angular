@@ -1,4 +1,12 @@
-import { Component, ComponentRef, DebugElement, ElementRef, input, Renderer2 } from '@angular/core';
+import {
+  Component,
+  ComponentRef,
+  DebugElement,
+  ElementRef,
+  input,
+  Renderer2,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProgressBarDirective } from './progress-bar.directive';
 import { By } from '@angular/platform-browser';
@@ -9,6 +17,7 @@ class MockElementRef extends ElementRef {}
 @Component({
   template: `<div cProgressBar [value]="value()" [color]="color()" variant="striped" animated></div>`,
   selector: 'c-test',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ProgressBarDirective]
 })
 export class TestComponent {

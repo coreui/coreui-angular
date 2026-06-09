@@ -1,10 +1,11 @@
-import { booleanAttribute, Component, computed, input } from '@angular/core';
+import { booleanAttribute, Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { Breakpoints } from '../coreui.types';
 
 @Component({
   selector: 'c-container, [cContainer]',
   template: '<ng-content />',
   styleUrls: ['./container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[class]': 'hostClasses()' }
 })
 export class ContainerComponent {

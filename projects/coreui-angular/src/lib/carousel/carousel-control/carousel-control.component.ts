@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, linkedSignal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, ChangeDetectionStrategy } from '@angular/core';
 
 import { CarouselState } from '../carousel-state';
 
@@ -6,6 +6,7 @@ import { CarouselState } from '../carousel-state';
   selector: 'c-carousel-control',
   templateUrl: './carousel-control.component.html',
   exportAs: 'cCarouselControl',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[attr.role]': 'role()',
     '[class]': 'hostClasses()',

@@ -1,10 +1,11 @@
-import { Component, DebugElement, DOCUMENT, ElementRef } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShadowOnScrollDirective } from './shadow-on-scroll.directive';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [ShadowOnScrollDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div [cShadowOnScroll]="true"></div>'
 })
 class TestComponent {}

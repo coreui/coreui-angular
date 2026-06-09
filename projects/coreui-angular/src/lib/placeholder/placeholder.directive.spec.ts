@@ -1,4 +1,4 @@
-import { Component, ComponentRef, DebugElement, input } from '@angular/core';
+import { Component, ComponentRef, DebugElement, input, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PlaceholderDirective } from './placeholder.directive';
@@ -10,6 +10,7 @@ import { PlaceholderAnimationDirective } from './placeholder-animation.directive
       <span [cPlaceholder]="visible()" cPlaceholderSize="sm"></span>
     </p>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PlaceholderDirective, PlaceholderAnimationDirective]
 })
 class TestComponent {

@@ -1,11 +1,12 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, computed, DebugElement, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, DebugElement, TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TemplateIdDirective } from './template-id.directive';
 
 @Component({
   imports: [TemplateIdDirective, NgTemplateOutlet],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <ng-template cTemplateId="test">Inner Text</ng-template>
     <div class="test">

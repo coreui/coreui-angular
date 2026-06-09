@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { IBreadcrumbItem } from '../breadcrumb-item/breadcrumb-item';
@@ -9,6 +9,7 @@ import { BreadcrumbItemComponent } from '../breadcrumb-item/breadcrumb-item.comp
 @Component({
   selector: 'c-breadcrumb-router, [cBreadcrumbRouter]',
   templateUrl: './breadcrumb-router.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [BreadcrumbComponent, BreadcrumbItemComponent]
 })
 export class BreadcrumbRouterComponent {

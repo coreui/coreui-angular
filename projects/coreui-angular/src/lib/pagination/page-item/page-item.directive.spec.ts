@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component, ComponentRef, DebugElement, input, Renderer2 } from '@angular/core';
+import { Component, ComponentRef, DebugElement, input, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { provideRouter, RouterLink } from '@angular/router';
 
 import { PageLinkDirective } from '../page-link/page-link.directive';
@@ -10,6 +10,7 @@ import { By } from '@angular/platform-browser';
 @Component({
   selector: 'c-test',
   imports: [PageItemComponent, PageLinkDirective, PageItemComponent, PageLinkDirective, RouterLink],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <c-page-item [disabled]="disabled()">
       <a cPageLink [routerLink]="[]">Previous</a>

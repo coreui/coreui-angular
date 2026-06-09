@@ -1,4 +1,4 @@
-import { Component, computed, input, InputSignal } from '@angular/core';
+import { Component, computed, input, InputSignal, ChangeDetectionStrategy } from '@angular/core';
 
 import { Positions } from '../../coreui.types';
 
@@ -8,6 +8,7 @@ type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
   selector: 'c-header, [c-header]',
   templateUrl: './header.component.html',
   exportAs: 'cHeader',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[attr.role]': 'role()', '[class]': 'hostClasses()' }
 })
 export class HeaderComponent {

@@ -12,7 +12,8 @@ import {
   OnDestroy,
   OnInit,
   output,
-  Renderer2
+  Renderer2,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -47,6 +48,7 @@ type AnimateType = 'hide' | 'show';
       })
     ])
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'toast show',
     '[class]': 'hostClasses()',

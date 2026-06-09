@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { HtmlAttributesDirective } from '../../shared';
 import { SidebarNavHelper } from './sidebar-nav.service';
@@ -8,6 +8,7 @@ import { INavData } from './sidebar-nav';
 @Component({
   selector: 'c-sidebar-nav-label',
   templateUrl: './sidebar-nav-label.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [HtmlAttributesDirective, SidebarNavBadgePipe]
 })
 export class SidebarNavLabelComponent {

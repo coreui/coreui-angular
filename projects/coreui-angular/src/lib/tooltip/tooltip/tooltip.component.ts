@@ -9,12 +9,14 @@ import {
   Renderer2,
   TemplateRef,
   viewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 @Component({
   selector: 'c-tooltip',
   templateUrl: './tooltip.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'tooltip fade bs-tooltip-auto',
     '[class]': 'hostClasses()',

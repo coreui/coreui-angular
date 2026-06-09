@@ -1,4 +1,13 @@
-import { booleanAttribute, Component, computed, contentChildren, effect, input, TemplateRef } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  computed,
+  contentChildren,
+  effect,
+  input,
+  TemplateRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { CardBodyComponent, CardComponent } from '../../card';
 import { TemplateIdDirective } from '../../shared';
@@ -9,6 +18,7 @@ import { NgTemplateOutlet } from '@angular/common';
   templateUrl: './widget-stat-c.component.html',
   exportAs: 'cWidgetStatC',
   imports: [CardBodyComponent, NgTemplateOutlet],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[class]': 'hostExtendedClass()' }
 })
 export class WidgetStatCComponent extends CardComponent {

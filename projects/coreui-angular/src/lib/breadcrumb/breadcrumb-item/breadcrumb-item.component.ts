@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, effect, input } from '@angular/core';
+import { booleanAttribute, Component, computed, effect, input, ChangeDetectionStrategy } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { INavAttributes, INavLinkProps } from './breadcrumb-item';
   styleUrls: ['./breadcrumb-item.component.scss'],
   imports: [RouterModule, NgTemplateOutlet, HtmlAttributesDirective],
   exportAs: 'breadcrumbItem',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[attr.aria-current]': 'ariaCurrent()',
     '[class]': 'hostClasses()'

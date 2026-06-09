@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, signal } from '@angular/core';
+import { Component, DebugElement, signal, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { VisibleDirective } from './visible.directive';
 
 @Component({
   imports: [VisibleDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<ng-template [cVisible]="visible()">Test Node</ng-template>'
 })
 class TestComponent {

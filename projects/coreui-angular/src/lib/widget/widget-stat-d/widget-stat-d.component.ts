@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { Colors } from '../../coreui.types';
 import { CardBodyComponent, CardComponent, CardHeaderComponent } from '../../card';
 import { ColComponent, RowDirective } from '../../grid';
@@ -13,6 +13,7 @@ export type WidgetStatDValue = {
   templateUrl: './widget-stat-d.component.html',
   exportAs: 'cWidgetStatD',
   imports: [CardHeaderComponent, CardBodyComponent, ColComponent, RowDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'card' }
 })
 export class WidgetStatDComponent extends CardComponent {

@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, effect, inject, input } from '@angular/core';
+import { booleanAttribute, Component, computed, effect, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { AccordionService } from '../accordion.service';
 
@@ -8,6 +8,7 @@ import { AccordionService } from '../accordion.service';
   styleUrls: ['./accordion.component.scss'],
   exportAs: 'cAccordionItem',
   providers: [AccordionService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[class]': 'hostClasses()' }
 })
 export class AccordionComponent {
@@ -29,8 +30,11 @@ export class AccordionComponent {
     this.#accordionService.alwaysOpen = this.alwaysOpen();
   });
 
-  readonly hostClasses = computed(() => ({
-    accordion: true,
-    'accordion-flush': this.flush()
-  }) as Record<string, boolean>);
+  readonly hostClasses = computed(
+    () =>
+      ({
+        accordion: true,
+        'accordion-flush': this.flush()
+      }) as Record<string, boolean>
+  );
 }

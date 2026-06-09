@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsComponent } from '../tabs.component';
@@ -8,7 +8,7 @@ import { TabsListComponent } from '../tabs-list/tabs-list.component';
 import { TabPanelComponent } from './tab-panel.component';
 
 @Component({
-    template: `
+  template: `
     <c-tabs activeItemKey="test-0">
       <c-tabs-list>
         <button cTab itemKey="test-0"></button>
@@ -20,7 +20,8 @@ import { TabPanelComponent } from './tab-panel.component';
       </c-tabs-content>
     </c-tabs>
   `,
-    imports: [TabPanelComponent, TabsComponent, TabDirective, TabsContentComponent, TabsListComponent]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [TabPanelComponent, TabsComponent, TabDirective, TabsContentComponent, TabsListComponent]
 })
 class TestComponent {}
 

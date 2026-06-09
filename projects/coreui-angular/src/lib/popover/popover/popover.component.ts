@@ -9,12 +9,14 @@ import {
   Renderer2,
   TemplateRef,
   viewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 @Component({
   selector: 'c-popover',
   templateUrl: './popover.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'popover fade bs-popover-auto',
     '[class]': 'hostClasses()',

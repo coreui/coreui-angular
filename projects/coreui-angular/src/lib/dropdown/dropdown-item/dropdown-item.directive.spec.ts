@@ -1,4 +1,13 @@
-import { Component, DebugElement, DOCUMENT, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  DOCUMENT,
+  ElementRef,
+  Renderer2,
+  signal,
+  viewChild,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -21,6 +30,7 @@ class MockElementRef extends ElementRef {}
       </ul>
     </c-dropdown>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
 })
 class TestComponent {

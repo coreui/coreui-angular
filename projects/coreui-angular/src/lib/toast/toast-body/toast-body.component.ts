@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ToastComponent } from '../toast/toast.component';
 
 @Component({
@@ -6,11 +6,11 @@ import { ToastComponent } from '../toast/toast.component';
   template: '<ng-content />',
   styleUrls: ['./toast-body.component.scss'],
   exportAs: 'cToastBody',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
-    class: 'toast-body',
+    class: 'toast-body'
   }
 })
 export class ToastBodyComponent {
   readonly toast? = inject(ToastComponent, { optional: true });
-
 }

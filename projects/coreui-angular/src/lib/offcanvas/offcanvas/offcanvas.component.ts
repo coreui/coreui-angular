@@ -16,7 +16,8 @@ import {
   OnInit,
   output,
   PLATFORM_ID,
-  Renderer2
+  Renderer2,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
@@ -35,6 +36,7 @@ let nextId = 0;
   exportAs: 'cOffcanvas',
   imports: [A11yModule],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     ngSkipHydration: 'true',
     '[attr.id]': 'id()',

@@ -7,7 +7,8 @@ import {
   linkedSignal,
   output,
   signal,
-  TemplateRef
+  TemplateRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
@@ -35,6 +36,7 @@ type AnimateType = 'hide' | 'show';
       transition('void => show', [animate('.3s ease-in')])
     ])
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[@.disabled]': '!fade()',
     '[@fadeInOut]': 'animateType',

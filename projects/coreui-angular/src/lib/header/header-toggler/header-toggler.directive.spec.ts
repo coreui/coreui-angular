@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { HeaderTogglerDirective } from './header-toggler.directive';
 
 @Component({
   imports: [HeaderTogglerDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div cHeaderToggler></div>'
 })
 export class TestComponent {

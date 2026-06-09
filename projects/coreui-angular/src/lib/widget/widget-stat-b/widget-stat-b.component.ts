@@ -1,4 +1,12 @@
-import { booleanAttribute, Component, computed, input, InputSignal, InputSignalWithTransform } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  computed,
+  input,
+  InputSignal,
+  InputSignalWithTransform,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { CardBodyComponent, CardComponent } from '../../card';
 
@@ -7,6 +15,7 @@ import { CardBodyComponent, CardComponent } from '../../card';
   templateUrl: './widget-stat-b.component.html',
   exportAs: 'cWidgetStatB',
   imports: [CardBodyComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatBComponent extends CardComponent {

@@ -1,9 +1,10 @@
-import { booleanAttribute, Component, computed, input } from '@angular/core';
+import { booleanAttribute, Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'c-modal-dialog',
   template: '<ng-content />',
   styleUrls: ['./modal-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'modal-dialog', '[class]': 'hostClasses()' }
 })
 export class ModalDialogComponent {

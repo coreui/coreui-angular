@@ -1,10 +1,11 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { CardBodyComponent, CardComponent } from '../../card';
 
 @Component({
   selector: 'c-widget-stat-e',
   templateUrl: './widget-stat-e.component.html',
   exportAs: 'cWidgetStatE',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CardBodyComponent]
 })
 export class WidgetStatEComponent extends CardComponent {

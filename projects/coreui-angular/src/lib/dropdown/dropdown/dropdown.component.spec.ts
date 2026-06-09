@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
-import { Component, DebugElement, DOCUMENT, ElementRef, signal } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DropdownService } from '../dropdown.service';
 import { By } from '@angular/platform-browser';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
@@ -46,6 +46,7 @@ class MockElementRef extends ElementRef {}
       </ul>
     </c-dropdown>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
 })
 class TestComponent {

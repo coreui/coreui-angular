@@ -1,9 +1,10 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'c-nav',
   template: '<ng-content />',
   styleUrls: ['./nav.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'nav', '[class]': 'hostClasses()' }
 })
 export class NavComponent {

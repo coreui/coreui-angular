@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, DebugElement, ElementRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,9 +7,10 @@ import { IconSetService } from '../icon-set';
 import { cilList } from '@coreui/icons';
 
 @Component({
-    template: '<svg [cIcon]="this.iconSet.icons.cilList" size="lg" class="test" title="Test"></svg>',
-    imports: [IconDirective],
-    providers: [IconSetService]
+  template: '<svg [cIcon]="this.iconSet.icons.cilList" size="lg" class="test" title="Test"></svg>',
+  imports: [IconDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  providers: [IconSetService]
 })
 class TestComponent {
   iconSet = inject(IconSetService);

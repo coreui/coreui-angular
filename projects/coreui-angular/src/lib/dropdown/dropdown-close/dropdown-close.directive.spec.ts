@@ -1,4 +1,12 @@
-import { Component, DebugElement, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  ElementRef,
+  Renderer2,
+  signal,
+  viewChild,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DropdownService } from '../dropdown.service';
@@ -23,6 +31,7 @@ class MockElementRef extends ElementRef {}
       </div>
     </c-dropdown>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ButtonCloseDirective, DropdownComponent, DropdownMenuDirective, DropdownCloseDirective]
 })
 class TestComponent {

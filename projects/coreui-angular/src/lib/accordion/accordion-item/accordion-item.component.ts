@@ -9,7 +9,8 @@ import {
   OnDestroy,
   OnInit,
   signal,
-  TemplateRef
+  TemplateRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -26,6 +27,7 @@ let nextId = 0;
   styleUrls: ['./accordion-item.component.scss'],
   exportAs: 'cAccordionItem',
   imports: [AccordionButtonDirective, NgTemplateOutlet, CollapseDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'accordion-item' }
 })
 export class AccordionItemComponent implements OnInit, OnDestroy {

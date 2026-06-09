@@ -1,11 +1,12 @@
 import { BooleanInput } from '@angular/cdk/coercion';
-import { booleanAttribute, Component, computed, contentChild, input } from '@angular/core';
+import { booleanAttribute, Component, computed, contentChild, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormCheckLabelDirective } from './form-check-label.directive';
 
 @Component({
   selector: 'c-form-check',
   template: '<ng-content />',
   exportAs: 'cFormCheck',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[class]': 'hostClasses()' }
 })
 export class FormCheckComponent {

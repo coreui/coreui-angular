@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ProgressBarDirective } from './progress-bar.directive';
 
 @Component({
@@ -10,6 +10,7 @@ import { ProgressBarDirective } from './progress-bar.directive';
       inputs: ['animated', 'color', 'max', 'role', 'value', 'variant']
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'progress-bar', '[class]': 'hostClasses()' }
 })
 export class ProgressBarComponent {

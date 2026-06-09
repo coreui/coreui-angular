@@ -1,10 +1,11 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { Colors } from '../coreui.types';
 
 @Component({
   selector: 'c-callout, [cCallout]',
   template: '<ng-content />',
   styleUrls: ['./callout.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'callout', '[class]': 'hostClasses()' }
 })
 export class CalloutComponent {

@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TextColorDirective } from './text-color.directive';
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [TextColorDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div cTextColor="primary"></div>'
 })
 class TestComponent {}

@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListGroupItemDirective } from './list-group-item.directive';
 
@@ -6,6 +6,7 @@ class MockElementRef extends ElementRef {}
 
 @Component({
   template: '<li cListGroupItem></li>',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ListGroupItemDirective]
 })
 class TestComponent {}

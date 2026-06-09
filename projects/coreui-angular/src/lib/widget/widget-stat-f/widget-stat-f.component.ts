@@ -1,4 +1,13 @@
-import { booleanAttribute, Component, computed, contentChildren, effect, input, TemplateRef } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  computed,
+  contentChildren,
+  effect,
+  input,
+  TemplateRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
 import { Colors } from '../../coreui.types';
@@ -10,6 +19,7 @@ import { CardBodyComponent, CardComponent, CardFooterComponent } from '../../car
   templateUrl: './widget-stat-f.component.html',
   exportAs: 'cWidgetStatB',
   imports: [CardBodyComponent, CardFooterComponent, NgTemplateOutlet],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatFComponent extends CardComponent {

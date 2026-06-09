@@ -1,4 +1,13 @@
-import { Component, computed, contentChildren, DestroyRef, inject, OnInit, TemplateRef } from '@angular/core';
+import {
+  Component,
+  computed,
+  contentChildren,
+  DestroyRef,
+  inject,
+  OnInit,
+  TemplateRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { CarouselState } from '../carousel-state';
 import { CarouselService } from '../carousel.service';
@@ -11,6 +20,7 @@ import { TemplateIdDirective } from '../../shared';
   exportAs: 'cCarouselIndicators',
   imports: [NgTemplateOutlet],
   templateUrl: './carousel-indicators.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'carousel-indicators' }
 })
 export class CarouselIndicatorsComponent implements OnInit {

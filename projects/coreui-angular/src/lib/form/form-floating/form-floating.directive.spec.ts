@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ComponentRef, DebugElement, input } from '@angular/core';
+import { Component, ComponentRef, DebugElement, input, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { FormFloatingDirective } from './form-floating.directive';
 import { FormControlDirective } from '../form-control/form-control.directive';
@@ -7,6 +7,7 @@ import { FormLabelDirective } from '../form-label/form-label.directive';
 
 @Component({
   imports: [FormFloatingDirective, FormControlDirective, FormLabelDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div [cFormFloating]="floating()">
       <textarea cFormControl id="floatingTextarea" placeholder="Leave a comment here"></textarea>

@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, Renderer2, signal } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormCheckInputDirective } from './form-check-input.directive';
@@ -7,6 +7,7 @@ class MockElementRef extends ElementRef {}
 
 @Component({
   template: '<input cFormCheckInput [indeterminate]="indeterminate()" [checked]="true">',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormCheckInputDirective]
 })
 class TestComponent {

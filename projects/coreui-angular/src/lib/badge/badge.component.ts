@@ -1,4 +1,4 @@
-import { Component, computed, input, InputSignal } from '@angular/core';
+import { Component, computed, input, InputSignal, ChangeDetectionStrategy } from '@angular/core';
 import { BadgePositions, Colors, Shapes, TextColors } from '../coreui.types';
 import { TextBgColorDirective, TextColorDirective } from '../utilities';
 
@@ -9,6 +9,7 @@ import { TextBgColorDirective, TextColorDirective } from '../utilities';
     { directive: TextColorDirective, inputs: ['cTextColor: textColor'] },
     { directive: TextBgColorDirective, inputs: ['cTextBgColor: textBgColor'] }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'badge',
     '[class]': 'hostClasses()'

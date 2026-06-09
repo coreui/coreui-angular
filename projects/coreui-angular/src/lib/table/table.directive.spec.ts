@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -23,6 +23,7 @@ import { TableActiveDirective } from './table-active.directive';
       [responsive]="true"
     ></table>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TableDirective]
 })
 class TestComponent {

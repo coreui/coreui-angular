@@ -13,7 +13,8 @@ import {
   OnInit,
   Renderer2,
   viewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -56,6 +57,7 @@ export type TToasterPlacement =
     class: 'toaster toast-container',
     '[class]': 'hostClasses()'
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ToasterService]
 })
 export class ToasterComponent implements OnInit {

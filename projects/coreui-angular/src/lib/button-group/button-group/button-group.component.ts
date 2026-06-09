@@ -1,8 +1,16 @@
-import { booleanAttribute, Component, computed, input, InputSignalWithTransform } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  computed,
+  input,
+  InputSignalWithTransform,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 @Component({
   selector: 'c-button-group',
   template: '<ng-content />',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[attr.role]': 'role()', '[class]': 'hostClasses()' }
 })
 export class ButtonGroupComponent {

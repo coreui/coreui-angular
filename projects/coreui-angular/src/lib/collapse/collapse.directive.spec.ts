@@ -1,5 +1,5 @@
 import { CollapseDirective } from './collapse.directive';
-import { Component, DebugElement, ElementRef, Renderer2, signal } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
@@ -8,6 +8,7 @@ class MockElementRef extends ElementRef {}
 
 @Component({
   template: '<div cCollapse [horizontal]="horizontal()" [(visible)]="visible" [animate]="false">Test</div>',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CollapseDirective]
 })
 class TestComponent {
