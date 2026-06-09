@@ -32,6 +32,7 @@ module.exports = tseslint.config(
       ],
       '@angular-eslint/no-input-rename': 'off',
       '@angular-eslint/no-output-rename': 'warn',
+      '@angular-eslint/prefer-on-push-component-change-detection': 'warn',
       '@typescript-eslint/consistent-indexed-object-style': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-inferrable-types': 'off',

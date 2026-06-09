@@ -3,17 +3,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "paths": {
       "coreui-angular": [
-        "dist/coreui-angular"
+        "./dist/coreui-angular"
       ],
       "coreui-angular-chartjs": [
-        "dist/coreui-angular-chartjs"
+        "./dist/coreui-angular-chartjs"
       ],
       "@coreui/icons-angular": [
-        "dist/coreui-icons-angular"
-      ]
+        "./dist/coreui-icons-angular"
+      ],
+      "*": ["./*"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -35,7 +35,8 @@
     "module": "preserve",
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "rootDir": "./projects"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -3,13 +3,17 @@
 {
   "extends": "./tsconfig.lib.json",
   "compilerOptions": {
-    "declarationMap": false
+    "declarationMap": false,
+    "rootDir": "./src"
   },
   "angularCompilerOptions": {
-    "compilationMode": "partial"
+    "compilationMode": "partial",
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts"]
 }

@@ -2,21 +2,17 @@
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
+    "lib": ["ES2022", "dom"],
     "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "rootDir": "schematics",
+    "rootDir": "./schematics",
     "outDir": "../../dist/coreui-icons-angular/schematics",
     "resolveJsonModule": true,
     "skipDefaultLibCheck": true,
@@ -24,15 +20,8 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "target": "ES2022",
-    "types": [
-      "jasmine",
-      "node"
-    ]
+    "types": ["jasmine", "node"]
   },
-  "include": [
-    "schematics/**/*"
-  ],
-  "exclude": [
-    "schematics/*/files/**/*"
-  ]
+  "include": ["./schematics/**/*"],
+  "exclude": ["./schematics/*/files/**/*"]
 }
