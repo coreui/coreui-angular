@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.7.2` for Angular 22
+
+- chore(dependencies): update to Angular 22.0.1
+
+---
+
 #### `5.7.1` for Angular 22
 
 - chore(dependencies): add angular aria package
