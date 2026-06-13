@@ -72,7 +72,7 @@ For directive description visit [https://coreui.io/angular/docs/](https://coreui
 
 ```shell
 npm install @coreui/icons@3
-npm install @coreui/icons-angular@~5.6
+npm install @coreui/icons-angular@~5.7
 ```
 
 ### Usage

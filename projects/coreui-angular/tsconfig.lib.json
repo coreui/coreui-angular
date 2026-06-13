@@ -9,8 +9,9 @@
     "inlineSources": true,
     "types": []
   },
-  "exclude": ["src/test.ts", "**/*.spec.ts"],
+  "exclude": ["./src/test.ts", "./**/*.spec.ts"],
   "angularCompilerOptions": {
+    "compilationMode": "partial",
     "extendedDiagnostics": {
       "checks": {
         "nullishCoalescingNotNullable": "suppress",

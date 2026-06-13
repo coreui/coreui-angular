@@ -58,8 +58,8 @@ ng add @coreui/angular-chartjs
 - or npm
 ```bash
 npm install chart.js@4.5
-npm install @coreui/chartjs@~4.1
-npm install @coreui/angular-chartjs@~5.6
+npm install @coreui/chartjs@~4.2
+npm install @coreui/angular-chartjs@~5.7
 ````
 
 ##### import:
