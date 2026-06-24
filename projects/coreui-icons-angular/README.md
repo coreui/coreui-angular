@@ -15,7 +15,7 @@
   <a href="https://coreui.io/angular/docs/icons"><strong>Explore CoreUI for Angular docs »</strong></a>
   <br>
   <br>
-  <a href="https://icons.coreui.io/"><strong>CoreUI Icons »</strong></a>
+  <a href="https://coreui.io/icons/"><strong>CoreUI Icons »</strong></a>
   <br>
   <br>
   <a href="https://github.com/coreui/coreui-icons-angular/issues/new?template=bug_report.md">Report a bug</a>
