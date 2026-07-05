@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { IconSetService } from '../icon-set';
 import { IconSize, IIcon, IPointerEvents, NgCssClass } from './icon.interface';
-import { transformName } from './icon.utils';
+import { escapeHtml, transformName } from './icon.utils';
 
 @Directive({
   exportAs: 'cIcon',
@@ -57,7 +57,8 @@ export class IconDirective implements IIcon {
   });
 
   readonly #titleCode = computed(() => {
-    return this.title() ? `<title>${this.title()}</title>` : '';
+    const title = this.title();
+    return title ? `<title>${escapeHtml(title)}</title>` : '';
   });
 
   readonly code = computed(() => {
