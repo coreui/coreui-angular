@@ -14,7 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { HtmlAttributesDirective } from '../shared/html-attr.directive';
 import { IconSetService } from '../icon-set';
 import { IconSize, IIcon, NgCssClass } from './icon.interface';
-import { transformName } from './icon.utils';
+import { escapeHtml, transformName } from './icon.utils';
 
 @Component({
   exportAs: 'cIconComponent',
@@ -72,7 +72,8 @@ export class IconComponent implements IIcon {
   });
 
   readonly #titleCode = computed(() => {
-    return this.title() ? `<title>${this.title()}</title>` : '';
+    const title = this.title();
+    return title ? `<title>${escapeHtml(title)}</title>` : '';
   });
 
   readonly code = computed(() => {
