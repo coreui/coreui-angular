@@ -71,3 +71,40 @@ describe('IconDirective', () => {
     expect(svgEl.nativeElement.getAttribute('xmlns')).toBe('http://www.w3.org/2000/svg');
   });
 });
+
+@Component({
+  template: '<svg [cIcon]="this.iconSet.icons.cilList" [title]="title"></svg>',
+  imports: [IconDirective],
+  providers: [IconSetService]
+})
+class TitleXssTestComponent {
+  iconSet = inject(IconSetService);
+  title = '</title><img src=x onerror="window.__xss=1">';
+
+  constructor() {
+    this.iconSet.icons = { cilList };
+  }
+}
+
+describe('IconDirective title XSS', () => {
+  let fixture: ComponentFixture<TitleXssTestComponent>;
+  let svgEl: DebugElement;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [IconSetService],
+      imports: [IconDirective, TitleXssTestComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TitleXssTestComponent);
+    fixture.detectChanges();
+    svgEl = fixture.debugElement.query(By.css('svg'));
+  });
+
+  it('escapes the title and does not inject markup', () => {
+    expect(svgEl.nativeElement.querySelector('img')).toBeNull();
+    const title = svgEl.nativeElement.querySelector('title');
+    expect(title).toBeTruthy();
+    expect(title.textContent).toBe('</title><img src=x onerror="window.__xss=1">');
+  });
+});
