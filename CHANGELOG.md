@@ -5,6 +5,23 @@
 #### `5.7.2` for Angular 22
 
 - chore(dependencies): update to Angular 22.0.1
+  - `@angular-devkit/schematics` @ "22.0.1" (was "22.0.0")
+  - `@angular/build` @ "22.0.1" (was "22.0.0")
+  - `@angular/cli` @ "22.0.1" (was "22.0.0")
+  - `@angular/compiler-cli` @ "22.0.1" (was "22.0.0")
+  - `@angular/language-service` @ "22.0.1" (was "22.0.0")
+  - `@angular/animations` @ "22.0.1" (was "22.0.0")
+  - `@angular/aria` @ "22.0.1" (was "22.0.0")
+  - `@angular/cdk` @ "22.0.1" (was "22.0.0")
+  - `@angular/common` @ "22.0.1" (was "22.0.0")
+  - `@angular/compiler` @ "22.0.1" (was "22.0.0")
+  - `@angular/core` @ "22.0.1" (was "22.0.0")
+  - `@angular/forms` @ "22.0.1" (was "22.0.0")
+  - `@angular/localize` @ "22.0.1" (was "22.0.0")
+  - `@angular/platform-browser` @ "22.0.1" (was "22.0.0")
+  - `@angular/router` @ "22.0.1" (was "22.0.0")
+  - `@types/node` @ "24.13.2" (was "24.13.1")
+  - `eslint` @ "10.5.0" (was "10.4.1")
 
 ---
 
