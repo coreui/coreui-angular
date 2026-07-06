@@ -1,0 +1,70 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: "12:00"
+      timezone: Europe/Athens
+    cooldown:
+      default-days: 7
+    labels:
+      - dependencies
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: "12:00"
+      timezone: Europe/Athens
+    open-pull-requests-limit: 10
+    reviewers:
+      - xidedix
+    labels:
+      - dependencies
+    cooldown:
+      default-days: 7
+    versioning-strategy: increase
+    rebase-strategy: disabled
+    ignore:
+      # Angular majors are coordinated framework migrations, bumped by hand
+      - dependency-name: "@angular/*"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "@angular-devkit/*"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "ng-packagr"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "zone.js"
+        update-types:
+          - "version-update:semver-major"
+      # Angular supports a narrow TypeScript range — out-of-range bumps break the build
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      # linter churn — new rules break CI; bump deliberately
+      - dependency-name: "eslint*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: "angular-eslint"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: "typescript-eslint"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
