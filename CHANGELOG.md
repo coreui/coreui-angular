@@ -1,6 +1,36 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
 ---
+#### `5.6.25`
+
+- fix(Icon): escape title to prevent XSS via bypassSecurityTrustHtml
+- chore: add Dependabot config
+- docs: add SECURITY.md
+- docs: update CoreUI Icons URL to coreui.io/icons
+- chore(dependencies): update to `Angular 21.2.17`
+    - `@angular-devkit/schematics` @ "21.2.18" (was "21.2.12")
+    - `@angular/build` @ "21.2.18" (was "21.2.12")
+    - `@angular/cli` @ "21.2.18" (was "21.2.12")
+    - `@angular/compiler-cli` @ "21.2.17" (was "21.2.14")
+    - `@angular/language-service` @ "21.2.17" (was "21.2.14")
+    - `@angular/animations` @ "21.2.17" (was "21.2.14")
+    - `@angular/cdk` @ "21.2.14" (was "21.2.12")
+    - `@angular/common` @ "21.2.17" (was "21.2.14")
+    - `@angular/compiler` @ "21.2.17" (was "21.2.14")
+    - `@angular/core` @ "21.2.17" (was "21.2.14")
+    - `@angular/forms` @ "21.2.17" (was "21.2.14")
+    - `@angular/localize` @ "21.2.17" (was "21.2.14")
+    - `@angular/platform-browser` @ "21.2.17" (was "21.2.14")
+    - `@angular/router` @ "21.2.17" (was "21.2.14")
+    - `@types/node` @ "24.13.2" (was "24.12.4")
+    - `eslint` @ "10.6.0" (was "10.4.0")
+    - `jasmine-core` @ "6.3.0" (was "6.2.0")
+    - `native-copyfiles` @ "2.0.3" (was "2.0.1")
+    - `ng-packagr` @ "21.2.5" (was "21.2.3")
+    - `prettier` @ "3.9.4" (was "3.8.3")
+    - `typescript-eslint` @ "8.62.1" (was "8.59.4")
+
+---
 #### `5.6.24`
 
 - fix(sidebar-nav-group): does not get `show` class when child router link is active; close #251 - thanks @ghdevacct
