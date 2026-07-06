@@ -2,6 +2,36 @@
 
 ---
 
+#### `5.7.3` for Angular 22
+
+- fix(Icon): escape title to prevent XSS via bypassSecurityTrustHtml
+- docs: add SECURITY.md
+- docs: update CoreUI Icons URL to coreui.io/icons
+- chore(deps): bump the github-actions group with 2 updates
+- chore(dependencies): update to Angular 22.0.5
+  - `@angular-devkit/schematics` @ "22.0.5" (was "22.0.1")
+  - `@angular/build` @ "22.0.5" (was "22.0.1")
+  - `@angular/cli` @ "22.0.5" (was "22.0.1")
+  - `@angular/compiler-cli` @ "22.0.5" (was "22.0.1")
+  - `@angular/language-service` @ "22.0.5" (was "22.0.1")
+  - `@angular/animations` @ "22.0.5" (was "22.0.1")
+  - `@angular/aria` @ "22.0.3" (was "22.0.1")
+  - `@angular/cdk` @ "22.0.3" (was "22.0.1")
+  - `@angular/common` @ "22.0.5" (was "22.0.1")
+  - `@angular/compiler` @ "22.0.5" (was "22.0.1")
+  - `@angular/core` @ "22.0.5" (was "22.0.1")
+  - `@angular/forms` @ "22.0.5" (was "22.0.1")
+  - `@angular/localize` @ "22.0.5" (was "22.0.1")
+  - `@angular/platform-browser` @ "22.0.5" (was "22.0.1")
+  - `@angular/router` @ "22.0.5" (was "22.0.1")
+  - `ng-packagr` @ "22.0.1" (was "22.0.0")
+  - `eslint` @ "10.6.0" (was "10.5.0")
+  - `prettier` @ "3.9.4" (was "3.8.4")
+  - `typescript-eslint` @ "8.62.1" (was "8.61.0")
+
+---
+
+
 #### `5.7.2` for Angular 22
 
 - chore(dependencies): update to Angular 22.0.1
