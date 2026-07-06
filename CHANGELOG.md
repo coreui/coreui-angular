@@ -2,6 +2,34 @@
 
 ---
 
+#### `5.5.26` 
+
+- fix(Icon): escape title to prevent XSS via bypassSecurityTrustHtml
+- chore(dependencies): update to `Angular 20.3.25`
+  - `@angular-devkit/schematics` @ "20.3.31" (was "20.3.12")
+  - `@angular/build` @ "20.3.31" (was "20.3.12")
+  - `@angular/cli` @ "20.3.31" (was "20.3.12")
+  - `@angular/compiler-cli` @ "20.3.25" (was "20.3.14")
+  - `@angular/language-service` @ "20.3.25" (was "20.3.14")
+  - `@angular/animations` @ "20.3.25" (was "20.3.14")
+  - `@angular/common` @ "20.3.25" (was "20.3.14")
+  - `@angular/compiler` @ "20.3.25" (was "20.3.14")
+  - `@angular/core` @ "20.3.25" (was "20.3.14")
+  - `@angular/forms` @ "20.3.25" (was "20.3.14")
+  - `@angular/localize` @ "20.3.25" (was "20.3.14")
+  - `@angular/platform-browser` @ "20.3.25" (was "20.3.14")
+  - `@angular/platform-browser-dynamic` @ "20.3.25" (was "20.3.14")
+  - `@angular/router` @ "20.3.25" (was "20.3.14")
+  - `lodash-es` @ "4.18.1" (was "4.17.21")
+  - `@types/jasmine` @ "5.1.15" (was "5.1.13")
+  - `eslint` @ "9.39.4" (was "9.39.1")
+  - `jasmine-core` @ "5.13.0" (was "5.12.1")
+  - `karma-jasmine-html-reporter` @ "2.2.0" (was "2.1.0")
+  - `prettier` @ "3.9.4" (was "3.6.2")
+  - `typescript-eslint` @ "8.62.1" (was "8.48.0")
+
+---
+
 #### `5.5.25` 
 
 - fix(backdrop): modal backdrop not removed on zoneless - close #240 - thanks @anyplin
