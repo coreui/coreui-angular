@@ -20,8 +20,7 @@ import {
   output,
   Renderer2,
   signal,
-  untracked,
-  ChangeDetectionStrategy
+  untracked
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
@@ -121,7 +120,6 @@ export class DropdownToggleDirective implements AfterViewInit {
   exportAs: 'cDropdown',
   providers: [DropdownService],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class]': 'hostClasses()',
     '[style]': 'hostStyle()',

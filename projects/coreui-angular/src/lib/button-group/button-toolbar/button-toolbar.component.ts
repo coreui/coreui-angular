@@ -1,9 +1,8 @@
-import { Component, input, InputSignal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, InputSignal } from '@angular/core';
 
 @Component({
   selector: 'c-button-toolbar',
   template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'btn-toolbar', '[attr.role]': 'role()' }
 })
 export class ButtonToolbarComponent {
@@ -12,5 +11,5 @@ export class ButtonToolbarComponent {
    * @type InputSignal<string>
    * @default 'toolbar'
    */
-  role: InputSignal<string> = input('toolbar');
+  readonly role = input('toolbar');
 }

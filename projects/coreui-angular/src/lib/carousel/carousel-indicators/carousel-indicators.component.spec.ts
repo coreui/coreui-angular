@@ -33,11 +33,11 @@ describe('CarouselIndicatorsComponent', () => {
 
   it('should set active index', () => {
     service.setIndex({ active: 1 });
-    expect(component.active).toBe(1);
+    expect(component.active()).toBe(1);
   });
 
   it('should call onClick', () => {
     component.onClick(2);
-    expect(component.active).toBe(2);
+    expect(component.active()).toBe(2);
   });
 });

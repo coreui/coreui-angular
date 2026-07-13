@@ -18,8 +18,7 @@ import {
   Renderer2,
   signal,
   untracked,
-  viewChild,
-  ChangeDetectionStrategy
+  viewChild
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -33,7 +32,6 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
   templateUrl: './modal.component.html',
   exportAs: 'cModal',
   imports: [ModalDialogComponent, ModalContentComponent, A11yModule],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'modal',
     '[class]': 'hostClasses()',

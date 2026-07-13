@@ -1,11 +1,10 @@
 import { NavLinkDirective } from './nav-link.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ComponentRef, DebugElement, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ComponentRef, DebugElement, input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 @Component({
   template: '<a cNavLink [active]="active()" [disabled]="disabled()">test</a>',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [NavLinkDirective]
 })
 class TestComponent {

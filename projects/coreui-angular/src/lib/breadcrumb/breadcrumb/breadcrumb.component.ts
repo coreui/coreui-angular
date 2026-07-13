@@ -1,9 +1,8 @@
-import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'c-breadcrumb',
   template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'breadcrumb',
     '[attr.aria-label]': 'ariaLabel()',

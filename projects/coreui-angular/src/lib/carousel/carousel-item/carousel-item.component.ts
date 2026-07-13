@@ -4,8 +4,7 @@ import {
   DestroyRef,
   inject,
   input,
-  linkedSignal,
-  ChangeDetectionStrategy
+  linkedSignal
 } from '@angular/core';
 
 import { CarouselService } from '../carousel.service';
@@ -16,7 +15,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './carousel-item.component.html',
   styleUrls: ['./carousel-item.component.scss'],
   exportAs: 'cCarouselItem',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'carousel-item',
     '[class.active]': 'active()',

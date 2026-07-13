@@ -1,4 +1,4 @@
-import { Component, DebugNode, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugNode } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ProgressComponent } from './progress.component';
@@ -7,7 +7,6 @@ import { ProgressBarDirective } from './progress-bar.directive';
 @Component({
   template: ` <c-progress value="42" color="success" />`,
   selector: 'c-test',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ProgressComponent]
 })
 export class TestComponent {}

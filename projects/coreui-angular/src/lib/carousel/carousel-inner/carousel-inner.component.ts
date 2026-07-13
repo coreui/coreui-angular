@@ -5,8 +5,7 @@ import {
   computed,
   contentChildren,
   inject,
-  signal,
-  ChangeDetectionStrategy
+  signal
 } from '@angular/core';
 import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
 import { CarouselState } from '../carousel-state';
@@ -17,7 +16,6 @@ import { carouselPlay } from '../carousel.animation';
   styleUrls: ['./carousel-inner.component.scss'],
   animations: [carouselPlay],
   template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'carousel-inner',
     '[@carouselPlay]': 'slideType()',

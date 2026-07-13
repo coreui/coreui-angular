@@ -1,9 +1,8 @@
-import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'c-input-group',
   template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'input-group', '[class]': 'hostClasses()' }
 })
 export class InputGroupComponent {

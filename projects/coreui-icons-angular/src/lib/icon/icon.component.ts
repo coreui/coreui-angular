@@ -1,14 +1,4 @@
-import {
-  Component,
-  computed,
-  effect,
-  ElementRef,
-  inject,
-  input,
-  Renderer2,
-  viewChild,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, Renderer2, viewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { HtmlAttributesDirective } from '../shared/html-attr.directive';
@@ -22,7 +12,6 @@ import { escapeHtml, transformName } from './icon.utils';
   selector: 'c-icon',
   styleUrls: ['./icon.component.scss'],
   templateUrl: './icon.component.svg',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { ngSkipHydration: 'true', style: 'display: none' }
 })
 export class IconComponent implements IIcon {

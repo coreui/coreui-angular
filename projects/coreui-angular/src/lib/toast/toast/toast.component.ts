@@ -1,7 +1,6 @@
 import {
   AnimationCallbackEvent,
   booleanAttribute,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
@@ -48,8 +47,7 @@ import { ToastContentComponent } from './toast-content.component';
     '(mouseout)': 'setTimer()'
   },
   encapsulation: ViewEncapsulation.None,
-  imports: [ToastContentComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [ToastContentComponent]
 })
 export class ToastComponent implements OnInit, OnDestroy {
   readonly destroyRef = inject(DestroyRef);

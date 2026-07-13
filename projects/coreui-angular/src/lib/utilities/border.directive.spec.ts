@@ -1,11 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BorderDirective } from './border.directive';
-import { Component, DebugElement, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement, input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [BorderDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div [cBorder]="border()"></div>'
 })
 class TestComponent {

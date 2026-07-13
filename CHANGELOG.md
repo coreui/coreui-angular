@@ -5,6 +5,7 @@
 #### `5.7.4` for Angular 22
 
 - refactor(toast): migrate to native CSS animations
+- refactor: update components to default Angular 22 changeDetectionStrategy
 
 ---
 

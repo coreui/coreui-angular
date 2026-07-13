@@ -11,8 +11,7 @@ import {
   input,
   InputSignal,
   signal,
-  untracked,
-  ChangeDetectionStrategy
+  untracked
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
@@ -24,7 +23,6 @@ import { RtlService } from '../../services';
   exportAs: 'cTabsList',
   selector: 'c-tabs-list',
   template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[attr.role]': 'role()',
     '[class]': 'hostClasses()',

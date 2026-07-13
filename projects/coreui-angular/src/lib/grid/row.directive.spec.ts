@@ -1,11 +1,10 @@
-import { Component, DebugElement, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RowDirective } from './row.directive';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [RowDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: ` <div id="row0" cRow xs="auto" [md]="7"></div> `
 })
 export class TestComponent {}

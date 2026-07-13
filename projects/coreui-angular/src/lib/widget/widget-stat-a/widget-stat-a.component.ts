@@ -1,13 +1,4 @@
-import {
-  Component,
-  computed,
-  contentChildren,
-  effect,
-  input,
-  InputSignal,
-  TemplateRef,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, computed, contentChildren, effect, input, InputSignal, TemplateRef } from '@angular/core';
 
 import { Colors } from '../../coreui.types';
 import { TemplateIdDirective } from '../../shared';
@@ -19,7 +10,6 @@ import { NgTemplateOutlet } from '@angular/common';
   templateUrl: './widget-stat-a.component.html',
   exportAs: 'cWidgetStatA',
   imports: [CardBodyComponent, NgTemplateOutlet],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class WidgetStatAComponent extends CardComponent {

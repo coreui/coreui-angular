@@ -10,8 +10,7 @@ import {
   numberAttribute,
   OnDestroy,
   OnInit,
-  output,
-  ChangeDetectionStrategy
+  output
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent, Subscription } from 'rxjs';
@@ -32,7 +31,6 @@ import { CarouselConfig } from '../carousel.config';
   providers: [CarouselService, CarouselState, ListenersService],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   exportAs: 'cCarousel',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'carousel slide',
     '[class.carousel-fade]': 'transition() === "crossfade" && animate()'

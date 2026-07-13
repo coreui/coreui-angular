@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
-import { Component, DebugElement, DOCUMENT, ElementRef, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef, input, signal } from '@angular/core';
 import { DropdownService } from '../dropdown.service';
 import { By } from '@angular/platform-browser';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
@@ -37,7 +37,13 @@ class MockElementRef extends ElementRef {}
 @Component({
   template: `
     <c-dropdown #dropdown="cDropdown" [(visible)]="visible" direction="dropup" [variant]="variant()">
-      <div cDropdownToggle [caret]="caret" [split]="split" [disabled]="disabled" [dropdownComponent]="dropdown"></div>
+      <div
+        cDropdownToggle
+        [caret]="caret()"
+        [split]="split()"
+        [disabled]="disabled()"
+        [dropdownComponent]="dropdown"
+      ></div>
       <ul cDropdownMenu>
         <li><a cDropdownItem>Action</a></li>
         <li><a cDropdownItem>Another action</a></li>
@@ -46,15 +52,14 @@ class MockElementRef extends ElementRef {}
       </ul>
     </c-dropdown>
   `,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
 })
 class TestComponent {
   readonly variant = signal<'btn-group' | 'dropdown' | 'input-group' | 'nav-item' | undefined>('nav-item');
   readonly visible = signal(false);
-  disabled = false;
-  caret = true;
-  split = false;
+  readonly disabled = input(false);
+  readonly caret = input(true);
+  readonly split = input(false);
 }
 
 describe('DropdownToggleDirective', () => {
@@ -98,9 +103,9 @@ describe('DropdownToggleDirective', () => {
     expect(elementRef.nativeElement).toHaveClass('dropdown-toggle');
     expect(elementRef.nativeElement).not.toHaveClass('dropdown-toggle-split');
     component.variant.set('input-group');
-    component.disabled = true;
-    component.split = true;
-    component.caret = false;
+    fixture.componentRef.setInput('disabled', true);
+    fixture.componentRef.setInput('split', true);
+    fixture.componentRef.setInput('caret', false);
     fixture.detectChanges();
     expect(elementRef.nativeElement).toHaveClass('disabled');
     expect(elementRef.nativeElement).not.toHaveClass('dropdown-toggle');

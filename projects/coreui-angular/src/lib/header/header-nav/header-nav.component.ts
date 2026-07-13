@@ -1,11 +1,10 @@
-import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'c-header-nav',
   template: '<ng-content />',
   styleUrls: ['./header-nav.component.scss'],
   exportAs: 'cHeaderNav',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[attr.role]': 'role()',
     class: 'header-nav'

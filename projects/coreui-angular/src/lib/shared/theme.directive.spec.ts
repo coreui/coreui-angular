@@ -1,11 +1,10 @@
-import { Component, DebugElement, ElementRef, input, Renderer2, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement, ElementRef, input, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ThemeDirective } from './theme.directive';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [ThemeDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div cTheme [colorScheme]="theme()"></div>'
 })
 export class TestComponent {

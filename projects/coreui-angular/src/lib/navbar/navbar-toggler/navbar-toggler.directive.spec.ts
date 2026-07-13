@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, Renderer2, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { NavbarTogglerDirective } from './navbar-toggler.directive';
 import { By } from '@angular/platform-browser';
@@ -9,7 +9,6 @@ class MockElementRef extends ElementRef {}
 
 @Component({
   imports: [NavbarTogglerDirective, CollapseDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <button [cNavbarToggler]="collapseRef"></button>
     <div #collapseRef="cCollapse" navbar cCollapse>test</div>

@@ -1,4 +1,4 @@
-import { Component, DebugElement, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { GutterDirective } from './gutter.directive';
@@ -6,7 +6,6 @@ import { GutterBreakpoints, Gutters, IGutterObject } from './gutter.type';
 
 @Component({
   imports: [GutterDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div [gutter]="gutter()"></div>'
 })
 export class TestComponent {

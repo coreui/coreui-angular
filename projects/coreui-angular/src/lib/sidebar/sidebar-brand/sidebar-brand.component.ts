@@ -1,4 +1,4 @@
-import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterLink, type UrlTree } from '@angular/router';
 
 import { HtmlAttributesDirective } from '../../shared';
@@ -7,7 +7,6 @@ import { HtmlAttributesDirective } from '../../shared';
   selector: 'c-sidebar-brand',
   templateUrl: './sidebar-brand.component.html',
   imports: [RouterLink, HtmlAttributesDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'sidebar-brand' }
 })
 export class SidebarBrandComponent {

@@ -1,11 +1,10 @@
-import { Component, computed, input, InputSignal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, input, InputSignal } from '@angular/core';
 
 import { Positions } from '../coreui.types';
 
 @Component({
   selector: 'c-footer, [cFooter]',
   template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'footer',
     '[class]': 'hostClasses()',

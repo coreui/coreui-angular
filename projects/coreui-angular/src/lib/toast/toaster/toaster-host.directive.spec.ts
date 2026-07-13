@@ -1,10 +1,9 @@
-import { Component, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ToasterHostDirective } from './toaster-host.directive';
 
 @Component({
   template: ` <div cToasterHost></div>`,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ToasterHostDirective]
 })
 class TestComponent {}

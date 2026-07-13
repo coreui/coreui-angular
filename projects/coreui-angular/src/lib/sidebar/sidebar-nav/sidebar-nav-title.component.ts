@@ -1,9 +1,8 @@
-import { Component, effect, ElementRef, inject, input, Renderer2, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
 import { INavData } from './sidebar-nav';
 
 @Component({
   selector: 'c-sidebar-nav-title',
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: ''
 })
 export class SidebarNavTitleComponent {

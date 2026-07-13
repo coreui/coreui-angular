@@ -10,8 +10,7 @@ import {
   inject,
   input,
   OnDestroy,
-  signal,
-  ChangeDetectionStrategy
+  signal
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -28,7 +27,6 @@ import { ThemeDirective } from '../shared';
   templateUrl: './navbar.component.html',
   imports: [NgTemplateOutlet],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[class]': 'hostClasses()', '[attr.role]': 'role()' }
 })
 export class NavbarComponent implements AfterContentInit, OnDestroy {

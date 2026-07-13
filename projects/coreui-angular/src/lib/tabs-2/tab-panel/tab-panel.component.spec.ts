@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsComponent } from '../tabs.component';
@@ -20,7 +20,6 @@ import { TabPanelComponent } from './tab-panel.component';
       </c-tabs-content>
     </c-tabs>
   `,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TabPanelComponent, TabsComponent, TabDirective, TabsContentComponent, TabsListComponent]
 })
 class TestComponent {}

@@ -1,4 +1,4 @@
-import { Component, computed, input, InputSignal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, input, InputSignal } from '@angular/core';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
 import { TextColorDirective } from '../utilities';
@@ -13,7 +13,6 @@ import { TextColorDirective } from '../utilities';
       inputs: ['cTextColor: textColor']
     }
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'avatar', '[class]': 'hostClasses()' }
 })
 export class AvatarComponent {

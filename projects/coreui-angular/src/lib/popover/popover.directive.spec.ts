@@ -8,8 +8,7 @@ import {
   input,
   Renderer2,
   signal,
-  ViewContainerRef,
-  ChangeDetectionStrategy
+  ViewContainerRef
 } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -20,7 +19,6 @@ import { Triggers } from '../coreui.types';
 @Component({
   template:
     '<button cPopover="content" [(cPopoverVisible)]="visible" [cPopoverTrigger]="trigger" >{{content}}</button>',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PopoverDirective]
 })
 export class TestComponent {

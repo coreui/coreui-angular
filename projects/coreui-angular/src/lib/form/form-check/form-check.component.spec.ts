@@ -1,4 +1,4 @@
-import { Component, ComponentRef, DebugElement, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ComponentRef, DebugElement, signal } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormCheckComponent } from './form-check.component';
 import { FormCheckInputDirective } from './form-check-input.directive';
@@ -12,7 +12,6 @@ import { By } from '@angular/platform-browser';
       <label cFormCheckLabel for="check1">Label</label>
     </c-form-check>
   `,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormCheckInputDirective, FormCheckComponent, FormCheckLabelDirective]
 })
 class TestComponent {

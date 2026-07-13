@@ -1,4 +1,4 @@
-import { Component, computed, input, InputSignal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, input, InputSignal } from '@angular/core';
 import { Colors, TextColors } from '../coreui.types';
 import { TextBgColorDirective, TextColorDirective } from '../utilities';
 
@@ -9,7 +9,6 @@ import { TextBgColorDirective, TextColorDirective } from '../utilities';
     { directive: TextColorDirective, inputs: ['cTextColor: textColor'] },
     { directive: TextBgColorDirective, inputs: ['cTextBgColor: textBgColor'] }
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'card', '[class]': 'hostClasses()' }
 })
 export class CardComponent {

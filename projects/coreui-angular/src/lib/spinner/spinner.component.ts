@@ -1,11 +1,10 @@
-import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 import { Colors } from '../coreui.types';
 
 @Component({
   selector: 'c-spinner',
   templateUrl: './spinner.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[attr.role]': 'role()',
     '[class]': 'hostClasses()'

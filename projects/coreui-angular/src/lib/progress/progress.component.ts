@@ -7,8 +7,7 @@ import {
   ElementRef,
   inject,
   input,
-  numberAttribute,
-  ChangeDetectionStrategy
+  numberAttribute
 } from '@angular/core';
 import { ProgressBarComponent } from './progress-bar.component';
 import { ProgressBarDirective } from './progress-bar.directive';
@@ -32,7 +31,6 @@ import { ProgressService } from './progress.service';
     '[class]': 'hostClasses()',
     '[style.height]': 'hostStyle()'
   },
-  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ProgressService]
 })
 export class ProgressComponent {

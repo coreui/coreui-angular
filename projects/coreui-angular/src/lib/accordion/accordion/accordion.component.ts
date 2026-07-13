@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, effect, inject, input, ChangeDetectionStrategy } from '@angular/core';
+import { booleanAttribute, Component, computed, effect, inject, input } from '@angular/core';
 
 import { AccordionService } from '../accordion.service';
 
@@ -8,7 +8,6 @@ import { AccordionService } from '../accordion.service';
   styleUrls: ['./accordion.component.scss'],
   exportAs: 'cAccordionItem',
   providers: [AccordionService],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[class]': 'hostClasses()' }
 })
 export class AccordionComponent {

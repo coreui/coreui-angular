@@ -1,9 +1,8 @@
-import { booleanAttribute, Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
+import { booleanAttribute, Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'c-navbar-nav',
   template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: { '[class]': 'hostClasses()' }
 })
 export class NavbarNavComponent {

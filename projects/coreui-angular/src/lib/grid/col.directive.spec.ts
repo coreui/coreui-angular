@@ -1,11 +1,10 @@
-import { Component, DebugElement, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ColDirective, ColOffsetType, ColOrderType } from './col.directive';
 
 @Component({
   imports: [ColDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div id="col0" cCol lg="auto" [xl]="true"></div>
     <div id="col1" cCol [order]="1" [offset]="1" xs="6" sm="5" md="4" lg="3" xl="2" xxl="1"></div>

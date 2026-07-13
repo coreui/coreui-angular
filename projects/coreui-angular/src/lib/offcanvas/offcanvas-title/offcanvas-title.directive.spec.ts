@@ -1,11 +1,10 @@
 import { OffcanvasTitleDirective } from './offcanvas-title.directive';
-import { Component, DebugElement, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 @Component({
   template: '<div cOffcanvasTitle>Test</div>',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [OffcanvasTitleDirective]
 })
 class TestComponent {}

@@ -1,11 +1,10 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component, DebugElement, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ModalToggleDirective } from './modal-toggle.directive';
 
 @Component({
   template: '<button cModalToggle>Dismiss</button>',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ModalToggleDirective]
 })
 class TestComponent {}

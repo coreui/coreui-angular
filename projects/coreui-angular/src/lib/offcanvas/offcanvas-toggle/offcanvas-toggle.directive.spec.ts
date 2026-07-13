@@ -1,4 +1,4 @@
-import { Component, DebugElement, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
@@ -9,7 +9,6 @@ import { OffcanvasService } from '../offcanvas.service';
 
 @Component({
   template: ` <button cOffcanvasToggle="OffcanvasEnd">OffcanvasToggle Test</button>`,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [OffcanvasToggleDirective]
 })
 class TestComponent {}

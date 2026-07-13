@@ -7,8 +7,7 @@ import {
   ElementRef,
   Renderer2,
   signal,
-  ViewContainerRef,
-  ChangeDetectionStrategy
+  ViewContainerRef
 } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -19,7 +18,6 @@ import { ListenersService } from '../services';
 @Component({
   template:
     '<button cTooltip="content" [(cTooltipVisible)]="visible" [cTooltipTrigger]="trigger" >{{content()}}</button>',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TooltipDirective]
 })
 export class TestComponent {

@@ -5,17 +5,14 @@ import {
   contentChildren,
   DestroyRef,
   effect,
-  ElementRef,
   inject,
   Injector,
   input,
   MAX_ANIMATION_TIMEOUT,
   NgModuleRef,
   OnInit,
-  Renderer2,
   viewChild,
-  ViewContainerRef,
-  ChangeDetectionStrategy
+  ViewContainerRef
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -58,12 +55,9 @@ export type TToasterPlacement =
     class: 'toaster toast-container',
     '[class]': 'hostClasses()'
   },
-  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ToasterService]
 })
 export class ToasterComponent implements OnInit {
-  readonly #hostElement = inject(ElementRef);
-  readonly #renderer = inject(Renderer2);
   readonly #toasterService = inject(ToasterService);
   readonly #destroyRef = inject(DestroyRef);
   readonly #maxAnimationTimeout = inject(MAX_ANIMATION_TIMEOUT);

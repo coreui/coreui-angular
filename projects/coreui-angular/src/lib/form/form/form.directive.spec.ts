@@ -1,11 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ComponentRef, DebugElement, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ComponentRef, DebugElement, input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { FormDirective } from './form.directive';
 
 @Component({
   imports: [FormDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<form cForm [validated]="validated()"></form>'
 })
 class TestComponent {

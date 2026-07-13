@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, Renderer2, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,7 +6,6 @@ import { HtmlAttributesDirective } from './html-attr.directive';
 
 @Component({
   template: ` <div [cHtmlAttr]="{ class: 'test', style: { backgroundColor: 'red' }, id: 'id-1' }"></div>`,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [HtmlAttributesDirective]
 })
 class TestComponent {}

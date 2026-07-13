@@ -1,11 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RoundedDirective } from './rounded.directive';
-import { Component, DebugElement, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DebugElement, input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [RoundedDirective],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div [cRounded]="rounded()"></div>'
 })
 class TestComponent {

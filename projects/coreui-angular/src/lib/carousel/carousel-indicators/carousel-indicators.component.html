@@ -1,5 +1,6 @@
 @let tmpl = templates();
-<ng-container *ngTemplateOutlet="tmpl['carouselIndicatorsTemplate'] || defaultCarouselIndicatorsTemplate; context: {$implicit: items, active: active}" />
+@let activeItem = active();
+<ng-container *ngTemplateOutlet="tmpl['carouselIndicatorsTemplate'] || defaultCarouselIndicatorsTemplate; context: {$implicit: items, active: activeItem}" />
 
 <ng-template #defaultCarouselIndicatorsTemplate>
   @for (item of items; track item; let i = $index) {
@@ -7,8 +8,8 @@
       [attr.data-coreui-target]="i"
       type="button"
       (click)="onClick(i)"
-      [class]="{ active: active === i }"
-      [attr.aria-current]="active === i">
+      [class]="{ active: activeItem === i }"
+      [attr.aria-current]="activeItem === i ? 'true' : null">
     </button>
   }
 </ng-template>
