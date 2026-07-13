@@ -6,6 +6,7 @@
 
 - refactor(toast): migrate to native CSS animations
 - refactor: update components to default Angular 22 changeDetectionStrategy
+- chore(eslint.config): use defineConfig()
 - chore(dependencies): update to Angular 22.0.6
   - `@angular-devkit/schematics` @ "22.0.6" (was "22.0.5")
   - `@angular/build` @ "22.0.6" (was "22.0.5")
