@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.7.4` for Angular 22
+
+- refactor(toast): migrate to native CSS animations
+
+---
+
 #### `5.7.3` for Angular 22
 
 - fix(Icon): escape title to prevent XSS via bypassSecurityTrustHtml
