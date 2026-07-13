@@ -6,6 +6,27 @@
 
 - refactor(toast): migrate to native CSS animations
 - refactor: update components to default Angular 22 changeDetectionStrategy
+- chore(dependencies): update to Angular 22.0.6
+  - `@angular-devkit/schematics` @ "22.0.6" (was "22.0.5")
+  - `@angular/build` @ "22.0.6" (was "22.0.5")
+  - `@angular/cli` @ "22.0.6" (was "22.0.5")
+  - `@angular/compiler-cli` @ "22.0.6" (was "22.0.5")
+  - `@angular/language-service` @ "22.0.6" (was "22.0.5")
+  - `@angular/animations` @ "22.0.6" (was "22.0.5")
+  - `@angular/aria` @ "22.0.4" (was "22.0.3")
+  - `@angular/cdk` @ "22.0.4" (was "22.0.3")
+  - `@angular/common` @ "22.0.6" (was "22.0.5")
+  - `@angular/compiler` @ "22.0.6" (was "22.0.5")
+  - `@angular/core` @ "22.0.6" (was "22.0.5")
+  - `@angular/forms` @ "22.0.6" (was "22.0.5")
+  - `@angular/localize` @ "22.0.6" (was "22.0.5")
+  - `@angular/platform-browser` @ "22.0.6" (was "22.0.5")
+  - `@angular/router` @ "22.0.6" (was "22.0.5")
+  - `@types/node` @ "24.13.3" (was "24.13.2")
+  - `angular-eslint` @ "22.1.0" (was "22.0.0")
+  - `eslint` @ "10.7.0" (was "10.6.0")
+  - `prettier` @ "3.9.5" (was "3.9.4")
+  - `typescript-eslint` @ "8.63.0" (was "8.62.1")
 
 ---
 
