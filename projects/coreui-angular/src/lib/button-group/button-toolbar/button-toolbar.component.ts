@@ -11,5 +11,5 @@ export class ButtonToolbarComponent {
    * @type InputSignal<string>
    * @default 'toolbar'
    */
-  role: InputSignal<string> = input('toolbar');
+  readonly role = input('toolbar');
 }

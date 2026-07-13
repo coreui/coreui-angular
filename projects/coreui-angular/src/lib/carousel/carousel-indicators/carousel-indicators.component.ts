@@ -1,4 +1,13 @@
-import { Component, computed, contentChildren, DestroyRef, inject, OnInit, TemplateRef } from '@angular/core';
+import {
+  Component,
+  computed,
+  contentChildren,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  TemplateRef
+} from '@angular/core';
 
 import { CarouselState } from '../carousel-state';
 import { CarouselService } from '../carousel.service';
@@ -11,7 +20,7 @@ import { TemplateIdDirective } from '../../shared';
   exportAs: 'cCarouselIndicators',
   imports: [NgTemplateOutlet],
   templateUrl: './carousel-indicators.component.html',
-  host: { class: 'carousel-indicators' }
+  host: { class: 'carousel-indicators' },
 })
 export class CarouselIndicatorsComponent implements OnInit {
   readonly #destroyRef = inject(DestroyRef);
@@ -19,7 +28,7 @@ export class CarouselIndicatorsComponent implements OnInit {
   readonly #carouselState = inject(CarouselState);
 
   items: (number | undefined)[] = [];
-  active = 0;
+  readonly active = signal(0);
 
   readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
 
@@ -37,14 +46,14 @@ export class CarouselIndicatorsComponent implements OnInit {
     this.#carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextIndex) => {
       this.items = this.#carouselState?.state?.items?.map((item) => item.index) ?? [];
       if ('active' in nextIndex) {
-        this.active = nextIndex.active ?? 0;
+        this.active.set(nextIndex.active ?? 0);
       }
     });
   }
 
   onClick(index: number): void {
-    if (index !== this.active) {
-      const direction = index < this.active ? 'prev' : 'next';
+    if (index !== this.active()) {
+      const direction = index < this.active() ? 'prev' : 'next';
       this.#carouselState.state = { direction, activeItemIndex: index };
     }
   }

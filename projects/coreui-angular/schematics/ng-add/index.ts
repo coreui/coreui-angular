@@ -21,6 +21,7 @@ export function ngAdd(): Rule {
       { name: '@angular/animations', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false },
       { name: '@angular/common', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false },
       { name: '@angular/core', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false },
+      { name: '@angular/forms', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false },
       { name: '@angular/router', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false }
     ];
 
@@ -30,6 +31,12 @@ export function ngAdd(): Rule {
     });
 
     const libraryDeps: NodeDependency[] = [
+      {
+        name: '@angular/aria',
+        type: NodeDependencyType.Default,
+        version: pkg.peerDependencies['@angular/aria'],
+        overwrite: false
+      },
       {
         name: '@angular/cdk',
         type: NodeDependencyType.Default,

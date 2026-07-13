@@ -1,9 +1,11 @@
 @let grpItem = item();
-<a (click)="toggleGroup($event)"
-   [cHtmlAttr]="grpItem?.attributes"
-   class="nav-link nav-group-toggle"
-   href>
-  <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: grpItem}" />
+<a
+  (click)="toggleGroup($event)"
+  [cHtmlAttr]="$safeNavigationMigration(grpItem?.attributes)"
+  class="nav-link nav-group-toggle"
+  href
+>
+  <ng-container *ngTemplateOutlet="iconTemplate; context: { $implicit: grpItem }" />
   <ng-container>{{ grpItem?.name }}</ng-container>
   @if (grpItem?.badge) {
     <span [class]="grpItem | cSidebarNavBadge">{{ grpItem?.badge?.text }}</span>
@@ -24,14 +26,14 @@
   <!--  <i *ngIf="item?.icon" [class]="item | cSidebarNavIcon"></i>-->
   @if (item?.icon) {
     <span class="nav-icon">
-    <span [class]="item.icon ?? ''"></span>
-  </span>
+      <span [class]="item.icon ?? ''"></span>
+    </span>
   }
   @if (item?.iconComponent) {
     <svg
-      [cIcon]="item.iconComponent?.content"
+      [cIcon]="$safeNavigationMigration(item.iconComponent?.content)"
       [customClasses]="item | cSidebarNavIcon"
-      [name]="item.iconComponent?.name"
+      [name]="$safeNavigationMigration(item.iconComponent?.name)"
     />
   }
   @if (!item?.icon && !item?.iconComponent) {

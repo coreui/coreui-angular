@@ -48,10 +48,10 @@ Featured CoreUI for Angular libraries:
 
 [coreui]: https://coreui.io/icons
 [coreui-angular-icons-npm]: https://www.npmjs.com/package/@coreui/icons-angular
-[npm-coreui-icons-angular-v5-ng21]: https://img.shields.io/npm/v/@coreui/icons-angular/v5-ng21?style=flat-square&color=brightgreen
+[npm-coreui-icons-angular-v5-ng22]: https://img.shields.io/npm/v/@coreui/icons-angular/v5-ng22?style=flat-square&color=brightgreen
 [npm-coreui-icons-angular-latest]: https://img.shields.io/npm/v/@coreui/icons-angular/latest?style=flat-square&color=brightgreen
 [npm-coreui-icons-angular-next]: https://img.shields.io/npm/v/@coreui/icons-angular/next?style=flat-square&color=red
-[angular-badge]: https://img.shields.io/badge/angular-^21.2.0-lightgrey.svg?style=flat-square&logo=angular
+[angular-badge]: https://img.shields.io/badge/angular-^22.0.0-lightgrey.svg?style=flat-square&logo=angular
 
 ## `cIcon` directive
 
@@ -72,7 +72,7 @@ For directive description visit [https://coreui.io/angular/docs/](https://coreui
 
 ```shell
 npm install @coreui/icons@3
-npm install @coreui/icons-angular@~5.6
+npm install @coreui/icons-angular@~5.7
 ```
 
 ### Usage

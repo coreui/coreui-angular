@@ -1,4 +1,11 @@
-import { booleanAttribute, Component, DestroyRef, inject, input, linkedSignal } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  linkedSignal
+} from '@angular/core';
 
 import { CarouselService } from '../carousel.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

@@ -1,16 +1,17 @@
 // @ts-check
 const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
+const { defineConfig } = require('eslint/config');
+const tsEslint = require('typescript-eslint');
 const angular = require('angular-eslint');
 
-module.exports = tseslint.config(
+module.exports = defineConfig([
   {
     files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.stylistic,
-      ...angular.configs.tsRecommended
+      tsEslint.configs.recommended,
+      tsEslint.configs.stylistic,
+      angular.configs.tsRecommended
     ],
     processor: angular.processInlineTemplates,
     rules: {
@@ -32,6 +33,7 @@ module.exports = tseslint.config(
       ],
       '@angular-eslint/no-input-rename': 'off',
       '@angular-eslint/no-output-rename': 'warn',
+      '@angular-eslint/prefer-on-push-component-change-detection': 'warn',
       '@typescript-eslint/consistent-indexed-object-style': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-inferrable-types': 'off',
@@ -42,7 +44,7 @@ module.exports = tseslint.config(
   },
   {
     files: ['**/*.html'],
-    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
+    extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
     rules: {
       '@angular-eslint/template/elements-content': 'off',
       '@angular-eslint/template/alt-text': 'off',
@@ -51,4 +53,4 @@ module.exports = tseslint.config(
       '@angular-eslint/template/label-has-associated-control': 'warn'
     }
   }
-);
+]);

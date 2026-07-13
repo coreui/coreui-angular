@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, DebugElement, ElementRef, inject, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,18 +7,19 @@ import { IconSetService } from '../icon-set';
 import { cilList } from '@coreui/icons';
 
 @Component({
-    template: '<svg [cIcon]="this.iconSet.icons.cilList" size="lg" class="test" title="Test"></svg>',
-    imports: [IconDirective],
-    providers: [IconSetService]
+  template: '<svg cIcon name="cilList" size="lg" class="test" title="Test"></svg>',
+  imports: [IconDirective],
+  providers: [IconSetService]
 })
 class TestComponent {
-  iconSet = inject(IconSetService);
+  readonly iconSet = inject(IconSetService);
 
   constructor() {
     this.iconSet.icons = { cilList };
   }
 
-  @ViewChild(IconDirective, { read: IconDirective }) public iconRef!: IconDirective;
+  // @ViewChild(IconDirective, { read: IconDirective }) public iconRef!: IconDirective;
+  readonly iconRef = viewChild(IconDirective);
 }
 
 class MockElementRef extends ElementRef {}
@@ -51,8 +52,9 @@ describe('IconDirective', () => {
   });
 
   it('icon component should render', () => {
-    expect(component.iconRef).toBeTruthy();
-    expect(component.iconRef.code()).toBe(component.iconSet.icons['cilList']);
+    fixture.detectChanges();
+    expect(component.iconRef()).toBeDefined();
+    expect(component.iconRef()?.code()).toBe(component.iconSet.icons['cilList']);
   });
 
   it('icon classes should be applied', () => {
@@ -73,7 +75,7 @@ describe('IconDirective', () => {
 });
 
 @Component({
-  template: '<svg [cIcon]="this.iconSet.icons.cilList" [title]="title"></svg>',
+  template: '<svg cIcon name="cilList" [title]="title"></svg>',
   imports: [IconDirective],
   providers: [IconSetService]
 })

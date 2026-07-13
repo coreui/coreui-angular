@@ -1,4 +1,5 @@
 export { ToastComponent } from './toast/toast.component';
+export { ToastContentComponent } from './toast/toast-content.component';
 export { ToastBodyComponent } from './toast-body/toast-body.component';
 export { ToastHeaderComponent } from './toast-header/toast-header.component';
 export { ToasterComponent, type TToasterPlacement, ToasterPlacement } from './toaster/toaster.component';

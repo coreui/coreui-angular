@@ -6,8 +6,8 @@ import { By } from '@angular/platform-browser';
 class MockElementRef extends ElementRef {}
 
 @Component({
-    template: '<button cButton color="info" size="lg"></button>',
-    imports: [ButtonDirective]
+  template: '<button cButton color="info" size="lg"></button>',
+  imports: [ButtonDirective]
 })
 class TestComponent {}
 

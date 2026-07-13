@@ -3,7 +3,7 @@
 @switch (linkType) {
   @case ('disabled') {
     <a [cHtmlAttr]="linkItem.attributes ?? {}" [class]="linkItem | cSidebarNavLink">
-      <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: linkItem}" />
+      <ng-container *ngTemplateOutlet="iconTemplate; context: { $implicit: linkItem }" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
         <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
@@ -11,8 +11,13 @@
     </a>
   }
   @case ('external') {
-    <a (click)="linkClicked()" [cHtmlAttr]="linkItem.attributes ?? {}" [href]="href" [class]="linkItem | cSidebarNavLink">
-      <ng-container *ngTemplateOutlet="iconTemplate; context: {$implicit: linkItem}" />
+    <a
+      (click)="linkClicked()"
+      [cHtmlAttr]="linkItem.attributes ?? {}"
+      [href]="href"
+      [class]="linkItem | cSidebarNavLink"
+    >
+      <ng-container *ngTemplateOutlet="iconTemplate; context: { $implicit: linkItem }" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
         <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
@@ -20,23 +25,24 @@
     </a>
   }
   @default {
-    <a (click)="linkClicked()"
-       [cHtmlAttr]="linkItem.attributes ?? {}"
-       [fragment]="linkItem.linkProps?.fragment"
-       [class]="linkItem | cSidebarNavLink"
-       [preserveFragment]="linkItem.linkProps?.preserveFragment ?? false"
-       [queryParamsHandling]="linkItem.linkProps?.queryParamsHandling"
-       [queryParams]="linkItem.linkProps?.queryParams ?? null"
-       [replaceUrl]="linkItem.linkProps?.replaceUrl ?? false"
-       [routerLinkActiveOptions]="linkItem.linkProps?.routerLinkActiveOptions ?? { exact: false }"
-       [routerLink]="linkItem.url"
-       [skipLocationChange]="linkItem.linkProps?.skipLocationChange ?? false"
-       [state]="linkItem.linkProps?.state ?? {}"
-       [target]="linkItem.attributes?.['target']"
-       routerLinkActive="active"
+    <a
+      (click)="linkClicked()"
+      [cHtmlAttr]="linkItem.attributes ?? {}"
+      [fragment]="$safeNavigationMigration(linkItem.linkProps?.fragment)"
+      [class]="linkItem | cSidebarNavLink"
+      [preserveFragment]="linkItem.linkProps?.preserveFragment ?? false"
+      [queryParamsHandling]="$safeNavigationMigration(linkItem.linkProps?.queryParamsHandling)"
+      [queryParams]="linkItem.linkProps?.queryParams ?? null"
+      [replaceUrl]="linkItem.linkProps?.replaceUrl ?? false"
+      [routerLinkActiveOptions]="linkItem.linkProps?.routerLinkActiveOptions ?? { exact: false }"
+      [routerLink]="linkItem.url"
+      [skipLocationChange]="linkItem.linkProps?.skipLocationChange ?? false"
+      [state]="linkItem.linkProps?.state ?? {}"
+      [target]="$safeNavigationMigration(linkItem.attributes?.['target'])"
+      routerLinkActive="active"
     >
       <!--    [class.active]="linkActive"-->
-      <ng-container *ngTemplateOutlet="iconTemplate ; context: {$implicit: linkItem}" />
+      <ng-container *ngTemplateOutlet="iconTemplate; context: { $implicit: linkItem }" />
       <c-sidebar-nav-link-content [item]="linkItem" />
       @if (linkItem.badge) {
         <span [class]="linkItem | cSidebarNavBadge">{{ linkItem.badge?.text }}</span>
@@ -53,9 +59,9 @@
   }
   @if (item?.iconComponent) {
     <svg
-      [cIcon]="item.iconComponent?.content"
+      [cIcon]="$safeNavigationMigration(item.iconComponent?.content)"
       [customClasses]="item | cSidebarNavIcon"
-      [name]="item.iconComponent?.name"
+      [name]="$safeNavigationMigration(item.iconComponent?.name)"
     ></svg>
   }
   @if (!item?.icon && !item?.iconComponent) {

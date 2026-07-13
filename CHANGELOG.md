@@ -1,6 +1,131 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
 ---
+
+#### `5.7.4` for Angular 22
+
+- refactor(toast): migrate to native CSS animations
+- refactor: update components to default Angular 22 changeDetectionStrategy
+- chore(eslint.config): use defineConfig()
+- chore(dependencies): update to Angular 22.0.6
+  - `@angular-devkit/schematics` @ "22.0.6" (was "22.0.5")
+  - `@angular/build` @ "22.0.6" (was "22.0.5")
+  - `@angular/cli` @ "22.0.6" (was "22.0.5")
+  - `@angular/compiler-cli` @ "22.0.6" (was "22.0.5")
+  - `@angular/language-service` @ "22.0.6" (was "22.0.5")
+  - `@angular/animations` @ "22.0.6" (was "22.0.5")
+  - `@angular/aria` @ "22.0.4" (was "22.0.3")
+  - `@angular/cdk` @ "22.0.4" (was "22.0.3")
+  - `@angular/common` @ "22.0.6" (was "22.0.5")
+  - `@angular/compiler` @ "22.0.6" (was "22.0.5")
+  - `@angular/core` @ "22.0.6" (was "22.0.5")
+  - `@angular/forms` @ "22.0.6" (was "22.0.5")
+  - `@angular/localize` @ "22.0.6" (was "22.0.5")
+  - `@angular/platform-browser` @ "22.0.6" (was "22.0.5")
+  - `@angular/router` @ "22.0.6" (was "22.0.5")
+  - `@types/node` @ "24.13.3" (was "24.13.2")
+  - `angular-eslint` @ "22.1.0" (was "22.0.0")
+  - `eslint` @ "10.7.0" (was "10.6.0")
+  - `prettier` @ "3.9.5" (was "3.9.4")
+  - `typescript-eslint` @ "8.63.0" (was "8.62.1")
+
+---
+
+#### `5.7.3` for Angular 22
+
+- fix(Icon): escape title to prevent XSS via bypassSecurityTrustHtml
+- docs: add SECURITY.md
+- docs: update CoreUI Icons URL to coreui.io/icons
+- chore(deps): bump the github-actions group with 2 updates
+- chore(dependencies): update to Angular 22.0.5
+  - `@angular-devkit/schematics` @ "22.0.5" (was "22.0.1")
+  - `@angular/build` @ "22.0.5" (was "22.0.1")
+  - `@angular/cli` @ "22.0.5" (was "22.0.1")
+  - `@angular/compiler-cli` @ "22.0.5" (was "22.0.1")
+  - `@angular/language-service` @ "22.0.5" (was "22.0.1")
+  - `@angular/animations` @ "22.0.5" (was "22.0.1")
+  - `@angular/aria` @ "22.0.3" (was "22.0.1")
+  - `@angular/cdk` @ "22.0.3" (was "22.0.1")
+  - `@angular/common` @ "22.0.5" (was "22.0.1")
+  - `@angular/compiler` @ "22.0.5" (was "22.0.1")
+  - `@angular/core` @ "22.0.5" (was "22.0.1")
+  - `@angular/forms` @ "22.0.5" (was "22.0.1")
+  - `@angular/localize` @ "22.0.5" (was "22.0.1")
+  - `@angular/platform-browser` @ "22.0.5" (was "22.0.1")
+  - `@angular/router` @ "22.0.5" (was "22.0.1")
+  - `ng-packagr` @ "22.0.1" (was "22.0.0")
+  - `eslint` @ "10.6.0" (was "10.5.0")
+  - `prettier` @ "3.9.4" (was "3.8.4")
+  - `typescript-eslint` @ "8.62.1" (was "8.61.0")
+
+---
+
+
+#### `5.7.2` for Angular 22
+
+- chore(dependencies): update to Angular 22.0.1
+  - `@angular-devkit/schematics` @ "22.0.1" (was "22.0.0")
+  - `@angular/build` @ "22.0.1" (was "22.0.0")
+  - `@angular/cli` @ "22.0.1" (was "22.0.0")
+  - `@angular/compiler-cli` @ "22.0.1" (was "22.0.0")
+  - `@angular/language-service` @ "22.0.1" (was "22.0.0")
+  - `@angular/animations` @ "22.0.1" (was "22.0.0")
+  - `@angular/aria` @ "22.0.1" (was "22.0.0")
+  - `@angular/cdk` @ "22.0.1" (was "22.0.0")
+  - `@angular/common` @ "22.0.1" (was "22.0.0")
+  - `@angular/compiler` @ "22.0.1" (was "22.0.0")
+  - `@angular/core` @ "22.0.1" (was "22.0.0")
+  - `@angular/forms` @ "22.0.1" (was "22.0.0")
+  - `@angular/localize` @ "22.0.1" (was "22.0.0")
+  - `@angular/platform-browser` @ "22.0.1" (was "22.0.0")
+  - `@angular/router` @ "22.0.1" (was "22.0.0")
+  - `@types/node` @ "24.13.2" (was "24.13.1")
+  - `eslint` @ "10.5.0" (was "10.4.1")
+
+---
+
+#### `5.7.1` for Angular 22
+
+- chore(dependencies): add angular aria package
+- chore: minor config updates and cleanups
+
+---
+
+#### `5.7.0` for Angular 22
+
+- chore(dependencies): update to `Angular 22.0.0`
+  - `@angular-devkit/schematics` @ "22.0.0" (was "21.2.12")
+  - `@angular/build` @ "22.0.0" (was "21.2.12")
+  - `@angular/cli` @ "22.0.0" (was "21.2.12")
+  - `@angular/compiler-cli` @ "22.0.0" (was "21.2.14")
+  - `@angular/language-service` @ "22.0.0" (was "21.2.14")
+  - `@angular/animations` @ "22.0.0" (was "21.2.14")
+  - `@angular/cdk` @ "22.0.0" (was "21.2.12")
+  - `@angular/common` @ "22.0.0" (was "21.2.14")
+  - `@angular/compiler` @ "22.0.0" (was "21.2.14")
+  - `@angular/core` @ "22.0.0" (was "21.2.14")
+  - `@angular/forms` @ "22.0.0" (was "21.2.14")
+  - `@angular/localize` @ "22.0.0" (was "21.2.14")
+  - `@angular/platform-browser` @ "22.0.0" (was "21.2.14")
+  - `@angular/router` @ "22.0.0" (was "21.2.14")
+  - `@types/node` @ "24.13.1" (was "24.12.4")
+  - `angular-eslint` @ "22.0.0" (was "21.4.0")
+  - `eslint` @ "10.4.1" (was "10.4.0")
+  - `jasmine-core` @ "6.3.0" (was "6.2.0")
+  - `native-copyfiles` @ "2.0.3" (was "2.0.1")
+  - `ng-packagr` @ "22.0.0" (was "21.2.3")
+  - `typescript` @ "6.0.3" (was "5.9.3")
+  - `typescript-eslint` @ "8.61.0" (was "8.59.4")
+- chore: add 'istanbul-lib-instrument' to 'devDependencies' for Karma unit testing
+  - `istanbul-lib-instrument` @ "6.0.3"
+- chore: add `ChangeDetectionStrategy.Eager` to applicable components
+- chore(tsconfig): disable the `nullishCoalescingNotNullable` & `optionalChainNotNullable` extended diagnostics
+- chore(dependencies): tmp <0.2.6 vulnerability
+- chore(tsconfig): migrate baseUrl to TS6
+- chore(tsconfig): migrate rootDir to TS6
+- chore(schematics): migrate `module` and `moduleResolution` to `nodenext` 
+
+---
 #### `5.6.25`
 
 - fix(Icon): escape title to prevent XSS via bypassSecurityTrustHtml

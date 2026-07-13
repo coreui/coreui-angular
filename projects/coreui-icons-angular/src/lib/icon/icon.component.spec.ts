@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, inject, ViewChild } from '@angular/core';
+import { Component, DebugElement, inject, viewChild } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { cilList } from '@coreui/icons';
@@ -15,7 +15,8 @@ import { IconComponent } from './icon.component';
 class TestComponent {
   iconSet = inject(IconSetService);
 
-  @ViewChild('icon', { read: IconComponent }) iconRef!: IconComponent;
+  // @ViewChild('icon', { read: IconComponent }) iconRef!: IconComponent;
+  readonly iconRef = viewChild(IconComponent);
 
   constructor() {
     this.iconSet.icons = { cilList };
@@ -49,9 +50,9 @@ describe('IconComponent', () => {
     expect(component.iconSet).toBeTruthy();
   });
   it('icon component should render', () => {
-    expect(component.iconRef).toBeTruthy();
-    expect(component.iconRef.name()).toBe('cilList');
-    expect(component.iconRef.svgElementRef).toBeTruthy();
+    expect(component.iconRef()).toBeTruthy();
+    expect(component.iconRef()?.name()).toBe('cilList');
+    expect(component.iconRef()?.svgElementRef).toBeTruthy();
   });
   it('icon classes should be applied', () => {
     expect(debugEl.nativeElement).toBeTruthy();

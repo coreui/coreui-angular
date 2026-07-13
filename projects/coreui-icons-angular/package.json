@@ -1,6 +1,6 @@
 {
   "name": "@coreui/icons-angular",
-  "version": "5.6.25",
+  "version": "5.7.4",
   "description": "CoreUI Icons Angular component and service",
   "copyright": "Copyright 2026 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -25,9 +25,9 @@
     "url": "https://github.com/coreui/coreui-angular/issues"
   },
   "peerDependencies": {
-    "@angular/common": "^21.2.17",
-    "@angular/core": "^21.2.17",
-    "@angular/platform-browser": "^21.2.17"
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

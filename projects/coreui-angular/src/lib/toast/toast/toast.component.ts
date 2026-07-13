@@ -1,8 +1,10 @@
 import {
+  AnimationCallbackEvent,
   booleanAttribute,
   ChangeDetectorRef,
   Component,
   computed,
+  DestroyRef,
   effect,
   ElementRef,
   inject,
@@ -12,51 +14,43 @@ import {
   OnDestroy,
   OnInit,
   output,
-  Renderer2
+  Renderer2,
+  signal,
+  ViewEncapsulation
 } from '@angular/core';
-
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { skipWhile } from 'rxjs';
 
 import { Colors } from '../../coreui.types';
 import { ToasterService } from '../toaster/toaster.service';
 import { TToasterPlacement } from '../toaster/toaster.component';
-
-type AnimateType = 'hide' | 'show';
+import { ToastContentComponent } from './toast-content.component';
 
 @Component({
   selector: 'c-toast',
-  template: '<ng-content />',
+  template: `
+    <c-toast-content>
+      <ng-content />
+    </c-toast-content>
+  `,
   styleUrls: ['./toast.component.scss'],
   exportAs: 'cToast',
-  animations: [
-    trigger('fadeInOut', [
-      state('show', style({ opacity: 1, height: '*', padding: '*', border: '*', margin: '*' })),
-      state('hide', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
-      state('void', style({ opacity: 0, height: 0, padding: 0, border: 0, margin: 0 })),
-      transition('show => hide', [animate('{{ time }} {{ easing }}')], {
-        params: { time: '300ms', easing: 'ease-out' }
-      }),
-      transition('hide => show', [animate('{{ time }} {{ easing }}')], {
-        params: { time: '300ms', easing: 'ease-in' }
-      }),
-      transition('show => void', [animate('{{ time }} {{ easing }}')], {
-        params: { time: '300ms', easing: 'ease-out' }
-      }),
-      transition('void => show', [animate('{{ time }} {{ easing }}')], {
-        params: { time: '300ms', easing: 'ease-in' }
-      })
-    ])
-  ],
   host: {
-    class: 'toast show',
+    class: 'toast',
+    '[attr.role]': 'role() || null',
+    '[aria-atomic]': 'visible || null',
     '[class]': 'hostClasses()',
+    '[inert]': '!visible || null',
+    '(animate.enter)': 'handleEnter($event)',
+    '(animate.leave)': 'handleLeave($event)',
     '(mouseover)': 'clearTimer()',
-    '(mouseout)': 'setTimer()',
-    '[@fadeInOut]': 'animateType',
-    '[@.disabled]': 'animationDisabled()'
-  }
+    '(mouseout)': 'setTimer()'
+  },
+  encapsulation: ViewEncapsulation.None,
+  imports: [ToastContentComponent]
 })
 export class ToastComponent implements OnInit, OnDestroy {
+  readonly destroyRef = inject(DestroyRef);
   readonly changeDetectorRef = inject(ChangeDetectorRef);
   readonly hostElement = inject(ElementRef);
   readonly renderer = inject(Renderer2);
@@ -94,6 +88,12 @@ export class ToastComponent implements OnInit, OnDestroy {
   readonly fade = input(true);
 
   /**
+   * ARIA role attribute.
+   * @return string
+   */
+  readonly role = input('alert');
+
+  /**
    * Toggle the visibility of component.
    * @return boolean
    */
@@ -101,10 +101,11 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   readonly #visible = linkedSignal(this.visibleInput);
 
+  readonly #visible$ = toObservable(this.#visible);
+
   readonly #visibleEffect = effect(() => {
-    const newValue = this.#visible();
-    newValue ? this.setTimer() : this.clearTimer();
-    this.visibleChange?.emit(newValue);
+    const visible = this.#visible();
+    visible ? this.setTimer() : this.clearTimer();
     this.changeDetectorRef.markForCheck();
   });
 
@@ -149,21 +150,15 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck();
   }
 
-  readonly animationDisabled = computed(() => {
-    return !this.fade();
-  });
-
-  get animateType(): AnimateType {
-    return this.visible ? 'show' : 'hide';
-  }
-
   readonly hostClasses = computed(() => {
     const color = this.color();
     return {
       toast: true,
-      show: true,
-      [`bg-${color}`]: !!color,
-      'border-0': !!color
+      show: this.#visible() && this.#rendered(),
+      [`text-bg-${color}`]: !!color,
+      // [`bg-${color}`]: !!color,
+      'border-0': !!color,
+      fade: this.fade()
     } as Record<string, boolean>;
   });
 
@@ -177,6 +172,16 @@ export class ToastComponent implements OnInit, OnDestroy {
       this.clearTimer();
       this.setTimer();
     }
+
+    // skip the first emission if the initial value is false to prevent emitting visibleChange on init
+    this.#visible$
+      .pipe(
+        skipWhile((value, index) => !value && index === 0),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((visible) => {
+        this.visibleChange.emit(visible);
+      });
   }
 
   ngOnDestroy(): void {
@@ -222,5 +227,25 @@ export class ToastComponent implements OnInit, OnDestroy {
     clearTimeout(this.clockTimerId);
     clearInterval(this.clockId);
     this.clockId = undefined;
+  }
+
+  readonly #rendered = signal(false);
+
+  protected handleEnter($event: AnimationCallbackEvent) {
+    // Check if the component is inserted dynamically / conditionally - the class '.ng-star-inserted' is added to the host element.
+    // If the class is present, set the visible state true to trigger the animation.
+    const inserted = this.hostElement.nativeElement.classList.contains('ng-star-inserted');
+    if (inserted) {
+      this.#visible.set(true);
+    }
+    setTimeout(() => {
+      this.#rendered.set(true);
+    });
+  }
+
+  protected handleLeave($event: AnimationCallbackEvent) {
+    this.#visible.set(false);
+    // component is destroyed already, remove the class
+    this.renderer.removeClass(this.hostElement.nativeElement, 'show');
   }
 }

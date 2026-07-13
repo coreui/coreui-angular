@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -34,6 +34,7 @@ export class SidebarNavLinkContentComponent {
   selector: 'c-sidebar-nav-link',
   templateUrl: './sidebar-nav-link.component.html',
   providers: [SidebarNavHelper],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
     HtmlAttributesDirective,

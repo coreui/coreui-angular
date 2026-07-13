@@ -1,4 +1,13 @@
-import { booleanAttribute, ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  inject,
+  Input,
+  OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TabContentComponent } from '../tab-content/tab-content.component';
@@ -9,6 +18,7 @@ import { ITabContentState, TabService } from '../tab.service';
   template: '<ng-content />',
   styleUrls: ['./tab-pane.component.scss'],
   exportAs: 'cTabPane',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { class: 'tab-pane' }
 })
 export class TabPaneComponent implements OnDestroy {

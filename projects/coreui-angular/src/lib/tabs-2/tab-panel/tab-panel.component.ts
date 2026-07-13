@@ -1,16 +1,5 @@
 import { animate, animateChild, AnimationEvent, query, state, style, transition, trigger } from '@angular/animations';
-import {
-  Component,
-  computed,
-  inject,
-  input,
-  InputSignal,
-  InputSignalWithTransform,
-  numberAttribute,
-  output,
-  OutputEmitterRef,
-  signal
-} from '@angular/core';
+import { Component, computed, inject, input, numberAttribute, output, OutputEmitterRef, signal } from '@angular/core';
 import { TabsService } from '../tabs.service';
 
 type AnimateType = 'hide' | 'show';
@@ -47,7 +36,7 @@ export class TabPanelComponent {
    * @type string
    * @default undefined
    */
-  readonly ariaLabelledBy: InputSignal<string | undefined> = input<string | undefined>(undefined, {
+  readonly ariaLabelledBy = input<string | undefined>(undefined, {
     alias: 'aria-labelledby'
   });
 
@@ -56,41 +45,41 @@ export class TabPanelComponent {
    * @type string
    * @default undefined
    */
-  readonly id: InputSignal<string | undefined> = input<string>();
+  readonly id = input<string>();
 
   /**
    * Item key.
    * @type string | number
    * @required
    */
-  readonly itemKey: InputSignal<string | number> = input.required();
+  readonly itemKey = input.required<string | number>();
 
   /**
    * Element role.
    * @type string
    * @default 'tabpanel'
    */
-  readonly role: InputSignal<string> = input('tabpanel');
+  readonly role = input('tabpanel');
 
   /**
    * tabindex attribute.
    * @type number
    * @default 0
    */
-  readonly tabindex: InputSignalWithTransform<number, unknown> = input(0, { transform: numberAttribute });
+  readonly tabindex = input(0, { transform: numberAttribute });
 
   /**
    * Enable fade in transition.
    * @type boolean
    * @default true
    */
-  readonly transition: InputSignal<boolean> = input(true);
+  readonly transition = input(true);
 
   /**
    * visible change output
    * @type OutputEmitterRef<VisibleChangeEvent>
    */
-  readonly visibleChange: OutputEmitterRef<VisibleChangeEvent> = output<VisibleChangeEvent>();
+  readonly visibleChange = output<VisibleChangeEvent>();
 
   readonly show = signal(false);
 

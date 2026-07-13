@@ -3,9 +3,9 @@
     @if (breadcrumb?.label && (breadcrumb?.url?.slice(-1) === '/' || last)) {
       <c-breadcrumb-item
         [active]="last"
-        [url]="breadcrumb?.url"
-        [attribs]="breadcrumb?.attributes"
-        [linkProps]="breadcrumb?.linkProps"
+        [url]="$safeNavigationMigration(breadcrumb?.url)"
+        [attribs]="$safeNavigationMigration(breadcrumb?.attributes)"
+        [linkProps]="$safeNavigationMigration(breadcrumb?.linkProps)"
       >
         {{ breadcrumb?.label }}
       </c-breadcrumb-item>

@@ -14,7 +14,8 @@ import {
   Renderer2,
   signal,
   SimpleChanges,
-  viewChild
+  viewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -65,6 +66,7 @@ import { IconDirective } from '@coreui/icons-angular';
       transition('open <=> closed', [animate('.15s ease')])
     ])
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class]': 'hostClasses()'
   }
@@ -204,6 +206,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     '[class]': 'hostClasses()',
     '[attr.role]': 'role()'
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [SidebarNavGroupService]
 })
 export class SidebarNavComponent implements OnChanges {
