@@ -1,4 +1,5 @@
 import { A11yModule } from '@angular/cdk/a11y';
+import { BooleanInput } from '@angular/cdk/coercion';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -47,6 +48,12 @@ let nextId = 0;
   }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
+  // Treats input as boolean value, even if provided as string or other types. Uses angular coercion mechanism
+  static ngAcceptInputType_ariaModal: BooleanInput;
+  static ngAcceptInputType_keyboard: BooleanInput;
+  static ngAcceptInputType_scroll: BooleanInput;
+  static ngAcceptInputType_visible: BooleanInput;
+
   readonly #document = inject<Document>(DOCUMENT);
   readonly #platformId = inject(PLATFORM_ID);
   readonly #renderer = inject(Renderer2);
