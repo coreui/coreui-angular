@@ -9,14 +9,17 @@ import {
   ElementRef,
   inject,
   input,
+  InputSignal,
   linkedSignal,
   NgZone,
   numberAttribute,
   OnDestroy,
   output,
   Renderer2,
+  Signal,
   untracked,
-  viewChild
+  viewChild,
+  WritableSignal
 } from '@angular/core';
 
 import { merge } from 'lodash-es';
@@ -92,16 +95,19 @@ export class ChartjsComponent implements OnDestroy {
    * @returns ChartOptions | undefined
    * @default {}
    */
-  readonly optionsInput = input<ChartOptions | undefined>({}, { alias: 'options' });
+  readonly optionsInput: InputSignal<ChartOptions | undefined> = input<ChartOptions | undefined>(
+    {},
+    { alias: 'options' }
+  );
 
-  readonly options = linkedSignal(this.optionsInput);
+  readonly options: WritableSignal<ChartOptions | undefined> = linkedSignal(this.optionsInput);
 
   /**
    * The plugins array that is passed into the Chart.js chart
    * @returns Plugin[]
    * @default []
    */
-  readonly plugins = input<Plugin[]>([]);
+  readonly plugins: InputSignal<Plugin[]> = input<Plugin[]>([]);
 
   /**
    * If true, will tear down and redraw chart on all updates.
@@ -300,7 +306,7 @@ export class ChartjsComponent implements OnDestroy {
     };
   });
 
-  readonly chartOptions = computed<ChartOptions>(() => this.options() ?? {});
+  readonly chartOptions: Signal<ChartOptions> = computed<ChartOptions>(() => this.options() ?? {});
 
   readonly chartConfig = computed<ChartConfiguration>(() => {
     this.chartCustomTooltips();
