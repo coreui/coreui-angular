@@ -2,6 +2,31 @@
 
 ---
 
+#### `5.7.6` for Angular 22
+
+- refactor(tabs): remove ChangeDetectionStrategy.Eager
+- refactor(offcanvas): add ngAcceptInputType for boolean inputs
+- fix(chartjs): TS2883: The inferred type cannot be named without a reference to 'DeepPartialObject'. This is likely not portable. A type annotation is necessary.
+- chore(dependencies): update to Angular 22.0.7
+  - `@angular-devkit/schematics` @ "22.0.7" (was "22.0.6")
+  - `@angular/build` @ "22.0.7" (was "22.0.6")
+  - `@angular/cli` @ "22.0.7" (was "22.0.6")
+  - `@angular/compiler-cli` @ "22.0.7" (was "22.0.6")
+  - `@angular/language-service` @ "22.0.7" (was "22.0.6")
+  - `@angular/animations` @ "22.0.7" (was "22.0.6")
+  - `@angular/aria` @ "22.0.5" (was "22.0.4")
+  - `@angular/cdk` @ "22.0.5" (was "22.0.4")
+  - `@angular/common` @ "22.0.7" (was "22.0.6")
+  - `@angular/compiler` @ "22.0.7" (was "22.0.6")
+  - `@angular/core` @ "22.0.7" (was "22.0.6")
+  - `@angular/forms` @ "22.0.7" (was "22.0.6")
+  - `@angular/localize` @ "22.0.7" (was "22.0.6")
+  - `@angular/platform-browser` @ "22.0.7" (was "22.0.6")
+  - `@angular/router` @ "22.0.7" (was "22.0.6")
+  - `typescript-eslint` @ "8.64.0" (was "8.63.0")
+
+---
+
 #### `5.7.4` for Angular 22
 
 - refactor(toast): migrate to native CSS animations
