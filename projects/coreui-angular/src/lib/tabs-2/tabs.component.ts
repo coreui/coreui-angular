@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, model, ModelSignal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, inject, input, model, ModelSignal } from '@angular/core';
 import { TabsService } from './tabs.service';
 
 let nextId = 0;
@@ -10,7 +10,6 @@ let nextId = 0;
   template: '<ng-content />',
   styleUrl: './tabs.component.scss',
   providers: [TabsService],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[id]': 'id()',
     class: 'tabs'
