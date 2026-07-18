@@ -9,6 +9,9 @@ on:
     branches:
       - main
       - v5.*
+permissions:
+  contents: read
+
 jobs:
   build:
 
