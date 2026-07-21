@@ -45,7 +45,6 @@ export abstract class DropdownToken {}
   }
 })
 export class DropdownToggleDirective implements AfterViewInit {
-  // injections
   readonly #destroyRef = inject(DestroyRef);
   public readonly elementRef = inject(ElementRef);
   #dropdownService = inject(DropdownService);
@@ -66,7 +65,7 @@ export class DropdownToggleDirective implements AfterViewInit {
   readonly disabled = input<boolean, unknown>(false, { transform: booleanAttribute });
 
   /**
-   * Enables pseudo element caret on toggler.
+   * Enables pseudo-element caret on toggler.
    * @return boolean
    */
   readonly caret = input(true);
@@ -106,9 +105,14 @@ export class DropdownToggleDirective implements AfterViewInit {
     }
     if (this.dropdown) {
       const dropdown = <DropdownComponent>this.dropdown;
-      dropdown?.visibleChange?.subscribe((visible) => {
+      const subscription = dropdown?.visibleChange?.subscribe((visible) => {
         this.#ariaExpanded.set(visible);
       });
+      if (subscription) {
+        this.#destroyRef.onDestroy(() => {
+          subscription.unsubscribe();
+        });
+      }
     }
   }
 }
