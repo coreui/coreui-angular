@@ -1,19 +1,17 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import {
-  AfterContentInit,
   afterEveryRender,
   Component,
   computed,
   contentChild,
   DOCUMENT,
+  effect,
   ElementRef,
   inject,
   input,
-  OnDestroy,
   signal
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { Subscription } from 'rxjs';
 
 import { CollapseDirective } from '../collapse';
 import { Colors } from '../coreui.types';
@@ -29,7 +27,7 @@ import { ThemeDirective } from '../shared';
   hostDirectives: [{ directive: ThemeDirective, inputs: ['colorScheme'] }],
   host: { '[class]': 'hostClasses()', '[attr.role]': 'role()' }
 })
-export class NavbarComponent implements AfterContentInit, OnDestroy {
+export class NavbarComponent {
   readonly #breakpointObserver = inject(BreakpointObserver);
   readonly #document = inject(DOCUMENT);
   readonly #hostElement = inject(ElementRef);
@@ -100,33 +98,26 @@ export class NavbarComponent implements AfterContentInit, OnDestroy {
     return false;
   });
 
-  #observer!: Subscription;
-
-  ngAfterContentInit(): void {
+  readonly #breakpointEffect = effect((onCleanup) => {
     const breakpoint = this.breakpoint();
-    if (breakpoint) {
-      const onBreakpoint = `(min-width: ${breakpoint})`;
-      this.#observer = this.#breakpointObserver
-        .observe([onBreakpoint])
-        .pipe()
-        .subscribe((result) => {
-          const collapse = this.collapse();
-          if (collapse) {
-            const animate = collapse.animate();
-            collapse.animate.set(false);
-            collapse.toggle(false);
-            setTimeout(() => {
-              collapse.toggle(result.matches);
-              setTimeout(() => {
-                collapse.animate.set(animate);
-              });
-            });
-          }
-        });
+    if (!breakpoint) {
+      return;
     }
-  }
 
-  ngOnDestroy(): void {
-    this.#observer?.unsubscribe();
-  }
+    const subscription = this.#breakpointObserver.observe([`(min-width: ${breakpoint})`]).subscribe((result) => {
+      const collapse = this.collapse();
+      if (!collapse) {
+        return;
+      }
+      const animate = collapse.animate();
+      collapse.animate.set(false);
+      collapse.toggle(false);
+      setTimeout(() => {
+        collapse.toggle(result.matches);
+        setTimeout(() => collapse.animate.set(animate));
+      });
+    });
+
+    onCleanup(() => subscription.unsubscribe());
+  });
 }
