@@ -2,6 +2,16 @@
 
 ---
 
+#### `5.7.8` for Angular 22
+
+- fix(navbar): responsive auto-collapse (expand breakpoint) never activates - closes #269
+- test(navbar): add BreakpointObserver integration tests
+- fix(dropdown-toggle): visibleChange subscription not torn down in some cases (leak on destroy) - closes #270
+- ci: pin GitHub Actions to full commit SHAs, bump to current versions
+- ci: set least-privilege permissions (contents: read) on check workflows
+
+---
+
 #### `5.7.6` for Angular 22
 
 - refactor(tabs): remove ChangeDetectionStrategy.Eager
