@@ -53,7 +53,7 @@ describe('ModalComponent', () => {
     fixture.componentRef.setInput('visible', true);
     fixture.detectChanges();
     tick(300);
-    const event = new KeyboardEvent('keyup', { key: 'Escape' });
+    const event = new KeyboardEvent('keydown', { key: 'Escape' });
     document.dispatchEvent(event);
 
     expect(component.visible()).toBe(false);
@@ -65,7 +65,7 @@ describe('ModalComponent', () => {
     fixture.detectChanges();
     tick(300);
     expect(component.visible()).toBe(true);
-    const event = new KeyboardEvent('keyup', { key: 'Escape' });
+    const event = new KeyboardEvent('keydown', { key: 'Escape' });
     document.dispatchEvent(event);
     tick(300);
     expect(component.visible()).toBe(true);

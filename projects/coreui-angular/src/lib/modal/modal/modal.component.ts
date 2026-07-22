@@ -43,7 +43,7 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
     '[attr.tabindex]': '-1',
     '(mousedown)': 'onMouseDownHandler($event)',
     '(click)': 'onClickHandler($event)',
-    '(document:keyup)': 'onKeyUpHandler($event)'
+    '(document:keydown)': 'onKeyDownHandler($event)'
   }
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -253,7 +253,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  onKeyUpHandler(event: KeyboardEvent): void {
+  onKeyDownHandler(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.keyboard() && this.visible()) {
       if (this.backdrop() === 'static') {
         this.setStaticBackdrop();
