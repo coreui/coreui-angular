@@ -96,4 +96,77 @@ describe('TooltipDirective', () => {
     tick(500);
     expect(document.querySelector('.tooltip.show')).toBeNull();
   }));
+
+  it('should close the tooltip when Escape is pressed while visible', fakeAsync(() => {
+    component.visible.set(true);
+    fixture.detectChanges();
+    tick(500);
+    expect(component.visible()).toBeTrue();
+    expect(document.querySelector('.tooltip.show')).toBeTruthy();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    fixture.detectChanges();
+    tick(500);
+
+    expect(component.visible()).toBeFalse();
+    expect(document.querySelector('.tooltip.show')).toBeNull();
+  }));
+
+  it('should not close the tooltip when a non-Escape key is pressed', fakeAsync(() => {
+    component.visible.set(true);
+    fixture.detectChanges();
+    tick(500);
+    expect(document.querySelector('.tooltip.show')).toBeTruthy();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+    fixture.detectChanges();
+    tick(500);
+
+    expect(component.visible()).toBeTrue();
+    expect(document.querySelector('.tooltip.show')).toBeTruthy();
+  }));
+
+  it('should add the document keydown listener while visible and remove it when hidden', fakeAsync(() => {
+    const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+    const removeSpy = spyOn(document, 'removeEventListener').and.callThrough();
+
+    component.visible.set(true);
+    fixture.detectChanges();
+    tick(500);
+
+    expect(addSpy).toHaveBeenCalledWith('keydown', jasmine.any(Function), true);
+
+    component.visible.set(false);
+    fixture.detectChanges();
+    tick(500);
+
+    expect(removeSpy).toHaveBeenCalledWith('keydown', jasmine.any(Function), true);
+
+    // no lingering listener: pressing Escape after hiding does nothing
+    removeSpy.calls.reset();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    fixture.detectChanges();
+    tick(500);
+    expect(component.visible()).toBeFalse();
+  }));
+
+  it('should remove the document keydown listener when the directive is destroyed while visible', fakeAsync(() => {
+    component.visible.set(true);
+    fixture.detectChanges();
+    tick(500);
+
+    const removeSpy = spyOn(document, 'removeEventListener').and.callThrough();
+
+    fixture.destroy();
+
+    expect(removeSpy).toHaveBeenCalledWith('keydown', jasmine.any(Function), true);
+
+    // the handler is gone: an Escape keypress no longer flips the model
+    component.visible.set(true);
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    tick(500);
+    expect(component.visible()).toBeTrue();
+  }));
 });
