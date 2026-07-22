@@ -2,6 +2,16 @@
 
 ---
 
+#### `5.7.9` for Angular 22
+
+- fix(tooltip): dismiss tooltip on `Escape` key (WCAG 1.4.13) - closes #268
+- test(tooltip): dismiss tooltip on `Escape` key
+- fix(popover): dismiss popover on `Escape` key (WCAG 1.4.13) - closes #268
+- test(popover): dismiss popover on `Escape` key
+- fix(modal): dismiss modal on `Escape` `keydown`, ensuring consistent handling of the `Escape` key
+
+---
+
 #### `5.7.8` for Angular 22
 
 - fix(navbar): responsive auto-collapse (expand breakpoint) never activates - closes #269
