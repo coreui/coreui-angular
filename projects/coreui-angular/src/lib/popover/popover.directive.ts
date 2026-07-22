@@ -111,6 +111,28 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
     }
   });
 
+  readonly #handleEscapeKey = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape') {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    this.visible.set(false);
+  };
+
+  readonly #escapeEffect = effect((onCleanup) => {
+    if (!this.visible()) {
+      return;
+    }
+
+    const useCapture = true;
+
+    this.#document.addEventListener('keydown', this.#handleEscapeKey, useCapture);
+    onCleanup(() => {
+      this.#document.removeEventListener('keydown', this.#handleEscapeKey, useCapture);
+    });
+  });
+
   get ariaDescribedBy(): string | null {
     return this.tooltipId ? this.tooltipId : null;
   }
