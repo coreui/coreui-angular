@@ -217,6 +217,11 @@ export class SidebarNavComponent implements OnChanges {
   readonly #hostElement = inject(ElementRef);
   readonly #sidebarService = inject(SidebarService);
 
+  /**
+   * Configuration object for sidebar-nav.
+   * @type INavData[]
+   * @default []
+   */
   readonly navItems = input<INavData[] | undefined>([]);
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
   readonly groupItems = input<boolean, unknown>(undefined, { transform: booleanAttribute });

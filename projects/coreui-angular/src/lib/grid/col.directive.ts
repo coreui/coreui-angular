@@ -28,6 +28,11 @@ export class ColDirective {
    * @return { 'auto' | number |  boolean }
    */
   readonly cCol = input(false, { transform: this.coerceInput });
+
+  /**
+   * The number of columns on extra small devices (<576px).
+   * @return { 'auto' | number | boolean }
+   */
   readonly xs = input(false, { transform: this.coerceInput });
 
   /**
@@ -71,7 +76,14 @@ export class ColDirective {
     } as Record<string, any>;
   });
 
+  /**
+   * Offset grid columns.
+   */
   readonly offset = input<ColOffsetType>();
+
+  /**
+   * Controls the visual order of your columns. Includes support for `1` through `5` across all breakpoints.
+   */
   readonly order = input<ColOrderType>();
 
   readonly hostClasses = computed(() => {

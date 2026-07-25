@@ -19,6 +19,11 @@ export class ThemeDirective {
     colorScheme ? this.setTheme(colorScheme) : this.unsetTheme();
   });
 
+  /**
+   * Add darker controls, indicators and captions.
+   * @type boolean
+   * @default false
+   */
   readonly dark = input(false, { transform: booleanAttribute });
 
   readonly #darkChange = effect(() => {
