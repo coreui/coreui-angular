@@ -87,6 +87,13 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   readonly item = input<INavData>();
+
+  /**
+   * Determines when an inactive `c-sidebar-nav-group` closes.
+   * - `path`: on an active route change only
+   * - `close`: when another group is clicked
+   * - `none`: never, the group stays open
+   */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
   readonly show = input<boolean>();
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
@@ -223,6 +230,13 @@ export class SidebarNavComponent implements OnChanges {
    * @default []
    */
   readonly navItems = input<INavData[] | undefined>([]);
+
+  /**
+   * Determines when an inactive `c-sidebar-nav-group` closes.
+   * - `path`: on an active route change only
+   * - `close`: when another group is clicked
+   * - `none`: never, the group stays open
+   */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
   readonly groupItems = input<boolean, unknown>(undefined, { transform: booleanAttribute });
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
