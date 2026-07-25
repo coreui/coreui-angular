@@ -12,6 +12,10 @@ import type { ToastComponent } from './toast/toast.component';
 export class ToastCloseDirective {
   readonly #toasterService = inject(ToasterService);
 
+  /**
+   * Toast to close.
+   * @type ToastComponent
+   */
   readonly cToastClose = input<ToastComponent>();
 
   toggleOpen($event: MouseEvent): void {

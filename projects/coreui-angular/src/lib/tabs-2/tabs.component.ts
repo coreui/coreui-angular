@@ -29,6 +29,12 @@ export class TabsComponent {
    * @type string
    */
   tabsId = `tabs-${nextId++}`;
+
+  /**
+   * HTML id attribute.
+   * @type string
+   * @default `tabs-{n}`
+   */
   readonly id = input<string>(this.tabsId);
 
   readonly #activeItemEffect = effect(() => {

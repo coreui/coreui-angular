@@ -91,6 +91,11 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
    * @since 4.3.10
    */
   readonly responsive = input<(boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl') | undefined>(true);
+
+  /**
+   * Html id attribute, required for programmatic visibility change.
+   * @type string
+   */
   readonly id = input(`offcanvas-${this.placement()}-${nextId++}`);
 
   /**

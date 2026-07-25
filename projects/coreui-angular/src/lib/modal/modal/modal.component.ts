@@ -88,6 +88,10 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   readonly keyboard = input(true, { transform: booleanAttribute });
 
+  /**
+   * Html id attribute, required for programmatic visibility change.
+   * @type string
+   */
   readonly attrId = input<string>(undefined, { alias: 'id' });
 
   get id() {

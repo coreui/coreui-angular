@@ -53,6 +53,10 @@ export class NavbarComponent {
    */
   readonly placement = input<'fixed-top' | 'fixed-bottom' | 'sticky-top'>();
 
+  /**
+   * HTML element role.
+   * @type string
+   */
   readonly role = input('navigation');
 
   readonly collapse = contentChild(CollapseDirective);
