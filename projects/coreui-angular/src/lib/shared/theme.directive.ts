@@ -20,8 +20,8 @@ export class ThemeDirective {
   });
 
   /**
-   * Add darker controls, indicators and captions.
-   * @type boolean
+   * Add darker controls, indicators, and captions.
+   * @return boolean
    * @default false
    */
   readonly dark = input(false, { transform: booleanAttribute });

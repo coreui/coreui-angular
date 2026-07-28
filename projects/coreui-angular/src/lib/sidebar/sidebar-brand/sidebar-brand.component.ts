@@ -10,7 +10,6 @@ import { HtmlAttributesDirective } from '../../shared';
   host: { class: 'sidebar-brand' }
 })
 export class SidebarBrandComponent {
-
   /**
    * Image for the wide sidebar.
    */
@@ -22,7 +21,7 @@ export class SidebarBrandComponent {
   readonly brandNarrow = input<any>();
 
   /**
-   * Router link for the brand images.
+   * Router link for the sidebar brand.
    */
   readonly routerLink = input<string | any[] | UrlTree | null | undefined>();
 

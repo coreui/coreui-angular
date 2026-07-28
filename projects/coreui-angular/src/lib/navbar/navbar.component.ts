@@ -55,7 +55,7 @@ export class NavbarComponent {
 
   /**
    * HTML element role.
-   * @type string
+   * @return string
    */
   readonly role = input('navigation');
 

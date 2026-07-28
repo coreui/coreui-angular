@@ -23,7 +23,7 @@ export class IconDirective implements IIcon {
   readonly #iconSet = inject(IconSetService);
 
   /**
-   * The icon itself: either its SVG content, or a `[viewBox, content]` pair. Use this or
+   * The icon itself: either its SVG content or a `[viewBox, content]` pair. Use this or
    * `name`, as it decides how the icon is imported.
    */
   readonly content = input<string | string[] | any[] | undefined>(undefined, { alias: 'cIcon' });

@@ -14,7 +14,7 @@ export class ToastCloseDirective {
 
   /**
    * Toast to close.
-   * @type ToastComponent
+   * @return ToastComponent
    */
   readonly cToastClose = input<ToastComponent>();
 

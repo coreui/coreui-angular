@@ -68,7 +68,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly alignment = input<'top' | 'center'>('top');
 
   /**
-   * Apply a backdrop on body while modal is open.
+   * Apply a backdrop on the body while the modal is open.
    * @return boolean | 'static'
    * @default true
    */
@@ -82,7 +82,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly fullscreen = input<boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>();
 
   /**
-   * Closes the modal when escape key is pressed.
+   * Closes the modal when the escape key is pressed.
    * @return boolean
    * @default true
    */
@@ -90,7 +90,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Html id attribute, required for programmatic visibility change.
-   * @type string
+   * @return string
    */
   readonly attrId = input<string>(undefined, { alias: 'id' });
 
@@ -106,7 +106,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly size = input<'sm' | 'lg' | 'xl'>();
 
   /**
-   * Remove animation to create modal that simply appear rather than fade in to view.
+   * Remove animation to create a modal that simply appears rather than fades in to view.
    */
   readonly transition = input(true, { transform: booleanAttribute });
 

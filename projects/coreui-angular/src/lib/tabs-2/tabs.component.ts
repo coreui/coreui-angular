@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, model, ModelSignal } from '@angular/core';
+import { Component, effect, inject, input, model } from '@angular/core';
 import { TabsService } from './tabs.service';
 
 let nextId = 0;
@@ -20,9 +20,9 @@ export class TabsComponent {
 
   /**
    * The active item key.
-   * @type <string | number | undefined>
+   * @return <string | number | undefined>
    */
-  readonly activeItemKey: ModelSignal<string | number | undefined> = model<number | string>();
+  readonly activeItemKey = model<number | string>();
 
   /**
    * The id attribute
@@ -32,7 +32,7 @@ export class TabsComponent {
 
   /**
    * HTML id attribute.
-   * @type string
+   * @return string
    * @default `tabs-{n}`
    */
   readonly id = input<string>(this.tabsId);

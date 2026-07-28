@@ -64,21 +64,21 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly #destroyRef = inject(DestroyRef);
 
   /**
-   * Apply a backdrop on body while offcanvas is open.
+   * Apply a backdrop on the body while offcanvas is open.
    * @return boolean | 'static'
    * @default true
    */
   readonly backdrop = input<boolean | 'static'>(true);
 
   /**
-   * Closes the offcanvas when escape key is pressed [docs]
+   * Closes the offcanvas when the escape key is pressed
    * @return boolean
    * @default true
    */
   readonly keyboard = input(true, { transform: booleanAttribute });
 
   /**
-   * Components placement, there’s no default placement.
+   * Component placement
    * @return {'start' | 'end' | 'top' | 'bottom'}
    * @default 'start'
    */
@@ -94,7 +94,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Html id attribute, required for programmatic visibility change.
-   * @type string
+   * @return string
    */
   readonly id = input(`offcanvas-${this.placement()}-${nextId++}`);
 
