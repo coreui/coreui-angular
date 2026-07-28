@@ -39,7 +39,9 @@ describe('TooltipDirective', () => {
   beforeEach(async () => {
     // Mock IntersectionObserver
     (globalThis as any).IntersectionObserver = class IntersectionObserver {
-      constructor() {}
+      constructor() {
+        // Mock implementation
+      }
       observe = vi.fn();
       unobserve = vi.fn();
       disconnect = vi.fn();

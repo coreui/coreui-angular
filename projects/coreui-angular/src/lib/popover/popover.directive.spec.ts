@@ -40,7 +40,9 @@ describe('PopoverDirective', () => {
   beforeEach(() => {
     // Mock IntersectionObserver
     (globalThis as any).IntersectionObserver = class IntersectionObserver {
-      constructor() {}
+      constructor() {
+        //
+      }
       observe = vi.fn();
       unobserve = vi.fn();
       disconnect = vi.fn();
