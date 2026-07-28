@@ -2,6 +2,33 @@
 
 ---
 
+#### `5.7.10` for Angular 22
+
+- docs(api): document the icon inputs and sidebar-nav dropdown mode
+- docs(api): document the theme, column and sidebar-nav inputs
+- docs(api): document inputs and outputs the docs already describe
+- fix(avatar): NG8021: Without an explicit main trigger, @defer defaults to 'idle' and prefetch may have no effect.
+- chore(dependencies): update to Angular 22.0.8
+  - `@angular-devkit/schematics` @ "22.0.8" (was "22.0.7")
+  - `@angular/build` @ "22.0.8" (was "22.0.7")
+  - `@angular/cli` @ "22.0.8" (was "22.0.7")
+  - `@angular/compiler-cli` @ "22.0.8" (was "22.0.7")
+  - `@angular/language-service` @ "22.0.8" (was "22.0.7")
+  - `@angular/animations` @ "22.0.8" (was "22.0.7")
+  - `@angular/aria` @ "22.0.6" (was "22.0.5")
+  - `@angular/cdk` @ "22.0.6" (was "22.0.5")
+  - `@angular/common` @ "22.0.8" (was "22.0.7")
+  - `@angular/compiler` @ "22.0.8" (was "22.0.7")
+  - `@angular/core` @ "22.0.8" (was "22.0.7")
+  - `@angular/forms` @ "22.0.8" (was "22.0.7")
+  - `@angular/localize` @ "22.0.8" (was "22.0.7")
+  - `@angular/platform-browser` @ "22.0.8" (was "22.0.7")
+  - `@angular/router` @ "22.0.8" (was "22.0.7")
+  - `eslint` @ "10.8.0" (was "10.7.0")
+  - `ng-packagr` @ "22.0.2" (was "22.0.1")
+
+---
+
 #### `5.7.9` for Angular 22
 
 - fix(tooltip): dismiss tooltip on `Escape` key (WCAG 1.4.13) - closes #268
