@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
 
 import { HeaderComponent } from './header.component';
@@ -8,14 +8,14 @@ describe('HeaderComponent', () => {
   let fixture: ComponentFixture<HeaderComponent>;
   let router: Router;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [HeaderComponent, RouterModule.forRoot([])]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
+    await fixture.whenStable();
+
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -26,6 +26,6 @@ describe('HeaderComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('header');
+    expect(fixture.nativeElement.classList.contains('header')).toBe(true);
   });
 });

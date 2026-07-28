@@ -44,12 +44,12 @@ describe('FormFloatingDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).not.toHaveClass('form-floating');
+    expect(debugElement.nativeElement.classList.contains('form-floating')).toBe(false);
     componentRef.setInput('floating', true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('form-floating');
+    expect(debugElement.nativeElement.classList.contains('form-floating')).toBe(true);
     componentRef.setInput('floating', false);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).not.toHaveClass('form-floating');
+    expect(debugElement.nativeElement.classList.contains('form-floating')).toBe(false);
   });
 });

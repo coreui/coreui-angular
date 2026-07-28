@@ -13,10 +13,10 @@ describe('BreadcrumbItemComponent', () => {
       imports: [BreadcrumbItemComponent],
       providers: [provideRouter([])]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(BreadcrumbItemComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     fixture.detectChanges();
@@ -27,14 +27,14 @@ describe('BreadcrumbItemComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('breadcrumb-item');
-    expect(fixture.nativeElement).not.toHaveClass('active');
+    expect(fixture.nativeElement.classList.contains('breadcrumb-item')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('active')).toBe(false);
   });
 
   it('should have active class', () => {
     componentRef.setInput('active', true);
     fixture.detectChanges();
-    expect(fixture.nativeElement).toHaveClass('active');
+    expect(fixture.nativeElement.classList.contains('active')).toBe(true);
   });
 
   it('should have aria-current attribute', () => {

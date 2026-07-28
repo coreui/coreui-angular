@@ -1,8 +1,9 @@
-import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentRef } from '@angular/core';
+import { Chart, registerables } from 'chart.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ChartjsComponent } from './chartjs.component';
-import { Chart, registerables } from 'chart.js';
-import { ComponentRef } from '@angular/core';
 
 describe('ChartjsComponent', () => {
   let component: ChartjsComponent;
@@ -47,30 +48,29 @@ describe('ChartjsComponent', () => {
     fixture.detectChanges();
   });
 
-  afterEach(fakeAsync(() => {
+  afterEach(() => {
     // Properly destroy chart to prevent async update errors
     if (component.chart) {
       component.chartDestroy();
     }
-    flush(); // Flush all pending async operations
     fixture.destroy();
-  }));
+  });
 
-  it('chart should create', fakeAsync(() => {
+  it('chart should create', async () => {
     expect(component).toBeTruthy();
     expect(component.chart).toBeDefined();
-  }));
+  });
 
-  it('chart should receive data', fakeAsync(() => {
+  it('chart should receive data', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
     // tick();
     expect(component.chart?.config.data.labels?.length).toBe(7);
     expect(component.chart?.config.data.labels).toEqual(labels);
     expect(component.chart?.config.data.datasets[0]?.data.length).toBe(7);
-  }));
+  });
 
-  it('chart to Base64Image', fakeAsync(() => {
+  it('chart to Base64Image', async () => {
     componentRef.setInput('height', 100);
     componentRef.setInput('width', 100);
     componentRef.setInput('data', { ...data });
@@ -80,9 +80,9 @@ describe('ChartjsComponent', () => {
     expect(image).toBeDefined();
     expect(typeof image).toBe('string');
     expect(image).toContain('data:image/png;base64,');
-  }));
+  });
 
-  it('chart should update on data change', fakeAsync(() => {
+  it('chart should update on data change', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
     // tick();
@@ -105,17 +105,17 @@ describe('ChartjsComponent', () => {
     expect(component.chart?.config?.data.labels?.length).toBe(5);
     expect(component.chart?.config.data.labels).toEqual(months);
     expect(component.chart?.config?.data.datasets[1]?.data.length).toBe(5);
-  }));
+  });
 
   it('should have css classes', () => {
     fixture.detectChanges();
-    expect(fixture.nativeElement).toHaveClass('chart-wrapper');
+    expect(fixture.nativeElement.classList.contains('chart-wrapper')).toBe(true);
   });
 
   it('should not have wrapper class when wrapper is false', () => {
     componentRef.setInput('wrapper', false);
     fixture.detectChanges();
-    expect(fixture.nativeElement).not.toHaveClass('chart-wrapper');
+    expect(fixture.nativeElement.classList.contains('chart-wrapper')).toBe(false);
   });
 
   it('should apply height style', () => {
@@ -142,7 +142,7 @@ describe('ChartjsComponent', () => {
     expect(component.id).toBe('custom-chart-id');
   });
 
-  it('should handle chart type changes', fakeAsync(() => {
+  it('should handle chart type changes', async () => {
     componentRef.setInput('data', { ...data });
     componentRef.setInput('type', 'bar');
     fixture.detectChanges();
@@ -151,24 +151,24 @@ describe('ChartjsComponent', () => {
     componentRef.setInput('type', 'pie');
     fixture.detectChanges();
     expect(component.type()).toBe('pie');
-  }));
+  });
 
-  it('should destroy chart on component destroy', fakeAsync(() => {
+  it('should destroy chart on component destroy', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
     const chart = component.chart;
     expect(chart).toBeDefined();
 
-    const destroySpy = jasmine.createSpy('destroy');
+    const destroySpy = vi.fn();
     if (chart) {
       chart.destroy = destroySpy;
     }
 
     component.ngOnDestroy();
     expect(destroySpy).toHaveBeenCalled();
-  }));
+  });
 
-  it('should emit chartRef when chart is created', fakeAsync(() => {
+  it('should emit chartRef when chart is created', async () => {
     let emissionCount = 0;
     component.chartRef.subscribe(() => {
       emissionCount++;
@@ -179,18 +179,18 @@ describe('ChartjsComponent', () => {
 
     expect(component.chart).toBeDefined();
     expect(emissionCount).toBeGreaterThan(0);
-  }));
+  });
 
-  it('should handle redraw input', fakeAsync(() => {
+  it('should handle redraw input', async () => {
     componentRef.setInput('data', { ...data });
     componentRef.setInput('redraw', true);
     fixture.detectChanges();
 
     expect(component.redraw()).toBe(true);
     expect(component.chart).toBeDefined();
-  }));
+  });
 
-  it('should emit getDatasetAtEvent on click', fakeAsync(() => {
+  it('should emit getDatasetAtEvent on click', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
 
@@ -203,9 +203,9 @@ describe('ChartjsComponent', () => {
     component.handleClick(mockEvent);
 
     expect(emittedItems).toBeDefined();
-  }));
+  });
 
-  it('should emit getElementAtEvent on click', fakeAsync(() => {
+  it('should emit getElementAtEvent on click', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
 
@@ -218,9 +218,9 @@ describe('ChartjsComponent', () => {
     component.handleClick(mockEvent);
 
     expect(emittedItems).toBeDefined();
-  }));
+  });
 
-  it('should emit getElementsAtEvent on click', fakeAsync(() => {
+  it('should emit getElementsAtEvent on click', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
 
@@ -233,7 +233,7 @@ describe('ChartjsComponent', () => {
     component.handleClick(mockEvent);
 
     expect(emittedItems).toBeDefined();
-  }));
+  });
 
   it('should not emit events when chart is not initialized', () => {
     // Create a fresh component without initializing the chart
@@ -263,15 +263,15 @@ describe('ChartjsComponent', () => {
     const mockEvent = new MouseEvent('click');
     newComponent.handleClick(mockEvent);
 
-    expect(datasetEmitted).toBeFalse();
-    expect(elementEmitted).toBeFalse();
-    expect(elementsEmitted).toBeFalse();
+    expect(datasetEmitted).toBe(false);
+    expect(elementEmitted).toBe(false);
+    expect(elementsEmitted).toBe(false);
   });
 
-  it('should handle custom plugins', fakeAsync(() => {
+  it('should handle custom plugins', async () => {
     const customPlugin = {
       id: 'custom-plugin',
-      beforeDraw: jasmine.createSpy('beforeDraw')
+      beforeDraw: vi.fn()
     };
 
     componentRef.setInput('data', { ...data });
@@ -279,9 +279,9 @@ describe('ChartjsComponent', () => {
     fixture.detectChanges();
 
     expect(component.chart?.config.plugins).toContain(customPlugin);
-  }));
+  });
 
-  it('should handle custom options', fakeAsync(() => {
+  it('should handle custom options', async () => {
     const customOptions = {
       responsive: true,
       maintainAspectRatio: false,
@@ -298,18 +298,18 @@ describe('ChartjsComponent', () => {
 
     expect(component.chart?.config.options?.responsive).toBe(true);
     expect(component.chart?.config.options?.maintainAspectRatio).toBe(false);
-  }));
+  });
 
-  it('should enable custom tooltips by default', fakeAsync(() => {
+  it('should enable custom tooltips by default', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
 
     const tooltipOptions = component.chart?.config.options?.plugins?.tooltip;
     expect(tooltipOptions?.enabled).toBe(false);
     expect(tooltipOptions?.external).toBeDefined();
-  }));
+  });
 
-  it('should disable custom tooltips when customTooltips is false', fakeAsync(() => {
+  it('should disable custom tooltips when customTooltips is false', async () => {
     componentRef.setInput('customTooltips', false);
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
@@ -318,15 +318,15 @@ describe('ChartjsComponent', () => {
     // The component will still create a chart, just without custom tooltip configuration
     expect(component.customTooltips()).toBe(false);
     expect(component.chart).toBeDefined();
-  }));
+  });
 
-  it('should handle empty data', fakeAsync(() => {
+  it('should handle empty data', async () => {
     componentRef.setInput('data', { labels: [], datasets: [] });
     fixture.detectChanges();
 
     expect(component.chart?.config.data.labels?.length).toBe(0);
     expect(component.chart?.config.data.datasets.length).toBe(0);
-  }));
+  });
 
   it('should handle undefined data', () => {
     componentRef.setInput('data', undefined);
@@ -334,7 +334,7 @@ describe('ChartjsComponent', () => {
     expect(component.chart).toBeDefined();
   });
 
-  it('should update chart options without redraw', fakeAsync(() => {
+  it('should update chart options without redraw', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
 
@@ -346,9 +346,9 @@ describe('ChartjsComponent', () => {
     fixture.detectChanges();
 
     expect(component.chart).toBe(firstChart);
-  }));
+  });
 
-  it('should return base64 image string', fakeAsync(() => {
+  it('should return base64 image string', async () => {
     componentRef.setInput('data', { ...data });
     componentRef.setInput('height', 100);
     componentRef.setInput('width', 100);
@@ -357,7 +357,7 @@ describe('ChartjsComponent', () => {
     const base64 = component.chartToBase64Image();
     expect(base64).toBeDefined();
     expect(typeof base64).toBe('string');
-  }));
+  });
 
   it('should return undefined for base64 when chart is not initialized', () => {
     const newFixture = TestBed.createComponent(ChartjsComponent);
@@ -370,7 +370,7 @@ describe('ChartjsComponent', () => {
     expect(base64).toBeUndefined();
   });
 
-  it('should handle multiple dataset updates', fakeAsync(() => {
+  it('should handle multiple dataset updates', async () => {
     componentRef.setInput('data', { ...data });
     fixture.detectChanges();
 
@@ -387,20 +387,20 @@ describe('ChartjsComponent', () => {
     fixture.detectChanges();
 
     expect(component.chart?.config.data.datasets[0]?.data).toEqual([4, 5, 6]);
-  }));
+  });
 
   it('should not render chart when canvas context is unavailable', () => {
     const newFixture = TestBed.createComponent(ChartjsComponent);
     const newComponent = newFixture.componentInstance;
 
-    spyOn(newComponent.canvasElement().nativeElement, 'getContext').and.returnValue(null);
+    vi.spyOn(newComponent.canvasElement().nativeElement, 'getContext').mockReturnValue(null);
 
     newComponent.chartRender();
     expect(newComponent.chart).toBeUndefined();
   });
 
   it('should not update chart when chart is not initialized', () => {
-    const updateSpy = jasmine.createSpy('update');
+    const updateSpy = vi.fn();
     component.chartUpdate();
     expect(updateSpy).not.toHaveBeenCalled();
   });

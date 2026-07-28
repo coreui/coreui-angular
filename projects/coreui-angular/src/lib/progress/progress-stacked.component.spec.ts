@@ -9,10 +9,11 @@ describe('ProgressStackedComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProgressStackedComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ProgressStackedComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,6 +24,6 @@ describe('ProgressStackedComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('progress-stacked');
+    expect(fixture.nativeElement.classList.contains('progress-stacked')).toBe(true);
   });
 });

@@ -35,10 +35,10 @@ describe('RoundedDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).toHaveClass('rounded-1');
+    expect(debugElement.nativeElement.classList.contains('rounded-1')).toBe(true);
     fixture.componentRef.setInput('rounded', true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('rounded');
+    expect(debugElement.nativeElement.classList.contains('rounded')).toBe(true);
     fixture.componentRef.setInput('rounded', {
       top: false,
       end: true,
@@ -47,10 +47,10 @@ describe('RoundedDirective', () => {
       size: 3
     });
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('rounded-3');
-    expect(debugElement.nativeElement).toHaveClass('rounded-end');
-    expect(debugElement.nativeElement).toHaveClass('rounded-circle');
-    expect(debugElement.nativeElement).toHaveClass('rounded-pill');
+    expect(debugElement.nativeElement.classList.contains('rounded-3')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('rounded-end')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('rounded-circle')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('rounded-pill')).toBe(true);
     expect(debugElement.nativeElement.classList.length).toBe(4);
     fixture.componentRef.setInput('rounded', {});
     fixture.detectChanges();

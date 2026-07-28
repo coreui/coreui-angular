@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CarouselItemComponent } from './carousel-item.component';
 import { CarouselService } from '../carousel.service';
@@ -8,16 +8,15 @@ describe('CarouselItemComponent', () => {
   let fixture: ComponentFixture<CarouselItemComponent>;
   let service: CarouselService;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [CarouselItemComponent],
       providers: [CarouselService]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CarouselItemComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     service = TestBed.inject(CarouselService);
     fixture.detectChanges();
@@ -28,6 +27,6 @@ describe('CarouselItemComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('carousel-item');
+    expect(fixture.nativeElement.classList.contains('carousel-item')).toBe(true);
   });
 });

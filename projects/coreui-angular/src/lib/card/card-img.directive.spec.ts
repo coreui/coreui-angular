@@ -36,15 +36,15 @@ describe('CardImgDirective', () => {
   it('should have css classes', () => {
     fixture.componentRef.setInput('orientation', 'start');
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('rounded-start');
+    expect(debugElement.nativeElement.classList.contains('rounded-start')).toBe(true);
     fixture.componentRef.setInput('orientation', 'end');
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('rounded-end');
+    expect(debugElement.nativeElement.classList.contains('rounded-end')).toBe(true);
     fixture.componentRef.setInput('orientation', 'top');
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('card-img-top');
+    expect(debugElement.nativeElement.classList.contains('card-img-top')).toBe(true);
     fixture.componentRef.setInput('orientation', 'bottom');
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('card-img-bottom');
+    expect(debugElement.nativeElement.classList.contains('card-img-bottom')).toBe(true);
   });
 });

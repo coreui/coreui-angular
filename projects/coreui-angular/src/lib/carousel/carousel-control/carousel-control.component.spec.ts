@@ -1,4 +1,5 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+/// <reference types="vitest/globals" />
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CarouselControlComponent } from './carousel-control.component';
 import { CarouselService } from '../carousel.service';
@@ -14,15 +15,15 @@ describe('CarouselControlComponent', () => {
   let state: CarouselState;
   let debugElement: DebugElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [CarouselControlComponent],
       providers: [CarouselService, CarouselState]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CarouselControlComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     service = TestBed.inject(CarouselService);
@@ -36,7 +37,7 @@ describe('CarouselControlComponent', () => {
   });
 
   it('should have css class="carousel-control-next"', () => {
-    expect(fixture.nativeElement).toHaveClass('carousel-control-next');
+    expect(fixture.nativeElement.classList.contains('carousel-control-next')).toBe(true);
   });
 
   it('should have role="button"', () => {
@@ -60,14 +61,14 @@ describe('CarouselControlComponent', () => {
     expect(component.carouselControlIconClass()).toBe('carousel-control-next-icon');
   });
 
-  it('should play on click', fakeAsync(() => {
+  it('should play on click', async () => {
     componentRef.setInput('direction', 'prev');
     component.onClick(new MouseEvent('click'));
     fixture.detectChanges();
     expect(component.caption()).toBe('Previous');
-  }));
+  });
 
-  it('should play on keyup', fakeAsync(() => {
+  it('should play on keyup', async () => {
     service.carouselIndex$.pipe(take(2)).subscribe((index) => {
       if (index.active === 0) {
         expect(index).toEqual({ active: 0, interval: -1, lastItemIndex: -1 });
@@ -77,10 +78,10 @@ describe('CarouselControlComponent', () => {
     });
 
     debugElement.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'ArrowLeft' }));
-    tick();
+    await fixture.whenStable();
     debugElement.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'ArrowRight' }));
-    tick();
+    await fixture.whenStable();
     debugElement.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
-    tick();
-  }));
+    await fixture.whenStable();
+  });
 });

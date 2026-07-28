@@ -1,7 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+/// <reference types="vitest/globals" />
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ModalToggleDirective } from './modal-toggle.directive';
+import { vi } from 'vitest';
 
 @Component({
   template: '<button cModalToggle>Dismiss</button>',
@@ -32,13 +34,13 @@ describe('ModalDismissDirective', () => {
     });
   });
 
-  it('should handle click', fakeAsync(() => {
+  it('should handle click', async () => {
     const directive = debugElement.injector.get(ModalToggleDirective);
-    const spy = spyOn(directive, 'dismiss').and.callThrough();
+    const spy = vi.spyOn(directive, 'dismiss');
     debugElement.nativeElement.click();
-    tick();
+    await fixture.whenStable();
     fixture.detectChanges();
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(jasmine.any(MouseEvent));
-  }));
+    expect(spy).toHaveBeenCalledWith(expect.any(MouseEvent));
+  });
 });

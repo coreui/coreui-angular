@@ -1,5 +1,5 @@
 import { Component, DebugElement } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
@@ -38,10 +38,10 @@ describe('OffcanvasToggleDirective', () => {
     });
   });
 
-  it('should toggle offcanvas on click', fakeAsync(() => {
+  it('should toggle offcanvas on click', async () => {
     service.offcanvasState$.pipe(take(1)).subscribe((value) => {
       expect(value).toEqual({ show: 'toggle', id: 'OffcanvasEnd' });
     });
     debugElement.nativeElement.dispatchEvent(new MouseEvent('click'));
-  }));
+  });
 });

@@ -9,12 +9,11 @@ describe('TabPaneComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TabPaneComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TabPaneComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,7 +23,7 @@ describe('TabPaneComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('tab-pane');
-    expect(fixture.nativeElement).toHaveClass('fade');
+    expect(fixture.nativeElement.classList.contains('tab-pane')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('fade')).toBe(true);
   });
 });

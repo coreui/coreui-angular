@@ -30,8 +30,8 @@ describe('RowDirective', () => {
 
   it('should have css class', () => {
     debugElement = fixture.debugElement.query(By.css('#row0'));
-    expect(debugElement.nativeElement).toHaveClass('row');
-    expect(debugElement.nativeElement).toHaveClass('row-cols-auto');
-    expect(debugElement.nativeElement).toHaveClass('row-cols-md-7');
+    expect(debugElement.nativeElement.classList.contains('row')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('row-cols-auto')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('row-cols-md-7')).toBe(true);
   });
 });

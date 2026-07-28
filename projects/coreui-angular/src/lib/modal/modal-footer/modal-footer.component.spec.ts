@@ -9,12 +9,11 @@ describe('ModalFooterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModalFooterComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ModalFooterComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('ModalFooterComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('modal-footer');
+    expect(fixture.nativeElement.classList.contains('modal-footer')).toBe(true);
   });
 });

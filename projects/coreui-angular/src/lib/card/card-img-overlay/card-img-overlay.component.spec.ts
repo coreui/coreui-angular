@@ -9,12 +9,11 @@ describe('CardImgOverlayComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CardImgOverlayComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CardImgOverlayComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('CardImgOverlayComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('card-img-overlay');
+    expect(fixture.nativeElement.classList.contains('card-img-overlay')).toBe(true);
   });
 });

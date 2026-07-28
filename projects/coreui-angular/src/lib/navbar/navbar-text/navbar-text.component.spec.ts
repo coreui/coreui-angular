@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavbarTextComponent } from './navbar-text.component';
 
@@ -6,15 +6,14 @@ describe('NavbarTextComponent', () => {
   let component: NavbarTextComponent;
   let fixture: ComponentFixture<NavbarTextComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [NavbarTextComponent]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(NavbarTextComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('NavbarTextComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('navbar-text');
+    expect(fixture.nativeElement.classList.contains('navbar-text')).toBe(true);
   });
 });

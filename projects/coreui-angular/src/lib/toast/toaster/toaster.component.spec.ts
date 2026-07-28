@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToasterComponent } from './toaster.component';
 import { ToasterHostDirective } from './toaster-host.directive';
@@ -7,15 +7,14 @@ describe('ToasterComponent', () => {
   let component: ToasterComponent;
   let fixture: ComponentFixture<ToasterComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [ToasterComponent, ToasterHostDirective]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ToasterComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -25,7 +24,7 @@ describe('ToasterComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('toaster');
-    expect(fixture.nativeElement).toHaveClass('toast-container');
+    expect(fixture.nativeElement.classList.contains('toaster')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('toast-container')).toBe(true);
   });
 });

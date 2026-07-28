@@ -1,5 +1,5 @@
 import { Component, DebugElement, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DropdownService } from '../dropdown.service';
 import { DropdownCloseDirective } from './dropdown-close.directive';
@@ -55,21 +55,21 @@ describe('DropdownCloseDirective', () => {
     });
   });
 
-  it('should have css classes and attributes', fakeAsync(() => {
-    expect(elementRef.nativeElement).not.toHaveClass('disabled');
+  it('should have css classes and attributes', async () => {
+    expect(elementRef.nativeElement.classList.contains('disabled')).toBe(false);
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBeNull();
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('0');
     component.disabled.set(true);
     fixture.detectChanges();
-    expect(elementRef.nativeElement).toHaveClass('disabled');
+    expect(elementRef.nativeElement.classList.contains('disabled')).toBe(true);
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBe('true');
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('-1');
-  }));
+  });
 
-  it('should call event handling functions', fakeAsync(() => {
-    expect(component.dropdown()?.visible()).toBeTrue();
+  it('should call event handling functions', async () => {
+    expect(component.dropdown()?.visible()).toBe(true);
     elementRef.nativeElement.dispatchEvent(new Event('click'));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
-    expect(component.dropdown()?.visible()).toBeFalse();
-  }));
+    expect(component.dropdown()?.visible()).toBe(false);
+  });
 });

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CarouselInnerComponent } from './carousel-inner.component';
@@ -11,16 +11,15 @@ describe('CarouselInnerComponent', () => {
   let service: CarouselService;
   let state: CarouselState;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [CarouselService, CarouselState],
       imports: [NoopAnimationsModule, CarouselInnerComponent]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CarouselInnerComponent);
+    await fixture.whenStable();
+
     service = TestBed.inject(CarouselService);
     state = TestBed.inject(CarouselState);
     component = fixture.componentInstance;
@@ -32,6 +31,6 @@ describe('CarouselInnerComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('carousel-inner');
+    expect(fixture.nativeElement.classList.contains('carousel-inner')).toBe(true);
   });
 });

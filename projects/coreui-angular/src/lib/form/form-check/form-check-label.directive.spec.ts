@@ -28,6 +28,6 @@ describe('FormCheckLabelDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).toHaveClass('form-check-label');
+    expect(debugElement.nativeElement.classList.contains('form-check-label')).toBe(true);
   });
 });

@@ -33,6 +33,6 @@ describe('TextBgColorDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).toHaveClass('text-bg-primary');
+    expect(debugElement.nativeElement.classList.contains('text-bg-primary')).toBe(true);
   });
 });

@@ -10,10 +10,10 @@ describe('HeaderNavComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HeaderNavComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(HeaderNavComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,7 +23,7 @@ describe('HeaderNavComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('header-nav');
+    expect(fixture.nativeElement.classList.contains('header-nav')).toBe(true);
   });
 
   it('should have role', () => {

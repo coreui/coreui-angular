@@ -9,12 +9,11 @@ describe('AccordionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AccordionComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(AccordionComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('AccordionComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('accordion');
+    expect(fixture.nativeElement.classList.contains('accordion')).toBe(true);
   });
 });

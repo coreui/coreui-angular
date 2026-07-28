@@ -38,27 +38,27 @@ describe('NavLinkDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).toHaveClass('nav-link');
+        expect(debugElement.nativeElement.classList.contains('nav-link')).toBe(true);
   });
 
   it('should have css classes for active', () => {
-    expect(debugElement.nativeElement).not.toHaveClass('active');
+        expect(debugElement.nativeElement.classList.contains('active')).toBe(false);
     componentRef.setInput('active', true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('active');
+        expect(debugElement.nativeElement.classList.contains('active')).toBe(true);
     componentRef.setInput('active', false);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).not.toHaveClass('active');
+        expect(debugElement.nativeElement.classList.contains('active')).toBe(false);
   });
 
   it('should have css classes for disabled', () => {
-    expect(debugElement.nativeElement).not.toHaveClass('disabled');
+        expect(debugElement.nativeElement.classList.contains('disabled')).toBe(false);
     componentRef.setInput('disabled', true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('disabled');
+        expect(debugElement.nativeElement.classList.contains('disabled')).toBe(true);
     componentRef.setInput('disabled', false);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).not.toHaveClass('disabled');
+        expect(debugElement.nativeElement.classList.contains('disabled')).toBe(false);
   });
 
   it('should have aria-* attr for active', () => {

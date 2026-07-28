@@ -12,10 +12,10 @@ describe('ModalDialogComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ModalDialogComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ModalDialogComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     fixture.detectChanges();
@@ -26,56 +26,56 @@ describe('ModalDialogComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('modal-dialog');
+    expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 
   it('should have css classes for alignment prop', () => {
     componentRef.setInput('alignment', 'center');
     fixture.detectChanges();
-    expect(fixture.nativeElement).toHaveClass('modal-dialog-centered');
+    expect(fixture.nativeElement.classList.contains('modal-dialog-centered')).toBe(true);
     componentRef.setInput('alignment', 'top');
     fixture.detectChanges();
-    expect(fixture.nativeElement).not.toHaveClass('modal-dialog-centered');
-    expect(fixture.nativeElement).toHaveClass('modal-dialog');
+    expect(fixture.nativeElement.classList.contains('modal-dialog-centered')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 
   it('should have css classes for fullscreen prop', () => {
     componentRef.setInput('fullscreen', true);
     fixture.detectChanges();
-    expect(fixture.nativeElement).toHaveClass('modal-fullscreen');
+    expect(fixture.nativeElement.classList.contains('modal-fullscreen')).toBe(true);
     for (const size of ['sm', 'md', 'lg', 'xl', 'xxl']) {
       componentRef.setInput('fullscreen', size);
       fixture.detectChanges();
-      expect(fixture.nativeElement).toHaveClass(`modal-fullscreen-${size}-down`);
+      expect(fixture.nativeElement.classList.contains(`modal-fullscreen-${size}-down`)).toBe(true);
     }
     componentRef.setInput('fullscreen', false);
     fixture.detectChanges();
-    expect(fixture.nativeElement).not.toHaveClass('modal-fullscreen');
-    expect(fixture.nativeElement).toHaveClass('modal-dialog');
+    expect(fixture.nativeElement.classList.contains('modal-fullscreen')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 
   it('should have css classes for scrollable prop', () => {
-    expect(fixture.nativeElement).not.toHaveClass('modal-dialog-scrollable');
+    expect(fixture.nativeElement.classList.contains('modal-dialog-scrollable')).toBe(false);
     componentRef.setInput('scrollable', true);
     fixture.detectChanges();
-    expect(fixture.nativeElement).toHaveClass('modal-dialog-scrollable');
+    expect(fixture.nativeElement.classList.contains('modal-dialog-scrollable')).toBe(true);
     componentRef.setInput('scrollable', false);
     fixture.detectChanges();
-    expect(fixture.nativeElement).not.toHaveClass('modal-dialog-scrollable');
-    expect(fixture.nativeElement).toHaveClass('modal-dialog');
+    expect(fixture.nativeElement.classList.contains('modal-dialog-scrollable')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 
   it('should have css classes for size prop', () => {
     for (const size of ['sm', 'lg', 'xl']) {
       componentRef.setInput('size', size);
       fixture.detectChanges();
-      expect(fixture.nativeElement).toHaveClass(`modal-${size}`);
+      expect(fixture.nativeElement.classList.contains(`modal-${size}`)).toBe(true);
     }
     componentRef.setInput('size', undefined);
     fixture.detectChanges();
-    expect(fixture.nativeElement).not.toHaveClass('modal-sm');
-    expect(fixture.nativeElement).not.toHaveClass('modal-lg');
-    expect(fixture.nativeElement).not.toHaveClass('modal-xl');
-    expect(fixture.nativeElement).toHaveClass('modal-dialog');
+    expect(fixture.nativeElement.classList.contains('modal-sm')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('modal-lg')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('modal-xl')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 });

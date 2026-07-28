@@ -35,10 +35,10 @@ describe('BorderDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).toHaveClass('border-1');
+    expect(debugElement.nativeElement.classList.contains('border-1')).toBe(true);
     fixture.componentRef.setInput('border', true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('border');
+    expect(debugElement.nativeElement.classList.contains('border')).toBe(true);
     fixture.componentRef.setInput('border', {
       top: 1,
       end: true,
@@ -46,11 +46,11 @@ describe('BorderDirective', () => {
       start: { color: 'success', width: 2 }
     });
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('border-top-1');
-    expect(debugElement.nativeElement).toHaveClass('border-end');
-    expect(debugElement.nativeElement).toHaveClass('border-color-primary');
-    expect(debugElement.nativeElement).toHaveClass('border-start-2');
-    expect(debugElement.nativeElement).toHaveClass('border-start-success');
+    expect(debugElement.nativeElement.classList.contains('border-top-1')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('border-end')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('border-color-primary')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('border-start-2')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('border-start-success')).toBe(true);
     expect(debugElement.nativeElement.classList.length).toBe(5);
     fixture.componentRef.setInput('border', {});
     fixture.detectChanges();

@@ -20,7 +20,7 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "target": "ES2022",
-    "types": ["jasmine", "node"]
+    "types": ["node"]
   },
   "include": ["./schematics/**/*"],
   "exclude": ["./schematics/*/files/**/*"]

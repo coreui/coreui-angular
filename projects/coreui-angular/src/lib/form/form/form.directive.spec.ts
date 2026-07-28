@@ -37,12 +37,12 @@ describe('FormDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).not.toHaveClass('was-validated');
+    expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(false);
     componentRef.setInput('validated', true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('was-validated');
+    expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(true);
     componentRef.setInput('validated', false);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).not.toHaveClass('was-validated');
+    expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(false);
   });
 });

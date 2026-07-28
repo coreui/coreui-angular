@@ -1,6 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
+import { expect } from 'vitest';
 import { SidebarNavGroupComponent } from './sidebar-nav.component';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
 
@@ -10,15 +11,15 @@ describe('SidebarNavGroupComponent', () => {
   let router: Router;
   let item: any;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, SidebarNavGroupComponent],
       providers: [provideRouter([]), SidebarNavGroupService]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SidebarNavGroupComponent);
+    await fixture.whenStable();
+
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
 
@@ -53,6 +54,6 @@ describe('SidebarNavGroupComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('nav-group');
+    expect(fixture.nativeElement.classList.contains('nav-group')).toBe(true);
   });
 });

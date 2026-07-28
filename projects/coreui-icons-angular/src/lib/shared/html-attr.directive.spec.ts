@@ -34,7 +34,7 @@ describe('HtmlAttributesDirective', () => {
 
   it('should render a class attr', () => {
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('test');
+    expect(debugElement.nativeElement.classList.contains('test')).toBe(true);
   });
 
   it('should render a style attr', () => {

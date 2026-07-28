@@ -1,5 +1,5 @@
 import { RouterModule } from '@angular/router';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarNavComponent } from './sidebar-nav.component';
 import { SidebarNavHelper } from './sidebar-nav.service';
@@ -10,16 +10,16 @@ describe('SidebarNavComponent', () => {
   let fixture: ComponentFixture<SidebarNavComponent>;
   let navItems: any[];
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [SidebarNavComponent, RouterModule.forRoot([])],
       declarations: [],
       providers: [SidebarNavHelper]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SidebarNavComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
 
     // mock items supplied by the parent component
@@ -45,6 +45,6 @@ describe('SidebarNavComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('sidebar-nav');
+    expect(fixture.nativeElement.classList.contains('sidebar-nav')).toBe(true);
   });
 });

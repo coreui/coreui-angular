@@ -12,6 +12,8 @@ describe('WidgetStatBComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(WidgetStatBComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -21,6 +23,6 @@ describe('WidgetStatBComponent', () => {
   });
 
   it('should have css class"', () => {
-    expect(fixture.nativeElement).toHaveClass('card');
+    expect(fixture.nativeElement.classList.contains('card')).toBe(true);
   });
 });

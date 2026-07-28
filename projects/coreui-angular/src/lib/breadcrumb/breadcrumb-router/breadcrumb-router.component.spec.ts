@@ -1,5 +1,5 @@
 import { ComponentRef } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Route } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 
@@ -18,15 +18,13 @@ describe('BreadcrumbComponent', () => {
     { path: '', component: BreadcrumbRouterComponent }
   ];
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [BreadcrumbRouterComponent],
       providers: [BreadcrumbRouterService, provideRouter(routes)]
     }).compileComponents();
-  }));
-
-  beforeEach(async () => {
     fixture = TestBed.createComponent(BreadcrumbRouterComponent);
+    await fixture.whenStable();
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
 

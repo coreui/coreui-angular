@@ -46,18 +46,18 @@ describe('PlaceholderDirective', () => {
   it('should toggle visibility for the placeholder', () => {
     componentRef.setInput('visible', true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('placeholder');
-    expect(debugElement.nativeElement).toHaveClass('placeholder-sm');
+    expect(debugElement.nativeElement.classList.contains('placeholder')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('placeholder-sm')).toBe(true);
     componentRef.setInput('visible', false);
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('aria-hidden')).toBe('true');
-    expect(debugElement.nativeElement).not.toHaveClass('placeholder');
+    expect(debugElement.nativeElement.classList.contains('placeholder')).toBe(false);
   });
 
   it('should toggle animation for the placeholder', () => {
-    expect(wrapperElement.nativeElement).not.toHaveClass('placeholder-glow');
+    expect(wrapperElement.nativeElement.classList.contains('placeholder-glow')).toBe(false);
     componentRef.setInput('animation', 'glow');
     fixture.detectChanges();
-    expect(wrapperElement.nativeElement).toHaveClass('placeholder-glow');
+    expect(wrapperElement.nativeElement.classList.contains('placeholder-glow')).toBe(true);
   });
 });

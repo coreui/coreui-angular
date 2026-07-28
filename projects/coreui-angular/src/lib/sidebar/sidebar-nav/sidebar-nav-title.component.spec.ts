@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarNavTitleComponent } from './sidebar-nav-title.component';
 
@@ -7,14 +7,14 @@ describe('SidebarNavTitleComponent', () => {
   let fixture: ComponentFixture<SidebarNavTitleComponent>;
   let item: any;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [SidebarNavTitleComponent]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SidebarNavTitleComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
 
     item = {

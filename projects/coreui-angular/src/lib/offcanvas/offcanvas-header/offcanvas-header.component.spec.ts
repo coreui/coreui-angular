@@ -9,12 +9,11 @@ describe('OffcanvasHeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OffcanvasHeaderComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(OffcanvasHeaderComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('OffcanvasHeaderComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('offcanvas-header');
+    expect(fixture.nativeElement.classList.contains('offcanvas-header')).toBe(true);
   });
 });

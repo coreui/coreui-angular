@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { SidebarNavLabelComponent } from './sidebar-nav-label.component';
@@ -9,15 +9,15 @@ describe('SidebarNavLabelComponent', () => {
   let fixture: ComponentFixture<SidebarNavLabelComponent>;
   let item: any;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [SidebarNavHelper],
       imports: [SidebarNavLabelComponent]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SidebarNavLabelComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
 
     item = {
@@ -43,12 +43,12 @@ describe('SidebarNavLabelComponent', () => {
   it('should set correct itemClass', () => {
     const link = fixture.debugElement.query(By.css('a')).nativeElement;
 
-    expect(link).toHaveClass('c-nav-label');
-    expect(link).toHaveClass('c-active');
+    expect(link.classList.contains('c-nav-label')).toBe(true);
+    expect(link.classList.contains('c-active')).toBe(true);
     item.class = 'custom-class';
     fixture.componentRef.setInput('item', { ...item });
     fixture.detectChanges();
-    expect(link).toHaveClass('custom-class');
+    expect(link.classList.contains('custom-class')).toBe(true);
   });
 
   it('should display label name', () => {
@@ -59,11 +59,11 @@ describe('SidebarNavLabelComponent', () => {
 
   it('should set correct labelIconClass', () => {
     const icon = fixture.debugElement.query(By.css('i')).nativeElement;
-    expect(icon).toHaveClass('text-info');
+    expect(icon.classList.contains('text-info')).toBe(true);
     item.label = { variant: 'success', class: 'custom-icon-class' };
     fixture.componentRef.setInput('item', { ...item });
     fixture.detectChanges();
-    expect(icon).toHaveClass('text-success');
-    expect(icon).toHaveClass('custom-icon-class');
+    expect(icon.classList.contains('text-success')).toBe(true);
+    expect(icon.classList.contains('custom-icon-class')).toBe(true);
   });
 });

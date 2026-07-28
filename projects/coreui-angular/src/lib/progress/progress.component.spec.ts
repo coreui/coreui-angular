@@ -1,5 +1,5 @@
 import { Component, DebugNode } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProgressComponent } from './progress.component';
 import { ProgressBarDirective } from './progress-bar.directive';
@@ -16,18 +16,19 @@ describe('ProgressComponent', () => {
   let progress: DebugNode | undefined;
   let fixture: ComponentFixture<TestComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [TestComponent, ProgressComponent, ProgressBarDirective]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
+    await fixture.whenStable();
 
     component = fixture.componentInstance;
     progress = fixture.debugElement.childNodes.find((v) => ProgressComponent);
     // let x= fixture.debugElement.queryAll(By.directive(ProgressBarDirective))
     fixture.detectChanges();
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeDefined();
@@ -35,7 +36,7 @@ describe('ProgressComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(progress?.nativeNode).toHaveClass('progress');
+    expect(progress?.nativeNode?.classList.contains('progress')).toBe(true);
   });
 
   it('should have style width %', () => {

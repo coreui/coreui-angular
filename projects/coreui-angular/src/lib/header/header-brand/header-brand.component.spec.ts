@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderBrandComponent } from './header-brand.component';
 
@@ -6,14 +6,14 @@ describe('HeaderBrandComponent', () => {
   let component: HeaderBrandComponent;
   let fixture: ComponentFixture<HeaderBrandComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [HeaderBrandComponent]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(HeaderBrandComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,7 +23,7 @@ describe('HeaderBrandComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('header-brand');
+    expect(fixture.nativeElement.classList.contains('header-brand')).toBe(true);
   });
 
   it('should have role', () => {

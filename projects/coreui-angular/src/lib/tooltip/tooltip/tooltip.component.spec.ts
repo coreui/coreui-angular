@@ -9,12 +9,11 @@ describe('TooltipComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TooltipComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TooltipComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,7 +23,7 @@ describe('TooltipComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('tooltip');
-    expect(fixture.nativeElement).toHaveClass('fade');
+    expect(fixture.nativeElement.classList.contains('tooltip')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('fade')).toBe(true);
   });
 });

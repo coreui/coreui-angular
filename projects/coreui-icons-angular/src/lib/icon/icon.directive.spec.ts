@@ -59,9 +59,9 @@ describe('IconDirective', () => {
 
   it('icon classes should be applied', () => {
     expect(svgEl.nativeElement).toBeTruthy();
-    expect(svgEl.nativeElement).toHaveClass('icon');
-    expect(svgEl.nativeElement).toHaveClass('icon-lg');
-    expect(svgEl.nativeElement).toHaveClass('test');
+    expect(svgEl.nativeElement.classList.contains('icon')).toBe(true);
+    expect(svgEl.nativeElement.classList.contains('icon-lg')).toBe(true);
+    expect(svgEl.nativeElement.classList.contains('test')).toBe(true);
   });
 
   it('icon attributes should be applied', () => {

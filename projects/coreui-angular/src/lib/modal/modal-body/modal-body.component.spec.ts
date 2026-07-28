@@ -9,12 +9,11 @@ describe('ModalBodyComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModalBodyComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ModalBodyComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -24,6 +23,6 @@ describe('ModalBodyComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement).toHaveClass('modal-body');
+    expect(fixture.nativeElement.classList.contains('modal-body')).toBe(true);
   });
 });

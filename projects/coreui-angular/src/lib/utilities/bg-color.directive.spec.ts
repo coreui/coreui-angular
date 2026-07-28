@@ -33,6 +33,6 @@ describe('BgColorDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement).toHaveClass('bg-primary');
+    expect(debugElement.nativeElement.classList.contains('bg-primary')).toBe(true);
   });
 });

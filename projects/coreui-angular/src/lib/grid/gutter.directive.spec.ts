@@ -33,13 +33,13 @@ describe('GutterDirective', () => {
   });
 
   it('should have css class', () => {
-    expect(debugElement.nativeElement).toHaveClass('g-5');
+    expect(debugElement.nativeElement.classList.contains('g-5')).toBe(true);
     fixture.componentInstance.gutter.set({ gx: 2, gy: 1 });
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('gx-2');
-    expect(debugElement.nativeElement).toHaveClass('gy-1');
+    expect(debugElement.nativeElement.classList.contains('gx-2')).toBe(true);
+    expect(debugElement.nativeElement.classList.contains('gy-1')).toBe(true);
     fixture.componentInstance.gutter.set({ md: { g: 3 } });
     fixture.detectChanges();
-    expect(debugElement.nativeElement).toHaveClass('g-md-3');
+    expect(debugElement.nativeElement.classList.contains('g-md-3')).toBe(true);
   });
 });

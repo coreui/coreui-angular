@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Router, RouterModule, Routes } from '@angular/router';
+import { expect } from 'vitest';
 
 import { SidebarNavHelper } from './sidebar-nav.service';
 
@@ -65,12 +66,12 @@ describe('SidebarNavHelper', () => {
 
   it('should return icon class object', () => {
     expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(
-      jasmine.objectContaining({
+      expect.objectContaining({
         'nav-icon': true,
         'icon-ban': true
       })
     );
-    expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(jasmine.objectContaining({ 'nav-icon': true }));
-    expect(service.getIconClass({ icon: '' })).toEqual(jasmine.objectContaining({ 'nav-icon': true }));
+    expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(expect.objectContaining({ 'nav-icon': true }));
+    expect(service.getIconClass({ icon: '' })).toEqual(expect.objectContaining({ 'nav-icon': true }));
   });
 });

@@ -37,8 +37,8 @@ describe('ButtonDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(elementRef.nativeElement).toHaveClass('btn');
-    expect(elementRef.nativeElement).toHaveClass('btn-lg');
-    expect(elementRef.nativeElement).toHaveClass('btn-info');
+    expect(elementRef.nativeElement.classList.contains('btn')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('btn-lg')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('btn-info')).toBe(true);
   });
 });

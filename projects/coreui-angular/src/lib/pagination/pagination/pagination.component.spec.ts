@@ -12,12 +12,11 @@ describe('PaginationComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PaginationComponent]
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PaginationComponent);
+    await fixture.whenStable();
+
     component = fixture.componentInstance;
     elementRef = fixture.debugElement.query(By.css('ul'));
     fixture.detectChanges();
@@ -28,6 +27,6 @@ describe('PaginationComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(elementRef.nativeElement).toHaveClass('pagination');
+    expect(elementRef.nativeElement.classList.contains('pagination')).toBe(true);
   });
 });

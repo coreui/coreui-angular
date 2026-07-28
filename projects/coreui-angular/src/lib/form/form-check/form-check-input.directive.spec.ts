@@ -38,13 +38,13 @@ describe('FormCheckInputDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(inputEl.nativeElement).toHaveClass('form-check-input');
+    expect(inputEl.nativeElement.classList.contains('form-check-input')).toBe(true);
   });
 
   it('should have indeterminate state', () => {
     component.indeterminate.set(true);
     fixture.detectChanges();
-    expect(inputEl.nativeElement.checked).toBeFalse();
-    expect(inputEl.nativeElement.indeterminate).toBeTrue();
+    expect(inputEl.nativeElement.checked).toBe(false);
+    expect(inputEl.nativeElement.indeterminate).toBe(true);
   });
 });

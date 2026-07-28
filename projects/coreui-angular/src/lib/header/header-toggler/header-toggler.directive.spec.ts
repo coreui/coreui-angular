@@ -36,7 +36,7 @@ describe('HeaderTogglerDirective', () => {
   });
 
   it('should have css class', () => {
-    expect(debugElement.nativeElement).toHaveClass('header-toggler');
+    expect(debugElement.nativeElement.classList.contains('header-toggler')).toBe(true);
   });
 
   it('should set attributes', () => {

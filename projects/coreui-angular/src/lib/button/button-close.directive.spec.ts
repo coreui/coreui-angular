@@ -37,7 +37,7 @@ describe('ButtonCloseDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(elementRef.nativeElement).toHaveClass('btn');
-    expect(elementRef.nativeElement).toHaveClass('btn-close');
+    expect(elementRef.nativeElement.classList.contains('btn')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('btn-close')).toBe(true);
   });
 });

@@ -32,6 +32,6 @@ describe('OffcanvasTitleDirective', () => {
   });
 
   it('should have css classes', () => {
-    expect(elementRef.nativeElement).toHaveClass('offcanvas-title');
+    expect(elementRef.nativeElement.classList.contains('offcanvas-title')).toBe(true);
   });
 });
