@@ -1,4 +1,4 @@
-import { Component, computed, input, InputSignal } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 import { Colors, Shapes, Sizes, TextColors } from '../coreui.types';
 import { TextColorDirective } from '../utilities';
@@ -18,15 +18,15 @@ import { TextColorDirective } from '../utilities';
 export class AvatarComponent {
   /**
    * Sets the background color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @return Colors
    */
-  readonly color: InputSignal<Colors | undefined> = input();
+  readonly color = input<Colors>();
 
   /**
    * Select the shape of the component.
-   * @type Shapes
+   * @return Shapes
    */
-  readonly shape: InputSignal<Shapes | undefined> = input();
+  readonly shape = input<Shapes>();
 
   /**
    * Size the component small, large, or extra large.
@@ -36,33 +36,34 @@ export class AvatarComponent {
 
   /**
    * The alt attribute for the img element alternate text.
-   * @type string
+   * @return string
    */
-  readonly alt: InputSignal<string> = input('');
+  readonly alt = input<string>('');
 
   /**
    * The src attribute for the img element.
-   * @type string
+   * @return string
    */
-  readonly src: InputSignal<string | undefined> = input();
+  readonly src = input<string>();
 
   /**
    * Sets the color context of the status indicator to one of CoreUI’s themed colors.
-   * @type Colors
+   * @return Colors
    */
-  readonly status: InputSignal<Colors | undefined> = input();
+  readonly status = input<Colors>();
 
   /**
    * Sets the text color of the component to one of CoreUI’s themed colors.
    * via TextColorDirective
-   * @type TextColors
+   * @return TextColors
    */
-  readonly textColor: InputSignal<TextColors | undefined> = input();
+  readonly textColor = input<TextColors>();
 
   readonly statusClass = computed(() => {
+    const status = this.status();
     return {
       'avatar-status': true,
-      [`bg-${this.status()}`]: !!this.status()
+      [`bg-${status}`]: !!status
     } as Record<string, boolean>;
   });
 

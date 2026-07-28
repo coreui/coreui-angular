@@ -1,6 +1,6 @@
 <ng-content>
   @if (src()) {
-    @defer (prefetch on idle) {
+    @defer (on immediate) {
       <img src="{{src() ?? ''}}" class="avatar-img" alt="{{alt()}}" />
     } @placeholder () {
       <svg aria-label="Avatar placeholder"
