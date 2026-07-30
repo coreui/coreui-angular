@@ -2,6 +2,31 @@
 
 ---
 
+#### `5.7.11` for Angular 22.1
+
+- chore(dependencies): update to Angular 22.1
+  - `@angular/animations` to version 22.1.0
+  - `@angular/aria` to version 22.1.0
+  - `@angular/cdk` to version 22.1.0
+  - `@angular/common` to version 22.1.0
+  - `@angular/compiler` to version 22.1.0
+  - `@angular/core` to version 22.1.0
+  - `@angular/forms` to version 22.1.0
+  - `@angular/localize` to version 22.1.0
+  - `@angular/platform-browser` to version 22.1.0
+  - `@angular/router` to version 22.1.0
+  - `@angular-devkit/schematics` to version 22.1.1
+  - `@angular/build` to version 22.1.1
+  - `@angular/cli` to version 22.1.1
+  - `@angular/compiler-cli` to version 22.1.0
+  - `@angular/language-service` to version 22.1.0
+  - `@types/node` to version 26.1.2
+  - `jsdom` to version 30.0.1
+  - `ng-packagr` to version 22.1.0
+- test: migrate from karma/jasmine to vitest
+
+---
+
 #### `5.7.10` for Angular 22
 
 - docs(api): document the icon inputs and sidebar-nav dropdown mode
