@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { expect } from 'vitest';
 
 import { AlertComponent } from './alert.component';
@@ -12,7 +11,7 @@ describe('AlertComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, AlertComponent, BrowserAnimationsModule]
+      imports: [AlertComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AlertComponent);
@@ -30,13 +29,11 @@ describe('AlertComponent', () => {
     expect(fixture.nativeElement.classList.contains('alert')).toBe(true);
     expect(fixture.nativeElement.classList.contains('alert-primary')).toBe(true);
     expect(fixture.nativeElement.classList.contains('show')).toBe(true);
-    expect(fixture.nativeElement.style.opacity).toBe('1');
     componentRef.setInput('visible', false);
     componentRef.setInput('color', 'danger');
     fixture.detectChanges();
     expect(fixture.nativeElement.classList.contains('alert-danger')).toBe(true);
-    expect(fixture.nativeElement.style.opacity).toBe('0');
-    expect(fixture.nativeElement.style.height).toBe('0px');
+    expect(fixture.nativeElement.classList.contains('show')).toBe(false);
     componentRef.setInput('dismissible', true);
     componentRef.setInput('fade', true);
     componentRef.setInput('variant', 'solid');
@@ -47,9 +44,7 @@ describe('AlertComponent', () => {
     expect(fixture.nativeElement.classList.contains('alert-danger')).toBe(false);
     expect(fixture.nativeElement.classList.contains('bg-danger')).toBe(true);
     expect(fixture.nativeElement.classList.contains('text-white')).toBe(true);
-    // When visible, opacity and height should be set back to normal (either unset or '1' and 'auto')
-    // Angular animations may leave some inline styles, so we check the values rather than style.length
-    expect(['1', '']).toContain(fixture.nativeElement.style.opacity);
+    expect(fixture.nativeElement.classList.contains('show')).toBe(true);
   });
 
   it('should have attributes', () => {
