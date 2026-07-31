@@ -2,6 +2,17 @@
 
 ---
 
+#### `5.7.12` for Angular 22.1
+
+- refactor(alert): migrate to native CSS animations, cleanups
+- test(alert): migrate to native CSS animations, cleanups
+- chore(dependencies): update angular-cli
+  - `@angular-devkit/schematics` to version 22.1.2
+  - `@angular/build` to version 22.1.2
+  - `@angular/cli` to version 22.1.2
+
+---
+
 #### `5.7.11` for Angular 22.1
 
 - chore(dependencies): update to Angular 22.1
