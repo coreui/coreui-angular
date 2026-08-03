@@ -1,7 +1,4 @@
-import { AnimationBuilder, AnimationPlayer, useAnimation } from '@angular/animations';
-
 import {
-  afterNextRender,
   booleanAttribute,
   computed,
   Directive,
@@ -13,96 +10,82 @@ import {
   OnDestroy,
   output,
   Renderer2,
-  signal
+  untracked
 } from '@angular/core';
-
-import {
-  collapseAnimation,
-  collapseHorizontalAnimation,
-  expandAnimation,
-  expandHorizontalAnimation
-} from './collapse.animations';
+import { BooleanInput } from '@angular/cdk/coercion';
 
 @Directive({
   selector: '[cCollapse]',
   exportAs: 'cCollapse',
-  host: { '[class]': 'hostClasses()', '[style]': '{ display: "none" }' }
+  host: { '[class]': 'hostClasses()' }
 })
 export class CollapseDirective implements OnDestroy {
-  readonly #animationBuilder = inject(AnimationBuilder);
+  static ngAcceptInputType_animate: BooleanInput;
+  static ngAcceptInputType_horizontal: BooleanInput;
+  static ngAcceptInputType_navbar: BooleanInput;
+  static ngAcceptInputType_visible: BooleanInput;
+
   readonly #hostElement = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
-  #player: AnimationPlayer | undefined = undefined;
-
-  constructor() {
-    afterNextRender({
-      read: () => {
-        this.#initialized.set(true);
-      }
-    });
-  }
+  #unlistenTransitionEnd?: () => void;
+  #isFirstChange = true;
 
   /**
-   * @ignore
+   * @ignore internal
    */
   readonly animateInput = input(true, { transform: booleanAttribute, alias: 'animate' });
 
-  readonly animate = linkedSignal({
-    source: this.animateInput,
-    computation: (value: boolean) => value
-  });
+  readonly animate = linkedSignal(this.animateInput);
 
   /**
    * Set horizontal collapsing to transition the width instead of height.
-   * @type boolean
+   * @return boolean
    * @default false
    */
   readonly horizontal = input(false, { transform: booleanAttribute });
 
   /**
-   * Toggle the visibility of collapsible element.
-   * @type boolean
+   * Toggle the visibility of a collapsible element.
+   * @return boolean
    * @default false
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
+  /**
+   * Event emitted on visibility change. [docs]
+   * @return boolean
+   */
   readonly visibleChange = output<boolean>();
 
-  readonly visible = linkedSignal({ source: this.visibleInput, computation: (value: boolean) => value });
-
-  readonly #initialized = signal(false);
+  readonly visible = linkedSignal(this.visibleInput);
 
   readonly #visibleEffect = effect(() => {
     const visible = this.visible();
-    if (this.#initialized()) {
-      this.createPlayer(visible);
+    if (this.#isFirstChange || !untracked(() => this.animate())) {
+      // no transition
+      this.#isFirstChange = false;
+      this.setInitialState(visible);
+      return;
     }
+    untracked(() => {
+      this.runTransition(visible);
+    });
   });
 
   /**
-   * Add `navbar` prop for grouping and hiding navbar contents by a parent breakpoint.
-   * @type boolean
+   * Add a `navbar` prop for grouping and hiding navbar contents by a parent breakpoint.
+   * @return boolean
    * @default false
    */
   readonly navbar = input(false, { transform: booleanAttribute });
 
   /**
-   * @ignore
-   */
-  readonly duration = input('350ms');
-
-  /**
-   * @ignore
-   */
-  readonly transition = input('ease');
-
-  /**
    * Event emitted on visibility change. [docs]
-   * @type string
+   * @return string
    */
   readonly collapseChange = output<string>();
 
-  readonly hostClasses = computed(() => {
+  protected readonly hostClasses = computed(() => {
     return {
       'navbar-collapse': this.navbar(),
       'collapse-horizontal': this.horizontal()
@@ -110,79 +93,107 @@ export class CollapseDirective implements OnDestroy {
   });
 
   ngOnDestroy(): void {
-    this.destroyPlayer();
+    this.clearPendingCallbacks();
   }
 
   toggle(visible = !this.visible()): void {
     this.visible.set(visible);
   }
 
-  destroyPlayer(): void {
-    this.#player?.destroy();
-    this.#player = undefined;
+  protected clearPendingCallbacks(): void {
+    this.#unlistenTransitionEnd?.();
+    this.#unlistenTransitionEnd = undefined;
   }
 
-  createPlayer(visible: boolean = this.visible()): void {
-    if (this.#player?.hasStarted()) {
-      this.destroyPlayer();
-    }
-
+  protected setInitialState(visible: boolean): void {
     const host: HTMLElement = this.#hostElement.nativeElement;
 
+    this.#renderer.addClass(host, 'collapse');
+    this.#renderer.removeClass(host, 'collapsing');
+
     if (visible) {
-      this.#renderer.removeStyle(host, 'display');
-    }
-
-    const duration = this.animate() ? this.duration() : '0ms';
-
-    const expand = this.horizontal() ? expandHorizontalAnimation : expandAnimation;
-    const collapse = this.horizontal() ? collapseHorizontalAnimation : collapseAnimation;
-
-    const dimension = this.horizontal() ? 'width' : 'height';
-    const capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
-    const scrollSize = `scroll${capitalizedDimension}`;
-
-    const animationFactory = this.#animationBuilder?.build(
-      useAnimation(visible ? expand : collapse, { params: { time: duration, easing: this.transition() } })
-    );
-
-    this.#player = animationFactory.create(host);
-
-    !visible && host.offsetHeight && host.style[dimension] && host.scrollHeight;
-
-    this.#renderer.setStyle(host, dimension, visible ? 0 : `${host.getBoundingClientRect()[dimension]}px`);
-
-    this.#player.onStart(() => {
-      this.setMaxSize();
-      this.#renderer.removeClass(host, 'collapse');
-      this.#renderer.addClass(host, 'collapsing');
+      this.#renderer.addClass(host, 'show');
+    } else {
       this.#renderer.removeClass(host, 'show');
-      this.#renderer.setStyle(host, dimension, visible ? `${(host as any)[scrollSize]}px` : '');
-      if (this.#player) {
-        this.collapseChange?.emit(visible ? 'opening' : 'collapsing');
-      }
-    });
-
-    this.#player.onDone(() => {
-      this.#renderer.removeClass(host, 'collapsing');
-      this.#renderer.addClass(host, 'collapse');
-      if (visible) {
-        this.#renderer.addClass(host, 'show');
-        this.#renderer.setStyle(host, dimension, '');
-      } else {
-        this.#renderer.removeClass(host, 'show');
-      }
-      if (this.#player) {
-        this.collapseChange?.emit(visible ? 'open' : 'collapsed');
-        this.visibleChange?.emit(visible);
-      }
-      this.destroyPlayer();
-    });
-
-    this.#player?.play();
+    }
   }
 
-  setMaxSize() {
+  protected runTransition(visible: boolean): void {
+    this.clearPendingCallbacks();
+
+    const host: HTMLElement = this.#hostElement.nativeElement;
+    const dimension = this.horizontal() ? 'width' : 'height';
+    const capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
+    const scrollSize = `scroll${capitalizedDimension}` as 'scrollHeight' | 'scrollWidth';
+
+    const animate = this.animate();
+
+    if (visible) {
+      this.setMaxSize();
+
+      // Switch off `collapse`/`show` before we measure its scroll size below.
+      this.#renderer.removeClass(host, 'collapse');
+      this.#renderer.removeClass(host, 'show');
+      this.#renderer.addClass(host, 'collapsing');
+
+      this.collapseChange?.emit('opening');
+
+      // Reading scrollHeight/scrollWidth forces a synchronous reflow, committing the 0-size
+      // starting point before we set the target size below, so the browser animates the change.
+      const targetSize = host[scrollSize];
+      this.#renderer.setStyle(host, dimension, `${targetSize}px`);
+    } else {
+      // Lock in the current pixel size first so the browser has a committed starting point,
+      // then switch to the collapsing state and clear it so the size can animate down to 0.
+      const startSize = host.getBoundingClientRect()[dimension];
+      this.#renderer.setStyle(host, dimension, `${startSize}px`);
+      // Force a reflow so the browser registers the starting size before the next style change.
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      host.offsetHeight;
+
+      this.#renderer.removeClass(host, 'collapse');
+      this.#renderer.removeClass(host, 'show');
+      this.#renderer.addClass(host, 'collapsing');
+
+      this.collapseChange?.emit('collapsing');
+
+      // Now that the starting size is committed, set the target size (0) so the browser
+      // animates the transition down.
+      this.#renderer.setStyle(host, dimension, '0px');
+    }
+
+    const finish = () => this.finishTransition(visible, host, dimension);
+
+    if (animate) {
+      this.#unlistenTransitionEnd = this.#renderer.listen(host, 'transitionend', (event: TransitionEvent) => {
+        // Ignore bubbled transitionend events from descendant elements.
+        if (event.target === host && event.propertyName === dimension) {
+          finish();
+        }
+      });
+    } else {
+      finish();
+    }
+  }
+
+  protected finishTransition(visible: boolean, host: HTMLElement, dimension: string): void {
+    this.clearPendingCallbacks();
+
+    this.#renderer.removeClass(host, 'collapsing');
+    this.#renderer.addClass(host, 'collapse');
+    if (visible) {
+      this.#renderer.addClass(host, 'show');
+    } else {
+      this.#renderer.removeClass(host, 'show');
+    }
+    this.#renderer.removeStyle(host, 'transition');
+    this.#renderer.removeStyle(host, dimension);
+
+    this.collapseChange?.emit(visible ? 'open' : 'collapsed');
+    this.visibleChange?.emit(visible);
+  }
+
+  protected setMaxSize() {
     const host = this.#hostElement.nativeElement;
     if (this.horizontal()) {
       host.scrollWidth > 0 && this.#renderer.setStyle(host, 'maxWidth', `${host.scrollWidth}px`);

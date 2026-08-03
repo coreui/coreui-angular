@@ -1,7 +1,6 @@
 import { CollapseDirective } from './collapse.directive';
 import { Component, DebugElement, ElementRef, Renderer2, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 
 class MockElementRef extends ElementRef {}
@@ -22,7 +21,7 @@ describe('CollapseDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestComponent, CollapseDirective, NoopAnimationsModule],
+      imports: [TestComponent, CollapseDirective],
       providers: [{ provide: ElementRef, useClass: MockElementRef }, Renderer2]
     });
 
@@ -40,8 +39,7 @@ describe('CollapseDirective', () => {
     });
   });
 
-  it('should have css classes', async () => {
-    expect(elementRef.nativeElement.style.display).toContain('none');
+  it('should have css classes', () => {
     expect(elementRef.nativeElement.classList.contains('collapse-horizontal')).toBe(false);
     component.horizontal.set(true);
     component.visible.set(true);
