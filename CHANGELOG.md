@@ -2,6 +2,15 @@
 
 ---
 
+#### `5.7.13` for Angular 22.1
+
+- refactor(collapse): migrate to native CSS animations, cleanups
+- fix(navbar): restore initial animate input for collapse, cleanups
+- test(page-item): fix 'Test timed out' – remove unnecessary async await
+- chore(dependencies): update typescript-eslint to version 8.66.0
+
+---
+
 #### `5.7.12` for Angular 22.1
 
 - refactor(alert): migrate to native CSS animations, cleanups
