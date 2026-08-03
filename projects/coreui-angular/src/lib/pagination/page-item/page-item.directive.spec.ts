@@ -47,16 +47,16 @@ describe('PageItemDirective', () => {
     });
   });
 
-  it('should toggle disable state for the component', async () => {
+  it('should toggle disable state for the component', () => {
     expect(debugElement.nativeElement.getAttribute('aria-disabled')).toBeNull();
     expect(debugElement.nativeElement.getAttribute('tabindex')).toBeNull();
     componentRef.setInput('disabled', true);
-    await fixture.whenStable();
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('aria-disabled')).toBe('true');
     expect(debugElement.nativeElement.getAttribute('tabindex')).toBe('-1');
     componentRef.setInput('disabled', false);
-    await fixture.whenStable();
     fixture.detectChanges();
+    expect(debugElement.nativeElement.getAttribute('aria-disabled')).toBeNull();
+    expect(debugElement.nativeElement.getAttribute('tabindex')).toBeNull();
   });
 });
