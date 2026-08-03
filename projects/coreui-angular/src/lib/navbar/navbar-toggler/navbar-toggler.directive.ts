@@ -27,28 +27,30 @@ export class NavbarTogglerDirective {
 
   /**
    * Reference to navbar collapse element (via # template variable) . [docs]
-   * @type string
+   * @return string
    * @default 'button'
    */
   readonly collapseRef = input<CollapseDirective | undefined>(undefined, { alias: 'cNavbarToggler' });
 
   /**
    * Default type for navbar-toggler. [docs]
-   * @type string
+   * @return string
    * @default 'button'
    */
   readonly type = input('button');
 
   /**
    * Default aria-label attr for navbar-toggler. [docs]
-   * @type string
+   * @return string
    * @default 'Toggle navigation'
    */
   readonly ariaLabel = input('Toggle navigation');
 
-  handleClick($event: MouseEvent): void {
+  protected handleClick($event: MouseEvent): void {
     const collapseRef = this.collapseRef();
-    collapseRef?.toggle(!collapseRef?.visible());
+    if (collapseRef) {
+      collapseRef?.toggle(!collapseRef?.visible());
+    }
   }
 
   addDefaultIcon(): void {

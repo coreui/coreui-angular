@@ -113,12 +113,11 @@ export class NavbarComponent {
       if (!collapse) {
         return;
       }
-      const animate = collapse.animate();
       collapse.animate.set(false);
       collapse.toggle(false);
       setTimeout(() => {
         collapse.toggle(result.matches);
-        setTimeout(() => collapse.animate.set(animate));
+        setTimeout(() => collapse.animate.set(collapse.animateInput()));
       });
     });
 
