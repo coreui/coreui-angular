@@ -1,5 +1,15 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+
+---
+
+#### `5.7.14` for Angular 22.1 
+
+- refactor(tab-panel): migrate to native CSS animations, cleanups
+- refactor(carousel): migrate to native CSS animations, cleanups
+- chore(deps): update ng-packagr to version 22.1.1
+- chore(deps): bump actions/stale in the github-actions group
+
 ---
 
 #### `5.7.13` for Angular 22.1
