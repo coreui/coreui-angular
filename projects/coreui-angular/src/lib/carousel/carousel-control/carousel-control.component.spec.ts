@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CarouselControlComponent } from './carousel-control.component';
 import { CarouselService } from '../carousel.service';
-import { CarouselState } from '../carousel-state';
 import { ComponentRef, DebugElement } from '@angular/core';
 import { take } from 'rxjs/operators';
 
@@ -12,13 +11,12 @@ describe('CarouselControlComponent', () => {
   let componentRef: ComponentRef<CarouselControlComponent>;
   let fixture: ComponentFixture<CarouselControlComponent>;
   let service: CarouselService;
-  let state: CarouselState;
   let debugElement: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CarouselControlComponent],
-      providers: [CarouselService, CarouselState]
+      providers: [CarouselService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CarouselControlComponent);
@@ -27,7 +25,6 @@ describe('CarouselControlComponent', () => {
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     service = TestBed.inject(CarouselService);
-    state = TestBed.inject(CarouselState);
     debugElement = fixture.debugElement;
     fixture.detectChanges();
   });

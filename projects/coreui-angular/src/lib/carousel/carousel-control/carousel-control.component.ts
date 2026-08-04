@@ -1,6 +1,5 @@
 import { Component, computed, inject, input, linkedSignal } from '@angular/core';
-
-import { CarouselState } from '../carousel-state';
+import { CarouselService } from '../carousel.service';
 
 @Component({
   selector: 'c-carousel-control',
@@ -14,7 +13,7 @@ import { CarouselState } from '../carousel-state';
   }
 })
 export class CarouselControlComponent {
-  readonly #carouselState = inject(CarouselState);
+  readonly #carouselService = inject(CarouselService);
 
   /**
    * Carousel control caption. [docs]
@@ -62,11 +61,14 @@ export class CarouselControlComponent {
   }
 
   onClick($event: MouseEvent): void {
+    if (this.#carouselService.animating()) {
+      return;
+    }
     this.#play();
   }
 
   #play(direction = this.direction()): void {
-    const nextIndex = this.#carouselState.direction(direction);
-    this.#carouselState.state = { activeItemIndex: nextIndex };
+    const nextIndex = this.#carouselService.direction(direction);
+    this.#carouselService.state = { activeItemIndex: nextIndex };
   }
 }

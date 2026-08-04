@@ -7,7 +7,6 @@ import { CarouselIndicatorsComponent } from './carousel-indicators/carousel-indi
 import { CarouselInnerComponent } from './carousel-inner/carousel-inner.component';
 import { CarouselItemComponent } from './carousel-item/carousel-item.component';
 import { CarouselService } from './carousel.service';
-import { CarouselState } from './carousel-state';
 import { CarouselConfig } from './carousel.config';
 
 @NgModule({
@@ -19,7 +18,7 @@ import { CarouselConfig } from './carousel.config';
     CarouselInnerComponent,
     CarouselItemComponent
   ],
-  providers: [CarouselService, CarouselState, CarouselConfig],
+  providers: [CarouselService, CarouselConfig],
   exports: [
     CarouselComponent,
     CarouselCaptionComponent,

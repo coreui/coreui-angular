@@ -8,23 +8,23 @@ import {
   signal
 } from '@angular/core';
 import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
-import { CarouselState } from '../carousel-state';
-import { carouselPlay } from '../carousel.animation';
+import { CarouselService } from '../carousel.service';
 
 @Component({
   selector: 'c-carousel-inner',
-  styleUrls: ['./carousel-inner.component.scss'],
-  animations: [carouselPlay],
+  styles: `
+    :host {
+      display: block;
+    }
+  `,
   template: '<ng-content />',
   host: {
     class: 'carousel-inner',
-    '[@carouselPlay]': 'slideType()',
-    '[@.disabled]': '!animate()',
     '[attr.aria-live]': 'ariaLive()'
   }
 })
 export class CarouselInnerComponent implements AfterContentInit, AfterContentChecked {
-  readonly #carouselState = inject(CarouselState);
+  readonly #carouselService = inject(CarouselService);
 
   readonly activeIndex = signal<number | undefined>(undefined);
   readonly animate = signal<boolean>(true);
@@ -49,7 +49,7 @@ export class CarouselInnerComponent implements AfterContentInit, AfterContentChe
 
   ngAfterContentChecked(): void {
     this.setItems();
-    const state = this.#carouselState?.state;
+    const state = this.#carouselService?.state;
     const nextIndex = state?.activeItemIndex;
     const nextDirection = state?.direction;
     if (this.activeIndex() !== nextIndex) {
@@ -65,7 +65,7 @@ export class CarouselInnerComponent implements AfterContentInit, AfterContentChe
     const contentItems = this.contentItems();
     if (this.#prevContentItems() !== contentItems) {
       this.#prevContentItems.set([...contentItems]);
-      this.#carouselState.setItems(contentItems);
+      this.#carouselService.setItems(contentItems);
     }
   }
 }

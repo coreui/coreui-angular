@@ -3,7 +3,11 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'c-carousel-caption',
   template: '<ng-content />',
-  styleUrls: ['./carousel-caption.component.scss'],
+  styles: `
+    :host {
+      display: block;
+    }
+  `,
   host: {
     '[class.carousel-caption]': 'true'
   }

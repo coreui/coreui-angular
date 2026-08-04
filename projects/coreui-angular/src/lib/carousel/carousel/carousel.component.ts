@@ -20,7 +20,6 @@ import { IListenersConfig, IntersectionService, ListenersService } from '../../s
 
 import { Triggers } from '../../coreui.types';
 import { ThemeDirective } from '../../shared/theme.directive';
-import { CarouselState } from '../carousel-state';
 import { CarouselService } from '../carousel.service';
 import { CarouselConfig } from '../carousel.config';
 
@@ -28,7 +27,7 @@ import { CarouselConfig } from '../carousel.config';
   selector: 'c-carousel',
   template: '<ng-content />',
   styleUrls: ['./carousel.component.scss'],
-  providers: [CarouselService, CarouselState, ListenersService],
+  providers: [CarouselService, ListenersService],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   exportAs: 'cCarousel',
   host: {
@@ -41,7 +40,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   readonly #hostElement = inject(ElementRef);
   readonly #carouselService = inject(CarouselService);
-  readonly #carouselState = inject(CarouselState);
   readonly #intersectionService = inject(IntersectionService);
   readonly #listenersService = inject(ListenersService);
 
@@ -51,7 +49,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   loadConfig() {
     this.activeIndex.update((activeIndex) => this.config?.activeIndex ?? activeIndex);
-    this.animate.update((animate) => this.config?.animate ?? animate);
+    this.animate.update((animate) => (animate === false ? animate : (this.config?.animate ?? animate)));
     this.direction.update((direction) => this.config?.direction ?? direction);
     this.interval.update((interval) => this.config?.interval ?? interval);
   }
@@ -73,10 +71,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    */
   readonly animateInput = input<boolean>(true, { alias: 'animate' });
 
-  readonly animate = linkedSignal({
-    source: this.animateInput,
-    computation: (value: boolean) => value
-  });
+  readonly animate = linkedSignal(this.animateInput);
 
   /**
    * Carousel direction. [docs]
@@ -103,7 +98,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   readonly #intervalEffect = effect(() => {
     const interval = this.interval();
-    this.#carouselState.state = { interval: interval };
+    this.#carouselService.state = { interval: interval };
     interval ? this.setTimer() : this.resetTimer();
   });
 
@@ -121,7 +116,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   readonly touch = input<boolean>(true);
 
   /**
-   * Set type of the transition.
+   * Set the type of the transition.
    * @return {'slide' | 'crossfade'}
    * @default 'slide'
    */
@@ -146,18 +141,20 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   readonly #destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    this.carouselStateSubscribe();
+    this.carouselServiceSubscribe();
   }
 
   ngOnDestroy(): void {
     this.resetTimer();
     this.clearListeners();
     this.swipeSubscribe(false);
+    // Ensure IntersectionObserver is cleaned up
+    this.#intersectionService?.unobserve(this.#hostElement);
   }
 
   ngAfterContentInit(): void {
     this.intersectionServiceSubscribe();
-    this.#carouselState.state = {
+    this.#carouselService.state = {
       activeItemIndex: this.activeIndex(),
       animate: this.animate(),
       interval: this.interval(),
@@ -201,8 +198,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     this.resetTimer();
     if (interval > 0) {
       this.timerId = setTimeout(() => {
-        const nextIndex = this.#carouselState.direction(direction);
-        this.#carouselState.state = { activeItemIndex: nextIndex };
+        const nextIndex = this.#carouselService.direction(direction);
+        this.#carouselService.state = { activeItemIndex: nextIndex };
       }, interval);
     }
   }
@@ -212,7 +209,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
     this.timerId = undefined;
   }
 
-  private carouselStateSubscribe(): void {
+  private carouselServiceSubscribe(): void {
     this.#carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextItem) => {
       if ('active' in nextItem && typeof nextItem.active === 'number') {
         this.itemChange?.emit(nextItem.active);
@@ -233,7 +230,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
       .pipe(
         filter((next) => next.hostElement === this.#hostElement),
         finalize(() => {
-          this.#intersectionService.unobserve(this.#hostElement);
+          this.#intersectionService?.unobserve(this.#hostElement);
         }),
         takeUntilDestroyed(this.#destroyRef)
       )
@@ -254,10 +251,13 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
         .subscribe(([touchstart, [touchend, touchmove]]) => {
           touchstart.stopPropagation();
           touchmove.stopPropagation();
+          if (this.#carouselService.animating()) {
+            return;
+          }
           const distanceX = touchstart.touches[0]?.clientX - touchmove.touches[0]?.clientX || 0;
           if (Math.abs(distanceX) > 0.3 * carouselElement.clientWidth && touchstart.timeStamp <= touchmove.timeStamp) {
-            const nextIndex = this.#carouselState.direction(distanceX > 0 ? 'next' : 'prev');
-            this.#carouselState.state = { activeItemIndex: nextIndex };
+            const nextIndex = this.#carouselService.direction(distanceX > 0 ? 'next' : 'prev');
+            this.#carouselService.state = { activeItemIndex: nextIndex };
           }
         });
     } else {

@@ -3,27 +3,24 @@ import { expect } from 'vitest';
 
 import { CarouselIndicatorsComponent } from './carousel-indicators.component';
 import { CarouselService } from '../carousel.service';
-import { CarouselState } from '../carousel-state';
 
 describe('CarouselIndicatorsComponent', () => {
   let component: CarouselIndicatorsComponent;
   let fixture: ComponentFixture<CarouselIndicatorsComponent>;
   let service: CarouselService;
-  let state: CarouselState;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CarouselIndicatorsComponent],
-      providers: [CarouselService, CarouselState]
+      providers: [CarouselService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CarouselIndicatorsComponent);
     await fixture.whenStable();
 
     service = TestBed.inject(CarouselService);
-    state = TestBed.inject(CarouselState);
     component = fixture.componentInstance;
-    state.setItems([
+    service.setItems([
       { index: 0, interval: () => 5000 } as any,
       { index: 1, interval: () => 5000 } as any,
       { index: 2, interval: () => 5000 } as any,
