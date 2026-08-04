@@ -78,7 +78,7 @@
     "eslint": "^10.8.0",
     "jsdom": "^30.0.1",
     "native-copyfiles": "^2.0.3",
-    "ng-packagr": "^22.1.0",
+    "ng-packagr": "^22.1.1",
     "prettier": "^3.9.6",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.66.0",
