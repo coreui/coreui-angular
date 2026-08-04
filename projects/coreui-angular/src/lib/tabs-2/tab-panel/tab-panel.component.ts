@@ -1,9 +1,8 @@
-import { animate, animateChild, AnimationEvent, query, state, style, transition, trigger } from '@angular/animations';
-import { Component, computed, inject, input, numberAttribute, output, OutputEmitterRef, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, numberAttribute, output, signal } from '@angular/core';
+import getTransitionDurationFromElement from '../../utilities/getTransitionDurationFromElement';
 import { TabsService } from '../tabs.service';
 
-type AnimateType = 'hide' | 'show';
-type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
+export type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
 
 @Component({
   exportAs: 'cTabPanel',
@@ -15,25 +14,16 @@ type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
     '[attr.aria-labelledby]': 'attrAriaLabelledBy()',
     '[id]': 'propId()',
     '[attr.role]': 'role()',
-    '[@.disabled]': '!transition()',
-    '[@fadeInOut]': 'visible() ? "show" : "hide"',
-    '(@fadeInOut.done)': 'onAnimationDone($event)'
-  },
-  animations: [
-    trigger('fadeInOut', [
-      state('show', style({ opacity: 1 })),
-      state('hide', style({ opacity: 0 })),
-      state('void', style({ opacity: 1 })),
-      transition('* => *', [query('@*', [animateChild()], { optional: true }), animate('150ms linear')])
-    ])
-  ]
+    '(transitionend)': 'onTransitionEnd($event)'
+  }
 })
 export class TabPanelComponent {
-  readonly tabsService = inject(TabsService);
+  readonly #tabsService = inject(TabsService);
+  readonly #elementRef = inject(ElementRef);
 
   /**
    * aria-labelledby attribute
-   * @type string
+   * @return string
    * @default undefined
    */
   readonly ariaLabelledBy = input<string | undefined>(undefined, {
@@ -42,71 +32,91 @@ export class TabPanelComponent {
 
   /**
    * Element id attribute
-   * @type string
+   * @return string
    * @default undefined
    */
   readonly id = input<string>();
 
   /**
    * Item key.
-   * @type string | number
+   * @return string | number
    * @required
    */
   readonly itemKey = input.required<string | number>();
 
   /**
    * Element role.
-   * @type string
+   * @return string
    * @default 'tabpanel'
    */
   readonly role = input('tabpanel');
 
   /**
    * tabindex attribute.
-   * @type number
+   * @return number
    * @default 0
    */
   readonly tabindex = input(0, { transform: numberAttribute });
 
   /**
    * Enable fade in transition.
-   * @type boolean
+   * @return boolean
    * @default true
    */
   readonly transition = input(true);
 
   /**
    * visible change output
-   * @type OutputEmitterRef<VisibleChangeEvent>
+   * @return VisibleChangeEvent
    */
   readonly visibleChange = output<VisibleChangeEvent>();
 
-  readonly show = signal(false);
+  protected readonly show = signal(false);
 
   readonly visible = computed(() => {
-    const visible = this.tabsService.activeItemKey() === this.itemKey() && !this.tabsService.activeItem()?.disabled;
+    const visible = this.#tabsService.activeItemKey() === this.itemKey() && !this.#tabsService.activeItem()?.disabled;
     this.visibleChange?.emit({ itemKey: this.itemKey(), visible });
     return visible;
   });
 
-  readonly propId = computed(() => this.id() ?? `${this.tabsService.id()}-panel-${this.itemKey()}`);
+  #transitionDuration = 0;
 
-  readonly attrAriaLabelledBy = computed(
-    () => this.ariaLabelledBy() ?? `${this.tabsService.id()}-tab-${this.itemKey()}`
+  readonly #visibleEffect = effect(() => {
+    const isVisible = this.visible();
+    const hasTransition = this.transition();
+
+    if (!hasTransition) {
+      this.show.set(isVisible);
+    } else {
+      requestAnimationFrame(() => {
+        if (this.#transitionDuration === 0) {
+          this.#transitionDuration = getTransitionDurationFromElement(this.#elementRef.nativeElement);
+        }
+        setTimeout(() => this.show.set(isVisible), this.#transitionDuration || 0);
+      });
+    }
+  });
+
+  protected readonly propId = computed(() => this.id() ?? `${this.#tabsService.id()}-panel-${this.itemKey()}`);
+
+  protected readonly attrAriaLabelledBy = computed(
+    () => this.ariaLabelledBy() ?? `${this.#tabsService.id()}-tab-${this.itemKey()}`
   );
 
-  readonly hostClasses = computed(
+  protected readonly hostClasses = computed(
     () =>
       ({
         'tab-pane': true,
-        active: this.show(),
+        active: this.visible(),
         fade: this.transition(),
         show: this.show(),
-        invisible: this.tabsService.activeItem()?.disabled
+        invisible: this.#tabsService.activeItem()?.disabled
       }) as Record<string, boolean>
   );
 
-  onAnimationDone($event: AnimationEvent): void {
-    this.show.set(this.visible());
+  protected onTransitionEnd($event: TransitionEvent): void {
+    if ($event.propertyName === 'opacity' && $event.target === this.#elementRef.nativeElement) {
+      this.show.set(this.visible());
+    }
   }
 }
