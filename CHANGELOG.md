@@ -3,6 +3,17 @@
 
 ---
 
+#### `5.7.15` for Angular 22.1 
+
+- chore(deps): update `@angular/cli` to version 22.1.3
+  - `@angular/aria` to version 22.1.1
+  - `@angular/cdk` to version 22.1.1
+  - `@angular-devkit/schematics` to version 22.1.3
+  - `@angular/build` to version 22.1.3
+  - `@angular/cli` to version 22.1.3
+
+---
+
 #### `5.7.14` for Angular 22.1 
 
 - refactor(tab-panel): migrate to native CSS animations, cleanups
