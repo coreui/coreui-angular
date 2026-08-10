@@ -66,15 +66,8 @@ export class CarouselItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('OnInit', this.#carouselService.state.animate);
-
     this.#carouselService.carouselIndex$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((nextIndex) => {
       if ('active' in nextIndex) {
-        console.log(
-          '#carouselService',
-          this.#carouselService.state.animate,
-          this.#elementRef.nativeElement.style.transition
-        );
         if (this.#carouselService.state.animate && this.#elementRef.nativeElement.style.transition !== '') {
           this.#timeoutId = setTimeout(() => {
             this.#elementRef.nativeElement.style.transition = '';
