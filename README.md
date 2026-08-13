@@ -65,6 +65,8 @@ Featured CoreUI for Angular libraries:
 - [Documentation](#documentation)
 - [Frameworks](#frameworks)
 - [Templates](#templates)
+- [Data Grid](#data-grid)
+- [Scheduler](#scheduler)
 - [Contributing](#contributing)
 - [Community](#community)
 - [Versioning](#versioning)
@@ -152,6 +154,32 @@ Fully featured, out-of-the-box, templates for your application based on CoreUI.
 - [Bootstrap Admin Template](https://coreui.io/)
 - [React Admin Template](https://coreui.io/react)
 - [Vue Admin Template](https://coreui.io/vue)
+
+## Data Grid
+
+CoreUI Angular Data Grid handles 100,000+ rows with sorting, filtering, virtualization, column pinning, inline editing and CSV export — using the same markup and stylesheet you already use.
+
+```bash
+npm install @coreui/angular-data-grid
+```
+
+One license also covers JavaScript, React and Vue. It's a separate add-on, not part of CoreUI PRO.
+
+- [Angular Data Grid](https://coreui.io/data-grid/angular/?src=readme-angular-github)
+- [Documentation](https://coreui.io/data-grid/angular/docs/getting-started/introduction/?src=readme-angular-github)
+
+## Scheduler
+
+CoreUI Angular Scheduler ships six views — day, week, month, agenda, resources, and timeline — with drag & drop, RFC 5545 recurrence, and DST-safe time handling, using the same markup and stylesheet you already use.
+
+```bash
+npm install @coreui/angular-scheduler
+```
+
+One license also covers JavaScript, React and Vue. It's a separate add-on, not part of CoreUI PRO.
+
+- [Angular Scheduler](https://coreui.io/scheduler/angular/?src=readme-angular-github)
+- [Documentation](https://coreui.io/scheduler/angular/docs/getting-started/introduction/?src=readme-angular-github)
 
 ## Contributing
 
