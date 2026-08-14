@@ -1,5 +1,26 @@
 ### [@coreui/angular](https://coreui.io/angular/) changelog
 
+---
+
+#### `5.7.18` for Angular 22.1 
+
+- chore(dependencies): update to Angular 22.1.2
+  - `@angular/animations` to version 22.1.2
+  - `@angular/aria` to version 22.1.2
+  - `@angular/cdk` to version 22.1.2
+  - `@angular/common` to version 22.1.2
+  - `@angular/compiler` to version 22.1.2
+  - `@angular/core` to version 22.1.2
+  - `@angular/forms` to version 22.1.2
+  - `@angular/localize` to version 22.1.2
+  - `@angular/platform-browser` to version 22.1.2
+  - `@angular/router` to version 22.1.2
+  - `@angular-devkit/schematics` to version 22.1.4
+  - `@angular/build` to version 22.1.4
+  - `@angular/cli` to version 22.1.4
+  - `@angular/compiler-cli` to version 22.1.2
+  - `@angular/language-service` to version 22.1.2
+  - `typescript-eslint` to version 8.67.0
 
 ---
 
