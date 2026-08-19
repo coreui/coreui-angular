@@ -27,7 +27,7 @@ export class PopoverComponent implements OnDestroy {
 
   /**
    * Content of popover
-   * @return {string | TemplateRef}
+   * @returns {string | TemplateRef}
    */
   readonly content = input<string | TemplateRef<any>>('');
 
@@ -37,10 +37,21 @@ export class PopoverComponent implements OnDestroy {
 
   /**
    * Toggle the visibility of popover component.
-   * @return boolean
+   * @returns boolean
    */
   readonly visible = input(false, { transform: booleanAttribute });
+
+  /**
+   * The `id` HTML attribute of the popover.
+   * @returns string
+   */
   readonly id = input<string>();
+
+  /**
+   * Default role for popover.
+   * @returns string
+   * @default 'tooltip'
+   */
   readonly role = input('tooltip');
 
   readonly viewContainerRef = viewChild('popoverTemplate', { read: ViewContainerRef });

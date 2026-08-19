@@ -28,13 +28,13 @@ export class PageItemDirective {
 
   /**
    * Toggle the active state for the component.
-   * @return boolean
+   * @returns boolean
    */
   readonly active = input<boolean>();
 
   /**
    * Toggle the disabled state for the component.
-   * @return boolean
+   * @returns boolean
    */
   readonly disabled = input(false, { transform: booleanAttribute });
 

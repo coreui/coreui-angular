@@ -16,38 +16,38 @@ export class WidgetStatBComponent extends CardComponent {
 
   /**
    * Sets the color context of the component to one of CoreUI themed colors.
-   * @type Colors
+   * @returns Colors
    */
   // override readonly color: InputSignal<Colors | undefined> = input();
 
   /**
    * Sets the text-color context of the component to one of CoreUI themed colors.
    * via TextColorDirective
-   * @type TextColors
+   * @returns TextColors
    */
   // override readonly textColor: InputSignal<TextColors | undefined> = input();
 
   /**
    * Title of the widget to display
-   * @type string
+   * @returns string
    */
   readonly title: InputSignal<string | undefined> = input<string>();
 
   /**
    * Helper text for your widget.
-   * @type string
+   * @returns string
    */
   readonly text: InputSignal<string | undefined> = input<string>();
 
   /**
    * Value for your widget to display
-   * @type string
+   * @returns string
    */
   readonly value: InputSignal<string | undefined> = input<string>();
 
   /**
    * Invert colors from their default dark shade.
-   * @type boolean
+   * @returns boolean
    */
   readonly inverse: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 

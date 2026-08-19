@@ -12,5 +12,10 @@ import { Component, input } from '@angular/core';
   host: { '[class.progress-stacked]': 'stacked()' }
 })
 export class ProgressStackedComponent {
+  /**
+   * Toggle the `progress-stacked` class on the host element.
+   * @returns boolean
+   * @default true
+   */
   readonly stacked = input(true);
 }

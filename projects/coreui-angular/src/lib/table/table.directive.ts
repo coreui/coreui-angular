@@ -32,45 +32,45 @@ export class TableDirective {
 
   /**
    * Set the vertical alignment.
-   * @return string
+   * @returns string
    * @values 'bottom' | 'middle' | 'top'
    */
   readonly align = input<'bottom' | 'middle' | 'top'>();
 
   /**
    * Sets the border color of the component to one of CoreUI’s themed colors.
-   * @return Colors
+   * @returns Colors
    */
   readonly borderColor = input<Colors>();
 
   /**
    * Add borders on all sides of the table and cells.
-   * @return boolean
+   * @returns boolean
    */
   readonly bordered = input(false, { transform: booleanAttribute });
 
   /**
    * Remove borders on all sides of the table and cells.
-   * @return boolean
+   * @returns boolean
    */
   readonly borderless = input(false, { transform: booleanAttribute });
 
   /**
    * Put the `<caption>` on the top of the table.
-   * @return 'top'
+   * @returns 'top'
    * @values 'top'
    */
   readonly caption = input<'top'>();
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @return Colors
+   * @returns Colors
    */
   readonly color = input<Colors>();
 
   /**
    * Enable a hover state on table rows within table body.
-   * @return boolean
+   * @returns boolean
    */
   readonly hover = input(false, { transform: booleanAttribute });
 
@@ -82,19 +82,19 @@ export class TableDirective {
 
   /**
    * Make table more compact by cutting all cell `padding` in half.
-   * @return boolean
+   * @returns boolean
    */
   readonly small = input(false, { transform: booleanAttribute });
 
   /**
    * Add zebra-striping to any table row within the table body.
-   * @return boolean
+   * @returns boolean
    */
   readonly striped = input(false, { transform: booleanAttribute });
 
   /**
    * Add zebra-striping to any table column.
-   * @return boolean
+   * @returns boolean
    * @since 4.2.4
    */
   readonly stripedColumns = input(false, { transform: booleanAttribute });

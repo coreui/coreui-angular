@@ -22,6 +22,10 @@ export class VisibleDirective {
 
   #hasView!: boolean;
 
+  /**
+   * Whether the embedded template is created (`true`) or cleared (`false`) in the view container.
+   * @returns boolean
+   */
   readonly cVisible = input<boolean>();
 
   readonly #visibleEffect = effect(() => {

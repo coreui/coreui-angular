@@ -14,15 +14,15 @@ export class HeaderTogglerDirective implements AfterContentInit {
   readonly #hostElement = inject(ElementRef);
 
   /**
-   * Default type for header-toggler button. [docs]
-   * @return string
+   * Default type for header-toggler button
+   * @returns string
    * @default 'button'
    */
   readonly type = input('button');
 
   /**
-   * Default aria-label attr for header-toggler. [docs]
-   * @type string
+   * Default aria-label attr for header-toggler
+   * @returns string
    * @default 'Toggle navigation'
    */
   readonly ariaLabel = input('Toggle navigation');

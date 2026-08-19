@@ -39,21 +39,21 @@ export class CollapseDirective implements OnDestroy {
 
   /**
    * Set horizontal collapsing to transition the width instead of height.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly horizontal = input(false, { transform: booleanAttribute });
 
   /**
    * Toggle the visibility of a collapsible element.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
   /**
-   * Event emitted on visibility change. [docs]
-   * @return boolean
+   * Event emitted on visibility change
+   * @returns boolean
    */
   readonly visibleChange = output<boolean>();
 
@@ -74,14 +74,14 @@ export class CollapseDirective implements OnDestroy {
 
   /**
    * Add a `navbar` prop for grouping and hiding navbar contents by a parent breakpoint.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly navbar = input(false, { transform: booleanAttribute });
 
   /**
-   * Event emitted on visibility change. [docs]
-   * @return string
+   * Event emitted on visibility change
+   * @returns string
    */
   readonly collapseChange = output<string>();
 

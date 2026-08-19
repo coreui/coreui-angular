@@ -56,7 +56,16 @@ export class ToastComponent implements OnInit, OnDestroy {
   readonly renderer = inject(Renderer2);
   readonly toasterService = inject(ToasterService);
 
+  /**
+   * Marks the toast as dynamically created by `ToasterService`, rather than declared in the template.
+   * @returns boolean
+   */
   readonly dynamic = input<boolean>();
+
+  /**
+   * Placement of the toast within its toaster, set by `ToasterComponent`.
+   * @returns TToasterPlacement
+   */
   readonly placementInput = input<TToasterPlacement>(undefined, { alias: 'placement' });
 
   get placement() {
@@ -65,37 +74,37 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   /**
    * Auto hide the toast.
-   * @return boolean
+   * @returns boolean
    */
   readonly autohide = input(true);
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @return Colors
+   * @returns Colors
    */
   readonly color = input<Colors>('');
 
   /**
    * Delay hiding the toast (ms).
-   * @return number
+   * @returns number
    */
   readonly delay = input(5000, { transform: numberAttribute });
 
   /**
    * Apply fade transition to the toast.
-   * @return boolean
+   * @returns boolean
    */
   readonly fade = input(true);
 
   /**
    * ARIA role attribute.
-   * @return string
+   * @returns string
    */
   readonly role = input('alert');
 
   /**
    * Toggle the visibility of component.
-   * @return boolean
+   * @returns boolean
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
@@ -123,14 +132,14 @@ export class ToastComponent implements OnInit, OnDestroy {
   readonly index = input(0, { transform: numberAttribute });
 
   /**
-   * Event emitted on visibility change. [docs]
-   * @return <boolean>
+   * Event emitted on visibility change
+   * @returns boolean
    */
   readonly visibleChange = output<boolean>();
 
   /**
-   * Event emitted on timer tick. [docs]
-   * @return number
+   * Event emitted on timer tick
+   * @returns number
    */
   readonly timer = output<number>();
 

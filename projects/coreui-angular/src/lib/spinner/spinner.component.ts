@@ -13,33 +13,33 @@ import { Colors } from '../coreui.types';
 export class SpinnerComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   readonly color = input<Colors>();
 
   /**
    * Label for accessibility.
-   * @type string
+   * @returns string
    * @default 'Loading...'
    */
   readonly label = input('Loading...');
 
   /**
    * Size the component small.
-   * @return string
+   * @returns string
    * @values 'sm'
    */
   readonly size = input<'sm'>();
 
   /**
    * Set the button variant to an outlined button or a ghost button.
-   * @values 'border' | 'grow'
+   * @returns 'border' | 'grow'
    * @default 'border'
    */
   readonly variant = input<'border' | 'grow'>('border');
   /**
-   * Default role attr for Spinner. [docs]
-   * @type string
+   * Default role attr for spinner
+   * @returns string
    * @default 'status'
    */
   readonly role = input('status');

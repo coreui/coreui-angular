@@ -20,19 +20,19 @@ export class TabsComponent {
 
   /**
    * The active item key.
-   * @return <string | number | undefined>
+   * @returns <string | number | undefined>
    */
   readonly activeItemKey = model<number | string>();
 
   /**
    * The id attribute
-   * @type string
+   * @returns string
    */
   tabsId = `tabs-${nextId++}`;
 
   /**
    * HTML id attribute.
-   * @return string
+   * @returns string
    * @default `tabs-{n}`
    */
   readonly id = input<string>(this.tabsId);

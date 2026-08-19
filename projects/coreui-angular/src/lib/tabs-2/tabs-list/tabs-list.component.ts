@@ -46,14 +46,14 @@ export class TabsListComponent {
 
   /**
    * Specify a layout type for component.
-   * @type 'fill' | 'justified' | undefined
+   * @returns 'fill' | 'justified' | undefined
    * @default undefined
    */
   readonly layout: InputSignal<'fill' | 'justified' | undefined> = input();
 
   /**
    * Set the variant to tabs, pills or underline.
-   * @type 'pills' | 'tabs' | 'underline' | 'underline-border' | undefined
+   * @returns 'pills' | 'tabs' | 'underline' | 'underline-border' | undefined
    * @default undefined
    */
   readonly variant: InputSignal<'pills' | 'tabs' | 'underline' | 'underline-border' | undefined> = input();

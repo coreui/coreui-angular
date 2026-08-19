@@ -33,7 +33,7 @@ export class AccordionItemComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle an accordion item programmatically
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });

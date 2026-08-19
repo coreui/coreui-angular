@@ -28,32 +28,32 @@ export class ButtonDirective {
   static ngAcceptInputType_disabled: BooleanInput;
 
   /**
-   * Toggle the active state for the component. [docs]
-   * @type InputSignalWithTransform<boolean, unknown>
+   * Toggle the active state for the component
+   * @returns boolean
    */
-  readonly active: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly active = input(false, { transform: booleanAttribute });
 
   /**
-   * Sets the color context of the component to one of CoreUI’s themed colors. [docs]
-   * @type InputSignal<Colors>
+   * Sets the color context of the component to one of CoreUI’s themed colors
+   * @returns Colors
    */
-  readonly color: InputSignal<Colors> = input<Colors>('primary');
+  readonly color = input<Colors>('primary');
 
   /**
    * Toggle the disabled state for the component.
-   * @type InputSignalWithTransform<boolean, unknown>
+   * @returns boolean
    */
-  readonly disabled: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   /**
    * Select the shape of the component.
-   * @return Shapes
+   * @returns Shapes
    */
   readonly shape = input<Shapes>();
 
   /**
    * Size the component small or large.
-   * @return  sm' | 'lg' | ''
+   * @returns 'sm' | 'lg' | ''
    */
   readonly size = input<'' | 'sm' | 'lg' | string>('');
 
@@ -65,16 +65,16 @@ export class ButtonDirective {
   /**
    * Specifies the type of button. Always specify the type attribute for the `<button>` element.
    * Different browsers may use different default types for the `<button>` element.
-   * @type InputSignal<ButtonType>
+   * @returns ButtonType
    * @default 'button'
    */
-  readonly type: InputSignal<ButtonType> = input<ButtonType>('button');
+  readonly type = input<ButtonType>('button');
 
   /**
    * Set the button variant to an outlined button or a ghost button.
-   * @type InputSignal<'ghost' | 'outline' | undefined>
+   * @returns 'ghost' | 'outline' | undefined
    */
-  readonly variant: InputSignal<'ghost' | 'outline' | undefined> = input<'ghost' | 'outline'>();
+  readonly variant = input<'ghost' | 'outline' | undefined>();
 
   readonly hostClasses = computed(() => {
     const color = this.color();

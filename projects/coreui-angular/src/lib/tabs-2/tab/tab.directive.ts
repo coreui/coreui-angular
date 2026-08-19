@@ -43,7 +43,7 @@ export class TabDirective implements FocusableOption, OnInit {
 
   /**
    * Disabled attribute
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly disabledInput = input(false, { transform: booleanAttribute, alias: 'disabled' });
@@ -61,21 +61,21 @@ export class TabDirective implements FocusableOption, OnInit {
 
   /**
    * Item key.
-   * @type string | number
+   * @returns string | number
    * @required
    */
   readonly itemKey: InputSignal<string | number> = input.required<string | number>();
 
   /**
    * Element id attribute
-   * @type string
+   * @returns string
    * @default undefined
    */
   readonly id: InputSignal<string | undefined> = input<string>();
 
   /**
    * aria-controls attribute
-   * @type string
+   * @returns string
    * @default undefined
    */
   readonly ariaControls: InputSignal<string | undefined> = input<string | undefined>(undefined, {

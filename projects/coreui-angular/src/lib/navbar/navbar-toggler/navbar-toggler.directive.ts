@@ -26,22 +26,22 @@ export class NavbarTogglerDirective {
   }
 
   /**
-   * Reference to navbar collapse element (via # template variable) . [docs]
-   * @return string
+   * Reference to navbar collapse element (via # template variable)
+   * @returns string
    * @default 'button'
    */
   readonly collapseRef = input<CollapseDirective | undefined>(undefined, { alias: 'cNavbarToggler' });
 
   /**
-   * Default type for navbar-toggler. [docs]
-   * @return string
+   * Default type for navbar-toggler
+   * @returns string
    * @default 'button'
    */
   readonly type = input('button');
 
   /**
-   * Default aria-label attr for navbar-toggler. [docs]
-   * @return string
+   * Default aria-label attr for navbar-toggler
+   * @returns string
    * @default 'Toggle navigation'
    */
   readonly ariaLabel = input('Toggle navigation');

@@ -13,37 +13,37 @@ import { NumberOfColumns } from './row.type';
 export class RowDirective {
   /**
    * The number of columns/offset/order on extra small devices (<576px).
-   * @return { cols: 'auto' | number }
+   * @returns NumberOfColumns
    */
   readonly xs = input<NumberOfColumns>();
 
   /**
    * The number of columns/offset/order on small devices (<768px).
-   * @return { cols: 'auto' | number }
+   * @returns NumberOfColumns
    */
   readonly sm = input<NumberOfColumns>();
 
   /**
    * The number of columns/offset/order on medium devices (<992px).
-   * @return { cols: 'auto' | number }
+   * @returns NumberOfColumns
    */
   readonly md = input<NumberOfColumns>();
 
   /**
    * The number of columns/offset/order on large devices (<1200px).
-   * @return { cols: 'auto' | number }
+   * @returns NumberOfColumns
    */
   readonly lg = input<NumberOfColumns>();
 
   /**
    * The number of columns/offset/order on X-Large devices (<1400px).
-   * @return { cols: 'auto' | number }
+   * @returns NumberOfColumns
    */
   readonly xl = input<NumberOfColumns>();
 
   /**
    * The number of columns/offset/order on XX-Large devices (≥1400px).
-   * @return { cols: 'auto' | number }
+   * @returns NumberOfColumns
    */
   readonly xxl = input<NumberOfColumns>();
 

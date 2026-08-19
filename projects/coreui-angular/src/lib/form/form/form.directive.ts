@@ -6,8 +6,8 @@ import { booleanAttribute, Directive, input } from '@angular/core';
 })
 export class FormDirective {
   /**
-   * Mark a form as validated. If you set it `true`, all validation styles will be applied to the form. [docs]
-   * @return boolean
+   * Mark a form as validated. If you set it `true`, all validation styles will be applied to the form
+   * @returns boolean
    * @default false
    */
   readonly validated = input(false, { transform: booleanAttribute });

@@ -15,43 +15,43 @@ import { CardBodyComponent, CardComponent, CardFooterComponent } from '../../car
 export class WidgetStatFComponent extends CardComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   // override readonly color = input<Colors>();
 
   /**
    * Sets the text-color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   // override readonly textColor = input<TextColors | 'white' | 'muted'>();
 
   /**
    * Footer for your widget
-   * @type string
+   * @returns string
    */
   readonly footer = input<string>();
 
   /**
    * Icon for your widget
-   * @type string
+   * @returns string
    */
   readonly icon = input<string>();
 
   /**
    * Set padding of your component.
-   * @type boolean
+   * @returns boolean
    */
   readonly padding = input(false, { transform: booleanAttribute });
 
   /**
    * Title of the widget to display
-   * @type string
+   * @returns string
    */
   readonly title = input<string>();
 
   /**
    * Value for your widget to display
-   * @type string
+   * @returns string
    */
   readonly value = input<string | number>();
 

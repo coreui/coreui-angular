@@ -56,7 +56,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   /**
    * Index of the active item.
-   * @return number
+   * @returns number
    */
   readonly activeIndexInput = input(0, { alias: 'activeIndex', transform: numberAttribute });
 
@@ -67,15 +67,15 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   /**
    * Carousel automatically starts cycle items.
-   * @return boolean
+   * @returns boolean
    */
   readonly animateInput = input<boolean>(true, { alias: 'animate' });
 
   readonly animate = linkedSignal(this.animateInput);
 
   /**
-   * Carousel direction. [docs]
-   * @return {'next' | 'prev'}
+   * Carousel direction
+   * @returns 'next' | 'prev'
    */
   readonly directionInput = input<'next' | 'prev'>('next', { alias: 'direction' });
 
@@ -86,7 +86,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   /**
    * The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.
-   * @return number
+   * @returns number
    * @default 0
    */
   readonly intervalInput = input(-1, { alias: 'interval', transform: numberAttribute });
@@ -104,34 +104,34 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   /**
    * Sets which event handlers you’d like provided to your pause prop. You can specify one trigger or an array of them.
-   * @return {'hover' | 'focus' | 'click'}
+   * @returns 'hover' | 'focus' | 'click'
    */
   readonly pause = input<Triggers | Triggers[] | false>('hover');
 
   /**
    * Support left/right swipe interactions on touchscreen devices.
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly touch = input<boolean>(true);
 
   /**
    * Set the type of the transition.
-   * @return {'slide' | 'crossfade'}
+   * @returns 'slide' | 'crossfade'
    * @default 'slide'
    */
   readonly transition = input<'slide' | 'crossfade'>('slide');
 
   /**
    * Set whether the carousel should cycle continuously or have hard stops.
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly wrap = input<boolean>(true);
 
   /**
-   * Event emitted on carousel item change. [docs]
-   * @return number
+   * Event emitted on carousel item change
+   * @returns number
    */
   readonly itemChange = output<number>();
 

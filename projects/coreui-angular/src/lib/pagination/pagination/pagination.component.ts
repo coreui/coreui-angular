@@ -10,17 +10,17 @@ import { Component, computed, input } from '@angular/core';
 export class PaginationComponent {
   /**
    * Set the alignment of pagination components.
-   * @values 'start', 'center', 'end'
+   * @returns 'start' | 'center' | 'end' | ''
    */
   readonly align = input<'start' | 'center' | 'end' | ''>('');
   /**
    * Size the component small or large.
-   * @values 'sm', 'lg'
+   * @returns '' | 'sm' | 'lg' | string
    */
   readonly size = input<'' | 'sm' | 'lg' | string>();
   /**
-   * Default role for pagination. [docs]
-   * @return string
+   * Default role for pagination
+   * @returns string
    * @default 'navigation'
    */
   readonly role = input<string>('navigation');

@@ -17,18 +17,18 @@ import { TextBgColorDirective, TextColorDirective } from '../utilities';
 export class BadgeComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   readonly color: InputSignal<Colors | undefined> = input();
   /**
    * Position badge in one of the corners of a link or button.
-   * @type BadgePositions
+   * @returns BadgePositions
    */
   readonly position: InputSignal<BadgePositions | undefined> = input();
 
   /**
    * Select the shape of the component.
-   * @type Shapes
+   * @returns Shapes
    */
   readonly shape: InputSignal<Shapes | undefined> = input();
 
@@ -40,14 +40,14 @@ export class BadgeComponent {
   /**
    * Sets the text color of the component to one of CoreUI’s themed colors.
    * via TextColorDirective
-   * @type TextColors
+   * @returns TextColors
    */
   readonly textColor: InputSignal<TextColors | undefined> = input();
 
   /**
    * Sets the component's color scheme to one of CoreUI's themed colors, ensuring the text color contrast adheres to the WCAG 4.5:1 contrast ratio standard for accessibility.
    * via TextBgColorDirective
-   * @type Colors
+   * @returns Colors
    * @since 5.0.0
    */
   readonly textBgColor: InputSignal<Colors | undefined> = input();

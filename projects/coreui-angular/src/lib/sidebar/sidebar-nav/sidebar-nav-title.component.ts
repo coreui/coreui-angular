@@ -9,6 +9,10 @@ export class SidebarNavTitleComponent {
   readonly #elementRef = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
 
+  /**
+   * The nav data item rendered as a sidebar nav title.
+   * @returns INavData
+   */
   readonly item = input<INavData>();
 
   readonly #itemEffect = effect(() => {

@@ -53,19 +53,19 @@ export class ProgressComponent {
 
   /**
    * Sets the height of the component. If you set that value the inner `<CProgressBar>` will automatically resize accordingly.
-   * @return number
+   * @returns number
    */
   readonly height = input(0, { transform: numberAttribute });
 
   /**
    * Displays thin progress.
-   * @return boolean
+   * @returns boolean
    */
   readonly thin = input(false, { transform: booleanAttribute });
 
   /**
    * Change the default color to white.
-   * @return boolean
+   * @returns boolean
    */
   readonly white = input(false, { transform: booleanAttribute });
 

@@ -67,7 +67,7 @@ export class ToasterComponent implements OnInit {
 
   /**
    * Toaster placement
-   * @return TToasterPlacement
+   * @returns TToasterPlacement
    */
   readonly placementInput = input<TToasterPlacement>(ToasterPlacement.TopEnd, { alias: 'placement' });
 
@@ -77,7 +77,7 @@ export class ToasterComponent implements OnInit {
 
   /**
    * Toaster position
-   * @return (string | 'absolute' | 'fixed' | 'static')
+   * @returns (string | 'absolute' | 'fixed' | 'static')
    */
   readonly position = input<string | 'absolute' | 'fixed' | 'static'>('absolute');
 

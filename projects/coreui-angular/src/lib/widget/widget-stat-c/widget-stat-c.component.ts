@@ -18,25 +18,25 @@ export class WidgetStatCComponent extends CardComponent {
 
   /**
    * Icon for your component.
-   * @type string
+   * @returns string
    */
   readonly icon = input<string>();
 
   /**
    * Title of the widget to display
-   * @type string
+   * @returns string
    */
   readonly title = input<string>();
 
   /**
    * Value for your widget to display
-   * @type string|number
+   * @returns string|number
    */
   readonly value = input<string | number>();
 
   /**
    * Invert colors from their default dark shade.
-   * @type boolean
+   * @returns boolean
    */
   readonly inverse = input(false, { transform: booleanAttribute });
 

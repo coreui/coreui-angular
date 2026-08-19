@@ -13,6 +13,11 @@ import { INavData } from './sidebar-nav';
 export class SidebarNavLabelComponent {
   readonly helper = inject(SidebarNavHelper);
 
+  /**
+   * The nav data item rendered as a sidebar nav label.
+   * @returns INavData
+   * @default {}
+   */
   readonly item = input<INavData>({});
 
   readonly itemClass = computed(() => {

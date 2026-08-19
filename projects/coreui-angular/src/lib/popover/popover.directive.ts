@@ -47,7 +47,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Content of popover
-   * @return {string | TemplateRef}
+   * @returns {string | TemplateRef}
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cPopover' });
 
@@ -59,7 +59,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Optional popper Options object, takes precedence over cPopoverPlacement prop
-   * @return Partial<Options>
+   * @returns Partial<Options>
    */
   readonly popperOptions = input<Partial<Options>>({}, { alias: 'cPopoverOptions' });
 
@@ -99,7 +99,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Toggle the visibility of popover component.
-   * @return boolean
+   * @returns boolean
    */
   readonly visible = model(false, { alias: 'cPopoverVisible' });
 

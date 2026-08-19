@@ -10,7 +10,7 @@ import { PlaceholderDirective } from './placeholder.directive';
 export class PlaceholderAnimationDirective {
   /**
    * Animation type for placeholder
-   * @type 'glow' | 'wave'
+   * @returns 'glow' | 'wave'
    * @default undefined
    */
   readonly animation: InputSignal<'glow' | 'wave' | undefined> = input<'glow' | 'wave' | undefined>(undefined, {

@@ -55,7 +55,7 @@ export class ChartjsComponent implements OnDestroy {
 
   /**
    * Enables custom html based tooltips instead of standard tooltips.
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly customTooltips = input(true, { transform: booleanAttribute });
@@ -74,7 +74,7 @@ export class ChartjsComponent implements OnDestroy {
 
   /**
    * Height attribute applied to the rendered canvas.
-   * @return number | undefined
+   * @returns number | undefined
    * @default null
    */
   readonly height = input(null, { transform: (value) => numberAttribute(value, undefined) });
@@ -125,14 +125,14 @@ export class ChartjsComponent implements OnDestroy {
 
   /**
    * Width attribute applied to the rendered canvas.
-   * @return number | undefined
+   * @returns number | undefined
    * @default null
    */
   readonly width = input(null, { transform: (value) => numberAttribute(value, undefined) });
 
   /**
    * Put the chart into the wrapper div element.
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly wrapper = input(true, { transform: booleanAttribute });

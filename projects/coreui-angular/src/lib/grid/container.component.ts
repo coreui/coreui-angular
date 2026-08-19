@@ -10,12 +10,15 @@ import { Breakpoints } from '../coreui.types';
 export class ContainerComponent {
   /**
    * Set container 100% wide until a breakpoint.
+   * @returns 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+   * @default ''
    */
   readonly breakpoint = input<Exclude<Breakpoints, 'xs'>>('');
 
   /**
    * Set container 100% wide, spanning the entire width of the viewport.
-   * @return boolean
+   * @returns boolean
+   * @default false
    */
   readonly fluid = input(false, { transform: booleanAttribute });
 

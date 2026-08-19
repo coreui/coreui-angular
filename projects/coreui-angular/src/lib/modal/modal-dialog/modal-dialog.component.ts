@@ -15,21 +15,21 @@ export class ModalDialogComponent {
 
   /**
    * Set modal to covers the entire user viewport.
-   * @return {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
+   * @returns {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
    */
   readonly fullscreen = input<boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>();
 
   /**
    * Does the modal dialog itself scroll, or does the whole dialog scroll within the window.
    * @default false
-   * @return {boolean}
+   * @returns {boolean}
    */
   readonly scrollable = input(false, { transform: booleanAttribute });
 
   /**
    * Size the component small, large, or extra large.
    * @default undefined
-   * @return {'sm' | 'lg' | 'xl'}
+   * @returns {'sm' | 'lg' | 'xl'}
    */
   readonly size = input<'sm' | 'lg' | 'xl'>();
 

@@ -18,7 +18,7 @@ import { ButtonDirective } from './button.directive';
 export class ButtonCloseDirective extends ButtonDirective {
   /**
    * Change the default color to white.
-   * @type boolean
+   * @returns boolean
    * @deprecated 5.0.0. Use `cButtonClose.dark` instead.
    */
   readonly white: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });

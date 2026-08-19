@@ -3,23 +3,23 @@ import { Breakpoints, Colors } from '../coreui.types';
 export interface ITable {
   /**
    * Set the vertical alignment.
-   * @type string
+   * @returns string
    * @values 'bottom' | 'middle' | 'top'
    */
   align?: 'bottom' | 'middle' | 'top';
   /**
    * Sets the border color of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   borderColor?: Colors;
   /**
    * Add borders on all sides of the table and cells.
-   * @type boolean
+   * @returns boolean
    */
   bordered?: boolean | string;
   /**
    * Remove borders on all sides of the table and cells.
-   * @type boolean
+   * @returns boolean
    */
   borderless?: boolean | string;
   /**
@@ -29,12 +29,12 @@ export interface ITable {
   caption?: 'top';
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   color?: Colors;
   /**
    * Enable a hover state on table rows within table body.
-   * @type boolean
+   * @returns boolean
    */
   hover?: boolean | string;
   /**
@@ -44,12 +44,12 @@ export interface ITable {
   responsive?: boolean | Omit<Breakpoints, 'xs'>;
   /**
    * Make table more compact by cutting all cell `padding` in half.
-   * @type boolean
+   * @returns boolean
    */
   small?: boolean | string;
   /**
    * Add zebra-striping to any table row within the table body`.
-   * @type boolean
+   * @returns boolean
    */
   striped?: boolean | string;
 
@@ -59,12 +59,12 @@ export interface ITable {
 export interface ITableElementProps {
   /**
    * Set the vertical alignment.
-   @type 'bottom' | 'middle' | 'top'
+   @returns 'bottom' | 'middle' | 'top'
    */
   align?: ('bottom' | 'middle' | 'top');
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   color?: Colors;
 
@@ -75,7 +75,7 @@ export interface ITableElementProps {
 export interface ITableRowCellProps extends ITableElementProps {
   /**
    * Highlight a table row or cell
-   @type boolean
+   @returns boolean
    */
   active?: boolean;
 

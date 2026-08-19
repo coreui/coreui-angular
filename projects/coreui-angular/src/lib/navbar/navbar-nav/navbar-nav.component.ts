@@ -8,7 +8,7 @@ import { booleanAttribute, Component, computed, input } from '@angular/core';
 export class NavbarNavComponent {
   /**
    * Enable vertical scrolling of a collapsed navbar toggleable contents.
-   * @type boolean
+   * @returns boolean
    */
   readonly scroll = input(false, { transform: booleanAttribute });
 

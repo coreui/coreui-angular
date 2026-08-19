@@ -23,7 +23,7 @@ export class TabPanelComponent {
 
   /**
    * aria-labelledby attribute
-   * @return string
+   * @returns string
    * @default undefined
    */
   readonly ariaLabelledBy = input<string | undefined>(undefined, {
@@ -32,42 +32,42 @@ export class TabPanelComponent {
 
   /**
    * Element id attribute
-   * @return string
+   * @returns string
    * @default undefined
    */
   readonly id = input<string>();
 
   /**
    * Item key.
-   * @return string | number
+   * @returns string | number
    * @required
    */
   readonly itemKey = input.required<string | number>();
 
   /**
    * Element role.
-   * @return string
+   * @returns string
    * @default 'tabpanel'
    */
   readonly role = input('tabpanel');
 
   /**
    * tabindex attribute.
-   * @return number
+   * @returns number
    * @default 0
    */
   readonly tabindex = input(0, { transform: numberAttribute });
 
   /**
    * Enable fade in transition.
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly transition = input(true);
 
   /**
    * visible change output
-   * @return VisibleChangeEvent
+   * @returns VisibleChangeEvent
    */
   readonly visibleChange = output<VisibleChangeEvent>();
 

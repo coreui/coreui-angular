@@ -10,7 +10,7 @@ import { booleanAttribute, Directive, input } from '@angular/core';
 export class TableActiveDirective {
   /**
    * Highlight a table row or cell
-   * @return boolean
+   * @returns boolean
    */
   readonly active = input(false, { alias: "cTableActive", transform: booleanAttribute });
 }

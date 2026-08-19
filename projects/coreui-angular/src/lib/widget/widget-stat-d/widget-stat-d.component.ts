@@ -18,13 +18,13 @@ export type WidgetStatDValue = {
 export class WidgetStatDComponent extends CardComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   // override readonly color = input<Colors>();
 
   /**
    * Values and subtitles for your component.
-   * @type WidgetStatDValue
+   * @returns WidgetStatDValue
    */
   readonly values = input<WidgetStatDValue[]>();
 

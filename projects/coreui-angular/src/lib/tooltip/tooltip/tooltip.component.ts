@@ -27,7 +27,7 @@ export class TooltipComponent implements OnDestroy {
 
   /**
    * Content of tooltip
-   * @type {string | TemplateRef}
+   * @returns {string | TemplateRef}
    */
   readonly content = input<string | TemplateRef<any>>('');
 
@@ -37,10 +37,21 @@ export class TooltipComponent implements OnDestroy {
 
   /**
    * Toggle the visibility of popover component.
-   * @type boolean
+   * @returns boolean
    */
   readonly visible = input(false, { transform: booleanAttribute });
+
+  /**
+   * The `id` HTML attribute of the tooltip.
+   * @returns string
+   */
   readonly id = input<string>();
+
+  /**
+   * Default role for tooltip.
+   * @returns string
+   * @default 'tooltip'
+   */
   readonly role = input('tooltip');
 
   readonly viewContainerRef = viewChild('tooltipTemplate', { read: ViewContainerRef });

@@ -20,7 +20,7 @@ export class ToastHeaderComponent {
 
   /**
    * Add close button to a toast header
-   * @return boolean
+   * @returns boolean
    */
   readonly closeButton = input(true);
 }

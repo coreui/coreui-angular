@@ -42,40 +42,43 @@ export class AlertComponent {
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @return Colors
+   * @returns Colors
    * @default 'primary'
    */
   readonly color = input<Colors>('primary');
 
   /**
-   * Default role for alert. [docs]
-   * @return string
+   * Default role for alert
+   * @returns string
    * @default 'alert'
    */
   readonly role = input('alert');
 
   /**
    * Set the alert variant to a solid.
-   * @return string
+   * @returns string
+   * @default 'solid'
    */
   readonly variant = input<'solid'>();
 
   /**
    * Optionally adds a close button to the alert and allow it to self-dismiss.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly dismissible = input(false, { transform: booleanAttribute });
 
   /**
    * Adds animation for dismissible alert.
-   * @return boolean
+   * @returns boolean
+   * @default false
    */
   readonly fade = input(false, { transform: booleanAttribute });
 
   /**
    * Toggle the visibility of the alert component.
-   * @return boolean
+   * @returns boolean
+   * @default true
    */
   readonly visibleInput = input(true, { transform: booleanAttribute, alias: 'visible' });
 
@@ -83,7 +86,7 @@ export class AlertComponent {
 
   /**
    * Event triggered on the alert visibility change.
-   * @return boolean
+   * @returns boolean
    */
   readonly visibleChange = output<boolean>();
 

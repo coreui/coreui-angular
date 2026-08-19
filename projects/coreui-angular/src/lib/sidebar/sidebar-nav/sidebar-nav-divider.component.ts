@@ -6,5 +6,9 @@ import { INavData } from './sidebar-nav';
   template: ``
 })
 export class SidebarNavDividerComponent {
+  /**
+   * The nav data item rendered as a sidebar nav divider.
+   * @returns INavData
+   */
   readonly item = input<INavData>();
 }

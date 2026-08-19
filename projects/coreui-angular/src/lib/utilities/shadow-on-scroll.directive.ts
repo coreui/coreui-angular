@@ -36,6 +36,11 @@ export class ShadowOnScrollDirective {
     });
   }
 
+  /**
+   * Shadow size applied to the host element once the document has been scrolled; `false`/`'none'` disables it.
+   * @returns 'sm' | 'lg' | 'none' | boolean
+   * @default true
+   */
   readonly cShadowOnScroll = input<'sm' | 'lg' | 'none' | boolean>(true);
 
   readonly #shadowOnScrollEffect = effect(() => {

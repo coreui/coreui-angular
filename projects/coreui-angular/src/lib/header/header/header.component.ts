@@ -12,19 +12,21 @@ type Container = boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'fluid';
 })
 export class HeaderComponent {
   /**
-   * Defines optional container wrapping children elements.
+   * Defines optional container wrapping children elements
+   * @returns Container
    */
   readonly container = input<Container>();
   /**
-   * Place header in non-static positions.
+   * Place header in non-static positions
+   * @returns Positions
    */
   readonly position = input<Positions>();
   /**
-   * Default role for header. [docs]
-   * @type string
+   * Default role for header
+   * @returns string
    * @default 'banner'
    */
-  readonly role: InputSignal<string> = input('banner');
+  readonly role = input('banner');
 
   readonly hostClasses = computed(() => {
     return !!this.container() ? this.containerClasses() : this.headerClasses();

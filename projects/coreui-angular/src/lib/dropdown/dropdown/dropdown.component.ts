@@ -52,28 +52,29 @@ export class DropdownToggleDirective implements AfterViewInit {
 
   /**
    * Reference to dropdown component.
-   * @return DropdownComponent | undefined
+   * @returns DropdownComponent | undefined
    * @default undefined
    */
   readonly dropdownComponent = input<DropdownComponent>();
 
   /**
    * Disables the toggler.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly disabled = input<boolean, unknown>(false, { transform: booleanAttribute });
 
   /**
    * Enables pseudo-element caret on toggler.
-   * @return boolean
+   * @returns boolean
+   * @default true
    */
   readonly caret = input(true);
 
   /**
    * Create split button dropdowns with virtually the same markup as single button dropdowns,
    * but with the addition of `.dropdown-toggle-split` class for proper spacing around the dropdown caret.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly split = input<boolean, unknown>(false, { transform: booleanAttribute });
@@ -145,38 +146,41 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   /**
    * Set alignment of dropdown menu.
-   * @return {'start' | 'end' | { xs: 'start' | 'end' } | { sm: 'start' | 'end' } | { md: 'start' | 'end' } | { lg: 'start' | 'end' } | { xl: 'start' | 'end'} | { xxl: 'start' | 'end'}}
+   * @returns {'start' | 'end' | { xs: 'start' | 'end' } | { sm: 'start' | 'end' } | { md: 'start' | 'end' } | { lg: 'start' | 'end' } | { xl: 'start' | 'end'} | { xxl: 'start' | 'end'}}
    */
   readonly alignment = input<string>();
 
   /**
    * Automatically close dropdown when clicking outside the dropdown menu.
+   * @returns boolean | 'inside' | 'outside'
+   * @default true
    */
   readonly autoClose = input<boolean | 'inside' | 'outside'>(true);
 
   /**
    * Sets a specified  direction and location of the dropdown menu.
-   * @return 'dropup' | 'dropend' | 'dropstart'
+   * @returns 'dropup' | 'dropend' | 'dropstart'
    */
   readonly direction = input<'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart'>();
 
   /**
    * Describes the placement of your component after Popper.js has applied all the modifiers
    * that may have flipped or altered the originally provided placement property.
-   * @return Placement
+   * @returns Placement
+   * @default 'bottom-start'
    */
   readonly placement = input<Placement>('bottom-start');
 
   /**
    * If you want to disable dynamic positioning set this property to `false`.
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly popper = input<boolean, unknown>(true, { transform: booleanAttribute });
 
   /**
-   * Optional popper Options object, placement prop takes precedence over
-   * @return Partial<Options>
+   * Optional popper Options object, `placement` prop takes precedence over
+   * @returns Partial<Options>
    */
   readonly popperOptionsInput = input<Partial<Options>>({}, { alias: 'popperOptions' });
 
@@ -232,7 +236,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   /**
    * Toggle the visibility of dropdown menu component.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
@@ -252,6 +256,10 @@ export class DropdownComponent implements OnDestroy, OnInit {
     });
   });
 
+  /**
+   * Event emitted on `visible` change.
+   * @returns boolean
+   */
   readonly visibleChange = output<boolean>();
 
   dropdownContext = { $implicit: this.visible() };

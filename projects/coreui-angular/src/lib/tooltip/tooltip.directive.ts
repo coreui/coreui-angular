@@ -47,7 +47,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Content of tooltip
-   * @return {string | TemplateRef}
+   * @returns {string | TemplateRef}
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cTooltip' });
 
@@ -59,7 +59,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Optional popper Options object, takes precedence over cPopoverPlacement prop
-   * @return Partial<Options>
+   * @returns Partial<Options>
    */
   readonly popperOptions = input<Partial<Options>>({}, { alias: 'cTooltipOptions' });
 
@@ -99,7 +99,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Toggle the visibility of tooltip component.
-   * @return boolean
+   * @returns boolean
    */
   readonly visible = model(false, { alias: 'cTooltipVisible' });
 

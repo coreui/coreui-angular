@@ -27,7 +27,7 @@ export class FormCheckComponent {
   readonly reverse = input(false, { transform: booleanAttribute });
 
   /**
-   * Size the component large or extra large. Works only with `[switch]="true"` [docs]
+   * Size the component large or extra large. Works only with `[switch]="true"`
    * @default undefined
    */
   readonly sizing = input<'' | 'lg' | 'xl' | string>();

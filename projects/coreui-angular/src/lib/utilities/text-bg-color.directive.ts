@@ -10,7 +10,7 @@ import { Colors } from '../coreui.types';
 export class TextBgColorDirective {
   /**
    * Set text-bg-color of element
-   * @type Colors
+   * @returns Colors
    */
   readonly textBgColor: InputSignal<Colors> = input('', { alias: 'cTextBgColor' });
 

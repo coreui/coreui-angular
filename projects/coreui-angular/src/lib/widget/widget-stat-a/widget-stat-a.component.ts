@@ -15,19 +15,19 @@ import { NgTemplateOutlet } from '@angular/common';
 export class WidgetStatAComponent extends CardComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   // override readonly color = input<Colors>();
 
   /**
    * Title of the widget to display
-   * @type string
+   * @returns string
    */
   readonly title: InputSignal<string | undefined> = input();
 
   /**
    * Value for your widget to display
-   * @type string
+   * @returns string
    */
   readonly value: InputSignal<string | undefined> = input<string>();
 

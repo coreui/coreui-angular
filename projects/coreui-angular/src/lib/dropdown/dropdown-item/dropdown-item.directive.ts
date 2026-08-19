@@ -24,21 +24,21 @@ export class DropdownItemDirective implements FocusableOption {
 
   /**
    * Set active state to a dropdown-item.
-   * @return boolean
+   * @returns boolean
    * @default undefined
    */
   readonly active = input<boolean>();
 
   /**
    * Configure dropdown-item close dropdown behavior.
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly autoClose = input<boolean>(true);
 
   /**
    * Disables a dropdown-item.
-   * @return boolean
+   * @returns boolean
    * @default undefined
    */
   readonly disabledInput = input(false, { transform: booleanAttribute, alias: 'disabled' });
@@ -56,8 +56,18 @@ export class DropdownItemDirective implements FocusableOption {
     return this.#disabled();
   }
 
+  /**
+   * Default role for dropdown-item.
+   * @returns string
+   * @default 'list-item'
+   */
   readonly role = input<string>('list-item');
 
+  /**
+   * Tab index of the dropdown-item.
+   * @returns string | number | null
+   * @default '0'
+   */
   readonly tabIndexInput = input<string | number | null>('0', { alias: 'tabIndex' });
 
   readonly tabIndex = linkedSignal({

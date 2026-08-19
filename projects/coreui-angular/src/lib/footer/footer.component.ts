@@ -13,14 +13,14 @@ import { Positions } from '../coreui.types';
 })
 export class FooterComponent {
   /**
-   * Place footer in non-static positions. [docs]
-   * @type Positions
+   * Place footer in non-static positions
+   * @returns Positions
    */
-  readonly position: InputSignal<Positions | undefined> = input();
+  readonly position = input<Positions | undefined>();
 
   /**
-   * Default role for footer. [docs]
-   * @return string
+   * Default role for footer
+   * @returns string
    * @default 'contentinfo'
    */
   readonly role = input<string>('contentinfo');

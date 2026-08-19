@@ -62,35 +62,35 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Align the modal in the center or top of the screen.
-   * @return {'top' | 'center'}
+   * @returns {'top' | 'center'}
    * @default 'top'
    */
   readonly alignment = input<'top' | 'center'>('top');
 
   /**
    * Apply a backdrop on the body while the modal is open.
-   * @return boolean | 'static'
+   * @returns boolean | 'static'
    * @default true
    */
   readonly backdrop = input<boolean | 'static'>(true);
 
   /**
    * Set modal to cover the entire user viewport.
-   * @return {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
+   * @returns {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
    * @default undefined
    */
   readonly fullscreen = input<boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>();
 
   /**
    * Closes the modal when the escape key is pressed.
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly keyboard = input(true, { transform: booleanAttribute });
 
   /**
    * Html id attribute, required for programmatic visibility change.
-   * @return string
+   * @returns string
    */
   readonly attrId = input<string>(undefined, { alias: 'id' });
 
@@ -100,7 +100,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Size the component small, large, or extra large.
-   * @return {'sm' | 'lg' | 'xl'}
+   * @returns {'sm' | 'lg' | 'xl'}
    * @default undefined
    */
   readonly size = input<'sm' | 'lg' | 'xl'>();
@@ -112,14 +112,14 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Default role for modal
-   * @return string
+   * @returns string
    * @default 'dialog'
    */
   readonly role = input('dialog');
 
   /**
    * Set aria-modal html attr for modal
-   * @type boolean
+   * @returns boolean
    * @default null
    */
   readonly ariaModalInput = input(false, { transform: booleanAttribute, alias: 'ariaModal' });
@@ -130,14 +130,14 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Create a scrollable modal that allows scrolling the modal body.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly scrollable = input(false, { transform: booleanAttribute });
 
   /**
    * Toggle the visibility of modal component.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
@@ -186,7 +186,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Event triggered on modal dismiss.
-   * @return boolean
+   * @returns boolean
    */
   readonly visibleChange = output<boolean>();
 

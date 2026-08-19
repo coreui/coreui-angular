@@ -15,8 +15,8 @@ export class BreadcrumbRouterComponent {
   readonly #breadcrumbRouterService = inject(BreadcrumbRouterService);
 
   /**
-   * Optional array of IBreadcrumbItem to override default BreadcrumbRouter behavior. [docs]
-   * @return IBreadcrumbItem[]
+   * Optional array of IBreadcrumbItem to override default BreadcrumbRouter behavior
+   * @returns IBreadcrumbItem[]
    */
   readonly items = input<IBreadcrumbItem[]>();
 

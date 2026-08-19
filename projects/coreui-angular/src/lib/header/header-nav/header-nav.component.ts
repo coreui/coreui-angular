@@ -12,8 +12,8 @@ import { Component, input } from '@angular/core';
 })
 export class HeaderNavComponent {
   /**
-   * Default role for header-nav. [docs]
-   * @return string
+   * Default role for header-nav
+   * @returns string
    * @default 'navigation'
    */
   readonly role = input('navigation');

@@ -16,8 +16,8 @@ export class CarouselControlComponent {
   readonly #carouselService = inject(CarouselService);
 
   /**
-   * Carousel control caption. [docs]
-   * @return string
+   * Carousel control caption
+   * @returns string
    */
   readonly captionInput = input<string | undefined>(undefined, { alias: 'caption' });
 
@@ -30,13 +30,13 @@ export class CarouselControlComponent {
 
   /**
    * Carousel control direction.
-   * @return {'next' | 'prev'}
+   * @returns 'next' | 'prev'
    */
   readonly direction = input<'prev' | 'next'>('next');
 
   /**
    * Carousel control role.
-   * @return string
+   * @returns string
    */
   readonly role = input('button');
 

@@ -40,13 +40,13 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
 
   /**
    * Set alignment of dropdown menu.
-   * @return 'start' | 'end'
+   * @returns 'start' | 'end'
    */
   readonly alignment = input<'start' | 'end' | string>();
 
   /**
    * Toggle the visibility of dropdown menu component.
-   * @return boolean
+   * @returns boolean
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 

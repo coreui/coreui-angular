@@ -19,7 +19,7 @@ export class DropdownCloseDirective implements AfterViewInit {
 
   /**
    * Disables a dropdown-close directive.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly disabledInput = input(false, { transform: booleanAttribute, alias: 'disabled' });
@@ -29,6 +29,10 @@ export class DropdownCloseDirective implements AfterViewInit {
     computation: (value) => value || null
   });
 
+  /**
+   * The dropdown component instance this cDropdownClose belongs to.
+   * @returns DropdownComponent
+   */
   readonly dropdownComponent = input<DropdownComponent>();
 
   ngAfterViewInit(): void {
@@ -39,6 +43,11 @@ export class DropdownCloseDirective implements AfterViewInit {
     }
   }
 
+  /**
+   * Tab index of the dropdown-close element.
+   * @returns string | number | null
+   * @default null
+   */
   readonly tabIndexInput = input<string | number | null>(null, { alias: 'tabIndex' });
 
   readonly tabIndex = linkedSignal({

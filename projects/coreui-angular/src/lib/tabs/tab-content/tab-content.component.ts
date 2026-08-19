@@ -33,7 +33,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
 
   /**
    * Set active tabPane index
-   * @type number
+   * @returns number
    */
   @Input({ transform: numberAttribute })
   set activeTabPaneIdx(value: number) {
@@ -54,6 +54,7 @@ export class TabContentComponent implements AfterContentChecked, AfterContentIni
 
   /**
    * Event emitted on the active tab pane index change.
+   * @returns number
    */
   readonly activeTabPaneIdxChange = output<number>();
 

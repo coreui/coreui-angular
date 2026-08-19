@@ -10,7 +10,7 @@ import { Colors } from '../coreui.types';
 export class CalloutComponent {
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type Colors
+   * @returns Colors
    */
   readonly color = input<Colors>();
 

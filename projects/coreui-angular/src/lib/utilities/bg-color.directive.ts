@@ -14,7 +14,7 @@ export class BgColorDirective {
 
   /**
    * Add linear gradient as background image to the backgrounds.
-   * @return boolean
+   * @returns boolean
    */
   readonly gradient = input<boolean>();
 

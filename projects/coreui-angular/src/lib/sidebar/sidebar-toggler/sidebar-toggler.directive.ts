@@ -11,6 +11,11 @@ import { SidebarToggleDirective } from '../sidebar-toggle/sidebar-toggle.directi
   }
 })
 export class SidebarTogglerDirective {
+  /**
+   * Default role for sidebar toggler.
+   * @returns string
+   * @default 'button'
+   */
   readonly role = input('button');
 
   get getStyles(): any {

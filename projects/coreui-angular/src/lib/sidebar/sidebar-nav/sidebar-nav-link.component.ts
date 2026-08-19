@@ -27,6 +27,11 @@ import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 export class SidebarNavLinkContentComponent {
   readonly helper = inject(SidebarNavHelper);
 
+  /**
+   * The nav data item rendered as the link content.
+   * @returns INavData
+   * @default {}
+   */
   readonly item = input<INavData>({});
 }
 
@@ -49,8 +54,16 @@ export class SidebarNavLinkContentComponent {
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   readonly router = inject(Router);
 
+  /**
+   * The nav data item rendered as a sidebar nav link.
+   * @returns INavData
+   */
   readonly item = input<INavData>();
 
+  /**
+   * Event emitted when the sidebar nav link is clicked.
+   * @returns void
+   */
   readonly linkClick = output();
 
   public linkType!: string;

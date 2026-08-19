@@ -65,28 +65,28 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Apply a backdrop on the body while offcanvas is open.
-   * @return boolean | 'static'
+   * @returns boolean | 'static'
    * @default true
    */
   readonly backdrop = input<boolean | 'static'>(true);
 
   /**
    * Closes the offcanvas when the escape key is pressed
-   * @return boolean
+   * @returns boolean
    * @default true
    */
   readonly keyboard = input(true, { transform: booleanAttribute });
 
   /**
    * Component placement
-   * @return {'start' | 'end' | 'top' | 'bottom'}
+   * @returns string | 'start' | 'end' | 'top' | 'bottom'
    * @default 'start'
    */
   readonly placement = input<string | 'start' | 'end' | 'top' | 'bottom'>('start');
 
   /**
    * Responsive offcanvas property hides content outside the viewport from a specified breakpoint and down.
-   * @return boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+   * @returns boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
    * @default true
    * @since 4.3.10
    */
@@ -94,20 +94,20 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Html id attribute, required for programmatic visibility change.
-   * @return string
+   * @returns string
    */
   readonly id = input(`offcanvas-${this.placement()}-${nextId++}`);
 
   /**
-   * Default role for offcanvas. [docs]
-   * @return string
+   * Default role for offcanvas
+   * @returns string
    * @default 'dialog'
    */
   readonly role = input<string>('dialog');
 
   /**
-   * Set aria-modal html attr for offcanvas. [docs]
-   * @return boolean
+   * Set aria-modal html attr for offcanvas
+   * @returns boolean
    * @default true
    */
   readonly ariaModal = input(true, { transform: booleanAttribute });
@@ -118,14 +118,14 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Allow body scrolling while offcanvas is visible.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly scroll = input(false, { transform: booleanAttribute });
 
   /**
    * Toggle the visibility of offcanvas component.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
@@ -150,7 +150,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Event triggered on visible change.
-   * @return <boolean>
+   * @returns boolean
    */
   readonly visibleChange = output<boolean>();
 

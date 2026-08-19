@@ -8,6 +8,10 @@ import { BooleanInput } from '@angular/cdk/coercion';
 export class PageLinkDirective {
   static ngAcceptInputType_disabled: BooleanInput;
 
+  /**
+   * Toggle the disabled state for the component.
+   * @returns boolean
+   */
   readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly hostClasses = computed(() => {

@@ -14,13 +14,13 @@ export class WidgetStatEComponent extends CardComponent {
 
   /**
    * Title of the widget to display
-   * @type string
+   * @returns string
    */
   readonly title = input<string>();
 
   /**
    * Value for your widget to display
-   * @type string | number
+   * @returns string | number
    */
   readonly value = input<string | number>();
 

@@ -11,15 +11,15 @@ import { Component, input } from '@angular/core';
 })
 export class BreadcrumbComponent {
   /**
-   * Default aria-label for breadcrumb. [docs]
-   * @return string
+   * Default aria-label for breadcrumb
+   * @returns string
    * @default 'breadcrumb'
    */
   readonly ariaLabel = input('breadcrumb');
 
   /**
-   * Default role for breadcrumb. [docs]
-   * @return string
+   * Default role for breadcrumb
+   * @returns string
    * @default 'navigation'
    */
   readonly role = input('navigation');

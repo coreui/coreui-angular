@@ -10,25 +10,25 @@ import { booleanAttribute, computed, Directive, input, InputSignal, InputSignalW
 export class ImgDirective {
   /**
    * Set the horizontal aligment.
-   * @type {'' | 'start' | 'end' | 'center'}
+   * @returns {'' | 'start' | 'end' | 'center'}
    */
   readonly align: InputSignal<'' | 'start' | 'end' | 'center'> = input<'' | 'start' | 'end' | 'center'>('');
 
   /**
    * Make image responsive.
-   * @type boolean
+   * @returns boolean
    */
   readonly fluid: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   /**
    * Make image rounded.
-   * @type boolean
+   * @returns boolean
    */
   readonly rounded: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
   /**
    * Give an image a rounded 1px border appearance.
-   * @type boolean
+   * @returns boolean
    */
   readonly thumbnail: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 

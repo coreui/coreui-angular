@@ -49,14 +49,14 @@ export class CarouselItemComponent implements OnInit {
 
   /**
    * Time delay before cycling to the next item. If -1, uses carousel interval value.
-   * @return number
+   * @returns number
    * @default -1
    */
   readonly interval = input<number>(-1);
 
   /**
    * Carousel item role.
-   * @return string
+   * @returns string
    * @default 'group'
    */
   readonly role = input('group');

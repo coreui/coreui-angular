@@ -10,7 +10,7 @@ export class ThemeDirective {
 
   /**
    * Add dark theme attribute.
-   * @return 'dark' | 'light' | undefined
+   * @returns 'dark' | 'light' | undefined
    */
   readonly colorScheme = input<'dark' | 'light'>();
 
@@ -21,7 +21,7 @@ export class ThemeDirective {
 
   /**
    * Add darker controls, indicators, and captions.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly dark = input(false, { transform: booleanAttribute });

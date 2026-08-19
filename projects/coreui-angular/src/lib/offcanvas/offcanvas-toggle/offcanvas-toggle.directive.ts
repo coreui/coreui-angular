@@ -13,7 +13,7 @@ export class OffcanvasToggleDirective {
 
   /**
    * Html id attr of offcanvas to toggle.
-   * @return string
+   * @returns string
    */
   readonly id = input<string>(undefined, { alias: 'cOffcanvasToggle' });
 

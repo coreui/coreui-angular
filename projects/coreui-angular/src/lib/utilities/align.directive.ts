@@ -9,7 +9,7 @@ import { Alignment } from '../coreui.types';
 export class AlignDirective {
   /**
    * Set vertical alignment of inline, inline-block, inline-table, and table cell elements
-   * @return Alignment
+   * @returns Alignment
    */
   readonly align = input<Alignment | undefined>(undefined, { alias: 'cAlign' });
 

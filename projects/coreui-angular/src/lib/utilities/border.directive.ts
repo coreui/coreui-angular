@@ -9,7 +9,7 @@ import { Border } from './border.type';
 export class BorderDirective {
   /**
    * Add or remove an element’s borders
-   * @return Border
+   * @returns Border
    */
   readonly cBorder = input<Border>(true);
 

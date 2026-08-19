@@ -13,7 +13,7 @@ export class ListGroupDirective {
 
   /**
    * Remove some borders and rounded corners to render list group items edge-to-edge in a parent component (e.g., `<CCard>`).
-   * @type boolean
+   * @returns boolean
    */
   readonly flush: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 

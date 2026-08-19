@@ -25,43 +25,50 @@ export class ColDirective {
 
   /**
    * The number of columns/offset/order on extra small devices (<576px).
-   * @return { 'auto' | number |  boolean }
+   * @returns 'auto' | number |  boolean
+   * @default false
    */
   readonly cCol = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns on extra small devices (<576px).
-   * @return { 'auto' | number | boolean }
+   * @returns { 'auto' | number | boolean }
+   * @default false
    */
   readonly xs = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on small devices (<768px).
-   * @return { 'auto' | number |  boolean }
+   * @returns 'auto' | number |  boolean
+   * @default false
    */
   readonly sm = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on medium devices (<992px).
-   * @return { 'auto' | number |  boolean }
+   * @returns 'auto' | number |  boolean
+   * @default false
    */
   readonly md = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on large devices (<1200px).
-   * @return { 'auto' | number |  boolean }
+   * @returns 'auto' | number |  boolean
+   * @default false
    */
   readonly lg = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on X-Large devices (<1400px).
-   * @return { 'auto' | number |  boolean }
+   * @returns 'auto' | number |  boolean
+   * @default false
    */
   readonly xl = input(false, { transform: this.coerceInput });
 
   /**
    * The number of columns/offset/order on XX-Large devices (≥1400px).
-   * @return { 'auto' | number |  boolean }
+   * @returns 'auto' | number |  boolean
+   * @default false
    */
   readonly xxl = input(false, { transform: this.coerceInput });
 
@@ -78,11 +85,13 @@ export class ColDirective {
 
   /**
    * Offset grid columns.
+   * @returns ColOffsetType
    */
   readonly offset = input<ColOffsetType>();
 
   /**
    * Controls the visual order of your columns. Includes support for `1` through `5` across all breakpoints.
+   * @returns ColOrderType
    */
   readonly order = input<ColOrderType>();
 

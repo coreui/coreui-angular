@@ -8,19 +8,19 @@ import { booleanAttribute, Component, computed, input, InputSignalWithTransform 
 export class ButtonGroupComponent {
   /**
    * Size the component small or large.
-   * @return { 'sm' | 'lg' }
+   * @returns '' | 'sm' | 'lg' | string
    */
   readonly size = input<'' | 'sm' | 'lg' | string>();
 
   /**
    * Create a set of buttons that appear vertically stacked rather than horizontally. Split button dropdowns are not supported here.
-   * @type boolean
+   * @returns boolean
    */
-  readonly vertical: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly vertical = input(false, { transform: booleanAttribute });
 
   /**
-   * Default role attr for ButtonGroup. [docs]
-   * @return string
+   * Default role attr for ButtonGroup
+   * @returns string
    * @default 'group'
    */
   readonly role = input<string>('group');

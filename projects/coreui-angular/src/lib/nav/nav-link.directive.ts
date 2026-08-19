@@ -16,25 +16,29 @@ export class NavLinkDirective {
   static ngAcceptInputType_disabled: BooleanInput;
 
   /**
-   * Sets .nav-link class to the host. [docs]
+   * Sets .nav-link class to the host
+   * @returns boolean
    * @default true
    */
   readonly cNavLink = input(true, { transform: booleanAttribute });
 
   /**
-   * Toggle the active state for the component. [docs]
+   * Toggle the active state for the component
+   * @returns boolean
    * @default undefined
    */
   readonly active = input<boolean>();
 
   /**
-   * Set disabled attr for the host element. [docs]
+   * Set disabled attr for the host element
+   * @returns boolean
    * @default false
    */
   readonly disabled = input(false, { transform: booleanAttribute });
 
   /**
    * The tabindex attribute specifies the tab order of an element (when the "tab" button is used for navigating).
+   * @returns number | undefined
    */
   readonly tabindex = input(undefined, { transform: numberAttribute });
 

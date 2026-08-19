@@ -9,7 +9,7 @@ import { Rounded } from './rounded.type';
 export class RoundedDirective {
   /**
    * Set border radius variant and radius size
-   * @type Rounded
+   * @returns Rounded
    */
   readonly cRounded = input<Rounded>(true);
 

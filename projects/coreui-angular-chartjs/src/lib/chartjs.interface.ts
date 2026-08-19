@@ -48,7 +48,7 @@ export interface IChartjs<TType extends ChartType = ChartType, TData = DefaultDa
 
   /**
    * Chart.js chart type.
-   * @type {'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'pie' | 'scatter'}
+   * @returns {'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'pie' | 'scatter'}
    */
   type: ChartConfiguration<TType, TData, TLabel>['type'];
 

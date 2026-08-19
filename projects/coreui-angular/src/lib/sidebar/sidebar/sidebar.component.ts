@@ -56,19 +56,19 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   /**
    * Sets if the color of text should be colored for a light or dark background.
-   * @return 'dark' | 'light'
+   * @returns 'dark' | 'light'
    */
   readonly colorScheme = input<'dark' | 'light'>();
 
   /**
    * Sets html attribute id.
-   * @return string
+   * @returns string
    */
   readonly id = input<string>();
 
   /**
    * Make sidebar narrow.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly narrowInput = input(false, { transform: booleanAttribute, alias: 'narrow' });
@@ -85,33 +85,33 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   /**
    * Set sidebar to overlaid variant.
-   * @return boolean
+   * @returns boolean
    * @default false
    */
   readonly overlaid = input(false, { transform: booleanAttribute });
 
   /**
    * Components placement, there’s no default placement.
-   * @return 'start' | 'end'
+   * @returns 'start' | 'end'
    */
   readonly placement = input<'start' | 'end'>();
 
   /**
    * Place sidebar in non-static positions.
-   * @return 'fixed' | 'sticky'
+   * @returns 'fixed' | 'sticky'
    * @default 'fixed'
    */
   readonly position = input<'fixed' | 'sticky'>('fixed');
 
   /**
    * Size the component small, large, or extra large.
-   * @return 'sm' | 'lg' | 'xl'
+   * @returns 'sm' | 'lg' | 'xl'
    */
   readonly size = input<'sm' | 'lg' | 'xl'>();
 
   /**
    * Expand narrowed sidebar on hover.
-   * @type boolean
+   * @returns boolean
    * @default false
    */
   readonly unfoldableInput = input(false, { transform: booleanAttribute, alias: 'unfoldable' });
@@ -123,7 +123,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   /**
    * Toggle the visibility of sidebar component.
-   * @type boolean
+   * @returns boolean
    * @default false
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
@@ -144,7 +144,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   /**
    * Event emitted on visibility change.
-   * @return boolean
+   * @returns boolean
    */
   readonly visibleChange = output<boolean>();
 

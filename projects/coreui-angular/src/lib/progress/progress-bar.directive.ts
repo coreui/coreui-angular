@@ -47,7 +47,7 @@ export class ProgressBarDirective {
 
   /**
    * Use to animate the stripes right to left via CSS3 animations.
-   * @return boolean
+   * @returns boolean
    */
   readonly animated = input<boolean, unknown>(undefined, { transform: booleanAttribute });
 
@@ -57,11 +57,16 @@ export class ProgressBarDirective {
    */
   readonly color = input<Colors>();
 
+  /**
+   * Number of decimal places to round the computed percent value to.
+   * @returns number
+   * @default 0
+   */
   readonly precision = input(0, { transform: numberAttribute });
 
   /**
    * The percent value the ProgressBar.
-   * @return number
+   * @returns number
    * @default 0
    */
   readonly value = input(0, { transform: numberAttribute });
@@ -75,14 +80,14 @@ export class ProgressBarDirective {
 
   /**
    * The max value of the ProgressBar.
-   * @return number
+   * @returns number
    * @default 100
    */
   readonly max = input(100, { transform: numberAttribute });
 
   /**
    * Set default html role attribute.
-   * @return string
+   * @returns string
    */
   readonly role = input<string>('progressbar');
 

@@ -86,6 +86,10 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     ) as Observable<NavigationEnd>;
   }
 
+  /**
+   * The nav data item rendered as a sidebar nav group.
+   * @returns INavData
+   */
   readonly item = input<INavData>();
 
   /**
@@ -95,7 +99,17 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
    * - `none`: never, the group stays open
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
+
+  /**
+   * Sets the group's initial expanded state.
+   * @returns boolean
+   */
   readonly show = input<boolean>();
+
+  /**
+   * Renders the group's nested nav in compact mode.
+   * @returns boolean
+   */
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
 
   readonly hostClasses = computed(() => {
@@ -226,7 +240,7 @@ export class SidebarNavComponent implements OnChanges {
 
   /**
    * Configuration object for sidebar-nav.
-   * @type INavData[]
+   * @returns INavData[]
    * @default []
    */
   readonly navItems = input<INavData[] | undefined>([]);
@@ -238,8 +252,21 @@ export class SidebarNavComponent implements OnChanges {
    * - `none`: never, the group stays open
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
+  /**
+   * Renders `c-sidebar-nav` as a nested group's item list rather than the top-level sidebar nav.
+   * @returns boolean
+   */
   readonly groupItems = input<boolean, unknown>(undefined, { transform: booleanAttribute });
+  /**
+   * Renders the nav in compact mode.
+   * @returns boolean
+   */
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
+  /**
+   * Default role for sidebar nav.
+   * @returns string
+   * @default 'navigation'
+   */
   readonly role = input('navigation');
 
   readonly hostClasses = computed(() => {

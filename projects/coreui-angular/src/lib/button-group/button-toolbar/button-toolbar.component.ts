@@ -7,8 +7,8 @@ import { Component, input, InputSignal } from '@angular/core';
 })
 export class ButtonToolbarComponent {
   /**
-   * Default role attr for ButtonToolbar. [docs]
-   * @type InputSignal<string>
+   * Default role attr for ButtonToolbar
+   * @returns string
    * @default 'toolbar'
    */
   readonly role = input('toolbar');

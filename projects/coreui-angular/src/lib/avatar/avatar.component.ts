@@ -18,44 +18,45 @@ import { TextColorDirective } from '../utilities';
 export class AvatarComponent {
   /**
    * Sets the background color context of the component to one of CoreUI’s themed colors.
-   * @return Colors
+   * @returns Colors
    */
   readonly color = input<Colors>();
 
   /**
    * Select the shape of the component.
-   * @return Shapes
+   * @returns Shapes
    */
   readonly shape = input<Shapes>();
 
   /**
    * Size the component small, large, or extra large.
+   * @returns Omit<Sizes, 'xxl'>
    * @default 'md'
    */
   readonly size = input<Omit<Sizes, 'xxl'>>('');
 
   /**
    * The alt attribute for the img element alternate text.
-   * @return string
+   * @returns string
    */
   readonly alt = input<string>('');
 
   /**
    * The src attribute for the img element.
-   * @return string
+   * @returns string
    */
   readonly src = input<string>();
 
   /**
    * Sets the color context of the status indicator to one of CoreUI’s themed colors.
-   * @return Colors
+   * @returns Colors
    */
   readonly status = input<Colors>();
 
   /**
-   * Sets the text color of the component to one of CoreUI’s themed colors.
+   * Sets the text color of the component to one of CoreUI’s themed colors
    * via TextColorDirective
-   * @return TextColors
+   * @returns TextColors
    */
   readonly textColor = input<TextColors>();
 

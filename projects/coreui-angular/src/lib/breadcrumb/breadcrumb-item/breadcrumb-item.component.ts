@@ -18,22 +18,26 @@ import { INavAttributes, INavLinkProps } from './breadcrumb-item';
 })
 export class BreadcrumbItemComponent {
   /**
-   * Toggle the active state for the component. [docs]
-   * @return boolean
+   * Toggle the active state for the component
+   * @returns boolean
    */
   readonly active = input<boolean, unknown>(undefined, { transform: booleanAttribute });
 
   /**
-   * The `url` prop for the inner `[routerLink]` directive. [docs]
-   * @return string
+   * The `url` prop for the inner `[routerLink]` directive
+   * @returns string
    */
   readonly url = input<string | any[]>();
 
   /**
-   * Additional html attributes for link. [docs]
-   * @return INavAttributes
+   * Additional html attributes for link
+   * @returns INavAttributes
    */
   readonly attribs = input<INavAttributes>();
+
+  /**
+   * @deprecated The `attributes` prop is deprecated, use `attribs` instead
+   */
   protected readonly _attributes = input<INavAttributes>(undefined, { alias: 'attributes' });
 
   readonly #attributesEffect = effect(() => {
@@ -43,8 +47,8 @@ export class BreadcrumbItemComponent {
   });
 
   /**
-   * Some `NavigationExtras` props for the inner `[routerLink]` directive and `routerLinkActiveOptions`. [docs]
-   * @return INavLinkProps
+   * Some `NavigationExtras` props for the inner `[routerLink]` directive and `routerLinkActiveOptions`
+   * @returns INavLinkProps
    */
   readonly linkProps = input<INavLinkProps>();
 

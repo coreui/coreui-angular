@@ -30,24 +30,25 @@ export class ListGroupItemDirective {
 
   /**
    * Toggle the active state for the component.
-   * @type InputSignalWithTransform<boolean, unknown>
+   * @returns boolean
    */
-  readonly active: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly active = input(false, { transform: booleanAttribute });
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @type InputSignal<boolean | undefined>
+   * @returns InputSignal<Colors | undefined>
    */
-  readonly color: InputSignal<Colors | undefined> = input();
+  readonly color = input<Colors | undefined>();
 
   /**
-   * Set disabled attr for the host element. [docs]
-   * @type boolean
+   * Set disabled attr for the host element
+   * @returns boolean
    */
-  readonly disabled: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   /**
    * The tabindex attribute specifies the tab order of an element (when the "tab" button is used for navigating).
+   * @returns number | undefined
    */
   readonly tabindex = input(undefined, { transform: numberAttribute });
 

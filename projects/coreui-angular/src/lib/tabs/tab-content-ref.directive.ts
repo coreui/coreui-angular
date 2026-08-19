@@ -30,13 +30,13 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
 
   /**
    * Template Ref
-   * @type TemplateRef
+   * @returns TemplateRef
    */
   @Input('cTabContent') tabContentRef!: any;
 
   /**
    * Set active state of tab content
-   * @type boolean
+   * @returns boolean
    * @default false
    */
   @Input({ transform: booleanAttribute })
@@ -56,7 +56,7 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
 
   /**
    * Set disabled state of tab content
-   * @type boolean
+   * @returns boolean
    */
   @Input({ transform: booleanAttribute })
   set disabled(value: boolean) {
@@ -71,7 +71,7 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
 
   /**
    * c-tab-pane index respectively
-   * @type number
+   * @returns number
    */
   @Input({ transform: numberAttribute }) tabPaneIdx = -1;
 

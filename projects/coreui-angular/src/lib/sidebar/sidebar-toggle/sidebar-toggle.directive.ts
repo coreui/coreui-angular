@@ -17,13 +17,13 @@ export class SidebarToggleDirective {
 
   /**
    * Id of sidebar for toggle action.
-   * @return string
+   * @returns string
    */
   readonly id = input<string>(undefined, { alias: 'cSidebarToggle' });
   /**
    * Sidebar property name for toggle action.
    *
-   * @return 'visible' | 'unfoldable'
+   * @returns 'visible' | 'unfoldable'
    * @default 'visible'
    */
   readonly toggle = input<'visible' | 'unfoldable'>('visible');

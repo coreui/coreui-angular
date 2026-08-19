@@ -11,7 +11,7 @@ import { booleanAttribute, computed, Directive, input, InputSignalWithTransform 
 export class PlaceholderDirective {
   /**
    * placeholder toggler
-   * @type boolean
+   * @returns boolean
    * @default false
    */
   readonly visible: InputSignalWithTransform<boolean, unknown> = input<boolean, unknown>(false, {
