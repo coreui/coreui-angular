@@ -31,6 +31,7 @@ export * from './lib/pagination';
 export * from './lib/placeholder';
 export * from './lib/popover';
 export * from './lib/progress';
+export * from './lib/search-button';
 export * from './lib/services';
 export * from './lib/sidebar';
 export * from './lib/spinner';
