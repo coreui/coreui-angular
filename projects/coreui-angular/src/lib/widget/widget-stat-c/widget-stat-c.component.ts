@@ -40,13 +40,16 @@ export class WidgetStatCComponent extends CardComponent {
    */
   readonly inverse = input(false, { transform: booleanAttribute });
 
-  templates: Record<string, TemplateRef<any>> = {};
   readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
 
-  readonly #contentTemplatesEffect = effect(() => {
-    this.contentTemplates().forEach((child: TemplateIdDirective) => {
-      this.templates[child.id] = child.templateRef;
-    });
+  readonly templates = computed(() => {
+    return this.contentTemplates().reduce(
+      (acc, child) => {
+        acc[child.id] = child.templateRef;
+        return acc;
+      },
+      {} as Record<string, TemplateRef<any>>
+    );
   });
 
   readonly hostExtendedClass = computed(() => {

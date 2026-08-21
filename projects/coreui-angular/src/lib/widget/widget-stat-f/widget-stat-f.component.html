@@ -1,16 +1,17 @@
+@let _templates = templates();
 <ng-container>
   <c-card-body [class]="cardBodyClasses()">
     <div [class]="iconClasses()">
-      <ng-container *ngTemplateOutlet="templates?.['widgetIconTemplate'] || defaultWidgetIconTemplate" />
+      <ng-container *ngTemplateOutlet="_templates?.['widgetIconTemplate'] || defaultWidgetIconTemplate" />
     </div>
     <div>
       <div [class]="valueClasses()">{{ value() }}</div>
       <div [class]="titleClasses()">{{ title() }}</div>
     </div>
   </c-card-body>
-  @if (footer() || templates?.['widgetFooterTemplate']) {
+  @if (footer() || _templates?.['widgetFooterTemplate']) {
     <c-card-footer>
-      <ng-container *ngTemplateOutlet="templates?.['widgetFooterTemplate'] || defaultFooterIconTemplate" />
+      <ng-container *ngTemplateOutlet="_templates?.['widgetFooterTemplate'] || defaultFooterIconTemplate" />
     </c-card-footer>
   }
 </ng-container>
