@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.7.20` for Angular 22.1 
+
+- feat(modal): add container/portal inputs to render modal outside its DOM position
+
+---
+
 #### `5.7.19` for Angular 22.1 
 
 - feat(search-button): add SearchButton component
