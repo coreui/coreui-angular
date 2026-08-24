@@ -171,4 +171,146 @@ describe('ModalComponent', () => {
 
     expect(component.visible()).toBe(true);
   });
+
+  describe('with portal', () => {
+    let container: HTMLDivElement;
+    let originalParent: HTMLElement;
+
+    beforeEach(() => {
+      container = document.createElement('div');
+      document.body.appendChild(container);
+      document.body.appendChild(fixture.nativeElement);
+      originalParent = fixture.nativeElement.parentElement;
+    });
+
+    afterEach(() => {
+      container.remove();
+    });
+
+    it('should default the container input to document.body', () => {
+      expect(component.container()).toBe(document.body);
+    });
+
+    it('should not move the modal element when portal is disabled', async () => {
+      fixture.componentRef.setInput('container', container);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(container.contains(fixture.nativeElement)).toBe(false);
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should move the modal element into the given container when portal is enabled', async () => {
+      fixture.componentRef.setInput('portal', true);
+      fixture.componentRef.setInput('container', container);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(container);
+    });
+
+    it('should resolve a container provided as a function', async () => {
+      fixture.componentRef.setInput('portal', true);
+      fixture.componentRef.setInput('container', () => container);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(container);
+    });
+
+    it('should not attach the portal when the container resolves to null', async () => {
+      fixture.componentRef.setInput('portal', true);
+      fixture.componentRef.setInput('container', null);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should restore the modal element to its original position once the close transition ends', async () => {
+      fixture.componentRef.setInput('portal', true);
+      fixture.componentRef.setInput('container', container);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      fixture.componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      const dialogElement = fixture.nativeElement.querySelector('.modal-dialog');
+      dialogElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'transform' }));
+
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should restore the modal element immediately when transition is disabled', async () => {
+      fixture.componentRef.setInput('transition', false);
+      fixture.componentRef.setInput('portal', true);
+      fixture.componentRef.setInput('container', container);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      fixture.componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should move the modal to a new container when the container input changes while visible', async () => {
+      const secondContainer = document.createElement('div');
+      document.body.appendChild(secondContainer);
+
+      fixture.componentRef.setInput('portal', true);
+      fixture.componentRef.setInput('container', container);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      fixture.componentRef.setInput('container', secondContainer);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(secondContainer);
+      secondContainer.remove();
+    });
+
+    it('should restore the modal to its original position when portal is disabled while visible', async () => {
+      fixture.componentRef.setInput('portal', true);
+      fixture.componentRef.setInput('container', container);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      fixture.componentRef.setInput('portal', false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should detach the portal when the component is destroyed', async () => {
+      fixture.componentRef.setInput('portal', true);
+      fixture.componentRef.setInput('container', container);
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      fixture.destroy();
+
+      expect(container.contains(fixture.nativeElement)).toBe(false);
+    });
+  });
 });

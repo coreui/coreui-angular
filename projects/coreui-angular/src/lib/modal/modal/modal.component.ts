@@ -1,5 +1,6 @@
 import { A11yModule, FocusMonitor } from '@angular/cdk/a11y';
 import { BooleanInput } from '@angular/cdk/coercion';
+import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import {
   AfterViewInit,
   booleanAttribute,
@@ -75,6 +76,14 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly backdrop = input<boolean | 'static'>(true);
 
   /**
+   * Appends the angular modal to a specific element. You can pass an HTML element or function that returns a single element. By default, `document.body`.
+   * @since 5.7.20
+   * @returns Element | (() => Element | null) | null
+   * @default document.body
+   */
+  readonly container = input<Element | (() => Element | null) | null>(this.#document.body);
+
+  /**
    * Set modal to cover the entire user viewport.
    * @returns {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
    * @default undefined
@@ -89,7 +98,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly keyboard = input(true, { transform: booleanAttribute });
 
   /**
-   * Html id attribute, required for programmatic visibility change.
+   * HTML id attribute, required for programmatic visibility change.
    * @returns string
    */
   readonly attrId = input<string>(undefined, { alias: 'id' });
@@ -97,6 +106,14 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   get id() {
     return this.attrId();
   }
+
+  /**
+   * Generates modal using a portal
+   * @since 5.7.20
+   * @returns boolean
+   * @default false
+   */
+  readonly portal = input(false, { transform: booleanAttribute });
 
   /**
    * Size the component small, large, or extra large.
@@ -144,6 +161,32 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly visible = linkedSignal(this.visibleInput);
 
+  protected readonly domPortal = new DomPortal(this.#hostElement.nativeElement);
+  protected domPortalOutlet!: DomPortalOutlet;
+
+  protected domPortalCleanup = () => {
+    if (this.domPortalOutlet?.hasAttached()) {
+      this.domPortalOutlet.detach();
+    }
+  };
+
+  readonly #portalEffect = effect(() => {
+    const visible = this.visible();
+    const containerInput = this.container();
+    const portalEnabled = this.portal();
+    untracked(() => {
+      if (!visible) {
+        return;
+      }
+      const container = typeof containerInput === 'function' ? containerInput() : containerInput;
+      this.domPortalCleanup();
+      if (container && portalEnabled) {
+        this.domPortalOutlet = new DomPortalOutlet(container);
+        this.domPortalOutlet.attach(this.domPortal);
+      }
+    });
+  });
+
   readonly #visibleInputEffect = effect(() => {
     const visible = this.visible();
     untracked(() => {
@@ -190,9 +233,6 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   readonly visibleChange = output<boolean>();
 
-  // @ViewChild(ModalContentComponent, { read: ElementRef }) modalContent!: ElementRef;
-  // @ViewChild('modalContentRef', { read: ElementRef }) modalContentRef!: ElementRef;
-  // readonly modalContentRef = viewChild(ModalContentComponent, { read: ElementRef });
   readonly modalContentRef = viewChild('modalContentRef', { read: ElementRef });
   readonly modalDialogRef = viewChild.required(ModalDialogComponent, { read: ElementRef });
 
@@ -212,6 +252,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     const modalDialogElement = this.modalDialogRef().nativeElement;
     if (event.target === modalDialogElement && event.propertyName === 'transform') {
       if (!this.visible()) {
+        this.domPortalCleanup();
         this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
       }
     }
@@ -249,6 +290,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'block');
     } else {
       if (!this.transition()) {
+        this.domPortalCleanup();
         this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
       }
     }
@@ -304,6 +346,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.#modalService.toggle({ show: false, modal: this });
     this.#afterViewInit.set(false);
     this.setBackdrop(false);
+    this.domPortalCleanup();
   }
 
   private stateToggleSubscribe(): void {
