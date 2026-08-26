@@ -14,7 +14,7 @@ export class FormLabelDirective {
    * Size the label small or large.
    * @default ''
    */
-  readonly sizing = input<'' | 'sm' | 'lg' | string>();
+  readonly sizing = input<'' | 'sm' | 'lg'>();
 
   readonly hostClasses = computed(() => {
     const col = this.col();

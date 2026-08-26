@@ -57,6 +57,11 @@ export class TabPaneComponent implements OnDestroy {
     };
   }
 
+  /**
+   * Element role.
+   * @returns string
+   * @default 'tabpanel'
+   */
   @Input()
   @HostBinding('attr.role')
   role = 'tabpanel';

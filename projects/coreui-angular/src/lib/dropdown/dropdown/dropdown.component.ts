@@ -27,6 +27,7 @@ import { filter } from 'rxjs/operators';
 
 import { createPopper, Instance, Options, Placement } from '@popperjs/core';
 
+import { DropdownAlignment } from '../../coreui.types';
 import { ThemeDirective } from '../../shared';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from '../dropdown.service';
@@ -146,12 +147,15 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   /**
    * Set alignment of dropdown menu.
-   * @returns {'start' | 'end' | { xs: 'start' | 'end' } | { sm: 'start' | 'end' } | { md: 'start' | 'end' } | { lg: 'start' | 'end' } | { xl: 'start' | 'end'} | { xxl: 'start' | 'end'}}
+   * @returns DropdownAlignment
    */
-  readonly alignment = input<string>();
+  readonly alignment = input<DropdownAlignment>();
 
   /**
-   * Automatically close dropdown when clicking outside the dropdown menu.
+   * Configure the auto close behavior: `true` closes the dropdown on a click inside or
+   * outside the menu, `false` only on the toggle button or an explicit hide/toggle call
+   * and not on the Esc key, `inside` only on a click inside the menu, `outside` only on
+   * a click outside it.
    * @returns boolean | 'inside' | 'outside'
    * @default true
    */
@@ -159,7 +163,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   /**
    * Sets a specified  direction and location of the dropdown menu.
-   * @returns 'dropup' | 'dropend' | 'dropstart'
+   * @returns 'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart'
    */
   readonly direction = input<'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart'>();
 
@@ -178,9 +182,13 @@ export class DropdownComponent implements OnDestroy, OnInit {
    */
   readonly popper = input<boolean, unknown>(true, { transform: booleanAttribute });
 
+  readonly #popperEnabled = computed(() => this.popper() && typeof this.alignment() !== 'object');
+
   /**
-   * Optional popper Options object, `placement` prop takes precedence over
+   * Optional Popper.js options object; the `placement` prop takes precedence over the
+   * placement set here. See https://popper.js.org/docs/v2/constructors/#options
    * @returns Partial<Options>
+   * @default {}
    */
   readonly popperOptionsInput = input<Partial<Options>>({}, { alias: 'popperOptions' });
 
@@ -350,7 +358,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
         // workaround for popper position calculate (see also: dropdown-menu.component)
         _menu.elementRef.nativeElement.style.visibility = 'hidden';
         _menu.elementRef.nativeElement.style.display = 'block';
-        if (this.popper()) {
+        if (this.#popperEnabled()) {
           this.popperInstance = createPopper(_toggler.elementRef.nativeElement, _menu.elementRef.nativeElement, {
             ...this.popperOptions
           });

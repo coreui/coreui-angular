@@ -15,9 +15,9 @@ export class PaginationComponent {
   readonly align = input<'start' | 'center' | 'end' | ''>('');
   /**
    * Size the component small or large.
-   * @returns '' | 'sm' | 'lg' | string
+   * @returns '' | 'sm' | 'lg'
    */
-  readonly size = input<'' | 'sm' | 'lg' | string>();
+  readonly size = input<'' | 'sm' | 'lg'>();
   /**
    * Default role for pagination
    * @returns string

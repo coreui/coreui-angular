@@ -1,6 +1,7 @@
 import { Component, DebugElement, DOCUMENT, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
 import { DropdownMenuDirective } from './dropdown-menu.directive';
 import { DropdownComponent, DropdownToggleDirective } from '../dropdown/dropdown.component';
@@ -24,7 +25,7 @@ class MockElementRef extends ElementRef {}
 })
 class TestComponent {
   readonly visible = signal(true);
-  readonly alignment = signal<string>('');
+  readonly alignment = signal<DropdownAlignment | undefined>(undefined);
   readonly dropdown = viewChild(DropdownComponent);
   readonly menu = viewChild(DropdownMenuDirective);
   readonly item = viewChild(DropdownItemDirective);
@@ -79,7 +80,11 @@ describe('DropdownMenuDirective', () => {
     fixture.detectChanges();
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(true);
-    component.alignment.set('');
+    component.alignment.set({ xs: 'end', lg: 'start' });
+    fixture.detectChanges();
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(true);
+    expect(elementRef.nativeElement.classList.contains('dropdown-menu-lg-start')).toBe(true);
+    component.alignment.set(undefined);
     fixture.detectChanges();
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(false);

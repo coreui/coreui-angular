@@ -20,7 +20,7 @@ export class TabsComponent {
 
   /**
    * The active item key.
-   * @returns <string | number | undefined>
+   * @returns number | string
    */
   readonly activeItemKey = model<number | string>();
 

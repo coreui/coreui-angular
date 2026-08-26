@@ -8,9 +8,9 @@ import { booleanAttribute, Component, computed, input, InputSignalWithTransform 
 export class ButtonGroupComponent {
   /**
    * Size the component small or large.
-   * @returns '' | 'sm' | 'lg' | string
+   * @returns '' | 'sm' | 'lg'
    */
-  readonly size = input<'' | 'sm' | 'lg' | string>();
+  readonly size = input<'' | 'sm' | 'lg'>();
 
   /**
    * Create a set of buttons that appear vertically stacked rather than horizontally. Split button dropdowns are not supported here.

@@ -18,6 +18,7 @@ import { tap } from 'rxjs/operators';
 
 import { ThemeDirective } from '../../shared/theme.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
+import { BreakpointInfix, DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
 
 @Directive({
@@ -40,9 +41,9 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
 
   /**
    * Set alignment of dropdown menu.
-   * @returns 'start' | 'end'
+   * @returns DropdownAlignment
    */
-  readonly alignment = input<'start' | 'end' | string>();
+  readonly alignment = input<DropdownAlignment>();
 
   /**
    * Toggle the visibility of dropdown menu component.
@@ -56,12 +57,11 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
   });
 
   readonly hostClasses = computed(() => {
-    const alignment = this.alignment();
     const visible = this.visible();
 
     return {
       'dropdown-menu': true,
-      [`dropdown-menu-${alignment}`]: !!alignment,
+      ...alignmentClasses(this.alignment()),
       show: visible
     } as Record<string, boolean>;
   });
@@ -142,3 +142,18 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
       .skipPredicate((dropdownItem) => dropdownItem.disabled === true);
   }
 }
+
+const alignmentClasses = (alignment?: DropdownAlignment): Record<string, boolean> => {
+  if (!alignment) {
+    return {};
+  }
+  if (typeof alignment === 'string') {
+    return { [`dropdown-menu-${alignment}`]: true };
+  }
+  return Object.fromEntries(
+    Object.entries(alignment).map(([breakpoint, direction]) => [
+      `dropdown-menu${breakpoint === BreakpointInfix.xs ? '' : `-${breakpoint}`}-${direction}`,
+      true
+    ])
+  );
+};

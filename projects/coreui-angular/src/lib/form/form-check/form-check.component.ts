@@ -30,7 +30,7 @@ export class FormCheckComponent {
    * Size the component large or extra large. Works only with `[switch]="true"`
    * @default undefined
    */
-  readonly sizing = input<'' | 'lg' | 'xl' | string>();
+  readonly sizing = input<'' | 'lg' | 'xl'>();
 
   /**
    * Render a toggle switch on for checkbox.

@@ -68,6 +68,10 @@ export type TextColors =
 
 export type Alignment = 'baseline' | 'top' | 'middle' | 'bottom' | 'text-top' | 'text-bottom';
 
+export type DropdownDirection = 'start' | 'end';
+
+export type DropdownAlignment = DropdownDirection | Partial<Record<BreakpointInfixStrings, DropdownDirection>>;
+
 export type BadgePositions = 'top-start' | 'top-end' | 'bottom-end' | 'bottom-start' | string | undefined;
 
 export type Placements =

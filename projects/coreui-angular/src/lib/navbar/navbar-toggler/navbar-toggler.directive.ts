@@ -27,8 +27,7 @@ export class NavbarTogglerDirective {
 
   /**
    * Reference to navbar collapse element (via # template variable)
-   * @returns string
-   * @default 'button'
+   * @returns CollapseDirective
    */
   readonly collapseRef = input<CollapseDirective | undefined>(undefined, { alias: 'cNavbarToggler' });
 

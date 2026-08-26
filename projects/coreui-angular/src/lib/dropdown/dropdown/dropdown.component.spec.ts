@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
 import { Component, DebugElement, DOCUMENT, ElementRef, input, signal } from '@angular/core';
+import { DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
 import { By } from '@angular/platform-browser';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
@@ -36,7 +37,7 @@ class MockElementRef extends ElementRef {}
 
 @Component({
   template: `
-    <c-dropdown #dropdown="cDropdown" [(visible)]="visible" direction="dropup" [variant]="variant()">
+    <c-dropdown #dropdown="cDropdown" [(visible)]="visible" [alignment]="alignment()" direction="dropup" [variant]="variant()">
       <div
         cDropdownToggle
         [caret]="caret()"
@@ -55,6 +56,7 @@ class MockElementRef extends ElementRef {}
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
 })
 class TestComponent {
+  readonly alignment = signal<DropdownAlignment | undefined>(undefined);
   readonly variant = signal<'btn-group' | 'dropdown' | 'input-group' | 'nav-item' | undefined>('nav-item');
   readonly visible = signal(false);
   readonly disabled = input(false);
@@ -115,6 +117,25 @@ describe('DropdownToggleDirective', () => {
     component.visible.set(true);
     fixture.detectChanges();
     expect(elementRef.nativeElement.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('should skip dynamic positioning for responsive alignment', async () => {
+    const dropdown = dropdownRef.injector.get(DropdownComponent);
+
+    component.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(dropdown['popperInstance']).toBeDefined();
+
+    component.visible.set(false);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.alignment.set({ lg: 'end' });
+    component.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(dropdown['popperInstance']).toBeUndefined();
   });
 
   it('should call event handling functions', async () => {

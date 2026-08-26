@@ -25,7 +25,7 @@ export class BreadcrumbItemComponent {
 
   /**
    * The `url` prop for the inner `[routerLink]` directive
-   * @returns string
+   * @returns string | any[]
    */
   readonly url = input<string | any[]>();
 

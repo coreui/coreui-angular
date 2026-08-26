@@ -9,7 +9,7 @@ export class FormSelectDirective {
    * Size the component small or large.
    * @default undefined
    */
-  readonly sizing = input<'' | 'sm' | 'lg' | string>();
+  readonly sizing = input<'' | 'sm' | 'lg'>();
 
   /**
    * Set component validation state to valid.

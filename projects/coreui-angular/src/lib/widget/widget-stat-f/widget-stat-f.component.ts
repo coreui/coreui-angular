@@ -51,7 +51,7 @@ export class WidgetStatFComponent extends CardComponent {
 
   /**
    * Value for your widget to display
-   * @returns string
+   * @returns string | number
    */
   readonly value = input<string | number>();
 

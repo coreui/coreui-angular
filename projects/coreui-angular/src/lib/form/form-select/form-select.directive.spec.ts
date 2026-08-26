@@ -8,7 +8,7 @@ import { By } from '@angular/platform-browser';
   template: ` <select cSelect [sizing]="sizing()" [valid]="valid()"></select> `
 })
 class TestComponent {
-  readonly sizing = input<'' | 'sm' | 'lg' | string>();
+  readonly sizing = input<'' | 'sm' | 'lg'>();
   readonly valid = input<boolean>();
 }
 

@@ -55,7 +55,7 @@ export class ButtonDirective {
    * Size the component small or large.
    * @returns 'sm' | 'lg' | ''
    */
-  readonly size = input<'' | 'sm' | 'lg' | string>('');
+  readonly size = input<'' | 'sm' | 'lg'>('');
 
   /**
    * The tabindex attribute specifies the tab order of an element (when the "tab" button is used for navigating).

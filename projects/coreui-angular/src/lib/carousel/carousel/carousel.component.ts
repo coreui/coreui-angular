@@ -104,7 +104,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
 
   /**
    * Sets which event handlers you’d like provided to your pause prop. You can specify one trigger or an array of them.
-   * @returns 'hover' | 'focus' | 'click'
+   * @returns Triggers | Triggers[] | false
    */
   readonly pause = input<Triggers | Triggers[] | false>('hover');
 
