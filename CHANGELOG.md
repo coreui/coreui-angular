@@ -2,6 +2,21 @@
 
 ---
 
+#### `5.7.21` for Angular 22.1 
+
+- feat(offcanvas): add container/portal inputs to render offcanvas outside its DOM position
+- chore(dependencies): update Angular CDK/CLI and dev dependencies
+  - `@angular/aria` to version 22.1.4
+  - `@angular/cdk` to version 22.1.4
+  - `@angular-devkit/schematics` to version 22.1.6
+  - `@angular/build` to version 22.1.6
+  - `@angular/cli` to version 22.1.6
+  - `@types/node` to version 26.3.0
+  - `eslint` to version 10.9.1
+  - `typescript-eslint` to version 8.68.0
+
+---
+
 #### `5.7.20` for Angular 22.1 
 
 - feat(modal): add container/portal inputs to render modal outside its DOM position
