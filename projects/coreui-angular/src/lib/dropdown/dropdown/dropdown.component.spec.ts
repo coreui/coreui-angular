@@ -174,3 +174,42 @@ describe('DropdownToggleDirective', () => {
     expect(component.visible()).toBe(false);
   });
 });
+
+@Component({
+  template: `
+    <c-dropdown [alignment]="first()">
+      <div cDropdownToggle></div>
+      <ul cDropdownMenu id="first"></ul>
+    </c-dropdown>
+    <c-dropdown [alignment]="second()">
+      <div cDropdownToggle></div>
+      <ul cDropdownMenu id="second"></ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective]
+})
+class TwoDropdownsComponent {
+  readonly first = signal<DropdownAlignment | undefined>(undefined);
+  readonly second = signal<DropdownAlignment | undefined>(undefined);
+}
+
+describe('DropdownComponent alignment scope', () => {
+  it('should keep each dropdown alignment to itself', async () => {
+    const fixture = TestBed.createComponent(TwoDropdownsComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const first = fixture.debugElement.query(By.css('#first')).nativeElement;
+    const second = fixture.debugElement.query(By.css('#second')).nativeElement;
+
+    component.first.set('end');
+    component.second.set({ lg: 'start' });
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(first.classList.contains('dropdown-menu-end')).toBe(true);
+    expect(first.classList.contains('dropdown-menu-lg-start')).toBe(false);
+    expect(second.classList.contains('dropdown-menu-lg-start')).toBe(true);
+    expect(second.classList.contains('dropdown-menu-end')).toBe(false);
+  });
+});
