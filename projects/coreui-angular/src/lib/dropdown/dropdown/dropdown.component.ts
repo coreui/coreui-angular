@@ -182,10 +182,16 @@ export class DropdownComponent implements OnDestroy, OnInit {
    */
   readonly popper = input<boolean, unknown>(true, { transform: booleanAttribute });
 
-  readonly #popperEnabled = computed(() => this.popper() && typeof this.alignment() !== 'object');
+  readonly #popperEnabled = computed(
+    () => this.popper() && typeof (this._menu()?.alignment() ?? this.alignment()) !== 'object'
+  );
 
   readonly #alignmentEffect = effect(() => {
     this.dropdownService.alignment.set(this.alignment());
+  });
+
+  readonly #popperEnabledEffect = effect(() => {
+    this.dropdownService.popper.set(this.#popperEnabled());
   });
 
   /**

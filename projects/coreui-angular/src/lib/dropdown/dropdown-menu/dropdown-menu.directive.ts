@@ -29,6 +29,7 @@ import { DropdownService } from '../dropdown.service';
     class: 'dropdown-menu',
     '[class]': 'hostClasses()',
     '[style]': 'hostStyles()',
+    '[attr.data-coreui-popper]': 'dataPopper()',
     '(keydown)': 'onKeyDown($event)',
     '(keyup)': 'onKeyUp($event)'
   }
@@ -74,6 +75,8 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
       display: visible ? null : ''
     } as Record<string, any>;
   });
+
+  readonly dataPopper = computed(() => (this.#dropdownService.popper() ? null : 'static'));
 
   onKeyDown($event: KeyboardEvent): void {
     if (!this.visible()) {

@@ -12,7 +12,7 @@ class MockElementRef extends ElementRef {}
 
 @Component({
   template: `
-    <c-dropdown #dropdown="cDropdown" [(visible)]="visible">
+    <c-dropdown #dropdown="cDropdown" [popper]="popper()" [(visible)]="visible">
       <button cButton cDropdownToggle color="secondary">Dropdown button</button>
       <ul cDropdownMenu [alignment]="alignment()">
         <li>
@@ -26,6 +26,7 @@ class MockElementRef extends ElementRef {}
 class TestComponent {
   readonly visible = signal(true);
   readonly alignment = signal<DropdownAlignment | undefined>(undefined);
+  readonly popper = signal(true);
   readonly dropdown = viewChild(DropdownComponent);
   readonly menu = viewChild(DropdownMenuDirective);
   readonly item = viewChild(DropdownItemDirective);
@@ -88,6 +89,19 @@ describe('DropdownMenuDirective', () => {
     fixture.detectChanges();
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(false);
+  });
+
+  it('should set data-coreui-popper when dynamic positioning is off', () => {
+    expect(elementRef.nativeElement.hasAttribute('data-coreui-popper')).toBe(false);
+    component.alignment.set({ xs: 'end', lg: 'start' });
+    fixture.detectChanges();
+    expect(elementRef.nativeElement.getAttribute('data-coreui-popper')).toBe('static');
+    component.alignment.set('end');
+    fixture.detectChanges();
+    expect(elementRef.nativeElement.hasAttribute('data-coreui-popper')).toBe(false);
+    component.popper.set(false);
+    fixture.detectChanges();
+    expect(elementRef.nativeElement.getAttribute('data-coreui-popper')).toBe('static');
   });
 
   it('should call event handling functions', async () => {

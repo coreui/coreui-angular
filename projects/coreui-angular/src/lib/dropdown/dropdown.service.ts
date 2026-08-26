@@ -16,6 +16,7 @@ export class DropdownService {
   readonly dropdownState$ = this.#dropdownState.asObservable();
 
   readonly alignment = signal<DropdownAlignment | undefined>(undefined);
+  readonly popper = signal(true);
 
   toggle(state: IDropdownState): void {
     this.#dropdownState.next(state);

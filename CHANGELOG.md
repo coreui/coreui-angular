@@ -2,6 +2,14 @@
 
 ---
 
+#### `5.7.23` for Angular 22.1 
+
+- fix(dropdown): set `data-coreui-popper="static"` on the menu when dynamic positioning is off, so the menu spacing and the per-breakpoint alignment classes take effect
+- fix(dropdown): dynamic positioning also stands down when the per-breakpoint map is bound on `cDropdownMenu` instead of `c-dropdown`
+- test(dropdown): cover the static positioning attribute for the alignment map and for `[popper]="false"`
+
+---
+
 #### `5.7.22` for Angular 22.1 
 
 - feat(dropdown): `alignment` accepts a per-breakpoint map, `[alignment]="{ xs: 'end', lg: 'start' }"`; dynamic positioning stands down for it
