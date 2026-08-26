@@ -2,6 +2,16 @@
 
 ---
 
+#### `5.7.22` for Angular 22.1 
+
+- feat(dropdown): `alignment` accepts a per-breakpoint map, `[alignment]="{ xs: 'end', lg: 'start' }"`; dynamic positioning stands down for it
+- fix(dropdown): apply the `alignment` set on `c-dropdown` to the menu, not only when bound on the menu itself
+- fix: `size`/`sizing` inputs across components declare their real unions instead of accepting any string
+- docs: correct JSDoc across components so the generated API tables name the right type, value and default
+- test(dropdown): cover the per-breakpoint alignment and keep it scoped to its own dropdown
+
+---
+
 #### `5.7.21` for Angular 22.1 
 
 - feat(offcanvas): add container/portal inputs to render offcanvas outside its DOM position
