@@ -184,6 +184,10 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   readonly #popperEnabled = computed(() => this.popper() && typeof this.alignment() !== 'object');
 
+  readonly #alignmentEffect = effect(() => {
+    this.dropdownService.alignment.set(this.alignment());
+  });
+
   /**
    * Optional Popper.js options object; the `placement` prop takes precedence over the
    * placement set here. See https://popper.js.org/docs/v2/constructors/#options

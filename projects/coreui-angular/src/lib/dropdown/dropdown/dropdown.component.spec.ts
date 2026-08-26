@@ -119,6 +119,21 @@ describe('DropdownToggleDirective', () => {
     expect(elementRef.nativeElement.getAttribute('aria-expanded')).toBe('true');
   });
 
+  it('should pass its alignment down to the menu', async () => {
+    const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
+
+    component.alignment.set('end');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(menu.classList.contains('dropdown-menu-end')).toBe(true);
+
+    component.alignment.set({ xs: 'end', lg: 'start' });
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(menu.classList.contains('dropdown-menu-end')).toBe(true);
+    expect(menu.classList.contains('dropdown-menu-lg-start')).toBe(true);
+  });
+
   it('should skip dynamic positioning for responsive alignment', async () => {
     const dropdown = dropdownRef.injector.get(DropdownComponent);
 

@@ -61,7 +61,7 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
 
     return {
       'dropdown-menu': true,
-      ...alignmentClasses(this.alignment()),
+      ...alignmentClasses(this.alignment() ?? this.#dropdownService.alignment()),
       show: visible
     } as Record<string, boolean>;
   });
