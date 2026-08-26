@@ -96,4 +96,183 @@ describe('OffcanvasComponent', () => {
     await vi.runAllTimersAsync();
     expect(fixture.componentInstance.responsiveBreakpoint).toBe(false);
   });
+
+  describe('with portal', () => {
+    let container: HTMLDivElement;
+    let originalParent: HTMLElement;
+
+    beforeEach(() => {
+      container = document.createElement('div');
+      document.body.appendChild(container);
+      document.body.appendChild(fixture.nativeElement);
+      originalParent = fixture.nativeElement.parentElement;
+    });
+
+    afterEach(() => {
+      container.remove();
+    });
+
+    it('should default the container input to document.body', () => {
+      expect(component.container()).toBe(document.body);
+    });
+
+    it('should not move the offcanvas element when portal is disabled', async () => {
+      componentRef.setInput('container', container);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(container.contains(fixture.nativeElement)).toBe(false);
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should move the offcanvas element into the given container when portal is enabled', async () => {
+      componentRef.setInput('portal', true);
+      componentRef.setInput('container', container);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(container);
+    });
+
+    it('should resolve a container provided as a function', async () => {
+      componentRef.setInput('portal', true);
+      componentRef.setInput('container', () => container);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(container);
+    });
+
+    it('should not attach the portal when the container resolves to null', async () => {
+      componentRef.setInput('portal', true);
+      componentRef.setInput('container', null);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should restore the offcanvas element to its original position once the close transition ends', async () => {
+      componentRef.setInput('portal', true);
+      componentRef.setInput('container', container);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      fixture.nativeElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'transform' }));
+
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should restore the offcanvas element when the close transition never fires', async () => {
+      componentRef.setInput('portal', true);
+      componentRef.setInput('container', container);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+      expect(fixture.nativeElement.classList.contains('hiding')).toBe(false);
+    });
+
+    it('should not run the hide completion for an offcanvas that was never shown', async () => {
+      document.body.style.overflow = 'hidden';
+      const localFixture = TestBed.createComponent(OffcanvasComponent);
+      localFixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(document.body.style.overflow).toBe('hidden');
+
+      localFixture.destroy();
+      document.body.style.removeProperty('overflow');
+    });
+
+    it('should commit the hidden starting style after the move, before the show classes are applied', async () => {
+      const element: HTMLElement = fixture.nativeElement;
+      const reflows: { parent: Element | null; classes: string }[] = [];
+      Object.defineProperty(element, 'offsetHeight', {
+        configurable: true,
+        get: () => {
+          reflows.push({ parent: element.parentElement, classes: element.getAttribute('class') ?? '' });
+          return 0;
+        }
+      });
+
+      componentRef.setInput('portal', true);
+      componentRef.setInput('container', container);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(reflows).toHaveLength(1);
+      expect(reflows[0].parent).toBe(container);
+      expect(reflows[0].classes).not.toContain('show');
+    });
+
+    it('should move the offcanvas to a new container when the container input changes while visible', async () => {
+      const secondContainer = document.createElement('div');
+      document.body.appendChild(secondContainer);
+
+      componentRef.setInput('portal', true);
+      componentRef.setInput('container', container);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      componentRef.setInput('container', secondContainer);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(secondContainer);
+      secondContainer.remove();
+    });
+
+    it('should restore the offcanvas to its original position when portal is disabled while visible', async () => {
+      componentRef.setInput('portal', true);
+      componentRef.setInput('container', container);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(fixture.nativeElement.parentElement).toBe(container);
+
+      componentRef.setInput('portal', false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(fixture.nativeElement.parentElement).toBe(originalParent);
+    });
+
+    it('should detach the portal when the component is destroyed', async () => {
+      const localFixture = TestBed.createComponent(OffcanvasComponent);
+      const localComponentRef = localFixture.componentRef;
+      await localFixture.whenStable();
+      document.body.appendChild(localFixture.nativeElement);
+
+      localComponentRef.setInput('portal', true);
+      localComponentRef.setInput('container', container);
+      localComponentRef.setInput('visible', true);
+      localFixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(localFixture.nativeElement.parentElement).toBe(container);
+
+      localFixture.destroy();
+
+      expect(container.contains(localFixture.nativeElement)).toBe(false);
+    });
+  });
 });

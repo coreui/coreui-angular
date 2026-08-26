@@ -1,6 +1,7 @@
 import { A11yModule } from '@angular/cdk/a11y';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
   booleanAttribute,
@@ -17,7 +18,8 @@ import {
   OnInit,
   output,
   PLATFORM_ID,
-  Renderer2
+  Renderer2,
+  untracked
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
@@ -37,7 +39,6 @@ let nextId = 0;
   imports: [A11yModule],
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: {
-    ngSkipHydration: 'true',
     '[attr.id]': 'id()',
     '[attr.inert]': 'ariaHidden() || null',
     '[attr.role]': 'role()',
@@ -71,6 +72,14 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly backdrop = input<boolean | 'static'>(true);
 
   /**
+   * Appends the offcanvas to a specific element. You can pass an HTML element or function that returns a single element. By default, `document.body`.
+   * @since 5.7.21
+   * @returns Element | (() => Element | null) | null
+   * @default document.body
+   */
+  readonly container = input<Element | (() => Element | null) | null>(this.#document.body);
+
+  /**
    * Closes the offcanvas when the escape key is pressed
    * @returns boolean
    * @default true
@@ -83,6 +92,14 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
    * @default 'start'
    */
   readonly placement = input<string | 'start' | 'end' | 'top' | 'bottom'>('start');
+
+  /**
+   * Generates offcanvas using a portal
+   * @since 5.7.21
+   * @returns boolean
+   * @default false
+   */
+  readonly portal = input(false, { transform: booleanAttribute });
 
   /**
    * Responsive offcanvas property hides content outside the viewport from a specified breakpoint and down.
@@ -115,6 +132,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #activeBackdrop!: HTMLDivElement;
   #backdropClickSubscription!: Subscription;
   #layoutChangeSubscription!: Subscription;
+  #hideFallbackId?: ReturnType<typeof setTimeout>;
+  #isShown = false;
 
   /**
    * Allow body scrolling while offcanvas is visible.
@@ -133,6 +152,35 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly visible = linkedSignal({
     source: this.visibleInput,
     computation: (value) => value
+  });
+
+  protected readonly domPortal = new DomPortal(this.#hostElement.nativeElement);
+  protected domPortalOutlet!: DomPortalOutlet;
+
+  protected domPortalCleanup = () => {
+    if (this.domPortalOutlet?.hasAttached()) {
+      this.domPortalOutlet.detach();
+    }
+  };
+
+  readonly #portalEffect = effect(() => {
+    const visible = this.visible();
+    const containerInput = this.container();
+    const portalEnabled = this.portal();
+    untracked(() => {
+      if (!visible) {
+        return;
+      }
+      const container = typeof containerInput === 'function' ? containerInput() : containerInput;
+      this.domPortalCleanup();
+      if (container && portalEnabled) {
+        this.domPortalOutlet = new DomPortalOutlet(container);
+        this.domPortalOutlet.attach(this.domPortal);
+        // Re-inserting the host drops its computed style, so the show classes applied later in
+        // this same cycle would have no starting point to animate from. Force a reflow to commit it.
+        void this.#hostElement.nativeElement.offsetHeight;
+      }
+    });
   });
 
   readonly visibleEffect = effect(() => {
@@ -196,6 +244,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   animateStart(visible: boolean = this.visible()): void {
+    const wasShown = this.#isShown;
+    this.#isShown = visible;
+    this.#clearHideFallback();
     if (visible) {
       if (!this.scroll()) {
         this.#backdropService.hideScrollbar();
@@ -205,6 +256,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     } else {
       this.#renderer.removeClass(this.#hostElement.nativeElement, 'showing');
       this.#renderer.addClass(this.#hostElement.nativeElement, 'hiding');
+      if (wasShown) {
+        this.#scheduleHideFallback();
+      }
     }
   }
 
@@ -227,6 +281,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.#offcanvasService.toggle({ show: false, id: this.id() });
     this.#removeEventListeners();
+    this.#clearHideFallback();
+    this.domPortalCleanup();
   }
 
   readonly #removeEventListeners = () => {
@@ -239,12 +295,33 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       if (this.visible()) {
         this.#renderer.removeClass(offcanvasElement, 'showing');
       } else {
-        this.#renderer.removeClass(offcanvasElement, 'hiding');
-        this.#renderer.removeStyle(this.#document.body, 'overflow');
-        this.#renderer.removeStyle(this.#document.body, 'paddingRight');
+        this.#completeHide();
       }
     }
   };
+
+  #completeHide(): void {
+    this.#clearHideFallback();
+    this.#renderer.removeClass(this.#hostElement.nativeElement, 'hiding');
+    this.#renderer.removeStyle(this.#document.body, 'overflow');
+    this.#renderer.removeStyle(this.#document.body, 'paddingRight');
+    this.domPortalCleanup();
+  }
+
+  // `transitionend` never fires when there is nothing to animate — reduced motion, or a responsive
+  // offcanvas above its breakpoint — which would leave the body scroll-locked and the host parked
+  // in the portal container.
+  #scheduleHideFallback(): void {
+    const style = this.#document.defaultView?.getComputedStyle(this.#hostElement.nativeElement);
+    const duration = Number.parseFloat(style?.transitionDuration ?? '') || 0;
+    const delay = Number.parseFloat(style?.transitionDelay ?? '') || 0;
+    this.#hideFallbackId = setTimeout(() => this.#completeHide(), (duration + delay) * 1000 + 5);
+  }
+
+  #clearHideFallback(): void {
+    clearTimeout(this.#hideFallbackId);
+    this.#hideFallbackId = undefined;
+  }
 
   setFocus(): void {
     if (isPlatformBrowser(this.#platformId)) {
