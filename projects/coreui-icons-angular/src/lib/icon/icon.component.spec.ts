@@ -10,17 +10,12 @@ import { IconComponent } from './icon.component';
 
 @Component({
   template: `<c-icon #icon name="cil-list" size="lg" class="test" />`,
-  imports: [IconComponent],
-  providers: [IconSetService]
+  imports: [IconComponent]
 })
 class TestComponent {
   iconSet = inject(IconSetService);
 
   iconRef = viewChild.required(IconComponent);
-
-  constructor() {
-    this.iconSet.icons = { cilList };
-  }
 }
 
 describe('IconComponent', () => {
@@ -33,6 +28,8 @@ describe('IconComponent', () => {
       imports: [TestComponent, IconComponent, HtmlAttributesDirective],
       providers: [IconSetService]
     }).compileComponents();
+
+    TestBed.inject(IconSetService).icons = { cilList };
 
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
@@ -61,9 +58,6 @@ describe('IconComponent', () => {
 
   describe('size input', () => {
     it('should handle different size values', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const sizes = ['sm', 'lg', 'xl', 'xxl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'];
 
       sizes.forEach((size) => {
@@ -149,9 +143,6 @@ describe('IconComponent', () => {
     });
 
     it('should prefer content over name', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('content', '<path d="custom"/>');
       testFixture.componentRef.setInput('name', 'cilList');
@@ -164,9 +155,6 @@ describe('IconComponent', () => {
 
   describe('title input', () => {
     it('should include title element when title is provided', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
       testFixture.componentRef.setInput('title', 'List Icon');
@@ -179,9 +167,6 @@ describe('IconComponent', () => {
     });
 
     it('should not include title element when title is not provided', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
       testFixture.detectChanges();
@@ -224,9 +209,6 @@ describe('IconComponent', () => {
 
   describe('customClasses input', () => {
     it('should use customClasses when provided', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('customClasses', { 'my-custom-class': true, 'another-class': true });
       testFixture.componentRef.setInput('name', 'cilList');
@@ -238,9 +220,6 @@ describe('IconComponent', () => {
     });
 
     it('should use default classes when customClasses is not provided', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
       testFixture.detectChanges();
@@ -253,9 +232,6 @@ describe('IconComponent', () => {
 
   describe('attributes input', () => {
     it('should apply default role attribute', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
       testFixture.detectChanges();
@@ -265,9 +241,6 @@ describe('IconComponent', () => {
     });
 
     it('should allow custom attributes', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('attributes', { 'aria-label': 'Custom Icon', 'data-test': 'icon' });
       testFixture.componentRef.setInput('name', 'cilList');
@@ -281,9 +254,6 @@ describe('IconComponent', () => {
 
   describe('width and height inputs', () => {
     it('should apply width attribute when provided', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('width', '48');
       testFixture.componentRef.setInput('name', 'cilList');
@@ -294,9 +264,6 @@ describe('IconComponent', () => {
     });
 
     it('should apply height attribute when provided', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('height', '48');
       testFixture.componentRef.setInput('name', 'cilList');
@@ -333,15 +300,10 @@ describe('IconComponent', () => {
       testFixture.componentRef.setInput('name', 'nonExistentIcon');
       testFixture.detectChanges();
 
-      expect(warnSpy).toHaveBeenCalled();
-      // The warning comes from IconComponent and/or IconSetService
-      expect(warnSpy.mock.calls.length).toBeGreaterThan(0);
+      expect(warnSpy).toHaveBeenCalledWith('CoreUI WARN: Icon nonExistentIcon is not registered in IconService');
     });
 
     it('should handle icon without size', () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
       testFixture.detectChanges();
@@ -354,9 +316,6 @@ describe('IconComponent', () => {
 
   describe('SVG element replacement', () => {
     it('should have svgElementRef after rendering', async () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
       testFixture.detectChanges();
@@ -368,9 +327,6 @@ describe('IconComponent', () => {
     });
 
     it('should render SVG with correct content', async () => {
-      const iconSet = TestBed.inject(IconSetService);
-      iconSet.icons = { cilList };
-
       @Component({
         template: `<c-icon name="cil-list" class="host-class-1 host-class-2" />`,
         imports: [IconComponent]
