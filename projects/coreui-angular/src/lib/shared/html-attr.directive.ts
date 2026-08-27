@@ -14,18 +14,20 @@ export class HtmlAttributesDirective {
   readonly #renderer = inject(Renderer2);
   readonly #elementRef = inject(ElementRef);
 
-  readonly #attrEffect = effect(() => {
-    const attribs = this.cHtmlAttr();
-    for (const attr in attribs) {
-      if (attr === 'style' && typeof attribs[attr] === 'object') {
-        this.setStyle(attribs[attr]);
-      } else if (attr === 'class') {
-        this.addClass(attribs[attr]);
-      } else {
-        this.setAttrib(attr, attribs[attr]);
+  constructor() {
+    effect(() => {
+      const attribs = this.cHtmlAttr();
+      for (const attr in attribs) {
+        if (attr === 'style' && typeof attribs[attr] === 'object') {
+          this.setStyle(attribs[attr]);
+        } else if (attr === 'class') {
+          this.addClass(attribs[attr]);
+        } else {
+          this.setAttrib(attr, attribs[attr]);
+        }
       }
-    }
-  });
+    });
+  }
 
   private setStyle(styles: Record<string, any>): void {
     for (const style in styles) {

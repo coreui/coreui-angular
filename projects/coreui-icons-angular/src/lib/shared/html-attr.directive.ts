@@ -5,23 +5,29 @@ import { Directive, effect, ElementRef, inject, input, Renderer2 } from '@angula
   exportAs: 'cHtmlAttr'
 })
 export class HtmlAttributesDirective {
+  /**
+   * A map of HTML attributes (including `class` and `style`) to set on the host element.
+   * @returns Record<string, any>
+   */
   readonly cHtmlAttr = input<Record<string, any>>();
 
   readonly #renderer = inject(Renderer2);
   readonly #elementRef = inject(ElementRef);
 
-  readonly attrEffect = effect(() => {
-    const attribs = this.cHtmlAttr();
-    for (const attr in attribs) {
-      if (attr === 'style' && typeof attribs[attr] === 'object') {
-        this.setStyle(attribs[attr]);
-      } else if (attr === 'class') {
-        this.addClass(attribs[attr]);
-      } else {
-        this.setAttrib(attr, attribs[attr]);
+  constructor() {
+    effect(() => {
+      const attribs = this.cHtmlAttr();
+      for (const attr in attribs) {
+        if (attr === 'style' && typeof attribs[attr] === 'object') {
+          this.setStyle(attribs[attr]);
+        } else if (attr === 'class') {
+          this.addClass(attribs[attr]);
+        } else {
+          this.setAttrib(attr, attribs[attr]);
+        }
       }
-    }
-  });
+    });
+  }
 
   private setStyle(styles: Record<string, any>): void {
     for (const style in styles) {
