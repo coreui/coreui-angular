@@ -110,16 +110,7 @@ export class IconDirective implements IIcon {
       return content;
     }
     const name = this.name();
-    if (this.#iconSet && name) {
-      return this.#iconSet.getIcon(name);
-    }
-    if (name && !this.#iconSet?.icons[name]) {
-      console.warn(
-        `cIcon directive: The '${name}' icon not found. Add it to the IconSet service for use with the 'name' property. \n`,
-        name
-      );
-    }
-    return '';
+    return name ? this.#iconSet.getIcon(name) : '';
   });
 
   readonly scale = computed(() => {

@@ -34,19 +34,21 @@ export class IconComponent implements IIcon {
 
   readonly svgElementRef = viewChild<ElementRef>('svgElement');
 
-  readonly #svgElementEffect = effect(() => {
-    const svgElementRef = this.svgElementRef();
-    const hostElement: Element = this.#elementRef.nativeElement;
-    if (svgElementRef && hostElement) {
-      const svgElement = svgElementRef.nativeElement;
-      hostElement.classList?.forEach((item: string) => {
-        this.#renderer.addClass(svgElement, item);
-      });
-      const parentElement = this.#renderer.parentNode(hostElement);
-      this.#renderer.insertBefore(parentElement, svgElement, hostElement);
-      this.#renderer.removeChild(parentElement, hostElement);
-    }
-  });
+  constructor() {
+    effect(() => {
+      const svgElementRef = this.svgElementRef();
+      const hostElement: Element = this.#elementRef.nativeElement;
+      if (svgElementRef && hostElement) {
+        const svgElement = svgElementRef.nativeElement;
+        hostElement.classList?.forEach((item: string) => {
+          this.#renderer.addClass(svgElement, item);
+        });
+        const parentElement = this.#renderer.parentNode(hostElement);
+        this.#renderer.insertBefore(parentElement, svgElement, hostElement);
+        this.#renderer.removeChild(parentElement, hostElement);
+      }
+    });
+  }
 
   readonly viewBox = computed(() => {
     return this.viewBoxInput() ?? this.scale();
@@ -71,16 +73,7 @@ export class IconComponent implements IIcon {
       return content;
     }
     const name = this.name();
-    if (this.#iconSet && name) {
-      return this.#iconSet.getIcon(name);
-    }
-    if (name && !this.#iconSet?.icons[name]) {
-      console.warn(
-        `c-icon component: The '${name}' icon not found. Add it to the IconSet service for use with the 'name' property. \n`,
-        name
-      );
-    }
-    return '';
+    return name ? this.#iconSet.getIcon(name) : '';
   });
 
   readonly scale = computed(() => {
