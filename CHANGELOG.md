@@ -7,6 +7,21 @@
 - fix(dropdown): set `data-coreui-popper="static"` on the menu when dynamic positioning is off, so the menu spacing and the per-breakpoint alignment classes take effect
 - fix(dropdown): dynamic positioning also stands down when the per-breakpoint map is bound on `cDropdownMenu` instead of `c-dropdown`
 - test(dropdown): cover the static positioning attribute for the alignment map and for `[popper]="false"`
+- refactor(icon): drop the unreachable "icon not found" warning from `IconComponent` and `IconDirective`; a missing icon is still reported by `IconSetService`
+- refactor(html-attr): create the attribute effect in the constructor and drop the unused `attrEffect` handle
+- test(icon): register the icon set once in the spec setup, so the suite stops logging "not registered" warnings
+- chore(dependencies): update to Angular 22.1.4
+  - `@angular/animations` to version 22.1.4
+  - `@angular/common` to version 22.1.4
+  - `@angular/compiler` to version 22.1.4
+  - `@angular/core` to version 22.1.4
+  - `@angular/forms` to version 22.1.4
+  - `@angular/localize` to version 22.1.4
+  - `@angular/platform-browser` to version 22.1.4
+  - `@angular/router` to version 22.1.4
+  - `@angular/compiler-cli` to version 22.1.4
+  - `@angular/language-service` to version 22.1.4
+  - `@types/node` to version 26.4.0
 
 ---
 
