@@ -26,6 +26,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { INavData } from './sidebar-nav';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
+import { NavGroupService } from '../../nav';
 import { HtmlAttributesDirective } from '../../shared';
 import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
@@ -228,7 +229,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     '[attr.role]': 'role()'
   },
   changeDetection: ChangeDetectionStrategy.Eager,
-  providers: [SidebarNavGroupService]
+  providers: [NavGroupService, SidebarNavGroupService]
 })
 export class SidebarNavComponent implements OnChanges {
   readonly sidebar = inject(SidebarComponent, { optional: true });

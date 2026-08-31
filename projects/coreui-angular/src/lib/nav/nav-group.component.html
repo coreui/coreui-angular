@@ -1,0 +1,25 @@
+@if (toggler() || togglerTemplate()) {
+  <a
+    (click)="toggleGroup($event)"
+    [attr.aria-expanded]="visibleState()"
+    class="nav-link nav-group-toggle"
+    href
+  >
+    @if (togglerTemplate(); as template) {
+      <ng-container
+        *ngTemplateOutlet="template; context: { $implicit: visibleState(), visible: visibleState() }"
+      />
+    } @else {
+      {{ toggler() }}
+    }
+  </a>
+}
+<c-nav-group-items
+  (collapseChange)="onCollapseChange($event)"
+  [compact]="compact()"
+  [style.display]="display()"
+  [visible]="visibleState()"
+  cCollapse
+>
+  <ng-content />
+</c-nav-group-items>

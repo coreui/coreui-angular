@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarNavComponent } from './sidebar-nav.component';
 import { SidebarNavHelper } from './sidebar-nav.service';
+import { NavGroupService } from '../../nav';
 // import { SidebarNavGroupComponent } from './sidebar-nav-group.component';
 
 describe('SidebarNavComponent', () => {
@@ -42,6 +43,10 @@ describe('SidebarNavComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should provide the nav group accordion level', () => {
+    expect(fixture.debugElement.injector.get(NavGroupService)).toBeTruthy();
   });
 
   it('should have css classes', () => {
