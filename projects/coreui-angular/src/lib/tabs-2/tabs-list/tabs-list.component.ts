@@ -52,11 +52,13 @@ export class TabsListComponent {
   readonly layout: InputSignal<'fill' | 'justified' | undefined> = input();
 
   /**
-   * Set the variant to tabs, pills or underline.
-   * @returns 'pills' | 'tabs' | 'underline' | 'underline-border' | undefined
+   * Set the variant to tabs, pills, underline or enclosed.
+   * @returns 'enclosed' | 'enclosed-pills' | 'pills' | 'tabs' | 'underline' | 'underline-border' | undefined
    * @default undefined
    */
-  readonly variant: InputSignal<'pills' | 'tabs' | 'underline' | 'underline-border' | undefined> = input();
+  readonly variant: InputSignal<
+    'enclosed' | 'enclosed-pills' | 'pills' | 'tabs' | 'underline' | 'underline-border' | undefined
+  > = input();
 
   /**
    * Set the role to tab list.
@@ -71,6 +73,7 @@ export class TabsListComponent {
     return {
       nav: true,
       [`nav-${layout}`]: layout,
+      'nav-enclosed': variant === 'enclosed' || variant === 'enclosed-pills',
       [`nav-${variant}`]: variant
     } as Record<string, boolean>;
   });
