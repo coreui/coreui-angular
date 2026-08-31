@@ -43,6 +43,13 @@ describe('NavComponent', () => {
     expect(fixture.nativeElement.classList.contains('nav-justified')).toBe(false);
   });
 
+  it('should have role attribute', () => {
+    expect(fixture.nativeElement.getAttribute('role')).toBe('navigation');
+    componentRef.setInput('role', 'tablist');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('role')).toBe('tablist');
+  });
+
   it('should have css classes for variant', () => {
     expect(fixture.nativeElement.classList.contains('nav-tabs')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(false);
@@ -77,11 +84,24 @@ describe('NavComponent', () => {
     expect(fixture.nativeElement.classList.contains('nav-underline')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(true);
 
+    componentRef.setInput('variant', 'enclosed');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('nav-enclosed')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('nav-enclosed-pills')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(false);
+
+    componentRef.setInput('variant', 'enclosed-pills');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('nav-enclosed')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('nav-enclosed-pills')).toBe(true);
+
     componentRef.setInput('variant', undefined);
     fixture.detectChanges();
     expect(fixture.nativeElement.classList.contains('nav-tabs')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('nav-enclosed')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('nav-enclosed-pills')).toBe(false);
   });
 });

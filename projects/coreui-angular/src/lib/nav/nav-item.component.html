@@ -1,0 +1,17 @@
+@if (href()) {
+  <a
+    [active]="active()"
+    [attr.href]="href()"
+    [disabled]="disabled()"
+    [tabindex]="tabindex()"
+    cNavLink
+  >
+    <ng-container *ngTemplateOutlet="content" />
+  </a>
+} @else {
+  <ng-container *ngTemplateOutlet="content" />
+}
+
+<ng-template #content>
+  <ng-content />
+</ng-template>
