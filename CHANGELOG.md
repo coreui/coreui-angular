@@ -2,6 +2,14 @@
 
 ---
 
+#### `5.7.24` for Angular 22.1 
+
+- fix(backdrop): a backdrop opened during the 300 ms fade-out of the previous one no longer sits on top of it, and `activeBackdrop` is released once its cleanup runs
+- test(offcanvas): hide the offcanvas before restoring real timers, so the backdrop cleanup cannot clear `body` overflow in a later test
+- chore(dependencies): update to angular-eslint to 22.2.0
+
+---
+
 #### `5.7.23` for Angular 22.1 
 
 - fix(dropdown): set `data-coreui-popper="static"` on the menu when dynamic positioning is off, so the menu spacing and the per-breakpoint alignment classes take effect
