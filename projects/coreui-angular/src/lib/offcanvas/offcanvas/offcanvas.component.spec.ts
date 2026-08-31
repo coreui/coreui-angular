@@ -27,12 +27,13 @@ describe('OffcanvasComponent', () => {
   });
 
   afterEach(async () => {
-    vi.useRealTimers();
-
     if (componentRef) {
       componentRef.setInput('visible', false);
       fixture.detectChanges();
+      await vi.runAllTimersAsync();
     }
+    vi.useRealTimers();
+
     const backdrop = document.querySelector('.offcanvas-backdrop');
     if (backdrop) {
       document.body.removeChild(backdrop);
