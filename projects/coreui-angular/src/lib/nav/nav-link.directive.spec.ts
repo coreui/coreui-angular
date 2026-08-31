@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, ComponentRef, DebugElement, input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+import { NavGroupComponent } from './nav-group.component';
+
 @Component({
   template: '<a cNavLink [active]="active()" [disabled]="disabled()">test</a>',
   imports: [NavLinkDirective]
@@ -10,6 +12,22 @@ import { By } from '@angular/platform-browser';
 class TestComponent {
   readonly active = input(false);
   readonly disabled = input(false);
+}
+
+@Component({
+  template: '<button cNavLink [disabled]="disabled()">test</button>',
+  imports: [NavLinkDirective]
+})
+class TestButtonComponent {
+  readonly disabled = input(false);
+}
+
+@Component({
+  template: '<c-nav-group toggler="group"><a cNavLink [active]="active()">test</a></c-nav-group>',
+  imports: [NavGroupComponent, NavLinkDirective]
+})
+class TestNavGroupComponent {
+  readonly active = input(false);
 }
 
 describe('NavLinkDirective', () => {
@@ -31,10 +49,7 @@ describe('NavLinkDirective', () => {
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new NavLinkDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(debugElement.injector.get(NavLinkDirective)).toBeTruthy();
   });
 
   it('should have css classes', () => {
@@ -72,14 +87,59 @@ describe('NavLinkDirective', () => {
     expect(debugElement.nativeElement.getAttribute('disabled')).toBeNull();
     expect(debugElement.nativeElement.getAttribute('aria-disabled')).not.toBeTruthy();
     expect(debugElement.nativeElement.getAttribute('tabindex')).not.toBe('-1');
-    expect(debugElement.nativeElement.style.cursor).toBe('pointer');
+    componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+    expect(debugElement.nativeElement.getAttribute('disabled')).toBeNull();
+    expect(debugElement.nativeElement.getAttribute('aria-disabled')).toBeTruthy();
+    expect(debugElement.nativeElement.getAttribute('tabindex')).toBe('-1');
+    componentRef.setInput('disabled', false);
+    fixture.detectChanges();
+  });
+});
+
+describe('NavLinkDirective on a button host', () => {
+  let fixture: ComponentFixture<TestButtonComponent>;
+  let componentRef: ComponentRef<TestButtonComponent>;
+  let debugElement: DebugElement;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [TestButtonComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestButtonComponent);
+    componentRef = fixture.componentRef;
+    debugElement = fixture.debugElement.query(By.directive(NavLinkDirective));
+    fixture.detectChanges();
+  });
+
+  it('should have disabled attr instead of aria-disabled', () => {
     componentRef.setInput('disabled', true);
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('disabled')).not.toBeNull();
-    expect(debugElement.nativeElement.getAttribute('aria-disabled')).toBeTruthy();
-    expect(debugElement.nativeElement.getAttribute('tabindex')).toBe('-1');
-    expect(debugElement.nativeElement.style.cursor).not.toBe('pointer');
-    componentRef.setInput('disabled', false);
+    expect(debugElement.nativeElement.getAttribute('aria-disabled')).not.toBeTruthy();
+    expect(debugElement.nativeElement.getAttribute('tabindex')).not.toBe('-1');
+  });
+});
+
+describe('NavLinkDirective in a nav group', () => {
+  let fixture: ComponentFixture<TestNavGroupComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [TestNavGroupComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestNavGroupComponent);
     fixture.detectChanges();
+  });
+
+  it('should open the group for an active link', () => {
+    const group = fixture.nativeElement.querySelector('c-nav-group');
+    expect(group.classList.contains('show')).toBe(false);
+
+    fixture.componentRef.setInput('active', true);
+    fixture.detectChanges();
+    expect(group.classList.contains('show')).toBe(true);
   });
 });

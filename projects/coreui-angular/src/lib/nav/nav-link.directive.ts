@@ -1,5 +1,20 @@
-import { booleanAttribute, computed, Directive, effect, input, numberAttribute } from '@angular/core';
+import {
+  afterNextRender,
+  booleanAttribute,
+  computed,
+  Directive,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  numberAttribute,
+  OnDestroy,
+  untracked
+} from '@angular/core';
 import { BooleanInput } from '../coreui.types';
+import { NavGroupService } from './nav-group.service';
+
+const DISABLED_ATTR_ELEMENTS = new Set(['button', 'fieldset', 'input', 'optgroup', 'option', 'select', 'textarea']);
 
 @Directive({
   selector: '[cNavLink]',
@@ -8,12 +23,24 @@ import { BooleanInput } from '../coreui.types';
     '[attr.aria-current]': 'ariaCurrent()',
     '[attr.aria-disabled]': 'ariaDisabled',
     '[attr.disabled]': 'attrDisabled',
-    '[attr.tabindex]': 'attrTabindex',
-    '[style.cursor]': 'styleCursor'
+    '[attr.tabindex]': 'attrTabindex'
   }
 })
-export class NavLinkDirective {
+export class NavLinkDirective implements OnDestroy {
   static ngAcceptInputType_disabled: BooleanInput;
+
+  readonly #hostElement = inject(ElementRef);
+  readonly #navGroupService = inject(NavGroupService, { optional: true });
+
+  #classObserver?: MutationObserver;
+
+  constructor() {
+    afterNextRender({
+      read: () => {
+        this.#observeActiveClass();
+      }
+    });
+  }
 
   /**
    * Sets .nav-link class to the host
@@ -49,14 +76,22 @@ export class NavLinkDirective {
   ariaDisabled: boolean | null = null;
   attrDisabled: boolean | string | null = null;
   attrTabindex: number | null = null;
-  styleCursor: 'pointer' | null = null;
 
   readonly #disabledEffect = effect(() => {
     const disabled = this.disabled();
-    this.ariaDisabled = disabled || null;
-    this.attrDisabled = disabled ? '' : null;
-    this.attrTabindex = disabled ? -1 : (this.tabindex() ?? null);
-    this.styleCursor = disabled ? null : 'pointer';
+    const tabindex = this.tabindex();
+    const disabledAttrElement = DISABLED_ATTR_ELEMENTS.has(this.#tagName);
+    this.ariaDisabled = (disabled && !disabledAttrElement) || null;
+    this.attrDisabled = disabled && disabledAttrElement ? '' : null;
+    this.attrTabindex = disabled && !disabledAttrElement ? -1 : (Number.isNaN(tabindex) ? null : (tabindex ?? null));
+  });
+
+  readonly #activeEffect = effect(() => {
+    if (this.active()) {
+      untracked(() => {
+        this.#navGroupService?.openBranch();
+      });
+    }
   });
 
   readonly hostClasses = computed(() => {
@@ -66,4 +101,34 @@ export class NavLinkDirective {
       active: this.active()
     } as Record<string, boolean>;
   });
+
+  get #tagName(): string {
+    return (this.#hostElement.nativeElement as HTMLElement).tagName.toLowerCase();
+  }
+
+  ngOnDestroy(): void {
+    this.#classObserver?.disconnect();
+  }
+
+  #observeActiveClass(): void {
+    const host: HTMLElement = this.#hostElement.nativeElement;
+
+    if (!this.#navGroupService) {
+      return;
+    }
+
+    let wasActive = host.classList.contains('active');
+    if (wasActive) {
+      this.#navGroupService.openBranch();
+    }
+
+    this.#classObserver = new MutationObserver(() => {
+      const active = host.classList.contains('active');
+      if (active && !wasActive) {
+        this.#navGroupService?.openBranch();
+      }
+      wasActive = active;
+    });
+    this.#classObserver.observe(host, { attributes: true, attributeFilter: ['class'] });
+  }
 }
