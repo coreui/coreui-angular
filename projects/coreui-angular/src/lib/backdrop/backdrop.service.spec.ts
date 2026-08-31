@@ -65,6 +65,29 @@ describe('BackdropService', () => {
     expect(document.body.style.overflow).not.toBe('hidden');
   });
 
+  it('should release the active backdrop after it is cleared', async () => {
+    const cleared = backdrop;
+    service.clearBackdrop(cleared);
+    await vi.runAllTimersAsync();
+
+    expect(service.activeBackdrop).toBeUndefined();
+    expect(cleared.parentElement).toBeNull();
+    backdrop = null;
+  });
+
+  it('should not reset the scrollbar once a cleared backdrop is replaced', async () => {
+    const cleared = backdrop;
+    service.clearBackdrop(cleared);
+    backdrop = service.setBackdrop('modal');
+    service.hideScrollbar();
+    await vi.runAllTimersAsync();
+
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(cleared.parentElement).toBeNull();
+    expect(backdrop.parentElement).toBe(document.body);
+    service.resetScrollbar();
+  });
+
   it('should react to backdrop click', async () => {
     let backdropClicked = false;
     service.backdropClick$.subscribe((value) => {

@@ -13,6 +13,9 @@ export class BackdropService {
 
   activeBackdrop: any;
 
+  #clearBackdropId?: ReturnType<typeof setTimeout>;
+  #pendingBackdrop?: HTMLElement;
+
   get #scrollbarWidth() {
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth#usage_notes
     const documentWidth = this.#document.documentElement.clientWidth;
@@ -23,6 +26,8 @@ export class BackdropService {
   scrollbarWidth = this.#scrollbarWidth;
 
   setBackdrop(type: string = 'modal'): HTMLDivElement {
+    this.#flushClearBackdrop();
+
     const backdropElement = this.#document.createElement('div');
     backdropElement.classList.add(`${type}-backdrop`);
     backdropElement.classList.add('fade');
@@ -51,16 +56,38 @@ export class BackdropService {
         delete (backdropElement as any).__backdropClickHandler;
       }
       backdropElement.classList.remove('show');
-      setTimeout(() => {
+      this.#flushClearBackdrop();
+      this.#pendingBackdrop = backdropElement;
+      this.#clearBackdropId = setTimeout(() => {
+        this.#clearBackdropId = undefined;
+        this.#pendingBackdrop = undefined;
         if (this.activeBackdrop === backdropElement) {
           this.resetScrollbar();
+          this.activeBackdrop = undefined;
         }
-        if (backdropElement.parentElement === this.#document.body) {
-          this.#document.body.removeChild(backdropElement);
-        }
+        this.#removeBackdrop(backdropElement);
       }, 300);
     }
     return undefined;
+  }
+
+  #flushClearBackdrop(): void {
+    if (this.#clearBackdropId === undefined) {
+      return;
+    }
+    clearTimeout(this.#clearBackdropId);
+    this.#clearBackdropId = undefined;
+    const pending = this.#pendingBackdrop;
+    this.#pendingBackdrop = undefined;
+    if (pending) {
+      this.#removeBackdrop(pending);
+    }
+  }
+
+  #removeBackdrop(backdropElement: HTMLElement): void {
+    if (backdropElement.parentElement === this.#document.body) {
+      this.#document.body.removeChild(backdropElement);
+    }
   }
 
   get #isRTL() {

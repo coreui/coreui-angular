@@ -24,8 +24,15 @@ describe('ModalComponent', () => {
     fixture.detectChanges();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
     vi.useRealTimers();
+
+    for (const element of Array.from(document.querySelectorAll('.modal-backdrop'))) {
+      element.remove();
+    }
   });
 
   it('should create', () => {
