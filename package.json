@@ -73,7 +73,7 @@
     "@types/node": "^26.4.0",
     "@vitest/coverage-v8": "^4.1.11",
     "@vitest/ui": "^4.1.11",
-    "angular-eslint": "^22.1.0",
+    "angular-eslint": "^22.2.0",
     "canvas": "^3.2.3",
     "eslint": "^10.9.1",
     "jsdom": "^30.0.1",
