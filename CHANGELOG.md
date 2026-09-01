@@ -2,6 +2,22 @@
 
 ---
 
+#### `5.7.25` for Angular 22.1 
+
+- feat(nav): add `c-nav-group`, `c-nav-group-items` and `c-nav-title`, so a nav group can be written in the template instead of only fed to `c-sidebar-nav` as data; groups accordion per level, and a collapsed group keeps the state of its nested groups
+- feat(nav): `variant` accepts `enclosed` and `enclosed-pills`, plus a `role` input defaulting to `navigation`
+- feat(nav): `c-nav-item` renders the `cNavLink` anchor when `href` is set, forwarding `active`, `disabled` and `tabindex`
+- feat(tabs): `c-tabs-list` accepts the `enclosed` and `enclosed-pills` variants
+- fix(nav-link): set the `disabled` attribute only on elements that have one, others get `aria-disabled` and `tabindex="-1"`; an unset numeric binding no longer writes `tabindex="NaN"`, and an active link opens every group above it
+- fix(sidebar-nav): keep the group's nav displayed while it collapses, so closing animates instead of snapping shut
+- fix(sidebar-nav): `.nav-item` is a block, restoring its top margin
+- refactor(sidebar-nav): collapse the group with `cCollapse` and CSS transitions instead of `@angular/animations`
+- refactor(sidebar): drop `ChangeDetectionStrategy.Eager` from `c-sidebar`, `c-sidebar-nav` and `c-sidebar-nav-link`
+- chore(dependencies): drop `@angular/animations`, no longer used by the library
+- chore(dependencies): update `typescript-eslint` to 8.69.0
+
+---
+
 #### `5.7.24` for Angular 22.1 
 
 - fix(backdrop): a backdrop opened during the 300 ms fade-out of the previous one no longer sits on top of it, and `activeBackdrop` is released once its cleanup runs
