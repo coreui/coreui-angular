@@ -30,9 +30,6 @@ describe('ModalComponent', () => {
     await vi.runAllTimersAsync();
     vi.useRealTimers();
 
-    for (const element of Array.from(document.querySelectorAll('.modal-backdrop'))) {
-      element.remove();
-    }
   });
 
   it('should create', () => {

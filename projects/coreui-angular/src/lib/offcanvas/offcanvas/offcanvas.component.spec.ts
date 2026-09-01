@@ -33,15 +33,22 @@ describe('OffcanvasComponent', () => {
       await vi.runAllTimersAsync();
     }
     vi.useRealTimers();
-
-    const backdrop = document.querySelector('.offcanvas-backdrop');
-    if (backdrop) {
-      document.body.removeChild(backdrop);
-    }
   });
 
   it('should create', async () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should clear the backdrop when the component is destroyed while visible', async () => {
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.offcanvas-backdrop')).not.toBeNull();
+
+    fixture.destroy();
+    await vi.runAllTimersAsync();
+
+    expect(document.querySelector('.offcanvas-backdrop')).toBeNull();
   });
 
   it('should have css classes', () => {

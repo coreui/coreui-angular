@@ -214,6 +214,9 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   ngOnDestroy(): void {
     this.stateToggleSubscribe(false);
     this.layoutChangeSubscribe(false);
+    if (this.state().mobile && this.state().visible) {
+      this.#backdropService.clearBackdrop();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

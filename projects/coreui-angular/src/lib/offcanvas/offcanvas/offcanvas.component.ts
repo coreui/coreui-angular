@@ -282,6 +282,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.#offcanvasService.toggle({ show: false, id: this.id() });
     this.#removeEventListeners();
     this.#clearHideFallback();
+    this.setBackdrop(false);
     this.domPortalCleanup();
   }
 

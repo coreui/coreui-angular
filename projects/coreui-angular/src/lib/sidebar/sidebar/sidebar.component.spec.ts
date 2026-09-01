@@ -25,4 +25,14 @@ describe('SidebarComponent', () => {
   it('should have css classes', () => {
     expect(fixture.nativeElement.classList.contains('sidebar-fixed')).toBe(true);
   });
+
+  it('should clear the backdrop when a visible mobile sidebar is destroyed', () => {
+    component.sidebarState = { mobile: true, visible: true };
+    fixture.detectChanges();
+    expect(document.querySelector('.sidebar-backdrop')).not.toBeNull();
+
+    fixture.destroy();
+
+    expect(document.querySelector('.sidebar-backdrop')).toBeNull();
+  });
 });
