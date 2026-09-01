@@ -12,8 +12,7 @@ import {
   OnInit,
   Renderer2,
   signal,
-  SimpleChanges,
-  ChangeDetectionStrategy
+  SimpleChanges
 } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -50,7 +49,6 @@ import { IconDirective } from '@coreui/icons-angular';
     SidebarNavBadgePipe,
     forwardRef(() => SidebarNavComponent)
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class]': 'hostClasses()'
   }
@@ -190,7 +188,6 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     '[class]': 'hostClasses()',
     '[attr.role]': 'role()'
   },
-  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [NavGroupService, SidebarNavGroupService]
 })
 export class SidebarNavComponent implements OnChanges {

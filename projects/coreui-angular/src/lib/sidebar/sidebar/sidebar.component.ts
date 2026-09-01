@@ -13,8 +13,7 @@ import {
   output,
   Renderer2,
   signal,
-  SimpleChanges,
-  ChangeDetectionStrategy
+  SimpleChanges
 } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
@@ -26,7 +25,6 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
   selector: 'c-sidebar',
   exportAs: 'cSidebar',
   template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'sidebar',
     '[class]': 'hostClasses()',
