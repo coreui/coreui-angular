@@ -175,6 +175,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'c-sidebar-nav',
   templateUrl: './sidebar-nav.component.html',
+  styleUrls: ['./sidebar-nav.component.scss'],
   imports: [
     HtmlAttributesDirective,
     SidebarNavLinkComponent,
