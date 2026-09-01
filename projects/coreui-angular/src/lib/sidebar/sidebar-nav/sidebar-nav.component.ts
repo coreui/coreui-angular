@@ -148,6 +148,10 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   openGroup(open: boolean): void {
+    if (this.open() !== undefined && this.open() !== open) {
+      // the group drops `show` in the same pass, hiding the nav before cCollapse can measure it
+      this.display.set('block');
+    }
     this.open.set(open);
   }
 
