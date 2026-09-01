@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
 import { expect } from 'vitest';
 import { SidebarNavGroupComponent } from './sidebar-nav.component';
@@ -13,7 +12,7 @@ describe('SidebarNavGroupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, SidebarNavGroupComponent],
+      imports: [SidebarNavGroupComponent],
       providers: [provideRouter([]), SidebarNavGroupService]
     }).compileComponents();
 
@@ -55,5 +54,18 @@ describe('SidebarNavGroupComponent', () => {
 
   it('should have css classes', () => {
     expect(fixture.nativeElement.classList.contains('nav-group')).toBe(true);
+  });
+
+  it('should collapse its nav', () => {
+    const nav = fixture.nativeElement.querySelector('c-sidebar-nav');
+    expect(nav.classList.contains('collapse')).toBe(true);
+    expect(nav.classList.contains('show')).toBe(false);
+
+    fixture.nativeElement.querySelector('.nav-group-toggle').click();
+    fixture.detectChanges();
+
+    expect(component.open()).toBe(true);
+    expect(nav.classList.contains('collapsing')).toBe(true);
+    expect(nav.style.display).toBe('block');
   });
 });

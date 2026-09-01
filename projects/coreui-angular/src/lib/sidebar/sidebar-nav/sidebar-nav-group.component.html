@@ -12,14 +12,14 @@
   }
 </a>
 <c-sidebar-nav
-  (@openClose.done)="onAnimationDone($event)"
-  (@openClose.start)="onAnimationStart($event)"
-  [@openClose]="open() ? 'open' : 'closed'"
+  (collapseChange)="onCollapseChange($event)"
   [compact]="compact()"
   [dropdownMode]="dropdownMode()"
   [groupItems]="true"
   [navItems]="navItems()"
-  [style]="display()"
+  [style.display]="display()"
+  [visible]="!!open()"
+  cCollapse
 />
 
 <ng-template #iconTemplate let-item>

@@ -1,4 +1,3 @@
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
@@ -14,7 +13,6 @@ import {
   Renderer2,
   signal,
   SimpleChanges,
-  viewChild,
   ChangeDetectionStrategy
 } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
@@ -27,6 +25,7 @@ import { INavData } from './sidebar-nav';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
 import { NavGroupService } from '../../nav';
+import { CollapseDirective } from '../../collapse';
 import { HtmlAttributesDirective } from '../../shared';
 import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
@@ -43,29 +42,13 @@ import { IconDirective } from '@coreui/icons-angular';
   styleUrls: ['./sidebar-nav-group.component.scss'],
   providers: [SidebarNavHelper],
   imports: [
+    CollapseDirective,
     HtmlAttributesDirective,
     IconDirective,
     NgTemplateOutlet,
     SidebarNavIconPipe,
     SidebarNavBadgePipe,
     forwardRef(() => SidebarNavComponent)
-  ],
-  animations: [
-    trigger('openClose', [
-      state(
-        'open',
-        style({
-          height: '*'
-        })
-      ),
-      state(
-        'closed',
-        style({
-          height: '0px'
-        })
-      ),
-      transition('open <=> closed', [animate('.15s ease')])
-    ])
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
@@ -74,7 +57,6 @@ import { IconDirective } from '@coreui/icons-angular';
 })
 export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   readonly #router = inject(Router);
-  readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
   readonly #sidebarNavGroupService = inject(SidebarNavGroupService);
   public readonly helper = inject(SidebarNavHelper);
@@ -120,18 +102,13 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     };
   });
 
-  readonly sidebarNav = viewChild.required(
-    forwardRef(() => SidebarNavComponent),
-    { read: ElementRef }
-  );
-
   navigationEndObservable: Observable<NavigationEnd>;
   navSubscription!: Subscription;
   navGroupSubscription!: Subscription;
 
   readonly open = signal<boolean | undefined>(undefined);
   readonly navItems = signal<INavData[]>([]);
-  readonly display = signal<any>({ display: 'block' });
+  readonly display = signal<string | null>(null);
 
   ngOnInit(): void {
     this.navItems.set([...(this.item()?.children ?? [])]);
@@ -186,28 +163,8 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     this.navSubscription?.unsubscribe();
   }
 
-  onAnimationStart($event: AnimationEvent) {
-    this.display.set({ display: 'block' });
-    setTimeout(() => {
-      const host = this.sidebarNav()?.nativeElement;
-      if ($event.toState === 'open' && host) {
-        this.#renderer.setStyle(host, 'height', `${host['scrollHeight']}px`);
-      }
-    });
-  }
-
-  onAnimationDone($event: AnimationEvent) {
-    setTimeout(() => {
-      const host = this.sidebarNav()?.nativeElement;
-      if ($event.toState === 'open' && host) {
-        this.#renderer.setStyle(host, 'height', 'auto');
-      }
-      if ($event.toState === 'closed') {
-        setTimeout(() => {
-          this.display.set(null);
-        });
-      }
-    });
+  onCollapseChange(state: string): void {
+    this.display.set(state === 'collapsed' || state === 'open' ? null : 'block');
   }
 }
 
