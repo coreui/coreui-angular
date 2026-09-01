@@ -18,7 +18,6 @@ export function ngAdd(): Rule {
     }
 
     const projectDeps: NodeDependency[] = [
-      { name: '@angular/animations', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false },
       { name: '@angular/common', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false },
       { name: '@angular/core', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false },
       { name: '@angular/forms', type: NodeDependencyType.Default, version: ngCoreVersionTag, overwrite: false },

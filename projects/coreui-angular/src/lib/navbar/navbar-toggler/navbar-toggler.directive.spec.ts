@@ -2,7 +2,6 @@ import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavbarTogglerDirective } from './navbar-toggler.directive';
 import { By } from '@angular/platform-browser';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { CollapseDirective } from '../../collapse';
 
 class MockElementRef extends ElementRef {}
@@ -25,7 +24,7 @@ describe('NavbarTogglerDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestComponent],
-      providers: [Renderer2, { provide: ElementRef, useValue: MockElementRef }, provideAnimationsAsync()]
+      providers: [Renderer2, { provide: ElementRef, useValue: MockElementRef }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);

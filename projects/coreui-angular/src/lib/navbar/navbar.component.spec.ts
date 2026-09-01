@@ -1,7 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { Subject } from 'rxjs';
 import { expect, Mock, vi } from 'vitest';
 
@@ -70,7 +69,7 @@ describe('NavbarComponent with BreakpointObserver', () => {
 
     await TestBed.configureTestingModule({
       imports: [TestNavbarComponent],
-      providers: [provideAnimationsAsync(), { provide: BreakpointObserver, useValue: breakpointObserver }]
+      providers: [{ provide: BreakpointObserver, useValue: breakpointObserver }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestNavbarComponent);

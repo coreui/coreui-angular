@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsComponent } from '../tabs.component';
 import { TabDirective } from '../tab/tab.directive';
 import { TabsContentComponent } from '../tabs-content/tabs-content.component';
@@ -30,7 +29,7 @@ describe('TabPanelComponent', () => {
 
   beforeEach(async () => {
     const fixture = TestBed.configureTestingModule({
-      imports: [TestComponent, NoopAnimationsModule]
+      imports: [TestComponent]
     }).createComponent(TestComponent);
     fixture.detectChanges();
 

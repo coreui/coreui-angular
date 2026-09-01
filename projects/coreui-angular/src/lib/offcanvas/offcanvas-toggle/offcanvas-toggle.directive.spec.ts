@@ -1,6 +1,5 @@
 import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
 
@@ -21,7 +20,7 @@ describe('OffcanvasToggleDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, OffcanvasToggleDirective, TestComponent],
+      imports: [OffcanvasToggleDirective, TestComponent],
       providers: [OffcanvasService]
     });
     fixture = TestBed.createComponent(TestComponent);
