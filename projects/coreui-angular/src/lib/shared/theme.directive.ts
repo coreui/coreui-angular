@@ -9,7 +9,7 @@ export class ThemeDirective {
   readonly #renderer = inject(Renderer2);
 
   /**
-   * Add dark theme attribute.
+   * Sets the dark theme attribute on the host element. 
    * @returns 'dark' | 'light' | undefined
    */
   readonly colorScheme = input<'dark' | 'light'>();
@@ -20,7 +20,7 @@ export class ThemeDirective {
   });
 
   /**
-   * Add darker controls, indicators, and captions.
+   * Sets a darker color scheme. If the colorScheme is set to 'dark', the dark theme will be applied.
    * @returns boolean
    * @default false
    */
