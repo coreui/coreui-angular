@@ -20,7 +20,7 @@ import { CarouselService } from '../carousel.service';
   template: '<ng-content />',
   host: {
     class: 'carousel-inner',
-    '[attr.aria-live]': 'ariaLive()'
+    '[aria-live]': 'ariaLive()'
   }
 })
 export class CarouselInnerComponent implements AfterContentInit, AfterContentChecked {

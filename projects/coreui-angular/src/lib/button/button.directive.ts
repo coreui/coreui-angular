@@ -3,8 +3,6 @@ import {
   computed,
   Directive,
   input,
-  InputSignal,
-  InputSignalWithTransform,
   numberAttribute
 } from '@angular/core';
 
@@ -16,8 +14,8 @@ import { BooleanInput, ButtonType, Colors, Shapes } from '../coreui.types';
   host: {
     class: 'btn',
     '[class]': 'hostClasses()',
-    '[attr.aria-disabled]': 'ariaDisabled()',
-    '[attr.aria-pressed]': 'isActive()',
+    '[aria-disabled]': 'ariaDisabled()',
+    '[aria-pressed]': 'isActive()',
     '[attr.disabled]': 'attrDisabled()',
     '[attr.tabindex]': 'tabIndex()',
     '[attr.type]': 'type()'

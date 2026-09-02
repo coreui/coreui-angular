@@ -16,8 +16,8 @@ import { BooleanInput, Colors } from '../coreui.types';
   exportAs: 'cListGroupItem',
   host: {
     '[class]': 'hostClasses()',
-    '[attr.aria-disabled]': 'ariaDisabled()',
-    '[attr.aria-current]': 'ariaCurrent()',
+    '[aria-disabled]': 'ariaDisabled()',
+    '[aria-current]': 'ariaCurrent()',
     '[attr.disabled]': 'attrDisabled()',
     '[attr.tabindex]': 'tabIndex()'
   }

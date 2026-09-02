@@ -12,7 +12,7 @@ import { INavAttributes, INavLinkProps } from './breadcrumb-item';
   imports: [RouterModule, NgTemplateOutlet, HtmlAttributesDirective],
   exportAs: 'breadcrumbItem',
   host: {
-    '[attr.aria-current]': 'ariaCurrent()',
+    '[aria-current]': 'ariaCurrent()',
     '[class]': 'hostClasses()'
   }
 })

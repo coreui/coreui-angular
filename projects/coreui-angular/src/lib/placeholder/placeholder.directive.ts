@@ -5,7 +5,7 @@ import { booleanAttribute, computed, Directive, input, InputSignalWithTransform 
   exportAs: 'cPlaceholder',
   host: {
     '[class]': 'hostClasses()',
-    '[attr.aria-hidden]': 'ariaHidden()'
+    '[aria-hidden]': 'ariaHidden()'
   }
 })
 export class PlaceholderDirective {

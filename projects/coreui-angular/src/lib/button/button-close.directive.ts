@@ -8,8 +8,8 @@ import { ButtonDirective } from './button.directive';
   host: {
     class: 'btn btn-close',
     '[class]': 'hostClasses()',
-    '[attr.aria-disabled]': 'ariaDisabled()',
-    '[attr.aria-pressed]': 'isActive()',
+    '[aria-disabled]': 'ariaDisabled()',
+    '[aria-pressed]': 'isActive()',
     '[attr.disabled]': 'attrDisabled()',
     '[attr.tabindex]': 'tabIndex()',
     '[attr.type]': 'type()'

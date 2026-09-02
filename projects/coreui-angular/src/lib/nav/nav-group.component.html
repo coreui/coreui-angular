@@ -1,7 +1,7 @@
 @if (toggler() || togglerTemplate()) {
   <a
     (click)="toggleGroup($event)"
-    [attr.aria-expanded]="visibleState()"
+    [aria-expanded]="visibleState()"
     class="nav-link nav-group-toggle"
     href
   >

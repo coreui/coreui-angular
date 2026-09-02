@@ -31,7 +31,7 @@ import { TooltipComponent } from './tooltip/tooltip.component';
   selector: '[cTooltip]',
   exportAs: 'cTooltip',
   providers: [ListenersService, IntersectionService],
-  host: { '[attr.aria-describedby]': 'ariaDescribedBy' }
+  host: { '[aria-describedby]': 'ariaDescribedBy' }
 })
 export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   readonly #renderer = inject(Renderer2);

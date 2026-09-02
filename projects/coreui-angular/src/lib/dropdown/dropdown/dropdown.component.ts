@@ -41,7 +41,7 @@ export abstract class DropdownToken {}
   exportAs: 'cDropdownToggle',
   host: {
     '[class]': 'hostClasses()',
-    '[attr.aria-expanded]': 'ariaExpanded',
+    '[aria-expanded]': 'ariaExpanded',
     '(click)': 'onClick($event)'
   }
 })

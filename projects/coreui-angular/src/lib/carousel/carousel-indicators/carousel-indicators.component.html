@@ -9,7 +9,7 @@
       type="button"
       (click)="onClick(i)"
       [class]="{ active: activeItem === i }"
-      [attr.aria-current]="activeItem === i ? 'true' : null">
+      [aria-current]="activeItem === i ? 'true' : null">
     </button>
   }
 </ng-template>

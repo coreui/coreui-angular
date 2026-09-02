@@ -4,7 +4,7 @@ import { CollapseDirective } from '../../collapse';
 @Directive({
   selector: '[cNavbarToggler]',
   host: {
-    '[attr.aria-label]': 'ariaLabel()',
+    '[aria-label]': 'ariaLabel()',
     '[attr.type]': 'type()',
     class: 'navbar-toggler',
     '(click)': 'handleClick($event)'

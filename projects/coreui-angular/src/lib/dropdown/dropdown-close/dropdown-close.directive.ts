@@ -7,7 +7,7 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
   exportAs: 'cDropdownClose',
   host: {
     '[class.disabled]': 'disabled()',
-    '[attr.aria-disabled]': 'disabled() || null',
+    '[aria-disabled]': 'disabled() || null',
     '[attr.tabindex]': 'tabIndex()',
     '(click)': 'onClick($event)',
     '(keyup)': 'onKeyUp($event)'

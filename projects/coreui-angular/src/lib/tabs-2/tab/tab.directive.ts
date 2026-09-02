@@ -28,8 +28,8 @@ import { TabsService } from '../tabs.service';
     '[class]': 'hostClasses()',
     type: 'button',
     role: 'tab',
-    '[attr.aria-selected]': 'isActive()',
-    '[attr.aria-controls]': 'attrAriaControls()',
+    '[aria-selected]': 'isActive()',
+    '[aria-controls]': 'attrAriaControls()',
     '[attr.disabled]': 'attrDisabled() || null',
     '[id]': 'propId()',
     '[tabindex]': 'isActive() ? 0 : -1'

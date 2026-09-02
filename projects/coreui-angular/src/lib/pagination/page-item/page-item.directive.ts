@@ -18,7 +18,7 @@ import { PageLinkDirective } from '../page-link/page-link.directive';
   host: {
     class: 'page-item',
     '[class]': 'hostClasses()',
-    '[attr.aria-current]': 'ariaCurrent()'
+    '[aria-current]': 'ariaCurrent()'
   }
 })
 export class PageItemDirective {

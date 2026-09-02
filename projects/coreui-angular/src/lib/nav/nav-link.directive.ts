@@ -9,6 +9,7 @@ import {
   input,
   numberAttribute,
   OnDestroy,
+  signal,
   untracked
 } from '@angular/core';
 import { BooleanInput } from '../coreui.types';
@@ -20,10 +21,10 @@ const DISABLED_ATTR_ELEMENTS = new Set(['button', 'fieldset', 'input', 'optgroup
   selector: '[cNavLink]',
   host: {
     '[class]': 'hostClasses()',
-    '[attr.aria-current]': 'ariaCurrent()',
-    '[attr.aria-disabled]': 'ariaDisabled',
-    '[attr.disabled]': 'attrDisabled',
-    '[attr.tabindex]': 'attrTabindex'
+    '[aria-current]': 'ariaCurrent()',
+    '[aria-disabled]': 'ariaDisabled()',
+    '[attr.disabled]': 'attrDisabled()',
+    '[attr.tabindex]': 'attrTabindex()'
   }
 })
 export class NavLinkDirective implements OnDestroy {
@@ -73,17 +74,17 @@ export class NavLinkDirective implements OnDestroy {
     return this.active() ? 'page' : null;
   });
 
-  ariaDisabled: boolean | null = null;
-  attrDisabled: boolean | string | null = null;
-  attrTabindex: number | null = null;
+  protected ariaDisabled = signal<boolean | null>(null);
+  protected attrDisabled = signal<boolean | string | null>(null);
+  protected attrTabindex = signal<number | null>(null);
 
   readonly #disabledEffect = effect(() => {
     const disabled = this.disabled();
     const tabindex = this.tabindex();
     const disabledAttrElement = DISABLED_ATTR_ELEMENTS.has(this.#tagName);
-    this.ariaDisabled = (disabled && !disabledAttrElement) || null;
-    this.attrDisabled = disabled && disabledAttrElement ? '' : null;
-    this.attrTabindex = disabled && !disabledAttrElement ? -1 : (Number.isNaN(tabindex) ? null : (tabindex ?? null));
+    this.ariaDisabled.set((disabled && !disabledAttrElement) || null);
+    this.attrDisabled.set(disabled && disabledAttrElement ? '' : null);
+    this.attrTabindex.set(disabled && !disabledAttrElement ? -1 : Number.isNaN(tabindex) ? null : (tabindex ?? null));
   });
 
   readonly #activeEffect = effect(() => {

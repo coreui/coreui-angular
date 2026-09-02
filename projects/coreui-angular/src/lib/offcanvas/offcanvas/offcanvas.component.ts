@@ -42,7 +42,7 @@ let nextId = 0;
     '[attr.id]': 'id()',
     '[attr.inert]': 'ariaHidden() || null',
     '[attr.role]': 'role()',
-    '[attr.aria-modal]': 'ariaModal()',
+    '[aria-modal]': 'ariaModal()',
     '[attr.tabindex]': 'tabIndex',
     '[class]': 'hostClasses()',
     '(document:keydown)': 'onKeyDownHandler($event)'
@@ -149,10 +149,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
    */
   readonly visibleInput = input(false, { transform: booleanAttribute, alias: 'visible' });
 
-  readonly visible = linkedSignal({
-    source: this.visibleInput,
-    computation: (value) => value
-  });
+  readonly visible = linkedSignal(this.visibleInput);
 
   protected readonly domPortal = new DomPortal(this.#hostElement.nativeElement);
   protected domPortalOutlet!: DomPortalOutlet;

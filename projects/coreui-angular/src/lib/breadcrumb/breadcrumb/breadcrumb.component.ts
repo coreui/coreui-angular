@@ -5,7 +5,7 @@ import { Component, input } from '@angular/core';
   template: '<ng-content />',
   host: {
     class: 'breadcrumb',
-    '[attr.aria-label]': 'ariaLabel()',
+    '[aria-label]': 'ariaLabel()',
     '[attr.role]': 'role()'
   }
 })

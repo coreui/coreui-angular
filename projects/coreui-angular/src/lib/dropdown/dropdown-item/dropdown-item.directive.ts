@@ -10,8 +10,8 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
     class: 'dropdown-item',
     '[class]': 'hostClasses()',
     '[attr.tabindex]': 'tabIndex()',
-    '[attr.aria-current]': 'ariaCurrent()',
-    '[attr.aria-disabled]': 'disabled || null',
+    '[aria-current]': 'ariaCurrent()',
+    '[aria-disabled]': 'disabled || null',
     '[attr.role]': 'role()',
     '(click)': 'onClick($event)',
     '(keyup)': 'onKeyUp($event)'

@@ -5,7 +5,7 @@ import { AfterContentInit, Directive, ElementRef, inject, input, Renderer2 } fro
   exportAs: 'cHeaderToggler',
   host: {
     '[attr.type]': 'type()',
-    '[attr.aria-label]': 'ariaLabel()',
+    '[aria-label]': 'ariaLabel()',
     class: 'header-toggler'
   }
 })
