@@ -43,10 +43,7 @@ export class DropdownItemDirective implements FocusableOption {
    */
   readonly disabledInput = input(false, { transform: booleanAttribute, alias: 'disabled' });
 
-  readonly #disabled = linkedSignal({
-    source: this.disabledInput,
-    computation: (value) => value
-  });
+  readonly #disabled = linkedSignal(this.disabledInput);
 
   set disabled(value) {
     this.#disabled.set(value);

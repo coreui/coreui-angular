@@ -91,10 +91,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
    */
   readonly intervalInput = input(-1, { alias: 'interval', transform: numberAttribute });
 
-  readonly interval = linkedSignal({
-    source: this.intervalInput,
-    computation: (value: number) => value
-  });
+  readonly interval = linkedSignal(this.intervalInput);
 
   readonly #intervalEffect = effect(() => {
     const interval = this.interval();
