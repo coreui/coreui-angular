@@ -32,7 +32,7 @@ import { TabsService } from '../tabs.service';
     '[aria-controls]': 'attrAriaControls()',
     '[attr.disabled]': 'attrDisabled() || null',
     '[id]': 'propId()',
-    '[tabindex]': 'isActive() ? 0 : -1'
+    '[attr.tabindex]': 'isActive() ? 0 : -1'
   }
 })
 export class TabDirective implements FocusableOption, OnInit {

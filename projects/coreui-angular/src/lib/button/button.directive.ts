@@ -103,7 +103,8 @@ export class ButtonDirective {
   });
 
   readonly tabIndex = computed(() => {
-    return this._disabled() ? '-1' : (this.tabindex() ?? null);
+    const tabindex = this.tabindex();
+    return this._disabled() ? -1 : Number.isNaN(tabindex) ? null : (tabindex ?? null);
   });
 
   readonly isActive = computed(() => {

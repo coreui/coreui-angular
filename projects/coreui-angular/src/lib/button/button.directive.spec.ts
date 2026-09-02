@@ -1,6 +1,6 @@
 import { ButtonDirective } from './button.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, ElementRef } from '@angular/core';
+import { Component, DebugElement, ElementRef, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 class MockElementRef extends ElementRef {}
@@ -10,6 +10,15 @@ class MockElementRef extends ElementRef {}
   imports: [ButtonDirective]
 })
 class TestComponent {}
+
+@Component({
+  template: '<button cButton [disabled]="disabled()" [tabindex]="tabindex()"></button>',
+  imports: [ButtonDirective]
+})
+class TestBoundComponent {
+  readonly disabled = signal(false);
+  readonly tabindex = signal<number | undefined>(undefined);
+}
 
 describe('ButtonDirective', () => {
   let component: TestComponent;
@@ -40,5 +49,35 @@ describe('ButtonDirective', () => {
     expect(elementRef.nativeElement.classList.contains('btn')).toBe(true);
     expect(elementRef.nativeElement.classList.contains('btn-lg')).toBe(true);
     expect(elementRef.nativeElement.classList.contains('btn-info')).toBe(true);
+  });
+
+  describe('with bound inputs', () => {
+    let boundFixture: ComponentFixture<TestBoundComponent>;
+    let boundComponent: TestBoundComponent;
+    let boundElementRef: DebugElement;
+
+    beforeEach(() => {
+      boundFixture = TestBed.createComponent(TestBoundComponent);
+      boundComponent = boundFixture.componentInstance;
+      boundElementRef = boundFixture.debugElement.query(By.directive(ButtonDirective));
+      boundFixture.detectChanges();
+    });
+
+    it('should not set tabindex when bound to undefined', () => {
+      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBeNull();
+    });
+
+    it('should pass tabindex to the host', () => {
+      boundComponent.tabindex.set(2);
+      boundFixture.detectChanges();
+      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBe('2');
+    });
+
+    it('should set tabindex to -1 when disabled', () => {
+      boundComponent.tabindex.set(2);
+      boundComponent.disabled.set(true);
+      boundFixture.detectChanges();
+      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBe('-1');
+    });
   });
 });

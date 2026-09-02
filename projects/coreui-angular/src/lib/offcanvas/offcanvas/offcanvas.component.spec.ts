@@ -57,6 +57,10 @@ describe('OffcanvasComponent', () => {
     expect(fixture.nativeElement.getAttribute('id')).toContain('offcanvas-start-');
   });
 
+  it('should set tabindex to -1', () => {
+    expect(fixture.nativeElement.getAttribute('tabindex')).toBe('-1');
+  });
+
   it('should react to visible changes', async () => {
     expect(componentRef.instance.visible()).toBe(false);
     expect(fixture.nativeElement.inert).toBe(true);
