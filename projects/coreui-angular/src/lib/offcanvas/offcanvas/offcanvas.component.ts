@@ -40,7 +40,7 @@ let nextId = 0;
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: {
     '[attr.id]': 'id()',
-    '[attr.inert]': 'ariaHidden() || null',
+    '[inert]': 'ariaHidden()',
     '[attr.role]': 'role()',
     '[aria-modal]': 'ariaModal()',
     '[attr.tabindex]': 'tabIndex',

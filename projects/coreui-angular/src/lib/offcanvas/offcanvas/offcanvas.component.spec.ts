@@ -59,24 +59,24 @@ describe('OffcanvasComponent', () => {
 
   it('should react to visible changes', async () => {
     expect(componentRef.instance.visible()).toBe(false);
-    expect(fixture.nativeElement.getAttribute('inert')).toBe('true');
+    expect(fixture.nativeElement.inert).toBe(true);
     componentRef.setInput('visible', true);
     fixture.detectChanges();
     await fixture.whenStable();
     expect(componentRef.instance.visible()).toBe(true);
-    expect(fixture.nativeElement.getAttribute('inert')).toBeNull();
+    expect(fixture.nativeElement.inert).toBeFalsy();
   });
 
   it('should close offcanvas to Esc keydown event', async () => {
     componentRef.setInput('visible', true);
     fixture.detectChanges();
     expect(componentRef.instance.visible()).toBe(true);
-    expect(fixture.nativeElement.getAttribute('inert')).toBeNull();
+    expect(fixture.nativeElement.inert).toBeFalsy();
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     await vi.runAllTimersAsync();
     fixture.detectChanges();
     expect(componentRef.instance.visible()).toBe(false);
-    expect(fixture.nativeElement.getAttribute('inert')).toBeTruthy();
+    expect(fixture.nativeElement.inert).toBe(true);
   });
 
   it('should close offcanvas on backdrop click', async () => {

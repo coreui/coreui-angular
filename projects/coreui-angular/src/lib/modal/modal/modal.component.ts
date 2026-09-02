@@ -37,7 +37,7 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
     class: 'modal',
     '[class]': 'hostClasses()',
     '[attr.role]': 'visible() ? role() : null',
-    '[attr.inert]': 'ariaHidden()',
+    '[inert]': 'ariaHidden()',
     '[attr.id]': 'id',
     '[aria-modal]': 'ariaModal()',
     '[aria-hidden]': 'ariaHidden()',

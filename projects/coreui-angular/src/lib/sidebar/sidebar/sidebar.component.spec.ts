@@ -26,6 +26,18 @@ describe('SidebarComponent', () => {
     expect(fixture.nativeElement.classList.contains('sidebar-fixed')).toBe(true);
   });
 
+  it('should toggle inert with visibility', () => {
+    expect(fixture.nativeElement.inert).toBe(true);
+
+    component.sidebarState = { visible: true };
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBeFalsy();
+
+    component.sidebarState = { visible: false };
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBe(true);
+  });
+
   it('should clear the backdrop when a visible mobile sidebar is destroyed', () => {
     component.sidebarState = { mobile: true, visible: true };
     fixture.detectChanges();

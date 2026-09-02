@@ -52,6 +52,18 @@ describe('ToastComponent', () => {
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
 
+  it('should toggle inert with visibility', () => {
+    expect(fixture.nativeElement.inert).toBe(true);
+
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBeFalsy();
+
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBe(true);
+  });
+
   it('should emit visibleChange visible change', () => {
     vi.spyOn(component.visibleChange, 'emit');
     fixture.componentRef.setInput('visible', true);

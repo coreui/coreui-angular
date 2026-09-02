@@ -65,6 +65,25 @@ describe('ModalComponent', () => {
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
 
+  it('should toggle inert and aria-hidden with visibility', async () => {
+    expect(fixture.nativeElement.inert).toBe(true);
+    expect(fixture.nativeElement.getAttribute('aria-hidden')).toBe('true');
+
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBeFalsy();
+    expect(fixture.nativeElement.getAttribute('aria-hidden')).toBeNull();
+
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBe(true);
+    expect(fixture.nativeElement.getAttribute('aria-hidden')).toBe('true');
+  });
+
   it('should close modal on Escape key press if keyboard is enabled', async () => {
     fixture.componentRef.setInput('visible', true);
     fixture.detectChanges();

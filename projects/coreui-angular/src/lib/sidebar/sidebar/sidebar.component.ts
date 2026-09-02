@@ -28,7 +28,7 @@ import { SidebarBackdropService } from '../sidebar-backdrop/sidebar-backdrop.ser
   host: {
     class: 'sidebar',
     '[class]': 'hostClasses()',
-    '[attr.inert]': '!this.sidebarState.visible || null'
+    '[inert]': '!this.sidebarState.visible || null'
   }
 })
 export class SidebarComponent implements OnChanges, OnDestroy, OnInit {

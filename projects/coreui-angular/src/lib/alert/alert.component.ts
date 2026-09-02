@@ -32,7 +32,8 @@ import { ButtonCloseDirective } from '../button';
     '(animate.leave)': 'handleLeaving($event)',
     '(transitionend)': 'onTransitionEnd($event)',
     '(transitionstart)': 'onTransitionStart($event)',
-    '[attr.hidden]': 'hide() ? "" : null'
+    '[hidden]': 'hide()',
+    '[inert]': 'hide()'
   },
   providers: [{ provide: MAX_ANIMATION_TIMEOUT, useValue: 300 }]
 })
@@ -126,7 +127,6 @@ export class AlertComponent {
       'alert-dismissible': this.dismissible(),
       fade: this.fade(),
       show: visible,
-      'd-none': this.hide() && !visible,
       [`alert-${color}`]: !!color && variant !== 'solid',
       [`bg-${color}`]: !!color && variant === 'solid',
       'text-white': !!color && variant === 'solid'

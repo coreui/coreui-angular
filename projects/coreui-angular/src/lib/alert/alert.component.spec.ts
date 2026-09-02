@@ -47,6 +47,20 @@ describe('AlertComponent', () => {
     expect(fixture.nativeElement.classList.contains('show')).toBe(true);
   });
 
+  it('should toggle inert with visibility', () => {
+    expect(fixture.nativeElement.inert).toBeFalsy();
+
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    fixture.nativeElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'opacity' }));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBe(true);
+
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBeFalsy();
+  });
+
   it('should have attributes', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.getAttribute('role')).toBe('alert');
