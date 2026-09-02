@@ -228,7 +228,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   });
 
   /**
-   * Event triggered on modal dismiss.
+   * Event triggered on visible change
    * @returns boolean
    */
   readonly visibleChange = output<boolean>();

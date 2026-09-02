@@ -1,4 +1,4 @@
-import { booleanAttribute, computed, Directive, input, InputSignalWithTransform } from '@angular/core';
+import { booleanAttribute, computed, Directive, input } from '@angular/core';
 import { ThemeDirective } from '../shared/theme.directive';
 import { ButtonDirective } from './button.directive';
 
@@ -19,9 +19,9 @@ export class ButtonCloseDirective extends ButtonDirective {
   /**
    * Change the default color to white.
    * @returns boolean
-   * @deprecated 5.0.0. Use `cButtonClose.dark` instead.
+   * @deprecated 5.0.0. Use `cButtonClose dark` instead.
    */
-  readonly white: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
+  readonly white = input(false, { transform: booleanAttribute });
 
   override readonly hostClasses = computed(() => {
     const size = this.size();

@@ -1,4 +1,4 @@
-import { booleanAttribute, computed, Directive, input, InputSignalWithTransform } from '@angular/core';
+import { booleanAttribute, computed, Directive, input } from '@angular/core';
 
 @Directive({
   selector: '[cPlaceholder]',
@@ -10,14 +10,11 @@ import { booleanAttribute, computed, Directive, input, InputSignalWithTransform 
 })
 export class PlaceholderDirective {
   /**
-   * placeholder toggler
+   * Toggle placeholder visibility
    * @returns boolean
    * @default false
    */
-  readonly visible: InputSignalWithTransform<boolean, unknown> = input<boolean, unknown>(false, {
-    transform: booleanAttribute,
-    alias: 'cPlaceholder'
-  });
+  readonly visible = input(false, { transform: booleanAttribute, alias: 'cPlaceholder' });
 
   /**
    * Size the placeholder xs, small, large.

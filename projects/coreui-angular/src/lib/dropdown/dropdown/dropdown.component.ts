@@ -152,10 +152,11 @@ export class DropdownComponent implements OnDestroy, OnInit {
   readonly alignment = input<DropdownAlignment>();
 
   /**
-   * Configure the auto close behavior: `true` closes the dropdown on a click inside or
-   * outside the menu, `false` only on the toggle button or an explicit hide/toggle call
-   * and not on the Esc key, `inside` only on a click inside the menu, `outside` only on
-   * a click outside it.
+   * Configure the auto close behavior:
+   * - `true` closes the dropdown on a click inside or outside the menu,
+   * - `false` only on the toggle button or an explicit hide/toggle call and not on the `Esc` key,
+   * - `inside` only on a click inside the menu,
+   * - `outside` only on a click outside it.
    * @returns boolean | 'inside' | 'outside'
    * @default true
    */

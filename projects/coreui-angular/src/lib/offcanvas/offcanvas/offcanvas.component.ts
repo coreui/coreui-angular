@@ -87,7 +87,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly keyboard = input(true, { transform: booleanAttribute });
 
   /**
-   * Component placement
+   * Offcanvas placement
    * @returns string | 'start' | 'end' | 'top' | 'bottom'
    * @default 'start'
    */

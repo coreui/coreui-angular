@@ -85,9 +85,9 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
   });
 
   /**
-   * The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.
+   * The amount of time to delay between automatically cycling an item. If -1, carousel will not automatically cycle.
    * @returns number
-   * @default 0
+   * @default -1
    */
   readonly intervalInput = input(-1, { alias: 'interval', transform: numberAttribute });
 
