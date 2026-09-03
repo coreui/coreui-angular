@@ -27,7 +27,7 @@ export class PopoverComponent implements OnDestroy {
 
   /**
    * Content of popover
-   * @returns {string | TemplateRef}
+   * @returns string | TemplateRef<any>
    */
   readonly content = input<string | TemplateRef<any>>('');
 

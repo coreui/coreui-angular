@@ -14,7 +14,7 @@ import { Positions } from '../coreui.types';
 export class FooterComponent {
   /**
    * Place footer in non-static positions
-   * @returns Positions
+   * @returns Positions | undefined
    */
   readonly position = input<Positions | undefined>();
 

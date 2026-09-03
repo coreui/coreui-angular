@@ -53,7 +53,7 @@ export class DropdownToggleDirective implements AfterViewInit {
 
   /**
    * Reference to dropdown component.
-   * @returns DropdownComponent | undefined
+   * @returns DropdownComponent
    * @default undefined
    */
   readonly dropdownComponent = input<DropdownComponent>();

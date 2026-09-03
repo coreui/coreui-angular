@@ -10,7 +10,7 @@ export class ThemeDirective {
 
   /**
    * Sets the dark theme attribute on the host element. 
-   * @returns 'dark' | 'light' | undefined
+   * @returns 'dark' | 'light'
    */
   readonly colorScheme = input<'dark' | 'light'>();
 

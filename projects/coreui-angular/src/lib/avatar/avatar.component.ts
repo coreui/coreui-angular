@@ -31,7 +31,7 @@ export class AvatarComponent {
   /**
    * Size the component small, large, or extra large.
    * @returns Omit<Sizes, 'xxl'>
-   * @default 'md'
+   * @default ''
    */
   readonly size = input<Omit<Sizes, 'xxl'>>('');
 

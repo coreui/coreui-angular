@@ -10,7 +10,8 @@ import { Breakpoints } from '../coreui.types';
 export class ContainerComponent {
   /**
    * Set container 100% wide until a breakpoint.
-   * @returns 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+   * @returns Exclude<Breakpoints, 'xs'>
+   * @values 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
    * @default ''
    */
   readonly breakpoint = input<Exclude<Breakpoints, 'xs'>>('');

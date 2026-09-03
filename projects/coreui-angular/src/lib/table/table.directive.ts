@@ -32,8 +32,7 @@ export class TableDirective {
 
   /**
    * Set the vertical alignment.
-   * @returns string
-   * @values 'bottom' | 'middle' | 'top'
+   * @returns 'bottom' | 'middle' | 'top'
    */
   readonly align = input<'bottom' | 'middle' | 'top'>();
 
@@ -76,7 +75,8 @@ export class TableDirective {
 
   /**
    * Make table responsive across all viewports or pick a maximum breakpoint with which to have a responsive table up to.
-   * @values: {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
+   * @returns boolean | Omit<Breakpoints, 'xs'>
+   * @values true | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
    */
   readonly responsive = input<boolean | Omit<Breakpoints, 'xs'>>();
 

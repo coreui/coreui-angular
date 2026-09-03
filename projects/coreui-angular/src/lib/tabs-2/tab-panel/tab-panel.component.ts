@@ -23,7 +23,7 @@ export class TabPanelComponent {
 
   /**
    * aria-labelledby attribute
-   * @returns string
+   * @returns string | undefined
    * @default undefined
    */
   readonly ariaLabelledBy = input<string | undefined>(undefined, {

@@ -103,7 +103,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Responsive offcanvas property hides content outside the viewport from a specified breakpoint and down.
-   * @returns boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+   * @returns (boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl') | undefined
    * @default true
    * @since 4.3.10
    */

@@ -39,7 +39,7 @@ export class DropdownItemDirective implements FocusableOption {
   /**
    * Disables a dropdown-item.
    * @returns boolean
-   * @default undefined
+   * @default false
    */
   readonly disabledInput = input(false, { transform: booleanAttribute, alias: 'disabled' });
 

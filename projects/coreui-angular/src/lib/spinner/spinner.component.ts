@@ -26,8 +26,7 @@ export class SpinnerComponent {
 
   /**
    * Size the component small.
-   * @returns string
-   * @values 'sm'
+   * @returns 'sm'
    */
   readonly size = input<'sm'>();
 

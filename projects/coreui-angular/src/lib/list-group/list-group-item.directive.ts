@@ -36,7 +36,7 @@ export class ListGroupItemDirective {
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @returns Colors
+   * @returns Colors | undefined
    */
   readonly color = input<Colors | undefined>();
 

@@ -51,7 +51,7 @@ export class ButtonDirective {
 
   /**
    * Size the component small or large.
-   * @returns 'sm' | 'lg' | ''
+   * @returns '' | 'sm' | 'lg'
    */
   readonly size = input<'' | 'sm' | 'lg'>('');
 

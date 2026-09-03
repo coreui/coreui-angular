@@ -200,7 +200,7 @@ export class SidebarNavComponent implements OnChanges {
 
   /**
    * Configuration object for sidebar-nav.
-   * @returns INavData[]
+   * @returns INavData[] | undefined
    * @default []
    */
   readonly navItems = input<INavData[] | undefined>([]);

@@ -12,7 +12,8 @@ export class FormLabelDirective {
   readonly col = input<'col' | ''>('', { alias: 'cLabel' });
   /**
    * Size the label small or large.
-   * @default ''
+   * @returns '' | 'sm' | 'lg'
+   * @default undefined
    */
   readonly sizing = input<'' | 'sm' | 'lg'>();
 

@@ -47,7 +47,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Content of tooltip
-   * @returns {string | TemplateRef}
+   * @returns string | TemplateRef<any> | undefined
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cTooltip' });
 
@@ -77,15 +77,16 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Describes the placement of your component after Popper.js has applied all the modifiers that may have flipped or altered the originally provided placement property.
-   * @return: 'top' | 'bottom' | 'left' | 'right'
-   * @default: 'top'
+   * @returns 'top' | 'bottom' | 'left' | 'right'
+   * @default 'top'
    */
   readonly placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'cTooltipPlacement' });
 
   /**
    * ElementRefDirective for positioning the tooltip on reference element
-   * @return: ElementRefDirective
-   * @default: undefined
+   * @returns ElementRefDirective | undefined
+   * @default undefined
+   * @since 5.1.0
    */
   readonly reference = input<ElementRefDirective | undefined>(undefined, { alias: 'cTooltipRef' });
 
@@ -93,7 +94,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Sets which event handlers you’d like provided to your toggle prop. You can specify one trigger or an array of them.
-   * @return: 'Triggers | Triggers[]
+   * @returns Triggers | Triggers[]
    */
   readonly trigger = input<Triggers | Triggers[]>('hover', { alias: 'cTooltipTrigger' });
 

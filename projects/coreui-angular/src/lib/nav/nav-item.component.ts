@@ -18,7 +18,7 @@ export class NavItemComponent {
 
   /**
    * Toggle the active state for the nav link rendered for `href`.
-   * @returns boolean
+   * @returns boolean | undefined
    * @default undefined
    */
   readonly active = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });

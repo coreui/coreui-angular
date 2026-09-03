@@ -137,7 +137,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Set aria-modal html attr for modal
    * @returns boolean
-   * @default null
+   * @default false
    */
   readonly ariaModalInput = input(false, { transform: booleanAttribute, alias: 'ariaModal' });
 

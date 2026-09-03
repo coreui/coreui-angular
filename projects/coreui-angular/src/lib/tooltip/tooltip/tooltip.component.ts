@@ -27,7 +27,7 @@ export class TooltipComponent implements OnDestroy {
 
   /**
    * Content of tooltip
-   * @returns {string | TemplateRef}
+   * @returns string | TemplateRef<any>
    */
   readonly content = input<string | TemplateRef<any>>('');
 

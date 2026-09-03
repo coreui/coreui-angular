@@ -47,7 +47,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Content of popover
-   * @returns {string | TemplateRef}
+   * @returns string | TemplateRef<any> | undefined
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cPopover' });
 
@@ -77,23 +77,24 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
 
   /**
    * Describes the placement of your component after Popper.js has applied all the modifiers that may have flipped or altered the originally provided placement property.
-   * @return: 'top' | 'bottom' | 'left' | 'right'
-   * @default: 'top'
+   * @returns 'top' | 'bottom' | 'left' | 'right'
+   * @default 'top'
    */
   readonly placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'cPopoverPlacement' });
 
   /**
    * ElementRefDirective for positioning the tooltip on reference element
-   * @return: ElementRefDirective
-   * @default: undefined
+   * @returns ElementRefDirective | undefined
+   * @default undefined
+   * @since 5.7.27
    */
-  readonly reference = input<ElementRefDirective | undefined>(undefined, { alias: 'cTooltipRef' });
+  readonly reference = input<ElementRefDirective | undefined>(undefined, { alias: 'cPopoverRef' });
 
   readonly referenceRef = computed(() => this.reference()?.elementRef ?? this.#hostElement);
 
   /**
    * Sets which event handlers you’d like provided to your toggle prop. You can specify one trigger or an array of them.
-   * @return: Triggers | Triggers[]
+   * @returns Triggers | Triggers[]
    */
   readonly trigger = input<Triggers | Triggers[]>('hover', { alias: 'cPopoverTrigger' });
 

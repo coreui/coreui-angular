@@ -57,8 +57,8 @@ export class AlertComponent {
 
   /**
    * Set the alert variant to a solid.
-   * @returns string
-   * @default 'solid'
+   * @returns 'solid'
+   * @default undefined
    */
   readonly variant = input<'solid'>();
 

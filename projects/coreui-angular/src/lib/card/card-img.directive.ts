@@ -7,7 +7,7 @@ import { computed, Directive, input } from '@angular/core';
 export class CardImgDirective {
   /**
    * Optionally orientate the image to the top, bottom, or make it overlaid across the card.
-   * @returns 'top' | 'bottom' | 'start' | 'end'
+   * @returns 'top' | 'bottom' | 'start' | 'end' | undefined
    */
   readonly orientation = input<'top' | 'bottom' | 'start' | 'end' | undefined>(undefined, { alias: 'cCardImg' });
 

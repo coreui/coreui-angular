@@ -11,7 +11,7 @@ import { Colors } from '../coreui.types';
 export class TableColorDirective {
   /**
    * Use contextual color for tables, table rows or individual cells.
-   * @returns Colors
+   * @returns Colors | undefined
    */
   readonly color = input<Colors | undefined>(undefined, { alias: 'cTableColor' });
 

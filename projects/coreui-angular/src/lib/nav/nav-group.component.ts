@@ -57,13 +57,13 @@ export class NavGroupComponent {
 
   /**
    * Template for the group toggler content, receives the visible state as `$implicit`.
-   * @returns TemplateRef
+   * @returns TemplateRef<{ $implicit: boolean; visible: boolean }>
    */
   readonly togglerTemplate = input<TemplateRef<{ $implicit: boolean; visible: boolean }>>();
 
   /**
    * Show nav group items. Sets the initial state, and follows every later change.
-   * @returns boolean
+   * @returns boolean | undefined
    */
   readonly visible = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
 

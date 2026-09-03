@@ -53,7 +53,7 @@ export class ProgressBarDirective {
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
-   * @values 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark', 'light'
+   * @returns Colors
    */
   readonly color = input<Colors>();
 

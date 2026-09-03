@@ -24,7 +24,7 @@ export class WidgetStatDComponent extends CardComponent {
 
   /**
    * Values and subtitles for your component.
-   * @returns WidgetStatDValue
+   * @returns WidgetStatDValue[]
    */
   readonly values = input<WidgetStatDValue[]>();
 

@@ -7,7 +7,7 @@ import { computed, Directive, input } from '@angular/core';
 export class AccordionButtonDirective {
   /**
    * Toggles an accordion button collapsed state. Use in accordionHeaderTemplate.
-   * @returns boolean
+   * @returns boolean | undefined
    */
   readonly collapsed = input<boolean | undefined>(undefined);
 

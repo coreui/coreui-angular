@@ -77,7 +77,7 @@ export class ToasterComponent implements OnInit {
 
   /**
    * Toaster position
-   * @returns (string | 'absolute' | 'fixed' | 'static')
+   * @returns string | 'absolute' | 'fixed' | 'static'
    */
   readonly position = input<string | 'absolute' | 'fixed' | 'static'>('absolute');
 

@@ -17,7 +17,7 @@ export class CarouselControlComponent {
 
   /**
    * Carousel control caption
-   * @returns string
+   * @returns string | undefined
    */
   readonly captionInput = input<string | undefined>(undefined, { alias: 'caption' });
 
@@ -30,7 +30,7 @@ export class CarouselControlComponent {
 
   /**
    * Carousel control direction.
-   * @returns 'next' | 'prev'
+   * @returns 'prev' | 'next'
    */
   readonly direction = input<'prev' | 'next'>('next');
 
