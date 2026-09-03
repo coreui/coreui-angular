@@ -7,7 +7,8 @@ import { booleanAttribute, Directive, input } from '@angular/core';
 export class FormFloatingDirective {
   /**
    * Enable floating labels
-   * @dafault boolean
+   * @returns boolean
+   * @default true
    */
   readonly floating = input(true, { transform: booleanAttribute, alias: 'cFormFloating' });
 }

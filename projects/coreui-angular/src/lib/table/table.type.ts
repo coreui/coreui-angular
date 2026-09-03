@@ -39,7 +39,7 @@ export interface ITable {
   hover?: boolean | string;
   /**
    * Make table responsive across all viewports or pick a maximum breakpoint with which to have a responsive table up to.
-   * @type: {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
+   * @returns boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
    */
   responsive?: boolean | Omit<Breakpoints, 'xs'>;
   /**
