@@ -2,6 +2,33 @@
 
 ---
 
+#### `5.7.26` for Angular 22.1 
+
+- fix(Offcanvas, Sidebar): clear the backdrop when the component is destroyed
+- refactor: `aria-*` attr cleanup
+- refactor: `inert` attr cleanup and test
+- refactor: `tabindex` attr cleanup and test
+- docs: fix JSDoc comments
+- chore(dependencies): update to Angular 22.1.5
+  - `@angular/aria` to version 22.1.5
+  - `@angular/cdk` to version 22.1.5
+  - `@angular/common` to version 22.1.5
+  - `@angular/compiler` to version 22.1.5
+  - `@angular/core` to version 22.1.5
+  - `@angular/forms` to version 22.1.5
+  - `@angular/localize` to version 22.1.5
+  - `@angular/platform-browser` to version 22.1.5
+  - `@angular/router` to version 22.1.5
+  - `zone.js` to version 0.16.3
+  - `@angular-devkit/schematics` to version 22.1.7
+  - `@angular/build` to version 22.1.7
+  - `@angular/cli` to version 22.1.7
+  - `@angular/compiler-cli` to version 22.1.5
+  - `@angular/language-service` to version 22.1.5
+  - `@types/node` to version 26.4.1
+
+---
+
 #### `5.7.25` for Angular 22.1 
 
 - feat(nav): add `c-nav-group`, `c-nav-group-items` and `c-nav-title`, so a nav group can be written in the template instead of only fed to `c-sidebar-nav` as data; groups accordion per level, and a collapsed group keeps the state of its nested groups
