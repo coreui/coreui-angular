@@ -2,6 +2,12 @@
 
 ---
 
+#### `5.7.27` for Angular 22.1 
+
+- docs: fix JSDoc comments
+
+---
+
 #### `5.7.26` for Angular 22.1 
 
 - fix(Offcanvas, Sidebar): clear the backdrop when the component is destroyed
