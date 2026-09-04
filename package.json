@@ -74,7 +74,7 @@
     "@vitest/ui": "^4.1.11",
     "angular-eslint": "^22.2.0",
     "canvas": "^3.2.3",
-    "eslint": "^10.9.1",
+    "eslint": "^10.10.0",
     "jsdom": "^30.0.1",
     "native-copyfiles": "^2.0.4",
     "ng-packagr": "^22.1.1",
