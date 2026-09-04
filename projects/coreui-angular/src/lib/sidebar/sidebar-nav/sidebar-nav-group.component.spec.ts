@@ -105,3 +105,63 @@ describe('SidebarNavGroupComponent', () => {
     expect(displayOnCollapsing).toBe('block');
   });
 });
+
+describe('SidebarNavGroupComponent openOnActive', () => {
+  let fixture: ComponentFixture<SidebarNavGroupComponent>;
+  let router: Router;
+
+  const item = {
+    name: 'Tables',
+    url: '/tables',
+    children: [{ name: 'Standard Tables', url: '/tables/tables' }]
+  };
+
+  async function createGroup(openOnActive?: boolean): Promise<SidebarNavGroupComponent> {
+    fixture = TestBed.createComponent(SidebarNavGroupComponent);
+    fixture.componentRef.setInput('item', item);
+    if (openOnActive !== undefined) {
+      fixture.componentRef.setInput('openOnActive', openOnActive);
+    }
+    await fixture.whenStable();
+    fixture.detectChanges();
+    return fixture.componentInstance;
+  }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SidebarNavGroupComponent],
+      providers: [
+        provideRouter([
+          { path: 'tables', children: [] },
+          { path: 'charts', children: [] }
+        ]),
+        SidebarNavGroupService
+      ]
+    }).compileComponents();
+
+    router = TestBed.inject(Router);
+    await router.navigate(['/tables']);
+  });
+
+  it('should open under the active route by default', async () => {
+    const component = await createGroup();
+    expect(component.open()).toBe(true);
+  });
+
+  it('should stay closed under the active route when off', async () => {
+    const component = await createGroup(false);
+    expect(component.open()).toBeFalsy();
+  });
+
+  it('should leave closing to dropdownMode when off', async () => {
+    const component = await createGroup(false);
+
+    fixture.nativeElement.querySelector('.nav-group-toggle').click();
+    fixture.detectChanges();
+    expect(component.open()).toBe(true);
+
+    await router.navigate(['/charts']);
+    fixture.detectChanges();
+    expect(component.open()).toBe(false);
+  });
+});

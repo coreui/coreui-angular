@@ -96,7 +96,8 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
 
   /**
-   * Open the group when the active route matches one of its items.
+   * Open the group when the active route matches one of its items. Governs opening only —
+   * closing an inactive group stays with `dropdownMode`.
    * @returns boolean
    * @default true
    * @since 5.7.28
@@ -121,17 +122,18 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navItems.set([...(this.item()?.children ?? [])]);
 
-    if (this.openOnActive()) {
-      this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
-        if (this.dropdownMode() !== 'none') {
-          const samePath = this.samePath(event.url);
-          this.openGroup(samePath);
+    this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
+      if (this.dropdownMode() !== 'none') {
+        const samePath = this.samePath(event.url);
+        if (samePath && !this.openOnActive()) {
+          return;
         }
-      });
-
-      if (this.samePath(this.#router.routerState.snapshot.url)) {
-        this.openGroup(true);
+        this.openGroup(samePath);
       }
+    });
+
+    if (this.openOnActive() && this.samePath(this.#router.routerState.snapshot.url)) {
+      this.openGroup(true);
     }
 
     this.navGroupSubscription = this.#sidebarNavGroupService.sidebarNavGroupState$.subscribe((next) => {
@@ -237,6 +239,7 @@ export class SidebarNavComponent implements OnChanges {
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
   /**
    * Open a nav group when a nav link inside it becomes active, e.g. through `routerLinkActive`.
+   * Governs opening only — closing an inactive group stays with `dropdownMode`.
    * @returns boolean
    * @default true
    * @since 5.7.28
