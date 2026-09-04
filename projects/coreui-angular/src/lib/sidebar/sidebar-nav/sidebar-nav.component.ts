@@ -79,7 +79,8 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
    * Determines when an inactive `c-sidebar-nav-group` closes.
    * - `path`: on an active route change only
    * - `close`: when another group is clicked
-   * - `none`: never, the group stays open
+   * - `none`: never, the group stays open — it stops reacting to route changes altogether,
+   *   so a matching route no longer opens it either
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
 
@@ -224,7 +225,8 @@ export class SidebarNavComponent implements OnChanges {
    * Determines when an inactive `c-sidebar-nav-group` closes.
    * - `path`: on an active route change only
    * - `close`: when another group is clicked
-   * - `none`: never, the group stays open
+   * - `none`: never, the group stays open — it stops reacting to route changes altogether,
+   *   so a matching route no longer opens it either
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
   /**
