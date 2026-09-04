@@ -104,6 +104,13 @@ export class NavGroupComponent {
     });
   });
 
+  readonly #openOnActiveEffect = effect(() => {
+    const openOnActive = this.#parentNavGroupService?.openOnActive() ?? true;
+    untracked(() => {
+      this.#navGroupService.openOnActive.set(openOnActive);
+    });
+  });
+
   toggleGroup(event: Event): void {
     event.preventDefault();
     const next = !this.visibleState();

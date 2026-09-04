@@ -3,6 +3,7 @@ import {
   booleanAttribute,
   Component,
   computed,
+  effect,
   ElementRef,
   forwardRef,
   inject,
@@ -12,7 +13,8 @@ import {
   OnInit,
   Renderer2,
   signal,
-  SimpleChanges
+  SimpleChanges,
+  untracked
 } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -77,7 +79,8 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
    * Determines when an inactive `c-sidebar-nav-group` closes.
    * - `path`: on an active route change only
    * - `close`: when another group is clicked
-   * - `none`: never, the group stays open
+   * - `none`: never, the group stays open — it stops reacting to the route altogether,
+   *   so a matching route neither opens it on init nor on a later navigation
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
 
@@ -118,7 +121,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (this.samePath(this.#router.routerState.snapshot.url)) {
+    if (this.dropdownMode() !== 'none' && this.samePath(this.#router.routerState.snapshot.url)) {
       this.openGroup(true);
     }
 
@@ -197,6 +200,7 @@ export class SidebarNavComponent implements OnChanges {
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
   readonly #sidebarService = inject(SidebarService);
+  readonly #navGroupService = inject(NavGroupService);
 
   /**
    * Configuration object for sidebar-nav.
@@ -209,7 +213,8 @@ export class SidebarNavComponent implements OnChanges {
    * Determines when an inactive `c-sidebar-nav-group` closes.
    * - `path`: on an active route change only
    * - `close`: when another group is clicked
-   * - `none`: never, the group stays open
+   * - `none`: never, the group stays open — it stops reacting to the route altogether,
+   *   so a matching route neither opens it on init nor on a later navigation
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
   /**
@@ -228,14 +233,29 @@ export class SidebarNavComponent implements OnChanges {
    * @default 'navigation'
    */
   readonly role = input('navigation');
+  /**
+   * Set the sidebar nav variant to tree.
+   * @default undefined
+   * @since 5.7.28
+   */
+  readonly variant = input<'tree'>();
 
   readonly hostClasses = computed(() => {
     const groupItems = this.groupItems();
+    const variant = this.variant();
     return {
       'sidebar-nav': !groupItems,
       'nav-group-items': groupItems,
-      compact: groupItems && this.compact()
+      [`sidebar-nav-${variant}`]: !groupItems && !!variant,
+      compact: this.compact()
     };
+  });
+
+  readonly #dropdownModeEffect = effect(() => {
+    const openOnActive = this.dropdownMode() !== 'none';
+    untracked(() => {
+      this.#navGroupService.openOnActive.set(openOnActive);
+    });
   });
 
   // @HostBinding('class.nav-group-items')

@@ -105,3 +105,72 @@ describe('SidebarNavGroupComponent', () => {
     expect(displayOnCollapsing).toBe('block');
   });
 });
+
+describe('SidebarNavGroupComponent dropdownMode', () => {
+  let fixture: ComponentFixture<SidebarNavGroupComponent>;
+  let router: Router;
+
+  const item = {
+    name: 'Tables',
+    url: '/tables',
+    children: [{ name: 'Standard Tables', url: '/tables/tables' }]
+  };
+
+  async function createGroup(dropdownMode?: string): Promise<SidebarNavGroupComponent> {
+    fixture = TestBed.createComponent(SidebarNavGroupComponent);
+    fixture.componentRef.setInput('item', item);
+    if (dropdownMode) {
+      fixture.componentRef.setInput('dropdownMode', dropdownMode);
+    }
+    await fixture.whenStable();
+    fixture.detectChanges();
+    return fixture.componentInstance;
+  }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SidebarNavGroupComponent],
+      providers: [
+        provideRouter([
+          { path: 'tables', children: [] },
+          { path: 'charts', children: [] }
+        ]),
+        SidebarNavGroupService
+      ]
+    }).compileComponents();
+
+    router = TestBed.inject(Router);
+    await router.navigate(['/tables']);
+  });
+
+  it('should open under the active route by default', async () => {
+    const component = await createGroup();
+    expect(component.open()).toBe(true);
+  });
+
+  it('should stay closed under the active route for none', async () => {
+    const component = await createGroup('none');
+    expect(component.open()).toBeFalsy();
+  });
+
+  it('should ignore a later navigation for none', async () => {
+    const component = await createGroup('none');
+
+    fixture.nativeElement.querySelector('.nav-group-toggle').click();
+    fixture.detectChanges();
+    expect(component.open()).toBe(true);
+
+    await router.navigate(['/charts']);
+    fixture.detectChanges();
+    expect(component.open()).toBe(true);
+  });
+
+  it('should close on a non-matching route for path', async () => {
+    const component = await createGroup('path');
+    expect(component.open()).toBe(true);
+
+    await router.navigate(['/charts']);
+    fixture.detectChanges();
+    expect(component.open()).toBe(false);
+  });
+});

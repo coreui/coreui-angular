@@ -90,7 +90,7 @@ export class NavLinkDirective implements OnDestroy {
   readonly #activeEffect = effect(() => {
     if (this.active()) {
       untracked(() => {
-        this.#navGroupService?.openBranch();
+        this.#openBranch();
       });
     }
   });
@@ -111,6 +111,12 @@ export class NavLinkDirective implements OnDestroy {
     this.#classObserver?.disconnect();
   }
 
+  #openBranch(): void {
+    if (this.#navGroupService?.openOnActive()) {
+      this.#navGroupService.openBranch();
+    }
+  }
+
   #observeActiveClass(): void {
     const host: HTMLElement = this.#hostElement.nativeElement;
 
@@ -120,13 +126,13 @@ export class NavLinkDirective implements OnDestroy {
 
     let wasActive = host.classList.contains('active');
     if (wasActive) {
-      this.#navGroupService.openBranch();
+      this.#openBranch();
     }
 
     this.#classObserver = new MutationObserver(() => {
       const active = host.classList.contains('active');
       if (active && !wasActive) {
-        this.#navGroupService?.openBranch();
+        this.#openBranch();
       }
       wasActive = active;
     });

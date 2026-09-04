@@ -8,6 +8,11 @@ export class NavGroupService {
   readonly activeId = signal<string | undefined>(undefined);
 
   /**
+   * Whether an active nav link opens the branch it sits in. Inherited by nested levels.
+   */
+  readonly openOnActive = signal(true);
+
+  /**
    * Opens the level owner within its own parent and cascades up to the root.
    * Replaced by the owning `c-nav-group`; stays a no-op for the root level.
    */
