@@ -34,6 +34,7 @@ jobs:
       - name: Project check
         run: |
           npm run build:icons:prod
+          npm run verify:icons
           npm run lint:icons
           npm run test:icons:prod
         env:

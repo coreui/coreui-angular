@@ -34,6 +34,7 @@ jobs:
       - name: Project check
         run: |
           npm run build:chartjs:prod
+          npm run verify:chartjs
           npm run lint:chartjs
           npm run test:chartjs:prod
         env:

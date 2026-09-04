@@ -35,6 +35,7 @@ jobs:
         run: |
           npm run build:icons:prod
           npm run build:lib:prod
+          npm run verify:lib
           npm run lint:lib
           npm run test:lib:prod
         env:
