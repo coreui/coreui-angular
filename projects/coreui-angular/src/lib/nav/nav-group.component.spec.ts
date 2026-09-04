@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, ComponentRef } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import { NavGroupComponent } from './nav-group.component';
 import { NavGroupService } from './nav-group.service';
@@ -86,6 +87,20 @@ describe('NavGroupComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
+
+  it('should keep the items displayed while collapsing', () => {
+    componentRef.setInput('toggler', 'anchorText');
+    fixture.detectChanges();
+    const toggler = fixture.nativeElement.querySelector('.nav-group-toggle');
+
+    toggler.click();
+    fixture.detectChanges();
+    component.onCollapseChange('open');
+    expect(component.display()).toBeNull();
+
+    toggler.click();
+    expect(component.display()).toBe('block');
+  });
 });
 
 describe('NavGroupComponent accordion', () => {
@@ -116,6 +131,20 @@ describe('NavGroupComponent accordion', () => {
     fixture.detectChanges();
     expect(groupA.classList.contains('show')).toBe(false);
     expect(groupB.classList.contains('show')).toBe(true);
+  });
+
+  it('should keep the items displayed when a sibling collapses it', () => {
+    const [groupA, , groupB] = fixture.nativeElement.querySelectorAll('c-nav-group');
+    const instanceA = fixture.debugElement.queryAll(By.directive(NavGroupComponent))[0]
+      .componentInstance as NavGroupComponent;
+
+    groupA.querySelector('.nav-group-toggle').click();
+    fixture.detectChanges();
+    instanceA.onCollapseChange('open');
+    expect(instanceA.display()).toBeNull();
+
+    groupB.querySelector('.nav-group-toggle').click();
+    expect(instanceA.display()).toBe('block');
   });
 
   it('should restore the nested group state on reopen', () => {

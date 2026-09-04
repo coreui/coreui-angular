@@ -6,6 +6,7 @@ import {
   effect,
   inject,
   input,
+  linkedSignal,
   output,
   signal,
   TemplateRef,
@@ -75,11 +76,15 @@ export class NavGroupComponent {
 
   readonly #uncontrolledVisible = signal(false);
 
-  readonly display = signal<string | null>(null);
-
   readonly visibleState = computed(() => {
     const parent = this.#parentNavGroupService;
     return parent ? parent.activeId() === this.#id : this.#uncontrolledVisible();
+  });
+
+  // the group drops `show` in the same pass, hiding the items before cCollapse can measure them
+  readonly display = linkedSignal<boolean, string | null>({
+    source: this.visibleState,
+    computation: (visible, previous) => (previous?.source && !visible ? 'block' : null)
   });
 
   readonly hostClasses = computed(() => {
