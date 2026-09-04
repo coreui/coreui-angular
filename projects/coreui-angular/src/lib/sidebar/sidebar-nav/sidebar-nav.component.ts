@@ -3,6 +3,7 @@ import {
   booleanAttribute,
   Component,
   computed,
+  effect,
   ElementRef,
   forwardRef,
   inject,
@@ -12,7 +13,8 @@ import {
   OnInit,
   Renderer2,
   signal,
-  SimpleChanges
+  SimpleChanges,
+  untracked
 } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -93,6 +95,14 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
    */
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
 
+  /**
+   * Open the group when the active route matches one of its items.
+   * @returns boolean
+   * @default true
+   * @since 5.7.28
+   */
+  readonly openOnActive = input(true, { transform: booleanAttribute });
+
   readonly hostClasses = computed(() => {
     return {
       'nav-group': true,
@@ -111,15 +121,17 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navItems.set([...(this.item()?.children ?? [])]);
 
-    this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
-      if (this.dropdownMode() !== 'none') {
-        const samePath = this.samePath(event.url);
-        this.openGroup(samePath);
-      }
-    });
+    if (this.openOnActive()) {
+      this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
+        if (this.dropdownMode() !== 'none') {
+          const samePath = this.samePath(event.url);
+          this.openGroup(samePath);
+        }
+      });
 
-    if (this.samePath(this.#router.routerState.snapshot.url)) {
-      this.openGroup(true);
+      if (this.samePath(this.#router.routerState.snapshot.url)) {
+        this.openGroup(true);
+      }
     }
 
     this.navGroupSubscription = this.#sidebarNavGroupService.sidebarNavGroupState$.subscribe((next) => {
@@ -197,6 +209,7 @@ export class SidebarNavComponent implements OnChanges {
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
   readonly #sidebarService = inject(SidebarService);
+  readonly #navGroupService = inject(NavGroupService);
 
   /**
    * Configuration object for sidebar-nav.
@@ -223,19 +236,41 @@ export class SidebarNavComponent implements OnChanges {
    */
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
   /**
+   * Open a nav group when a nav link inside it becomes active, e.g. through `routerLinkActive`.
+   * @returns boolean
+   * @default true
+   * @since 5.7.28
+   */
+  readonly openOnActive = input(true, { transform: booleanAttribute });
+  /**
    * Default role for sidebar nav.
    * @returns string
    * @default 'navigation'
    */
   readonly role = input('navigation');
+  /**
+   * Set the sidebar nav variant to tree.
+   * @default undefined
+   * @since 5.7.28
+   */
+  readonly variant = input<'tree'>();
 
   readonly hostClasses = computed(() => {
     const groupItems = this.groupItems();
+    const variant = this.variant();
     return {
       'sidebar-nav': !groupItems,
       'nav-group-items': groupItems,
-      compact: groupItems && this.compact()
+      [`sidebar-nav-${variant}`]: !groupItems && !!variant,
+      compact: this.compact()
     };
+  });
+
+  readonly #openOnActiveEffect = effect(() => {
+    const openOnActive = this.openOnActive();
+    untracked(() => {
+      this.#navGroupService.openOnActive.set(openOnActive);
+    });
   });
 
   // @HostBinding('class.nav-group-items')

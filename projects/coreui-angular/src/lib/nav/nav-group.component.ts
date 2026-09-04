@@ -50,6 +50,14 @@ export class NavGroupComponent {
   readonly compact = input(false, { transform: booleanAttribute });
 
   /**
+   * Open the group when a nav link inside it becomes active, e.g. through `routerLinkActive`.
+   * Inherited by nested groups, defaults to the parent level.
+   * @returns boolean | undefined
+   * @since 5.7.28
+   */
+  readonly openOnActive = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
+  /**
    * Set group toggler label.
    * @returns string
    */
@@ -96,6 +104,13 @@ export class NavGroupComponent {
     }
     untracked(() => {
       this.#setVisible(visible);
+    });
+  });
+
+  readonly #openOnActiveEffect = effect(() => {
+    const openOnActive = this.openOnActive() ?? this.#parentNavGroupService?.openOnActive() ?? true;
+    untracked(() => {
+      this.#navGroupService.openOnActive.set(openOnActive);
     });
   });
 

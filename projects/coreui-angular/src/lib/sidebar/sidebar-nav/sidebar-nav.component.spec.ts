@@ -52,4 +52,33 @@ describe('SidebarNavComponent', () => {
   it('should have css classes', () => {
     expect(fixture.nativeElement.classList.contains('sidebar-nav')).toBe(true);
   });
+
+  it('should render the tree variant', () => {
+    fixture.componentRef.setInput('variant', 'tree');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('sidebar-nav-tree')).toBe(true);
+  });
+
+  it('should not render the tree variant as a group item list', () => {
+    fixture.componentRef.setInput('variant', 'tree');
+    fixture.componentRef.setInput('groupItems', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('sidebar-nav-tree')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('nav-group-items')).toBe(true);
+  });
+
+  it('should compact the whole nav', () => {
+    fixture.componentRef.setInput('compact', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('compact')).toBe(true);
+  });
+
+  it('should share openOnActive with the nav group level', () => {
+    const navGroupService = fixture.debugElement.injector.get(NavGroupService);
+    expect(navGroupService.openOnActive()).toBe(true);
+
+    fixture.componentRef.setInput('openOnActive', false);
+    fixture.detectChanges();
+    expect(navGroupService.openOnActive()).toBe(false);
+  });
 });

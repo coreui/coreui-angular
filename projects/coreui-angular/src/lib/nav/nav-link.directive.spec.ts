@@ -30,6 +30,22 @@ class TestNavGroupComponent {
   readonly active = input(false);
 }
 
+@Component({
+  template: `
+    <c-nav-group toggler="group" openOnActive="false">
+      <a cNavLink [active]="active()">test</a>
+      <c-nav-group toggler="nested">
+        <a cNavLink [active]="nestedActive()">nested</a>
+      </c-nav-group>
+    </c-nav-group>
+  `,
+  imports: [NavGroupComponent, NavLinkDirective]
+})
+class TestNavGroupOpenOnActiveComponent {
+  readonly active = input(false);
+  readonly nestedActive = input(false);
+}
+
 describe('NavLinkDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let component: TestComponent;
@@ -141,5 +157,34 @@ describe('NavLinkDirective in a nav group', () => {
     fixture.componentRef.setInput('active', true);
     fixture.detectChanges();
     expect(group.classList.contains('show')).toBe(true);
+  });
+});
+
+describe('NavLinkDirective in a nav group with openOnActive off', () => {
+  let fixture: ComponentFixture<TestNavGroupOpenOnActiveComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [TestNavGroupOpenOnActiveComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestNavGroupOpenOnActiveComponent);
+    fixture.detectChanges();
+  });
+
+  it('should keep the group closed for an active link', () => {
+    const group = fixture.nativeElement.querySelector('c-nav-group');
+
+    fixture.componentRef.setInput('active', true);
+    fixture.detectChanges();
+    expect(group.classList.contains('show')).toBe(false);
+  });
+
+  it('should keep a nested group closed for an active link', () => {
+    const [, nested] = fixture.nativeElement.querySelectorAll('c-nav-group');
+
+    fixture.componentRef.setInput('nestedActive', true);
+    fixture.detectChanges();
+    expect(nested.classList.contains('show')).toBe(false);
   });
 });
