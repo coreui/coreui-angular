@@ -2,6 +2,17 @@
 
 ---
 
+#### `5.7.28` for Angular 22.1 
+
+- feat(sidebar-nav): `variant="tree"` draws nested groups as a tree, with a guide line per level and items lined up under the group they belong to
+- fix(sidebar-nav): `compact` applies to `c-sidebar-nav` itself, not only to a group's nested item list, so compacting a whole navigation works
+- change(sidebar-nav): `dropdownMode="none"` no longer opens a group under the active route on init either, so the route drives nothing; `c-sidebar-nav` passes the mode on to groups written in the template, and nested levels inherit it
+- fix(nav-group): keep the group items displayed while they collapse, so closing animates instead of snapping shut
+- docs: fix JSDoc comments
+- chore(dependencies): update `eslint` to 10.10.0
+
+---
+
 #### `5.7.27` for Angular 22.1 
 
 - docs: fix JSDoc comments
