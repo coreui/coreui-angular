@@ -73,11 +73,11 @@ describe('SidebarNavComponent', () => {
     expect(fixture.nativeElement.classList.contains('compact')).toBe(true);
   });
 
-  it('should share openOnActive with the nav group level', () => {
+  it('should stop the nav group level opening on active for dropdownMode none', () => {
     const navGroupService = fixture.debugElement.injector.get(NavGroupService);
     expect(navGroupService.openOnActive()).toBe(true);
 
-    fixture.componentRef.setInput('openOnActive', false);
+    fixture.componentRef.setInput('dropdownMode', 'none');
     fixture.detectChanges();
     expect(navGroupService.openOnActive()).toBe(false);
   });

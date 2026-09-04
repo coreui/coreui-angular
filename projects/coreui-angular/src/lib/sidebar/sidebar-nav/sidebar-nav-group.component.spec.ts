@@ -106,7 +106,7 @@ describe('SidebarNavGroupComponent', () => {
   });
 });
 
-describe('SidebarNavGroupComponent openOnActive', () => {
+describe('SidebarNavGroupComponent dropdownMode', () => {
   let fixture: ComponentFixture<SidebarNavGroupComponent>;
   let router: Router;
 
@@ -116,11 +116,11 @@ describe('SidebarNavGroupComponent openOnActive', () => {
     children: [{ name: 'Standard Tables', url: '/tables/tables' }]
   };
 
-  async function createGroup(openOnActive?: boolean): Promise<SidebarNavGroupComponent> {
+  async function createGroup(dropdownMode?: string): Promise<SidebarNavGroupComponent> {
     fixture = TestBed.createComponent(SidebarNavGroupComponent);
     fixture.componentRef.setInput('item', item);
-    if (openOnActive !== undefined) {
-      fixture.componentRef.setInput('openOnActive', openOnActive);
+    if (dropdownMode) {
+      fixture.componentRef.setInput('dropdownMode', dropdownMode);
     }
     await fixture.whenStable();
     fixture.detectChanges();
@@ -148,16 +148,25 @@ describe('SidebarNavGroupComponent openOnActive', () => {
     expect(component.open()).toBe(true);
   });
 
-  it('should stay closed under the active route when off', async () => {
-    const component = await createGroup(false);
+  it('should stay closed under the active route for none', async () => {
+    const component = await createGroup('none');
     expect(component.open()).toBeFalsy();
   });
 
-  it('should leave closing to dropdownMode when off', async () => {
-    const component = await createGroup(false);
+  it('should ignore a later navigation for none', async () => {
+    const component = await createGroup('none');
 
     fixture.nativeElement.querySelector('.nav-group-toggle').click();
     fixture.detectChanges();
+    expect(component.open()).toBe(true);
+
+    await router.navigate(['/charts']);
+    fixture.detectChanges();
+    expect(component.open()).toBe(true);
+  });
+
+  it('should close on a non-matching route for path', async () => {
+    const component = await createGroup('path');
     expect(component.open()).toBe(true);
 
     await router.navigate(['/charts']);

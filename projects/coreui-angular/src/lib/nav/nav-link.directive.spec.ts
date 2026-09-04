@@ -3,7 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, ComponentRef, DebugElement, input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+import { provideRouter } from '@angular/router';
+
 import { NavGroupComponent } from './nav-group.component';
+import { SidebarNavComponent } from '../sidebar/sidebar-nav/sidebar-nav.component';
 
 @Component({
   template: '<a cNavLink [active]="active()" [disabled]="disabled()">test</a>',
@@ -32,16 +35,18 @@ class TestNavGroupComponent {
 
 @Component({
   template: `
-    <c-nav-group toggler="group" openOnActive="false">
-      <a cNavLink [active]="active()">test</a>
-      <c-nav-group toggler="nested">
-        <a cNavLink [active]="nestedActive()">nested</a>
+    <c-sidebar-nav dropdownMode="none">
+      <c-nav-group toggler="group">
+        <a cNavLink [active]="active()">test</a>
+        <c-nav-group toggler="nested">
+          <a cNavLink [active]="nestedActive()">nested</a>
+        </c-nav-group>
       </c-nav-group>
-    </c-nav-group>
+    </c-sidebar-nav>
   `,
-  imports: [NavGroupComponent, NavLinkDirective]
+  imports: [NavGroupComponent, NavLinkDirective, SidebarNavComponent]
 })
-class TestNavGroupOpenOnActiveComponent {
+class TestSidebarNavDropdownModeComponent {
   readonly active = input(false);
   readonly nestedActive = input(false);
 }
@@ -160,15 +165,16 @@ describe('NavLinkDirective in a nav group', () => {
   });
 });
 
-describe('NavLinkDirective in a nav group with openOnActive off', () => {
-  let fixture: ComponentFixture<TestNavGroupOpenOnActiveComponent>;
+describe('NavLinkDirective in a sidebar nav with dropdownMode none', () => {
+  let fixture: ComponentFixture<TestSidebarNavDropdownModeComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestNavGroupOpenOnActiveComponent]
+      imports: [TestSidebarNavDropdownModeComponent],
+      providers: [provideRouter([])]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TestNavGroupOpenOnActiveComponent);
+    fixture = TestBed.createComponent(TestSidebarNavDropdownModeComponent);
     fixture.detectChanges();
   });
 

@@ -79,8 +79,8 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
    * Determines when an inactive `c-sidebar-nav-group` closes.
    * - `path`: on an active route change only
    * - `close`: when another group is clicked
-   * - `none`: never, the group stays open — it stops reacting to route changes altogether,
-   *   so a matching route no longer opens it either
+   * - `none`: never, the group stays open — it stops reacting to the route altogether,
+   *   so a matching route neither opens it on init nor on a later navigation
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
 
@@ -95,15 +95,6 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
    * @returns boolean
    */
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
-
-  /**
-   * Open the group when the active route matches one of its items. Governs opening only —
-   * closing an inactive group stays with `dropdownMode`.
-   * @returns boolean
-   * @default true
-   * @since 5.7.28
-   */
-  readonly openOnActive = input(true, { transform: booleanAttribute });
 
   readonly hostClasses = computed(() => {
     return {
@@ -126,14 +117,11 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
     this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
       if (this.dropdownMode() !== 'none') {
         const samePath = this.samePath(event.url);
-        if (samePath && !this.openOnActive()) {
-          return;
-        }
         this.openGroup(samePath);
       }
     });
 
-    if (this.openOnActive() && this.samePath(this.#router.routerState.snapshot.url)) {
+    if (this.dropdownMode() !== 'none' && this.samePath(this.#router.routerState.snapshot.url)) {
       this.openGroup(true);
     }
 
@@ -225,8 +213,8 @@ export class SidebarNavComponent implements OnChanges {
    * Determines when an inactive `c-sidebar-nav-group` closes.
    * - `path`: on an active route change only
    * - `close`: when another group is clicked
-   * - `none`: never, the group stays open — it stops reacting to route changes altogether,
-   *   so a matching route no longer opens it either
+   * - `none`: never, the group stays open — it stops reacting to the route altogether,
+   *   so a matching route neither opens it on init nor on a later navigation
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
   /**
@@ -239,14 +227,6 @@ export class SidebarNavComponent implements OnChanges {
    * @returns boolean
    */
   readonly compact = input<boolean, unknown>(undefined, { transform: booleanAttribute });
-  /**
-   * Open a nav group when a nav link inside it becomes active, e.g. through `routerLinkActive`.
-   * Governs opening only — closing an inactive group stays with `dropdownMode`.
-   * @returns boolean
-   * @default true
-   * @since 5.7.28
-   */
-  readonly openOnActive = input(true, { transform: booleanAttribute });
   /**
    * Default role for sidebar nav.
    * @returns string
@@ -271,8 +251,8 @@ export class SidebarNavComponent implements OnChanges {
     };
   });
 
-  readonly #openOnActiveEffect = effect(() => {
-    const openOnActive = this.openOnActive();
+  readonly #dropdownModeEffect = effect(() => {
+    const openOnActive = this.dropdownMode() !== 'none';
     untracked(() => {
       this.#navGroupService.openOnActive.set(openOnActive);
     });
