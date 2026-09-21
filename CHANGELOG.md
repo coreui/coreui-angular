@@ -2,6 +2,32 @@
 
 ---
 
+#### `5.7.30` for Angular 22.1
+
+- chore(dependencies): update to Angular 22.1.7
+  - `@angular/aria` to version 22.1.7
+  - `@angular/cdk` to version 22.1.7
+  - `@angular/common` to version 22.1.7
+  - `@angular/compiler` to version 22.1.7
+  - `@angular/core` to version 22.1.7
+  - `@angular/forms` to version 22.1.7
+  - `@angular/localize` to version 22.1.7
+  - `@angular/platform-browser` to version 22.1.7
+  - `@angular/router` to version 22.1.7
+  - `@angular-devkit/schematics` to version 22.1.8
+  - `@angular/build` to version 22.1.8
+  - `@angular/cli` to version 22.1.8
+  - `@angular/compiler-cli` to version 22.1.7
+  - `@angular/language-service` to version 22.1.7
+  - `@types/node` to version 26.6.2
+  - `angular-eslint` to version 22.5.0
+  - `eslint` to version 10.11.0
+  - `jsdom` to version 30.1.0
+  - `prettier` to version 3.9.8
+  - `typescript-eslint` to version 8.70.0
+
+---
+
 #### `5.7.28` for Angular 22.1 
 
 - feat(sidebar-nav): `variant="tree"` draws nested groups as a tree, with a guide line per level and items lined up under the group they belong to
