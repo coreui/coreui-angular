@@ -2,6 +2,34 @@
 
 ---
 
+#### `5.7.31` for Angular 22.2
+
+- chore(dependencies): update to Angular 22.2.0
+  - `@angular/aria` to version 22.2.0
+  - `@angular/cdk` to version 22.2.0
+  - `@angular/common` to version 22.2.0
+  - `@angular/compiler` to version 22.2.0
+  - `@angular/core` to version 22.2.0
+  - `@angular/forms` to version 22.2.0
+  - `@angular/localize` to version 22.2.0
+  - `@angular/platform-browser` to version 22.2.0
+  - `@angular/router` to version 22.2.0
+  - `@angular-devkit/schematics` to version 22.2.0
+  - `@angular/build` to version 22.2.0
+  - `@angular/cli` to version 22.2.0
+  - `@angular/compiler-cli` to version 22.2.0
+  - `@angular/language-service` to version 22.2.0
+  - `ng-packagr` to version 22.2.1
+- chore(dependencies): update to vitest 5.0.1
+  - `@vitest/coverage-v8` to version 5.0.1
+  - `@vitest/ui` to version 5.0.1
+  - `vitest` to version 5.0.1
+  - `jsdom` to version 30.1.1
+  - `prettier` to version 3.9.9
+  - `typescript-eslint` to version 8.70.1
+
+---
+
 #### `5.7.30` for Angular 22.1
 
 - chore(dependencies): update to Angular 22.1.7
