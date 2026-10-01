@@ -32,40 +32,24 @@ updates:
     versioning-strategy: increase
     rebase-strategy: disabled
     ignore:
-      # Angular majors are coordinated framework migrations, bumped by hand
-      - dependency-name: "@angular/*"
-        update-types:
-          - "version-update:semver-major"
-      - dependency-name: "@angular-devkit/*"
-        update-types:
-          - "version-update:semver-major"
-      - dependency-name: "ng-packagr"
-        update-types:
-          - "version-update:semver-major"
-      - dependency-name: "zone.js"
+      # only minors and patches are automated; majors are coordinated upgrades taken by hand
+      - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
       # Angular supports a narrow TypeScript range — out-of-range bumps break the build
       - dependency-name: "typescript"
         update-types:
-          - "version-update:semver-major"
           - "version-update:semver-minor"
       # linter churn — new rules break CI; bump deliberately
       - dependency-name: "eslint*"
         update-types:
-          - "version-update:semver-major"
           - "version-update:semver-minor"
       - dependency-name: "angular-eslint"
         update-types:
-          - "version-update:semver-major"
           - "version-update:semver-minor"
       - dependency-name: "typescript-eslint"
         update-types:
-          - "version-update:semver-major"
           - "version-update:semver-minor"
-      - dependency-name: "@types/node"
-        update-types:
-          - "version-update:semver-major"
     groups:
       production-dependencies:
         dependency-type: "production"
