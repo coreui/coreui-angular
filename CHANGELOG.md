@@ -2,6 +2,18 @@
 
 ---
 
+#### `5.7.34` for Angular 22.2.1
+
+- chore(devDependencies): update
+  - `@types/node` to version 26.6.4
+  - `eslint` to version 10.12.0
+  - `jsdom` to version 30.1.2
+  - `native-copyfiles` to version 2.1.1
+  - `typescript-eslint` to version 8.71.1
+- chore(dependabot): automate only minors and patches
+
+---
+
 #### `5.7.32` for Angular 22.2.1
 
 - chore(dependencies): update to Angular 22.2.1
