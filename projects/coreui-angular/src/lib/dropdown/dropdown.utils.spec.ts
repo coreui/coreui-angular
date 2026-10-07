@@ -36,6 +36,19 @@ describe('dropdown.utils', () => {
     expect(isEditableTarget(element('<div contenteditable="foo"><b id="t">t</b></div>').querySelector('#t'))).toBe(
       false
     );
+    expect(isEditableTarget(element('<div contenteditable="TRUE"><b id="c">c</b></div>').querySelector('#c'))).toBe(
+      true
+    );
+    expect(
+      isEditableTarget(element('<div contenteditable="plaintext-only"><b id="p">p</b></div>').querySelector('#p'))
+    ).toBe(true);
+    expect(
+      isEditableTarget(
+        element('<div contenteditable=""><span contenteditable="False"><b id="d">d</b></span></div>').querySelector(
+          '#d'
+        )
+      )
+    ).toBe(false);
     expect(
       isEditableTarget(
         element(

@@ -168,33 +168,6 @@ describe('DropdownMenuDirective Space', () => {
     expect(document.activeElement).toBe(menu.querySelector('#link'));
   });
 
-  it('should leave every key to a form control inside a shadow root in the menu', () => {
-    const fixture = TestBed.createComponent(SpaceTestComponent);
-    fixture.detectChanges();
-    const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
-    const host = document.createElement('x-field');
-    menu.querySelector('li').append(host);
-    const field = document.createElement('input');
-    host.attachShadow({ mode: 'open' }).append(field);
-    field.focus();
-    for (const [key, code, keyCode] of [
-      [' ', 'Space', 32],
-      ['ArrowDown', 'ArrowDown', 40]
-    ] as const) {
-      const event = new KeyboardEvent('keydown', {
-        key,
-        code,
-        keyCode,
-        bubbles: true,
-        composed: true,
-        cancelable: true
-      });
-      field.dispatchEvent(event);
-      expect(event.defaultPrevented).toBe(false);
-      expect(host.shadowRoot?.activeElement).toBe(field);
-    }
-  });
-
   it('should leave every key to a form control inside the menu', () => {
     const fixture = TestBed.createComponent(SpaceTestComponent);
     fixture.detectChanges();

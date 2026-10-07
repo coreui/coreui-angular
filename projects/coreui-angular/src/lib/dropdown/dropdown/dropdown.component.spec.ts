@@ -702,3 +702,39 @@ describe('DropdownComponent with shadow DOM', () => {
     host.remove();
   });
 });
+
+@Component({
+  template: `
+    <c-dropdown [autoClose]="false" [(visible)]="visible">
+      <button cDropdownToggle id="toggle">Toggle</button>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="item">One</button></li>
+      </ul>
+    </c-dropdown>
+    <button id="outside">Outside</button>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class NoAutoCloseComponent {
+  readonly visible = signal(true);
+}
+
+describe('DropdownComponent with autoClose false', () => {
+  it('should neither close nor move focus on Escape or Tab', async () => {
+    const fixture = TestBed.createComponent(NoAutoCloseComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const item: HTMLElement = fixture.nativeElement.querySelector('#item');
+    const outside: HTMLElement = fixture.nativeElement.querySelector('#outside');
+    item.focus();
+    item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+    expect(document.activeElement).toBe(item);
+    outside.focus();
+    outside.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+});
