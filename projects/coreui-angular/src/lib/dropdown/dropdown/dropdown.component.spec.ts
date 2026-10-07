@@ -177,6 +177,30 @@ describe('DropdownToggleDirective', () => {
 
 @Component({
   template: `
+    <c-dropdown visible>
+      <button cDropdownToggle>Toggle</button>
+      <ul cDropdownMenu></ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective]
+})
+class InitiallyVisibleComponent {}
+
+describe('DropdownToggleDirective initially visible', () => {
+  it('should set aria-expanded on first render', () => {
+    const fixture = TestBed.createComponent(InitiallyVisibleComponent);
+    fixture.detectChanges();
+
+    const toggle = fixture.debugElement.query(By.directive(DropdownToggleDirective)).nativeElement;
+    const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
+
+    expect(menu.classList.contains('show')).toBe(true);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+  });
+});
+
+@Component({
+  template: `
     <c-dropdown [alignment]="first()">
       <div cDropdownToggle></div>
       <ul cDropdownMenu id="first"></ul>

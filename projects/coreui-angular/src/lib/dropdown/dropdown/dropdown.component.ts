@@ -46,7 +46,6 @@ export abstract class DropdownToken {}
   }
 })
 export class DropdownToggleDirective implements AfterViewInit {
-  readonly #destroyRef = inject(DestroyRef);
   public readonly elementRef = inject(ElementRef);
   #dropdownService = inject(DropdownService);
   public dropdown = inject(DropdownToken, { optional: true });
@@ -88,7 +87,9 @@ export class DropdownToggleDirective implements AfterViewInit {
     } as Record<string, boolean>;
   });
 
-  readonly #ariaExpanded = signal(false);
+  readonly #ariaExpanded = computed(
+    () => (this.dropdownComponent() ?? (this.dropdown as DropdownComponent | null))?.visible() ?? false
+  );
 
   get ariaExpanded() {
     return this.#ariaExpanded();
@@ -104,17 +105,6 @@ export class DropdownToggleDirective implements AfterViewInit {
     if (dropdownComponent) {
       this.dropdown = dropdownComponent;
       this.#dropdownService = dropdownComponent?.dropdownService;
-    }
-    if (this.dropdown) {
-      const dropdown = <DropdownComponent>this.dropdown;
-      const subscription = dropdown?.visibleChange?.subscribe((visible) => {
-        this.#ariaExpanded.set(visible);
-      });
-      if (subscription) {
-        this.#destroyRef.onDestroy(() => {
-          subscription.unsubscribe();
-        });
-      }
     }
   }
 }
