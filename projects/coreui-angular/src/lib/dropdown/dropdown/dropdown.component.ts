@@ -33,8 +33,7 @@ import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive'
 import { DropdownService } from '../dropdown.service';
 import { clicksOnEnter, isEditableTarget } from '../dropdown.utils';
 
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
 
 // lightweight injection token
 export abstract class DropdownToken {}
@@ -45,6 +44,7 @@ export abstract class DropdownToken {}
   exportAs: 'cDropdownToggle',
   host: {
     '[class]': 'hostClasses()',
+    '[attr.aria-disabled]': 'disabled() || null',
     '[aria-expanded]': 'ariaExpanded',
     '(click)': 'onClick($event)',
     '(keydown)': 'onKeyDown($event)'
@@ -102,11 +102,15 @@ export class DropdownToggleDirective implements AfterViewInit {
   }
 
   public onClick($event: MouseEvent): void {
+    const element: HTMLElement = this.elementRef.nativeElement;
+    const target = $event.target as Element;
+    if (target !== element && clicksOnEnter(target)) {
+      return;
+    }
     $event.preventDefault();
     if (this.disabled()) {
       return;
     }
-    const element: HTMLElement = this.elementRef.nativeElement;
     if (!element.contains(element.ownerDocument.activeElement)) {
       element.focus();
     }
@@ -461,12 +465,13 @@ export class DropdownComponent implements OnDestroy, OnInit {
     }
     this.listeners.push(
       this.#renderer.listen(this.#document, 'keyup', (event: KeyboardEvent) => {
-        const target = event.composedPath()[0] as Node;
+        const path = event.composedPath();
+        const toggler = this.#togglerElement();
         if (
           event.key === 'Tab' &&
           this.autoClose() !== false &&
-          !this.#elementRef.nativeElement.contains(target) &&
-          !this.#togglerElement()?.contains(target)
+          !path.includes(this.#elementRef.nativeElement) &&
+          !(toggler && path.includes(toggler))
         ) {
           this.setVisibleState(false);
         }
@@ -479,7 +484,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
       return;
     }
     event.stopPropagation();
-    const focusInMenu = this._menuElementRef()?.nativeElement.contains(this.#document.activeElement);
+    const focusInMenu = this._menuElementRef()?.nativeElement.contains(event.target as Node);
     this.setVisibleState(false);
     if (focusInMenu) {
       this.#focusToggler();
@@ -495,13 +500,13 @@ export class DropdownComponent implements OnDestroy, OnInit {
     if (!toggler) {
       return;
     }
-    const candidates = [toggler, ...toggler.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)];
+    const root = toggler.getRootNode() as Document | ShadowRoot;
+    const candidates = [toggler, ...toggler.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)].filter(
+      (candidate) => candidate === toggler || (candidate.tabIndex >= 0 && !candidate.closest('[aria-hidden="true"]'))
+    );
     for (const candidate of candidates) {
-      if (candidate.getAttribute('aria-hidden') === 'true') {
-        continue;
-      }
       candidate.focus();
-      if (this.#document.activeElement === candidate) {
+      if (root.activeElement === candidate) {
         return;
       }
     }

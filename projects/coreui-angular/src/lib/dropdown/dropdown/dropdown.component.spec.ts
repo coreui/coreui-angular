@@ -468,8 +468,17 @@ describe('DropdownToggleDirective on anchor', () => {
     const go = element('go');
     go.focus();
     expect(await keydown(go, 'Enter')).toBe(false);
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+    go.dispatchEvent(click);
+    fixture.detectChanges();
+    expect(click.defaultPrevented).toBe(false);
     expect(await keydown(go, ' ')).toBe(false);
     expect(fixture.componentInstance.nestedVisible()).toBe(false);
+  });
+
+  it('should mark a disabled toggle with aria-disabled', () => {
+    expect(element('disabledAnchor').getAttribute('aria-disabled')).toBe('true');
+    expect(element('toggle').hasAttribute('aria-disabled')).toBe(false);
   });
 
   it('should ignore the arrows on a disabled anchor toggle', async () => {
@@ -560,11 +569,12 @@ describe('DropdownToggleDirective outside the dropdown', () => {
   template: `
     <c-dropdown [(visible)]="visible">
       <div cDropdownToggle id="group">
-        <input type="hidden" name="v" />
         <span tabindex="-1" id="icon"></span>
         <input aria-hidden="true" tabindex="-1" id="hint" />
-        <button disabled id="off">x</button>
+        <span aria-hidden="true"><button id="hiddenGroup">x</button></span>
+        <button tabindex="-1" id="clear">x</button>
         <input id="field" />
+        <input id="second" />
       </div>
       <ul cDropdownMenu>
         <li><button cDropdownItem id="item">One</button></li>
@@ -636,5 +646,44 @@ describe('DropdownComponent nested', () => {
     expect(component.outer()).toBe(true);
     expect(component.panelClosed).toBe(false);
     expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#innerToggle'));
+  });
+});
+
+describe('DropdownComponent with shadow DOM', () => {
+  it('should keep the menu open on Tab inside a shadow root in the menu', async () => {
+    const fixture = TestBed.createComponent(KeyboardTestComponent);
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const host = document.createElement('x-item');
+    fixture.nativeElement.querySelector('li').append(host);
+    const inner = document.createElement('button');
+    host.attachShadow({ mode: 'open' }).append(inner);
+    inner.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+
+  it('should close on Tab leaving a dropdown rendered inside a shadow root and return focus on Escape', async () => {
+    const fixture = TestBed.createComponent(KeyboardTestComponent);
+    const host = document.createElement('div');
+    document.body.append(host);
+    const root = host.attachShadow({ mode: 'open' });
+    root.append(fixture.nativeElement);
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const toggle: HTMLElement = fixture.nativeElement.querySelector('#toggle');
+    const items: HTMLElement[] = [...fixture.nativeElement.querySelectorAll('.dropdown-item')];
+    items[0].focus();
+    items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.visible()).toBe(true);
+    items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true, composed: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(root.activeElement).toBe(toggle);
+    host.remove();
   });
 });

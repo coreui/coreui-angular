@@ -1,5 +1,5 @@
 const EDITABLE_SELECTOR =
-  'input:not([type="button"]):not([type="image"]):not([type="reset"]):not([type="submit"]), select, textarea, [contenteditable]';
+  'input:not([type="button"]):not([type="image"]):not([type="reset"]):not([type="submit"]), select, textarea, [contenteditable]:not([contenteditable="false"])';
 
 /**
  * Whether the event target types or selects natively, so dropdown key handling must leave it alone.

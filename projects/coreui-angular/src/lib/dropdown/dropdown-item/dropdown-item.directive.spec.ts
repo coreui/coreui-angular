@@ -91,6 +91,7 @@ describe('DropdownItemDirective', () => {
   template: `
     <c-dropdown visible>
       <ul cDropdownMenu>
+        <li contenteditable="false"><div cDropdownItem id="island">Island</div></li>
         <li><button cDropdownItem id="button">Action</button></li>
         <li><a cDropdownItem href="#" id="link">Link</a></li>
         <li><input type="button" cDropdownItem id="inputButton" value="Go" /></li>
@@ -129,6 +130,10 @@ describe('DropdownItemDirective Enter', () => {
     keyup('query');
     expect(dropdown.visible()).toBe(true);
     keyup('plain');
+    expect(dropdown.visible()).toBe(false);
+    dropdown.visible.set(true);
+    fixture.detectChanges();
+    keyup('island');
     expect(dropdown.visible()).toBe(false);
   });
 });
