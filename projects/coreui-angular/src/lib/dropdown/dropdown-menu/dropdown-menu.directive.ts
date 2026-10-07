@@ -1,6 +1,7 @@
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import {
   AfterContentInit,
+  afterNextRender,
   booleanAttribute,
   computed,
   contentChildren,
@@ -9,6 +10,7 @@ import {
   ElementRef,
   forwardRef,
   inject,
+  Injector,
   input,
   linkedSignal,
   OnInit
@@ -30,12 +32,13 @@ import { DropdownService } from '../dropdown.service';
     '[class]': 'hostClasses()',
     '[style]': 'hostStyles()',
     '[attr.data-coreui-popper]': 'dataPopper()',
-    '(keydown)': 'onKeyDown($event)',
-    '(keyup)': 'onKeyUp($event)'
+    '(focusin)': 'onFocusIn($event)',
+    '(keydown)': 'onKeyDown($event)'
   }
 })
 export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
+  readonly #injector = inject(Injector);
   public readonly elementRef: ElementRef = inject(ElementRef);
   readonly #dropdownService: DropdownService = inject(DropdownService);
   #focusKeyManager!: FocusKeyManager<DropdownItemDirective>;
@@ -88,22 +91,21 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
     this.#focusKeyManager.onKeydown($event);
   }
 
-  onKeyUp($event: KeyboardEvent): void {
-    if (!this.visible()) {
-      return;
-    }
-    if (['Tab'].includes($event.key)) {
-      if (this.#focusKeyManager.activeItem) {
-        $event.shiftKey ? this.#focusKeyManager.setPreviousItemActive() : this.#focusKeyManager.setNextItemActive();
-      } else {
-        this.#focusKeyManager.setFirstItemActive();
-      }
+  onFocusIn($event: FocusEvent): void {
+    const index = this.itemElements().findIndex(({ nativeElement }) => nativeElement.contains($event.target));
+    if (index > -1) {
+      this.#focusKeyManager.updateActiveItem(index);
     }
   }
 
   readonly dropdownItemsContent = contentChildren<DropdownItemDirective>(
     forwardRef(() => DropdownItemDirective),
     { descendants: true }
+  );
+
+  private readonly itemElements = contentChildren(
+    forwardRef(() => DropdownItemDirective),
+    { descendants: true, read: ElementRef }
   );
 
   readonly items$ = toObservable(this.dropdownItemsContent);
@@ -130,6 +132,15 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
             if (!this.visible()) {
               this.#focusKeyManager?.setActiveItem(-1);
             }
+          }
+          if (state.focus && this.visible()) {
+            afterNextRender(
+              () =>
+                state.focus === 'first'
+                  ? this.#focusKeyManager.setFirstItemActive()
+                  : this.#focusKeyManager.setLastItemActive(),
+              { injector: this.#injector }
+            );
           }
         }),
         takeUntilDestroyed(this.#destroyRef)

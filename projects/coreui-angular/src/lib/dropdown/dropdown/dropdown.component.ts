@@ -42,7 +42,8 @@ export abstract class DropdownToken {}
   host: {
     '[class]': 'hostClasses()',
     '[aria-expanded]': 'ariaExpanded',
-    '(click)': 'onClick($event)'
+    '(click)': 'onClick($event)',
+    '(keydown)': 'onKeyDown($event)'
   }
 })
 export class DropdownToggleDirective implements AfterViewInit {
@@ -98,6 +99,22 @@ export class DropdownToggleDirective implements AfterViewInit {
   public onClick($event: MouseEvent): void {
     $event.preventDefault();
     !this.disabled() && this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+  }
+
+  onKeyDown($event: KeyboardEvent): void {
+    if (
+      this.disabled() ||
+      !['ArrowDown', 'ArrowUp'].includes($event.key) ||
+      /^(input|textarea)$/i.test(($event.target as HTMLElement).tagName)
+    ) {
+      return;
+    }
+    $event.preventDefault();
+    this.#dropdownService.toggle({
+      visible: true,
+      dropdown: this.dropdown,
+      focus: $event.key === 'ArrowDown' ? 'first' : 'last'
+    });
   }
 
   ngAfterViewInit(): void {
@@ -409,7 +426,11 @@ export class DropdownComponent implements OnDestroy, OnInit {
       this.#renderer.listen(this.#elementRef.nativeElement, 'keyup', (event) => {
         if (event.key === 'Escape' && this.autoClose() !== false) {
           event.stopPropagation();
+          const focusInMenu = this._menuElementRef()?.nativeElement.contains(this.#document.activeElement);
           this.setVisibleState(false);
+          if (focusInMenu) {
+            this._toggler()?.elementRef.nativeElement.focus();
+          }
           return;
         }
       })

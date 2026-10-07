@@ -111,7 +111,7 @@ describe('DropdownMenuDirective', () => {
     component.visible.set(true);
     fixture.detectChanges();
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }));
-    elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab' }));
+    elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', keyCode: 40 }));
     elementRef.nativeElement.focus();
     fixture.detectChanges();
     expect(document.activeElement).toEqual(itemRef.nativeElement);

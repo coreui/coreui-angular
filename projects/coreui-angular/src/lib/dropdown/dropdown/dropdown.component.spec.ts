@@ -37,7 +37,13 @@ class MockElementRef extends ElementRef {}
 
 @Component({
   template: `
-    <c-dropdown #dropdown="cDropdown" [(visible)]="visible" [alignment]="alignment()" direction="dropup" [variant]="variant()">
+    <c-dropdown
+      #dropdown="cDropdown"
+      [(visible)]="visible"
+      [alignment]="alignment()"
+      direction="dropup"
+      [variant]="variant()"
+    >
       <div
         cDropdownToggle
         [caret]="caret()"
@@ -235,5 +241,93 @@ describe('DropdownComponent alignment scope', () => {
     expect(first.classList.contains('dropdown-menu-lg-start')).toBe(false);
     expect(second.classList.contains('dropdown-menu-lg-start')).toBe(true);
     expect(second.classList.contains('dropdown-menu-end')).toBe(false);
+  });
+});
+
+@Component({
+  template: `
+    <c-dropdown [(visible)]="visible">
+      <button cDropdownToggle id="toggle">Toggle <input id="field" /></button>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem>One</button></li>
+        <li><button cDropdownItem>Two</button></li>
+        <li><button cDropdownItem>Three</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class KeyboardTestComponent {
+  readonly visible = signal(false);
+}
+
+describe('Dropdown keyboard', () => {
+  let fixture: ComponentFixture<KeyboardTestComponent>;
+  let toggle: HTMLElement;
+  let items: HTMLElement[];
+
+  const keydown = async (target: HTMLElement, key: string) => {
+    const keyCode = { ArrowDown: 40, ArrowUp: 38 }[key];
+    target.dispatchEvent(new KeyboardEvent('keydown', { key, keyCode, bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+  };
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(KeyboardTestComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    toggle = fixture.nativeElement.querySelector('#toggle');
+    items = [...fixture.nativeElement.querySelectorAll('.dropdown-item')];
+    toggle.focus();
+  });
+
+  it('should open and focus the first item on ArrowDown on the toggle', async () => {
+    await keydown(toggle, 'ArrowDown');
+    expect(fixture.componentInstance.visible()).toBe(true);
+    expect(document.activeElement).toBe(items[0]);
+  });
+
+  it('should open and focus the last item on ArrowUp on the toggle', async () => {
+    await keydown(toggle, 'ArrowUp');
+    expect(fixture.componentInstance.visible()).toBe(true);
+    expect(document.activeElement).toBe(items[2]);
+  });
+
+  it('should focus the first item on ArrowDown on the toggle of an open menu', async () => {
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await keydown(toggle, 'ArrowDown');
+    expect(document.activeElement).toBe(items[0]);
+  });
+
+  it('should ignore ArrowDown from a field inside the toggle', async () => {
+    const field = fixture.nativeElement.querySelector('#field');
+    field.focus();
+    await keydown(field, 'ArrowDown');
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(field);
+  });
+
+  it('should continue arrow navigation from the item focused by Tab', async () => {
+    await keydown(toggle, 'ArrowDown');
+    items[1].focus();
+    items[1].dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
+    expect(document.activeElement).toBe(items[1]);
+    await keydown(items[1], 'ArrowDown');
+    expect(document.activeElement).toBe(items[2]);
+  });
+
+  it('should close and focus the toggle on Escape from an item', async () => {
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    items[0].focus();
+    items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(toggle);
   });
 });
