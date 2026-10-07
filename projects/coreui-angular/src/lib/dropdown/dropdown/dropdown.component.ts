@@ -98,7 +98,14 @@ export class DropdownToggleDirective implements AfterViewInit {
 
   public onClick($event: MouseEvent): void {
     $event.preventDefault();
-    !this.disabled() && this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+    if (this.disabled()) {
+      return;
+    }
+    const element: HTMLElement = this.elementRef.nativeElement;
+    if (!element.contains(element.ownerDocument.activeElement)) {
+      element.focus();
+    }
+    this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
   }
 
   onKeyDown($event: KeyboardEvent): void {

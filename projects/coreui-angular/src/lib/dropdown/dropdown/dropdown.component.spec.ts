@@ -319,6 +319,24 @@ describe('Dropdown keyboard', () => {
     expect(document.activeElement).toBe(items[2]);
   });
 
+  it('should focus the toggle on click', async () => {
+    toggle.blur();
+    toggle.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it('should keep focus on a field inside the toggle on click', async () => {
+    const field = fixture.nativeElement.querySelector('#field');
+    field.focus();
+    field.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(field);
+  });
+
   it('should close and focus the toggle on Escape from an item', async () => {
     fixture.componentInstance.visible.set(true);
     fixture.detectChanges();
