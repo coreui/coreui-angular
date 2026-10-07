@@ -126,6 +126,7 @@ describe('DropdownMenuDirective', () => {
         <li><button cDropdownItem id="button">Action</button></li>
         <li><a cDropdownItem href="#" id="link">Link</a></li>
         <li><input id="field" /></li>
+        <li><input type="checkbox" id="check" /></li>
       </ul>
     </c-dropdown>
   `,
@@ -146,8 +147,28 @@ describe('DropdownMenuDirective Space', () => {
 
     expect(press(menu.querySelector('#button'), 'Space')).toBe(false);
     expect(press(menu.querySelector('#field'), 'Space')).toBe(false);
+    expect(press(menu.querySelector('#check'), 'Space')).toBe(false);
     expect(press(menu.querySelector('#link'), 'Space')).toBe(true);
     expect(press(menu, 'Space')).toBe(true);
     expect(press(menu.querySelector('#button'), 'ArrowDown')).toBe(true);
+  });
+
+  it('should leave every key to a form control inside the menu', () => {
+    const fixture = TestBed.createComponent(SpaceTestComponent);
+    fixture.detectChanges();
+    const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
+    const field: HTMLInputElement = menu.querySelector('#field');
+    field.focus();
+    for (const [key, keyCode] of [
+      ['Home', 36],
+      ['End', 35],
+      ['ArrowDown', 40],
+      ['ArrowUp', 38]
+    ] as const) {
+      const event = new KeyboardEvent('keydown', { key, keyCode, bubbles: true, cancelable: true });
+      field.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(false);
+      expect(document.activeElement).toBe(field);
+    }
   });
 });

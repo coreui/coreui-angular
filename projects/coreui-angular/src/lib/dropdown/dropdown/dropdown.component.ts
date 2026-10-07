@@ -1,5 +1,4 @@
 import {
-  afterNextRender,
   AfterViewInit,
   booleanAttribute,
   ChangeDetectorRef,
@@ -32,6 +31,7 @@ import { DropdownAlignment } from '../../coreui.types';
 import { ThemeDirective } from '../../shared';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from '../dropdown.service';
+import { clicksOnEnter, isEditableTarget } from '../dropdown.utils';
 
 // lightweight injection token
 export abstract class DropdownToken {}
@@ -61,13 +61,6 @@ export class DropdownToggleDirective implements AfterViewInit {
     if (!element.hasAttribute('role')) {
       this.#renderer.setAttribute(element, 'role', 'button');
     }
-    afterNextRender({
-      write: () => {
-        if (!element.hasAttribute('href') && !element.hasAttribute('tabindex')) {
-          this.#renderer.setAttribute(element, 'tabindex', '0');
-        }
-      }
-    });
   }
 
   /**
@@ -128,21 +121,16 @@ export class DropdownToggleDirective implements AfterViewInit {
   }
 
   onKeyDown($event: KeyboardEvent): void {
+    if (this.disabled() || isEditableTarget($event.target)) {
+      return;
+    }
     const element: HTMLElement = this.elementRef.nativeElement;
-    if (
-      !this.disabled() &&
-      element.tagName === 'A' &&
-      ($event.key === ' ' || ($event.key === 'Enter' && !element.hasAttribute('href')))
-    ) {
+    if (element.tagName === 'A' && ($event.key === ' ' || ($event.key === 'Enter' && !clicksOnEnter(element)))) {
       $event.preventDefault();
       element.click();
       return;
     }
-    if (
-      this.disabled() ||
-      !['ArrowDown', 'ArrowUp'].includes($event.key) ||
-      /^(input|textarea)$/i.test(($event.target as HTMLElement).tagName)
-    ) {
+    if (!['ArrowDown', 'ArrowUp'].includes($event.key)) {
       return;
     }
     $event.preventDefault();
@@ -158,6 +146,7 @@ export class DropdownToggleDirective implements AfterViewInit {
     if (dropdownComponent) {
       this.dropdown = dropdownComponent;
       this.#dropdownService = dropdownComponent?.dropdownService;
+      dropdownComponent.toggler = this;
     }
   }
 }
@@ -326,6 +315,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   dropdownContext = { $implicit: this.visible() };
   readonly _toggler = contentChild(DropdownToggleDirective);
+  toggler?: DropdownToggleDirective;
   readonly _menu = contentChild(DropdownMenuDirective);
   readonly _menuElementRef = contentChild(DropdownMenuDirective, { read: ElementRef });
 
@@ -405,7 +395,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   // todo: turn off popper in navbar-nav
   createPopperInstance(): void {
-    const _toggler = this._toggler();
+    const _toggler = this._toggler() ?? this.toggler;
     const _menu = this._menu();
     if (_toggler && _menu) {
       this.#ngZone.runOutsideAngular(() => {
@@ -465,7 +455,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
           const focusInMenu = this._menuElementRef()?.nativeElement.contains(this.#document.activeElement);
           this.setVisibleState(false);
           if (focusInMenu) {
-            this._toggler()?.elementRef.nativeElement.focus();
+            (this._toggler() ?? this.toggler)?.elementRef.nativeElement.focus();
           }
           return;
         }

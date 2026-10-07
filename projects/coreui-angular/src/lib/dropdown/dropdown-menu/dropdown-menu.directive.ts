@@ -22,6 +22,7 @@ import { ThemeDirective } from '../../shared/theme.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
 import { BreakpointInfix, DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
+import { clicksOnSpace, isEditableTarget } from '../dropdown.utils';
 
 @Directive({
   selector: '[cDropdownMenu]',
@@ -82,17 +83,19 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly dataPopper = computed(() => (this.#dropdownService.popper() ? null : 'static'));
 
   onKeyDown($event: KeyboardEvent): void {
-    if (!this.visible()) {
+    if (!this.visible() || isEditableTarget($event.target)) {
       return;
     }
-    if ($event.code === 'ArrowDown' || ($event.code === 'Space' && !this.#handlesSpace($event.target))) {
+    if ($event.code === 'ArrowDown' || ($event.code === 'Space' && !this.#clicksOnSpace($event.target))) {
       $event.preventDefault();
     }
     this.#focusKeyManager.onKeydown($event);
   }
 
   onFocusIn($event: FocusEvent): void {
-    const index = this.itemElements().findIndex(({ nativeElement }) => nativeElement.contains($event.target));
+    const index = this.dropdownItemsContent().findIndex((item) =>
+      item.elementRef.nativeElement.contains($event.target)
+    );
     if (index > -1) {
       this.#focusKeyManager.updateActiveItem(index);
     }
@@ -101,11 +104,6 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly dropdownItemsContent = contentChildren<DropdownItemDirective>(
     forwardRef(() => DropdownItemDirective),
     { descendants: true }
-  );
-
-  private readonly itemElements = contentChildren(
-    forwardRef(() => DropdownItemDirective),
-    { descendants: true, read: ElementRef }
   );
 
   readonly items$ = toObservable(this.dropdownItemsContent);
@@ -148,9 +146,8 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
       .subscribe();
   }
 
-  #handlesSpace(target: EventTarget | null): boolean {
-    const control = (target as Element | null)?.closest?.('button, input, select, textarea, [contenteditable]');
-    return !!control && this.elementRef.nativeElement.contains(control);
+  #clicksOnSpace(target: EventTarget | null): boolean {
+    return target instanceof Element && clicksOnSpace(target);
   }
 
   private focusKeyManagerInit(): void {

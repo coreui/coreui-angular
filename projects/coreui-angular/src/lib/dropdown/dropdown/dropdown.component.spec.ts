@@ -86,7 +86,7 @@ describe('DropdownToggleDirective', () => {
         { provide: ElementRef, useClass: MockElementRef },
         DropdownService,
         DropdownComponent,
-        Renderer2
+        { provide: Renderer2, useValue: { setAttribute: vi.fn() } }
         // ChangeDetectorRef
       ]
     });
@@ -375,11 +375,16 @@ describe('Dropdown keyboard', () => {
       <a cDropdownToggle routerLink="/route" id="router">Router</a>
       <ul cDropdownMenu></ul>
     </c-dropdown>
+    <c-dropdown [(visible)]="nestedVisible">
+      <a cDropdownToggle id="nested">Search <input id="nestedField" /></a>
+      <ul cDropdownMenu></ul>
+    </c-dropdown>
   `,
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective, RouterLink]
 })
 class AnchorToggleComponent {
   readonly visible = signal(false);
+  readonly nestedVisible = signal(false);
 }
 
 describe('DropdownToggleDirective on anchor', () => {
@@ -400,9 +405,9 @@ describe('DropdownToggleDirective on anchor', () => {
     await fixture.whenStable();
   });
 
-  it('should expose an anchor toggle as a focusable button', () => {
+  it('should expose an anchor toggle as a button and keep its tabindex and href', () => {
     expect(element('toggle').getAttribute('role')).toBe('button');
-    expect(element('toggle').getAttribute('tabindex')).toBe('0');
+    expect(element('toggle').hasAttribute('tabindex')).toBe(false);
     expect(element('link').getAttribute('role')).toBe('button');
     expect(element('link').hasAttribute('tabindex')).toBe(false);
     expect(element('custom').getAttribute('role')).toBe('tab');
@@ -422,7 +427,52 @@ describe('DropdownToggleDirective on anchor', () => {
     expect(fixture.componentInstance.visible()).toBe(false);
   });
 
+  it('should leave Space and Enter to a field inside an anchor toggle', async () => {
+    const field = element('nestedField');
+    field.focus();
+    expect(await keydown(field, ' ')).toBe(false);
+    expect(await keydown(field, 'Enter')).toBe(false);
+    expect(fixture.componentInstance.nestedVisible()).toBe(false);
+  });
+
   it('should leave Enter on an anchor with href to the native click', async () => {
     expect(await keydown(element('link'), 'Enter')).toBe(false);
+  });
+});
+
+@Component({
+  template: `
+    <button cDropdownToggle [dropdownComponent]="dd" id="external">External</button>
+    <c-dropdown #dd="cDropdown" [(visible)]="visible">
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="item">One</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class ExternalToggleComponent {
+  readonly visible = signal(false);
+}
+
+describe('DropdownToggleDirective outside the dropdown', () => {
+  it('should close on Escape and focus the external toggle', async () => {
+    const fixture = TestBed.createComponent(ExternalToggleComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const toggle: HTMLElement = fixture.nativeElement.querySelector('#external');
+    const item: HTMLElement = fixture.nativeElement.querySelector('#item');
+
+    toggle.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+
+    item.focus();
+    item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(toggle);
   });
 });
