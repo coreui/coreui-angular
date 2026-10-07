@@ -95,6 +95,7 @@ describe('DropdownItemDirective', () => {
         <li><a cDropdownItem href="#" id="link">Link</a></li>
         <li><input type="button" cDropdownItem id="inputButton" value="Go" /></li>
         <li cDropdownItem id="host"><button id="inner">Inner</button></li>
+        <li cDropdownItem id="fieldHost"><input id="query" /></li>
         <li><div cDropdownItem id="plain">Plain</div></li>
       </ul>
     </c-dropdown>
@@ -124,6 +125,8 @@ describe('DropdownItemDirective Enter', () => {
     keyup('inputButton');
     expect(dropdown.visible()).toBe(true);
     keyup('inner');
+    expect(dropdown.visible()).toBe(true);
+    keyup('query');
     expect(dropdown.visible()).toBe(true);
     keyup('plain');
     expect(dropdown.visible()).toBe(false);

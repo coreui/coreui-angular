@@ -33,7 +33,8 @@ import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive'
 import { DropdownService } from '../dropdown.service';
 import { clicksOnEnter, isEditableTarget } from '../dropdown.utils';
 
-const INTERACTIVE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 // lightweight injection token
 export abstract class DropdownToken {}
@@ -117,7 +118,11 @@ export class DropdownToggleDirective implements AfterViewInit {
       return;
     }
     const element: HTMLElement = this.elementRef.nativeElement;
-    if (element.tagName === 'A' && ($event.key === ' ' || ($event.key === 'Enter' && !clicksOnEnter(element)))) {
+    if (
+      $event.target === element &&
+      element.tagName === 'A' &&
+      ($event.key === ' ' || ($event.key === 'Enter' && !clicksOnEnter(element)))
+    ) {
       $event.preventDefault();
       if (!$event.repeat) {
         element.click();
@@ -135,11 +140,14 @@ export class DropdownToggleDirective implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    const element: HTMLElement = this.elementRef.nativeElement;
-    if (element.tagName === 'A' && !element.hasAttribute('role') && !element.querySelector(INTERACTIVE_SELECTOR)) {
+  constructor() {
+    const element: HTMLElement | undefined = this.elementRef.nativeElement;
+    if (element?.tagName === 'A' && !element.hasAttribute('role')) {
       this.#renderer.setAttribute(element, 'role', 'button');
     }
+  }
+
+  ngAfterViewInit(): void {
     const dropdownComponent = this.dropdownComponent();
     if (dropdownComponent) {
       this.dropdown = dropdownComponent;
@@ -446,28 +454,37 @@ export class DropdownComponent implements OnDestroy, OnInit {
         }
       })
     );
+    this.listeners.push(this.#renderer.listen(this.#elementRef.nativeElement, 'keyup', this.#onEscape));
+    const toggler = this.#togglerElement();
+    if (toggler && !this.#elementRef.nativeElement.contains(toggler)) {
+      this.listeners.push(this.#renderer.listen(toggler, 'keyup', this.#onEscape));
+    }
     this.listeners.push(
-      this.#renderer.listen(this.#document, 'keyup', (event) => {
-        if (this.autoClose() === false) {
-          return;
-        }
-        const inside =
-          this.#elementRef.nativeElement.contains(event.target) || this.#togglerElement()?.contains(event.target);
-        if (event.key === 'Escape' && inside) {
-          event.stopPropagation();
-          const focusInMenu = this._menuElementRef()?.nativeElement.contains(this.#document.activeElement);
-          this.setVisibleState(false);
-          if (focusInMenu) {
-            this.#focusToggler();
-          }
-          return;
-        }
-        if (event.key === 'Tab' && !inside) {
+      this.#renderer.listen(this.#document, 'keyup', (event: KeyboardEvent) => {
+        const target = event.composedPath()[0] as Node;
+        if (
+          event.key === 'Tab' &&
+          this.autoClose() !== false &&
+          !this.#elementRef.nativeElement.contains(target) &&
+          !this.#togglerElement()?.contains(target)
+        ) {
           this.setVisibleState(false);
         }
       })
     );
   }
+
+  readonly #onEscape = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape' || this.autoClose() === false) {
+      return;
+    }
+    event.stopPropagation();
+    const focusInMenu = this._menuElementRef()?.nativeElement.contains(this.#document.activeElement);
+    this.setVisibleState(false);
+    if (focusInMenu) {
+      this.#focusToggler();
+    }
+  };
 
   #togglerElement(): HTMLElement | undefined {
     return (this._toggler() ?? this.toggler)?.elementRef.nativeElement;
@@ -475,9 +492,18 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   #focusToggler(): void {
     const toggler = this.#togglerElement();
-    toggler?.focus();
-    if (toggler && this.#document.activeElement !== toggler) {
-      toggler.querySelector<HTMLElement>(INTERACTIVE_SELECTOR)?.focus();
+    if (!toggler) {
+      return;
+    }
+    const candidates = [toggler, ...toggler.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)];
+    for (const candidate of candidates) {
+      if (candidate.getAttribute('aria-hidden') === 'true') {
+        continue;
+      }
+      candidate.focus();
+      if (this.#document.activeElement === candidate) {
+        return;
+      }
     }
   }
 

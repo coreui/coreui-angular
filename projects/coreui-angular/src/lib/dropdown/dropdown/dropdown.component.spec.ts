@@ -248,7 +248,7 @@ describe('DropdownComponent alignment scope', () => {
 @Component({
   template: `
     <c-dropdown [(visible)]="visible">
-      <button cDropdownToggle [disabled]="disabled()" id="toggle">Toggle <input id="field" /></button>
+      <button cDropdownToggle id="toggle">Toggle <input id="field" /></button>
       <ul cDropdownMenu>
         <li><button cDropdownItem>One</button></li>
         <li><button cDropdownItem>Two</button></li>
@@ -259,7 +259,6 @@ describe('DropdownComponent alignment scope', () => {
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
 })
 class KeyboardTestComponent {
-  readonly disabled = signal(false);
   readonly visible = signal(false);
 }
 
@@ -330,13 +329,6 @@ describe('Dropdown keyboard', () => {
     expect(document.activeElement).toBe(items[0]);
   });
 
-  it('should ignore the arrows on a disabled toggle', async () => {
-    fixture.componentInstance.disabled.set(true);
-    fixture.detectChanges();
-    await keydown(toggle, 'ArrowDown');
-    expect(fixture.componentInstance.visible()).toBe(false);
-  });
-
   it('should move focus to the first item only after the menu rendered', async () => {
     const dropdownRef = fixture.debugElement.query(By.directive(DropdownComponent));
     const service = dropdownRef.injector.get(DropdownService);
@@ -403,13 +395,18 @@ describe('Dropdown keyboard', () => {
       <ul cDropdownMenu></ul>
     </c-dropdown>
     <c-dropdown [(visible)]="nestedVisible">
-      <a cDropdownToggle id="nested">Search <input id="nestedField" /></a>
+      <a cDropdownToggle id="nested">Search <input id="nestedField" /> <input type="submit" id="go" value="Go" /></a>
+      <ul cDropdownMenu></ul>
+    </c-dropdown>
+    <c-dropdown [(visible)]="disabledVisible">
+      <a cDropdownToggle href="#" [disabled]="true" id="disabledAnchor">Off</a>
       <ul cDropdownMenu></ul>
     </c-dropdown>
   `,
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective, RouterLink]
 })
 class AnchorToggleComponent {
+  readonly disabledVisible = signal(false);
   readonly visible = signal(false);
   readonly nestedVisible = signal(false);
 }
@@ -463,8 +460,21 @@ describe('DropdownToggleDirective on anchor', () => {
     expect(fixture.componentInstance.visible()).toBe(true);
   });
 
-  it('should not force a role on an anchor toggle with interactive content', () => {
-    expect(element('nested').hasAttribute('role')).toBe(false);
+  it('should expose an anchor toggle with interactive content as a button too', () => {
+    expect(element('nested').getAttribute('role')).toBe('button');
+  });
+
+  it('should leave Enter and Space to a native control inside an anchor toggle', async () => {
+    const go = element('go');
+    go.focus();
+    expect(await keydown(go, 'Enter')).toBe(false);
+    expect(await keydown(go, ' ')).toBe(false);
+    expect(fixture.componentInstance.nestedVisible()).toBe(false);
+  });
+
+  it('should ignore the arrows on a disabled anchor toggle', async () => {
+    await keydown(element('disabledAnchor'), 'ArrowDown');
+    expect(fixture.componentInstance.disabledVisible()).toBe(false);
   });
 
   it('should leave Space and Enter to a field inside an anchor toggle', async () => {
@@ -549,7 +559,13 @@ describe('DropdownToggleDirective outside the dropdown', () => {
 @Component({
   template: `
     <c-dropdown [(visible)]="visible">
-      <div cDropdownToggle id="group"><input id="field" /></div>
+      <div cDropdownToggle id="group">
+        <input type="hidden" name="v" />
+        <span tabindex="-1" id="icon"></span>
+        <input aria-hidden="true" tabindex="-1" id="hint" />
+        <button disabled id="off">x</button>
+        <input id="field" />
+      </div>
       <ul cDropdownMenu>
         <li><button cDropdownItem id="item">One</button></li>
       </ul>
@@ -574,5 +590,51 @@ describe('DropdownToggleDirective on a non-focusable host', () => {
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#field'));
+  });
+});
+
+@Component({
+  template: `
+    <div (keyup.escape)="panelClosed = true" tabindex="-1">
+      <c-dropdown autoClose="outside" [(visible)]="outer">
+        <button cDropdownToggle id="outerToggle">Outer</button>
+        <div cDropdownMenu>
+          <c-dropdown [(visible)]="inner">
+            <button cDropdownToggle id="innerToggle">Inner</button>
+            <ul cDropdownMenu>
+              <li><button cDropdownItem id="innerItem">One</button></li>
+            </ul>
+          </c-dropdown>
+        </div>
+      </c-dropdown>
+    </div>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class NestedDropdownComponent {
+  readonly inner = signal(false);
+  readonly outer = signal(false);
+  panelClosed = false;
+}
+
+describe('DropdownComponent nested', () => {
+  it('should close only the inner dropdown on Escape and keep it from ancestors', async () => {
+    const fixture = TestBed.createComponent(NestedDropdownComponent);
+    const component = fixture.componentInstance;
+    component.outer.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    component.inner.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const innerItem: HTMLElement = fixture.nativeElement.querySelector('#innerItem');
+    innerItem.focus();
+    innerItem.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(component.inner()).toBe(false);
+    expect(component.outer()).toBe(true);
+    expect(component.panelClosed).toBe(false);
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#innerToggle'));
   });
 });

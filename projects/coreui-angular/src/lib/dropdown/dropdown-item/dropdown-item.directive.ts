@@ -1,7 +1,7 @@
 import { FocusableOption, FocusOrigin } from '@angular/cdk/a11y';
 import { booleanAttribute, computed, Directive, ElementRef, inject, input, linkedSignal } from '@angular/core';
 import { DropdownService } from '../dropdown.service';
-import { clicksOnEnter } from '../dropdown.utils';
+import { clicksOnEnter, isEditableTarget } from '../dropdown.utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 
 @Directive({
@@ -98,7 +98,8 @@ export class DropdownItemDirective implements FocusableOption {
   }
 
   onKeyUp($event: KeyboardEvent): void {
-    if ($event.key === 'Enter' && !clicksOnEnter($event.target as Element)) {
+    const target = $event.target as Element;
+    if ($event.key === 'Enter' && !isEditableTarget(target) && !clicksOnEnter(target)) {
       this.handleInteraction();
     }
   }
