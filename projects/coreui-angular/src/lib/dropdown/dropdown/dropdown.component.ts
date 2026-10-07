@@ -31,7 +31,7 @@ import { DropdownAlignment } from '../../coreui.types';
 import { ThemeDirective } from '../../shared';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from '../dropdown.service';
-import { clicksOnEnter, isEditableTarget } from '../dropdown.utils';
+import { clicksOnEnter, isEditableTarget, isReplayedEvent } from '../dropdown.utils';
 
 const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
 
@@ -113,7 +113,7 @@ export class DropdownToggleDirective implements AfterViewInit {
   }
 
   onKeyDown($event: KeyboardEvent): void {
-    if (this.disabled() || isEditableTarget($event.target)) {
+    if (this.disabled() || isReplayedEvent($event) || isEditableTarget($event.target)) {
       return;
     }
     const element: HTMLElement = this.elementRef.nativeElement;
@@ -123,6 +123,7 @@ export class DropdownToggleDirective implements AfterViewInit {
       ($event.key === ' ' || ($event.key === 'Enter' && !clicksOnEnter(element)))
     ) {
       $event.preventDefault();
+      $event.stopPropagation();
       if (!$event.repeat) {
         element.click();
       }
@@ -132,6 +133,7 @@ export class DropdownToggleDirective implements AfterViewInit {
       return;
     }
     $event.preventDefault();
+    $event.stopPropagation();
     this.#dropdownService.toggle({
       visible: true,
       dropdown: this.dropdown,

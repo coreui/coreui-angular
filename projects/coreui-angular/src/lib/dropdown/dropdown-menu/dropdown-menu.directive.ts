@@ -22,7 +22,7 @@ import { ThemeDirective } from '../../shared/theme.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
 import { BreakpointInfix, DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
-import { clicksOnSpace, isEditableTarget } from '../dropdown.utils';
+import { clicksOnSpace, isEditableTarget, isReplayedEvent } from '../dropdown.utils';
 
 @Directive({
   selector: '[cDropdownMenu]',
@@ -83,7 +83,7 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly dataPopper = computed(() => (this.#dropdownService.popper() ? null : 'static'));
 
   onKeyDown($event: KeyboardEvent): void {
-    if (!this.visible() || isEditableTarget($event.target)) {
+    if (!this.visible() || isReplayedEvent($event) || isEditableTarget($event.target)) {
       return;
     }
     if ($event.code === 'ArrowDown' || ($event.code === 'Space' && !this.#clicksOnSpace($event.target))) {

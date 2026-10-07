@@ -1,5 +1,5 @@
 /// <reference types="vitest/globals" />
-import { clicksOnEnter, clicksOnSpace, isEditableTarget } from './dropdown.utils';
+import { clicksOnEnter, clicksOnSpace, isEditableTarget, isReplayedEvent } from './dropdown.utils';
 
 const element = (html: string): Element => {
   const template = document.createElement('template');
@@ -95,5 +95,13 @@ describe('dropdown.utils', () => {
     expect(clicksOnSpace(element('<summary>s</summary>'))).toBe(true);
     expect(clicksOnSpace(element('<a href="#">a</a>'))).toBe(false);
     expect(clicksOnSpace(element('<input type="text" />'))).toBe(false);
+  });
+
+  it('isReplayedEvent should recognise the replay phase', () => {
+    const live = new KeyboardEvent('keydown');
+    const replay = new KeyboardEvent('keydown');
+    Object.defineProperty(replay, 'eventPhase', { value: 101 });
+    expect(isReplayedEvent(live)).toBe(false);
+    expect(isReplayedEvent(replay)).toBe(true);
   });
 });

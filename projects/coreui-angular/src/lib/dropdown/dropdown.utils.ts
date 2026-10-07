@@ -1,3 +1,10 @@
+const REPLAY_EVENT_PHASE = 101;
+
+/**
+ * Whether Angular is replaying the event after hydration (`EventPhase.REPLAY`); such an event cannot be prevented.
+ */
+export const isReplayedEvent = (event: Event): boolean => event.eventPhase === REPLAY_EVENT_PHASE;
+
 const FORM_CONTROL_SELECTOR =
   'input:not([type="button"]):not([type="image"]):not([type="reset"]):not([type="submit"]), select, textarea';
 
