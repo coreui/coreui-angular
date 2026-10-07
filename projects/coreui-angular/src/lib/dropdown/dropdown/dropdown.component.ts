@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   AfterViewInit,
   booleanAttribute,
   ChangeDetectorRef,
@@ -54,14 +55,19 @@ export class DropdownToggleDirective implements AfterViewInit {
 
   constructor() {
     const element: HTMLElement | undefined = this.elementRef.nativeElement;
-    if (element?.tagName === 'A') {
-      if (!element.hasAttribute('role')) {
-        this.#renderer.setAttribute(element, 'role', 'button');
-      }
-      if (!element.hasAttribute('href') && !element.hasAttribute('tabindex')) {
-        this.#renderer.setAttribute(element, 'tabindex', '0');
-      }
+    if (element?.tagName !== 'A') {
+      return;
     }
+    if (!element.hasAttribute('role')) {
+      this.#renderer.setAttribute(element, 'role', 'button');
+    }
+    afterNextRender({
+      write: () => {
+        if (!element.hasAttribute('href') && !element.hasAttribute('tabindex')) {
+          this.#renderer.setAttribute(element, 'tabindex', '0');
+        }
+      }
+    });
   }
 
   /**

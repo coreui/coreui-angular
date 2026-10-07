@@ -5,6 +5,7 @@ import { Component, DebugElement, DOCUMENT, ElementRef, input, Renderer2, signal
 import { DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
 import { By } from '@angular/platform-browser';
+import { provideRouter, RouterLink } from '@angular/router';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
 
@@ -370,8 +371,12 @@ describe('Dropdown keyboard', () => {
       <button cDropdownToggle id="button">Button</button>
       <ul cDropdownMenu></ul>
     </c-dropdown>
+    <c-dropdown>
+      <a cDropdownToggle routerLink="/route" id="router">Router</a>
+      <ul cDropdownMenu></ul>
+    </c-dropdown>
   `,
-  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective, RouterLink]
 })
 class AnchorToggleComponent {
   readonly visible = signal(false);
@@ -389,6 +394,7 @@ describe('DropdownToggleDirective on anchor', () => {
   };
 
   beforeEach(async () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
     fixture = TestBed.createComponent(AnchorToggleComponent);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -403,6 +409,9 @@ describe('DropdownToggleDirective on anchor', () => {
     expect(element('custom').getAttribute('tabindex')).toBe('-1');
     expect(element('button').hasAttribute('role')).toBe(false);
     expect(element('button').hasAttribute('tabindex')).toBe(false);
+    expect(element('router').getAttribute('href')).toBe('/route');
+    expect(element('router').getAttribute('role')).toBe('button');
+    expect(element('router').hasAttribute('tabindex')).toBe(false);
   });
 
   it('should toggle an anchor without href on Enter and Space', async () => {
