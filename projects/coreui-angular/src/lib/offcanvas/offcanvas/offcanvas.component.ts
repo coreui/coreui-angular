@@ -4,6 +4,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
+  afterEveryRender,
   booleanAttribute,
   Component,
   computed,
@@ -19,6 +20,7 @@ import {
   output,
   PLATFORM_ID,
   Renderer2,
+  signal,
   untracked
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -41,11 +43,12 @@ let nextId = 0;
   host: {
     '[attr.id]': 'id()',
     '[inert]': 'ariaHidden()',
-    '[attr.role]': 'role()',
-    '[aria-modal]': 'ariaModal()',
+    '[attr.role]': 'visible() ? role() : null',
+    '[aria-modal]': 'visible() ? ariaModal() : null',
     '[attr.tabindex]': 'tabIndex',
     '[class]': 'hostClasses()',
-    '(document:keydown)': 'onKeyDownHandler($event)'
+    '(document:keydown)': 'onKeyDownHandler($event)',
+    '(window:resize)': 'onResizeHandler()'
   }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
@@ -116,14 +119,14 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly id = input(`offcanvas-${this.placement()}-${nextId++}`);
 
   /**
-   * Default role for offcanvas
+   * Role attribute rendered while the offcanvas is open
    * @returns string
    * @default 'dialog'
    */
   readonly role = input<string>('dialog');
 
   /**
-   * Set aria-modal html attr for offcanvas
+   * aria-modal attribute rendered while the offcanvas is open
    * @returns boolean
    * @default true
    */
@@ -134,6 +137,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #layoutChangeSubscription!: Subscription;
   #hideFallbackId?: ReturnType<typeof setTimeout>;
   #isShown = false;
+  readonly #inPlace = signal(false);
 
   /**
    * Allow body scrolling while offcanvas is visible.
@@ -180,6 +184,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     });
   });
 
+  readonly #afterEveryRenderFn = afterEveryRender({ read: () => this.#readPosition() });
+
   readonly visibleEffect = effect(() => {
     const visible = this.visible();
     this.animateStart(visible);
@@ -212,7 +218,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   });
 
   readonly ariaHidden = computed(() => {
-    return this.visible() ? null : true;
+    return this.visible() || this.#inPlace() ? null : true;
   });
 
   get tabIndex(): string | null {
@@ -252,8 +258,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       this.#renderer.addClass(this.#hostElement.nativeElement, 'showing');
     } else {
       this.#renderer.removeClass(this.#hostElement.nativeElement, 'showing');
-      this.#renderer.addClass(this.#hostElement.nativeElement, 'hiding');
       if (wasShown) {
+        this.#renderer.addClass(this.#hostElement.nativeElement, 'hiding');
         this.#scheduleHideFallback();
       }
     }
@@ -263,6 +269,10 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     if (event.key === 'Escape' && this.keyboard() && this.visible() && this.backdrop() !== 'static') {
       this.#offcanvasService.toggle({ show: false, id: this.id() });
     }
+  }
+
+  onResizeHandler(): void {
+    this.#readPosition();
   }
 
   ngOnInit(): void {
@@ -319,6 +329,11 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #clearHideFallback(): void {
     clearTimeout(this.#hideFallbackId);
     this.#hideFallbackId = undefined;
+  }
+
+  #readPosition(): void {
+    const position = this.#document.defaultView?.getComputedStyle(this.#hostElement.nativeElement).position;
+    this.#inPlace.set(!!position && position !== 'fixed');
   }
 
   setFocus(): void {

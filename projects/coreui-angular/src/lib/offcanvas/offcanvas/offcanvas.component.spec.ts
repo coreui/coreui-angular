@@ -1,6 +1,8 @@
 /// <reference types="vitest/globals" />
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { ComponentRef, DOCUMENT } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { OffcanvasComponent } from './offcanvas.component';
 
@@ -21,6 +23,7 @@ describe('OffcanvasComponent', () => {
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     document = TestBed.inject(DOCUMENT);
+    fixture.nativeElement.style.position = 'fixed';
     fixture.detectChanges();
 
     vi.useFakeTimers();
@@ -107,6 +110,69 @@ describe('OffcanvasComponent', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     expect(fixture.componentInstance.responsiveBreakpoint).toBe(false);
+  });
+
+  it('should not carry the hiding class before it was ever shown', async () => {
+    await vi.runAllTimersAsync();
+    expect(fixture.nativeElement.classList.contains('hiding')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('showing')).toBe(false);
+  });
+
+  it('should add the hiding class only for a real hide transition', async () => {
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('hiding')).toBe(true);
+    await vi.runAllTimersAsync();
+    expect(fixture.nativeElement.classList.contains('hiding')).toBe(false);
+  });
+
+  it('should render role and aria-modal only while open', async () => {
+    expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+    expect(fixture.nativeElement.getAttribute('aria-modal')).toBeNull();
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('role')).toBe('dialog');
+    expect(fixture.nativeElement.getAttribute('aria-modal')).toBe('true');
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+    expect(fixture.nativeElement.getAttribute('aria-modal')).toBeNull();
+  });
+
+  it('should set inert only when the closed offcanvas is positioned as a panel', async () => {
+    expect(fixture.nativeElement.inert).toBe(true);
+    fixture.nativeElement.style.position = 'static';
+    fixture.detectChanges();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBeFalsy();
+  });
+
+  it('should re-evaluate the panel position on window resize', async () => {
+    expect(componentRef.instance.ariaHidden()).toBe(true);
+    fixture.nativeElement.style.position = 'static';
+    window.dispatchEvent(new Event('resize'));
+    expect(componentRef.instance.ariaHidden()).toBeNull();
+  });
+
+  it('should re-evaluate the panel position when responsive changes', async () => {
+    fixture.nativeElement.style.position = 'static';
+    componentRef.setInput('responsive', 'lg');
+    fixture.detectChanges();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('offcanvas-lg')).toBe(true);
+    expect(fixture.nativeElement.inert).toBeFalsy();
+  });
+
+  it('should enable the focus trap only while open', async () => {
+    const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+    expect(trap.enabled).toBe(false);
+    expect(trap.autoCapture).toBe(false);
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    expect(trap.enabled).toBe(true);
   });
 
   describe('with portal', () => {
