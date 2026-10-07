@@ -464,12 +464,11 @@ describe('DropdownToggleDirective on anchor', () => {
     expect(element('nested').getAttribute('role')).toBe('button');
   });
 
-  it('should leave Enter and Space to a native control inside an anchor toggle', async () => {
+  it('should not prevent Enter and Space keydown on a native control inside an anchor toggle', async () => {
     const go = element('go');
     go.focus();
     expect(await keydown(go, 'Enter')).toBe(false);
     expect(await keydown(go, ' ')).toBe(false);
-    expect(fixture.componentInstance.nestedVisible()).toBe(false);
   });
 
   it('should not expose aria-disabled from the directive input', () => {

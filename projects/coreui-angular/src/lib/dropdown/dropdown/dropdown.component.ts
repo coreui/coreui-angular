@@ -113,7 +113,7 @@ export class DropdownToggleDirective implements AfterViewInit {
   }
 
   onKeyDown($event: KeyboardEvent): void {
-    if (this.disabled() || isEditableTarget($event.target)) {
+    if (this.disabled() || isEditableTarget($event.composedPath()[0])) {
       return;
     }
     const element: HTMLElement = this.elementRef.nativeElement;

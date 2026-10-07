@@ -11,8 +11,20 @@ export const isEditableTarget = (target: EventTarget | null): boolean => {
   if (target.closest(FORM_CONTROL_SELECTOR)) {
     return true;
   }
-  const editable = target.closest('[contenteditable]');
-  return editable !== null && editable.getAttribute('contenteditable')?.toLowerCase() !== 'false';
+  for (
+    let host = target.closest('[contenteditable]');
+    host;
+    host = host.parentElement?.closest('[contenteditable]') ?? null
+  ) {
+    const value = host.getAttribute('contenteditable')?.toLowerCase();
+    if (value === '' || value === 'true' || value === 'plaintext-only') {
+      return true;
+    }
+    if (value === 'false') {
+      return false;
+    }
+  }
+  return false;
 };
 
 /**

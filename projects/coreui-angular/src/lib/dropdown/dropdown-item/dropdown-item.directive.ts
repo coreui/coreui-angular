@@ -98,7 +98,7 @@ export class DropdownItemDirective implements FocusableOption {
   }
 
   onKeyUp($event: KeyboardEvent): void {
-    const target = $event.target as Element;
+    const target = $event.composedPath()[0] as Element;
     if ($event.key === 'Enter' && !isEditableTarget(target) && !clicksOnEnter(target)) {
       this.handleInteraction();
     }

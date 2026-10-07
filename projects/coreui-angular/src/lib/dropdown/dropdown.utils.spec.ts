@@ -28,6 +28,23 @@ describe('dropdown.utils', () => {
     );
     expect(
       isEditableTarget(
+        element(
+          '<div contenteditable="false"><span contenteditable="inherit"><b id="u">u</b></span></div>'
+        ).querySelector('#u')
+      )
+    ).toBe(false);
+    expect(isEditableTarget(element('<div contenteditable="foo"><b id="t">t</b></div>').querySelector('#t'))).toBe(
+      false
+    );
+    expect(
+      isEditableTarget(
+        element(
+          '<div contenteditable="true"><span contenteditable="inherit"><b id="s">s</b></span></div>'
+        ).querySelector('#s')
+      )
+    ).toBe(true);
+    expect(
+      isEditableTarget(
         element('<div contenteditable="false"><span contenteditable=""><b id="v">v</b></span></div>').querySelector(
           '#v'
         )

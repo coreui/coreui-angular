@@ -83,7 +83,7 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly dataPopper = computed(() => (this.#dropdownService.popper() ? null : 'static'));
 
   onKeyDown($event: KeyboardEvent): void {
-    if (!this.visible() || isEditableTarget($event.target)) {
+    if (!this.visible() || isEditableTarget($event.composedPath()[0])) {
       return;
     }
     if ($event.code === 'ArrowDown' || ($event.code === 'Space' && !this.#clicksOnSpace($event.target))) {
