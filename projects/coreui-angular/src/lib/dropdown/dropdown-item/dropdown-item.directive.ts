@@ -97,9 +97,14 @@ export class DropdownItemDirective implements FocusableOption {
   }
 
   onKeyUp($event: KeyboardEvent): void {
-    if ($event.key === 'Enter') {
+    if ($event.key === 'Enter' && !this.#clicksOnEnter()) {
       this.handleInteraction();
     }
+  }
+
+  #clicksOnEnter(): boolean {
+    const element: HTMLElement = this.#elementRef.nativeElement;
+    return element.tagName === 'BUTTON' || (element.tagName === 'A' && element.hasAttribute('href'));
   }
 
   private handleInteraction(): void {

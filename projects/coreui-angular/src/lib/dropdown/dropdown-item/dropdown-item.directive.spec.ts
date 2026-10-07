@@ -85,3 +85,38 @@ describe('DropdownItemDirective', () => {
     expect(document.activeElement).toBe(elementRef.nativeElement);
   });
 });
+
+@Component({
+  template: `
+    <c-dropdown visible>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="button">Action</button></li>
+        <li><a cDropdownItem href="#" id="link">Link</a></li>
+        <li><div cDropdownItem id="plain">Plain</div></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class EnterTestComponent {
+  readonly dropdown = viewChild.required(DropdownComponent);
+}
+
+describe('DropdownItemDirective Enter', () => {
+  it('should toggle on Enter keyup only for items without a native Enter click', () => {
+    const fixture = TestBed.createComponent(EnterTestComponent);
+    fixture.detectChanges();
+    const dropdown = fixture.componentInstance.dropdown();
+    const keyup = (id: string) => {
+      fixture.nativeElement.querySelector(`#${id}`).dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
+      fixture.detectChanges();
+    };
+
+    keyup('button');
+    expect(dropdown.visible()).toBe(true);
+    keyup('link');
+    expect(dropdown.visible()).toBe(true);
+    keyup('plain');
+    expect(dropdown.visible()).toBe(false);
+  });
+});
