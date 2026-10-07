@@ -6,6 +6,7 @@ export interface IOffcanvasAction {
   show?: boolean | 'toggle';
   offcanvas?: OffcanvasComponent;
   id?: string;
+  trigger?: HTMLElement;
 }
 
 @Injectable({

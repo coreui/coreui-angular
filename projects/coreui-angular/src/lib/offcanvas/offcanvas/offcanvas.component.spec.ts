@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { OffcanvasComponent } from './offcanvas.component';
+import { OffcanvasService } from '../offcanvas.service';
 
 describe('OffcanvasComponent', () => {
   let component: OffcanvasComponent;
@@ -176,6 +177,81 @@ describe('OffcanvasComponent', () => {
     componentRef.setInput('visible', false);
     fixture.detectChanges();
     expect(trap.enabled).toBe(false);
+  });
+
+  describe('focus return', () => {
+    let input: HTMLInputElement;
+    let service: OffcanvasService;
+    let trigger: HTMLButtonElement;
+
+    const toggle = async (show: boolean | 'toggle', toggleTrigger?: HTMLElement) => {
+      service.toggle({ show, id: component.id(), trigger: toggleTrigger });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    };
+
+    beforeEach(() => {
+      service = TestBed.inject(OffcanvasService);
+      input = document.createElement('input');
+      trigger = document.createElement('button');
+      document.body.append(input, trigger);
+    });
+
+    afterEach(() => {
+      input.remove();
+      trigger.remove();
+    });
+
+    it('should return focus to the toggle that opened it', async () => {
+      const closeButton = document.createElement('button');
+      fixture.nativeElement.append(closeButton);
+      input.focus();
+      await toggle('toggle', trigger);
+      closeButton.focus();
+      await toggle('toggle', closeButton);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should return focus to the element focused before opening without a toggle', async () => {
+      input.focus();
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(document.activeElement).toBe(fixture.nativeElement);
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should fall back when the toggle cannot take focus', async () => {
+      input.focus();
+      await toggle(true, trigger);
+      trigger.disabled = true;
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should return focus when destroyed while open', async () => {
+      await toggle(true, trigger);
+      expect(document.activeElement).toBe(fixture.nativeElement);
+      fixture.destroy();
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should not move focus that left the panel', async () => {
+      await toggle(true, trigger);
+      input.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not focus a detached element', async () => {
+      await toggle(true, trigger);
+      trigger.remove();
+      const focus = vi.spyOn(trigger, 'focus');
+      await toggle(false);
+      expect(focus).not.toHaveBeenCalled();
+    });
   });
 
   describe('with portal', () => {

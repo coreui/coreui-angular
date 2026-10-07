@@ -1,10 +1,12 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
 
 import { OffcanvasToggleDirective } from './offcanvas-toggle.directive';
 import { OffcanvasService } from '../offcanvas.service';
+
+class MockElementRef extends ElementRef {}
 
 @Component({
   template: ` <button cOffcanvasToggle="OffcanvasEnd">OffcanvasToggle Test</button>`,
@@ -21,7 +23,7 @@ describe('OffcanvasToggleDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [OffcanvasToggleDirective, TestComponent],
-      providers: [OffcanvasService]
+      providers: [OffcanvasService, { provide: ElementRef, useClass: MockElementRef }]
     });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
@@ -38,9 +40,9 @@ describe('OffcanvasToggleDirective', () => {
   });
 
   it('should toggle offcanvas on click', async () => {
-    service.offcanvasState$.pipe(take(1)).subscribe((value) => {
-      expect(value).toEqual({ show: 'toggle', id: 'OffcanvasEnd' });
-    });
+    let action;
+    service.offcanvasState$.pipe(take(1)).subscribe((value) => (action = value));
     debugElement.nativeElement.dispatchEvent(new MouseEvent('click'));
+    expect(action).toEqual({ show: 'toggle', id: 'OffcanvasEnd', trigger: debugElement.nativeElement });
   });
 });

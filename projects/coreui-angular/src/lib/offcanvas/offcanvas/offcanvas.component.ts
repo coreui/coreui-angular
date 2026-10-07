@@ -136,7 +136,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #backdropClickSubscription!: Subscription;
   #layoutChangeSubscription!: Subscription;
   #hideFallbackId?: ReturnType<typeof setTimeout>;
+  #focusBeforeShow: HTMLElement | null = null;
   #isShown = false;
+  #trigger: HTMLElement | null = null;
   readonly #inPlace = signal(false);
 
   /**
@@ -190,9 +192,11 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     const visible = this.visible();
     this.animateStart(visible);
     if (visible) {
+      this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
       this.setBackdrop(this.backdrop());
       this.setFocus();
     } else {
+      this.#restoreFocus();
       this.setBackdrop(false);
     }
     this.layoutChangeSubscribe(visible);
@@ -286,6 +290,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.visible()) {
+      this.#restoreFocus();
+    }
     this.#offcanvasService.toggle({ show: false, id: this.id() });
     this.#removeEventListeners();
     this.#clearHideFallback();
@@ -342,11 +349,38 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     }
   }
 
+  #restoreFocus(): void {
+    const candidates = [this.#trigger, this.#focusBeforeShow];
+    this.#trigger = null;
+    this.#focusBeforeShow = null;
+    if (!isPlatformBrowser(this.#platformId)) {
+      return;
+    }
+    const host = this.#hostElement.nativeElement;
+    const active = this.#document.activeElement;
+    if (active && active !== this.#document.body && !host.contains(active)) {
+      return;
+    }
+    for (const target of candidates) {
+      if (target?.isConnected && target !== this.#document.body) {
+        target.focus({ preventScroll: true });
+        if (this.#document.activeElement === target) {
+          return;
+        }
+      }
+    }
+  }
+
   private stateToggleSubscribe(): void {
     this.#offcanvasService.offcanvasState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
       if (this === action.offcanvas || this.id() === action.id) {
         if ('show' in action) {
-          this.visible.update((value) => (action?.show === 'toggle' ? !value : action.show));
+          const visible = this.visible();
+          const show = action?.show === 'toggle' ? !visible : !!action.show;
+          if (show && !visible) {
+            this.#trigger = action.trigger ?? null;
+          }
+          this.visible.set(show);
         }
       }
     });
