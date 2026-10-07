@@ -4,6 +4,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
+  afterEveryRender,
   booleanAttribute,
   Component,
   computed,
@@ -19,6 +20,7 @@ import {
   output,
   PLATFORM_ID,
   Renderer2,
+  signal,
   untracked
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -41,11 +43,12 @@ let nextId = 0;
   host: {
     '[attr.id]': 'id()',
     '[inert]': 'ariaHidden()',
-    '[attr.role]': 'role()',
-    '[aria-modal]': 'ariaModal()',
+    '[attr.role]': 'visible() ? role() : null',
+    '[aria-modal]': 'visible() ? ariaModal() : null',
     '[attr.tabindex]': 'tabIndex',
     '[class]': 'hostClasses()',
-    '(document:keydown)': 'onKeyDownHandler($event)'
+    '(document:keydown)': 'onKeyDownHandler($event)',
+    '(window:resize)': 'onResizeHandler()'
   }
 })
 export class OffcanvasComponent implements OnInit, OnDestroy {
@@ -116,14 +119,14 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly id = input(`offcanvas-${this.placement()}-${nextId++}`);
 
   /**
-   * Default role for offcanvas
+   * Role attribute rendered while the offcanvas is open
    * @returns string
    * @default 'dialog'
    */
   readonly role = input<string>('dialog');
 
   /**
-   * Set aria-modal html attr for offcanvas
+   * aria-modal attribute rendered while the offcanvas is open
    * @returns boolean
    * @default true
    */
@@ -133,7 +136,11 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #backdropClickSubscription!: Subscription;
   #layoutChangeSubscription!: Subscription;
   #hideFallbackId?: ReturnType<typeof setTimeout>;
+  #focusBeforeShow: HTMLElement | null = null;
   #isShown = false;
+  #shownAsPanel = false;
+  #trigger: HTMLElement | null = null;
+  readonly #inPlace = signal(false);
 
   /**
    * Allow body scrolling while offcanvas is visible.
@@ -180,13 +187,21 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     });
   });
 
+  readonly #afterEveryRenderFn = afterEveryRender({ read: () => this.#readPosition() });
+
   readonly visibleEffect = effect(() => {
     const visible = this.visible();
+    const wasShown = this.#isShown;
     this.animateStart(visible);
     if (visible) {
+      if (!wasShown) {
+        this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
+      }
       this.setBackdrop(this.backdrop());
       this.setFocus();
     } else {
+      this.#shownAsPanel = false;
+      this.#restoreFocus();
       this.setBackdrop(false);
     }
     this.layoutChangeSubscribe(visible);
@@ -212,7 +227,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   });
 
   readonly ariaHidden = computed(() => {
-    return this.visible() ? null : true;
+    return this.visible() || this.#inPlace() ? null : true;
   });
 
   get tabIndex(): string | null {
@@ -252,8 +267,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       this.#renderer.addClass(this.#hostElement.nativeElement, 'showing');
     } else {
       this.#renderer.removeClass(this.#hostElement.nativeElement, 'showing');
-      this.#renderer.addClass(this.#hostElement.nativeElement, 'hiding');
       if (wasShown) {
+        this.#renderer.addClass(this.#hostElement.nativeElement, 'hiding');
         this.#scheduleHideFallback();
       }
     }
@@ -261,6 +276,13 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   onKeyDownHandler(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.keyboard() && this.visible() && this.backdrop() !== 'static') {
+      this.#offcanvasService.toggle({ show: false, id: this.id() });
+    }
+  }
+
+  onResizeHandler(): void {
+    this.#readPosition();
+    if (this.visible() && this.#shownAsPanel && this.#inPlace()) {
       this.#offcanvasService.toggle({ show: false, id: this.id() });
     }
   }
@@ -276,6 +298,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.visible()) {
+      this.#restoreFocus();
+    }
     this.#offcanvasService.toggle({ show: false, id: this.id() });
     this.#removeEventListeners();
     this.#clearHideFallback();
@@ -321,9 +346,39 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.#hideFallbackId = undefined;
   }
 
+  #readPosition(): void {
+    const position = this.#document.defaultView?.getComputedStyle(this.#hostElement.nativeElement).position;
+    this.#inPlace.set(!!position && position !== 'fixed');
+    if (position === 'fixed' && this.visible()) {
+      this.#shownAsPanel = true;
+    }
+  }
+
   setFocus(): void {
     if (isPlatformBrowser(this.#platformId)) {
       setTimeout(() => this.#hostElement.nativeElement.focus());
+    }
+  }
+
+  #restoreFocus(): void {
+    const candidates = [this.#trigger, this.#focusBeforeShow];
+    this.#trigger = null;
+    this.#focusBeforeShow = null;
+    if (!isPlatformBrowser(this.#platformId)) {
+      return;
+    }
+    const host = this.#hostElement.nativeElement;
+    const active = this.#document.activeElement;
+    if (active && active !== this.#document.body && !host.contains(active)) {
+      return;
+    }
+    for (const target of candidates) {
+      if (target?.isConnected && target !== this.#document.body) {
+        target.focus({ preventScroll: true });
+        if (this.#document.activeElement === target) {
+          return;
+        }
+      }
     }
   }
 
@@ -331,7 +386,12 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     this.#offcanvasService.offcanvasState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
       if (this === action.offcanvas || this.id() === action.id) {
         if ('show' in action) {
-          this.visible.update((value) => (action?.show === 'toggle' ? !value : action.show));
+          const visible = this.visible();
+          const show = action?.show === 'toggle' ? !visible : !!action.show;
+          if (show && !visible) {
+            this.#trigger = action.trigger ?? null;
+          }
+          this.visible.set(show);
         }
       }
     });

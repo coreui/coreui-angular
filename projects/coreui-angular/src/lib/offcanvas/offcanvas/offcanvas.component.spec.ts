@@ -1,8 +1,11 @@
 /// <reference types="vitest/globals" />
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { ComponentRef, DOCUMENT } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { OffcanvasComponent } from './offcanvas.component';
+import { OffcanvasService } from '../offcanvas.service';
 
 describe('OffcanvasComponent', () => {
   let component: OffcanvasComponent;
@@ -21,6 +24,7 @@ describe('OffcanvasComponent', () => {
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     document = TestBed.inject(DOCUMENT);
+    fixture.nativeElement.style.position = 'fixed';
     fixture.detectChanges();
 
     vi.useFakeTimers();
@@ -107,6 +111,221 @@ describe('OffcanvasComponent', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     expect(fixture.componentInstance.responsiveBreakpoint).toBe(false);
+  });
+
+  it('should not carry the hiding class before it was ever shown', async () => {
+    await vi.runAllTimersAsync();
+    expect(fixture.nativeElement.classList.contains('hiding')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('showing')).toBe(false);
+  });
+
+  it('should add the hiding class only for a real hide transition', async () => {
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('hiding')).toBe(true);
+    await vi.runAllTimersAsync();
+    expect(fixture.nativeElement.classList.contains('hiding')).toBe(false);
+  });
+
+  it('should render role and aria-modal only while open', async () => {
+    expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+    expect(fixture.nativeElement.getAttribute('aria-modal')).toBeNull();
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('role')).toBe('dialog');
+    expect(fixture.nativeElement.getAttribute('aria-modal')).toBe('true');
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+    expect(fixture.nativeElement.getAttribute('aria-modal')).toBeNull();
+  });
+
+  it('should set inert only when the closed offcanvas is positioned as a panel', async () => {
+    expect(fixture.nativeElement.inert).toBe(true);
+    fixture.nativeElement.style.position = 'static';
+    fixture.detectChanges();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.inert).toBeFalsy();
+  });
+
+  it('should re-evaluate the panel position on window resize', async () => {
+    expect(componentRef.instance.ariaHidden()).toBe(true);
+    fixture.nativeElement.style.position = 'static';
+    window.dispatchEvent(new Event('resize'));
+    expect(componentRef.instance.ariaHidden()).toBeNull();
+  });
+
+  it('should close when a window resize lays the open offcanvas out in place', async () => {
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.offcanvas-backdrop')).not.toBeNull();
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(true);
+    fixture.nativeElement.style.position = 'static';
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(false);
+    expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.offcanvas-backdrop')).toBeNull();
+  });
+
+  it('should stay open on resize when it was never positioned as a panel', async () => {
+    fixture.nativeElement.style.position = 'absolute';
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(true);
+  });
+
+  it('should not close on resize after reopening in place', async () => {
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    fixture.nativeElement.style.position = 'static';
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(true);
+  });
+
+  it('should re-evaluate the panel position when responsive changes', async () => {
+    fixture.nativeElement.style.position = 'static';
+    componentRef.setInput('responsive', 'lg');
+    fixture.detectChanges();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('offcanvas-lg')).toBe(true);
+    expect(fixture.nativeElement.inert).toBeFalsy();
+  });
+
+  it('should enable the focus trap only while open', async () => {
+    const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+    expect(trap.enabled).toBe(false);
+    expect(trap.autoCapture).toBe(false);
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    expect(trap.enabled).toBe(true);
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    expect(trap.enabled).toBe(false);
+  });
+
+  describe('focus return', () => {
+    let input: HTMLInputElement;
+    let service: OffcanvasService;
+    let trigger: HTMLButtonElement;
+
+    const toggle = async (show: boolean | 'toggle', toggleTrigger?: HTMLElement) => {
+      service.toggle({ show, id: component.id(), trigger: toggleTrigger });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    };
+
+    beforeEach(() => {
+      service = TestBed.inject(OffcanvasService);
+      input = document.createElement('input');
+      trigger = document.createElement('button');
+      document.body.append(input, trigger);
+    });
+
+    afterEach(() => {
+      input.remove();
+      trigger.remove();
+    });
+
+    it('should return focus to the toggle that opened it', async () => {
+      const closeButton = document.createElement('button');
+      fixture.nativeElement.append(closeButton);
+      input.focus();
+      await toggle('toggle', trigger);
+      closeButton.focus();
+      await toggle('toggle', closeButton);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should return focus to the element focused before opening without a toggle', async () => {
+      input.focus();
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(document.activeElement).toBe(fixture.nativeElement);
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should keep the element focused before opening when an input changes while open', async () => {
+      input.focus();
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      componentRef.setInput('backdrop', 'static');
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not reuse the toggle of an earlier opening', async () => {
+      await toggle(true, trigger);
+      await toggle(false);
+      input.focus();
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should return focus that fell to the body', async () => {
+      await toggle(true, trigger);
+      (document.activeElement as HTMLElement).blur();
+      expect(document.activeElement).toBe(document.body);
+      await toggle(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should fall back when the toggle cannot take focus', async () => {
+      input.focus();
+      await toggle(true, trigger);
+      trigger.disabled = true;
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should return focus when destroyed while open', async () => {
+      await toggle(true, trigger);
+      expect(document.activeElement).toBe(fixture.nativeElement);
+      fixture.destroy();
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should not move focus that left the panel', async () => {
+      await toggle(true, trigger);
+      input.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not focus a detached element', async () => {
+      await toggle(true, trigger);
+      trigger.remove();
+      const focus = vi.spyOn(trigger, 'focus');
+      await toggle(false);
+      expect(focus).not.toHaveBeenCalled();
+    });
   });
 
   describe('with portal', () => {

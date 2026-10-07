@@ -1,4 +1,4 @@
-import { Directive, inject, input } from '@angular/core';
+import { Directive, ElementRef, inject, input } from '@angular/core';
 
 import { OffcanvasService } from '../offcanvas.service';
 
@@ -9,6 +9,7 @@ import { OffcanvasService } from '../offcanvas.service';
   }
 })
 export class OffcanvasToggleDirective {
+  readonly #elementRef = inject(ElementRef<HTMLElement>);
   readonly #offcanvasService = inject(OffcanvasService);
 
   /**
@@ -19,6 +20,6 @@ export class OffcanvasToggleDirective {
 
   protected toggleOpen($event: MouseEvent): void {
     $event.preventDefault();
-    this.#offcanvasService.toggle({ show: 'toggle', id: this.id() });
+    this.#offcanvasService.toggle({ show: 'toggle', id: this.id(), trigger: this.#elementRef.nativeElement });
   }
 }
