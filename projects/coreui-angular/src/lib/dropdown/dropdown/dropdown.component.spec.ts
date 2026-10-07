@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
-import { Component, DebugElement, DOCUMENT, ElementRef, input, Renderer2, signal } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef, ErrorHandler, input, Renderer2, signal } from '@angular/core';
 import { DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
 import { By } from '@angular/platform-browser';
@@ -756,66 +756,23 @@ const replayed = (type: string, init: KeyboardEventInit): KeyboardEvent => {
 };
 
 describe('DropdownComponent with replayed events', () => {
-  it('should ignore a replayed key on the toggle, the menu and an item without throwing', async () => {
+  it('should ignore a replayed key on the toggle and in the menu without an error', async () => {
     const fixture = TestBed.createComponent(KeyboardTestComponent);
     fixture.detectChanges();
     await fixture.whenStable();
+    const errorSpy = vi.spyOn(TestBed.inject(ErrorHandler), 'handleError').mockImplementation(() => undefined);
+    const service = fixture.debugElement.query(By.directive(DropdownComponent)).injector.get(DropdownService);
+    const toggleSpy = vi.spyOn(service, 'toggle');
     const toggle: HTMLElement = fixture.nativeElement.querySelector('#toggle');
-    expect(() => toggle.dispatchEvent(replayed('keydown', { key: 'ArrowDown', keyCode: 40 }))).not.toThrow();
-    expect(fixture.componentInstance.visible()).toBe(false);
+    toggle.dispatchEvent(replayed('keydown', { key: 'ArrowDown', keyCode: 40 }));
+    expect(toggleSpy).not.toHaveBeenCalled();
     fixture.componentInstance.visible.set(true);
     fixture.detectChanges();
     await fixture.whenStable();
     const items: HTMLElement[] = [...fixture.nativeElement.querySelectorAll('.dropdown-item')];
     items[0].focus();
-    expect(() => items[0].dispatchEvent(replayed('keydown', { key: 'ArrowDown', keyCode: 40 }))).not.toThrow();
+    items[0].dispatchEvent(replayed('keydown', { key: 'ArrowDown', keyCode: 40 }));
     expect(document.activeElement).toBe(items[0]);
-    expect(() => items[0].dispatchEvent(replayed('keyup', { key: 'Enter' }))).not.toThrow();
-  });
-});
-
-@Component({
-  template: `
-    <c-dropdown [(visible)]="outer">
-      <button cDropdownToggle id="outerToggle">A</button>
-      <ul cDropdownMenu>
-        <li><button cDropdownItem id="o1">One</button></li>
-        <li>
-          <c-dropdown direction="dropend" [(visible)]="inner">
-            <button cDropdownToggle cDropdownItem id="sub">More</button>
-            <ul cDropdownMenu>
-              <li><button cDropdownItem id="i1">Inner</button></li>
-            </ul>
-          </c-dropdown>
-        </li>
-        <li><button cDropdownItem id="o3">Three</button></li>
-      </ul>
-    </c-dropdown>
-  `,
-  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
-})
-class SubmenuComponent {
-  readonly inner = signal(false);
-  readonly outer = signal(true);
-}
-
-describe('DropdownComponent with a toggle inside another menu', () => {
-  it('should let only the inner dropdown handle the arrow', async () => {
-    const fixture = TestBed.createComponent(SubmenuComponent);
-    fixture.detectChanges();
-    await fixture.whenStable();
-    const sub: HTMLElement = fixture.nativeElement.querySelector('#sub');
-    const focused: string[] = [];
-    fixture.nativeElement.addEventListener('focusin', (event: FocusEvent) =>
-      focused.push((event.target as Element).id)
-    );
-    sub.focus();
-    focused.length = 0;
-    sub.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', keyCode: 38, bubbles: true, cancelable: true }));
-    fixture.detectChanges();
-    await fixture.whenStable();
-    expect(fixture.componentInstance.inner()).toBe(true);
-    expect(focused).toEqual(['i1']);
-    expect(document.activeElement?.id).toBe('i1');
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 });

@@ -123,7 +123,6 @@ export class DropdownToggleDirective implements AfterViewInit {
       ($event.key === ' ' || ($event.key === 'Enter' && !clicksOnEnter(element)))
     ) {
       $event.preventDefault();
-      $event.stopPropagation();
       if (!$event.repeat) {
         element.click();
       }
@@ -133,7 +132,6 @@ export class DropdownToggleDirective implements AfterViewInit {
       return;
     }
     $event.preventDefault();
-    $event.stopPropagation();
     this.#dropdownService.toggle({
       visible: true,
       dropdown: this.dropdown,
