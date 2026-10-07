@@ -173,6 +173,9 @@ describe('OffcanvasComponent', () => {
     componentRef.setInput('visible', true);
     fixture.detectChanges();
     expect(trap.enabled).toBe(true);
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    expect(trap.enabled).toBe(false);
   });
 
   describe('with portal', () => {
