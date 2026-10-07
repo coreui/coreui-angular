@@ -1,6 +1,7 @@
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import {
   AfterContentInit,
+  afterNextRender,
   booleanAttribute,
   computed,
   contentChildren,
@@ -9,6 +10,7 @@ import {
   ElementRef,
   forwardRef,
   inject,
+  Injector,
   input,
   linkedSignal,
   OnInit
@@ -20,6 +22,7 @@ import { ThemeDirective } from '../../shared/theme.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
 import { BreakpointInfix, DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
+import { clicksOnSpace, isEditableTarget, isReplayedEvent } from '../dropdown.utils';
 
 @Directive({
   selector: '[cDropdownMenu]',
@@ -30,12 +33,13 @@ import { DropdownService } from '../dropdown.service';
     '[class]': 'hostClasses()',
     '[style]': 'hostStyles()',
     '[attr.data-coreui-popper]': 'dataPopper()',
-    '(keydown)': 'onKeyDown($event)',
-    '(keyup)': 'onKeyUp($event)'
+    '(focusin)': 'onFocusIn($event)',
+    '(keydown)': 'onKeyDown($event)'
   }
 })
 export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
+  readonly #injector = inject(Injector);
   public readonly elementRef: ElementRef = inject(ElementRef);
   readonly #dropdownService: DropdownService = inject(DropdownService);
   #focusKeyManager!: FocusKeyManager<DropdownItemDirective>;
@@ -79,25 +83,21 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
   readonly dataPopper = computed(() => (this.#dropdownService.popper() ? null : 'static'));
 
   onKeyDown($event: KeyboardEvent): void {
-    if (!this.visible()) {
+    if (!this.visible() || isReplayedEvent($event) || isEditableTarget($event.target)) {
       return;
     }
-    if (['Space', 'ArrowDown'].includes($event.code)) {
+    if ($event.code === 'ArrowDown' || ($event.code === 'Space' && !this.#clicksOnSpace($event.target))) {
       $event.preventDefault();
     }
     this.#focusKeyManager.onKeydown($event);
   }
 
-  onKeyUp($event: KeyboardEvent): void {
-    if (!this.visible()) {
-      return;
-    }
-    if (['Tab'].includes($event.key)) {
-      if (this.#focusKeyManager.activeItem) {
-        $event.shiftKey ? this.#focusKeyManager.setPreviousItemActive() : this.#focusKeyManager.setNextItemActive();
-      } else {
-        this.#focusKeyManager.setFirstItemActive();
-      }
+  onFocusIn($event: FocusEvent): void {
+    const index = this.dropdownItemsContent().findIndex((item) =>
+      item.elementRef.nativeElement.contains($event.target)
+    );
+    if (index > -1) {
+      this.#focusKeyManager.updateActiveItem(index);
     }
   }
 
@@ -131,10 +131,23 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
               this.#focusKeyManager?.setActiveItem(-1);
             }
           }
+          if (state.focus && this.visible()) {
+            afterNextRender(
+              () =>
+                state.focus === 'first'
+                  ? this.#focusKeyManager.setFirstItemActive()
+                  : this.#focusKeyManager.setLastItemActive(),
+              { injector: this.#injector }
+            );
+          }
         }),
         takeUntilDestroyed(this.#destroyRef)
       )
       .subscribe();
+  }
+
+  #clicksOnSpace(target: EventTarget | null): boolean {
+    return target instanceof Element && clicksOnSpace(target);
   }
 
   private focusKeyManagerInit(): void {

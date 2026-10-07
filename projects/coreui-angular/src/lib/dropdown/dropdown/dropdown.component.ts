@@ -31,6 +31,9 @@ import { DropdownAlignment } from '../../coreui.types';
 import { ThemeDirective } from '../../shared';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from '../dropdown.service';
+import { clicksOnEnter, isEditableTarget, isReplayedEvent } from '../dropdown.utils';
+
+const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
 
 // lightweight injection token
 export abstract class DropdownToken {}
@@ -42,12 +45,13 @@ export abstract class DropdownToken {}
   host: {
     '[class]': 'hostClasses()',
     '[aria-expanded]': 'ariaExpanded',
-    '(click)': 'onClick($event)'
+    '(click)': 'onClick($event)',
+    '(keydown)': 'onKeyDown($event)'
   }
 })
 export class DropdownToggleDirective implements AfterViewInit {
-  readonly #destroyRef = inject(DestroyRef);
   public readonly elementRef = inject(ElementRef);
+  readonly #renderer = inject(Renderer2);
   #dropdownService = inject(DropdownService);
   public dropdown = inject(DropdownToken, { optional: true });
 
@@ -88,7 +92,9 @@ export class DropdownToggleDirective implements AfterViewInit {
     } as Record<string, boolean>;
   });
 
-  readonly #ariaExpanded = signal(false);
+  readonly #ariaExpanded = computed(
+    () => (this.dropdownComponent() ?? (this.dropdown as DropdownComponent | null))?.visible() ?? false
+  );
 
   get ariaExpanded() {
     return this.#ariaExpanded();
@@ -96,7 +102,48 @@ export class DropdownToggleDirective implements AfterViewInit {
 
   public onClick($event: MouseEvent): void {
     $event.preventDefault();
-    !this.disabled() && this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+    if (this.disabled()) {
+      return;
+    }
+    const element: HTMLElement = this.elementRef.nativeElement;
+    if (!element.contains(element.ownerDocument.activeElement)) {
+      element.focus();
+    }
+    this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+  }
+
+  onKeyDown($event: KeyboardEvent): void {
+    if (this.disabled() || isReplayedEvent($event) || isEditableTarget($event.target)) {
+      return;
+    }
+    const element: HTMLElement = this.elementRef.nativeElement;
+    if (
+      $event.target === element &&
+      element.tagName === 'A' &&
+      ($event.key === ' ' || ($event.key === 'Enter' && !clicksOnEnter(element)))
+    ) {
+      $event.preventDefault();
+      if (!$event.repeat) {
+        element.click();
+      }
+      return;
+    }
+    if (!['ArrowDown', 'ArrowUp'].includes($event.key)) {
+      return;
+    }
+    $event.preventDefault();
+    this.#dropdownService.toggle({
+      visible: true,
+      dropdown: this.dropdown,
+      focus: $event.key === 'ArrowDown' ? 'first' : 'last'
+    });
+  }
+
+  constructor() {
+    const element: HTMLElement | undefined = this.elementRef.nativeElement;
+    if (element?.tagName === 'A' && !element.hasAttribute('role')) {
+      this.#renderer.setAttribute(element, 'role', 'button');
+    }
   }
 
   ngAfterViewInit(): void {
@@ -104,17 +151,7 @@ export class DropdownToggleDirective implements AfterViewInit {
     if (dropdownComponent) {
       this.dropdown = dropdownComponent;
       this.#dropdownService = dropdownComponent?.dropdownService;
-    }
-    if (this.dropdown) {
-      const dropdown = <DropdownComponent>this.dropdown;
-      const subscription = dropdown?.visibleChange?.subscribe((visible) => {
-        this.#ariaExpanded.set(visible);
-      });
-      if (subscription) {
-        this.#destroyRef.onDestroy(() => {
-          subscription.unsubscribe();
-        });
-      }
+      dropdownComponent.toggler = this;
     }
   }
 }
@@ -283,6 +320,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   dropdownContext = { $implicit: this.visible() };
   readonly _toggler = contentChild(DropdownToggleDirective);
+  toggler?: DropdownToggleDirective;
   readonly _menu = contentChild(DropdownMenuDirective);
   readonly _menuElementRef = contentChild(DropdownMenuDirective, { read: ElementRef });
 
@@ -362,7 +400,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   // todo: turn off popper in navbar-nav
   createPopperInstance(): void {
-    const _toggler = this._toggler();
+    const _toggler = this._toggler() ?? this.toggler;
     const _menu = this._menu();
     if (_toggler && _menu) {
       this.#ngZone.runOutsideAngular(() => {
@@ -397,7 +435,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
         if (this._menuElementRef()?.nativeElement.contains(event.target)) {
           this.clickedTarget = target;
         }
-        if (this._toggler()?.elementRef.nativeElement.contains(event.target)) {
+        if (this.#togglerElement()?.contains(event.target)) {
           return;
         }
         const autoClose = this.autoClose();
@@ -415,27 +453,58 @@ export class DropdownComponent implements OnDestroy, OnInit {
         }
       })
     );
+    this.listeners.push(this.#renderer.listen(this.#elementRef.nativeElement, 'keyup', this.#onEscape));
+    const toggler = this.#togglerElement();
+    if (toggler && !this.#elementRef.nativeElement.contains(toggler)) {
+      this.listeners.push(this.#renderer.listen(toggler, 'keyup', this.#onEscape));
+    }
     this.listeners.push(
-      this.#renderer.listen(this.#elementRef.nativeElement, 'keyup', (event) => {
-        if (event.key === 'Escape' && this.autoClose() !== false) {
-          event.stopPropagation();
-          this.setVisibleState(false);
-          return;
-        }
-      })
-    );
-    this.listeners.push(
-      this.#renderer.listen(this.#document, 'keyup', (event) => {
+      this.#renderer.listen(this.#document, 'keyup', (event: KeyboardEvent) => {
+        const path = event.composedPath();
+        const toggler = this.#togglerElement();
         if (
           event.key === 'Tab' &&
           this.autoClose() !== false &&
-          !this.#elementRef.nativeElement.contains(event.target)
+          !path.includes(this.#elementRef.nativeElement) &&
+          !(toggler && path.includes(toggler))
         ) {
           this.setVisibleState(false);
-          return;
         }
       })
     );
+  }
+
+  readonly #onEscape = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape' || this.autoClose() === false) {
+      return;
+    }
+    event.stopPropagation();
+    const focusInMenu = this._menuElementRef()?.nativeElement.contains(event.target as Node);
+    this.setVisibleState(false);
+    if (focusInMenu) {
+      this.#focusToggler();
+    }
+  };
+
+  #togglerElement(): HTMLElement | undefined {
+    return (this._toggler() ?? this.toggler)?.elementRef.nativeElement;
+  }
+
+  #focusToggler(): void {
+    const toggler = this.#togglerElement();
+    if (!toggler) {
+      return;
+    }
+    const root = toggler.getRootNode() as Document | ShadowRoot;
+    const candidates = [toggler, ...toggler.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)].filter(
+      (candidate) => candidate === toggler || (candidate.tabIndex >= 0 && !candidate.closest('[aria-hidden="true"]'))
+    );
+    for (const candidate of candidates) {
+      candidate.focus();
+      if (root.activeElement === candidate) {
+        return;
+      }
+    }
   }
 
   private clearListeners(): void {

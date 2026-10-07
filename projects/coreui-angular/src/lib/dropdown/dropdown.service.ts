@@ -6,6 +6,7 @@ import { DropdownAlignment } from '../coreui.types';
 export interface IDropdownState {
   visible?: boolean | 'toggle';
   dropdown?: any;
+  focus?: 'first' | 'last';
 }
 
 @Injectable({

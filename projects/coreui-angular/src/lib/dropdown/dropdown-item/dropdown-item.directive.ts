@@ -1,6 +1,7 @@
 import { FocusableOption, FocusOrigin } from '@angular/cdk/a11y';
 import { booleanAttribute, computed, Directive, ElementRef, inject, input, linkedSignal } from '@angular/core';
 import { DropdownService } from '../dropdown.service';
+import { clicksOnEnter, isEditableTarget } from '../dropdown.utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 
 @Directive({
@@ -18,7 +19,7 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
   }
 })
 export class DropdownItemDirective implements FocusableOption {
-  readonly #elementRef: ElementRef = inject(ElementRef);
+  public readonly elementRef: ElementRef = inject(ElementRef);
   readonly #dropdownService = inject(DropdownService);
   dropdown? = inject(DropdownComponent, { optional: true });
 
@@ -54,11 +55,11 @@ export class DropdownItemDirective implements FocusableOption {
   }
 
   /**
-   * Default role for dropdown-item.
+   * Role for dropdown-item.
    * @returns string
-   * @default 'list-item'
+   * @default undefined
    */
-  readonly role = input<string>('list-item');
+  readonly role = input<string>();
 
   /**
    * Tab index of the dropdown-item.
@@ -73,11 +74,11 @@ export class DropdownItemDirective implements FocusableOption {
   });
 
   focus(origin?: FocusOrigin | undefined): void {
-    this.#elementRef?.nativeElement?.focus();
+    this.elementRef?.nativeElement?.focus();
   }
 
   getLabel?(): string {
-    return this.#elementRef?.nativeElement?.textContent.trim();
+    return this.elementRef?.nativeElement?.textContent.trim();
   }
 
   readonly ariaCurrent = computed(() => {
@@ -97,7 +98,8 @@ export class DropdownItemDirective implements FocusableOption {
   }
 
   onKeyUp($event: KeyboardEvent): void {
-    if ($event.key === 'Enter') {
+    const target = $event.target as Element;
+    if ($event.key === 'Enter' && !isEditableTarget(target) && !clicksOnEnter(target)) {
       this.handleInteraction();
     }
   }
