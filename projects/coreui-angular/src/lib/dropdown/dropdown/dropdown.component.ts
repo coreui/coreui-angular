@@ -48,8 +48,21 @@ export abstract class DropdownToken {}
 })
 export class DropdownToggleDirective implements AfterViewInit {
   public readonly elementRef = inject(ElementRef);
+  readonly #renderer = inject(Renderer2);
   #dropdownService = inject(DropdownService);
   public dropdown = inject(DropdownToken, { optional: true });
+
+  constructor() {
+    const element: HTMLElement | undefined = this.elementRef.nativeElement;
+    if (element?.tagName === 'A') {
+      if (!element.hasAttribute('role')) {
+        this.#renderer.setAttribute(element, 'role', 'button');
+      }
+      if (!element.hasAttribute('href') && !element.hasAttribute('tabindex')) {
+        this.#renderer.setAttribute(element, 'tabindex', '0');
+      }
+    }
+  }
 
   /**
    * Reference to dropdown component.
@@ -109,6 +122,16 @@ export class DropdownToggleDirective implements AfterViewInit {
   }
 
   onKeyDown($event: KeyboardEvent): void {
+    const element: HTMLElement = this.elementRef.nativeElement;
+    if (
+      !this.disabled() &&
+      element.tagName === 'A' &&
+      ($event.key === ' ' || ($event.key === 'Enter' && !element.hasAttribute('href')))
+    ) {
+      $event.preventDefault();
+      element.click();
+      return;
+    }
     if (
       this.disabled() ||
       !['ArrowDown', 'ArrowUp'].includes($event.key) ||

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
-import { Component, DebugElement, DOCUMENT, ElementRef, input, signal } from '@angular/core';
+import { Component, DebugElement, DOCUMENT, ElementRef, input, Renderer2, signal } from '@angular/core';
 import { DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
 import { By } from '@angular/platform-browser';
@@ -84,8 +84,8 @@ describe('DropdownToggleDirective', () => {
       providers: [
         { provide: ElementRef, useClass: MockElementRef },
         DropdownService,
-        DropdownComponent
-        // Renderer2,
+        DropdownComponent,
+        Renderer2
         // ChangeDetectorRef
       ]
     });
@@ -347,5 +347,73 @@ describe('Dropdown keyboard', () => {
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(toggle);
+  });
+});
+
+@Component({
+  template: `
+    <c-dropdown [(visible)]="visible">
+      <a cDropdownToggle id="toggle">Toggle</a>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem>One</button></li>
+      </ul>
+    </c-dropdown>
+    <c-dropdown>
+      <a cDropdownToggle href="#" id="link">Link</a>
+      <ul cDropdownMenu></ul>
+    </c-dropdown>
+    <c-dropdown>
+      <a cDropdownToggle role="tab" tabindex="-1" id="custom">Custom</a>
+      <ul cDropdownMenu></ul>
+    </c-dropdown>
+    <c-dropdown>
+      <button cDropdownToggle id="button">Button</button>
+      <ul cDropdownMenu></ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class AnchorToggleComponent {
+  readonly visible = signal(false);
+}
+
+describe('DropdownToggleDirective on anchor', () => {
+  let fixture: ComponentFixture<AnchorToggleComponent>;
+  const element = (id: string): HTMLElement => fixture.nativeElement.querySelector(`#${id}`);
+  const keydown = async (target: HTMLElement, key: string) => {
+    const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
+    target.dispatchEvent(event);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    return event.defaultPrevented;
+  };
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(AnchorToggleComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+  });
+
+  it('should expose an anchor toggle as a focusable button', () => {
+    expect(element('toggle').getAttribute('role')).toBe('button');
+    expect(element('toggle').getAttribute('tabindex')).toBe('0');
+    expect(element('link').getAttribute('role')).toBe('button');
+    expect(element('link').hasAttribute('tabindex')).toBe(false);
+    expect(element('custom').getAttribute('role')).toBe('tab');
+    expect(element('custom').getAttribute('tabindex')).toBe('-1');
+    expect(element('button').hasAttribute('role')).toBe(false);
+    expect(element('button').hasAttribute('tabindex')).toBe(false);
+  });
+
+  it('should toggle an anchor without href on Enter and Space', async () => {
+    const toggle = element('toggle');
+    expect(await keydown(toggle, 'Enter')).toBe(true);
+    expect(fixture.componentInstance.visible()).toBe(true);
+    expect(await keydown(toggle, ' ')).toBe(true);
+    expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
+  it('should leave Enter on an anchor with href to the native click', async () => {
+    expect(await keydown(element('link'), 'Enter')).toBe(false);
   });
 });
