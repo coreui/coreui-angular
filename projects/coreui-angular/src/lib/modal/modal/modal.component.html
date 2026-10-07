@@ -5,7 +5,7 @@
   [scrollable]="scrollable()"
   [size]="size()">
   <c-modal-content>
-    <div #modalContentRef [cdkTrapFocusAutoCapture]="isVisible" [cdkTrapFocus]="isVisible" style="display: contents;">
+    <div #modalContentRef [cdkTrapFocus]="isVisible" style="display: contents;">
       <ng-content />
     </div>
   </c-modal-content>

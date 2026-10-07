@@ -29,6 +29,7 @@ import { filter } from 'rxjs/operators';
 
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { ThemeDirective } from '../../shared';
+import { restoreFocus } from '../../shared/focus.utils';
 import { OffcanvasService } from '../offcanvas.service';
 
 let nextId = 0;
@@ -364,21 +365,8 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     const candidates = [this.#trigger, this.#focusBeforeShow];
     this.#trigger = null;
     this.#focusBeforeShow = null;
-    if (!isPlatformBrowser(this.#platformId)) {
-      return;
-    }
-    const host = this.#hostElement.nativeElement;
-    const active = this.#document.activeElement;
-    if (active && active !== this.#document.body && !host.contains(active)) {
-      return;
-    }
-    for (const target of candidates) {
-      if (target?.isConnected && target !== this.#document.body) {
-        target.focus({ preventScroll: true });
-        if (this.#document.activeElement === target) {
-          return;
-        }
-      }
+    if (isPlatformBrowser(this.#platformId)) {
+      restoreFocus(this.#hostElement.nativeElement, candidates);
     }
   }
 

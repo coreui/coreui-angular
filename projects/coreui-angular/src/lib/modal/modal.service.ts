@@ -6,6 +6,7 @@ export interface IModalAction {
   show?: boolean | 'toggle';
   modal?: ModalComponent;
   id?: string;
+  trigger?: HTMLElement;
 }
 
 @Injectable({

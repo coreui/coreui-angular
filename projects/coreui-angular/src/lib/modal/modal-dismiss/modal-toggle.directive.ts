@@ -1,4 +1,4 @@
-import { Directive, inject, input } from '@angular/core';
+import { Directive, ElementRef, inject, input } from '@angular/core';
 
 import { ModalService } from '../modal.service';
 
@@ -9,6 +9,7 @@ import { ModalService } from '../modal.service';
   }
 })
 export class ModalToggleDirective {
+  readonly #elementRef = inject(ElementRef<HTMLElement>);
   readonly #modalService = inject(ModalService);
 
   /**
@@ -19,6 +20,6 @@ export class ModalToggleDirective {
 
   dismiss($event: Event): void {
     $event.preventDefault();
-    this.#modalService.toggle({ show: 'toggle', id: this.toggle() });
+    this.#modalService.toggle({ show: 'toggle', id: this.toggle(), trigger: this.#elementRef.nativeElement });
   }
 }

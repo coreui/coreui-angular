@@ -1,7 +1,10 @@
 /// <reference types="vitest/globals" />
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { ModalComponent } from './modal.component';
+import { ModalService } from '../modal.service';
 import { DOCUMENT } from '@angular/core';
 
 describe('ModalComponent', () => {
@@ -193,6 +196,96 @@ describe('ModalComponent', () => {
     await vi.runAllTimersAsync();
 
     expect(component.visible()).toBe(true);
+  });
+
+  describe('focus return', () => {
+    let inside: HTMLButtonElement;
+    let input: HTMLInputElement;
+    let service: ModalService;
+    let trigger: HTMLButtonElement;
+
+    const toggle = async (show: boolean | 'toggle', toggleTrigger?: HTMLElement) => {
+      service.toggle({ show, modal: component, trigger: toggleTrigger });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    };
+
+    beforeEach(() => {
+      service = TestBed.inject(ModalService);
+      inside = document.createElement('button');
+      fixture.nativeElement.append(inside);
+      input = document.createElement('input');
+      trigger = document.createElement('button');
+      document.body.append(input, trigger);
+    });
+
+    afterEach(() => {
+      input.remove();
+      trigger.remove();
+    });
+
+    it('should return focus to the toggle that opened it', async () => {
+      input.focus();
+      await toggle('toggle', trigger);
+      inside.focus();
+      await toggle('toggle', inside);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should return focus to the element focused before opening without a toggle', async () => {
+      input.focus();
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      fixture.componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should fall back when the toggle cannot take focus', async () => {
+      input.focus();
+      await toggle(true, trigger);
+      inside.focus();
+      trigger.disabled = true;
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should return focus when destroyed while open', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      fixture.destroy();
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should not move focus that left the modal', async () => {
+      await toggle(true, trigger);
+      input.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not reuse the toggle of an earlier opening', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      await toggle(false);
+      input.focus();
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      fixture.componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not let the focus trap capture focus while open', async () => {
+      await toggle(true);
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      expect(trap.enabled).toBe(true);
+      expect(trap.autoCapture).toBe(false);
+    });
   });
 
   describe('with portal', () => {

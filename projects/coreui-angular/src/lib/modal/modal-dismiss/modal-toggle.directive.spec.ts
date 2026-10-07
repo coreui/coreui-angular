@@ -1,9 +1,12 @@
 /// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, ElementRef } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ModalToggleDirective } from './modal-toggle.directive';
 import { vi } from 'vitest';
+import { ModalService } from '../modal.service';
+
+class MockElementRef extends ElementRef {}
 
 @Component({
   template: '<button cModalToggle>Dismiss</button>',
@@ -18,7 +21,8 @@ describe('ModalDismissDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestComponent]
+      imports: [TestComponent],
+      providers: [{ provide: ElementRef, useClass: MockElementRef }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
@@ -42,5 +46,11 @@ describe('ModalDismissDirective', () => {
     fixture.detectChanges();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(expect.any(MouseEvent));
+  });
+
+  it('should pass its host as the trigger', () => {
+    const toggle = vi.spyOn(TestBed.inject(ModalService), 'toggle');
+    debugElement.nativeElement.click();
+    expect(toggle).toHaveBeenCalledWith({ show: 'toggle', id: '', trigger: debugElement.nativeElement });
   });
 });
