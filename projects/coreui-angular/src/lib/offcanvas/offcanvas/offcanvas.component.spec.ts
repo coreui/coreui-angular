@@ -161,6 +161,8 @@ describe('OffcanvasComponent', () => {
   it('should close when a window resize lays the open offcanvas out in place', async () => {
     componentRef.setInput('visible', true);
     fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.offcanvas-backdrop')).not.toBeNull();
     window.dispatchEvent(new Event('resize'));
     fixture.detectChanges();
     expect(componentRef.instance.visible()).toBe(true);
@@ -169,6 +171,8 @@ describe('OffcanvasComponent', () => {
     fixture.detectChanges();
     expect(componentRef.instance.visible()).toBe(false);
     expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.offcanvas-backdrop')).toBeNull();
   });
 
   it('should re-evaluate the panel position when responsive changes', async () => {
