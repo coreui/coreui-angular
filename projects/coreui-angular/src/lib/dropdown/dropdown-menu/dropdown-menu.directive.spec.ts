@@ -112,6 +112,7 @@ describe('DropdownMenuDirective', () => {
     fixture.detectChanges();
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', keyCode: 40 }));
+    expect(document.activeElement).toEqual(itemRef.nativeElement);
     elementRef.nativeElement.focus();
     fixture.detectChanges();
     expect(document.activeElement).toEqual(itemRef.nativeElement);
@@ -124,6 +125,7 @@ describe('DropdownMenuDirective', () => {
       <button cDropdownToggle>Dropdown button</button>
       <ul cDropdownMenu>
         <li><button cDropdownItem id="button">Action</button></li>
+        <li><input type="button" cDropdownItem id="inputItem" value="Go" /></li>
         <li><a cDropdownItem href="#" id="link">Link</a></li>
         <li><input id="field" /></li>
         <li><input type="checkbox" id="check" /></li>
@@ -146,11 +148,24 @@ describe('DropdownMenuDirective Space', () => {
     };
 
     expect(press(menu.querySelector('#button'), 'Space')).toBe(false);
+    expect(press(menu.querySelector('#inputItem'), 'Space')).toBe(false);
     expect(press(menu.querySelector('#field'), 'Space')).toBe(false);
     expect(press(menu.querySelector('#check'), 'Space')).toBe(false);
     expect(press(menu.querySelector('#link'), 'Space')).toBe(true);
     expect(press(menu, 'Space')).toBe(true);
     expect(press(menu.querySelector('#button'), 'ArrowDown')).toBe(true);
+  });
+
+  it('should move the arrows from an input button item', () => {
+    const fixture = TestBed.createComponent(SpaceTestComponent);
+    fixture.detectChanges();
+    const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
+    const inputItem: HTMLInputElement = menu.querySelector('#inputItem');
+    inputItem.focus();
+    const event = new KeyboardEvent('keydown', { key: 'ArrowDown', keyCode: 40, bubbles: true, cancelable: true });
+    inputItem.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(menu.querySelector('#link'));
   });
 
   it('should leave every key to a form control inside the menu', () => {

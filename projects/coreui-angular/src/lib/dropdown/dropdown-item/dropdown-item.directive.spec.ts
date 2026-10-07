@@ -94,6 +94,7 @@ describe('DropdownItemDirective', () => {
         <li><button cDropdownItem id="button">Action</button></li>
         <li><a cDropdownItem href="#" id="link">Link</a></li>
         <li><input type="button" cDropdownItem id="inputButton" value="Go" /></li>
+        <li cDropdownItem id="host"><button id="inner">Inner</button></li>
         <li><div cDropdownItem id="plain">Plain</div></li>
       </ul>
     </c-dropdown>
@@ -110,7 +111,9 @@ describe('DropdownItemDirective Enter', () => {
     fixture.detectChanges();
     const dropdown = fixture.componentInstance.dropdown();
     const keyup = (id: string) => {
-      fixture.nativeElement.querySelector(`#${id}`).dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
+      fixture.nativeElement
+        .querySelector(`#${id}`)
+        .dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }));
       fixture.detectChanges();
     };
 
@@ -119,6 +122,8 @@ describe('DropdownItemDirective Enter', () => {
     keyup('link');
     expect(dropdown.visible()).toBe(true);
     keyup('inputButton');
+    expect(dropdown.visible()).toBe(true);
+    keyup('inner');
     expect(dropdown.visible()).toBe(true);
     keyup('plain');
     expect(dropdown.visible()).toBe(false);

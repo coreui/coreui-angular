@@ -1,4 +1,5 @@
-const EDITABLE_SELECTOR = 'input, select, textarea, [contenteditable]';
+const EDITABLE_SELECTOR =
+  'input:not([type="button"]):not([type="image"]):not([type="reset"]):not([type="submit"]), select, textarea, [contenteditable]';
 
 /**
  * Whether the event target types or selects natively, so dropdown key handling must leave it alone.

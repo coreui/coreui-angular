@@ -171,7 +171,7 @@ describe('DropdownToggleDirective', () => {
     elementRef.nativeElement.dispatchEvent(new MouseEvent('click'));
     fixture.detectChanges();
     expect(component.visible()).toBe(true);
-    dropdownRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape' }));
+    dropdownRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
     fixture.detectChanges();
     expect(component.visible()).toBe(false);
     component.visible.set(true);
@@ -248,7 +248,7 @@ describe('DropdownComponent alignment scope', () => {
 @Component({
   template: `
     <c-dropdown [(visible)]="visible">
-      <button cDropdownToggle id="toggle">Toggle <input id="field" /></button>
+      <button cDropdownToggle [disabled]="disabled()" id="toggle">Toggle <input id="field" /></button>
       <ul cDropdownMenu>
         <li><button cDropdownItem>One</button></li>
         <li><button cDropdownItem>Two</button></li>
@@ -259,6 +259,7 @@ describe('DropdownComponent alignment scope', () => {
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
 })
 class KeyboardTestComponent {
+  readonly disabled = signal(false);
   readonly visible = signal(false);
 }
 
@@ -268,7 +269,7 @@ describe('Dropdown keyboard', () => {
   let items: HTMLElement[];
 
   const keydown = async (target: HTMLElement, key: string) => {
-    const keyCode = { ArrowDown: 40, ArrowUp: 38 }[key];
+    const keyCode = { ArrowDown: 40, ArrowUp: 38, End: 35, Home: 36 }[key];
     target.dispatchEvent(new KeyboardEvent('keydown', { key, keyCode, bubbles: true, cancelable: true }));
     fixture.detectChanges();
     await fixture.whenStable();
@@ -311,13 +312,39 @@ describe('Dropdown keyboard', () => {
     expect(document.activeElement).toBe(field);
   });
 
-  it('should continue arrow navigation from the item focused by Tab', async () => {
+  it('should continue arrow navigation from the item that received focus', async () => {
     await keydown(toggle, 'ArrowDown');
-    items[1].focus();
-    items[1].dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
+    items[2].focus();
+    await keydown(items[2], 'ArrowUp');
     expect(document.activeElement).toBe(items[1]);
-    await keydown(items[1], 'ArrowDown');
+  });
+
+  it('should wrap the arrows and jump with Home and End', async () => {
+    await keydown(toggle, 'ArrowUp');
     expect(document.activeElement).toBe(items[2]);
+    await keydown(items[2], 'ArrowDown');
+    expect(document.activeElement).toBe(items[0]);
+    await keydown(items[0], 'End');
+    expect(document.activeElement).toBe(items[2]);
+    await keydown(items[2], 'Home');
+    expect(document.activeElement).toBe(items[0]);
+  });
+
+  it('should ignore the arrows on a disabled toggle', async () => {
+    fixture.componentInstance.disabled.set(true);
+    fixture.detectChanges();
+    await keydown(toggle, 'ArrowDown');
+    expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
+  it('should move focus to the first item only after the menu rendered', async () => {
+    const dropdownRef = fixture.debugElement.query(By.directive(DropdownComponent));
+    const service = dropdownRef.injector.get(DropdownService);
+    service.toggle({ visible: true, dropdown: dropdownRef.componentInstance, focus: 'first' });
+    expect(document.activeElement).not.toBe(items[0]);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(items[0]);
   });
 
   it('should focus the toggle on click', async () => {
@@ -427,6 +454,19 @@ describe('DropdownToggleDirective on anchor', () => {
     expect(fixture.componentInstance.visible()).toBe(false);
   });
 
+  it('should toggle once while Space is held on an anchor toggle', async () => {
+    const toggle = element('toggle');
+    await keydown(toggle, ' ');
+    toggle.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', repeat: true, bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+
+  it('should not force a role on an anchor toggle with interactive content', () => {
+    expect(element('nested').hasAttribute('role')).toBe(false);
+  });
+
   it('should leave Space and Enter to a field inside an anchor toggle', async () => {
     const field = element('nestedField');
     field.focus();
@@ -456,6 +496,35 @@ class ExternalToggleComponent {
 }
 
 describe('DropdownToggleDirective outside the dropdown', () => {
+  it('should stay open when change detection runs before the click reaches document', async () => {
+    const fixture = TestBed.createComponent(ExternalToggleComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const toggle: HTMLElement = fixture.nativeElement.querySelector('#external');
+    fixture.nativeElement.addEventListener('click', () => fixture.detectChanges());
+    toggle.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+
+  it('should close on Escape pressed on the external toggle and stay open on Tab from it', async () => {
+    const fixture = TestBed.createComponent(ExternalToggleComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const toggle: HTMLElement = fixture.nativeElement.querySelector('#external');
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    toggle.focus();
+    toggle.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.visible()).toBe(true);
+    toggle.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
   it('should close on Escape and focus the external toggle', async () => {
     const fixture = TestBed.createComponent(ExternalToggleComponent);
     fixture.detectChanges();
@@ -474,5 +543,36 @@ describe('DropdownToggleDirective outside the dropdown', () => {
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(toggle);
+  });
+});
+
+@Component({
+  template: `
+    <c-dropdown [(visible)]="visible">
+      <div cDropdownToggle id="group"><input id="field" /></div>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="item">One</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class FieldToggleComponent {
+  readonly visible = signal(false);
+}
+
+describe('DropdownToggleDirective on a non-focusable host', () => {
+  it('should return focus to the field inside the toggle on Escape', async () => {
+    const fixture = TestBed.createComponent(FieldToggleComponent);
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const item: HTMLElement = fixture.nativeElement.querySelector('#item');
+    item.focus();
+    item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#field'));
   });
 });

@@ -33,6 +33,8 @@ import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive'
 import { DropdownService } from '../dropdown.service';
 import { clicksOnEnter, isEditableTarget } from '../dropdown.utils';
 
+const INTERACTIVE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
+
 // lightweight injection token
 export abstract class DropdownToken {}
 
@@ -52,16 +54,6 @@ export class DropdownToggleDirective implements AfterViewInit {
   readonly #renderer = inject(Renderer2);
   #dropdownService = inject(DropdownService);
   public dropdown = inject(DropdownToken, { optional: true });
-
-  constructor() {
-    const element: HTMLElement | undefined = this.elementRef.nativeElement;
-    if (element?.tagName !== 'A') {
-      return;
-    }
-    if (!element.hasAttribute('role')) {
-      this.#renderer.setAttribute(element, 'role', 'button');
-    }
-  }
 
   /**
    * Reference to dropdown component.
@@ -127,7 +119,9 @@ export class DropdownToggleDirective implements AfterViewInit {
     const element: HTMLElement = this.elementRef.nativeElement;
     if (element.tagName === 'A' && ($event.key === ' ' || ($event.key === 'Enter' && !clicksOnEnter(element)))) {
       $event.preventDefault();
-      element.click();
+      if (!$event.repeat) {
+        element.click();
+      }
       return;
     }
     if (!['ArrowDown', 'ArrowUp'].includes($event.key)) {
@@ -142,6 +136,10 @@ export class DropdownToggleDirective implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    const element: HTMLElement = this.elementRef.nativeElement;
+    if (element.tagName === 'A' && !element.hasAttribute('role') && !element.querySelector(INTERACTIVE_SELECTOR)) {
+      this.#renderer.setAttribute(element, 'role', 'button');
+    }
     const dropdownComponent = this.dropdownComponent();
     if (dropdownComponent) {
       this.dropdown = dropdownComponent;
@@ -430,7 +428,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
         if (this._menuElementRef()?.nativeElement.contains(event.target)) {
           this.clickedTarget = target;
         }
-        if (this._toggler()?.elementRef.nativeElement.contains(event.target)) {
+        if (this.#togglerElement()?.contains(event.target)) {
           return;
         }
         const autoClose = this.autoClose();
@@ -449,30 +447,38 @@ export class DropdownComponent implements OnDestroy, OnInit {
       })
     );
     this.listeners.push(
-      this.#renderer.listen(this.#elementRef.nativeElement, 'keyup', (event) => {
-        if (event.key === 'Escape' && this.autoClose() !== false) {
+      this.#renderer.listen(this.#document, 'keyup', (event) => {
+        if (this.autoClose() === false) {
+          return;
+        }
+        const inside =
+          this.#elementRef.nativeElement.contains(event.target) || this.#togglerElement()?.contains(event.target);
+        if (event.key === 'Escape' && inside) {
           event.stopPropagation();
           const focusInMenu = this._menuElementRef()?.nativeElement.contains(this.#document.activeElement);
           this.setVisibleState(false);
           if (focusInMenu) {
-            (this._toggler() ?? this.toggler)?.elementRef.nativeElement.focus();
+            this.#focusToggler();
           }
           return;
         }
-      })
-    );
-    this.listeners.push(
-      this.#renderer.listen(this.#document, 'keyup', (event) => {
-        if (
-          event.key === 'Tab' &&
-          this.autoClose() !== false &&
-          !this.#elementRef.nativeElement.contains(event.target)
-        ) {
+        if (event.key === 'Tab' && !inside) {
           this.setVisibleState(false);
-          return;
         }
       })
     );
+  }
+
+  #togglerElement(): HTMLElement | undefined {
+    return (this._toggler() ?? this.toggler)?.elementRef.nativeElement;
+  }
+
+  #focusToggler(): void {
+    const toggler = this.#togglerElement();
+    toggler?.focus();
+    if (toggler && this.#document.activeElement !== toggler) {
+      toggler.querySelector<HTMLElement>(INTERACTIVE_SELECTOR)?.focus();
+    }
   }
 
   private clearListeners(): void {

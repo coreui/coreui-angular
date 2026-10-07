@@ -13,6 +13,9 @@ describe('dropdown.utils', () => {
     expect(isEditableTarget(element('<textarea></textarea>'))).toBe(true);
     expect(isEditableTarget(element('<select></select>'))).toBe(true);
     expect(isEditableTarget(element('<div contenteditable=""><b id="x">x</b></div>').querySelector('#x'))).toBe(true);
+    expect(isEditableTarget(element('<input type="checkbox" />'))).toBe(true);
+    expect(isEditableTarget(element('<input type="button" />'))).toBe(false);
+    expect(isEditableTarget(element('<input type="submit" />'))).toBe(false);
     expect(isEditableTarget(element('<button>b</button>'))).toBe(false);
     expect(isEditableTarget(element('<a href="#">a</a>'))).toBe(false);
     expect(isEditableTarget(null)).toBe(false);
@@ -23,6 +26,8 @@ describe('dropdown.utils', () => {
     expect(clicksOnEnter(element('<input type="submit" />'))).toBe(true);
     expect(clicksOnEnter(element('<input type="button" />'))).toBe(true);
     expect(clicksOnEnter(element('<a href="#">a</a>'))).toBe(true);
+    expect(clicksOnEnter(element('<input type="image" />'))).toBe(true);
+    expect(clicksOnEnter(element('<input type="reset" />'))).toBe(true);
     expect(clicksOnEnter(element('<summary>s</summary>'))).toBe(true);
     expect(clicksOnEnter(element('<a>a</a>'))).toBe(false);
     expect(clicksOnEnter(element('<input type="checkbox" />'))).toBe(false);
@@ -34,6 +39,9 @@ describe('dropdown.utils', () => {
     expect(clicksOnSpace(element('<input type="checkbox" />'))).toBe(true);
     expect(clicksOnSpace(element('<input type="radio" />'))).toBe(true);
     expect(clicksOnSpace(element('<input type="submit" />'))).toBe(true);
+    expect(clicksOnSpace(element('<input type="button" />'))).toBe(true);
+    expect(clicksOnSpace(element('<input type="reset" />'))).toBe(true);
+    expect(clicksOnSpace(element('<input type="image" />'))).toBe(true);
     expect(clicksOnSpace(element('<summary>s</summary>'))).toBe(true);
     expect(clicksOnSpace(element('<a href="#">a</a>'))).toBe(false);
     expect(clicksOnSpace(element('<input type="text" />'))).toBe(false);
