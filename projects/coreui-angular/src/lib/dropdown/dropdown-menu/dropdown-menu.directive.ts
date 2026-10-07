@@ -82,7 +82,7 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
     if (!this.visible()) {
       return;
     }
-    if (['Space', 'ArrowDown'].includes($event.code)) {
+    if ($event.code === 'ArrowDown' || ($event.code === 'Space' && !this.#handlesSpace($event.target))) {
       $event.preventDefault();
     }
     this.#focusKeyManager.onKeydown($event);
@@ -135,6 +135,11 @@ export class DropdownMenuDirective implements OnInit, AfterContentInit {
         takeUntilDestroyed(this.#destroyRef)
       )
       .subscribe();
+  }
+
+  #handlesSpace(target: EventTarget | null): boolean {
+    const control = (target as Element | null)?.closest?.('button, input, select, textarea, [contenteditable]');
+    return !!control && this.elementRef.nativeElement.contains(control);
   }
 
   private focusKeyManagerInit(): void {

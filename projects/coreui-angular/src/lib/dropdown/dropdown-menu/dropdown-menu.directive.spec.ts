@@ -117,3 +117,37 @@ describe('DropdownMenuDirective', () => {
     expect(document.activeElement).toEqual(itemRef.nativeElement);
   });
 });
+
+@Component({
+  template: `
+    <c-dropdown visible>
+      <button cDropdownToggle>Dropdown button</button>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="button">Action</button></li>
+        <li><a cDropdownItem href="#" id="link">Link</a></li>
+        <li><input id="field" /></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownComponent, DropdownMenuDirective, DropdownItemDirective, DropdownToggleDirective]
+})
+class SpaceTestComponent {}
+
+describe('DropdownMenuDirective Space', () => {
+  it('should prevent page scroll on Space only for targets without native Space handling', () => {
+    const fixture = TestBed.createComponent(SpaceTestComponent);
+    fixture.detectChanges();
+    const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
+    const press = (target: HTMLElement, code: string) => {
+      const event = new KeyboardEvent('keydown', { code, bubbles: true, cancelable: true });
+      target.dispatchEvent(event);
+      return event.defaultPrevented;
+    };
+
+    expect(press(menu.querySelector('#button'), 'Space')).toBe(false);
+    expect(press(menu.querySelector('#field'), 'Space')).toBe(false);
+    expect(press(menu.querySelector('#link'), 'Space')).toBe(true);
+    expect(press(menu, 'Space')).toBe(true);
+    expect(press(menu.querySelector('#button'), 'ArrowDown')).toBe(true);
+  });
+});
