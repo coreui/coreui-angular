@@ -16,6 +16,23 @@ describe('dropdown.utils', () => {
     expect(isEditableTarget(element('<div contenteditable="false"><b id="y">y</b></div>').querySelector('#y'))).toBe(
       false
     );
+    expect(
+      isEditableTarget(
+        element('<div contenteditable=""><span contenteditable="false"><b id="z">z</b></span></div>').querySelector(
+          '#z'
+        )
+      )
+    ).toBe(false);
+    expect(isEditableTarget(element('<div contenteditable="False"><b id="w">w</b></div>').querySelector('#w'))).toBe(
+      false
+    );
+    expect(
+      isEditableTarget(
+        element('<div contenteditable="false"><span contenteditable=""><b id="v">v</b></span></div>').querySelector(
+          '#v'
+        )
+      )
+    ).toBe(true);
     expect(isEditableTarget(element('<input type="checkbox" />'))).toBe(true);
     expect(isEditableTarget(element('<input type="button" />'))).toBe(false);
     expect(isEditableTarget(element('<input type="submit" />'))).toBe(false);

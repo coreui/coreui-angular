@@ -44,7 +44,6 @@ export abstract class DropdownToken {}
   exportAs: 'cDropdownToggle',
   host: {
     '[class]': 'hostClasses()',
-    '[attr.aria-disabled]': 'disabled() || null',
     '[aria-expanded]': 'ariaExpanded',
     '(click)': 'onClick($event)',
     '(keydown)': 'onKeyDown($event)'
@@ -102,15 +101,11 @@ export class DropdownToggleDirective implements AfterViewInit {
   }
 
   public onClick($event: MouseEvent): void {
-    const element: HTMLElement = this.elementRef.nativeElement;
-    const target = $event.target as Element;
-    if (target !== element && clicksOnEnter(target)) {
-      return;
-    }
     $event.preventDefault();
     if (this.disabled()) {
       return;
     }
+    const element: HTMLElement = this.elementRef.nativeElement;
     if (!element.contains(element.ownerDocument.activeElement)) {
       element.focus();
     }

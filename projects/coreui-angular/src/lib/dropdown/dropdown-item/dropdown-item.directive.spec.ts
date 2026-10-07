@@ -91,7 +91,9 @@ describe('DropdownItemDirective', () => {
   template: `
     <c-dropdown visible>
       <ul cDropdownMenu>
-        <li contenteditable="false"><div cDropdownItem id="island">Island</div></li>
+        <li contenteditable="">
+          <span contenteditable="false"><div cDropdownItem id="island">Island</div></span>
+        </li>
         <li><button cDropdownItem id="button">Action</button></li>
         <li><a cDropdownItem href="#" id="link">Link</a></li>
         <li><input type="button" cDropdownItem id="inputButton" value="Go" /></li>

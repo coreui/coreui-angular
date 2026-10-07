@@ -468,17 +468,12 @@ describe('DropdownToggleDirective on anchor', () => {
     const go = element('go');
     go.focus();
     expect(await keydown(go, 'Enter')).toBe(false);
-    const click = new MouseEvent('click', { bubbles: true, cancelable: true });
-    go.dispatchEvent(click);
-    fixture.detectChanges();
-    expect(click.defaultPrevented).toBe(false);
     expect(await keydown(go, ' ')).toBe(false);
     expect(fixture.componentInstance.nestedVisible()).toBe(false);
   });
 
-  it('should mark a disabled toggle with aria-disabled', () => {
-    expect(element('disabledAnchor').getAttribute('aria-disabled')).toBe('true');
-    expect(element('toggle').hasAttribute('aria-disabled')).toBe(false);
+  it('should not expose aria-disabled from the directive input', () => {
+    expect(element('disabledAnchor').hasAttribute('aria-disabled')).toBe(false);
   });
 
   it('should ignore the arrows on a disabled anchor toggle', async () => {
@@ -588,6 +583,18 @@ class FieldToggleComponent {
 }
 
 describe('DropdownToggleDirective on a non-focusable host', () => {
+  it('should toggle on a click bubbling from a button inside the toggle', async () => {
+    const fixture = TestBed.createComponent(FieldToggleComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.nativeElement
+      .querySelector('#clear')
+      .dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+
   it('should return focus to the field inside the toggle on Escape', async () => {
     const fixture = TestBed.createComponent(FieldToggleComponent);
     fixture.componentInstance.visible.set(true);
@@ -684,6 +691,15 @@ describe('DropdownComponent with shadow DOM', () => {
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(root.activeElement).toBe(toggle);
+    const outside = document.createElement('button');
+    root.append(outside);
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    outside.focus();
+    outside.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.visible()).toBe(false);
     host.remove();
   });
 });
