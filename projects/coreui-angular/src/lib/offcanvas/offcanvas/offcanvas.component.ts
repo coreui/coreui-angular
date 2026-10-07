@@ -190,9 +190,12 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   readonly visibleEffect = effect(() => {
     const visible = this.visible();
+    const wasShown = this.#isShown;
     this.animateStart(visible);
     if (visible) {
-      this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
+      if (!wasShown) {
+        this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
+      }
       this.setBackdrop(this.backdrop());
       this.setFocus();
     } else {

@@ -223,6 +223,39 @@ describe('OffcanvasComponent', () => {
       expect(document.activeElement).toBe(input);
     });
 
+    it('should keep the element focused before opening when an input changes while open', async () => {
+      input.focus();
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      componentRef.setInput('backdrop', 'static');
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not reuse the toggle of an earlier opening', async () => {
+      await toggle(true, trigger);
+      await toggle(false);
+      input.focus();
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should return focus that fell to the body', async () => {
+      await toggle(true, trigger);
+      (document.activeElement as HTMLElement).blur();
+      expect(document.activeElement).toBe(document.body);
+      await toggle(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
     it('should fall back when the toggle cannot take focus', async () => {
       input.focus();
       await toggle(true, trigger);
