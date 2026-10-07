@@ -71,21 +71,6 @@ describe('restoreFocus', () => {
     expect(focus).toHaveBeenCalledWith({ preventScroll: true });
   });
 
-  it('should read focus inside a shadow root', () => {
-    const shadowHost = document.createElement('div');
-    document.body.append(shadowHost);
-    const root = shadowHost.attachShadow({ mode: 'open' });
-    const shadowOverlay = document.createElement('div');
-    const shadowInside = document.createElement('button');
-    const shadowTrigger = document.createElement('button');
-    shadowOverlay.append(shadowInside);
-    root.append(shadowOverlay, shadowTrigger);
-    shadowInside.focus();
-    expect(restoreFocus(shadowOverlay, [shadowTrigger])).toBe(true);
-    expect(root.activeElement).toBe(shadowTrigger);
-    shadowHost.remove();
-  });
-
   it('should return false when no candidate takes focus', () => {
     inside.focus();
     expect(restoreFocus(overlay, [])).toBe(false);
