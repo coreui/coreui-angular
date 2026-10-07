@@ -58,6 +58,7 @@ describe('DropdownItemDirective', () => {
   });
 
   it('should have css classes and attributes', async () => {
+    expect(elementRef.nativeElement.hasAttribute('role')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('disabled')).toBe(false);
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBeNull();
     expect(elementRef.nativeElement.getAttribute('aria-current')).toBeNull();

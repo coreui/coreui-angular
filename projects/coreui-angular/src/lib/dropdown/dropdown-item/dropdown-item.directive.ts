@@ -54,11 +54,11 @@ export class DropdownItemDirective implements FocusableOption {
   }
 
   /**
-   * Default role for dropdown-item.
+   * Role for dropdown-item.
    * @returns string
-   * @default 'list-item'
+   * @default undefined
    */
-  readonly role = input<string>('list-item');
+  readonly role = input<string>();
 
   /**
    * Tab index of the dropdown-item.
