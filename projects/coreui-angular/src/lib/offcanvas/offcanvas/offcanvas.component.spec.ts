@@ -158,6 +158,19 @@ describe('OffcanvasComponent', () => {
     expect(componentRef.instance.ariaHidden()).toBeNull();
   });
 
+  it('should close when a window resize lays the open offcanvas out in place', async () => {
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(true);
+    fixture.nativeElement.style.position = 'static';
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(false);
+    expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+  });
+
   it('should re-evaluate the panel position when responsive changes', async () => {
     fixture.nativeElement.style.position = 'static';
     componentRef.setInput('responsive', 'lg');

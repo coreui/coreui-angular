@@ -280,6 +280,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   onResizeHandler(): void {
     this.#readPosition();
+    if (this.visible() && this.#inPlace()) {
+      this.#offcanvasService.toggle({ show: false, id: this.id() });
+    }
   }
 
   ngOnInit(): void {
