@@ -280,6 +280,48 @@ describe('ModalComponent', () => {
       expect(document.activeElement).toBe(input);
     });
 
+    it('should move focus to the first focusable element on open', async () => {
+      const content = fixture.nativeElement.querySelector('c-modal-content > div:not(.cdk-focus-trap-anchor)');
+      const first = document.createElement('button');
+      content.append(first);
+      await toggle(true, trigger);
+      expect(document.activeElement).toBe(first);
+    });
+
+    it('should fall back to the first tabbable element when the first match cannot take focus', async () => {
+      const content = fixture.nativeElement.querySelector('c-modal-content > div:not(.cdk-focus-trap-anchor)');
+      const hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      content.append(hidden);
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      const fallback = vi.spyOn(trap.focusTrap, 'focusFirstTabbableElement');
+      await toggle(true, trigger);
+      expect(fallback).toHaveBeenCalled();
+    });
+
+    it('should not use the fallback when the first match takes focus', async () => {
+      const content = fixture.nativeElement.querySelector('c-modal-content > div:not(.cdk-focus-trap-anchor)');
+      content.append(document.createElement('button'));
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      const fallback = vi.spyOn(trap.focusTrap, 'focusFirstTabbableElement');
+      await toggle(true, trigger);
+      expect(fallback).not.toHaveBeenCalled();
+    });
+
+    it('should return focus when closed and destroyed in the same tick', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      service.toggle({ show: false, modal: component });
+      fixture.destroy();
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should render the dialog role only while open', async () => {
+      expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+      await toggle(true);
+      expect(fixture.nativeElement.getAttribute('role')).toBe('dialog');
+    });
+
     it('should not let the focus trap capture focus while open', async () => {
       await toggle(true);
       const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);

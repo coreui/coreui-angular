@@ -312,6 +312,13 @@ describe('OffcanvasComponent', () => {
       expect(document.activeElement).toBe(trigger);
     });
 
+    it('should return focus when closed and destroyed in the same tick', async () => {
+      await toggle(true, trigger);
+      service.toggle({ show: false, id: component.id() });
+      fixture.destroy();
+      expect(document.activeElement).toBe(trigger);
+    });
+
     it('should not move focus that left the panel', async () => {
       await toggle(true, trigger);
       input.focus();

@@ -299,7 +299,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.visible()) {
+    if (this.#trigger || this.#focusBeforeShow) {
       this.#restoreFocus();
     }
     this.#offcanvasService.toggle({ show: false, id: this.id() });

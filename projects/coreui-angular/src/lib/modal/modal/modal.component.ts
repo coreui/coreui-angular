@@ -1,4 +1,4 @@
-import { A11yModule, FocusMonitor } from '@angular/cdk/a11y';
+import { A11yModule, CdkTrapFocus, FocusMonitor } from '@angular/cdk/a11y';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -217,6 +217,9 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
           if (focusable?.length) {
             this.#focusMonitor.focusVia(focusable[0], 'keyboard');
           }
+          if (!this.modalContentRef()?.nativeElement.contains(this.#document.activeElement)) {
+            this.focusTrap()?.focusTrap.focusFirstTabbableElement();
+          }
         });
       } else {
         this.#restoreFocus();
@@ -231,6 +234,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly visibleChange = output<boolean>();
 
   readonly modalContentRef = viewChild('modalContentRef', { read: ElementRef });
+  protected readonly focusTrap = viewChild(CdkTrapFocus);
   readonly modalDialogRef = viewChild.required(ModalDialogComponent, { read: ElementRef });
 
   readonly #modalDialogEffect = effect((OnCleanup) => {
@@ -340,7 +344,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    if (this.visible()) {
+    if (this.#trigger || this.#focusBeforeShow) {
       this.#restoreFocus();
     }
     this.#modalService.toggle({ show: false, modal: this });

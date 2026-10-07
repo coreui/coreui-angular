@@ -1,3 +1,5 @@
+import { _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
+
 /**
  * Returns focus after an overlay closes: to the first candidate that takes it, without scrolling.
  * Does nothing when focus has already moved to an element outside the overlay.
@@ -6,15 +8,14 @@
  * @returns whether a candidate took focus
  */
 export const restoreFocus = (overlay: HTMLElement, candidates: readonly (HTMLElement | null | undefined)[]): boolean => {
-  const document = overlay.ownerDocument;
-  const active = document.activeElement;
-  if (active && active !== document.body && !overlay.contains(active)) {
+  const active = _getFocusedElementPierceShadowDom();
+  if (active && active !== overlay.ownerDocument.body && !overlay.contains(active)) {
     return false;
   }
   for (const target of candidates) {
     if (target?.isConnected) {
       target.focus({ preventScroll: true });
-      if (document.activeElement === target) {
+      if (_getFocusedElementPierceShadowDom() === target) {
         return true;
       }
     }
