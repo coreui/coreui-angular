@@ -43,7 +43,6 @@ import { restoreFocus } from '../../shared/focus.utils';
     '[inert]': 'ariaHidden()',
     '[attr.id]': 'id',
     '[aria-modal]': 'ariaModal()',
-    '[aria-hidden]': 'ariaHidden()',
     '[attr.tabindex]': '-1',
     '(mousedown)': 'onMouseDownHandler($event)',
     '(click)': 'onClickHandler($event)',
