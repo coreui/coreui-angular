@@ -138,6 +138,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #hideFallbackId?: ReturnType<typeof setTimeout>;
   #focusBeforeShow: HTMLElement | null = null;
   #isShown = false;
+  #shownAsPanel = false;
   #trigger: HTMLElement | null = null;
   readonly #inPlace = signal(false);
 
@@ -199,6 +200,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       this.setBackdrop(this.backdrop());
       this.setFocus();
     } else {
+      this.#shownAsPanel = false;
       this.#restoreFocus();
       this.setBackdrop(false);
     }
@@ -280,7 +282,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   onResizeHandler(): void {
     this.#readPosition();
-    if (this.visible() && this.#inPlace()) {
+    if (this.visible() && this.#shownAsPanel && this.#inPlace()) {
       this.#offcanvasService.toggle({ show: false, id: this.id() });
     }
   }
@@ -347,6 +349,9 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #readPosition(): void {
     const position = this.#document.defaultView?.getComputedStyle(this.#hostElement.nativeElement).position;
     this.#inPlace.set(!!position && position !== 'fixed');
+    if (position === 'fixed' && this.visible()) {
+      this.#shownAsPanel = true;
+    }
   }
 
   setFocus(): void {

@@ -175,6 +175,30 @@ describe('OffcanvasComponent', () => {
     expect(document.querySelector('.offcanvas-backdrop')).toBeNull();
   });
 
+  it('should stay open on resize when it was never positioned as a panel', async () => {
+    fixture.nativeElement.style.position = 'absolute';
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(true);
+  });
+
+  it('should not close on resize after reopening in place', async () => {
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    fixture.nativeElement.style.position = 'static';
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(true);
+  });
+
   it('should re-evaluate the panel position when responsive changes', async () => {
     fixture.nativeElement.style.position = 'static';
     componentRef.setInput('responsive', 'lg');
