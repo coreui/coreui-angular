@@ -1,4 +1,4 @@
-import { A11yModule, CdkTrapFocus, FocusMonitor } from '@angular/cdk/a11y';
+import { A11yModule, CdkTrapFocus } from '@angular/cdk/a11y';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -61,7 +61,6 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly #backdropService = inject(BackdropService);
 
   readonly #destroyRef = inject(DestroyRef);
-  readonly #focusMonitor = inject(FocusMonitor);
   readonly #platformId = inject(PLATFORM_ID);
 
   /**
@@ -210,14 +209,8 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
       if (visible && afterViewInit) {
         this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
         setTimeout(() => {
-          const focusable = this.modalContentRef()?.nativeElement.querySelectorAll(
-            '[tabindex]:not([tabindex="-1"]), button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
-          );
-          if (focusable?.length) {
-            this.#focusMonitor.focusVia(focusable[0], 'keyboard');
-          }
-          if (!this.modalContentRef()?.nativeElement.contains(this.#document.activeElement)) {
-            this.focusTrap()?.focusTrap.focusFirstTabbableElement();
+          if (!this.focusTrap()?.focusTrap.focusInitialElement()) {
+            this.#hostElement.nativeElement.focus();
           }
         });
       } else {

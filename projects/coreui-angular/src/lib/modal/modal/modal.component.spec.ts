@@ -280,32 +280,30 @@ describe('ModalComponent', () => {
       expect(document.activeElement).toBe(input);
     });
 
-    it('should move focus to the first focusable element on open', async () => {
-      const content = fixture.nativeElement.querySelector('c-modal-content > div:not(.cdk-focus-trap-anchor)');
-      const first = document.createElement('button');
-      content.append(first);
+    it('should hand initial focus to the focus trap on open', async () => {
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      const initial = vi.spyOn(trap.focusTrap, 'focusInitialElement').mockReturnValue(true);
       await toggle(true, trigger);
-      expect(document.activeElement).toBe(first);
+      expect(initial).toHaveBeenCalledTimes(1);
+      expect(document.activeElement).not.toBe(fixture.nativeElement);
     });
 
-    it('should fall back to the first tabbable element when the first match cannot take focus', async () => {
-      const content = fixture.nativeElement.querySelector('c-modal-content > div:not(.cdk-focus-trap-anchor)');
-      const hidden = document.createElement('input');
-      hidden.type = 'hidden';
-      content.append(hidden);
+    it('should focus the modal itself when nothing in it can take focus', async () => {
       const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
-      const fallback = vi.spyOn(trap.focusTrap, 'focusFirstTabbableElement');
+      vi.spyOn(trap.focusTrap, 'focusInitialElement').mockReturnValue(false);
+      trigger.focus();
       await toggle(true, trigger);
-      expect(fallback).toHaveBeenCalled();
+      expect(document.activeElement).toBe(fixture.nativeElement);
     });
 
-    it('should not use the fallback when the first match takes focus', async () => {
-      const content = fixture.nativeElement.querySelector('c-modal-content > div:not(.cdk-focus-trap-anchor)');
-      content.append(document.createElement('button'));
+    it('should move initial focus only after the modal has rendered', async () => {
       const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
-      const fallback = vi.spyOn(trap.focusTrap, 'focusFirstTabbableElement');
-      await toggle(true, trigger);
-      expect(fallback).not.toHaveBeenCalled();
+      const initial = vi.spyOn(trap.focusTrap, 'focusInitialElement');
+      service.toggle({ show: true, modal: component, trigger });
+      fixture.detectChanges();
+      expect(initial).not.toHaveBeenCalled();
+      await vi.runAllTimersAsync();
+      expect(initial).toHaveBeenCalledTimes(1);
     });
 
     it('should return focus when closed and destroyed in the same tick', async () => {
