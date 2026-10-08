@@ -1,6 +1,7 @@
-import { A11yModule, FocusMonitor } from '@angular/cdk/a11y';
+import { A11yModule, CdkTrapFocus } from '@angular/cdk/a11y';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   booleanAttribute,
@@ -16,6 +17,7 @@ import {
   OnDestroy,
   OnInit,
   output,
+  PLATFORM_ID,
   Renderer2,
   signal,
   untracked,
@@ -23,10 +25,11 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { ModalService } from '../modal.service';
+import { IModalAction, ModalService } from '../modal.service';
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { ModalContentComponent } from '../modal-content/modal-content.component';
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
+import { restoreFocus } from '../../shared/focus.utils';
 
 @Component({
   selector: 'c-modal',
@@ -40,7 +43,6 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
     '[inert]': 'ariaHidden()',
     '[attr.id]': 'id',
     '[aria-modal]': 'ariaModal()',
-    '[aria-hidden]': 'ariaHidden()',
     '[attr.tabindex]': '-1',
     '(mousedown)': 'onMouseDownHandler($event)',
     '(click)': 'onClickHandler($event)',
@@ -59,7 +61,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly #backdropService = inject(BackdropService);
 
   readonly #destroyRef = inject(DestroyRef);
-  readonly #focusMonitor = inject(FocusMonitor);
+  readonly #platformId = inject(PLATFORM_ID);
 
   /**
    * Align the modal in the center or top of the screen.
@@ -197,32 +199,23 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   });
 
-  readonly #activeElement = signal<HTMLElement | null>(null);
+  #focusBeforeShow: HTMLElement | null = null;
+  #openAction: IModalAction | null = null;
+  #trigger: HTMLElement | null = null;
 
   readonly #visibleEffect = effect(() => {
     const visible = this.visible();
     const afterViewInit = this.#afterViewInit();
     untracked(() => {
       if (visible && afterViewInit) {
-        this.#activeElement.set(this.#document.activeElement as HTMLElement);
-        // this.#activeElement()?.blur();
+        this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
         setTimeout(() => {
-          const focusable = this.modalContentRef()?.nativeElement.querySelectorAll(
-            '[tabindex]:not([tabindex="-1"]), button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
-          );
-          if (focusable?.length) {
-            this.#focusMonitor.focusVia(focusable[0], 'keyboard');
+          if (!this.focusTrap()?.focusTrap.focusInitialElement()) {
+            this.#hostElement.nativeElement.focus();
           }
         });
       } else {
-        const activeElement = this.#activeElement();
-        if (activeElement && this.#document.contains(activeElement)) {
-          this.#focusMonitor.focusVia(activeElement, 'keyboard');
-          setTimeout(() => {
-            // this.#activeElement()?.focus();
-            this.#activeElement.set(null);
-          });
-        }
+        this.#restoreFocus();
       }
     });
   });
@@ -234,6 +227,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly visibleChange = output<boolean>();
 
   readonly modalContentRef = viewChild('modalContentRef', { read: ElementRef });
+  protected readonly focusTrap = viewChild(CdkTrapFocus);
   readonly modalDialogRef = viewChild.required(ModalDialogComponent, { read: ElementRef });
 
   readonly #modalDialogEffect = effect((OnCleanup) => {
@@ -343,6 +337,9 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    if (this.#trigger || this.#focusBeforeShow) {
+      this.#restoreFocus();
+    }
     this.#modalService.toggle({ show: false, modal: this });
     this.#afterViewInit.set(false);
     this.setBackdrop(false);
@@ -353,14 +350,39 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.#modalService.modalState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
       if (this === action.modal || this.id === action.id) {
         if ('show' in action) {
-          this.visible.update((visible) => (action?.show === 'toggle' ? !visible : action.show));
+          const visible = this.visible();
+          const show = action?.show === 'toggle' ? !visible : !!action.show;
+          if (show && !visible) {
+            this.#trigger = action.trigger ?? null;
+            this.#openAction = action;
+          }
+          this.visible.set(show);
         }
       } else {
         if (this.visible()) {
+          for (const target of this.#focusCandidates()) {
+            if (!action.focusFallback?.includes(target)) {
+              action.focusFallback?.push(target);
+            }
+          }
           this.visible.set(false);
         }
       }
     });
+  }
+
+  #focusCandidates(): (HTMLElement | null)[] {
+    return [this.#trigger, this.#focusBeforeShow, ...(this.#openAction?.focusFallback ?? [])];
+  }
+
+  #restoreFocus(): void {
+    const candidates = this.#focusCandidates();
+    this.#trigger = null;
+    this.#focusBeforeShow = null;
+    this.#openAction = null;
+    if (isPlatformBrowser(this.#platformId)) {
+      restoreFocus(this.#hostElement.nativeElement, candidates);
+    }
   }
 
   private setBackdrop(setBackdrop: boolean): void {

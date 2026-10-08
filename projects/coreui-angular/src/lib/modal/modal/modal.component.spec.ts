@@ -1,7 +1,10 @@
 /// <reference types="vitest/globals" />
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { ModalComponent } from './modal.component';
+import { ModalService } from '../modal.service';
 import { DOCUMENT } from '@angular/core';
 
 describe('ModalComponent', () => {
@@ -65,9 +68,9 @@ describe('ModalComponent', () => {
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
 
-  it('should toggle inert and aria-hidden with visibility', async () => {
+  it('should toggle inert with visibility and never set aria-hidden', async () => {
     expect(fixture.nativeElement.inert).toBe(true);
-    expect(fixture.nativeElement.getAttribute('aria-hidden')).toBe('true');
+    expect(fixture.nativeElement.getAttribute('aria-hidden')).toBeNull();
 
     fixture.componentRef.setInput('visible', true);
     fixture.detectChanges();
@@ -81,7 +84,7 @@ describe('ModalComponent', () => {
     await vi.runAllTimersAsync();
     fixture.detectChanges();
     expect(fixture.nativeElement.inert).toBe(true);
-    expect(fixture.nativeElement.getAttribute('aria-hidden')).toBe('true');
+    expect(fixture.nativeElement.getAttribute('aria-hidden')).toBeNull();
   });
 
   it('should close modal on Escape key press if keyboard is enabled', async () => {
@@ -193,6 +196,192 @@ describe('ModalComponent', () => {
     await vi.runAllTimersAsync();
 
     expect(component.visible()).toBe(true);
+  });
+
+  describe('focus return', () => {
+    let inside: HTMLButtonElement;
+    let input: HTMLInputElement;
+    let service: ModalService;
+    let trigger: HTMLButtonElement;
+
+    const toggle = async (show: boolean | 'toggle', toggleTrigger?: HTMLElement) => {
+      service.toggle({ show, modal: component, trigger: toggleTrigger });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    };
+
+    beforeEach(() => {
+      service = TestBed.inject(ModalService);
+      inside = document.createElement('button');
+      fixture.nativeElement.append(inside);
+      input = document.createElement('input');
+      trigger = document.createElement('button');
+      document.body.append(input, trigger);
+    });
+
+    afterEach(() => {
+      input.remove();
+      trigger.remove();
+    });
+
+    it('should return focus to the toggle that opened it', async () => {
+      input.focus();
+      await toggle('toggle', trigger);
+      inside.focus();
+      await toggle('toggle', inside);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should return focus to the element focused before opening without a toggle', async () => {
+      input.focus();
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      fixture.componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should fall back when the toggle cannot take focus', async () => {
+      input.focus();
+      await toggle(true, trigger);
+      inside.focus();
+      trigger.disabled = true;
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should return focus when destroyed while open', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      fixture.destroy();
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should not move focus that left the modal', async () => {
+      await toggle(true, trigger);
+      input.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not reuse the toggle of an earlier opening', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      await toggle(false);
+      input.focus();
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      fixture.componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should hand initial focus to the focus trap on open', async () => {
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      const initial = vi.spyOn(trap.focusTrap, 'focusInitialElement').mockReturnValue(true);
+      await toggle(true, trigger);
+      expect(initial).toHaveBeenCalledTimes(1);
+      expect(document.activeElement).not.toBe(fixture.nativeElement);
+    });
+
+    it('should focus the modal itself when nothing in it can take focus', async () => {
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      vi.spyOn(trap.focusTrap, 'focusInitialElement').mockReturnValue(false);
+      trigger.focus();
+      await toggle(true, trigger);
+      expect(document.activeElement).toBe(fixture.nativeElement);
+    });
+
+    it('should move initial focus only after the modal has rendered', async () => {
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      const initial = vi.spyOn(trap.focusTrap, 'focusInitialElement');
+      service.toggle({ show: true, modal: component, trigger });
+      fixture.detectChanges();
+      expect(initial).not.toHaveBeenCalled();
+      await vi.runAllTimersAsync();
+      expect(initial).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return focus when closed and destroyed in the same tick', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      service.toggle({ show: false, modal: component });
+      fixture.destroy();
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should render the dialog role only while open', async () => {
+      expect(fixture.nativeElement.getAttribute('role')).toBeNull();
+      await toggle(true);
+      expect(fixture.nativeElement.getAttribute('role')).toBe('dialog');
+    });
+
+    it('should hand its focus candidates to the action that closes it for another modal', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      const received: { focusFallback?: (HTMLElement | null)[] }[] = [];
+      service.modalState$.subscribe((action) => received.push(action));
+      service.toggle({ show: true, id: 'other-modal', trigger: inside });
+      expect(received[0].focusFallback?.includes(trigger)).toBe(true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    });
+
+    it('should return focus to a fallback handed over by the action that opened it', async () => {
+      (document.activeElement as HTMLElement | null)?.blur();
+      trigger.disabled = true;
+      service.toggle({ show: true, modal: component, trigger, focusFallback: [input] });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not reuse the fallback of an earlier opening', async () => {
+      const stale = document.createElement('button');
+      document.body.append(stale);
+      (document.activeElement as HTMLElement | null)?.blur();
+      service.toggle({ show: true, modal: component, focusFallback: [stale] });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(stale);
+      input.focus();
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      input.disabled = true;
+      fixture.componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).not.toBe(stale);
+      stale.remove();
+    });
+
+    it('should hand over each focus candidate once', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      let received: { focusFallback?: (HTMLElement | null)[] } = {};
+      service.modalState$.subscribe((action) => (received = action));
+      service.toggle({ show: true, id: 'other-modal', focusFallback: [trigger] });
+      expect(received.focusFallback?.filter((target) => target === trigger).length).toBe(1);
+      expect(new Set(received.focusFallback).size).toBe(received.focusFallback?.length);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    });
+
+    it('should not let the focus trap capture focus while open', async () => {
+      await toggle(true);
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      expect(trap.enabled).toBe(true);
+      expect(trap.autoCapture).toBe(false);
+    });
   });
 
   describe('with portal', () => {
