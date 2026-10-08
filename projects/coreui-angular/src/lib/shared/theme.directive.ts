@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, effect, ElementRef, inject, input, Renderer2, untracked } from '@angular/core';
+import { booleanAttribute, Directive, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[cTheme]',
@@ -9,26 +9,21 @@ export class ThemeDirective {
   readonly #renderer = inject(Renderer2);
 
   /**
-   * Sets the dark theme attribute on the host element. 
+   * Sets the `data-coreui-theme` attribute on the host element. Overridden by `dark`.
    * @returns 'dark' | 'light'
    */
   readonly colorScheme = input<'dark' | 'light'>();
 
-  readonly #colorSchemeChange = effect(() => {
-    const colorScheme = this.colorScheme();
-    colorScheme ? this.setTheme(colorScheme) : this.unsetTheme();
-  });
-
   /**
-   * Sets a darker color scheme. If the colorScheme is set to 'dark', the dark theme will be applied.
+   * Applies the dark color scheme, regardless of `colorScheme`.
    * @returns boolean
    * @default false
    */
   readonly dark = input(false, { transform: booleanAttribute });
 
-  readonly #darkChange = effect(() => {
-    const darkTheme = this.dark() || untracked(this.colorScheme) === 'dark';
-    darkTheme ? this.setTheme('dark') : this.unsetTheme();
+  readonly #themeChange = effect(() => {
+    const theme = this.dark() ? 'dark' : this.colorScheme();
+    theme ? this.setTheme(theme) : this.unsetTheme();
   });
 
   setTheme(theme?: string): void {

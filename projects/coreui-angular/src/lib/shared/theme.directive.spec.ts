@@ -11,6 +11,23 @@ export class TestComponent {
   readonly theme = input<'dark' | 'light' | undefined>();
 }
 
+@Component({
+  imports: [ThemeDirective],
+  template: '<div cTheme colorScheme="light" [dark]="dark()"></div>'
+})
+export class TestLightComponent {
+  readonly dark = input(false);
+}
+
+@Component({
+  imports: [ThemeDirective],
+  template: '<div cTheme [colorScheme]="theme()" [dark]="dark()"></div>'
+})
+export class TestDarkComponent {
+  readonly dark = input(false);
+  readonly theme = input<'dark' | 'light' | undefined>();
+}
+
 class MockElementRef extends ElementRef {}
 
 describe('ThemeDirective', () => {
@@ -45,5 +62,37 @@ describe('ThemeDirective', () => {
     fixture.componentRef.setInput('theme', undefined);
     fixture.detectChanges();
     expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
+  });
+
+  it('should keep a static light colorScheme on the first render', () => {
+    const lightFixture = TestBed.createComponent(TestLightComponent);
+    const element = lightFixture.debugElement.query(By.css('div')).nativeElement;
+    lightFixture.detectChanges();
+    expect(element.getAttribute('data-coreui-theme')).toBe('light');
+  });
+
+  it('should apply dark over colorScheme and restore colorScheme when dark is unset', () => {
+    const lightFixture = TestBed.createComponent(TestLightComponent);
+    const element = lightFixture.debugElement.query(By.css('div')).nativeElement;
+    lightFixture.componentRef.setInput('dark', true);
+    lightFixture.detectChanges();
+    expect(element.getAttribute('data-coreui-theme')).toBe('dark');
+    lightFixture.componentRef.setInput('dark', false);
+    lightFixture.detectChanges();
+    expect(element.getAttribute('data-coreui-theme')).toBe('light');
+  });
+
+  it('should keep dark when colorScheme changes or is unset', () => {
+    const darkFixture = TestBed.createComponent(TestDarkComponent);
+    const element = darkFixture.debugElement.query(By.css('div')).nativeElement;
+    darkFixture.componentRef.setInput('dark', true);
+    darkFixture.componentRef.setInput('theme', 'dark');
+    darkFixture.detectChanges();
+    darkFixture.componentRef.setInput('theme', 'light');
+    darkFixture.detectChanges();
+    expect(element.getAttribute('data-coreui-theme')).toBe('dark');
+    darkFixture.componentRef.setInput('theme', undefined);
+    darkFixture.detectChanges();
+    expect(element.getAttribute('data-coreui-theme')).toBe('dark');
   });
 });
