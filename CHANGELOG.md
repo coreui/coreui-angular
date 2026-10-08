@@ -2,6 +2,21 @@
 
 ---
 
+#### `5.7.35` for Angular 22.2.1
+
+- fix(dropdown): keyboard, focus and ARIA parity
+- fix(offcanvas): in-place panel stays interactive, focus returns on close
+- fix(modal): focus returns to the toggle on close, initial focus through the focus trap
+- ci: run the os matrix only in coreui/coreui-angular
+- chore(dependencies): update `@angular/cli` to version 22.2.2
+  - `@angular/aria` to version 22.2.2
+  - `@angular/cdk` to version 22.2.2
+  - `@angular-devkit/schematics` to version 22.2.2
+  - `@angular/build` to version 22.2.2
+  - `@angular/cli` to version 22.2.2
+
+---
+
 #### `5.7.34` for Angular 22.2.1
 
 - chore(devDependencies): update
