@@ -5,6 +5,7 @@ import { ModalComponent } from './modal/modal.component';
 export interface IModalAction {
   show?: boolean | 'toggle';
   modal?: ModalComponent;
+  focusFallback?: (HTMLElement | null)[];
   id?: string;
   trigger?: HTMLElement;
 }
@@ -17,6 +18,6 @@ export class ModalService {
   readonly modalState$ = this.#modalState.asObservable();
 
   toggle(action: IModalAction): void {
-    this.#modalState.next(action);
+    this.#modalState.next({ ...action });
   }
 }

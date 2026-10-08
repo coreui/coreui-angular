@@ -25,7 +25,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { ModalService } from '../modal.service';
+import { IModalAction, ModalService } from '../modal.service';
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { ModalContentComponent } from '../modal-content/modal-content.component';
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
@@ -200,6 +200,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   });
 
   #focusBeforeShow: HTMLElement | null = null;
+  #openAction: IModalAction | null = null;
   #trigger: HTMLElement | null = null;
 
   readonly #visibleEffect = effect(() => {
@@ -353,21 +354,28 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
           const show = action?.show === 'toggle' ? !visible : !!action.show;
           if (show && !visible) {
             this.#trigger = action.trigger ?? null;
+            this.#openAction = action;
           }
           this.visible.set(show);
         }
       } else {
         if (this.visible()) {
+          (action.focusFallback ??= []).push(...this.#focusCandidates());
           this.visible.set(false);
         }
       }
     });
   }
 
+  #focusCandidates(): (HTMLElement | null)[] {
+    return [this.#trigger, this.#focusBeforeShow, ...(this.#openAction?.focusFallback ?? [])];
+  }
+
   #restoreFocus(): void {
-    const candidates = [this.#trigger, this.#focusBeforeShow];
+    const candidates = this.#focusCandidates();
     this.#trigger = null;
     this.#focusBeforeShow = null;
+    this.#openAction = null;
     if (isPlatformBrowser(this.#platformId)) {
       restoreFocus(this.#hostElement.nativeElement, candidates);
     }

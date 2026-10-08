@@ -65,6 +65,14 @@ describe('restoreFocus', () => {
     expect(document.activeElement).toBe(inside);
   });
 
+  it('should skip a candidate inside the overlay', () => {
+    inside.focus();
+    const insideFocus = vi.spyOn(inside, 'focus');
+    expect(restoreFocus(overlay, [inside, second])).toBe(true);
+    expect(insideFocus).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(second);
+  });
+
   it('should focus without scrolling', () => {
     const focus = vi.spyOn(first, 'focus');
     restoreFocus(overlay, [first]);

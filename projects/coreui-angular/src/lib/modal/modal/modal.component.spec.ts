@@ -320,6 +320,47 @@ describe('ModalComponent', () => {
       expect(fixture.nativeElement.getAttribute('role')).toBe('dialog');
     });
 
+    it('should hand its focus candidates to the action that closes it for another modal', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      const received: { focusFallback?: (HTMLElement | null)[] }[] = [];
+      service.modalState$.subscribe((action) => received.push(action));
+      service.toggle({ show: true, id: 'other-modal', trigger: inside });
+      expect(received[0].focusFallback?.includes(trigger)).toBe(true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    });
+
+    it('should return focus to a fallback handed over by the action that opened it', async () => {
+      (document.activeElement as HTMLElement | null)?.blur();
+      trigger.disabled = true;
+      service.toggle({ show: true, modal: component, trigger, focusFallback: [input] });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not reuse the fallback of an earlier opening', async () => {
+      const stale = document.createElement('button');
+      document.body.append(stale);
+      service.toggle({ show: true, modal: component, focusFallback: [stale] });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      await toggle(false);
+      inside.focus();
+      fixture.componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      fixture.componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).not.toBe(stale);
+      stale.remove();
+    });
+
     it('should not let the focus trap capture focus while open', async () => {
       await toggle(true);
       const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
