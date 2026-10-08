@@ -360,7 +360,11 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       } else {
         if (this.visible()) {
-          (action.focusFallback ??= []).push(...this.#focusCandidates());
+          for (const target of this.#focusCandidates()) {
+            if (!action.focusFallback?.includes(target)) {
+              action.focusFallback?.push(target);
+            }
+          }
           this.visible.set(false);
         }
       }

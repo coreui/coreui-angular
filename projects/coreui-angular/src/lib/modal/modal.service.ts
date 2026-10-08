@@ -18,6 +18,6 @@ export class ModalService {
   readonly modalState$ = this.#modalState.asObservable();
 
   toggle(action: IModalAction): void {
-    this.#modalState.next({ ...action });
+    this.#modalState.next({ ...action, focusFallback: [...(action.focusFallback ?? [])] });
   }
 }

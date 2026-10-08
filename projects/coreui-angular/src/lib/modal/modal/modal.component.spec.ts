@@ -345,20 +345,35 @@ describe('ModalComponent', () => {
     it('should not reuse the fallback of an earlier opening', async () => {
       const stale = document.createElement('button');
       document.body.append(stale);
+      (document.activeElement as HTMLElement | null)?.blur();
       service.toggle({ show: true, modal: component, focusFallback: [stale] });
       fixture.detectChanges();
       await vi.runAllTimersAsync();
       inside.focus();
       await toggle(false);
-      inside.focus();
+      expect(document.activeElement).toBe(stale);
+      input.focus();
       fixture.componentRef.setInput('visible', true);
       fixture.detectChanges();
       await vi.runAllTimersAsync();
       inside.focus();
+      input.disabled = true;
       fixture.componentRef.setInput('visible', false);
       fixture.detectChanges();
       expect(document.activeElement).not.toBe(stale);
       stale.remove();
+    });
+
+    it('should hand over each focus candidate once', async () => {
+      await toggle(true, trigger);
+      inside.focus();
+      let received: { focusFallback?: (HTMLElement | null)[] } = {};
+      service.modalState$.subscribe((action) => (received = action));
+      service.toggle({ show: true, id: 'other-modal', focusFallback: [trigger] });
+      expect(received.focusFallback?.filter((target) => target === trigger).length).toBe(1);
+      expect(new Set(received.focusFallback).size).toBe(received.focusFallback?.length);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
     });
 
     it('should not let the focus trap capture focus while open', async () => {
