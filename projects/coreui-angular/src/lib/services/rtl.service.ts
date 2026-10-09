@@ -12,9 +12,9 @@ export class RtlService {
       if (direction) {
         return direction === 'rtl';
       }
-      const declared = element.closest('[dir]');
+      const declared = element.closest('[dir="ltr"], [dir="rtl"]');
       if (declared) {
-        return declared.matches(':dir(rtl)');
+        return declared.matches('[dir="rtl"]');
       }
     }
 
