@@ -1,0 +1,17 @@
+@for (item of items(); track item.value) {
+  <c-chip
+    [active]="item.active"
+    [ariaRemoveLabel]="item.ariaRemoveLabel"
+    [clickable]="item.clickable"
+    [color]="item.color"
+    [disabled]="item.disabled"
+    [filter]="item.filter"
+    [removable]="item.removable"
+    [selectable]="item.selectable"
+    [size]="item.size"
+    [value]="item.value"
+    [variant]="item.variant"
+    >{{ item.label ?? item.value }}</c-chip
+  >
+}
+<ng-content />

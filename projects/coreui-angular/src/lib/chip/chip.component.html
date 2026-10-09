@@ -1,0 +1,44 @@
+@if (isFilter() && isSelected()) {
+  <span class="chip-check" aria-hidden="true">
+    @if (selectedIconTemplate(); as selectedIconTpl) {
+      <ng-container *ngTemplateOutlet="selectedIconTpl" />
+    } @else {
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512" fill="currentColor">
+        <path d="M425.373 89.373 196 318.745 86.627 209.373l-45.254 45.254L196 409.255l274.627-274.628z" />
+      </svg>
+    }
+  </span>
+}
+<ng-content />
+@if (isRemovable() && !isDisabled()) {
+  @if (hasRemoveButton()) {
+    <button
+      type="button"
+      class="chip-remove"
+      tabindex="-1"
+      [attr.aria-label]="removeLabel()"
+      (click)="onRemoveClick($event)"
+    >
+      <ng-container *ngTemplateOutlet="removeIconTemplate() ?? defaultRemoveIcon" />
+    </button>
+  } @else {
+    <span class="chip-remove" aria-hidden="true" (click)="onRemoveClick($event)">
+      <ng-container *ngTemplateOutlet="removeIconTemplate() ?? defaultRemoveIcon" />
+    </span>
+  }
+}
+<ng-template #defaultRemoveIcon>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+  >
+    <line x1="4" y1="4" x2="12" y2="12" />
+    <line x1="12" y1="4" x2="4" y2="12" />
+  </svg>
+</ng-template>
