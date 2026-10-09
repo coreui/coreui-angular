@@ -14,7 +14,7 @@ import { ChipComponent } from '../chip/chip.component';
 import { ChipSetRef } from '../chip/chip-set-ref';
 import { optionalNumberAttribute } from '../chip/chip.utils';
 import { ChipSetService } from './chip-set.service';
-import { ChipItem, ChipSelectionMode } from './chip-set.types';
+import { ChipItem } from './chip-set.types';
 
 @Component({
   selector: 'c-chip-set',
@@ -133,7 +133,7 @@ export class ChipSetComponent {
    * @returns 'single' | 'multiple'
    * @default 'multiple'
    */
-  readonly selectionMode = input<ChipSelectionMode>('multiple');
+  readonly selectionMode = input<'single' | 'multiple'>('multiple');
 
   /**
    * Tab index of the set host. Without it the set takes `-1` only while it holds focus after its last chip is removed.

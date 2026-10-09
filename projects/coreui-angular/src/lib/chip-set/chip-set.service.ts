@@ -27,6 +27,7 @@ export interface ChipSetHost {
   readonly filter: Signal<boolean>;
   readonly initialStop: 'first' | 'last';
   readonly isListbox: Signal<boolean>;
+  readonly readonly?: Signal<boolean>;
   readonly removable: Signal<boolean>;
   readonly removeIcon: Signal<TemplateRef<unknown> | undefined>;
   readonly selectable: Signal<boolean>;
@@ -60,6 +61,7 @@ export class ChipSetService extends ChipSetRef {
   readonly disabled = computed(() => this.#host()?.disabled() ?? false);
   readonly filter = computed(() => this.#host()?.filter() ?? false);
   readonly isListbox = computed(() => this.#host()?.isListbox() ?? false);
+  readonly readonly = computed(() => this.#host()?.readonly?.() ?? false);
   readonly removable = computed(() => this.#host()?.removable() ?? false);
   readonly removeIcon = computed(() => this.#host()?.removeIcon());
   readonly selectable = computed(() => this.#host()?.selectable() ?? false);
@@ -140,7 +142,7 @@ export class ChipSetService extends ChipSetRef {
       return null;
     }
     if (this.orderedItems().length === 0) {
-      return chip === this.#firstFocusable() ? 0 : -1;
+      return chip === this.#provisionalStop() ? 0 : -1;
     }
     if (!this.#ordered().has(chip)) {
       return null;
@@ -150,6 +152,17 @@ export class ChipSetService extends ChipSetRef {
 
   requestRemove(chip: ChipComponent): void {
     this.#host()?.removeRequested(chip.identity());
+  }
+
+  focusLast(): boolean {
+    const chip = this.#lastFocusable();
+    chip?.focus();
+    return !!chip;
+  }
+
+  isLastFocusable(target: EventTarget | null): boolean {
+    const chip = this.#chipContaining(target);
+    return !!chip && chip === this.#lastFocusable();
   }
 
   handleKeydown($event: KeyboardEvent): void {
@@ -171,13 +184,19 @@ export class ChipSetService extends ChipSetRef {
     const chip = this.#chipContaining($event.target);
     this.#focusedItem = chip;
     if (chip?.focusable() && this.#host()?.element.contains(chip.element)) {
-      [...this.#registry]
-        .filter((item) => item !== chip && item.element.getAttribute('tabindex') === '0')
-        .forEach((item) => item.element.setAttribute('tabindex', '-1'));
-      chip.element.setAttribute('tabindex', '0');
       this.activeItem.set(chip);
-      this.#keyManager.updateActiveItem(chip);
+      this.#moveStop(chip);
     }
+  }
+
+  resync(): void {
+    this.#settled = false;
+    this.#scheduleRefresh();
+  }
+
+  resetStop(): void {
+    this.activeItem.set(null);
+    this.#moveStop(untracked(this.#stop));
   }
 
   handleFocusout($event: FocusEvent): void {
@@ -340,13 +359,35 @@ export class ChipSetService extends ChipSetRef {
     return focusable.find((chip) => this.isSelected(chip.identity())) ?? focusable[0] ?? null;
   }
 
-  #firstFocusable(): ChipComponent | null {
+  #lastFocusable(): ChipComponent | null {
+    return (
+      this.#updateOrder()
+        .filter((chip) => chip.focusable())
+        .at(-1) ?? null
+    );
+  }
+
+  #provisionalStop(): ChipComponent | null {
+    const host = this.#host();
+    if (!host || host.initialStop === 'last') {
+      return null;
+    }
     for (const chip of this.#registry) {
-      if (chip.focusable()) {
+      if (chip.focusable() && host.element.contains(chip.element)) {
         return chip;
       }
     }
     return null;
+  }
+
+  #moveStop(stop: ChipComponent | null): void {
+    [...this.#registry]
+      .filter((item) => item !== stop && item.element.getAttribute('tabindex') === '0')
+      .forEach((item) => item.element.setAttribute('tabindex', '-1'));
+    if (stop) {
+      stop.element.setAttribute('tabindex', '0');
+      this.#keyManager.updateActiveItem(stop);
+    }
   }
 
   #chipContaining(target: EventTarget | null): ChipComponent | null {

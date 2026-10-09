@@ -1,0 +1,24 @@
+@if (label(); as label) {
+  <label class="chip-input-label" [for]="id()">{{ label }}</label>
+}
+@for (item of items(); track item) {
+  <c-chip [class]="chipClass(item)" [value]="item">{{ item }}</c-chip>
+}
+<input
+  #field
+  type="text"
+  class="chip-input-field"
+  [attr.aria-describedby]="ariaDescribedBy() ?? null"
+  [attr.aria-invalid]="state() === 'invalid' ? 'true' : null"
+  [attr.aria-label]="ariaLabel() ?? null"
+  [attr.aria-labelledby]="ariaLabelledBy() ?? null"
+  [attr.aria-required]="required() ? 'true' : null"
+  [attr.size]="fieldSize()"
+  [disabled]="disabled()"
+  [id]="id()"
+  [placeholder]="placeholder()"
+  [readOnly]="readonly() && !disabled()"
+  (input)="onFieldInput($event)"
+  (keydown)="onFieldKeydown($event)"
+  (paste)="onFieldPaste($event)"
+/>

@@ -6,6 +6,7 @@ export abstract class ChipSetRef {
   abstract readonly disabled: Signal<boolean>;
   abstract readonly filter: Signal<boolean>;
   abstract readonly isListbox: Signal<boolean>;
+  abstract readonly readonly: Signal<boolean>;
   abstract readonly removable: Signal<boolean>;
   abstract readonly removeIcon: Signal<TemplateRef<unknown> | undefined>;
   abstract readonly selectable: Signal<boolean>;
