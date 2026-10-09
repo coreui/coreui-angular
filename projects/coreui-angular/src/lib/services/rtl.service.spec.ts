@@ -46,7 +46,7 @@ describe('RtlService', () => {
     expect(service.isRTL()).toBe(false);
   });
 
-  it('should answer the same for a detached element as for a connected one', () => {
+  it('should answer the same for a detached element as for a connected one under an explicit dir', () => {
     const cases: [string, boolean][] = [
       ['<div dir="rtl"><span data-probe></span></div>', true],
       ['<div dir="rtl"><div dir="ltr"><span data-probe></span></div></div>', false]
@@ -99,7 +99,7 @@ describe('RtlService', () => {
   });
 
   it('should resolve dir=auto from the content it has at the time', () => {
-    fixtureEl.innerHTML = '<div dir="auto">مرحبا<span id="probe"></span></div>';
+    fixtureEl.innerHTML = '<div dir="rtl"><div dir="auto">مرحبا<span id="probe"></span></div></div>';
     const probe = fixtureEl.querySelector<HTMLElement>('#probe');
 
     expect(service.isRTL(probe)).toBe(true);
@@ -128,7 +128,7 @@ describe('RtlService', () => {
     expect(service.isRTL(field?.parentElement)).toBe(true);
   });
 
-  it('should read the nearest dir when there is no computed direction', () => {
+  it('should read the nearest explicit dir when there is no computed direction', () => {
     vi.spyOn(window, 'getComputedStyle').mockReturnValue({ direction: '' } as CSSStyleDeclaration);
     document.documentElement.dir = 'rtl';
     fixtureEl.innerHTML =
