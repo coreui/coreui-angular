@@ -101,6 +101,7 @@ describe('ChipSetComponent', () => {
   });
 
   afterEach(() => {
+    document.documentElement.removeAttribute('dir');
     vi.restoreAllMocks();
   });
 
@@ -195,6 +196,19 @@ describe('ChipSetComponent', () => {
     press(chip('a'), 'ArrowLeft');
     expect(document.activeElement).toBe(chip('b'));
     press(chip('b'), 'ArrowRight');
+    expect(document.activeElement).toBe(chip('a'));
+  });
+
+  it('ChipSet keeps arrow keys in an LTR island on an RTL page', async () => {
+    document.documentElement.dir = 'rtl';
+    host.selectable.set(true);
+    host.dir.set('ltr');
+    host.declare('a', 'b');
+    await fixture.whenStable();
+    chip('a').focus();
+    press(chip('a'), 'ArrowRight');
+    expect(document.activeElement).toBe(chip('b'));
+    press(chip('b'), 'ArrowLeft');
     expect(document.activeElement).toBe(chip('a'));
   });
 
