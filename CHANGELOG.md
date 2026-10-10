@@ -2,6 +2,22 @@
 
 ---
 
+#### `5.7.36` for Angular 22.2.2
+
+- chore(dependencies): update to Angular 22.2.2
+  - `@angular/common` to version 22.2.2
+  - `@angular/compiler` to version 22.2.2
+  - `@angular/core` to version 22.2.2
+  - `@angular/forms` to version 22.2.2
+  - `@angular/localize` to version 22.2.2
+  - `@angular/platform-browser` to version 22.2.2
+  - `@angular/router` to version 22.2.2
+  - `@angular/compiler-cli` to version 22.2.2
+  - `@angular/language-service` to version 22.2.2
+  - `@types/node` to version 26.6.5
+
+---
+
 #### `5.7.35` for Angular 22.2.1
 
 - fix(dropdown): keyboard, focus and ARIA parity
