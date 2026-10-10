@@ -2,6 +2,26 @@
 
 ---
 
+#### `5.7.36` for Angular 22.2.2
+
+- feat(chip): add `c-chip` and `c-chip-set`: removable, selectable and filter chips
+- feat(chip-input): add `c-chip-input`, a form control that turns typed or pasted text into chips
+- fix(theme.directive): `colorScheme="light"` kept on first render
+- fix(rtl.service): read the computed direction, so an LTR island on an RTL page is LTR
+- chore(dependencies): update to Angular 22.2.2
+  - `@angular/common` to version 22.2.2
+  - `@angular/compiler` to version 22.2.2
+  - `@angular/core` to version 22.2.2
+  - `@angular/forms` to version 22.2.2
+  - `@angular/localize` to version 22.2.2
+  - `@angular/platform-browser` to version 22.2.2
+  - `@angular/router` to version 22.2.2
+  - `@angular/compiler-cli` to version 22.2.2
+  - `@angular/language-service` to version 22.2.2
+  - `@types/node` to version 26.6.5
+
+---
+
 #### `5.7.35` for Angular 22.2.1
 
 - fix(dropdown): keyboard, focus and ARIA parity
