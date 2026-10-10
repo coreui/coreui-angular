@@ -16,6 +16,7 @@ export * from './lib/callout';
 export * from './lib/card';
 export * from './lib/carousel';
 export * from './lib/chip';
+export * from './lib/chip-input';
 export * from './lib/chip-set';
 export * from './lib/collapse';
 export * from './lib/dropdown';

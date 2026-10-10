@@ -19,7 +19,7 @@ import {
 import { Colors } from '../coreui.types';
 import { UIDService } from '../services/uid.service';
 import { ChipSetRef } from './chip-set-ref';
-import { ChipSize, ChipVariant } from './chip.types';
+import { ChipVariant } from './chip.types';
 import { getChipText, optionalBooleanAttribute, optionalNumberAttribute } from './chip.utils';
 
 @Component({
@@ -143,7 +143,7 @@ export class ChipComponent implements FocusableOption, OnInit {
    * @returns 'sm' | 'lg' | undefined
    * @default undefined
    */
-  readonly size = input<ChipSize>();
+  readonly size = input<'sm' | 'lg'>();
 
   /**
    * Tab index of a standalone chip. Inside a chip set it is ignored: the set keeps one tab stop for all its chips.
@@ -215,7 +215,9 @@ export class ChipComponent implements FocusableOption, OnInit {
     this.roleAttr() === 'button' && this.isSelectable() ? String(this.isSelected()) : null
   );
 
-  readonly ariaDisabled = computed(() => (this.roleAttr() && this.isDisabled() ? 'true' : null));
+  readonly isLocked = computed(() => this.isSelectable() && !!this.#set?.readonly());
+
+  readonly ariaDisabled = computed(() => (this.roleAttr() && (this.isDisabled() || this.isLocked()) ? 'true' : null));
 
   readonly hasRemoveButton = computed(() => this.isRemovable() && !this.isDisabled() && this.roleAttr() !== 'option');
 
@@ -251,7 +253,7 @@ export class ChipComponent implements FocusableOption, OnInit {
       disabled: this.isDisabled(),
       [`chip-${color}`]: !!color,
       [`chip-${size}`]: !!size,
-      'chip-clickable': this.clickable() || this.isSelectable(),
+      'chip-clickable': (this.clickable() || this.isSelectable()) && !this.isLocked(),
       'chip-outline': this.variant() === 'outline'
     } as Record<string, boolean>;
   });
@@ -345,6 +347,9 @@ export class ChipComponent implements FocusableOption, OnInit {
   }
 
   #toggle(): void {
+    if (this.isLocked()) {
+      return;
+    }
     const next = !this.isSelected();
     this.#selected.set(next);
     this.selectedChange.emit(next);
