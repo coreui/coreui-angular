@@ -1,83 +1,51 @@
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { ButtonDirective } from './button.directive';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, ElementRef, signal } from '@angular/core';
-import { By } from '@angular/platform-browser';
-
-class MockElementRef extends ElementRef {}
-
-@Component({
-  template: '<button cButton color="info" size="lg"></button>',
-  imports: [ButtonDirective]
-})
-class TestComponent {}
-
-@Component({
-  template: '<button cButton [disabled]="disabled()" [tabindex]="tabindex()"></button>',
-  imports: [ButtonDirective]
-})
-class TestBoundComponent {
-  readonly disabled = signal(false);
-  readonly tabindex = signal<number | undefined>(undefined);
-}
 
 describe('ButtonDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let elementRef: DebugElement;
+  let disabled: WritableSignal<boolean>;
+  let tabindex: WritableSignal<number | undefined>;
+  let fixture: DirectiveFixture<ButtonDirective>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent, ButtonDirective],
-      providers: [{ provide: ElementRef, useClass: MockElementRef }]
+    disabled = signal(false);
+    tabindex = signal<number | undefined>(undefined);
+    fixture = TestBed.createDirective(ButtonDirective, {
+      tagName: 'button',
+      bindings: [
+        inputBinding('color', () => 'info'),
+        inputBinding('size', () => 'lg'),
+        inputBinding('disabled', disabled),
+        inputBinding('tabindex', tabindex)
+      ]
     });
-
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    elementRef = fixture.debugElement.query(By.directive(ButtonDirective));
-
-    fixture.detectChanges(); // initial binding
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new ButtonDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css classes', () => {
-    expect(elementRef.nativeElement.classList.contains('btn')).toBe(true);
-    expect(elementRef.nativeElement.classList.contains('btn-lg')).toBe(true);
-    expect(elementRef.nativeElement.classList.contains('btn-info')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('btn')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('btn-lg')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('btn-info')).toBe(true);
   });
 
-  describe('with bound inputs', () => {
-    let boundFixture: ComponentFixture<TestBoundComponent>;
-    let boundComponent: TestBoundComponent;
-    let boundElementRef: DebugElement;
+  it('should not set tabindex when bound to undefined', () => {
+    expect(fixture.nativeElement.getAttribute('tabindex')).toBeNull();
+  });
 
-    beforeEach(() => {
-      boundFixture = TestBed.createComponent(TestBoundComponent);
-      boundComponent = boundFixture.componentInstance;
-      boundElementRef = boundFixture.debugElement.query(By.directive(ButtonDirective));
-      boundFixture.detectChanges();
-    });
+  it('should pass tabindex to the host', () => {
+    tabindex.set(2);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('tabindex')).toBe('2');
+  });
 
-    it('should not set tabindex when bound to undefined', () => {
-      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBeNull();
-    });
-
-    it('should pass tabindex to the host', () => {
-      boundComponent.tabindex.set(2);
-      boundFixture.detectChanges();
-      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBe('2');
-    });
-
-    it('should set tabindex to -1 when disabled', () => {
-      boundComponent.tabindex.set(2);
-      boundComponent.disabled.set(true);
-      boundFixture.detectChanges();
-      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBe('-1');
-    });
+  it('should set tabindex to -1 when disabled', () => {
+    tabindex.set(2);
+    disabled.set(true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('tabindex')).toBe('-1');
   });
 });

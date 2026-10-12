@@ -1,11 +1,21 @@
+import { inputBinding, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PlaceholderAnimationDirective } from './placeholder-animation.directive';
 
 describe('PlaceholderAnimationDirective', () => {
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new PlaceholderAnimationDirective();
-      expect(directive).toBeTruthy();
+    const fixture = TestBed.createDirective(PlaceholderAnimationDirective, { tagName: 'p' });
+    expect(fixture.directiveInstance).toBeTruthy();
+  });
+
+  it('should not animate without a placeholder', () => {
+    const animation = signal<'glow' | 'wave' | undefined>('wave');
+    const fixture = TestBed.createDirective(PlaceholderAnimationDirective, {
+      tagName: 'p',
+      bindings: [inputBinding('cPlaceholderAnimation', animation)]
     });
+    fixture.detectChanges();
+    expect(fixture.directiveInstance.animation()).toBe('wave');
+    expect(fixture.nativeElement.classList.contains('placeholder-wave')).toBe(false);
   });
 });

@@ -1,46 +1,19 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ComponentRef,
-  DebugElement,
-  DOCUMENT,
-  ElementRef,
-  Renderer2,
-  signal,
-  ViewContainerRef
-} from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { DOCUMENT, inputBinding, signal, twoWayBinding, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { TooltipDirective } from './tooltip.directive';
 import { Triggers } from '../coreui.types';
-import { ListenersService } from '../services';
-
-@Component({
-  template:
-    '<button cTooltip="content" [(cTooltipVisible)]="visible" [cTooltipTrigger]="trigger" >{{content()}}</button>',
-  imports: [TooltipDirective]
-})
-export class TestComponent {
-  readonly content = signal('Test');
-  readonly visible = signal(false);
-  readonly trigger: Triggers[] = ['hover', 'click'];
-}
-
-class MockElementRef extends ElementRef {}
 
 describe('TooltipDirective', () => {
-  let component: TestComponent;
-  let componentRef: ComponentRef<TestComponent>;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
+  let visible: WritableSignal<boolean>;
+  let fixture: DirectiveFixture<TooltipDirective>;
   let document: Document;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // Mock IntersectionObserver
     (globalThis as any).IntersectionObserver = class IntersectionObserver {
       constructor() {
-        // Mock implementation
+        //
       }
       observe = vi.fn();
       unobserve = vi.fn();
@@ -53,22 +26,16 @@ describe('TooltipDirective', () => {
 
     vi.useFakeTimers();
 
-    await TestBed.configureTestingModule({
-      imports: [TestComponent],
-      providers: [
-        // IntersectionService,
-        Renderer2,
-        ListenersService,
-        { provide: ElementRef, useClass: MockElementRef },
-        ViewContainerRef,
-        ChangeDetectorRef
-      ]
-    }).compileComponents();
     document = TestBed.inject(DOCUMENT);
-    fixture = TestBed.createComponent(TestComponent);
-    fixture.whenStable();
-    component = fixture.componentInstance;
-    debugElement = fixture.debugElement.query(By.directive(TooltipDirective));
+    visible = signal(false);
+    fixture = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [
+        inputBinding('cTooltip', () => 'content'),
+        twoWayBinding('cTooltipVisible', visible),
+        inputBinding('cTooltipTrigger', () => ['hover', 'click'] as Triggers[])
+      ]
+    });
     fixture.autoDetectChanges();
   });
 
@@ -77,19 +44,16 @@ describe('TooltipDirective', () => {
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new TooltipDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css classes', async () => {
     expect(document.querySelector('.tooltip.show')).toBeNull();
-    component.visible.set(true);
+    visible.set(true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
-    component.visible.set(false);
+    visible.set(false);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeNull();
@@ -97,30 +61,30 @@ describe('TooltipDirective', () => {
 
   it('should set popover on and off', async () => {
     fixture.autoDetectChanges();
-    component.visible.set(false);
+    visible.set(false);
     expect(document.querySelector('.tooltip.show')).toBeNull();
-    debugElement.nativeElement.dispatchEvent(new Event('mouseenter'));
+    fixture.nativeElement.dispatchEvent(new Event('mouseenter'));
     await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
-    debugElement.nativeElement.dispatchEvent(new Event('mouseleave'));
+    fixture.nativeElement.dispatchEvent(new Event('mouseleave'));
     await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeNull();
   });
 
   it('should toggle popover', async () => {
     fixture.autoDetectChanges();
-    component.visible.set(false);
+    visible.set(false);
     expect(document.querySelector('.tooltip.show')).toBeNull();
-    debugElement.nativeElement.dispatchEvent(new Event('click'));
+    fixture.nativeElement.dispatchEvent(new Event('click'));
     await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
-    debugElement.nativeElement.dispatchEvent(new Event('click'));
+    fixture.nativeElement.dispatchEvent(new Event('click'));
     await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeNull();
   });
 
   it('should not close the tooltip when a non-Escape key is pressed', async () => {
-    component.visible.set(true);
+    visible.set(true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
@@ -131,7 +95,7 @@ describe('TooltipDirective', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
 
-    expect(component.visible()).toBe(true);
+    expect(visible()).toBe(true);
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
   });
 
@@ -139,13 +103,13 @@ describe('TooltipDirective', () => {
     const addSpy = vi.spyOn(document, 'addEventListener');
     const removeSpy = vi.spyOn(document, 'removeEventListener');
 
-    component.visible.set(true);
+    visible.set(true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
 
     expect(addSpy).toHaveBeenCalledWith('keydown', expect.any(Function), true);
 
-    component.visible.set(false);
+    visible.set(false);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
 
@@ -156,11 +120,11 @@ describe('TooltipDirective', () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     fixture.detectChanges();
     await vi.runAllTimersAsync();
-    expect(component.visible()).toBe(false);
+    expect(visible()).toBe(false);
   });
 
   it('should remove the document keydown listener when the directive is destroyed while visible', async () => {
-    component.visible.set(true);
+    visible.set(true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
 
@@ -171,9 +135,9 @@ describe('TooltipDirective', () => {
     expect(removeSpy).toHaveBeenCalledWith('keydown', expect.any(Function), true);
 
     // the handler is gone: an Escape keypress no longer flips the model
-    component.visible.set(true);
+    visible.set(true);
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     await vi.runAllTimersAsync();
-    expect(component.visible()).toBe(true);
+    expect(visible()).toBe(true);
   });
 });

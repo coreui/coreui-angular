@@ -1,41 +1,32 @@
-import { Component, ComponentRef, DebugElement, ElementRef, input, Renderer2 } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
+import { Colors } from '../coreui.types';
 import { ProgressBarDirective } from './progress-bar.directive';
-import { By } from '@angular/platform-browser';
 import { ProgressService } from './progress.service';
 
-class MockElementRef extends ElementRef {}
-
-@Component({
-  template: `<div cProgressBar [value]="value()" [color]="color()" variant="striped" animated></div>`,
-  selector: 'c-test',
-  imports: [ProgressBarDirective]
-})
-export class TestComponent {
-  readonly value = input(42);
-  readonly color = input('success');
-}
-
 describe('ProgressBarDirective', () => {
+  let value: WritableSignal<number | undefined>;
+  let color: WritableSignal<Colors>;
   let directive: ProgressBarDirective;
-  let debugElement: DebugElement;
-  let fixture: ComponentFixture<TestComponent>;
-  let componentRef: ComponentRef<TestComponent>;
+  let fixture: DirectiveFixture<ProgressBarDirective>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }, ProgressService],
-      imports: [TestComponent]
+      providers: [ProgressService]
     });
-    fixture = TestBed.createComponent(TestComponent);
-    componentRef = fixture.componentRef;
-    debugElement = fixture.debugElement.query(By.directive(ProgressBarDirective));
-    directive = debugElement.injector.get(ProgressBarDirective);
+    value = signal<number | undefined>(42);
+    color = signal<Colors>('success');
+    fixture = TestBed.createDirective(ProgressBarDirective, {
+      tagName: 'div',
+      bindings: [
+        inputBinding('value', value),
+        inputBinding('color', color),
+        inputBinding('variant', () => 'striped'),
+        inputBinding('animated', () => '')
+      ]
+    });
+    directive = fixture.directiveInstance;
     fixture.detectChanges();
-
-    // TestBed.runInInjectionContext(() => {
-    //   directive = new ProgressBarDirective();
-    // });
   });
 
   it('should create an instance', () => {
@@ -67,15 +58,16 @@ describe('ProgressBarDirective', () => {
   });
 
   it('should have aria-* attributes', () => {
-    expect(debugElement.nativeElement.getAttribute('aria-valuenow')).toBe('42');
-    expect(debugElement.nativeElement.getAttribute('aria-valuemin')).toBe('0');
-    expect(debugElement.nativeElement.getAttribute('aria-valuemax')).toBe('100');
-    expect(debugElement.nativeElement.getAttribute('role')).toBe('progressbar');
-    componentRef.setInput('value', undefined);
+    const element = fixture.nativeElement;
+    expect(element.getAttribute('aria-valuenow')).toBe('42');
+    expect(element.getAttribute('aria-valuemin')).toBe('0');
+    expect(element.getAttribute('aria-valuemax')).toBe('100');
+    expect(element.getAttribute('role')).toBe('progressbar');
+    value.set(undefined);
     fixture.detectChanges();
-    expect(debugElement.nativeElement.getAttribute('aria-valuenow')).toBeNull();
-    expect(debugElement.nativeElement.getAttribute('aria-valuemin')).toBeNull();
-    expect(debugElement.nativeElement.getAttribute('aria-valuemax')).toBeNull();
-    expect(debugElement.nativeElement.getAttribute('role')).toBeNull();
+    expect(element.getAttribute('aria-valuenow')).toBeNull();
+    expect(element.getAttribute('aria-valuemin')).toBeNull();
+    expect(element.getAttribute('aria-valuemax')).toBeNull();
+    expect(element.getAttribute('role')).toBeNull();
   });
 });

@@ -1,69 +1,33 @@
-import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-
+import { inputBinding } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { TableDirective } from './table.directive';
-import { Colors } from '../coreui.types';
-import { TableActiveDirective } from './table-active.directive';
-
-@Component({
-  template: `
-    <table
-      cTable
-      [align]="align"
-      [borderColor]="borderColor"
-      [bordered]="bordered"
-      [borderless]="borderless"
-      [caption]="caption"
-      [color]="color"
-      [hover]="hover"
-      [small]="small"
-      [striped]="striped"
-      [stripedColumns]="stripedColumns"
-      [responsive]="true"
-    ></table>
-  `,
-  imports: [TableDirective]
-})
-class TestComponent {
-  align: 'bottom' | 'middle' | 'top' = 'middle';
-  borderColor: Colors = 'primary';
-  bordered: boolean = true;
-  borderless: boolean = false;
-  caption = 'top' as const;
-  color: Colors = 'secondary';
-  hover: boolean = true;
-  small: boolean = true;
-  striped: boolean = true;
-  stripedColumns: boolean = true;
-}
-
-class MockElementRef extends ElementRef {}
 
 describe('TableDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
+  let fixture: DirectiveFixture<TableDirective>;
   let directive: TableDirective;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent],
-      providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }]
+    fixture = TestBed.createDirective(TableDirective, {
+      bindings: [
+        inputBinding('align', () => 'middle'),
+        inputBinding('borderColor', () => 'primary'),
+        inputBinding('bordered', () => true),
+        inputBinding('borderless', () => false),
+        inputBinding('caption', () => 'top'),
+        inputBinding('color', () => 'secondary'),
+        inputBinding('hover', () => true),
+        inputBinding('small', () => true),
+        inputBinding('striped', () => true),
+        inputBinding('stripedColumns', () => true),
+        inputBinding('responsive', () => true)
+      ]
     });
-    fixture = TestBed.createComponent(TestComponent);
-    debugElement = fixture.debugElement.query(By.directive(TableDirective));
-    directive = debugElement.injector.get(TableDirective);
-    component = fixture.componentInstance;
+    directive = fixture.directiveInstance;
     fixture.detectChanges();
   });
 
   it('should create an instance', () => {
     expect(directive).toBeTruthy();
-    TestBed.runInInjectionContext(() => {
-      const directive = new TableActiveDirective();
-      expect(directive).toBeTruthy();
-    });
   });
 
   it('should apply align input', () => {
@@ -91,13 +55,11 @@ describe('TableDirective', () => {
   });
 
   it('should have responsive wrapper', () => {
-    const parentElement = debugElement.nativeElement.parentElement;
-    const classes = parentElement.classList;
-    expect(classes).toContain('table-responsive');
+    expect(fixture.nativeElement.parentElement?.classList).toContain('table-responsive');
   });
 
   it('should apply correct host classes', () => {
-    const classes = debugElement.nativeElement.classList;
+    const classes = fixture.nativeElement.classList;
 
     expect(classes).toContain('table');
     expect(classes).toContain('align-middle');

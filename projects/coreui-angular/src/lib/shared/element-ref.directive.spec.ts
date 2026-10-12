@@ -1,26 +1,14 @@
-import { ElementRefDirective } from './element-ref.directive';
-import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-class MockElementRef extends ElementRef {}
+import { ElementRefDirective } from './element-ref.directive';
 
 describe('ElementRefDirective', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [{ provide: ElementRef, useClass: MockElementRef }]
-    });
-  });
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new ElementRefDirective();
-      expect(directive).toBeTruthy();
-    });
+    const fixture = TestBed.createDirective(ElementRefDirective, { tagName: 'div' });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should expose elementRef', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new ElementRefDirective();
-      expect(directive.elementRef).toBeInstanceOf(ElementRef);
-    });
+  it('should expose elementRef of the host', () => {
+    const fixture = TestBed.createDirective(ElementRefDirective, { tagName: 'div' });
+    expect(fixture.directiveInstance.elementRef.nativeElement).toBe(fixture.nativeElement);
   });
 });

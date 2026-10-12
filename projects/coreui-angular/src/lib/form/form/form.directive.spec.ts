@@ -1,48 +1,30 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ComponentRef, DebugElement, input } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { FormDirective } from './form.directive';
 
-@Component({
-  imports: [FormDirective],
-  template: '<form cForm [validated]="validated()"></form>'
-})
-class TestComponent {
-  readonly validated = input(false);
-}
-
 describe('FormDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
-  let componentRef: ComponentRef<TestComponent>;
+  let validated: WritableSignal<boolean>;
+  let fixture: DirectiveFixture<FormDirective>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    componentRef = fixture.componentRef;
-    debugElement = fixture.debugElement.query(By.directive(FormDirective));
+    validated = signal(false);
+    fixture = TestBed.createDirective(FormDirective, {
+      bindings: [inputBinding('validated', validated)]
+    });
     fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new FormDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(false);
-    componentRef.setInput('validated', true);
+    expect(fixture.nativeElement.classList.contains('was-validated')).toBe(false);
+    validated.set(true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(true);
-    componentRef.setInput('validated', false);
+    expect(fixture.nativeElement.classList.contains('was-validated')).toBe(true);
+    validated.set(false);
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('was-validated')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('was-validated')).toBe(false);
   });
 });

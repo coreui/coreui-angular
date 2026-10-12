@@ -1,11 +1,38 @@
-import { TestBed } from '@angular/core/testing';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
+import { Sizes } from '../coreui.types';
 import { ListGroupDirective } from './list-group.directive';
 
 describe('ListGroupDirective', () => {
-  it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new ListGroupDirective();
-      expect(directive).toBeTruthy();
+  let flush: WritableSignal<boolean>;
+  let horizontal: WritableSignal<boolean | Sizes | undefined>;
+  let fixture: DirectiveFixture<ListGroupDirective>;
+
+  beforeEach(() => {
+    flush = signal(false);
+    horizontal = signal<boolean | Sizes | undefined>(undefined);
+    fixture = TestBed.createDirective(ListGroupDirective, {
+      tagName: 'ul',
+      bindings: [inputBinding('flush', flush), inputBinding('horizontal', horizontal)]
     });
+    fixture.detectChanges();
+  });
+
+  it('should create an instance', () => {
+    expect(fixture.directiveInstance).toBeTruthy();
+  });
+
+  it('should have css classes', () => {
+    expect(fixture.nativeElement.classList.contains('list-group')).toBe(true);
+    expect(fixture.nativeElement.classList.length).toBe(1);
+    flush.set(true);
+    horizontal.set(true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('list-group-flush')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('list-group-horizontal')).toBe(true);
+    horizontal.set('md');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('list-group-horizontal')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('list-group-horizontal-md')).toBe(true);
   });
 });

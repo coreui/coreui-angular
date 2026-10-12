@@ -1,50 +1,33 @@
-import { Component, DebugElement, ElementRef, Renderer2 } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-
+import { inputBinding } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { HtmlAttributesDirective } from './html-attr.directive';
 
-@Component({
-  template: ` <div [cHtmlAttr]="{ class: 'test', style: { backgroundColor: 'red' }, id: 'id-1' }"></div>`,
-  imports: [HtmlAttributesDirective]
-})
-class TestComponent {}
-
-class MockElementRef extends ElementRef {}
-
 describe('HtmlAttributesDirective', () => {
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
+  let fixture: DirectiveFixture<HtmlAttributesDirective>;
+  let element: HTMLElement;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HtmlAttributesDirective, TestComponent],
-      providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }]
+    fixture = TestBed.createDirective(HtmlAttributesDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('cHtmlAttr', () => ({ class: 'test', style: { backgroundColor: 'red' }, id: 'id-1' }))]
     });
-    fixture = TestBed.createComponent(TestComponent);
-    debugElement = fixture.debugElement.query(By.css('div'));
+    element = fixture.nativeElement as HTMLElement;
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new HtmlAttributesDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should render a class attr', () => {
-    fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('test')).toBe(true);
+    expect(element.classList.contains('test')).toBe(true);
   });
 
   it('should render a style attr', () => {
-    fixture.detectChanges();
-    // console.log(inputEl.nativeElement.style.backgroundColor);
-    expect(debugElement.nativeElement.style.backgroundColor).toBe('red');
+    expect(element.style.backgroundColor).toBe('red');
   });
 
   it('should render an id attr', () => {
-    fixture.detectChanges();
-    expect(debugElement.nativeElement.getAttribute('id')).toBe('id-1');
+    expect(element.getAttribute('id')).toBe('id-1');
   });
 });
