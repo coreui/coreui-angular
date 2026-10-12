@@ -61,13 +61,16 @@ export class CollapseDirective implements OnDestroy {
 
   readonly #visibleEffect = effect(() => {
     const visible = this.visible();
-    if (this.#isFirstChange || !untracked(() => this.animate())) {
-      // no transition
-      this.#isFirstChange = false;
-      this.setInitialState(visible);
-      return;
-    }
     untracked(() => {
+      if (this.#isFirstChange) {
+        this.#isFirstChange = false;
+        this.setInitialState(visible);
+        return;
+      }
+      if (!this.animate()) {
+        this.finishTransition(visible, this.#hostElement.nativeElement, this.horizontal() ? 'width' : 'height');
+        return;
+      }
       this.runTransition(visible);
     });
   });
@@ -148,7 +151,6 @@ export class CollapseDirective implements OnDestroy {
       const startSize = host.getBoundingClientRect()[dimension];
       this.#renderer.setStyle(host, dimension, `${startSize}px`);
       // Force a reflow so the browser registers the starting size before the next style change.
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       host.offsetHeight;
 
       this.#renderer.removeClass(host, 'collapse');
