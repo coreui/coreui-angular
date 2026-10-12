@@ -1,40 +1,13 @@
-import {
-  DestroyRef,
-  Directive,
-  DOCUMENT,
-  effect,
-  ElementRef,
-  inject,
-  input,
-  signal,
-  untracked,
-  WritableSignal
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { fromEvent, Subscription } from 'rxjs';
+import { computed, Directive, DOCUMENT, effect, ElementRef, inject, input } from '@angular/core';
+import { fromEvent } from 'rxjs';
 
 @Directive({
   selector: '[cShadowOnScroll]',
   exportAs: 'cShadowOnScroll'
 })
 export class ShadowOnScrollDirective {
-  readonly #destroyRef: DestroyRef = inject(DestroyRef);
   readonly #document: Document = inject(DOCUMENT);
-  readonly #elementRef: ElementRef = inject(ElementRef);
-  readonly #scrolled: WritableSignal<boolean> = signal(false);
-
-  readonly #scrollEffect = effect(() => {
-    this.#elementRef.nativeElement.classList.toggle(this.#shadowClass, this.#scrolled());
-  });
-
-  #observable!: Subscription;
-  #shadowClass = 'shadow-sm';
-
-  constructor() {
-    this.#destroyRef.onDestroy(() => {
-      this.#scrollEffect?.destroy();
-    });
-  }
+  readonly #elementRef: ElementRef<HTMLElement> = inject(ElementRef);
 
   /**
    * Shadow size applied to the host element once the document has been scrolled; `false`/`'none'` disables it.
@@ -43,20 +16,26 @@ export class ShadowOnScrollDirective {
    */
   readonly cShadowOnScroll = input<'sm' | 'lg' | 'none' | boolean>(true);
 
-  readonly #shadowOnScrollEffect = effect(() => {
+  readonly #shadowClass = computed(() => {
     const value = this.cShadowOnScroll();
-    untracked(() => {
-      this.#scrolled.set(false);
-      if (value) {
-        this.#shadowClass = value === true ? 'shadow' : `shadow-${value}`;
-        this.#observable = fromEvent(this.#document, 'scroll')
-          .pipe(takeUntilDestroyed(this.#destroyRef))
-          .subscribe((scrolled) => {
-            this.#scrolled.set(this.#document.documentElement.scrollTop > 0);
-          });
-      } else {
-        this.#observable?.unsubscribe();
-      }
+    if (!value || value === 'none') {
+      return undefined;
+    }
+    return value === true ? 'shadow' : `shadow-${value}`;
+  });
+
+  readonly #shadowOnScrollEffect = effect((onCleanup) => {
+    const shadowClass = this.#shadowClass();
+    if (!shadowClass) {
+      return;
+    }
+    const host = this.#elementRef.nativeElement;
+    const toggleShadow = () => host.classList.toggle(shadowClass, this.#document.documentElement.scrollTop > 0);
+    toggleShadow();
+    const subscription = fromEvent(this.#document, 'scroll').subscribe(toggleShadow);
+    onCleanup(() => {
+      subscription.unsubscribe();
+      host.classList.remove(shadowClass);
     });
   });
 }
