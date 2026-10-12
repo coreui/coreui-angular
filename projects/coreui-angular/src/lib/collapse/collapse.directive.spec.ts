@@ -1,4 +1,4 @@
-import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { inputBinding, signal, twoWayBinding, WritableSignal } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { CollapseDirective } from './collapse.directive';
 
@@ -14,7 +14,7 @@ describe('CollapseDirective', () => {
       tagName: 'div',
       bindings: [
         inputBinding('horizontal', horizontal),
-        inputBinding('visible', visible),
+        twoWayBinding('visible', visible),
         inputBinding('animate', () => false)
       ]
     });

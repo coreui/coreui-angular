@@ -26,12 +26,12 @@ describe('ColDirective', () => {
         inputBinding('cCol', () => ''),
         inputBinding('order', () => 1),
         inputBinding('offset', () => 1),
-        inputBinding('xs', () => 6),
-        inputBinding('sm', () => 5),
-        inputBinding('md', () => 4),
-        inputBinding('lg', () => 3),
-        inputBinding('xl', () => 2),
-        inputBinding('xxl', () => 1)
+        inputBinding('xs', () => '6'),
+        inputBinding('sm', () => '5'),
+        inputBinding('md', () => '4'),
+        inputBinding('lg', () => '3'),
+        inputBinding('xl', () => '2'),
+        inputBinding('xxl', () => '1')
       ]
     });
     fixture.detectChanges();

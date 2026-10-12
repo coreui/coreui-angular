@@ -31,4 +31,15 @@ describe('ModalToggleDirective', () => {
     (fixture.nativeElement as HTMLElement).click();
     expect(toggle).toHaveBeenCalledWith({ show: 'toggle', id: 'liveDemoModal', trigger: fixture.nativeElement });
   });
+
+  it('should pass an empty id for a bare cModalToggle', () => {
+    const bareFixture = TestBed.createDirective(ModalToggleDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cModalToggle', () => '')]
+    });
+    bareFixture.detectChanges();
+    const toggle = vi.spyOn(TestBed.inject(ModalService), 'toggle');
+    (bareFixture.nativeElement as HTMLElement).click();
+    expect(toggle).toHaveBeenCalledWith({ show: 'toggle', id: '', trigger: bareFixture.nativeElement });
+  });
 });

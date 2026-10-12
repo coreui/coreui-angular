@@ -26,6 +26,12 @@ describe('ButtonCloseDirective', () => {
     expect(fixture.nativeElement.classList.contains('btn-close')).toBe(true);
   });
 
+  it('should not set tabindex when not given', () => {
+    const unboundFixture = TestBed.createDirective(ButtonCloseDirective, { tagName: 'button' });
+    unboundFixture.detectChanges();
+    expect(unboundFixture.nativeElement.getAttribute('tabindex')).toBeNull();
+  });
+
   it('should not set tabindex when bound to undefined', () => {
     expect(fixture.nativeElement.getAttribute('tabindex')).toBeNull();
   });
