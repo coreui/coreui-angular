@@ -1,37 +1,21 @@
-import { Component, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { inputBinding } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { RowDirective } from './row.directive';
-import { By } from '@angular/platform-browser';
-
-@Component({
-  imports: [RowDirective],
-  template: ` <div id="row0" cRow xs="auto" [md]="7"></div> `
-})
-export class TestComponent {}
 
 describe('RowDirective', () => {
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent]
-    });
-    fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-  });
-
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new RowDirective();
-      expect(directive).toBeTruthy();
-    });
+    const fixture = TestBed.createDirective(RowDirective, { tagName: 'div' });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css class', () => {
-    debugElement = fixture.debugElement.query(By.css('#row0'));
-    expect(debugElement.nativeElement.classList.contains('row')).toBe(true);
-    expect(debugElement.nativeElement.classList.contains('row-cols-auto')).toBe(true);
-    expect(debugElement.nativeElement.classList.contains('row-cols-md-7')).toBe(true);
+    const fixture = TestBed.createDirective(RowDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('xs', () => 'auto'), inputBinding('md', () => 7)]
+    });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('row')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('row-cols-auto')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('row-cols-md-7')).toBe(true);
   });
 });

@@ -1,45 +1,32 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { RoundedDirective } from './rounded.directive';
-import { Component, DebugElement, input } from '@angular/core';
-import { By } from '@angular/platform-browser';
-
-@Component({
-  imports: [RoundedDirective],
-  template: '<div [cRounded]="rounded()"></div>'
-})
-class TestComponent {
-  readonly rounded = input(1);
-}
+import { Rounded } from './rounded.type';
 
 describe('RoundedDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
+  let rounded: WritableSignal<Rounded>;
+  let fixture: DirectiveFixture<RoundedDirective>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    debugElement = fixture.debugElement.query(By.directive(RoundedDirective));
+    rounded = signal<Rounded>(1);
+    fixture = TestBed.createDirective(RoundedDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('cRounded', rounded)]
+    });
     fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new RoundedDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement.classList.contains('rounded-1')).toBe(true);
-    fixture.componentRef.setInput('rounded', true);
+    const classList = fixture.nativeElement.classList;
+    expect(classList.contains('rounded-1')).toBe(true);
+    rounded.set(true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('rounded')).toBe(true);
-    fixture.componentRef.setInput('rounded', {
+    expect(classList.contains('rounded')).toBe(true);
+    rounded.set({
       top: false,
       end: true,
       circle: true,
@@ -47,16 +34,16 @@ describe('RoundedDirective', () => {
       size: 3
     });
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('rounded-3')).toBe(true);
-    expect(debugElement.nativeElement.classList.contains('rounded-end')).toBe(true);
-    expect(debugElement.nativeElement.classList.contains('rounded-circle')).toBe(true);
-    expect(debugElement.nativeElement.classList.contains('rounded-pill')).toBe(true);
-    expect(debugElement.nativeElement.classList.length).toBe(4);
-    fixture.componentRef.setInput('rounded', {});
+    expect(classList.contains('rounded-3')).toBe(true);
+    expect(classList.contains('rounded-end')).toBe(true);
+    expect(classList.contains('rounded-circle')).toBe(true);
+    expect(classList.contains('rounded-pill')).toBe(true);
+    expect(classList.length).toBe(4);
+    rounded.set({});
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.length).toBe(0);
-    fixture.componentRef.setInput('rounded', 1234n);
+    expect(classList.length).toBe(0);
+    rounded.set(1234n as unknown as Rounded);
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.length).toBe(0);
+    expect(classList.length).toBe(0);
   });
 });

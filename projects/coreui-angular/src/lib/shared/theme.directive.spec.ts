@@ -1,98 +1,64 @@
-import { Component, DebugElement, ElementRef, input, Renderer2 } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { ThemeDirective } from './theme.directive';
-import { By } from '@angular/platform-browser';
-
-@Component({
-  imports: [ThemeDirective],
-  template: '<div cTheme [colorScheme]="theme()"></div>'
-})
-export class TestComponent {
-  readonly theme = input<'dark' | 'light' | undefined>();
-}
-
-@Component({
-  imports: [ThemeDirective],
-  template: '<div cTheme colorScheme="light" [dark]="dark()"></div>'
-})
-export class TestLightComponent {
-  readonly dark = input(false);
-}
-
-@Component({
-  imports: [ThemeDirective],
-  template: '<div cTheme [colorScheme]="theme()" [dark]="dark()"></div>'
-})
-export class TestDarkComponent {
-  readonly dark = input(false);
-  readonly theme = input<'dark' | 'light' | undefined>();
-}
-
-class MockElementRef extends ElementRef {}
 
 describe('ThemeDirective', () => {
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
+  let colorScheme: WritableSignal<'dark' | 'light' | undefined>;
+  let dark: WritableSignal<boolean>;
+  let fixture: DirectiveFixture<ThemeDirective>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent],
-      providers: [{ provide: ElementRef, useClass: MockElementRef }, Renderer2]
+    colorScheme = signal<'dark' | 'light' | undefined>(undefined);
+    dark = signal(false);
+    fixture = TestBed.createDirective(ThemeDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('colorScheme', colorScheme), inputBinding('dark', dark)]
     });
-    fixture = TestBed.createComponent(TestComponent);
-    debugElement = fixture.debugElement.query(By.css('div'));
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new ThemeDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should set data-coreui-theme attribute', () => {
     fixture.detectChanges();
-    expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
-    fixture.componentRef.setInput('theme', 'dark');
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
+    colorScheme.set('dark');
     fixture.detectChanges();
-    expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
-    fixture.componentRef.setInput('theme', 'light');
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
+    colorScheme.set('light');
     fixture.detectChanges();
-    expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
-    fixture.componentRef.setInput('theme', undefined);
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
+    colorScheme.set(undefined);
     fixture.detectChanges();
-    expect(debugElement.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
   });
 
-  it('should keep a static light colorScheme on the first render', () => {
-    const lightFixture = TestBed.createComponent(TestLightComponent);
-    const element = lightFixture.debugElement.query(By.css('div')).nativeElement;
-    lightFixture.detectChanges();
-    expect(element.getAttribute('data-coreui-theme')).toBe('light');
+  it('should keep a light colorScheme on the first render', () => {
+    colorScheme.set('light');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
   });
 
   it('should apply dark over colorScheme and restore colorScheme when dark is unset', () => {
-    const lightFixture = TestBed.createComponent(TestLightComponent);
-    const element = lightFixture.debugElement.query(By.css('div')).nativeElement;
-    lightFixture.componentRef.setInput('dark', true);
-    lightFixture.detectChanges();
-    expect(element.getAttribute('data-coreui-theme')).toBe('dark');
-    lightFixture.componentRef.setInput('dark', false);
-    lightFixture.detectChanges();
-    expect(element.getAttribute('data-coreui-theme')).toBe('light');
+    colorScheme.set('light');
+    dark.set(true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
+    dark.set(false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
   });
 
   it('should keep dark when colorScheme changes or is unset', () => {
-    const darkFixture = TestBed.createComponent(TestDarkComponent);
-    const element = darkFixture.debugElement.query(By.css('div')).nativeElement;
-    darkFixture.componentRef.setInput('dark', true);
-    darkFixture.componentRef.setInput('theme', 'dark');
-    darkFixture.detectChanges();
-    darkFixture.componentRef.setInput('theme', 'light');
-    darkFixture.detectChanges();
-    expect(element.getAttribute('data-coreui-theme')).toBe('dark');
-    darkFixture.componentRef.setInput('theme', undefined);
-    darkFixture.detectChanges();
-    expect(element.getAttribute('data-coreui-theme')).toBe('dark');
+    dark.set(true);
+    colorScheme.set('dark');
+    fixture.detectChanges();
+    colorScheme.set('light');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
+    colorScheme.set(undefined);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
   });
 });

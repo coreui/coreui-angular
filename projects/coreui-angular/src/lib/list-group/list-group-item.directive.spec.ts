@@ -1,74 +1,44 @@
-import { Component, DebugElement, ElementRef, signal } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { ListGroupItemDirective } from './list-group-item.directive';
 
-class MockElementRef extends ElementRef {}
-
-@Component({
-  template: '<li cListGroupItem></li>',
-  imports: [ListGroupItemDirective]
-})
-class TestComponent {}
-
-@Component({
-  template: '<li cListGroupItem [disabled]="disabled()" [tabindex]="tabindex()"></li>',
-  imports: [ListGroupItemDirective]
-})
-class TestBoundComponent {
-  readonly disabled = signal(false);
-  readonly tabindex = signal<number | undefined>(undefined);
-}
-
 describe('ListGroupItemDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
+  let disabled: WritableSignal<boolean>;
+  let tabindex: WritableSignal<number | undefined>;
+  let fixture: DirectiveFixture<ListGroupItemDirective>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [ListGroupItemDirective, TestComponent],
-      providers: [{ provide: ElementRef, useClass: MockElementRef }]
+    disabled = signal(false);
+    tabindex = signal<number | undefined>(undefined);
+    fixture = TestBed.createDirective(ListGroupItemDirective, {
+      tagName: 'li',
+      bindings: [inputBinding('disabled', disabled), inputBinding('tabindex', tabindex)]
     });
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges(); // initial binding
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new ListGroupItemDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  describe('with bound inputs', () => {
-    let boundFixture: ComponentFixture<TestBoundComponent>;
-    let boundComponent: TestBoundComponent;
-    let boundElementRef: DebugElement;
+  it('should have css classes', () => {
+    expect(fixture.nativeElement.classList.contains('list-group-item')).toBe(true);
+  });
 
-    beforeEach(() => {
-      boundFixture = TestBed.createComponent(TestBoundComponent);
-      boundComponent = boundFixture.componentInstance;
-      boundElementRef = boundFixture.debugElement.query(By.directive(ListGroupItemDirective));
-      boundFixture.detectChanges();
-    });
+  it('should not set tabindex when bound to undefined', () => {
+    expect(fixture.nativeElement.getAttribute('tabindex')).toBeNull();
+  });
 
-    it('should not set tabindex when bound to undefined', () => {
-      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBeNull();
-    });
+  it('should pass tabindex to the host', () => {
+    tabindex.set(2);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('tabindex')).toBe('2');
+  });
 
-    it('should pass tabindex to the host', () => {
-      boundComponent.tabindex.set(2);
-      boundFixture.detectChanges();
-      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBe('2');
-    });
-
-    it('should set tabindex to -1 when disabled', () => {
-      boundComponent.tabindex.set(2);
-      boundComponent.disabled.set(true);
-      boundFixture.detectChanges();
-      expect(boundElementRef.nativeElement.getAttribute('tabindex')).toBe('-1');
-    });
+  it('should set tabindex to -1 when disabled', () => {
+    tabindex.set(2);
+    disabled.set(true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.getAttribute('tabindex')).toBe('-1');
   });
 });

@@ -1,39 +1,48 @@
-import { Component, DebugElement, DOCUMENT, ElementRef } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DOCUMENT, inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { ShadowOnScrollDirective } from './shadow-on-scroll.directive';
-import { By } from '@angular/platform-browser';
-
-@Component({
-  imports: [ShadowOnScrollDirective],
-  template: '<div [cShadowOnScroll]="true"></div>'
-})
-class TestComponent {}
-
-class MockElementRef extends ElementRef {}
 
 describe('ShadowOnScrollDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
+  let shadow: WritableSignal<'sm' | 'lg' | 'none' | boolean>;
+  let fixture: DirectiveFixture<ShadowOnScrollDirective>;
   let document: Document;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent, ShadowOnScrollDirective],
-      providers: [{ provide: ElementRef, useClass: MockElementRef }]
-    }).compileComponents();
+  const scrollTo = (scrollTop: number) => {
+    Object.defineProperty(document.documentElement, 'scrollTop', { configurable: true, value: scrollTop });
+    document.dispatchEvent(new Event('scroll'));
+    fixture.detectChanges();
+  };
 
-    fixture = TestBed.createComponent(TestComponent);
+  beforeEach(() => {
     document = TestBed.inject(DOCUMENT);
-    component = fixture.componentInstance;
-    debugElement = fixture.debugElement.query(By.directive(ShadowOnScrollDirective));
+    shadow = signal<'sm' | 'lg' | 'none' | boolean>(true);
+    fixture = TestBed.createDirective(ShadowOnScrollDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('cShadowOnScroll', shadow)]
+    });
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    delete (document.documentElement as { scrollTop?: number }).scrollTop;
+  });
+
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new ShadowOnScrollDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
+  });
+
+  it('should toggle shadow on scroll', () => {
+    expect(fixture.nativeElement.classList.contains('shadow')).toBe(false);
+    scrollTo(10);
+    expect(fixture.nativeElement.classList.contains('shadow')).toBe(true);
+    scrollTo(0);
+    expect(fixture.nativeElement.classList.contains('shadow')).toBe(false);
+  });
+
+  it('should apply shadow size', () => {
+    shadow.set('lg');
+    fixture.detectChanges();
+    scrollTo(10);
+    expect(fixture.nativeElement.classList.contains('shadow-lg')).toBe(true);
   });
 });

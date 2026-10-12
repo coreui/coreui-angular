@@ -1,38 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { inputBinding } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { TextColorDirective } from './text-color.directive';
-import { Component, DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
-
-@Component({
-  imports: [TextColorDirective],
-  template: '<div cTextColor="primary"></div>'
-})
-class TestComponent {}
 
 describe('TextColorDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
+  let fixture: DirectiveFixture<TextColorDirective>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    debugElement = fixture.debugElement.query(By.directive(TextColorDirective));
+    fixture = TestBed.createDirective(TextColorDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('cTextColor', () => 'primary')]
+    });
     fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new TextColorDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement.classList.contains('text-primary')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('text-primary')).toBe(true);
   });
 });

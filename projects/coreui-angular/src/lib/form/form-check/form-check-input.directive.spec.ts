@@ -1,50 +1,34 @@
-import { Component, DebugElement, ElementRef, Renderer2, signal } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { FormCheckInputDirective } from './form-check-input.directive';
 
-class MockElementRef extends ElementRef {}
-
-@Component({
-  template: '<input cFormCheckInput [indeterminate]="indeterminate()" [checked]="true">',
-  imports: [FormCheckInputDirective]
-})
-class TestComponent {
-  readonly indeterminate = signal(false);
-}
-
 describe('FormCheckInputDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let inputEl: DebugElement;
-  // let renderer: Renderer2;
+  let indeterminate: WritableSignal<boolean>;
+  let fixture: DirectiveFixture<FormCheckInputDirective>;
+  let input: HTMLInputElement;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [FormCheckInputDirective, TestComponent],
-      providers: [Renderer2, { provide: ElementRef, useClass: MockElementRef }]
-    }).compileComponents();
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    inputEl = fixture.debugElement.query(By.directive(FormCheckInputDirective));
+    indeterminate = signal(false);
+    fixture = TestBed.createDirective(FormCheckInputDirective, {
+      bindings: [inputBinding('indeterminate', indeterminate)]
+    });
+    input = fixture.nativeElement as HTMLInputElement;
+    input.checked = true;
     fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new FormCheckInputDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css classes', () => {
-    expect(inputEl.nativeElement.classList.contains('form-check-input')).toBe(true);
+    expect(input.classList.contains('form-check-input')).toBe(true);
   });
 
   it('should have indeterminate state', () => {
-    component.indeterminate.set(true);
+    indeterminate.set(true);
     fixture.detectChanges();
-    expect(inputEl.nativeElement.checked).toBe(false);
-    expect(inputEl.nativeElement.indeterminate).toBe(true);
+    expect(input.checked).toBe(false);
+    expect(input.indeterminate).toBe(true);
   });
 });

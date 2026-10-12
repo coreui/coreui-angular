@@ -1,50 +1,36 @@
-import { Component, DebugElement, input } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { CardImgDirective } from './card-img.directive';
-import { By } from '@angular/platform-browser';
-
-@Component({
-  imports: [CardImgDirective],
-  template: ` <div [cCardImg]="orientation()"></div> `
-})
-export class TestComponent {
-  readonly orientation = input<'top' | 'bottom' | 'start' | 'end' | undefined>(undefined);
-}
 
 describe('CardImgDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
+  let orientation: WritableSignal<'top' | 'bottom' | 'start' | 'end' | undefined>;
+  let fixture: DirectiveFixture<CardImgDirective>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent]
-    }).compileComponents();
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    debugElement = fixture.debugElement.query(By.directive(CardImgDirective));
-    fixture.detectChanges(); // initial binding
+    orientation = signal<'top' | 'bottom' | 'start' | 'end' | undefined>(undefined);
+    fixture = TestBed.createDirective(CardImgDirective, {
+      tagName: 'img',
+      bindings: [inputBinding('cCardImg', orientation)]
+    });
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new CardImgDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css classes', () => {
-    fixture.componentRef.setInput('orientation', 'start');
+    orientation.set('start');
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('rounded-start')).toBe(true);
-    fixture.componentRef.setInput('orientation', 'end');
+    expect(fixture.nativeElement.classList.contains('rounded-start')).toBe(true);
+    orientation.set('end');
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('rounded-end')).toBe(true);
-    fixture.componentRef.setInput('orientation', 'top');
+    expect(fixture.nativeElement.classList.contains('rounded-end')).toBe(true);
+    orientation.set('top');
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('card-img-top')).toBe(true);
-    fixture.componentRef.setInput('orientation', 'bottom');
+    expect(fixture.nativeElement.classList.contains('card-img-top')).toBe(true);
+    orientation.set('bottom');
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('card-img-bottom')).toBe(true);
+    expect(fixture.nativeElement.classList.contains('card-img-bottom')).toBe(true);
   });
 });

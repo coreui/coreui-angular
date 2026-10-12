@@ -1,55 +1,37 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ComponentRef, DebugElement, input } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { FormFloatingDirective } from './form-floating.directive';
-import { FormControlDirective } from '../form-control/form-control.directive';
-import { FormLabelDirective } from '../form-label/form-label.directive';
-
-@Component({
-  imports: [FormFloatingDirective, FormControlDirective, FormLabelDirective],
-  template: `
-    <div [cFormFloating]="floating()">
-      <textarea cFormControl id="floatingTextarea" placeholder="Leave a comment here"></textarea>
-      <label cLabel for="floatingTextarea">Comments</label>
-    </div>
-  `
-})
-class TestComponent {
-  readonly floating = input(false);
-}
 
 describe('FormFloatingDirective', () => {
-  let component: TestComponent;
-  let fixture: ComponentFixture<TestComponent>;
-  let debugElement: DebugElement;
-  let componentRef: ComponentRef<TestComponent>;
+  let floating: WritableSignal<boolean>;
+  let fixture: DirectiveFixture<FormFloatingDirective>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
-    componentRef = fixture.componentRef;
-    debugElement = fixture.debugElement.query(By.directive(FormFloatingDirective));
+    floating = signal(false);
+    fixture = TestBed.createDirective(FormFloatingDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('cFormFloating', floating)]
+    });
     fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    TestBed.runInInjectionContext(() => {
-      const directive = new FormFloatingDirective();
-      expect(directive).toBeTruthy();
-    });
+    expect(fixture.directiveInstance).toBeTruthy();
   });
 
   it('should have css classes', () => {
-    expect(debugElement.nativeElement.classList.contains('form-floating')).toBe(false);
-    componentRef.setInput('floating', true);
+    expect(fixture.nativeElement.classList.contains('form-floating')).toBe(false);
+    floating.set(true);
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('form-floating')).toBe(true);
-    componentRef.setInput('floating', false);
+    expect(fixture.nativeElement.classList.contains('form-floating')).toBe(true);
+    floating.set(false);
     fixture.detectChanges();
-    expect(debugElement.nativeElement.classList.contains('form-floating')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('form-floating')).toBe(false);
+  });
+
+  it('should be floating by default', () => {
+    const defaultFixture = TestBed.createDirective(FormFloatingDirective, { tagName: 'div' });
+    defaultFixture.detectChanges();
+    expect(defaultFixture.nativeElement.classList.contains('form-floating')).toBe(true);
   });
 });
