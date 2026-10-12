@@ -40,6 +40,15 @@ describe('ThemeDirective', () => {
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
   });
 
+  it('should keep a light colorScheme on the first render without a dark binding', () => {
+    const lightFixture = TestBed.createDirective(ThemeDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('colorScheme', () => 'light')]
+    });
+    lightFixture.detectChanges();
+    expect(lightFixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
+  });
+
   it('should apply dark over colorScheme and restore colorScheme when dark is unset', () => {
     colorScheme.set('light');
     dark.set(true);
