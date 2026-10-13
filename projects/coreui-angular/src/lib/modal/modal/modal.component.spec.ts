@@ -13,8 +13,6 @@ describe('ModalComponent', () => {
   let document: Document;
 
   beforeEach(async () => {
-    vi.useFakeTimers();
-    
     await TestBed.configureTestingModule({
       imports: [ModalComponent]
     }).compileComponents();
@@ -24,7 +22,8 @@ describe('ModalComponent', () => {
     await fixture.whenStable();
 
     component = fixture.componentInstance;
-    fixture.detectChanges();
+
+    vi.useFakeTimers();
   });
 
   afterEach(async () => {

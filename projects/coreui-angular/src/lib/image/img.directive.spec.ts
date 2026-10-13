@@ -10,7 +10,7 @@ describe('ImgDirective', () => {
   let placeholderColor: WritableSignal<string>;
   let fixture: DirectiveFixture<ImgDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     align = signal<'' | 'start' | 'end' | 'center'>('');
     fluid = signal(false);
     rounded = signal(false);
@@ -26,36 +26,36 @@ describe('ImgDirective', () => {
         inputBinding('placeholderColor', placeholderColor)
       ]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     expect(fixture.nativeElement.classList.length).toBe(0);
     align.set('start');
     fluid.set(true);
     rounded.set(true);
     thumbnail.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('float-start')).toBe(true);
     expect(fixture.nativeElement.classList.contains('img-fluid')).toBe(true);
     expect(fixture.nativeElement.classList.contains('rounded')).toBe(true);
     expect(fixture.nativeElement.classList.contains('img-thumbnail')).toBe(true);
     align.set('center');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('float-start')).toBe(false);
     expect(fixture.nativeElement.classList.contains('d-block')).toBe(true);
     expect(fixture.nativeElement.classList.contains('mx-auto')).toBe(true);
   });
 
-  it('should have placeholder background color', () => {
+  it('should have placeholder background color', async () => {
     const element = fixture.nativeElement as HTMLImageElement;
     expect(element.style.backgroundColor).toBe('transparent');
     placeholderColor.set('red');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.style.backgroundColor).toBe('red');
   });
 });

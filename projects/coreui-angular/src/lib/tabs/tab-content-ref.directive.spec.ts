@@ -6,13 +6,13 @@ describe('TabContentRefDirective', () => {
   let disabled: WritableSignal<boolean>;
   let fixture: DirectiveFixture<TabContentRefDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     disabled = signal(false);
     fixture = TestBed.createDirective(TabContentRefDirective, {
       tagName: 'a',
       bindings: [inputBinding('cTabContent', () => undefined), inputBinding('disabled', disabled)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
@@ -23,9 +23,9 @@ describe('TabContentRefDirective', () => {
     expect(fixture.nativeElement.getAttribute('tabindex')).toBeNull();
   });
 
-  it('should set tabindex to -1 when disabled', () => {
+  it('should set tabindex to -1 when disabled', async () => {
     disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('tabindex')).toBe('-1');
   });
 });

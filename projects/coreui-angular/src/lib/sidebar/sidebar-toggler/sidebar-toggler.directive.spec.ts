@@ -9,21 +9,21 @@ describe('SidebarTogglerDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css class, role and styles', () => {
+  it('should have css class, role and styles', async () => {
     const fixture = TestBed.createDirective(SidebarTogglerDirective, { tagName: 'button' });
-    fixture.detectChanges();
+    await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
     expect(element.classList.contains('sidebar-toggler')).toBe(true);
     expect(element.getAttribute('role')).toBe('button');
     expect(element.style.cursor).toBe('pointer');
   });
 
-  it('should toggle the sidebar on click', () => {
+  it('should toggle the sidebar on click', async () => {
     const fixture = TestBed.createDirective(SidebarTogglerDirective, {
       tagName: 'button',
       bindings: [inputBinding('cSidebarToggler', () => 'sidebar-1'), inputBinding('toggle', () => 'unfoldable')]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     const toggle = vi.spyOn(TestBed.inject(SidebarService), 'toggle');
     (fixture.nativeElement as HTMLElement).click();
     expect(toggle).toHaveBeenCalledWith({ toggle: 'unfoldable', id: 'sidebar-1' });

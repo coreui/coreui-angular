@@ -6,31 +6,31 @@ describe('CardImgDirective', () => {
   let orientation: WritableSignal<'top' | 'bottom' | 'start' | 'end' | undefined>;
   let fixture: DirectiveFixture<CardImgDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     orientation = signal<'top' | 'bottom' | 'start' | 'end' | undefined>(undefined);
     fixture = TestBed.createDirective(CardImgDirective, {
       tagName: 'img',
       bindings: [inputBinding('cCardImg', orientation)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     orientation.set('start');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('rounded-start')).toBe(true);
     orientation.set('end');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('rounded-end')).toBe(true);
     orientation.set('top');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('card-img-top')).toBe(true);
     orientation.set('bottom');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('card-img-bottom')).toBe(true);
   });
 });

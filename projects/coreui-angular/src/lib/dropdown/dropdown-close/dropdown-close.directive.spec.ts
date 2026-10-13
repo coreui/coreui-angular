@@ -35,7 +35,7 @@ describe('DropdownCloseDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let elementRef: DebugElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TestComponent],
       providers: [{ provide: ElementRef, useClass: MockElementRef }, Renderer2, DropdownService]
@@ -45,7 +45,7 @@ describe('DropdownCloseDirective', () => {
     component = fixture.componentInstance;
     elementRef = fixture.debugElement.query(By.directive(DropdownCloseDirective));
     component.disabled.set(false);
-    fixture.detectChanges(); // initial binding
+    await fixture.whenStable(); // initial binding
   });
 
   it('should create an instance', () => {
@@ -60,7 +60,7 @@ describe('DropdownCloseDirective', () => {
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBeNull();
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('0');
     component.disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.classList.contains('disabled')).toBe(true);
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBe('true');
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('-1');

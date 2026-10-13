@@ -19,7 +19,6 @@ describe('CarouselItemComponent', () => {
 
     component = fixture.componentInstance;
     service = TestBed.inject(CarouselService);
-    fixture.detectChanges();
   });
 
   it('should create', () => {

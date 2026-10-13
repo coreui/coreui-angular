@@ -7,44 +7,44 @@ describe('FormSelectDirective', () => {
   let valid: WritableSignal<boolean | undefined>;
   let fixture: DirectiveFixture<FormSelectDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     sizing = signal<'' | 'sm' | 'lg' | undefined>(undefined);
     valid = signal<boolean | undefined>(undefined);
     fixture = TestBed.createDirective(FormSelectDirective, {
       bindings: [inputBinding('sizing', sizing), inputBinding('valid', valid)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     const classList = fixture.nativeElement.classList;
     expect(classList.contains('form-select')).toBe(true);
     sizing.set('sm');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('form-select-sm')).toBe(true);
     sizing.set('lg');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('form-select-lg')).toBe(true);
     sizing.set('');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('form-select-sm')).toBe(false);
     expect(classList.contains('form-select-lg')).toBe(false);
     expect(classList.contains('is-invalid')).toBe(false);
     expect(classList.contains('is-valid')).toBe(false);
     valid.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('is-invalid')).toBe(false);
     expect(classList.contains('is-valid')).toBe(true);
     valid.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('is-invalid')).toBe(true);
     expect(classList.contains('is-valid')).toBe(false);
     valid.set(undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('is-invalid')).toBe(false);
     expect(classList.contains('is-valid')).toBe(false);
   });

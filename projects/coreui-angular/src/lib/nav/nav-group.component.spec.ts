@@ -32,7 +32,6 @@ describe('NavGroupComponent', () => {
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -44,57 +43,57 @@ describe('NavGroupComponent', () => {
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
 
-  it('should render toggler', () => {
+  it('should render toggler', async () => {
     expect(fixture.nativeElement.querySelector('.nav-group-toggle')).toBeNull();
     componentRef.setInput('toggler', 'anchorText');
-    fixture.detectChanges();
+    await fixture.whenStable();
     const toggler = fixture.nativeElement.querySelector('.nav-group-toggle');
     expect(toggler.classList.contains('nav-link')).toBe(true);
     expect(toggler.textContent.trim()).toBe('anchorText');
     expect(toggler.getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('should toggle its own visibility', () => {
+  it('should toggle its own visibility', async () => {
     componentRef.setInput('toggler', 'anchorText');
-    fixture.detectChanges();
+    await fixture.whenStable();
     const toggler = fixture.nativeElement.querySelector('.nav-group-toggle');
 
     toggler.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('show')).toBe(true);
 
     toggler.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
 
-  it('should emit visibleChange on toggle', () => {
+  it('should emit visibleChange on toggle', async () => {
     const visibleChange = vi.fn();
     componentRef.setInput('toggler', 'anchorText');
     component.visibleChange.subscribe(visibleChange);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     fixture.nativeElement.querySelector('.nav-group-toggle').click();
     expect(visibleChange).toHaveBeenCalledWith(true);
   });
 
-  it('should follow the visible input', () => {
+  it('should follow the visible input', async () => {
     componentRef.setInput('visible', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('show')).toBe(true);
 
     componentRef.setInput('visible', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
 
-  it('should keep the items displayed while collapsing', () => {
+  it('should keep the items displayed while collapsing', async () => {
     componentRef.setInput('toggler', 'anchorText');
-    fixture.detectChanges();
+    await fixture.whenStable();
     const toggler = fixture.nativeElement.querySelector('.nav-group-toggle');
 
     toggler.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     component.onCollapseChange('open');
     expect(component.display()).toBeNull();
 
@@ -113,33 +112,32 @@ describe('NavGroupComponent accordion', () => {
 
     fixture = TestBed.createComponent(TestComponent);
     await fixture.whenStable();
-    fixture.detectChanges();
   });
 
-  it('should collapse the sibling group on open', () => {
+  it('should collapse the sibling group on open', async () => {
     const groups = fixture.nativeElement.querySelectorAll('c-nav-group');
     const [groupA, , groupB] = groups;
     const togglerA = groupA.querySelector('.nav-group-toggle');
     const togglerB = groupB.querySelector('.nav-group-toggle');
 
     togglerA.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(groupA.classList.contains('show')).toBe(true);
     expect(groupB.classList.contains('show')).toBe(false);
 
     togglerB.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(groupA.classList.contains('show')).toBe(false);
     expect(groupB.classList.contains('show')).toBe(true);
   });
 
-  it('should keep the items displayed when a sibling collapses it', () => {
+  it('should keep the items displayed when a sibling collapses it', async () => {
     const [groupA, , groupB] = fixture.nativeElement.querySelectorAll('c-nav-group');
     const instanceA = fixture.debugElement.queryAll(By.directive(NavGroupComponent))[0]
       .componentInstance as NavGroupComponent;
 
     groupA.querySelector('.nav-group-toggle').click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     instanceA.onCollapseChange('open');
     expect(instanceA.display()).toBeNull();
 
@@ -147,23 +145,23 @@ describe('NavGroupComponent accordion', () => {
     expect(instanceA.display()).toBe('block');
   });
 
-  it('should restore the nested group state on reopen', () => {
+  it('should restore the nested group state on reopen', async () => {
     const [groupA, groupA1] = fixture.nativeElement.querySelectorAll('c-nav-group');
     const togglerA = groupA.querySelector('.nav-group-toggle');
     const togglerA1 = groupA1.querySelector('.nav-group-toggle');
 
     togglerA.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     togglerA1.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(groupA1.classList.contains('show')).toBe(true);
 
     togglerA.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(groupA.classList.contains('show')).toBe(false);
 
     togglerA.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(groupA.classList.contains('show')).toBe(true);
     expect(groupA1.classList.contains('show')).toBe(true);
   });

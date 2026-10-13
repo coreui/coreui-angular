@@ -38,6 +38,7 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/coreui-angular/tsconfig.spec.json",
+            "providersFile": "projects/coreui-angular/src/test-providers.ts",
             "runnerConfig": true
           }
         },
@@ -80,6 +81,7 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/coreui-angular-chartjs/tsconfig.spec.json",
+            "providersFile": "projects/coreui-angular-chartjs/src/test-providers.ts",
             "runnerConfig": true,
             "setupFiles": ["projects/coreui-angular-chartjs/src/test-setup.spec.ts"]
           }
@@ -126,6 +128,7 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/coreui-icons-angular/tsconfig.spec.json",
+            "providersFile": "projects/coreui-icons-angular/src/test-providers.ts",
             "runnerConfig": true
           }
         },

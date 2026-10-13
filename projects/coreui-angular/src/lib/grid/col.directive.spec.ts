@@ -8,18 +8,18 @@ describe('ColDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css class for breakpoint inputs', () => {
+  it('should have css class for breakpoint inputs', async () => {
     const fixture = TestBed.createDirective(ColDirective, {
       tagName: 'div',
       bindings: [inputBinding('cCol', () => ''), inputBinding('lg', () => 'auto'), inputBinding('xl', () => true)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('col')).toBe(true);
     expect(fixture.nativeElement.classList.contains('col-lg-auto')).toBe(true);
     expect(fixture.nativeElement.classList.contains('col-xl')).toBe(true);
   });
 
-  it('should have css class for order, offset and every breakpoint', () => {
+  it('should have css class for order, offset and every breakpoint', async () => {
     const fixture = TestBed.createDirective(ColDirective, {
       tagName: 'div',
       bindings: [
@@ -34,7 +34,7 @@ describe('ColDirective', () => {
         inputBinding('xxl', () => '1')
       ]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     const classList = fixture.nativeElement.classList;
     expect(classList.contains('col-6')).toBe(true);
     expect(classList.contains('order-1')).toBe(true);
@@ -46,7 +46,7 @@ describe('ColDirective', () => {
     expect(classList.contains('col-xxl-1')).toBe(true);
   });
 
-  it('should have css class for responsive order and offset', () => {
+  it('should have css class for responsive order and offset', async () => {
     const offset: ColOffsetType = { md: 2, xs: 1 };
     const order: ColOrderType = { xl: 'first', xxl: 'last', md: 1, xs: 1 };
     const fixture = TestBed.createDirective(ColDirective, {
@@ -57,7 +57,7 @@ describe('ColDirective', () => {
         inputBinding('offset', () => offset)
       ]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     const classList = fixture.nativeElement.classList;
     expect(classList.contains('col')).toBe(true);
     expect(classList.contains('offset-md-2')).toBe(true);

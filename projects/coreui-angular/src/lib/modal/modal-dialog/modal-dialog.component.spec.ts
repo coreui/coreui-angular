@@ -18,7 +18,6 @@ describe('ModalDialogComponent', () => {
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -29,50 +28,50 @@ describe('ModalDialogComponent', () => {
     expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 
-  it('should have css classes for alignment prop', () => {
+  it('should have css classes for alignment prop', async () => {
     componentRef.setInput('alignment', 'center');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('modal-dialog-centered')).toBe(true);
     componentRef.setInput('alignment', 'top');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('modal-dialog-centered')).toBe(false);
     expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 
-  it('should have css classes for fullscreen prop', () => {
+  it('should have css classes for fullscreen prop', async () => {
     componentRef.setInput('fullscreen', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('modal-fullscreen')).toBe(true);
     for (const size of ['sm', 'md', 'lg', 'xl', 'xxl']) {
       componentRef.setInput('fullscreen', size);
-      fixture.detectChanges();
+      await fixture.whenStable();
       expect(fixture.nativeElement.classList.contains(`modal-fullscreen-${size}-down`)).toBe(true);
     }
     componentRef.setInput('fullscreen', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('modal-fullscreen')).toBe(false);
     expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 
-  it('should have css classes for scrollable prop', () => {
+  it('should have css classes for scrollable prop', async () => {
     expect(fixture.nativeElement.classList.contains('modal-dialog-scrollable')).toBe(false);
     componentRef.setInput('scrollable', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('modal-dialog-scrollable')).toBe(true);
     componentRef.setInput('scrollable', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('modal-dialog-scrollable')).toBe(false);
     expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 
-  it('should have css classes for size prop', () => {
+  it('should have css classes for size prop', async () => {
     for (const size of ['sm', 'lg', 'xl']) {
       componentRef.setInput('size', size);
-      fixture.detectChanges();
+      await fixture.whenStable();
       expect(fixture.nativeElement.classList.contains(`modal-${size}`)).toBe(true);
     }
     componentRef.setInput('size', undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('modal-sm')).toBe(false);
     expect(fixture.nativeElement.classList.contains('modal-lg')).toBe(false);
     expect(fixture.nativeElement.classList.contains('modal-xl')).toBe(false);

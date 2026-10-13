@@ -10,7 +10,7 @@ describe('ProgressBarDirective', () => {
   let directive: ProgressBarDirective;
   let fixture: DirectiveFixture<ProgressBarDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       providers: [ProgressService]
     });
@@ -26,7 +26,7 @@ describe('ProgressBarDirective', () => {
       ]
     });
     directive = fixture.directiveInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
@@ -57,14 +57,14 @@ describe('ProgressBarDirective', () => {
     expect(directive.animated()).toBe(true);
   });
 
-  it('should have aria-* attributes', () => {
+  it('should have aria-* attributes', async () => {
     const element = fixture.nativeElement;
     expect(element.getAttribute('aria-valuenow')).toBe('42');
     expect(element.getAttribute('aria-valuemin')).toBe('0');
     expect(element.getAttribute('aria-valuemax')).toBe('100');
     expect(element.getAttribute('role')).toBe('progressbar');
     value.set(undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.getAttribute('aria-valuenow')).toBeNull();
     expect(element.getAttribute('aria-valuemin')).toBeNull();
     expect(element.getAttribute('aria-valuemax')).toBeNull();

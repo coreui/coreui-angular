@@ -5,12 +5,12 @@ import { TextBgColorDirective } from './text-bg-color.directive';
 describe('TextBgColorDirective', () => {
   let fixture: DirectiveFixture<TextBgColorDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createDirective(TextBgColorDirective, {
       tagName: 'div',
       bindings: [inputBinding('cTextBgColor', () => 'primary')]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {

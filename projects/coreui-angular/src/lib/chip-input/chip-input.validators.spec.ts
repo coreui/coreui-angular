@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Directive,
-  input,
-  OnChanges,
-  provideZonelessChangeDetection,
-  signal
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, input, OnChanges, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   AbstractControl,
@@ -78,7 +70,6 @@ class FirstRenderHostComponent {
 
 describe('ChipInputComponent template validators', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
     vi.spyOn(TestBed.inject(AnnouncerService), 'announce').mockReturnValue(vi.fn());
   });
 

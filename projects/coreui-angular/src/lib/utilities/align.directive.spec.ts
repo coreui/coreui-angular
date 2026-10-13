@@ -9,16 +9,16 @@ describe('AlignDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     const align = signal<Alignment | undefined>(undefined);
     const fixture = TestBed.createDirective(AlignDirective, {
       tagName: 'span',
       bindings: [inputBinding('cAlign', align)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.length).toBe(0);
     align.set('middle');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('align-middle')).toBe(true);
   });
 });

@@ -8,12 +8,12 @@ describe('RowDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css class', () => {
+  it('should have css class', async () => {
     const fixture = TestBed.createDirective(RowDirective, {
       tagName: 'div',
       bindings: [inputBinding('xs', () => 'auto'), inputBinding('md', () => 7)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('row')).toBe(true);
     expect(fixture.nativeElement.classList.contains('row-cols-auto')).toBe(true);
     expect(fixture.nativeElement.classList.contains('row-cols-md-7')).toBe(true);

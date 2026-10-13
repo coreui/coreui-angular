@@ -29,7 +29,7 @@ describe('IconDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let svgEl: DebugElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       providers: [IconSetService, { provide: ElementRef, useClass: MockElementRef }],
       imports: [IconDirective, TestComponent]
@@ -37,7 +37,7 @@ describe('IconDirective', () => {
 
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
     svgEl = fixture.debugElement.query(By.css('svg'));
   });
   it('should create an instance', () => {
@@ -51,8 +51,8 @@ describe('IconDirective', () => {
     expect(component.iconSet).toBeTruthy();
   });
 
-  it('icon component should render', () => {
-    fixture.detectChanges();
+  it('icon component should render', async () => {
+    await fixture.whenStable();
     expect(component.iconRef()).toBeDefined();
     expect(component.iconRef()?.code()).toBe(component.iconSet.icons['cilList']);
   });
@@ -92,14 +92,14 @@ describe('IconDirective title XSS', () => {
   let fixture: ComponentFixture<TitleXssTestComponent>;
   let svgEl: DebugElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       providers: [IconSetService],
       imports: [IconDirective, TitleXssTestComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TitleXssTestComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
     svgEl = fixture.debugElement.query(By.css('svg'));
   });
 

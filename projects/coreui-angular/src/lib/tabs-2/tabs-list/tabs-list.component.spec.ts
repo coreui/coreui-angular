@@ -18,28 +18,28 @@ describe('TabsListComponent', () => {
     fixture = TestBed.createComponent(TabsListComponent);
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have css classes for variant', () => {
+  it('should have css classes for variant', async () => {
     expect(fixture.nativeElement.classList.contains('nav')).toBe(true);
 
     componentRef.setInput('variant', 'pills');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(true);
     expect(fixture.nativeElement.classList.contains('nav-enclosed')).toBe(false);
 
     componentRef.setInput('variant', 'enclosed');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-enclosed')).toBe(true);
     expect(fixture.nativeElement.classList.contains('nav-enclosed-pills')).toBe(false);
 
     componentRef.setInput('variant', 'enclosed-pills');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-enclosed')).toBe(true);
     expect(fixture.nativeElement.classList.contains('nav-enclosed-pills')).toBe(true);
   });

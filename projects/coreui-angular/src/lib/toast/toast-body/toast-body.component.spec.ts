@@ -15,7 +15,6 @@ describe('ToastBodyComponent', () => {
     await fixture.whenStable();
 
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

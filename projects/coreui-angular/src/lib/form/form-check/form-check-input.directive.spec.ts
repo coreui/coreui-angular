@@ -7,14 +7,14 @@ describe('FormCheckInputDirective', () => {
   let fixture: DirectiveFixture<FormCheckInputDirective>;
   let input: HTMLInputElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     indeterminate = signal(false);
     fixture = TestBed.createDirective(FormCheckInputDirective, {
       bindings: [inputBinding('indeterminate', indeterminate)]
     });
     input = fixture.nativeElement as HTMLInputElement;
     input.checked = true;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
@@ -25,9 +25,9 @@ describe('FormCheckInputDirective', () => {
     expect(input.classList.contains('form-check-input')).toBe(true);
   });
 
-  it('should have indeterminate state', () => {
+  it('should have indeterminate state', async () => {
     indeterminate.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(input.checked).toBe(false);
     expect(input.indeterminate).toBe(true);
   });

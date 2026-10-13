@@ -33,18 +33,17 @@ describe('CarouselComponent', () => {
 
     service = TestBed.inject(CarouselService);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     expect(fixture.nativeElement.classList.contains('carousel')).toBe(true);
     expect(fixture.nativeElement.classList.contains('slide')).toBe(true);
     fixture.componentRef.setInput('transition', 'crossfade');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('carousel-fade')).toBe(true);
   });
 

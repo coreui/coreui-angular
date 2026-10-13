@@ -16,7 +16,7 @@ describe('VisibleDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let debugElement: DebugElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TestComponent]
     }).compileComponents();
@@ -24,40 +24,40 @@ describe('VisibleDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     debugElement = fixture.debugElement.query(By.directive(VisibleDirective));
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
-  it('should display the content when cVisible is true', () => {
+  it('should display the content when cVisible is true', async () => {
     component.visible.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const content = fixture.nativeElement.textContent.trim();
     expect(content).toBe('Test Node');
   });
 
-  it('should not display the content when cVisible is false', () => {
+  it('should not display the content when cVisible is false', async () => {
     component.visible.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const content = fixture.nativeElement.textContent.trim();
     expect(content).toBe('');
   });
 
-  it('should toggle visibility when cVisible changes from true to false', () => {
+  it('should toggle visibility when cVisible changes from true to false', async () => {
     component.visible.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent.trim()).toBe('Test Node');
 
     component.visible.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent.trim()).toBe('');
   });
 
-  it('should toggle visibility when cVisible changes from false to true', () => {
+  it('should toggle visibility when cVisible changes from false to true', async () => {
     component.visible.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent.trim()).toBe('');
 
     component.visible.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent.trim()).toBe('Test Node');
   });
 });

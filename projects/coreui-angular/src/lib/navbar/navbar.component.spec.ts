@@ -61,8 +61,6 @@ describe('NavbarComponent with BreakpointObserver', () => {
   let collapseDirective: CollapseDirective;
 
   beforeEach(async () => {
-    vi.useFakeTimers();
-
     breakpointSubject = new Subject<BreakpointState>();
     breakpointObserver = { observe: vi.fn() };
     breakpointObserver.observe.mockReturnValue(breakpointSubject.asObservable());
@@ -77,19 +75,6 @@ describe('NavbarComponent with BreakpointObserver', () => {
     // Set up CSS custom property for breakpoint
     const navbarElement = fixture.nativeElement.querySelector('c-navbar');
     navbarElement.style.setProperty('--cui-breakpoint-md', '768px');
-
-    // Trigger initial change detection
-    fixture.detectChanges();
-
-    // Run timers to let afterEveryRender execute
-    await vi.runAllTimersAsync();
-
-    // Detect changes again to trigger the effect
-    fixture.detectChanges();
-
-    // Run timers again for any async operations
-    await vi.runAllTimersAsync();
-
     await fixture.whenStable();
 
     // Get the CollapseDirective instance
@@ -99,6 +84,8 @@ describe('NavbarComponent with BreakpointObserver', () => {
       .query((el) => el.nativeElement === collapseElement)
       ?.injector.get(CollapseDirective) as CollapseDirective;
     expect(collapseDirective).toBeTruthy();
+
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
@@ -107,7 +94,6 @@ describe('NavbarComponent with BreakpointObserver', () => {
 
   it('should subscribe to BreakpointObserver when expand is set to a breakpoint', async () => {
     // After the component initializes with expand="md", it should observe breakpoints
-    await fixture.whenStable();
     expect(breakpointObserver.observe).toHaveBeenCalledWith([expect.stringMatching(/\(min-width: .*\)/)]);
   });
 

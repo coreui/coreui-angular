@@ -7,12 +7,12 @@ import { OffcanvasToggleDirective } from './offcanvas-toggle.directive';
 describe('OffcanvasToggleDirective', () => {
   let fixture: DirectiveFixture<OffcanvasToggleDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createDirective(OffcanvasToggleDirective, {
       tagName: 'button',
       bindings: [inputBinding('cOffcanvasToggle', () => 'OffcanvasEnd')]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {

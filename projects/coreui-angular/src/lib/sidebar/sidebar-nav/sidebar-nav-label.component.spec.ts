@@ -33,21 +33,21 @@ describe('SidebarNavLabelComponent', () => {
     };
     fixture.componentRef.setInput('item', item);
 
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set correct itemClass', () => {
+  it('should set correct itemClass', async () => {
     const link = fixture.debugElement.query(By.css('a')).nativeElement;
 
     expect(link.classList.contains('c-nav-label')).toBe(true);
     expect(link.classList.contains('c-active')).toBe(true);
     item.class = 'custom-class';
     fixture.componentRef.setInput('item', { ...item });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(link.classList.contains('custom-class')).toBe(true);
   });
 
@@ -57,12 +57,12 @@ describe('SidebarNavLabelComponent', () => {
     expect(label.textContent).toBe('Label Item');
   });
 
-  it('should set correct labelIconClass', () => {
+  it('should set correct labelIconClass', async () => {
     const icon = fixture.debugElement.query(By.css('i')).nativeElement;
     expect(icon.classList.contains('text-info')).toBe(true);
     item.label = { variant: 'success', class: 'custom-icon-class' };
     fixture.componentRef.setInput('item', { ...item });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(icon.classList.contains('text-success')).toBe(true);
     expect(icon.classList.contains('custom-icon-class')).toBe(true);
   });

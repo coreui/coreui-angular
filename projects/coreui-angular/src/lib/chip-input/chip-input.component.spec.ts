@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ChipComponent } from '../chip/chip.component';
@@ -71,8 +71,7 @@ describe('ChipInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChipInputHostComponent],
-      providers: [provideZonelessChangeDetection()]
+      imports: [ChipInputHostComponent]
     }).compileComponents();
     announce = vi.spyOn(TestBed.inject(AnnouncerService), 'announce').mockReturnValue(vi.fn());
     fixture = TestBed.createComponent(ChipInputHostComponent);
@@ -383,10 +382,6 @@ describe('ChipInputComponent', () => {
 class StrayChipHostComponent {}
 
 describe('ChipInputComponent with a projected chip', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
-  });
-
   it('ignores the chip and warns', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const fixture = TestBed.createComponent(StrayChipHostComponent);
@@ -444,7 +439,6 @@ describe('ChipInputComponent options', () => {
   };
 
   beforeEach(async () => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
     announce = vi.spyOn(TestBed.inject(AnnouncerService), 'announce').mockReturnValue(vi.fn());
     fixture = TestBed.createComponent(OptionsHostComponent);
     await fixture.whenStable();

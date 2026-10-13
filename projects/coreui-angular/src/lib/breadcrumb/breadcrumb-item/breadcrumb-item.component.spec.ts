@@ -19,7 +19,6 @@ describe('BreadcrumbItemComponent', () => {
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -31,19 +30,19 @@ describe('BreadcrumbItemComponent', () => {
     expect(fixture.nativeElement.classList.contains('active')).toBe(false);
   });
 
-  it('should have active class', () => {
+  it('should have active class', async () => {
     componentRef.setInput('active', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('active')).toBe(true);
   });
 
-  it('should have aria-current attribute', () => {
+  it('should have aria-current attribute', async () => {
     expect(fixture.nativeElement.getAttribute('aria-current')).toBeNull();
     componentRef.setInput('active', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('aria-current')).toBe('page');
     componentRef.setInput('active', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('aria-current')).toBeNull();
   });
 });

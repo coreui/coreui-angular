@@ -40,7 +40,7 @@ describe('DropdownMenuDirective', () => {
   let itemRef: DebugElement;
   let document: Document;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TestComponent],
       providers: [{ provide: ElementRef, useClass: MockElementRef }, Renderer2, DropdownService]
@@ -52,7 +52,7 @@ describe('DropdownMenuDirective', () => {
     elementRef = fixture.debugElement.query(By.directive(DropdownMenuDirective));
     itemRef = fixture.debugElement.query(By.directive(DropdownItemDirective));
     component.visible.set(true);
-    fixture.detectChanges(); // initial binding
+    await fixture.whenStable(); // initial binding
   });
 
   it('should create an instance', () => {
@@ -64,7 +64,7 @@ describe('DropdownMenuDirective', () => {
 
   it('should have css classes', async () => {
     component.visible.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(dropdownRef.nativeElement.classList.contains('show')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu')).toBe(true);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
@@ -72,35 +72,35 @@ describe('DropdownMenuDirective', () => {
     expect(elementRef.nativeElement.classList.contains('show')).toBe(false);
     component.visible.set(true);
     component.alignment.set('end');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(dropdownRef.nativeElement.classList.contains('show')).toBe(true);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(true);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('show')).toBe(true);
     component.alignment.set('start');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(true);
     component.alignment.set({ xs: 'end', lg: 'start' });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(true);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-lg-start')).toBe(true);
     component.alignment.set(undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-end')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('dropdown-menu-start')).toBe(false);
   });
 
-  it('should set data-coreui-popper when dynamic positioning is off', () => {
+  it('should set data-coreui-popper when dynamic positioning is off', async () => {
     expect(elementRef.nativeElement.hasAttribute('data-coreui-popper')).toBe(false);
     component.alignment.set({ xs: 'end', lg: 'start' });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.getAttribute('data-coreui-popper')).toBe('static');
     component.alignment.set('end');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.hasAttribute('data-coreui-popper')).toBe(false);
     component.popper.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.getAttribute('data-coreui-popper')).toBe('static');
   });
 
@@ -109,12 +109,12 @@ describe('DropdownMenuDirective', () => {
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab' }));
     component.visible.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', keyCode: 40 }));
     expect(document.activeElement).toEqual(itemRef.nativeElement);
     elementRef.nativeElement.focus();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(document.activeElement).toEqual(itemRef.nativeElement);
   });
 });
@@ -137,9 +137,9 @@ describe('DropdownMenuDirective', () => {
 class SpaceTestComponent {}
 
 describe('DropdownMenuDirective Space', () => {
-  it('should prevent page scroll on Space only for targets without native Space handling', () => {
+  it('should prevent page scroll on Space only for targets without native Space handling', async () => {
     const fixture = TestBed.createComponent(SpaceTestComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
     const press = (target: HTMLElement, code: string) => {
       const event = new KeyboardEvent('keydown', { code, bubbles: true, cancelable: true });
@@ -156,9 +156,9 @@ describe('DropdownMenuDirective Space', () => {
     expect(press(menu.querySelector('#button'), 'ArrowDown')).toBe(true);
   });
 
-  it('should move the arrows from an input button item', () => {
+  it('should move the arrows from an input button item', async () => {
     const fixture = TestBed.createComponent(SpaceTestComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
     const inputItem: HTMLInputElement = menu.querySelector('#inputItem');
     inputItem.focus();
@@ -168,9 +168,9 @@ describe('DropdownMenuDirective Space', () => {
     expect(document.activeElement).toBe(menu.querySelector('#link'));
   });
 
-  it('should leave every key to a form control inside the menu', () => {
+  it('should leave every key to a form control inside the menu', async () => {
     const fixture = TestBed.createComponent(SpaceTestComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
     const field: HTMLInputElement = menu.querySelector('#field');
     field.focus();

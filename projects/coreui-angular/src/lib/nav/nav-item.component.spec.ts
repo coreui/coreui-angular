@@ -18,7 +18,6 @@ describe('NavItemComponent', () => {
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -33,33 +32,33 @@ describe('NavItemComponent', () => {
     expect(fixture.nativeElement.querySelector('.nav-link')).toBeNull();
   });
 
-  it('should render nav link for href', () => {
+  it('should render nav link for href', async () => {
     componentRef.setInput('href', '/test');
-    fixture.detectChanges();
+    await fixture.whenStable();
     const link = fixture.nativeElement.querySelector('.nav-link');
     expect(link.getAttribute('href')).toBe('/test');
     expect(link.classList.contains('active')).toBe(false);
     expect(link.classList.contains('disabled')).toBe(false);
   });
 
-  it('should not set tabindex on the nav link when not given', () => {
+  it('should not set tabindex on the nav link when not given', async () => {
     componentRef.setInput('href', '/test');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.querySelector('.nav-link').getAttribute('tabindex')).toBeNull();
   });
 
-  it('should pass tabindex to the nav link', () => {
+  it('should pass tabindex to the nav link', async () => {
     componentRef.setInput('href', '/test');
     componentRef.setInput('tabindex', 2);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.querySelector('.nav-link').getAttribute('tabindex')).toBe('2');
   });
 
-  it('should pass active and disabled to the nav link', () => {
+  it('should pass active and disabled to the nav link', async () => {
     componentRef.setInput('href', '/test');
     componentRef.setInput('active', true);
     componentRef.setInput('disabled', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const link = fixture.nativeElement.querySelector('.nav-link');
     expect(link.classList.contains('active')).toBe(true);
     expect(link.classList.contains('disabled')).toBe(true);

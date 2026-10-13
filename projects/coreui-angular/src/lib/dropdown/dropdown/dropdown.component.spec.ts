@@ -22,7 +22,6 @@ describe('DropdownComponent', () => {
     await fixture.whenStable();
 
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -79,7 +78,7 @@ describe('DropdownToggleDirective', () => {
   let service: DropdownService;
   let document: Document;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TestComponent],
       providers: [
@@ -97,7 +96,7 @@ describe('DropdownToggleDirective', () => {
     dropdownRef = fixture.debugElement.query(By.directive(DropdownComponent));
     service = new DropdownService();
 
-    fixture.detectChanges(); // initial binding
+    await fixture.whenStable(); // initial binding
   });
 
   it('should create an instance', () => {
@@ -115,14 +114,14 @@ describe('DropdownToggleDirective', () => {
     fixture.componentRef.setInput('disabled', true);
     fixture.componentRef.setInput('split', true);
     fixture.componentRef.setInput('caret', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.classList.contains('disabled')).toBe(true);
     expect(elementRef.nativeElement.classList.contains('dropdown-toggle')).toBe(false);
     expect(elementRef.nativeElement.classList.contains('dropdown-toggle-split')).toBe(true);
     expect(elementRef.nativeElement.getAttribute('aria-expanded')).toBe('false');
     component.variant.set('nav-item');
     component.visible.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.getAttribute('aria-expanded')).toBe('true');
   });
 
@@ -130,12 +129,10 @@ describe('DropdownToggleDirective', () => {
     const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
 
     component.alignment.set('end');
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(menu.classList.contains('dropdown-menu-end')).toBe(true);
 
     component.alignment.set({ xs: 'end', lg: 'start' });
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(menu.classList.contains('dropdown-menu-end')).toBe(true);
     expect(menu.classList.contains('dropdown-menu-lg-start')).toBe(true);
@@ -145,17 +142,14 @@ describe('DropdownToggleDirective', () => {
     const dropdown = dropdownRef.injector.get(DropdownComponent);
 
     component.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(dropdown['popperInstance']).toBeDefined();
 
     component.visible.set(false);
-    fixture.detectChanges();
     await fixture.whenStable();
 
     component.alignment.set({ lg: 'end' });
     component.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(dropdown['popperInstance']).toBeUndefined();
   });
@@ -163,21 +157,21 @@ describe('DropdownToggleDirective', () => {
   it('should call event handling functions', async () => {
     expect(component.visible()).toBe(false);
     elementRef.nativeElement.dispatchEvent(new MouseEvent('click'));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.visible()).toBe(true);
     elementRef.nativeElement.dispatchEvent(new MouseEvent('click'));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.visible()).toBe(false);
     elementRef.nativeElement.dispatchEvent(new MouseEvent('click'));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.visible()).toBe(true);
     dropdownRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.visible()).toBe(false);
     component.visible.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab' }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.visible()).toBe(false);
   });
 });
@@ -194,9 +188,9 @@ describe('DropdownToggleDirective', () => {
 class InitiallyVisibleComponent {}
 
 describe('DropdownToggleDirective initially visible', () => {
-  it('should set aria-expanded on first render', () => {
+  it('should set aria-expanded on first render', async () => {
     const fixture = TestBed.createComponent(InitiallyVisibleComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const toggle = fixture.debugElement.query(By.directive(DropdownToggleDirective)).nativeElement;
     const menu = fixture.debugElement.query(By.directive(DropdownMenuDirective)).nativeElement;
@@ -228,14 +222,13 @@ describe('DropdownComponent alignment scope', () => {
   it('should keep each dropdown alignment to itself', async () => {
     const fixture = TestBed.createComponent(TwoDropdownsComponent);
     const component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const first = fixture.debugElement.query(By.css('#first')).nativeElement;
     const second = fixture.debugElement.query(By.css('#second')).nativeElement;
 
     component.first.set('end');
     component.second.set({ lg: 'start' });
-    fixture.detectChanges();
     await fixture.whenStable();
 
     expect(first.classList.contains('dropdown-menu-end')).toBe(true);
@@ -270,13 +263,11 @@ describe('Dropdown keyboard', () => {
   const keydown = async (target: HTMLElement, key: string) => {
     const keyCode = { ArrowDown: 40, ArrowUp: 38, End: 35, Home: 36 }[key];
     target.dispatchEvent(new KeyboardEvent('keydown', { key, keyCode, bubbles: true, cancelable: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
   };
 
   beforeEach(async () => {
     fixture = TestBed.createComponent(KeyboardTestComponent);
-    fixture.detectChanges();
     await fixture.whenStable();
     toggle = fixture.nativeElement.querySelector('#toggle');
     items = [...fixture.nativeElement.querySelectorAll('.dropdown-item')];
@@ -297,7 +288,6 @@ describe('Dropdown keyboard', () => {
 
   it('should focus the first item on ArrowDown on the toggle of an open menu', async () => {
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     await keydown(toggle, 'ArrowDown');
     expect(document.activeElement).toBe(items[0]);
@@ -334,7 +324,6 @@ describe('Dropdown keyboard', () => {
     const service = dropdownRef.injector.get(DropdownService);
     service.toggle({ visible: true, dropdown: dropdownRef.componentInstance, focus: 'first' });
     expect(document.activeElement).not.toBe(items[0]);
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(document.activeElement).toBe(items[0]);
   });
@@ -342,7 +331,6 @@ describe('Dropdown keyboard', () => {
   it('should focus the toggle on click', async () => {
     toggle.blur();
     toggle.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
     expect(document.activeElement).toBe(toggle);
@@ -352,18 +340,15 @@ describe('Dropdown keyboard', () => {
     const field = fixture.nativeElement.querySelector('#field');
     field.focus();
     field.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(document.activeElement).toBe(field);
   });
 
   it('should close and focus the toggle on Escape from an item', async () => {
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     items[0].focus();
     items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(toggle);
@@ -417,7 +402,6 @@ describe('DropdownToggleDirective on anchor', () => {
   const keydown = async (target: HTMLElement, key: string) => {
     const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
     target.dispatchEvent(event);
-    fixture.detectChanges();
     await fixture.whenStable();
     return event.defaultPrevented;
   };
@@ -425,7 +409,6 @@ describe('DropdownToggleDirective on anchor', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({ providers: [provideRouter([])] });
     fixture = TestBed.createComponent(AnchorToggleComponent);
-    fixture.detectChanges();
     await fixture.whenStable();
   });
 
@@ -455,7 +438,6 @@ describe('DropdownToggleDirective on anchor', () => {
     const toggle = element('toggle');
     await keydown(toggle, ' ');
     toggle.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', repeat: true, bubbles: true, cancelable: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
   });
@@ -511,48 +493,41 @@ class ExternalToggleComponent {
 describe('DropdownToggleDirective outside the dropdown', () => {
   it('should stay open when change detection runs before the click reaches document', async () => {
     const fixture = TestBed.createComponent(ExternalToggleComponent);
-    fixture.detectChanges();
     await fixture.whenStable();
     const toggle: HTMLElement = fixture.nativeElement.querySelector('#external');
     fixture.nativeElement.addEventListener('click', () => fixture.detectChanges());
     toggle.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
   });
 
   it('should close on Escape pressed on the external toggle and stay open on Tab from it', async () => {
     const fixture = TestBed.createComponent(ExternalToggleComponent);
-    fixture.detectChanges();
     await fixture.whenStable();
     const toggle: HTMLElement = fixture.nativeElement.querySelector('#external');
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     toggle.focus();
     toggle.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
     toggle.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
   });
 
   it('should close on Escape and focus the external toggle', async () => {
     const fixture = TestBed.createComponent(ExternalToggleComponent);
-    fixture.detectChanges();
     await fixture.whenStable();
     const toggle: HTMLElement = fixture.nativeElement.querySelector('#external');
     const item: HTMLElement = fixture.nativeElement.querySelector('#item');
 
     toggle.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
 
     item.focus();
     item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(toggle);
@@ -584,12 +559,10 @@ class FieldToggleComponent {
 describe('DropdownToggleDirective on a non-focusable host', () => {
   it('should toggle on a click bubbling from a button inside the toggle', async () => {
     const fixture = TestBed.createComponent(FieldToggleComponent);
-    fixture.detectChanges();
     await fixture.whenStable();
     fixture.nativeElement
       .querySelector('#clear')
       .dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
   });
@@ -597,12 +570,10 @@ describe('DropdownToggleDirective on a non-focusable host', () => {
   it('should return focus to the field inside the toggle on Escape', async () => {
     const fixture = TestBed.createComponent(FieldToggleComponent);
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     const item: HTMLElement = fixture.nativeElement.querySelector('#item');
     item.focus();
     item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#field'));
@@ -638,15 +609,12 @@ describe('DropdownComponent nested', () => {
     const fixture = TestBed.createComponent(NestedDropdownComponent);
     const component = fixture.componentInstance;
     component.outer.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     component.inner.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     const innerItem: HTMLElement = fixture.nativeElement.querySelector('#innerItem');
     innerItem.focus();
     innerItem.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(component.inner()).toBe(false);
     expect(component.outer()).toBe(true);
@@ -659,14 +627,13 @@ describe('DropdownComponent with shadow DOM', () => {
   it('should keep the menu open on Tab inside a shadow root in the menu', async () => {
     const fixture = TestBed.createComponent(KeyboardTestComponent);
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     const host = document.createElement('x-item');
     fixture.nativeElement.querySelector('li').append(host);
     const inner = document.createElement('button');
     host.attachShadow({ mode: 'open' }).append(inner);
     inner.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
   });
 
@@ -677,27 +644,24 @@ describe('DropdownComponent with shadow DOM', () => {
     const root = host.attachShadow({ mode: 'open' });
     root.append(fixture.nativeElement);
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     const toggle: HTMLElement = fixture.nativeElement.querySelector('#toggle');
     const items: HTMLElement[] = [...fixture.nativeElement.querySelectorAll('.dropdown-item')];
     items[0].focus();
     items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
     items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true, composed: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(root.activeElement).toBe(toggle);
     const outside = document.createElement('button');
     root.append(outside);
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     outside.focus();
     outside.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     host.remove();
   });
@@ -722,19 +686,17 @@ class NoAutoCloseComponent {
 describe('DropdownComponent with autoClose false', () => {
   it('should neither close nor move focus on Escape or Tab', async () => {
     const fixture = TestBed.createComponent(NoAutoCloseComponent);
-    fixture.detectChanges();
     await fixture.whenStable();
     const item: HTMLElement = fixture.nativeElement.querySelector('#item');
     const outside: HTMLElement = fixture.nativeElement.querySelector('#outside');
     item.focus();
     item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
     expect(document.activeElement).toBe(item);
     outside.focus();
     outside.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
   });
 });
@@ -758,7 +720,6 @@ const replayed = (type: string, init: KeyboardEventInit): KeyboardEvent => {
 describe('DropdownComponent with replayed events', () => {
   it('should ignore a replayed key on the toggle and in the menu without an error', async () => {
     const fixture = TestBed.createComponent(KeyboardTestComponent);
-    fixture.detectChanges();
     await fixture.whenStable();
     const errorSpy = vi.spyOn(TestBed.inject(ErrorHandler), 'handleError').mockImplementation(() => undefined);
     const service = fixture.debugElement.query(By.directive(DropdownComponent)).injector.get(DropdownService);
@@ -767,7 +728,6 @@ describe('DropdownComponent with replayed events', () => {
     toggle.dispatchEvent(replayed('keydown', { key: 'ArrowDown', keyCode: 40 }));
     expect(toggleSpy).not.toHaveBeenCalled();
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
     await fixture.whenStable();
     const items: HTMLElement[] = [...fixture.nativeElement.querySelectorAll('.dropdown-item')];
     items[0].focus();

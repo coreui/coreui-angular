@@ -8,26 +8,26 @@ describe('BgColorDirective', () => {
   let gradient: WritableSignal<boolean>;
   let fixture: DirectiveFixture<BgColorDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     color = signal('primary');
     gradient = signal(false);
     fixture = TestBed.createDirective(BgColorDirective, {
       tagName: 'div',
       bindings: [inputBinding('cBgColor', color), inputBinding('gradient', gradient)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     expect(fixture.nativeElement.classList.contains('bg-primary')).toBe(true);
     expect(fixture.nativeElement.classList.contains('bg-gradient')).toBe(false);
     color.set('success');
     gradient.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('bg-primary')).toBe(false);
     expect(fixture.nativeElement.classList.contains('bg-success')).toBe(true);
     expect(fixture.nativeElement.classList.contains('bg-gradient')).toBe(true);

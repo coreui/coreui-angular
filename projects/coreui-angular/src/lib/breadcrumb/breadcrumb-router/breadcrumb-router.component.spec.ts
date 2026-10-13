@@ -29,7 +29,7 @@ describe('BreadcrumbComponent', () => {
     componentRef = fixture.componentRef;
 
     harness = await RouterTestingHarness.create();
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
@@ -53,9 +53,9 @@ describe('BreadcrumbComponent', () => {
     expect(component.breadcrumbs()).toEqual([{ label: '', url: '/', queryParams: {} }]);
   });
 
-  it('should emit breadcrumbs on items change', () => {
+  it('should emit breadcrumbs on items change', async () => {
     componentRef.setInput('items', [{ label: 'test', url: '/color', attributes: { title: 'test' } }]);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.breadcrumbs()).toEqual([{ label: 'test', url: '/color', attributes: { title: 'test' } }]);
   });
 });

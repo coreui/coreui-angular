@@ -8,17 +8,17 @@ describe('PageLinkDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     const disabled = signal(false);
     const fixture = TestBed.createDirective(PageLinkDirective, {
       tagName: 'a',
       bindings: [inputBinding('disabled', disabled)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('page-link')).toBe(true);
     expect(fixture.nativeElement.classList.contains('disabled')).toBe(false);
     disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('page-link')).toBe(true);
     expect(fixture.nativeElement.classList.contains('disabled')).toBe(true);
   });

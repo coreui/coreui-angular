@@ -6,7 +6,7 @@ describe('TableDirective', () => {
   let fixture: DirectiveFixture<TableDirective>;
   let directive: TableDirective;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createDirective(TableDirective, {
       bindings: [
         inputBinding('align', () => 'middle'),
@@ -23,7 +23,7 @@ describe('TableDirective', () => {
       ]
     });
     directive = fixture.directiveInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {

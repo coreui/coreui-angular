@@ -7,24 +7,24 @@ describe('BorderDirective', () => {
   let border: WritableSignal<Border>;
   let fixture: DirectiveFixture<BorderDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     border = signal<Border>(1);
     fixture = TestBed.createDirective(BorderDirective, {
       tagName: 'div',
       bindings: [inputBinding('cBorder', border)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     const classList = fixture.nativeElement.classList;
     expect(classList.contains('border-1')).toBe(true);
     border.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('border')).toBe(true);
     border.set({
       top: 1,
@@ -32,7 +32,7 @@ describe('BorderDirective', () => {
       color: 'primary',
       start: { color: 'success', width: 2 }
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('border-top-1')).toBe(true);
     expect(classList.contains('border-end')).toBe(true);
     expect(classList.contains('border-color-primary')).toBe(true);
@@ -40,10 +40,10 @@ describe('BorderDirective', () => {
     expect(classList.contains('border-start-success')).toBe(true);
     expect(classList.length).toBe(5);
     border.set({});
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.length).toBe(0);
     border.set(1234n as unknown as Border);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.length).toBe(0);
   });
 });

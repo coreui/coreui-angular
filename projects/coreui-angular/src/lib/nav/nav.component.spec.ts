@@ -18,7 +18,6 @@ describe('NavComponent', () => {
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -29,74 +28,74 @@ describe('NavComponent', () => {
     expect(fixture.nativeElement.classList.contains('nav')).toBe(true);
   });
 
-  it('should have css classes for layout', () => {
+  it('should have css classes for layout', async () => {
     componentRef.setInput('layout', 'fill');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-fill')).toBe(true);
     componentRef.setInput('layout', 'justified');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-fill')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-justified')).toBe(true);
     componentRef.setInput('layout', undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-fill')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-justified')).toBe(false);
   });
 
-  it('should have role attribute', () => {
+  it('should have role attribute', async () => {
     expect(fixture.nativeElement.getAttribute('role')).toBe('navigation');
     componentRef.setInput('role', 'tablist');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('role')).toBe('tablist');
   });
 
-  it('should have css classes for variant', () => {
+  it('should have css classes for variant', async () => {
     expect(fixture.nativeElement.classList.contains('nav-tabs')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(false);
 
     componentRef.setInput('variant', 'tabs');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-tabs')).toBe(true);
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(false);
 
     componentRef.setInput('variant', 'pills');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-tabs')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(true);
     expect(fixture.nativeElement.classList.contains('nav-underline')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(false);
 
     componentRef.setInput('variant', 'underline');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-tabs')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline')).toBe(true);
     expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(false);
 
     componentRef.setInput('variant', 'underline-border');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-tabs')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(true);
 
     componentRef.setInput('variant', 'enclosed');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-enclosed')).toBe(true);
     expect(fixture.nativeElement.classList.contains('nav-enclosed-pills')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline-border')).toBe(false);
 
     componentRef.setInput('variant', 'enclosed-pills');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-enclosed')).toBe(true);
     expect(fixture.nativeElement.classList.contains('nav-enclosed-pills')).toBe(true);
 
     componentRef.setInput('variant', undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('nav-tabs')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-pills')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-underline')).toBe(false);

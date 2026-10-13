@@ -18,7 +18,6 @@ describe('NavGroupItemsComponent', () => {
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -29,10 +28,10 @@ describe('NavGroupItemsComponent', () => {
     expect(fixture.nativeElement.classList.contains('nav-group-items')).toBe(true);
   });
 
-  it('should have css classes for compact', () => {
+  it('should have css classes for compact', async () => {
     expect(fixture.nativeElement.classList.contains('compact')).toBe(false);
     componentRef.setInput('compact', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('compact')).toBe(true);
   });
 });

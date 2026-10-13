@@ -26,7 +26,6 @@ describe('CarouselControlComponent', () => {
     componentRef = fixture.componentRef;
     service = TestBed.inject(CarouselService);
     debugElement = fixture.debugElement;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -61,7 +60,7 @@ describe('CarouselControlComponent', () => {
   it('should play on click', async () => {
     componentRef.setInput('direction', 'prev');
     component.onClick(new MouseEvent('click'));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.caption()).toBe('Previous');
   });
 

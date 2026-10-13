@@ -9,16 +9,16 @@ describe('TableColorDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     const color = signal<Colors | undefined>(undefined);
     const fixture = TestBed.createDirective(TableColorDirective, {
       tagName: 'tr',
       bindings: [inputBinding('cTableColor', color)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.length).toBe(0);
     color.set('danger');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('table-danger')).toBe(true);
   });
 });

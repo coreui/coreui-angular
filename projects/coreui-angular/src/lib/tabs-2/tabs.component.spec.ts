@@ -13,7 +13,7 @@ describe('TabsComponent', () => {
 
     fixture = TestBed.createComponent(TabsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

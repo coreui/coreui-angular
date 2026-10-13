@@ -36,7 +36,7 @@ describe('DropdownItemDirective', () => {
   let elementRef: DebugElement;
   let document: Document;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TestComponent],
       providers: [{ provide: ElementRef, useClass: MockElementRef }, Renderer2, DropdownService]
@@ -47,7 +47,7 @@ describe('DropdownItemDirective', () => {
     component = fixture.componentInstance;
     elementRef = fixture.debugElement.query(By.directive(DropdownItemDirective));
     component.disabled.set(false);
-    fixture.detectChanges(); // initial binding
+    await fixture.whenStable(); // initial binding
   });
 
   it('should create an instance', () => {
@@ -65,7 +65,7 @@ describe('DropdownItemDirective', () => {
     expect(elementRef.nativeElement.getAttribute('tabindex')).toBe('0');
     component.disabled.set(true);
     component.active.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(elementRef.nativeElement.classList.contains('disabled')).toBe(true);
     expect(elementRef.nativeElement.getAttribute('aria-disabled')).toBe('true');
     expect(elementRef.nativeElement.getAttribute('aria-current')).toBe('true');
@@ -77,7 +77,7 @@ describe('DropdownItemDirective', () => {
     elementRef.nativeElement.dispatchEvent(new Event('click'));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
     elementRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     elementRef.nativeElement.focus();
     // @ts-ignore
     const label = component.item()?.getLabel() ?? undefined;
@@ -110,32 +110,32 @@ class EnterTestComponent {
 }
 
 describe('DropdownItemDirective Enter', () => {
-  it('should toggle on Enter keyup only for items without a native Enter click', () => {
+  it('should toggle on Enter keyup only for items without a native Enter click', async () => {
     const fixture = TestBed.createComponent(EnterTestComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const dropdown = fixture.componentInstance.dropdown();
-    const keyup = (id: string) => {
+    const keyup = async (id: string) => {
       fixture.nativeElement
         .querySelector(`#${id}`)
         .dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }));
-      fixture.detectChanges();
+      await fixture.whenStable();
     };
 
-    keyup('button');
+    await keyup('button');
     expect(dropdown.visible()).toBe(true);
-    keyup('link');
+    await keyup('link');
     expect(dropdown.visible()).toBe(true);
-    keyup('inputButton');
+    await keyup('inputButton');
     expect(dropdown.visible()).toBe(true);
-    keyup('inner');
+    await keyup('inner');
     expect(dropdown.visible()).toBe(true);
-    keyup('query');
+    await keyup('query');
     expect(dropdown.visible()).toBe(true);
-    keyup('plain');
+    await keyup('plain');
     expect(dropdown.visible()).toBe(false);
     dropdown.visible.set(true);
-    fixture.detectChanges();
-    keyup('island');
+    await fixture.whenStable();
+    await keyup('island');
     expect(dropdown.visible()).toBe(false);
   });
 });

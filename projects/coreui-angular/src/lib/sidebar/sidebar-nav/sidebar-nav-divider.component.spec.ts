@@ -22,7 +22,7 @@ describe('SidebarNavDividerComponent', () => {
     };
     fixture.componentRef.setInput('item', item);
 
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
