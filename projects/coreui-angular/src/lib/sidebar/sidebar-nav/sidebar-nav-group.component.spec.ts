@@ -102,6 +102,12 @@ describe('SidebarNavGroupComponent', () => {
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
     expect(displayOnCollapsing).toBe('block');
   });
+
+  it('should render without an item', () => {
+    const emptyFixture = TestBed.createComponent(SidebarNavGroupComponent);
+    expect(() => emptyFixture.detectChanges()).not.toThrow();
+    expect(emptyFixture.nativeElement.querySelector('.nav-group-toggle .nav-icon')).toBeTruthy();
+  });
 });
 
 describe('SidebarNavGroupComponent dropdownMode', () => {
