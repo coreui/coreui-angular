@@ -31,7 +31,11 @@ export class SidebarNavHelper {
   }
 
   public isActive(router: any, item: INavData): boolean {
-    return router.isActive(item.url, false);
+    if (item.url == null) {
+      return false;
+    }
+    const url = Array.isArray(item.url) ? router.createUrlTree(item.url) : item.url;
+    return router.isActive(url, false);
   }
 
   public hasBadge = (item: INavData) => Boolean(item?.badge);

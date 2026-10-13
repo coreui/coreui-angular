@@ -1,15 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, RouterModule, Routes } from '@angular/router';
+import { ActivationEnd, Router, RouterModule, Routes } from '@angular/router';
 import { expect } from 'vitest';
 
 import { SidebarNavHelper } from './sidebar-nav.service';
 
 describe('SidebarNavHelper', () => {
   let service: SidebarNavHelper;
-  let router: RouterModule;
+  let router: Router;
   const routes: Routes = [
     { path: 'dashboard', redirectTo: 'home', pathMatch: 'full' },
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: 'home', children: [{ path: 'stats', children: [] }] },
+    { path: 'reports', children: [] }
   ];
 
   beforeEach(() => {
@@ -53,6 +55,32 @@ describe('SidebarNavHelper', () => {
   it('should be active', () => {
     expect(service.isActive(router, { url: '' })).toBeTruthy();
     expect(service.isActive(router, { url: 'dashboard' })).toBeFalsy();
+    expect(service.isActive(router, {})).toBeFalsy();
+    expect(service.isActive(router, { url: null as unknown as string })).toBeFalsy();
+  });
+
+  it('should match an array url against the current route', async () => {
+    await router.navigateByUrl('/home/stats');
+    expect(service.isActive(router, { url: ['/home'] })).toBeTruthy();
+    expect(service.isActive(router, { url: ['/home', 'stats'] })).toBeTruthy();
+    expect(service.isActive(router, { url: ['/reports'] })).toBeFalsy();
+  });
+
+  it('should report the target url as active while the route activates', async () => {
+    await router.navigateByUrl('/home');
+    const seen: { target: boolean; previous: boolean }[] = [];
+    const subscription = router.events.subscribe((event) => {
+      if (event instanceof ActivationEnd) {
+        seen.push({
+          target: service.isActive(router, { url: '/reports' }),
+          previous: service.isActive(router, { url: ['/home'] })
+        });
+      }
+    });
+    await router.navigateByUrl('/reports');
+    subscription.unsubscribe();
+    expect(seen).not.toHaveLength(0);
+    expect(seen).toEqual(seen.map(() => ({ target: true, previous: false })));
   });
 
   it('item hasBadge', () => {
