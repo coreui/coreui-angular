@@ -15,14 +15,6 @@ export type ColOrderType =
   }
 })
 export class ColDirective {
-  static ngAcceptInputType_cCol: BooleanInput | NumberInput;
-  static ngAcceptInputType_xs: BooleanInput | NumberInput;
-  static ngAcceptInputType_sm: BooleanInput | NumberInput;
-  static ngAcceptInputType_md: BooleanInput | NumberInput;
-  static ngAcceptInputType_lg: BooleanInput | NumberInput;
-  static ngAcceptInputType_xl: BooleanInput | NumberInput;
-  static ngAcceptInputType_xxl: BooleanInput | NumberInput;
-
   /**
    * The number of columns/offset/order on extra small devices (<576px).
    * @returns 'auto' | number |  boolean

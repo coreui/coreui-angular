@@ -1,5 +1,4 @@
 import { booleanAttribute, Component, computed, input } from '@angular/core';
-import { BooleanInput } from '../coreui.types';
 
 @Component({
   selector: 'c-nav-group-items',
@@ -8,8 +7,6 @@ import { BooleanInput } from '../coreui.types';
   host: { '[class]': 'hostClasses()' }
 })
 export class NavGroupItemsComponent {
-  static ngAcceptInputType_compact: BooleanInput;
-
   /**
    * Make nav group items more compact by cutting all `padding` in half.
    * @returns boolean

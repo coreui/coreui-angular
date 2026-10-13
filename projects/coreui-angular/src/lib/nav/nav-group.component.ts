@@ -14,7 +14,6 @@ import {
 } from '@angular/core';
 
 import { CollapseDirective } from '../collapse';
-import { BooleanInput } from '../coreui.types';
 import { NavGroupItemsComponent } from './nav-group-items.component';
 import { NavGroupService } from './nav-group.service';
 
@@ -29,9 +28,6 @@ let nextId = 0;
   host: { '[class]': 'hostClasses()' }
 })
 export class NavGroupComponent {
-  static ngAcceptInputType_compact: BooleanInput;
-  static ngAcceptInputType_visible: BooleanInput;
-
   readonly #navGroupService = inject(NavGroupService);
   readonly #parentNavGroupService = inject(NavGroupService, { optional: true, skipSelf: true });
 

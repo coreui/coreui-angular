@@ -12,7 +12,6 @@ import {
   signal,
   untracked
 } from '@angular/core';
-import { BooleanInput } from '../coreui.types';
 import { NavGroupService } from './nav-group.service';
 
 const DISABLED_ATTR_ELEMENTS = new Set(['button', 'fieldset', 'input', 'optgroup', 'option', 'select', 'textarea']);
@@ -28,8 +27,6 @@ const DISABLED_ATTR_ELEMENTS = new Set(['button', 'fieldset', 'input', 'optgroup
   }
 })
 export class NavLinkDirective implements OnDestroy {
-  static ngAcceptInputType_disabled: BooleanInput;
-
   readonly #hostElement = inject(ElementRef);
   readonly #navGroupService = inject(NavGroupService, { optional: true });
 

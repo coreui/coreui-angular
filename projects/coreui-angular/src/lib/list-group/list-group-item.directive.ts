@@ -9,7 +9,7 @@ import {
   InputSignalWithTransform,
   numberAttribute
 } from '@angular/core';
-import { BooleanInput, Colors } from '../coreui.types';
+import { Colors } from '../coreui.types';
 
 @Directive({
   selector: '[cListGroupItem], c-list-group-item',
@@ -23,9 +23,6 @@ import { BooleanInput, Colors } from '../coreui.types';
   }
 })
 export class ListGroupItemDirective {
-  static ngAcceptInputType_active: BooleanInput;
-  static ngAcceptInputType_disabled: BooleanInput;
-
   readonly hostElement = inject(ElementRef);
 
   /**

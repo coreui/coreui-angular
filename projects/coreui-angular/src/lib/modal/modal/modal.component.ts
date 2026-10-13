@@ -1,5 +1,4 @@
 import { A11yModule, CdkTrapFocus } from '@angular/cdk/a11y';
-import { BooleanInput } from '@angular/cdk/coercion';
 import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -50,10 +49,6 @@ import { restoreFocus } from '../../shared/focus.utils';
   }
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
-  static ngAcceptInputType_ariaModalInput: BooleanInput;
-  static ngAcceptInputType_scrollable: BooleanInput;
-  static ngAcceptInputType_visibleInput: BooleanInput;
-
   readonly #document = inject<Document>(DOCUMENT);
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);

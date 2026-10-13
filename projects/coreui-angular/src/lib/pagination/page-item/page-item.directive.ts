@@ -9,7 +9,6 @@ import {
   input,
   Renderer2
 } from '@angular/core';
-import { BooleanInput } from '@angular/cdk/coercion';
 
 import { PageLinkDirective } from '../page-link/page-link.directive';
 
@@ -22,8 +21,6 @@ import { PageLinkDirective } from '../page-link/page-link.directive';
   }
 })
 export class PageItemDirective {
-  static ngAcceptInputType_disabled: BooleanInput;
-
   readonly #renderer = inject(Renderer2);
 
   /**
