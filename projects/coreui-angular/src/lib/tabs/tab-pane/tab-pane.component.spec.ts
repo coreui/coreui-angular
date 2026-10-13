@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TabContentComponent } from '../tab-content/tab-content.component';
@@ -17,6 +17,13 @@ import { TabPaneComponent } from './tab-pane.component';
 class TestComponent {
   readonly activeIdx = signal(0);
 }
+
+@Component({
+  imports: [TabPaneComponent],
+  template: '<c-tab-pane />',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+class OnPushHostComponent {}
 
 describe('TabPaneComponent', () => {
   let component: TabPaneComponent;
@@ -43,6 +50,11 @@ describe('TabPaneComponent', () => {
     expect(fixture.nativeElement.classList.contains('fade')).toBe(true);
     expect(fixture.nativeElement.classList.contains('active')).toBe(false);
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
+  });
+
+  it('should have the tab-pane class before the first change detection', () => {
+    const element: HTMLElement = TestBed.createComponent(TabPaneComponent).nativeElement;
+    expect(element.classList.contains('tab-pane')).toBe(true);
   });
 
   it('should have default role', () => {
@@ -81,9 +93,28 @@ describe('TabPaneComponent', () => {
     const tabContent = {} as TabContentComponent;
     component.tabContent = tabContent;
     component.tabPaneIdx = 0;
+    tabService.setActiveTabIdx({ tabContent, activeIdx: 0 });
+    expect(component.active).toBe(true);
+    tabService.setActiveTabIdx({ tabContent, activeIdx: 1 });
+    expect(component.active).toBe(false);
     fixture.destroy();
 
     tabService.setActiveTabIdx({ tabContent, activeIdx: 0 });
     expect(component.active).toBe(false);
+  });
+
+  it('should update its classes inside an OnPush host on a tab service change', () => {
+    const hostFixture = TestBed.createComponent(OnPushHostComponent);
+    hostFixture.detectChanges();
+    const pane = hostFixture.debugElement.children[0];
+    const paneComponent: TabPaneComponent = pane.componentInstance;
+    const tabContent = {} as TabContentComponent;
+    paneComponent.tabContent = tabContent;
+    paneComponent.tabPaneIdx = 0;
+
+    TestBed.inject(TabService).setActiveTabIdx({ tabContent, activeIdx: 0 });
+    hostFixture.detectChanges();
+    expect(pane.nativeElement.classList.contains('active')).toBe(true);
+    expect(pane.nativeElement.classList.contains('show')).toBe(true);
   });
 });

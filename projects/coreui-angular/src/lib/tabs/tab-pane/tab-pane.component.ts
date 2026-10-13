@@ -10,6 +10,7 @@ import { ITabContentState, TabService } from '../tab.service';
   styleUrls: ['./tab-pane.component.scss'],
   exportAs: 'cTabPane',
   host: {
+    class: 'tab-pane',
     '[class]': 'hostClasses()',
     '[attr.role]': 'role()'
   }
