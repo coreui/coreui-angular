@@ -1,14 +1,5 @@
-import {
-  booleanAttribute,
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  inject,
-  Input,
-  OnDestroy,
-  ChangeDetectionStrategy
-} from '@angular/core';
-import { Subscription } from 'rxjs';
+import { booleanAttribute, Component, computed, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { TabContentComponent } from '../tab-content/tab-content.component';
 import { ITabContentState, TabService } from '../tab.service';
@@ -18,43 +9,20 @@ import { ITabContentState, TabService } from '../tab.service';
   template: '<ng-content />',
   styleUrls: ['./tab-pane.component.scss'],
   exportAs: 'cTabPane',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  host: { class: 'tab-pane' }
+  host: {
+    '[class]': 'hostClasses()',
+    '[attr.role]': 'role()'
+  }
 })
-export class TabPaneComponent implements OnDestroy {
-  readonly #changeDetectorRef = inject(ChangeDetectorRef);
+export class TabPaneComponent {
   readonly #tabService = inject(TabService);
 
   constructor() {
-    this.subscribeTabService();
-  }
-
-  public tabPaneIdx!: number;
-  public tabContent!: TabContentComponent;
-  #tabServiceSubscription!: Subscription;
-
-  set active(value: boolean) {
-    const newValue = booleanAttribute(value);
-    if (this.#active !== newValue) {
-      this.#active = newValue;
-      this.#changeDetectorRef.markForCheck();
-    }
-  }
-
-  get active(): boolean {
-    return this.#active;
-  }
-
-  #active: boolean = false;
-
-  @HostBinding('class')
-  get hostClasses() {
-    return {
-      'tab-pane': true,
-      fade: true,
-      show: this.active,
-      active: this.active
-    };
+    this.#tabService.activeTabPaneIdx$.pipe(takeUntilDestroyed()).subscribe((tabContentState: ITabContentState) => {
+      if (tabContentState.tabContent === this.tabContent) {
+        this.active = tabContentState.activeIdx === this.tabPaneIdx;
+      }
+    });
   }
 
   /**
@@ -62,25 +30,28 @@ export class TabPaneComponent implements OnDestroy {
    * @returns string
    * @default 'tabpanel'
    */
-  @Input()
-  @HostBinding('attr.role')
-  role = 'tabpanel';
+  readonly role = input('tabpanel');
 
-  ngOnDestroy(): void {
-    this.subscribeTabService(false);
+  public tabPaneIdx!: number;
+  public tabContent!: TabContentComponent;
+
+  set active(value: boolean) {
+    this.#active.set(booleanAttribute(value));
   }
 
-  subscribeTabService(subscribe: boolean = true) {
-    if (subscribe) {
-      this.#tabServiceSubscription = this.#tabService.activeTabPaneIdx$.subscribe(
-        (tabContentState: ITabContentState) => {
-          if (tabContentState.tabContent === this.tabContent) {
-            this.active = tabContentState.activeIdx === this.tabPaneIdx;
-          }
-        }
-      );
-    } else {
-      this.#tabServiceSubscription?.unsubscribe();
-    }
+  get active(): boolean {
+    return this.#active();
   }
+
+  readonly #active = signal(false);
+
+  readonly hostClasses = computed(() => {
+    const active = this.#active();
+    return {
+      'tab-pane': true,
+      fade: true,
+      show: active,
+      active
+    } as Record<string, boolean>;
+  });
 }
