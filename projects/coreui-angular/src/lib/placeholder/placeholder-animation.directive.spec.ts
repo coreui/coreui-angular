@@ -8,13 +8,13 @@ describe('PlaceholderAnimationDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should not animate without a placeholder', () => {
+  it('should not animate without a placeholder', async () => {
     const animation = signal<'glow' | 'wave' | undefined>('wave');
     const fixture = TestBed.createDirective(PlaceholderAnimationDirective, {
       tagName: 'p',
       bindings: [inputBinding('cPlaceholderAnimation', animation)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.directiveInstance.animation()).toBe('wave');
     expect(fixture.nativeElement.classList.contains('placeholder-wave')).toBe(false);
   });

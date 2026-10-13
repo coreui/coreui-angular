@@ -20,8 +20,8 @@ describe('ToastContentComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have class toast-content', () => {
-    fixture.detectChanges();
+  it('should have class toast-content', async () => {
+    await fixture.whenStable();
     const element = fixture.nativeElement;
     expect(element.classList.contains('toast-content')).toBe(true);
     const minHeight = getComputedStyle(element).minHeight;

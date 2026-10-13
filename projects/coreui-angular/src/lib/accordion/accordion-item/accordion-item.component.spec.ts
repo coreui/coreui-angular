@@ -19,7 +19,6 @@ describe('AccordionItemComponent', () => {
     await fixture.whenStable();
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

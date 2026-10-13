@@ -7,26 +7,26 @@ describe('FormLabelDirective', () => {
   let sizing: WritableSignal<'' | 'sm' | 'lg' | undefined>;
   let fixture: DirectiveFixture<FormLabelDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     col = signal<'col' | ''>('');
     sizing = signal<'' | 'sm' | 'lg' | undefined>('sm');
     fixture = TestBed.createDirective(FormLabelDirective, {
       tagName: 'label',
       bindings: [inputBinding('cLabel', col), inputBinding('sizing', sizing)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     expect(fixture.nativeElement.classList.contains('form-label')).toBe(true);
     expect(fixture.nativeElement.classList.contains('col-form-label')).toBe(false);
     expect(fixture.nativeElement.classList.contains('col-form-label-sm')).toBe(false);
     col.set('col');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('form-label')).toBe(true);
     expect(fixture.nativeElement.classList.contains('col-form-label')).toBe(true);
     expect(fixture.nativeElement.classList.contains('col-form-label-sm')).toBe(true);

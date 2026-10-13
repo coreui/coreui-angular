@@ -6,13 +6,13 @@ describe('HtmlAttributesDirective', () => {
   let fixture: DirectiveFixture<HtmlAttributesDirective>;
   let element: HTMLElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createDirective(HtmlAttributesDirective, {
       tagName: 'div',
       bindings: [inputBinding('cHtmlAttr', () => ({ class: 'test', style: { backgroundColor: 'red' }, id: 'id-1' }))]
     });
     element = fixture.nativeElement as HTMLElement;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {

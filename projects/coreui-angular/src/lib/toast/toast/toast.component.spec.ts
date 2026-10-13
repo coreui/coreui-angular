@@ -10,8 +10,6 @@ describe('ToastComponent', () => {
   let fixture: ComponentFixture<ToastComponent>;
 
   beforeEach(async () => {
-    vi.useFakeTimers();
-    
     await TestBed.configureTestingModule({
       imports: [ToastComponent, ToastCloseDirective]
     }).compileComponents();
@@ -20,11 +18,6 @@ describe('ToastComponent', () => {
     await fixture.whenStable();
 
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   it('should create', () => {
@@ -38,39 +31,36 @@ describe('ToastComponent', () => {
   it('should toggle show class on visible change', async () => {
     // Call handleEnter directly to simulate the animation completion
     component['handleEnter']({} as AnimationCallbackEvent);
-    // Flush the setTimeout in handleEnter to set #rendered to true
-    await vi.runAllTimersAsync();
-    // The show class requires both #visible and #rendered to be true
-    // #rendered is set asynchronously in handleEnter after a setTimeout
+    await new Promise((resolve) => setTimeout(resolve));
     fixture.componentRef.setInput('visible', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(fixture.nativeElement.classList.contains('show')).toBe(true);
 
     fixture.componentRef.setInput('visible', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
 
-  it('should toggle inert with visibility', () => {
+  it('should toggle inert with visibility', async () => {
     expect(fixture.nativeElement.inert).toBe(true);
 
     fixture.componentRef.setInput('visible', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.inert).toBeFalsy();
 
     fixture.componentRef.setInput('visible', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.inert).toBe(true);
   });
 
-  it('should emit visibleChange visible change', () => {
+  it('should emit visibleChange visible change', async () => {
     vi.spyOn(component.visibleChange, 'emit');
     fixture.componentRef.setInput('visible', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.visibleChange.emit).toHaveBeenCalledWith(true);
     fixture.componentRef.setInput('visible', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.visibleChange.emit).toHaveBeenCalledWith(false);
   });
 });

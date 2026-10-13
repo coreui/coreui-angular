@@ -36,7 +36,7 @@ describe('FormCheckComponent', () => {
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     componentRef.setInput('switch', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
@@ -61,10 +61,9 @@ describe('FormCheckComponent Test', () => {
     await testFixture.whenStable();
 
     debugElement = testFixture.debugElement.query(By.directive(FormCheckComponent));
-    testFixture.detectChanges(); // initial binding
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     expect(debugElement.nativeElement.classList.contains('form-switch')).toBe(false);
     expect(debugElement.nativeElement.classList.contains('form-switch-xl')).toBe(false);
     expect(debugElement.nativeElement.classList.contains('form-check-inline')).toBe(true);
@@ -72,7 +71,7 @@ describe('FormCheckComponent Test', () => {
     testFixture.componentInstance.switch.set(true);
     testFixture.componentInstance.inline.set(false);
     testFixture.componentInstance.reverse.set(false);
-    testFixture.detectChanges();
+    await testFixture.whenStable();
     expect(debugElement.nativeElement.classList.contains('form-switch')).toBe(true);
     expect(debugElement.nativeElement.classList.contains('form-switch-xl')).toBe(true);
     expect(debugElement.nativeElement.classList.contains('form-check-inline')).toBe(false);

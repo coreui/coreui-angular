@@ -38,7 +38,7 @@ describe('SidebarNavComponent', () => {
     ];
     fixture.componentRef.setInput('navItems', navItems);
 
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
@@ -53,32 +53,32 @@ describe('SidebarNavComponent', () => {
     expect(fixture.nativeElement.classList.contains('sidebar-nav')).toBe(true);
   });
 
-  it('should render the tree variant', () => {
+  it('should render the tree variant', async () => {
     fixture.componentRef.setInput('variant', 'tree');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('sidebar-nav-tree')).toBe(true);
   });
 
-  it('should not render the tree variant as a group item list', () => {
+  it('should not render the tree variant as a group item list', async () => {
     fixture.componentRef.setInput('variant', 'tree');
     fixture.componentRef.setInput('groupItems', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('sidebar-nav-tree')).toBe(false);
     expect(fixture.nativeElement.classList.contains('nav-group-items')).toBe(true);
   });
 
-  it('should compact the whole nav', () => {
+  it('should compact the whole nav', async () => {
     fixture.componentRef.setInput('compact', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('compact')).toBe(true);
   });
 
-  it('should stop the nav group level opening on active for dropdownMode none', () => {
+  it('should stop the nav group level opening on active for dropdownMode none', async () => {
     const navGroupService = fixture.debugElement.injector.get(NavGroupService);
     expect(navGroupService.openOnActive()).toBe(true);
 
     fixture.componentRef.setInput('dropdownMode', 'none');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(navGroupService.openOnActive()).toBe(false);
   });
 });

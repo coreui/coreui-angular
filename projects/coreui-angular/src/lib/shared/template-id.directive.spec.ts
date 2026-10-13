@@ -30,11 +30,10 @@ describe('TemplateIdDirective', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     debugElement = fixture.debugElement.query(By.css('.test'));
     component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
   it('should create a template with innerText', () => {
@@ -49,10 +48,10 @@ describe('TemplateIdDirective', () => {
     expect(component.templateId()?.templateRef).toBeInstanceOf(TemplateRef);
   });
 
-  it('should handle multiple instances of the directive with unique ids', () => {
+  it('should handle multiple instances of the directive with unique ids', async () => {
     const secondFixture = TestBed.createComponent(TestComponent);
     const secondComponent = secondFixture.componentInstance;
-    secondFixture.detectChanges();
+    await secondFixture.whenStable();
 
     expect(component.templateId()?.id).toBe('test');
     expect(secondComponent.templateId()?.id).toBe('test');

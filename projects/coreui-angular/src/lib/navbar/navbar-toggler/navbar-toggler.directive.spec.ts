@@ -21,7 +21,7 @@ describe('NavbarTogglerDirective', () => {
   let debugElement: DebugElement;
   let debugElementCollapse: DebugElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TestComponent],
       providers: [Renderer2, { provide: ElementRef, useValue: MockElementRef }]
@@ -31,7 +31,7 @@ describe('NavbarTogglerDirective', () => {
     component = fixture.componentInstance;
     debugElement = fixture.debugElement.query(By.directive(NavbarTogglerDirective));
     debugElementCollapse = fixture.debugElement.query(By.directive(CollapseDirective));
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {

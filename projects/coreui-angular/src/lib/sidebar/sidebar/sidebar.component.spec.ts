@@ -15,7 +15,6 @@ describe('SidebarComponent', () => {
     await fixture.whenStable();
 
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -26,21 +25,21 @@ describe('SidebarComponent', () => {
     expect(fixture.nativeElement.classList.contains('sidebar-fixed')).toBe(true);
   });
 
-  it('should toggle inert with visibility', () => {
+  it('should toggle inert with visibility', async () => {
     expect(fixture.nativeElement.inert).toBe(true);
 
     component.sidebarState = { visible: true };
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.inert).toBeFalsy();
 
     component.sidebarState = { visible: false };
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.inert).toBe(true);
   });
 
-  it('should clear the backdrop when a visible mobile sidebar is destroyed', () => {
+  it('should clear the backdrop when a visible mobile sidebar is destroyed', async () => {
     component.sidebarState = { mobile: true, visible: true };
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(document.querySelector('.sidebar-backdrop')).not.toBeNull();
 
     fixture.destroy();

@@ -19,7 +19,6 @@ describe('PaginationComponent', () => {
 
     component = fixture.componentInstance;
     elementRef = fixture.debugElement.query(By.css('ul'));
-    fixture.detectChanges();
   });
 
   it('should create', () => {

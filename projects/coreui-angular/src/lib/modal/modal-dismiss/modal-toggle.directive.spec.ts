@@ -6,12 +6,12 @@ import { ModalToggleDirective } from './modal-toggle.directive';
 describe('ModalToggleDirective', () => {
   let fixture: DirectiveFixture<ModalToggleDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createDirective(ModalToggleDirective, {
       tagName: 'button',
       bindings: [inputBinding('cModalToggle', () => 'liveDemoModal')]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
@@ -32,12 +32,12 @@ describe('ModalToggleDirective', () => {
     expect(toggle).toHaveBeenCalledWith({ show: 'toggle', id: 'liveDemoModal', trigger: fixture.nativeElement });
   });
 
-  it('should pass an empty id for a bare cModalToggle', () => {
+  it('should pass an empty id for a bare cModalToggle', async () => {
     const bareFixture = TestBed.createDirective(ModalToggleDirective, {
       tagName: 'button',
       bindings: [inputBinding('cModalToggle', () => '')]
     });
-    bareFixture.detectChanges();
+    await bareFixture.whenStable();
     const toggle = vi.spyOn(TestBed.inject(ModalService), 'toggle');
     (bareFixture.nativeElement as HTMLElement).click();
     expect(toggle).toHaveBeenCalledWith({ show: 'toggle', id: '', trigger: bareFixture.nativeElement });

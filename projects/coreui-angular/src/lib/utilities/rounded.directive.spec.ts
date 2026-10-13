@@ -7,24 +7,24 @@ describe('RoundedDirective', () => {
   let rounded: WritableSignal<Rounded>;
   let fixture: DirectiveFixture<RoundedDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     rounded = signal<Rounded>(1);
     fixture = TestBed.createDirective(RoundedDirective, {
       tagName: 'div',
       bindings: [inputBinding('cRounded', rounded)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     const classList = fixture.nativeElement.classList;
     expect(classList.contains('rounded-1')).toBe(true);
     rounded.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('rounded')).toBe(true);
     rounded.set({
       top: false,
@@ -33,17 +33,17 @@ describe('RoundedDirective', () => {
       pill: true,
       size: 3
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.contains('rounded-3')).toBe(true);
     expect(classList.contains('rounded-end')).toBe(true);
     expect(classList.contains('rounded-circle')).toBe(true);
     expect(classList.contains('rounded-pill')).toBe(true);
     expect(classList.length).toBe(4);
     rounded.set({});
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.length).toBe(0);
     rounded.set(1234n as unknown as Rounded);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(classList.length).toBe(0);
   });
 });

@@ -20,54 +20,54 @@ describe('ThemeDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should set data-coreui-theme attribute', () => {
-    fixture.detectChanges();
+  it('should set data-coreui-theme attribute', async () => {
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
     colorScheme.set('dark');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
     colorScheme.set('light');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
     colorScheme.set(undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBeNull();
   });
 
-  it('should keep a light colorScheme on the first render', () => {
+  it('should keep a light colorScheme on the first render', async () => {
     colorScheme.set('light');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
   });
 
-  it('should keep a light colorScheme on the first render without a dark binding', () => {
+  it('should keep a light colorScheme on the first render without a dark binding', async () => {
     const lightFixture = TestBed.createDirective(ThemeDirective, {
       tagName: 'div',
       bindings: [inputBinding('colorScheme', () => 'light')]
     });
-    lightFixture.detectChanges();
+    await lightFixture.whenStable();
     expect(lightFixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
   });
 
-  it('should apply dark over colorScheme and restore colorScheme when dark is unset', () => {
+  it('should apply dark over colorScheme and restore colorScheme when dark is unset', async () => {
     colorScheme.set('light');
     dark.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
     dark.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('light');
   });
 
-  it('should keep dark when colorScheme changes or is unset', () => {
+  it('should keep dark when colorScheme changes or is unset', async () => {
     dark.set(true);
     colorScheme.set('dark');
-    fixture.detectChanges();
+    await fixture.whenStable();
     colorScheme.set('light');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
     colorScheme.set(undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('data-coreui-theme')).toBe('dark');
   });
 });

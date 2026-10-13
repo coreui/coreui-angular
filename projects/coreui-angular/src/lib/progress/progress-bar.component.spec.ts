@@ -27,7 +27,7 @@ describe('ProgressBarComponent', () => {
     componentRef.setInput('color', 'success');
     componentRef.setInput('variant', 'striped');
     componentRef.setInput('animated', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
@@ -52,9 +52,9 @@ describe('ProgressBarComponent', () => {
     expect(fixture.nativeElement.getAttribute('role')).toBe('progressbar');
   });
 
-  it('should not have aria-* attributes', () => {
+  it('should not have aria-* attributes', async () => {
     componentRef.setInput('value', undefined);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('aria-valuenow')).toBeFalsy();
     expect(fixture.nativeElement.getAttribute('aria-valuemin')).toBeFalsy();
     expect(fixture.nativeElement.getAttribute('aria-valuemax')).toBeFalsy();

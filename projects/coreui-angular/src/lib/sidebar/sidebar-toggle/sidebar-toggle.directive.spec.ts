@@ -32,7 +32,7 @@ describe('SidebarToggleDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     sidebarService = TestBed.inject(SidebarService);
     debugElements = fixture.debugElement.queryAll(By.directive(SidebarToggleDirective));
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {

@@ -38,7 +38,7 @@ describe('NavLinkDirective', () => {
   let fixture: DirectiveFixture<NavLinkDirective>;
   let element: Element;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     active = signal(false);
     disabled = signal(false);
     fixture = TestBed.createDirective(NavLinkDirective, {
@@ -46,7 +46,7 @@ describe('NavLinkDirective', () => {
       bindings: [inputBinding('active', active), inputBinding('disabled', disabled)]
     });
     element = fixture.nativeElement;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
@@ -57,39 +57,39 @@ describe('NavLinkDirective', () => {
     expect(element.classList.contains('nav-link')).toBe(true);
   });
 
-  it('should have css classes for active', () => {
+  it('should have css classes for active', async () => {
     expect(element.classList.contains('active')).toBe(false);
     active.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.classList.contains('active')).toBe(true);
     active.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.classList.contains('active')).toBe(false);
   });
 
-  it('should have css classes for disabled', () => {
+  it('should have css classes for disabled', async () => {
     expect(element.classList.contains('disabled')).toBe(false);
     disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.classList.contains('disabled')).toBe(true);
     disabled.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.classList.contains('disabled')).toBe(false);
   });
 
-  it('should have aria-* attr for active', () => {
+  it('should have aria-* attr for active', async () => {
     expect(element.getAttribute('aria-current')).not.toBe('page');
     active.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.getAttribute('aria-current')).toBe('page');
   });
 
-  it('should have attributes for disabled', () => {
+  it('should have attributes for disabled', async () => {
     expect(element.getAttribute('disabled')).toBeNull();
     expect(element.getAttribute('aria-disabled')).not.toBeTruthy();
     expect(element.getAttribute('tabindex')).not.toBe('-1');
     disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.getAttribute('disabled')).toBeNull();
     expect(element.getAttribute('aria-disabled')).toBeTruthy();
     expect(element.getAttribute('tabindex')).toBe('-1');
@@ -97,12 +97,12 @@ describe('NavLinkDirective', () => {
 });
 
 describe('NavLinkDirective on a button host', () => {
-  it('should have disabled attr instead of aria-disabled', () => {
+  it('should have disabled attr instead of aria-disabled', async () => {
     const fixture = TestBed.createDirective(NavLinkDirective, {
       tagName: 'button',
       bindings: [inputBinding('disabled', () => true)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('disabled')).not.toBeNull();
     expect(fixture.nativeElement.getAttribute('aria-disabled')).not.toBeTruthy();
     expect(fixture.nativeElement.getAttribute('tabindex')).not.toBe('-1');
@@ -112,21 +112,21 @@ describe('NavLinkDirective on a button host', () => {
 describe('NavLinkDirective in a nav group', () => {
   let fixture: ComponentFixture<TestNavGroupComponent>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TestNavGroupComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestNavGroupComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
-  it('should open the group for an active link', () => {
+  it('should open the group for an active link', async () => {
     const group = fixture.nativeElement.querySelector('c-nav-group');
     expect(group.classList.contains('show')).toBe(false);
 
     fixture.componentRef.setInput('active', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(group.classList.contains('show')).toBe(true);
   });
 });
@@ -134,29 +134,29 @@ describe('NavLinkDirective in a nav group', () => {
 describe('NavLinkDirective in a sidebar nav with dropdownMode none', () => {
   let fixture: ComponentFixture<TestSidebarNavDropdownModeComponent>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TestSidebarNavDropdownModeComponent],
       providers: [provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestSidebarNavDropdownModeComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
-  it('should keep the group closed for an active link', () => {
+  it('should keep the group closed for an active link', async () => {
     const group = fixture.nativeElement.querySelector('c-nav-group');
 
     fixture.componentRef.setInput('active', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(group.classList.contains('show')).toBe(false);
   });
 
-  it('should keep a nested group closed for an active link', () => {
+  it('should keep a nested group closed for an active link', async () => {
     const [, nested] = fixture.nativeElement.querySelectorAll('c-nav-group');
 
     fixture.componentRef.setInput('nestedActive', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(nested.classList.contains('show')).toBe(false);
   });
 });

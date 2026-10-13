@@ -4,9 +4,9 @@ import { HeaderTogglerDirective } from './header-toggler.directive';
 describe('HeaderTogglerDirective', () => {
   let fixture: DirectiveFixture<HeaderTogglerDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createDirective(HeaderTogglerDirective, { tagName: 'button' });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {

@@ -7,14 +7,14 @@ describe('ButtonCloseDirective', () => {
   let tabindex: WritableSignal<number | undefined>;
   let fixture: DirectiveFixture<ButtonCloseDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     disabled = signal(false);
     tabindex = signal<number | undefined>(undefined);
     fixture = TestBed.createDirective(ButtonCloseDirective, {
       tagName: 'button',
       bindings: [inputBinding('disabled', disabled), inputBinding('tabindex', tabindex)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
@@ -26,9 +26,9 @@ describe('ButtonCloseDirective', () => {
     expect(fixture.nativeElement.classList.contains('btn-close')).toBe(true);
   });
 
-  it('should not set tabindex when not given', () => {
+  it('should not set tabindex when not given', async () => {
     const unboundFixture = TestBed.createDirective(ButtonCloseDirective, { tagName: 'button' });
-    unboundFixture.detectChanges();
+    await unboundFixture.whenStable();
     expect(unboundFixture.nativeElement.getAttribute('tabindex')).toBeNull();
   });
 
@@ -36,16 +36,16 @@ describe('ButtonCloseDirective', () => {
     expect(fixture.nativeElement.getAttribute('tabindex')).toBeNull();
   });
 
-  it('should pass tabindex to the host', () => {
+  it('should pass tabindex to the host', async () => {
     tabindex.set(2);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('tabindex')).toBe('2');
   });
 
-  it('should set tabindex to -1 when disabled', () => {
+  it('should set tabindex to -1 when disabled', async () => {
     tabindex.set(2);
     disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('tabindex')).toBe('-1');
   });
 });

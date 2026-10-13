@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChipComponent } from '../chip/chip.component';
 import { AnnouncerService } from '../services/announcer.service';
@@ -91,8 +91,7 @@ describe('ChipSetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChipSetHostComponent],
-      providers: [provideZonelessChangeDetection()]
+      imports: [ChipSetHostComponent]
     }).compileComponents();
     announce = vi.spyOn(TestBed.inject(AnnouncerService), 'announce').mockReturnValue(vi.fn());
     fixture = TestBed.createComponent(ChipSetHostComponent);
@@ -343,7 +342,7 @@ describe('ChipSetComponent', () => {
       const server = TestBed.createComponent(ChipSetHostComponent);
       server.componentInstance.removable.set(true);
       server.componentInstance.declare('a', 'b');
-      server.detectChanges();
+      await server.whenStable();
       const tabindexes = [...server.nativeElement.querySelectorAll('c-chip')].map((element: Element) =>
         element.getAttribute('tabindex')
       );
@@ -362,7 +361,7 @@ describe('ChipSetComponent', () => {
       server.componentInstance.selected.set(['b']);
       server.componentInstance.chips.set(['a', 'b']);
       server.componentInstance.declare('c');
-      server.detectChanges();
+      await server.whenStable();
       expect(server.nativeElement.querySelectorAll('c-chip[tabindex="0"]').length).toBe(1);
     } finally {
       delete scope.ngServerMode;
@@ -376,7 +375,7 @@ describe('ChipSetComponent', () => {
       const early = TestBed.createComponent(ChipSetHostComponent);
       early.componentInstance.removable.set(true);
       early.componentInstance.declare('a', 'b');
-      early.detectChanges();
+      await early.whenStable();
       const [a, b] = early.nativeElement.querySelectorAll('c-chip') as NodeListOf<HTMLElement>;
       b.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
       expect(b.getAttribute('tabindex')).toBe('0');
@@ -648,10 +647,6 @@ class TwoWayChipsHostComponent {
 }
 
 describe('ChipSetComponent with [(chips)]', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
-  });
-
   it('removes the chip through the two-way binding', async () => {
     const fixture = TestBed.createComponent(TwoWayChipsHostComponent);
     await fixture.whenStable();
@@ -672,10 +667,6 @@ class OneWaySelectedHostComponent {
 }
 
 describe('ChipSetComponent with one-way [selected]', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
-  });
-
   it('applies new values from the parent but does not write back', async () => {
     const fixture = TestBed.createComponent(OneWaySelectedHostComponent);
     await fixture.whenStable();

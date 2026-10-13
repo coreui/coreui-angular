@@ -19,13 +19,12 @@ describe('OffcanvasComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(OffcanvasComponent);
+    fixture.nativeElement.style.position = 'fixed';
     await fixture.whenStable();
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     document = TestBed.inject(DOCUMENT);
-    fixture.nativeElement.style.position = 'fixed';
-    fixture.detectChanges();
 
     vi.useFakeTimers();
   });
@@ -70,7 +69,7 @@ describe('OffcanvasComponent', () => {
     expect(fixture.nativeElement.inert).toBe(true);
     componentRef.setInput('visible', true);
     fixture.detectChanges();
-    await fixture.whenStable();
+    await vi.runAllTimersAsync();
     expect(componentRef.instance.visible()).toBe(true);
     expect(fixture.nativeElement.inert).toBeFalsy();
   });
@@ -146,8 +145,8 @@ describe('OffcanvasComponent', () => {
   it('should set inert only when the closed offcanvas is positioned as a panel', async () => {
     expect(fixture.nativeElement.inert).toBe(true);
     fixture.nativeElement.style.position = 'static';
-    fixture.detectChanges();
-    fixture.detectChanges();
+    componentRef.changeDetectorRef.markForCheck();
+    await vi.runAllTimersAsync();
     expect(fixture.nativeElement.inert).toBeFalsy();
   });
 
@@ -498,7 +497,7 @@ describe('OffcanvasComponent', () => {
     it('should detach the portal when the component is destroyed', async () => {
       const localFixture = TestBed.createComponent(OffcanvasComponent);
       const localComponentRef = localFixture.componentRef;
-      await localFixture.whenStable();
+      await vi.runAllTimersAsync();
       document.body.appendChild(localFixture.nativeElement);
 
       localComponentRef.setInput('portal', true);

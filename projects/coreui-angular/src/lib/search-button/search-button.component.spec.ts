@@ -45,7 +45,6 @@ describe('SearchButtonComponent', () => {
     await fixture.whenStable();
 
     host = fixture.componentInstance;
-    fixture.detectChanges();
     button = fixture.nativeElement.querySelector('button');
   });
 
@@ -77,10 +76,10 @@ describe('SearchButtonComponent', () => {
     expect(keys[1].textContent?.trim()).toBe('/');
   });
 
-  it('should customize placeholder and shortcut', () => {
+  it('should customize placeholder and shortcut', async () => {
     host.placeholder.set('Command palette');
     host.shortcut.set('meta+k,ctrl+k');
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(button.querySelector('.search-button-placeholder')?.textContent?.trim()).toBe('Command palette');
 
@@ -90,9 +89,9 @@ describe('SearchButtonComponent', () => {
     expect(keys[1].textContent?.trim()).toBe('K');
   });
 
-  it('should reflect the disabled input as an attribute', () => {
+  it('should reflect the disabled input as an attribute', async () => {
     host.disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(button.getAttribute('disabled')).toBe('');
   });
@@ -103,44 +102,44 @@ describe('SearchButtonComponent', () => {
     expect(host.onTrigger).toHaveBeenCalledTimes(1);
   });
 
-  it('should emit trigger on a matching shortcut', () => {
+  it('should emit trigger on a matching shortcut', async () => {
     host.shortcut.set('meta+k,ctrl+k');
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
 
     expect(host.onTrigger).toHaveBeenCalledTimes(1);
   });
 
-  it('should not emit trigger on a matching shortcut when disabled', () => {
+  it('should not emit trigger on a matching shortcut when disabled', async () => {
     host.shortcut.set('meta+k,ctrl+k');
     host.disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
 
     expect(host.onTrigger).not.toHaveBeenCalled();
   });
 
-  it('should not track active shortcut keys while disabled', () => {
+  it('should not track active shortcut keys while disabled', async () => {
     host.shortcut.set('meta+k,ctrl+k');
     host.disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', metaKey: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const keys = button.querySelectorAll('.search-button-key');
     expect(keys[0].classList.contains('active')).toBe(false);
     expect(host.onTrigger).not.toHaveBeenCalled();
   });
 
-  it('should clear an already-active shortcut key as soon as the component becomes disabled', () => {
+  it('should clear an already-active shortcut key as soon as the component becomes disabled', async () => {
     host.shortcut.set('meta+k,ctrl+k');
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', metaKey: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     let keys = button.querySelectorAll('.search-button-key');
     expect(keys[0].classList.contains('active')).toBe(true);
@@ -148,15 +147,15 @@ describe('SearchButtonComponent', () => {
     // a real keyup never arrives while the key is held and the button becomes
     // disabled mid-press; the highlight must clear immediately rather than get stuck
     host.disabled.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     keys = button.querySelectorAll('.search-button-key');
     expect(keys[0].classList.contains('active')).toBe(false);
   });
 
-  it('should ignore plain typing in editable targets', () => {
+  it('should ignore plain typing in editable targets', async () => {
     host.shortcut.set('k');
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const input = document.createElement('input');
     document.body.append(input);
@@ -168,19 +167,19 @@ describe('SearchButtonComponent', () => {
     input.remove();
   });
 
-  it('should highlight and clear active shortcut keys', () => {
+  it('should highlight and clear active shortcut keys', async () => {
     host.shortcut.set('meta+k,ctrl+k');
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', metaKey: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     let keys = button.querySelectorAll('.search-button-key');
     expect(keys[0].classList.contains('active')).toBe(true);
     expect(keys[1].classList.contains('active')).toBe(false);
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     keys = button.querySelectorAll('.search-button-key');
     expect(keys[0].classList.contains('active')).toBe(true);
@@ -189,17 +188,17 @@ describe('SearchButtonComponent', () => {
     // a keyup carries the modifier flags still held at release time; this synthetic
     // event (like the vanilla/React/Vue suites) omits metaKey, so both keys clear
     document.dispatchEvent(new KeyboardEvent('keyup', { key: 'k' }));
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     keys = button.querySelectorAll('.search-button-key');
     expect(keys[0].classList.contains('active')).toBe(false);
     expect(keys[1].classList.contains('active')).toBe(false);
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     window.dispatchEvent(new FocusEvent('blur'));
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     keys = button.querySelectorAll('.search-button-key');
     expect(keys[0].classList.contains('active')).toBe(false);
@@ -220,12 +219,12 @@ describe('SearchButtonComponent', () => {
 class IconTemplateHostComponent {}
 
 describe('SearchButtonComponent icon template', () => {
-  it('should render a custom icon template instead of the default icon', () => {
+  it('should render a custom icon template instead of the default icon', async () => {
     const fixture: ComponentFixture<IconTemplateHostComponent> = TestBed.configureTestingModule({
       imports: [IconTemplateHostComponent]
     }).createComponent(IconTemplateHostComponent);
 
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const button = fixture.nativeElement.querySelector('button');
     expect(button.querySelector('.custom-icon')).toBeTruthy();
@@ -244,12 +243,12 @@ describe('SearchButtonComponent icon template', () => {
 class ProjectedContentHostComponent {}
 
 describe('SearchButtonComponent projected content', () => {
-  it('should render fully custom projected content instead of the default icon and placeholder', () => {
+  it('should render fully custom projected content instead of the default icon and placeholder', async () => {
     const fixture: ComponentFixture<ProjectedContentHostComponent> = TestBed.configureTestingModule({
       imports: [ProjectedContentHostComponent]
     }).createComponent(ProjectedContentHostComponent);
 
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const button = fixture.nativeElement.querySelector('button');
     expect(button.querySelector('.custom-content')?.textContent?.trim()).toBe('Custom content');

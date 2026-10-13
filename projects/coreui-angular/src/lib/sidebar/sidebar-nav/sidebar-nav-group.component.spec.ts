@@ -25,7 +25,6 @@ describe('SidebarNavGroupComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(SidebarNavGroupComponent);
-    await fixture.whenStable();
 
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
@@ -52,8 +51,7 @@ describe('SidebarNavGroupComponent', () => {
       ]
     };
     fixture.componentRef.setInput('item', item);
-
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
@@ -64,28 +62,28 @@ describe('SidebarNavGroupComponent', () => {
     expect(fixture.nativeElement.classList.contains('nav-group')).toBe(true);
   });
 
-  it('should collapse its nav', () => {
+  it('should collapse its nav', async () => {
     const nav = fixture.nativeElement.querySelector('c-sidebar-nav');
     expect(nav.classList.contains('collapse')).toBe(true);
     expect(nav.classList.contains('show')).toBe(false);
 
     fixture.nativeElement.querySelector('.nav-group-toggle').click();
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(component.open()).toBe(true);
     expect(nav.classList.contains('collapsing')).toBe(true);
     expect(nav.style.display).toBe('block');
   });
 
-  it('should display its nav before the collapse to closed starts', () => {
+  it('should display its nav before the collapse to closed starts', async () => {
     const nav = fixture.nativeElement.querySelector('c-sidebar-nav');
     const collapse = fixture.debugElement.query(By.directive(CollapseDirective)).injector.get(CollapseDirective);
     const toggler = fixture.nativeElement.querySelector('.nav-group-toggle');
 
     toggler.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     endTransition(nav);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(nav.classList.contains('show')).toBe(true);
     expect(nav.style.display).toBe('');
@@ -98,7 +96,7 @@ describe('SidebarNavGroupComponent', () => {
     });
 
     toggler.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(component.open()).toBe(false);
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
@@ -123,7 +121,6 @@ describe('SidebarNavGroupComponent dropdownMode', () => {
       fixture.componentRef.setInput('dropdownMode', dropdownMode);
     }
     await fixture.whenStable();
-    fixture.detectChanges();
     return fixture.componentInstance;
   }
 
@@ -157,11 +154,11 @@ describe('SidebarNavGroupComponent dropdownMode', () => {
     const component = await createGroup('none');
 
     fixture.nativeElement.querySelector('.nav-group-toggle').click();
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.open()).toBe(true);
 
     await router.navigate(['/charts']);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.open()).toBe(true);
   });
 
@@ -170,7 +167,7 @@ describe('SidebarNavGroupComponent dropdownMode', () => {
     expect(component.open()).toBe(true);
 
     await router.navigate(['/charts']);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.open()).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -68,7 +68,6 @@ class SignalHostComponent {
 
 describe('ChipInputComponent forms', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
     vi.spyOn(TestBed.inject(AnnouncerService), 'announce').mockReturnValue(vi.fn());
   });
 

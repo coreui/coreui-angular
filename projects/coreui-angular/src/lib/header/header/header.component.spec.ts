@@ -18,7 +18,6 @@ describe('HeaderComponent', () => {
 
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

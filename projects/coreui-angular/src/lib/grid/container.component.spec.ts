@@ -18,20 +18,19 @@ describe('ContainerComponent', () => {
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     expect(fixture.nativeElement.classList.contains('container')).toBe(true);
     expect(fixture.nativeElement.classList.contains('container-fluid')).toBe(false);
     expect(fixture.nativeElement.classList.contains('container-xl')).toBe(false);
     componentRef.setInput('fluid', true);
     componentRef.setInput('breakpoint', 'xl');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('container-xl')).toBe(true);
   });
 });

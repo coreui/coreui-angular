@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Colors } from '../coreui.types';
 import { ChipComponent } from './chip.component';
@@ -63,8 +63,7 @@ describe('ChipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChipHostComponent],
-      providers: [provideZonelessChangeDetection()]
+      imports: [ChipHostComponent]
     }).compileComponents();
     fixture = TestBed.createComponent(ChipHostComponent);
     host = fixture.componentInstance;
@@ -278,10 +277,6 @@ describe('ChipComponent', () => {
 class ChipTextHostComponent {}
 
 describe('ChipComponent text and attributes', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
-  });
-
   it('reads its text without icons and hidden content', async () => {
     const fixture = TestBed.createComponent(ChipTextHostComponent);
     await fixture.whenStable();

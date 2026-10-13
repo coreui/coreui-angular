@@ -33,10 +33,9 @@ describe('TabPanelComponent', () => {
     fixture = TestBed.configureTestingModule({
       imports: [TestComponent]
     }).createComponent(TestComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

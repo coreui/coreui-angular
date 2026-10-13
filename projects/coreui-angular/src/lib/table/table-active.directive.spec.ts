@@ -6,28 +6,28 @@ describe('TableActiveDirective', () => {
   let active: WritableSignal<boolean>;
   let fixture: DirectiveFixture<TableActiveDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     active = signal(false);
     fixture = TestBed.createDirective(TableActiveDirective, {
       tagName: 'tr',
       bindings: [inputBinding('cTableActive', active)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should add class "table-active" when active is true', () => {
+  it('should add class "table-active" when active is true', async () => {
     active.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList).toContain('table-active');
   });
 
-  it('should not add class "table-active" when active is false', () => {
+  it('should not add class "table-active" when active is false', async () => {
     active.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList).not.toContain('table-active');
   });
 });

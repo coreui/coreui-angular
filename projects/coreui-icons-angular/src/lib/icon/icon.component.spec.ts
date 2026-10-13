@@ -33,7 +33,7 @@ describe('IconComponent', () => {
 
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
     debugEl = fixture.debugElement.query(By.css('svg'));
   });
 
@@ -57,46 +57,46 @@ describe('IconComponent', () => {
   });
 
   describe('size input', () => {
-    it('should handle different size values', () => {
+    it('should handle different size values', async () => {
       const sizes = ['sm', 'lg', 'xl', 'xxl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'];
 
-      sizes.forEach((size) => {
+      for (const size of sizes) {
         const testFixture = TestBed.createComponent(IconComponent);
         testFixture.componentRef.setInput('size', size);
         testFixture.componentRef.setInput('name', 'cilList');
-        testFixture.detectChanges();
+        await testFixture.whenStable();
 
         const svg = testFixture.debugElement.query(By.css('svg'));
         expect(svg.nativeElement.classList.contains(`icon-${size}`)).toBe(true);
         testFixture.destroy();
-      });
+      }
     });
 
-    it('should handle custom size when width is provided', () => {
+    it('should handle custom size when width is provided', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('width', '32');
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.computedSize()).toBe('custom-size');
     });
 
-    it('should handle custom size when height is provided', () => {
+    it('should handle custom size when height is provided', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('height', '32');
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.computedSize()).toBe('custom-size');
     });
 
-    it('should use custom-size when size is explicitly set to custom', () => {
+    it('should use custom-size when size is explicitly set to custom', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('size', 'custom');
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.computedSize()).toBe('custom-size');
@@ -104,19 +104,19 @@ describe('IconComponent', () => {
   });
 
   describe('name input', () => {
-    it('should transform name with toPascalCase', () => {
+    it('should transform name with toPascalCase', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cil-list');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.name()).toBe('cilList');
     });
 
-    it('should handle already transformed names', () => {
+    it('should handle already transformed names', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.name()).toBe('cilList');
@@ -124,29 +124,29 @@ describe('IconComponent', () => {
   });
 
   describe('content input', () => {
-    it('should use content when provided as string', () => {
+    it('should use content when provided as string', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('content', '<path d="M10 10"/>');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.code()).toBe('<path d="M10 10"/>');
     });
 
-    it('should use content when provided as array', () => {
+    it('should use content when provided as array', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('content', ['512 512', '<path d="M10 10"/>']);
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.code()).toEqual(['512 512', '<path d="M10 10"/>']);
     });
 
-    it('should prefer content over name', () => {
+    it('should prefer content over name', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('content', '<path d="custom"/>');
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.code()).toBe('<path d="custom"/>');
@@ -154,11 +154,11 @@ describe('IconComponent', () => {
   });
 
   describe('title input', () => {
-    it('should include title element when title is provided', () => {
+    it('should include title element when title is provided', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
       testFixture.componentRef.setInput('title', 'List Icon');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const svg = testFixture.debugElement.query(By.css('svg'));
       const title = svg.nativeElement.querySelector('title');
@@ -166,10 +166,10 @@ describe('IconComponent', () => {
       expect(title?.textContent).toBe('List Icon');
     });
 
-    it('should not include title element when title is not provided', () => {
+    it('should not include title element when title is not provided', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const svg = testFixture.debugElement.query(By.css('svg'));
       const title = svg.nativeElement.querySelector('title');
@@ -178,29 +178,29 @@ describe('IconComponent', () => {
   });
 
   describe('viewBox', () => {
-    it('should use provided viewBox when set', () => {
+    it('should use provided viewBox when set', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('viewBox', '0 0 100 100');
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.viewBox()).toBe('0 0 100 100');
     });
 
-    it('should calculate viewBox from icon code when array with first element', () => {
+    it('should calculate viewBox from icon code when array with first element', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('content', ['512 512', '<path d="M10 10"/>']);
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.viewBox()).toBe('0 0 512 512');
     });
 
-    it('should use default viewBox when icon code is not array', () => {
+    it('should use default viewBox when icon code is not array', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('content', '<path d="M10 10"/>');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.viewBox()).toBe('0 0 64 64');
@@ -208,21 +208,21 @@ describe('IconComponent', () => {
   });
 
   describe('customClasses input', () => {
-    it('should use customClasses when provided', () => {
+    it('should use customClasses when provided', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('customClasses', { 'my-custom-class': true, 'another-class': true });
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const svg = testFixture.debugElement.query(By.css('svg'));
       expect(svg.nativeElement.classList.contains('my-custom-class')).toBe(true);
       expect(svg.nativeElement.classList.contains('another-class')).toBe(true);
     });
 
-    it('should use default classes when customClasses is not provided', () => {
+    it('should use default classes when customClasses is not provided', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       const classes = iconComponent.computedClasses();
@@ -231,20 +231,20 @@ describe('IconComponent', () => {
   });
 
   describe('attributes input', () => {
-    it('should apply default role attribute', () => {
+    it('should apply default role attribute', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const svg = testFixture.debugElement.query(By.css('svg'));
       expect(svg.nativeElement.getAttribute('role')).toBe('img');
     });
 
-    it('should allow custom attributes', () => {
+    it('should allow custom attributes', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('attributes', { 'aria-label': 'Custom Icon', 'data-test': 'icon' });
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const svg = testFixture.debugElement.query(By.css('svg'));
       expect(svg.nativeElement.getAttribute('aria-label')).toBe('Custom Icon');
@@ -253,21 +253,21 @@ describe('IconComponent', () => {
   });
 
   describe('width and height inputs', () => {
-    it('should apply width attribute when provided', () => {
+    it('should apply width attribute when provided', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('width', '48');
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const svg = testFixture.debugElement.query(By.css('svg'));
       expect(svg.nativeElement.getAttribute('width')).toBe('48');
     });
 
-    it('should apply height attribute when provided', () => {
+    it('should apply height attribute when provided', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('height', '48');
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const svg = testFixture.debugElement.query(By.css('svg'));
       expect(svg.nativeElement.getAttribute('height')).toBe('48');
@@ -275,38 +275,38 @@ describe('IconComponent', () => {
   });
 
   describe('edge cases', () => {
-    it('should handle empty content', () => {
+    it('should handle empty content', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('content', '');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.code()).toBe('');
     });
 
-    it('should handle array content with only viewBox', () => {
+    it('should handle array content with only viewBox', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('content', ['512 512']);
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.code()).toEqual(['512 512']);
     });
 
-    it('should warn when icon name is not found in IconSet', () => {
+    it('should warn when icon name is not found in IconSet', async () => {
       const warnSpy = vi.spyOn(console, 'warn');
 
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'nonExistentIcon');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       expect(warnSpy).toHaveBeenCalledWith('CoreUI WARN: Icon nonExistentIcon is not registered in IconService');
     });
 
-    it('should handle icon without size', () => {
+    it('should handle icon without size', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       const iconComponent = testFixture.componentInstance;
       expect(iconComponent.size()).toBe('');
@@ -318,7 +318,7 @@ describe('IconComponent', () => {
     it('should have svgElementRef after rendering', async () => {
       const testFixture = TestBed.createComponent(IconComponent);
       testFixture.componentRef.setInput('name', 'cilList');
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       await new Promise((resolve) => setTimeout(resolve, 10));
 
@@ -334,7 +334,7 @@ describe('IconComponent', () => {
       class HostClassTestComponent {}
 
       const testFixture = TestBed.createComponent(HostClassTestComponent);
-      testFixture.detectChanges();
+      await testFixture.whenStable();
 
       await new Promise((resolve) => setTimeout(resolve, 10));
 

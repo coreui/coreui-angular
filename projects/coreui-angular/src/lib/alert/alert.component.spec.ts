@@ -18,27 +18,26 @@ describe('AlertComponent', () => {
     await fixture.whenStable();
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have css classes and styles', () => {
+  it('should have css classes and styles', async () => {
     expect(fixture.nativeElement.classList.contains('alert')).toBe(true);
     expect(fixture.nativeElement.classList.contains('alert-primary')).toBe(true);
     expect(fixture.nativeElement.classList.contains('show')).toBe(true);
     componentRef.setInput('visible', false);
     componentRef.setInput('color', 'danger');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('alert-danger')).toBe(true);
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
     componentRef.setInput('dismissible', true);
     componentRef.setInput('fade', true);
     componentRef.setInput('variant', 'solid');
     componentRef.setInput('visible', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('alert-dismissible')).toBe(true);
     expect(fixture.nativeElement.classList.contains('fade')).toBe(true);
     expect(fixture.nativeElement.classList.contains('alert-danger')).toBe(false);
@@ -47,22 +46,22 @@ describe('AlertComponent', () => {
     expect(fixture.nativeElement.classList.contains('show')).toBe(true);
   });
 
-  it('should toggle inert with visibility', () => {
+  it('should toggle inert with visibility', async () => {
     expect(fixture.nativeElement.inert).toBeFalsy();
 
     componentRef.setInput('visible', false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     fixture.nativeElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'opacity' }));
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.inert).toBe(true);
 
     componentRef.setInput('visible', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.inert).toBeFalsy();
   });
 
-  it('should have attributes', () => {
-    fixture.detectChanges();
+  it('should have attributes', async () => {
+    await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('role')).toBe('alert');
   });
 });

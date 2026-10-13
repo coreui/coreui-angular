@@ -7,20 +7,20 @@ describe('ShadowOnScrollDirective', () => {
   let fixture: DirectiveFixture<ShadowOnScrollDirective>;
   let document: Document;
 
-  const scrollTo = (scrollTop: number) => {
+  const scrollTo = async (scrollTop: number) => {
     Object.defineProperty(document.documentElement, 'scrollTop', { configurable: true, value: scrollTop });
     document.dispatchEvent(new Event('scroll'));
-    fixture.detectChanges();
+    await fixture.whenStable();
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     document = TestBed.inject(DOCUMENT);
     shadow = signal<'sm' | 'lg' | 'none' | boolean>(true);
     fixture = TestBed.createDirective(ShadowOnScrollDirective, {
       tagName: 'div',
       bindings: [inputBinding('cShadowOnScroll', shadow)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   afterEach(() => {
@@ -32,77 +32,77 @@ describe('ShadowOnScrollDirective', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should toggle shadow on scroll', () => {
+  it('should toggle shadow on scroll', async () => {
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(false);
-    scrollTo(10);
+    await scrollTo(10);
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(true);
-    scrollTo(0);
+    await scrollTo(0);
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(false);
   });
 
-  it('should apply shadow size', () => {
+  it('should apply shadow size', async () => {
     shadow.set('lg');
-    fixture.detectChanges();
-    scrollTo(10);
+    await fixture.whenStable();
+    await scrollTo(10);
     expect(fixture.nativeElement.classList.contains('shadow-lg')).toBe(true);
   });
 
-  it('should drop the previous shadow class when the input changes', () => {
-    scrollTo(10);
+  it('should drop the previous shadow class when the input changes', async () => {
+    await scrollTo(10);
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(true);
     shadow.set('lg');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(false);
-    scrollTo(10);
+    await scrollTo(10);
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(false);
     expect(fixture.nativeElement.classList.contains('shadow-lg')).toBe(true);
   });
 
-  it('should keep one scroll listener when the input changes', () => {
+  it('should keep one scroll listener when the input changes', async () => {
     const add = vi.spyOn(document, 'addEventListener');
     const remove = vi.spyOn(document, 'removeEventListener');
     shadow.set('lg');
-    fixture.detectChanges();
+    await fixture.whenStable();
     shadow.set('sm');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(add.mock.calls.filter(([type]) => type === 'scroll').length).toBe(2);
     expect(remove.mock.calls.filter(([type]) => type === 'scroll').length).toBe(2);
   });
 
-  it('should remove the shadow and stop listening when disabled', () => {
-    scrollTo(10);
+  it('should remove the shadow and stop listening when disabled', async () => {
+    await scrollTo(10);
     shadow.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(false);
-    scrollTo(10);
+    await scrollTo(10);
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(false);
   });
 
-  it('should not listen to scroll for none', () => {
+  it('should not listen to scroll for none', async () => {
     const add = vi.spyOn(document, 'addEventListener');
     shadow.set('none');
-    fixture.detectChanges();
-    scrollTo(10);
+    await fixture.whenStable();
+    await scrollTo(10);
     expect(fixture.nativeElement.classList.contains('shadow-none')).toBe(false);
     expect(add.mock.calls.filter(([type]) => type === 'scroll').length).toBe(0);
   });
 
-  it('should apply the shadow when the document is already scrolled', () => {
-    scrollTo(10);
+  it('should apply the shadow when the document is already scrolled', async () => {
+    await scrollTo(10);
     shadow.set('lg');
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('shadow-lg')).toBe(true);
   });
 
-  it('should apply the shadow on mount when the document is already scrolled', () => {
+  it('should apply the shadow on mount when the document is already scrolled', async () => {
     Object.defineProperty(document.documentElement, 'scrollTop', { configurable: true, value: 10 });
     const scrolledFixture = TestBed.createDirective(ShadowOnScrollDirective, { tagName: 'div' });
-    scrolledFixture.detectChanges();
+    await scrolledFixture.whenStable();
     expect(scrolledFixture.nativeElement.classList.contains('shadow')).toBe(true);
   });
 
-  it('should remove the shadow and stop listening when destroyed', () => {
-    scrollTo(10);
+  it('should remove the shadow and stop listening when destroyed', async () => {
+    await scrollTo(10);
     expect(fixture.nativeElement.classList.contains('shadow')).toBe(true);
     const remove = vi.spyOn(document, 'removeEventListener');
     const element = fixture.nativeElement;

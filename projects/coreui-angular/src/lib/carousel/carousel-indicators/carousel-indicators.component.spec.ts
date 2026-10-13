@@ -26,7 +26,7 @@ describe('CarouselIndicatorsComponent', () => {
       { index: 2, interval: () => 5000 } as any,
       { index: 3, interval: () => 5000 } as any
     ]);
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

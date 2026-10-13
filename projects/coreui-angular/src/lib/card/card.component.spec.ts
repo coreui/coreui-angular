@@ -14,7 +14,6 @@ describe('CardComponent', () => {
     fixture = TestBed.createComponent(CardComponent);
     await fixture.whenStable();
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnnouncerService } from '../services/announcer.service';
 import { ChipInputComponent } from './chip-input.component';
@@ -53,8 +53,7 @@ describe('ChipInputComponent keyboard', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KeyboardHostComponent],
-      providers: [provideZonelessChangeDetection()]
+      imports: [KeyboardHostComponent]
     }).compileComponents();
     vi.spyOn(TestBed.inject(AnnouncerService), 'announce').mockReturnValue(vi.fn());
     fixture = TestBed.createComponent(KeyboardHostComponent);
@@ -269,13 +268,12 @@ describe('ChipInputComponent keyboard', () => {
 });
 
 describe('ChipInputComponent on the server', () => {
-  it('renders no chip tab stop before its first refresh', () => {
+  it('renders no chip tab stop before its first refresh', async () => {
     const scope = globalThis as { ngServerMode?: boolean };
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
     scope.ngServerMode = true;
     try {
       const fixture = TestBed.createComponent(KeyboardHostComponent);
-      fixture.detectChanges();
+      await fixture.whenStable();
       const stops = [...fixture.nativeElement.querySelectorAll('c-chip')].map((chip: Element) =>
         chip.getAttribute('tabindex')
       );

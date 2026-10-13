@@ -39,9 +39,9 @@ describe('TabDirective', () => {
     let fixture: ComponentFixture<TestComponent>;
     let tabs: HTMLButtonElement[];
 
-    beforeEach(() => {
+    beforeEach(async () => {
       fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
+      await fixture.whenStable();
       tabs = Array.from(fixture.nativeElement.querySelectorAll('button[cTab]'));
     });
 

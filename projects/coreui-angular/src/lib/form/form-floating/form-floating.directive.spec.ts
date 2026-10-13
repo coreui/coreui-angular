@@ -6,32 +6,32 @@ describe('FormFloatingDirective', () => {
   let floating: WritableSignal<boolean>;
   let fixture: DirectiveFixture<FormFloatingDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     floating = signal(false);
     fixture = TestBed.createDirective(FormFloatingDirective, {
       tagName: 'div',
       bindings: [inputBinding('cFormFloating', floating)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     expect(fixture.nativeElement.classList.contains('form-floating')).toBe(false);
     floating.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('form-floating')).toBe(true);
     floating.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('form-floating')).toBe(false);
   });
 
-  it('should be floating by default', () => {
+  it('should be floating by default', async () => {
     const defaultFixture = TestBed.createDirective(FormFloatingDirective, { tagName: 'div' });
-    defaultFixture.detectChanges();
+    await defaultFixture.whenStable();
     expect(defaultFixture.nativeElement.classList.contains('form-floating')).toBe(true);
   });
 });

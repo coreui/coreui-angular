@@ -6,25 +6,25 @@ describe('FormDirective', () => {
   let validated: WritableSignal<boolean>;
   let fixture: DirectiveFixture<FormDirective>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     validated = signal(false);
     fixture = TestBed.createDirective(FormDirective, {
       bindings: [inputBinding('validated', validated)]
     });
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
   });
 
-  it('should have css classes', () => {
+  it('should have css classes', async () => {
     expect(fixture.nativeElement.classList.contains('was-validated')).toBe(false);
     validated.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('was-validated')).toBe(true);
     validated.set(false);
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('was-validated')).toBe(false);
   });
 });

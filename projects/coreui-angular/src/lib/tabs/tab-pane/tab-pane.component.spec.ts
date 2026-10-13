@@ -38,7 +38,6 @@ describe('TabPaneComponent', () => {
     await fixture.whenStable();
 
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -61,14 +60,14 @@ describe('TabPaneComponent', () => {
     expect(fixture.nativeElement.getAttribute('role')).toBe('tabpanel');
   });
 
-  it('should toggle active and show classes', () => {
+  it('should toggle active and show classes', async () => {
     component.active = true;
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('active')).toBe(true);
     expect(fixture.nativeElement.classList.contains('show')).toBe(true);
 
     component.active = false;
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('active')).toBe(false);
     expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
@@ -76,14 +75,13 @@ describe('TabPaneComponent', () => {
   it('should follow the active index of its tab content', async () => {
     const hostFixture = TestBed.createComponent(TestComponent);
     await hostFixture.whenStable();
-    hostFixture.detectChanges();
 
     const panes: HTMLElement[] = Array.from(hostFixture.nativeElement.querySelectorAll('c-tab-pane'));
     expect(panes.map((pane) => pane.classList.contains('active'))).toEqual([true, false]);
     expect(panes[1].getAttribute('role')).toBe('region');
 
     hostFixture.componentInstance.activeIdx.set(1);
-    hostFixture.detectChanges();
+    await hostFixture.whenStable();
     expect(panes.map((pane) => pane.classList.contains('active'))).toEqual([false, true]);
     expect(panes.map((pane) => pane.classList.contains('show'))).toEqual([false, true]);
   });
@@ -103,9 +101,9 @@ describe('TabPaneComponent', () => {
     expect(component.active).toBe(false);
   });
 
-  it('should update its classes inside an OnPush host on a tab service change', () => {
+  it('should update its classes inside an OnPush host on a tab service change', async () => {
     const hostFixture = TestBed.createComponent(OnPushHostComponent);
-    hostFixture.detectChanges();
+    await hostFixture.whenStable();
     const pane = hostFixture.debugElement.children[0];
     const paneComponent: TabPaneComponent = pane.componentInstance;
     const tabContent = {} as TabContentComponent;
@@ -113,7 +111,7 @@ describe('TabPaneComponent', () => {
     paneComponent.tabPaneIdx = 0;
 
     TestBed.inject(TabService).setActiveTabIdx({ tabContent, activeIdx: 0 });
-    hostFixture.detectChanges();
+    await hostFixture.whenStable();
     expect(pane.nativeElement.classList.contains('active')).toBe(true);
     expect(pane.nativeElement.classList.contains('show')).toBe(true);
   });

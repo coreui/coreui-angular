@@ -35,7 +35,7 @@ describe('SidebarNavLinkComponent', () => {
     fixture.componentRef.setInput('item', item);
 
     // router.initialNavigation();
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
