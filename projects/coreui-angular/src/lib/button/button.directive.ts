@@ -6,7 +6,7 @@ import {
   numberAttribute
 } from '@angular/core';
 
-import { BooleanInput, ButtonType, Colors, Shapes } from '../coreui.types';
+import { ButtonType, Colors, Shapes } from '../coreui.types';
 
 @Directive({
   selector: '[cButton]',
@@ -22,9 +22,6 @@ import { BooleanInput, ButtonType, Colors, Shapes } from '../coreui.types';
   }
 })
 export class ButtonDirective {
-  static ngAcceptInputType_active: BooleanInput;
-  static ngAcceptInputType_disabled: BooleanInput;
-
   /**
    * Toggle the active state for the component
    * @returns boolean

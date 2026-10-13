@@ -12,7 +12,6 @@ import {
   Renderer2,
   untracked
 } from '@angular/core';
-import { BooleanInput } from '@angular/cdk/coercion';
 
 @Directive({
   selector: '[cCollapse]',
@@ -20,11 +19,6 @@ import { BooleanInput } from '@angular/cdk/coercion';
   host: { '[class]': 'hostClasses()' }
 })
 export class CollapseDirective implements OnDestroy {
-  static ngAcceptInputType_animate: BooleanInput;
-  static ngAcceptInputType_horizontal: BooleanInput;
-  static ngAcceptInputType_navbar: BooleanInput;
-  static ngAcceptInputType_visible: BooleanInput;
-
   readonly #hostElement = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
   #unlistenTransitionEnd?: () => void;

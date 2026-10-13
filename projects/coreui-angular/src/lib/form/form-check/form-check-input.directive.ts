@@ -9,7 +9,6 @@ import {
   linkedSignal,
   Renderer2
 } from '@angular/core';
-import { BooleanInput } from '@angular/cdk/coercion';
 
 @Directive({
   selector: 'input[cFormCheckInput]',
@@ -20,8 +19,6 @@ import { BooleanInput } from '@angular/cdk/coercion';
   }
 })
 export class FormCheckInputDirective {
-  static ngAcceptInputType_indeterminate: BooleanInput;
-
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
 

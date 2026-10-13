@@ -1,5 +1,5 @@
 import { booleanAttribute, computed, Directive, input, InputSignalWithTransform } from '@angular/core';
-import { BooleanInput, Sizes } from '../coreui.types';
+import { Sizes } from '../coreui.types';
 
 @Directive({
   selector: '[cListGroup]',
@@ -9,8 +9,6 @@ import { BooleanInput, Sizes } from '../coreui.types';
   }
 })
 export class ListGroupDirective {
-  static ngAcceptInputType_flush: BooleanInput;
-
   /**
    * Remove some borders and rounded corners to render list group items edge-to-edge in a parent component (e.g., `<CCard>`).
    * @returns boolean

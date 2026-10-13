@@ -1,4 +1,3 @@
-import { BooleanInput } from '@angular/cdk/coercion';
 import { booleanAttribute, Component, computed, contentChild, input } from '@angular/core';
 import { FormCheckLabelDirective } from './form-check-label.directive';
 
@@ -9,10 +8,6 @@ import { FormCheckLabelDirective } from './form-check-label.directive';
   host: { '[class]': 'hostClasses()' }
 })
 export class FormCheckComponent {
-  static ngAcceptInputType_inline: BooleanInput;
-  static ngAcceptInputType_reverse: BooleanInput;
-  static ngAcceptInputType_switch: BooleanInput;
-
   /**
    * Group checkboxes or radios on the same horizontal row.
    * @default false

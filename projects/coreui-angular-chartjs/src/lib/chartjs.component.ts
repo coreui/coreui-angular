@@ -27,7 +27,6 @@ import { merge } from 'lodash-es';
 import type { ChartConfiguration, ChartData, ChartOptions, ChartType, InteractionItem, Plugin } from 'chart.js';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { customTooltips as cuiCustomTooltips } from '@coreui/chartjs';
-import { BooleanInput } from './chartjs.interface';
 
 ChartJS.register(...registerables);
 
@@ -46,9 +45,6 @@ let nextId = 0;
   }
 })
 export class ChartjsComponent implements OnDestroy {
-  //
-  static ngAcceptInputType_redraw: BooleanInput;
-
   private readonly ngZone = inject(NgZone);
   private readonly renderer = inject(Renderer2);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
