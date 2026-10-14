@@ -88,7 +88,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly fullscreen = input<boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>();
 
   /**
-   * Closes the modal when the escape key is pressed.
+   * Closes the modal when the escape key is pressed, unless another handler already prevented its default.
    * @returns boolean
    * @default true
    */
@@ -289,7 +289,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onKeyDownHandler(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this.keyboard() && this.visible()) {
+    if (event.key === 'Escape' && !event.defaultPrevented && this.keyboard() && this.visible()) {
       if (this.backdrop() === 'static') {
         this.setStaticBackdrop();
       } else {

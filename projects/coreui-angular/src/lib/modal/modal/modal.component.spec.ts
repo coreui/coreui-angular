@@ -98,6 +98,34 @@ describe('ModalComponent', () => {
     expect(component.visible()).toBe(false);
   });
 
+  it('should not close modal on an Escape key press another component already handled', async () => {
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
+    event.preventDefault();
+    document.dispatchEvent(event);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    expect(component.visible()).toBe(true);
+  });
+
+  it('should not play the static backdrop on an Escape key press another component already handled', async () => {
+    fixture.componentRef.setInput('backdrop', 'static');
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const staticBackdrop = vi.spyOn(component, 'setStaticBackdrop');
+    const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
+    event.preventDefault();
+    document.dispatchEvent(event);
+    await vi.runAllTimersAsync();
+
+    expect(staticBackdrop).not.toHaveBeenCalled();
+    expect(component.visible()).toBe(true);
+  });
+
   it('should not close modal on Escape key press if keyboard is disabled', async () => {
     fixture.componentRef.setInput('keyboard', false);
     fixture.componentRef.setInput('visible', true);

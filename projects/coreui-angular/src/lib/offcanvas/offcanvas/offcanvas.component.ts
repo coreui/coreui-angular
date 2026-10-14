@@ -77,7 +77,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly container = input<Element | (() => Element | null) | null>(this.#document.body);
 
   /**
-   * Closes the offcanvas when the escape key is pressed
+   * Closes the offcanvas when the escape key is pressed, unless another handler already prevented its default.
    * @returns boolean
    * @default true
    */
@@ -269,7 +269,13 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   onKeyDownHandler(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this.keyboard() && this.visible() && this.backdrop() !== 'static') {
+    if (
+      event.key === 'Escape' &&
+      !event.defaultPrevented &&
+      this.keyboard() &&
+      this.visible() &&
+      this.backdrop() !== 'static'
+    ) {
       this.#offcanvasService.toggle({ show: false, id: this.id() });
     }
   }

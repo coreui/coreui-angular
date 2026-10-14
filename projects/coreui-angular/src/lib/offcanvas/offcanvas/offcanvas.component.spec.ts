@@ -86,6 +86,17 @@ describe('OffcanvasComponent', () => {
     expect(fixture.nativeElement.inert).toBe(true);
   });
 
+  it('should not close offcanvas on an Esc keydown another component already handled', async () => {
+    componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
+    event.preventDefault();
+    document.dispatchEvent(event);
+    await vi.runAllTimersAsync();
+    fixture.detectChanges();
+    expect(componentRef.instance.visible()).toBe(true);
+  });
+
   it('should close offcanvas on backdrop click', async () => {
     componentRef.setInput('backdrop', true);
     componentRef.setInput('visible', true);
