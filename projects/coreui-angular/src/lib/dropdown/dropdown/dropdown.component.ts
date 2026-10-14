@@ -30,6 +30,7 @@ import { filter } from 'rxjs/operators';
 import { createPopper, Instance, Options, Placement } from '@popperjs/core';
 
 import { DropdownAlignment } from '../../coreui.types';
+import { RtlService } from '../../services';
 import { ThemeDirective } from '../../shared';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from '../dropdown.service';
@@ -177,6 +178,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
   readonly #elementRef = inject(ElementRef);
   readonly #injector = inject(Injector);
   readonly #renderer = inject(Renderer2);
+  readonly #rtlService = inject(RtlService);
   readonly #ngZone = inject(NgZone);
   readonly #changeDetectorRef = inject(ChangeDetectorRef);
   readonly dropdownService = inject(DropdownService);
@@ -186,7 +188,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
   }
 
   /**
-   * Set alignment of dropdown menu.
+   * Set alignment of dropdown menu. A `placement` set on the dropdown takes precedence for the menu position.
    * @returns DropdownAlignment
    */
   readonly alignment = input<DropdownAlignment>();
@@ -203,18 +205,20 @@ export class DropdownComponent implements OnDestroy, OnInit {
   readonly autoClose = input<boolean | 'inside' | 'outside'>(true);
 
   /**
-   * Sets a specified  direction and location of the dropdown menu.
+   * Sets a specified  direction and location of the dropdown menu. A `placement` set on the dropdown takes
+   * precedence for the menu position.
    * @returns 'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart'
    */
   readonly direction = input<'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart'>();
 
   /**
-   * Describes the placement of your component after Popper.js has applied all the modifiers
-   * that may have flipped or altered the originally provided placement property.
+   * Placement of the menu positioned by Popper, used as given. Without it the placement follows `direction` and the alignment
+   * of the menu (its own, else this one), mirrored in a right-to-left context: `bottom-start`, or
+   * `bottom-end` right to left.
    * @returns Placement
-   * @default 'bottom-start'
+   * @default undefined
    */
-  readonly placement = input<Placement>('bottom-start');
+  readonly placement = input<Placement>();
 
   /**
    * If you want to disable dynamic positioning set this property to `false`.
@@ -223,9 +227,9 @@ export class DropdownComponent implements OnDestroy, OnInit {
    */
   readonly popper = input<boolean, unknown>(true, { transform: booleanAttribute });
 
-  readonly #popperEnabled = computed(
-    () => this.popper() && typeof (this._menu()?.alignment() ?? this.alignment()) !== 'object'
-  );
+  readonly #alignment = computed(() => this._menu()?.alignment() ?? this.alignment());
+
+  readonly #popperEnabled = computed(() => this.popper() && typeof this.#alignment() !== 'object');
 
   readonly #alignmentEffect = effect(() => {
     this.dropdownService.alignment.set(this.alignment());
@@ -236,8 +240,8 @@ export class DropdownComponent implements OnDestroy, OnInit {
   });
 
   /**
-   * Optional Popper.js options object; the `placement` prop takes precedence over the
-   * placement set here. See https://popper.js.org/docs/v2/constructors/#options
+   * Optional Popper.js options object; a `placement` set here is ignored, the menu placement comes
+   * from `placement`, `direction` and `alignment`. See https://popper.js.org/docs/v2/constructors/#options
    * @returns Partial<Options>
    * @default {}
    */
@@ -252,38 +256,12 @@ export class DropdownComponent implements OnDestroy, OnInit {
   }
 
   get popperOptions(): Partial<Options> {
-    let placement = this.placement();
-    switch (this.direction()) {
-      case 'dropup': {
-        placement = 'top-start';
-        break;
-      }
-      case 'dropend': {
-        placement = 'right-start';
-        break;
-      }
-      case 'dropstart': {
-        placement = 'left-start';
-        break;
-      }
-      case 'center': {
-        placement = 'bottom';
-        break;
-      }
-      case 'dropup-center': {
-        placement = 'top';
-        break;
-      }
-    }
-    if (this.alignment() === 'end') {
-      placement = 'bottom-end';
-    }
+    const placement = this.placement() ?? this.#directionPlacement();
     this.#popperOptions.update((value) => ({ ...value, placement: placement }));
     return this.#popperOptions();
   }
 
   readonly #popperOptions = signal<Partial<Options>>({
-    placement: this.placement(),
     modifiers: [],
     strategy: 'absolute'
   });
@@ -488,6 +466,25 @@ export class DropdownComponent implements OnDestroy, OnInit {
       this.#focusToggler();
     }
   };
+
+  #directionPlacement(): Placement {
+    const rtl = this.#rtlService.isRTL(this.#elementRef.nativeElement);
+    const end = this.#alignment() === 'end';
+    switch (this.direction()) {
+      case 'dropend':
+        return rtl ? 'left-start' : 'right-start';
+      case 'dropstart':
+        return rtl ? 'right-start' : 'left-start';
+      case 'center':
+        return 'bottom';
+      case 'dropup-center':
+        return 'top';
+      case 'dropup':
+        return end === rtl ? 'top-start' : 'top-end';
+      default:
+        return end === rtl ? 'bottom-start' : 'bottom-end';
+    }
+  }
 
   #togglerElement(): HTMLElement | undefined {
     return (this._toggler() ?? this.toggler)?.elementRef.nativeElement;
