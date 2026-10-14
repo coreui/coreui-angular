@@ -1,5 +1,6 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Options, Placement } from '@popperjs/core';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
 import {
@@ -234,6 +235,190 @@ class TwoDropdownsComponent {
   readonly first = signal<DropdownAlignment | undefined>(undefined);
   readonly second = signal<DropdownAlignment | undefined>(undefined);
 }
+
+@Component({
+  template: `
+    <div [attr.dir]="dir()">
+      <c-dropdown
+        [(visible)]="visible"
+        [alignment]="alignment()"
+        [direction]="direction()"
+        [placement]="placement()"
+        [popperOptions]="popperOptions()"
+      >
+        <button cDropdownToggle>Toggle</button>
+        <ul cDropdownMenu [alignment]="menuAlignment()">
+          <li><button cDropdownItem>One</button></li>
+        </ul>
+      </c-dropdown>
+    </div>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class PlacementTestComponent {
+  readonly alignment = signal<DropdownAlignment | undefined>(undefined);
+  readonly dir = signal<'ltr' | 'rtl'>('ltr');
+  readonly direction = signal<'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart' | undefined>(undefined);
+  readonly menuAlignment = signal<DropdownAlignment | undefined>(undefined);
+  readonly placement = signal<Placement | undefined>(undefined);
+  readonly popperOptions = signal<Partial<Options>>({});
+  readonly visible = signal(false);
+}
+
+@Component({
+  template: `
+    <c-dropdown alignment="end" visible>
+      <button cDropdownToggle>Toggle</button>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem>One</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class InitiallyVisibleEndComponent {}
+
+@Component({
+  template: `
+    <c-dropdown alignment="end" [(visible)]="outer">
+      <button cDropdownToggle>Outer</button>
+      <div cDropdownMenu>
+        <c-dropdown [(visible)]="inner" id="inner">
+          <button cDropdownToggle>Inner</button>
+          <ul cDropdownMenu>
+            <li><button cDropdownItem>One</button></li>
+          </ul>
+        </c-dropdown>
+      </div>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class NestedInEndMenuComponent {
+  readonly inner = signal(false);
+  readonly outer = signal(true);
+}
+
+@Component({
+  template: `
+    <c-dropdown visible>
+      <button cDropdownToggle>Toggle</button>
+      <ul cDropdownMenu class="dropdown-menu-end">
+        <li><button cDropdownItem>One</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class MarkupEndClassComponent {}
+
+describe('DropdownComponent placement', () => {
+  let fixture: ComponentFixture<PlacementTestComponent>;
+
+  type Direction = 'center' | 'dropup' | 'dropup-center' | 'dropend' | 'dropstart' | undefined;
+  type Case = [Direction, DropdownAlignment | undefined, Placement | undefined, Placement];
+
+  const placementWhenOpen = async (): Promise<Placement | undefined> => {
+    const dropdown = fixture.debugElement.query(By.directive(DropdownComponent)).componentInstance;
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    const placement = dropdown['popperInstance']?.state.options.placement;
+    fixture.componentInstance.visible.set(false);
+    await fixture.whenStable();
+    return placement;
+  };
+
+  const expectPlacements = async (cases: Case[]) => {
+    const component = fixture.componentInstance;
+    for (const [direction, alignment, placement, expected] of cases) {
+      component.direction.set(direction);
+      component.alignment.set(alignment);
+      component.placement.set(placement);
+      await fixture.whenStable();
+      expect(await placementWhenOpen(), `${direction} ${alignment} ${placement}`).toBe(expected);
+    }
+  };
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(PlacementTestComponent);
+    await fixture.whenStable();
+  });
+
+  it('should place the menu from direction and end alignment left to right', async () => {
+    await expectPlacements([
+      [undefined, undefined, undefined, 'bottom-start'],
+      [undefined, 'end', undefined, 'bottom-end'],
+      ['dropup', undefined, undefined, 'top-start'],
+      ['dropup', 'end', undefined, 'top-end'],
+      ['dropend', 'end', undefined, 'right-start'],
+      ['dropstart', 'end', undefined, 'left-start'],
+      ['center', 'end', undefined, 'bottom'],
+      ['dropup-center', 'end', undefined, 'top']
+    ]);
+  });
+
+  it('should mirror the direction and end alignment placements right to left', async () => {
+    fixture.componentInstance.dir.set('rtl');
+    await expectPlacements([
+      [undefined, undefined, undefined, 'bottom-end'],
+      [undefined, 'end', undefined, 'bottom-start'],
+      ['dropup', undefined, undefined, 'top-end'],
+      ['dropup', 'end', undefined, 'top-start'],
+      ['dropend', undefined, undefined, 'left-start'],
+      ['dropstart', undefined, undefined, 'right-start'],
+      ['center', undefined, undefined, 'bottom']
+    ]);
+  });
+
+  it('should use a placement set on the input as given', async () => {
+    await expectPlacements([
+      ['dropend', 'end', 'top', 'top'],
+      [undefined, 'end', 'auto', 'auto']
+    ]);
+    fixture.componentInstance.dir.set('rtl');
+    await expectPlacements([
+      [undefined, undefined, 'bottom-start', 'bottom-start'],
+      ['dropup', 'end', 'top-end', 'top-end']
+    ]);
+  });
+
+  it('should ignore a placement passed in popperOptions', async () => {
+    fixture.componentInstance.popperOptions.set({ placement: 'top-end' });
+    await fixture.whenStable();
+    await expectPlacements([[undefined, undefined, undefined, 'bottom-start']]);
+  });
+
+  it('should take the end alignment from the menu', async () => {
+    const component = fixture.componentInstance;
+    component.menuAlignment.set('end');
+    await expectPlacements([[undefined, undefined, undefined, 'bottom-end']]);
+    component.menuAlignment.set('start');
+    await expectPlacements([[undefined, 'end', undefined, 'bottom-start']]);
+  });
+
+  it('should not take the alignment from a class set in the markup', async () => {
+    const classFixture = TestBed.createComponent(MarkupEndClassComponent);
+    await classFixture.whenStable();
+    const dropdown = classFixture.debugElement.query(By.directive(DropdownComponent)).componentInstance;
+    expect(dropdown['popperInstance']?.state.options.placement).toBe('bottom-start');
+  });
+
+  it('should open an initially visible dropdown at its end alignment', async () => {
+    const visibleFixture = TestBed.createComponent(InitiallyVisibleEndComponent);
+    await visibleFixture.whenStable();
+    const dropdown = visibleFixture.debugElement.query(By.directive(DropdownComponent)).componentInstance;
+    expect(dropdown['popperInstance']?.state.options.placement).toBe('bottom-end');
+  });
+
+  it('should not take the end alignment of an enclosing menu', async () => {
+    const nestedFixture = TestBed.createComponent(NestedInEndMenuComponent);
+    await nestedFixture.whenStable();
+    nestedFixture.componentInstance.inner.set(true);
+    await nestedFixture.whenStable();
+    const inner = nestedFixture.debugElement.query(By.css('#inner')).injector.get(DropdownComponent);
+    expect(inner['popperInstance']?.state.options.placement).toBe('bottom-start');
+  });
+});
 
 describe('DropdownComponent alignment scope', () => {
   it('should keep each dropdown alignment to itself', async () => {
