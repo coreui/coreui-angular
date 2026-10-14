@@ -1,13 +1,28 @@
+import { FocusMonitor } from '@angular/cdk/a11y';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
-import { Component, DebugElement, DOCUMENT, ElementRef, ErrorHandler, input, Renderer2, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  DebugElement,
+  DOCUMENT,
+  ElementRef,
+  ErrorHandler,
+  inject,
+  input,
+  Renderer2,
+  signal,
+  viewChild
+} from '@angular/core';
 import { DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
 import { By } from '@angular/platform-browser';
 import { provideRouter, RouterLink } from '@angular/router';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
+import { ModalComponent } from '../../modal/modal/modal.component';
+import { OffcanvasComponent } from '../../offcanvas/offcanvas/offcanvas.component';
 
 describe('DropdownComponent', () => {
   let component: DropdownComponent;
@@ -165,7 +180,9 @@ describe('DropdownToggleDirective', () => {
     elementRef.nativeElement.dispatchEvent(new MouseEvent('click'));
     await fixture.whenStable();
     expect(component.visible()).toBe(true);
-    dropdownRef.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    dropdownRef.nativeElement.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })
+    );
     await fixture.whenStable();
     expect(component.visible()).toBe(false);
     component.visible.set(true);
@@ -348,10 +365,21 @@ describe('Dropdown keyboard', () => {
     fixture.componentInstance.visible.set(true);
     await fixture.whenStable();
     items[0].focus();
-    items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(toggle);
+  });
+
+  it('should leave an Escape that a control in the menu already handled', async () => {
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    items[0].focus();
+    items[0].addEventListener('keydown', (event) => event.preventDefault());
+    items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+    expect(document.activeElement).toBe(items[0]);
   });
 });
 
@@ -511,7 +539,7 @@ describe('DropdownToggleDirective outside the dropdown', () => {
     toggle.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
-    toggle.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    toggle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
   });
@@ -527,7 +555,7 @@ describe('DropdownToggleDirective outside the dropdown', () => {
     expect(fixture.componentInstance.visible()).toBe(true);
 
     item.focus();
-    item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    item.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(toggle);
@@ -573,7 +601,7 @@ describe('DropdownToggleDirective on a non-focusable host', () => {
     await fixture.whenStable();
     const item: HTMLElement = fixture.nativeElement.querySelector('#item');
     item.focus();
-    item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    item.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#field'));
@@ -582,7 +610,61 @@ describe('DropdownToggleDirective on a non-focusable host', () => {
 
 @Component({
   template: `
-    <div (keyup.escape)="panelClosed = true" tabindex="-1">
+    <c-dropdown [(visible)]="visible">
+      <div cDropdownToggle><input #field id="field" /></div>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="item">One</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class KeyboardFocusOpensComponent {
+  readonly #focusMonitor = inject(FocusMonitor);
+  readonly dropdown = viewChild.required(DropdownComponent);
+  readonly field = viewChild.required<ElementRef<HTMLInputElement>>('field');
+  readonly visible = signal(false);
+
+  constructor() {
+    afterNextRender(() => {
+      this.#focusMonitor.monitor(this.field()).subscribe((origin) => {
+        if (origin === 'keyboard' && !this.dropdown().visible()) {
+          this.dropdown().visible.set(true);
+        }
+      });
+    });
+  }
+}
+
+describe('DropdownComponent focus origin tracking', () => {
+  it('should not start listening for input modality before Escape returns focus', async () => {
+    const addEventListener = vi.spyOn(document, 'addEventListener');
+    const fixture = TestBed.createComponent(KeyboardTestComponent);
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(addEventListener).not.toHaveBeenCalledWith('mousedown', expect.any(Function), expect.anything());
+    addEventListener.mockRestore();
+  });
+});
+
+describe('DropdownToggleDirective on a field that opens on keyboard focus', () => {
+  it('should stay closed when Escape returns focus to the field', async () => {
+    const fixture = TestBed.createComponent(KeyboardFocusOpensComponent);
+    await fixture.whenStable();
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    const item: HTMLElement = fixture.nativeElement.querySelector('#item');
+    item.focus();
+    item.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#field'));
+  });
+});
+
+@Component({
+  template: `
+    <div (keydown.escape)="ancestorEscape = $event" tabindex="-1">
       <c-dropdown autoClose="outside" [(visible)]="outer">
         <button cDropdownToggle id="outerToggle">Outer</button>
         <div cDropdownMenu>
@@ -601,11 +683,11 @@ describe('DropdownToggleDirective on a non-focusable host', () => {
 class NestedDropdownComponent {
   readonly inner = signal(false);
   readonly outer = signal(false);
-  panelClosed = false;
+  ancestorEscape?: Event;
 }
 
 describe('DropdownComponent nested', () => {
-  it('should close only the inner dropdown on Escape and keep it from ancestors', async () => {
+  it('should close only the inner dropdown on Escape and mark it handled for ancestors', async () => {
     const fixture = TestBed.createComponent(NestedDropdownComponent);
     const component = fixture.componentInstance;
     component.outer.set(true);
@@ -614,12 +696,117 @@ describe('DropdownComponent nested', () => {
     await fixture.whenStable();
     const innerItem: HTMLElement = fixture.nativeElement.querySelector('#innerItem');
     innerItem.focus();
-    innerItem.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    innerItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
     await fixture.whenStable();
     expect(component.inner()).toBe(false);
     expect(component.outer()).toBe(true);
-    expect(component.panelClosed).toBe(false);
+    expect(component.ancestorEscape?.defaultPrevented).toBe(true);
     expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#innerToggle'));
+  });
+});
+
+@Component({
+  template: `
+    <c-modal [(visible)]="modal">
+      <div (keyup.escape)="keyupEscape = keyupEscape + 1" tabindex="-1">
+        <c-dropdown [(visible)]="modalDropdown">
+          <button cDropdownToggle id="modalToggle">Toggle</button>
+          <ul cDropdownMenu>
+            <li><button cDropdownItem id="modalItem">One</button></li>
+          </ul>
+        </c-dropdown>
+      </div>
+    </c-modal>
+    <c-offcanvas [(visible)]="offcanvas">
+      <c-dropdown [(visible)]="offcanvasDropdown">
+        <button cDropdownToggle id="offcanvasToggle">Toggle</button>
+        <ul cDropdownMenu>
+          <li><button cDropdownItem id="offcanvasItem">One</button></li>
+        </ul>
+      </c-dropdown>
+    </c-offcanvas>
+  `,
+  imports: [
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    ModalComponent,
+    OffcanvasComponent
+  ]
+})
+class DropdownInOverlayComponent {
+  keyupEscape = 0;
+  readonly modal = signal(false);
+  readonly modalDropdown = signal(false);
+  readonly offcanvas = signal(false);
+  readonly offcanvasDropdown = signal(false);
+}
+
+describe('DropdownComponent in a modal or offcanvas', () => {
+  let fixture: ComponentFixture<DropdownInOverlayComponent>;
+  const element = (id: string): HTMLElement => fixture.nativeElement.querySelector(`#${id}`);
+  const pressEscape = async (target: HTMLElement) => {
+    const keydown = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    target.dispatchEvent(keydown);
+    await fixture.whenStable();
+    document.activeElement?.dispatchEvent(
+      new KeyboardEvent('keyup', { key: 'Escape', bubbles: true, cancelable: true })
+    );
+    await fixture.whenStable();
+    return keydown.defaultPrevented;
+  };
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(DropdownInOverlayComponent);
+    await fixture.whenStable();
+  });
+
+  it('should close only the menu on Escape in a modal and leave the next Escape to the modal', async () => {
+    const component = fixture.componentInstance;
+    component.modal.set(true);
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
+    component.modalDropdown.set(true);
+    await fixture.whenStable();
+    element('modalItem').focus();
+    expect(await pressEscape(element('modalItem'))).toBe(true);
+    expect(component.modalDropdown()).toBe(false);
+    expect(component.modal()).toBe(true);
+    expect(document.activeElement).toBe(element('modalToggle'));
+    expect(component.keyupEscape).toBe(1);
+    expect(await pressEscape(element('modalToggle'))).toBe(false);
+    expect(component.modal()).toBe(false);
+  });
+
+  it('should close only the menu on Escape from its toggle in a modal', async () => {
+    const component = fixture.componentInstance;
+    component.modal.set(true);
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
+    component.modalDropdown.set(true);
+    await fixture.whenStable();
+    element('modalToggle').focus();
+    expect(await pressEscape(element('modalToggle'))).toBe(true);
+    expect(component.modalDropdown()).toBe(false);
+    expect(component.modal()).toBe(true);
+    expect(document.activeElement).toBe(element('modalToggle'));
+  });
+
+  it('should close only the menu on Escape in an offcanvas and leave the next Escape to the offcanvas', async () => {
+    const component = fixture.componentInstance;
+    component.offcanvas.set(true);
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
+    component.offcanvasDropdown.set(true);
+    await fixture.whenStable();
+    element('offcanvasItem').focus();
+    expect(await pressEscape(element('offcanvasItem'))).toBe(true);
+    expect(component.offcanvasDropdown()).toBe(false);
+    expect(component.offcanvas()).toBe(true);
+    expect(document.activeElement).toBe(element('offcanvasToggle'));
+    expect(await pressEscape(element('offcanvasToggle'))).toBe(false);
+    expect(component.offcanvas()).toBe(false);
   });
 });
 
@@ -651,7 +838,9 @@ describe('DropdownComponent with shadow DOM', () => {
     items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true }));
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
-    items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true, composed: true }));
+    items[0].dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true, composed: true })
+    );
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(root.activeElement).toBe(toggle);
@@ -690,8 +879,13 @@ describe('DropdownComponent with autoClose false', () => {
     const item: HTMLElement = fixture.nativeElement.querySelector('#item');
     const outside: HTMLElement = fixture.nativeElement.querySelector('#outside');
     item.focus();
-    item.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    let reachedHost = false;
+    fixture.nativeElement.addEventListener('keydown', () => (reachedHost = true));
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    item.dispatchEvent(escape);
     await fixture.whenStable();
+    expect(escape.defaultPrevented).toBe(false);
+    expect(reachedHost).toBe(true);
     expect(fixture.componentInstance.visible()).toBe(true);
     expect(document.activeElement).toBe(item);
     outside.focus();

@@ -1,3 +1,4 @@
+import { FocusMonitor } from '@angular/cdk/a11y';
 import {
   AfterViewInit,
   booleanAttribute,
@@ -12,6 +13,7 @@ import {
   ElementRef,
   forwardRef,
   inject,
+  Injector,
   input,
   linkedSignal,
   NgZone,
@@ -173,6 +175,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
   readonly #destroyRef = inject(DestroyRef);
   readonly #document = inject(DOCUMENT);
   readonly #elementRef = inject(ElementRef);
+  readonly #injector = inject(Injector);
   readonly #renderer = inject(Renderer2);
   readonly #ngZone = inject(NgZone);
   readonly #changeDetectorRef = inject(ChangeDetectorRef);
@@ -453,10 +456,10 @@ export class DropdownComponent implements OnDestroy, OnInit {
         }
       })
     );
-    this.listeners.push(this.#renderer.listen(this.#elementRef.nativeElement, 'keyup', this.#onEscape));
+    this.listeners.push(this.#renderer.listen(this.#elementRef.nativeElement, 'keydown', this.#onEscape));
     const toggler = this.#togglerElement();
     if (toggler && !this.#elementRef.nativeElement.contains(toggler)) {
-      this.listeners.push(this.#renderer.listen(toggler, 'keyup', this.#onEscape));
+      this.listeners.push(this.#renderer.listen(toggler, 'keydown', this.#onEscape));
     }
     this.listeners.push(
       this.#renderer.listen(this.#document, 'keyup', (event: KeyboardEvent) => {
@@ -475,10 +478,10 @@ export class DropdownComponent implements OnDestroy, OnInit {
   }
 
   readonly #onEscape = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape' || this.autoClose() === false) {
+    if (event.key !== 'Escape' || event.defaultPrevented || this.autoClose() === false) {
       return;
     }
-    event.stopPropagation();
+    event.preventDefault();
     const focusInMenu = this._menuElementRef()?.nativeElement.contains(event.target as Node);
     this.setVisibleState(false);
     if (focusInMenu) {
@@ -499,8 +502,9 @@ export class DropdownComponent implements OnDestroy, OnInit {
     const candidates = [toggler, ...toggler.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)].filter(
       (candidate) => candidate === toggler || (candidate.tabIndex >= 0 && !candidate.closest('[aria-hidden="true"]'))
     );
+    const focusMonitor = this.#injector.get(FocusMonitor);
     for (const candidate of candidates) {
-      candidate.focus();
+      focusMonitor.focusVia(candidate, 'program');
       if (root.activeElement === candidate) {
         return;
       }
