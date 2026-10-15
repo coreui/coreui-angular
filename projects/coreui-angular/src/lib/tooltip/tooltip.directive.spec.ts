@@ -8,12 +8,13 @@ describe('TooltipDirective', () => {
   let visible: WritableSignal<boolean>;
   let fixture: DirectiveFixture<TooltipDirective>;
   let document: Document;
+  let intersect: IntersectionObserverCallback;
 
   beforeEach(() => {
     // Mock IntersectionObserver
     (globalThis as any).IntersectionObserver = class IntersectionObserver {
-      constructor() {
-        //
+      constructor(callback: IntersectionObserverCallback) {
+        intersect = callback;
       }
       observe = vi.fn();
       unobserve = vi.fn();
@@ -83,6 +84,22 @@ describe('TooltipDirective', () => {
     expect(document.querySelector('.tooltip.show')).toBeNull();
   });
 
+  it('should close the tooltip when Escape is pressed while visible', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.tooltip.show')).toBeTruthy();
+
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
+    document.dispatchEvent(escape);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    expect(escape.defaultPrevented).toBe(true);
+    expect(visible()).toBe(false);
+    expect(document.querySelector('.tooltip.show')).toBeNull();
+  });
+
   it('should not close the tooltip when a non-Escape key is pressed', async () => {
     visible.set(true);
     fixture.detectChanges();
@@ -139,5 +156,19 @@ describe('TooltipDirective', () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     await vi.runAllTimersAsync();
     expect(visible()).toBe(true);
+  });
+
+  it('should hide the tooltip when its host leaves the viewport', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+    expect(visible()).toBe(true);
+
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+    expect(visible()).toBe(false);
   });
 });
