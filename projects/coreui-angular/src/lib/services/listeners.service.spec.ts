@@ -79,12 +79,12 @@ describe('ListenersService listeners', () => {
   });
 
   it('should listen to nothing without a trigger or a callback', () => {
-    listen(undefined);
-    fire('click', 'focus', 'blur', 'mouseenter');
-    expect(calls()).toEqual({ on: 0, off: 0, toggle: 0 });
+    const rendererListen = vi.spyOn(service.renderer, 'listen');
 
-    service.setListeners({ hostElement: new ElementRef(host), trigger: ['click', 'hover', 'focusin'] });
-    expect(() => fire('click', 'mouseenter', 'focusin')).not.toThrow();
+    listen(undefined);
+    service.setListeners({ hostElement: new ElementRef(host), trigger: ['click', 'focus', 'focusin', 'hover'] });
+
+    expect(rendererListen).not.toHaveBeenCalled();
   });
 
   it('should remove every listener on clear', () => {

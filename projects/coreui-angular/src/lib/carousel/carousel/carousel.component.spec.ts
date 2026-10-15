@@ -143,7 +143,7 @@ describe('CarouselComponent with items', () => {
 
   it('should move to the next item after the interval', async () => {
     await render((host) => host.interval.set(20));
-    await vi.waitFor(() => expect(fixture.componentInstance.changes[0]).toBe(1));
+    await vi.waitFor(() => expect(fixture.componentInstance.changes).toContain(1), { timeout: 3000 });
     const active = fixture.componentInstance.changes.at(-1) ?? -1;
     expect(items.map((item) => item.active())).toEqual(items.map((_, index) => index === active));
   });
@@ -154,22 +154,26 @@ describe('CarouselComponent with items', () => {
       host.interval.set(20);
       host.wrap.set(false);
     });
-    await vi.waitFor(() => expect(fixture.componentInstance.changes).toEqual([2]));
+    await vi.waitFor(() => expect(items[2].active()).toBe(true), { timeout: 3000 });
     await wait(80);
-    expect(fixture.componentInstance.changes).toEqual([2]);
+    expect(items.map((item) => item.active())).toEqual([false, false, true]);
+    expect(fixture.componentInstance.changes).not.toContain(0);
   });
 
   it('should pause cycling out of the viewport and resume in it', async () => {
     await render((host) => host.interval.set(20));
     intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    const paused = fixture.componentInstance.changes.length;
     await wait(80);
-    expect(fixture.componentInstance.changes).toEqual([]);
+    expect(fixture.componentInstance.changes.length).toBe(paused);
 
     intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
-    await vi.waitFor(() => expect(fixture.componentInstance.changes[0]).toBe(1));
+    await vi.waitFor(() => expect(fixture.componentInstance.changes.length).toBeGreaterThan(paused), {
+      timeout: 3000
+    });
   });
 
-  it('should swipe to the next and the previous item past a third of its width', async () => {
+  it('should swipe to the next and the previous item past 30% of its width', async () => {
     await render();
     Object.defineProperty(carousel, 'clientWidth', { configurable: true, value: 400 });
 

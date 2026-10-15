@@ -114,6 +114,10 @@ describe('ToasterComponent declared toasts', () => {
     await fixture.whenStable();
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should hide a toast declared in the template on close', async () => {
     const toast = fixture.componentInstance.toast();
     expect(toast.visible).toBe(true);
@@ -127,20 +131,22 @@ describe('ToasterComponent declared toasts', () => {
 
   it('should hide a toast after its delay and not while hovered', async () => {
     fixture.componentInstance.visible.set(false);
-    fixture.componentInstance.delay.set(5);
     await fixture.whenStable();
+    vi.useFakeTimers();
+    fixture.componentInstance.delay.set(5000);
     fixture.componentInstance.visible.set(true);
-    await fixture.whenStable();
+    fixture.detectChanges();
     const toast = fixture.componentInstance.toast();
     const host: HTMLElement = fixture.debugElement.query(By.directive(ToastComponent)).nativeElement;
 
     host.dispatchEvent(new MouseEvent('mouseover'));
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    vi.advanceTimersByTime(10000);
     expect(toast.visible).toBe(true);
 
     host.dispatchEvent(new MouseEvent('mouseout'));
-    await new Promise((resolve) => setTimeout(resolve, 20));
-    await fixture.whenStable();
+    vi.advanceTimersByTime(4999);
+    expect(toast.visible).toBe(true);
+    vi.advanceTimersByTime(1);
     expect(toast.visible).toBe(false);
   });
 });

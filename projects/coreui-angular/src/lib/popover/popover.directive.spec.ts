@@ -199,12 +199,18 @@ describe('PopoverDirective with template content', () => {
       unobserve = vi.fn();
       disconnect = vi.fn();
     };
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('should render the template in the popover', async () => {
     const fixture = TestBed.createComponent(TemplatePopoverComponent);
-    await fixture.whenStable();
-    await vi.waitFor(() => expect(document.querySelector('.popover.show #templateContent')).not.toBeNull());
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.popover.show #templateContent')).not.toBeNull();
     expect(document.querySelector('.popover .popover-body')).toBeNull();
     fixture.destroy();
   });
