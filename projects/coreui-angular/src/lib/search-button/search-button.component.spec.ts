@@ -153,6 +153,45 @@ describe('SearchButtonComponent', () => {
     expect(keys[0].classList.contains('active')).toBe(false);
   });
 
+  it('should prevent the default action of a matching shortcut only with preventDefault on', async () => {
+    host.shortcut.set('meta+k');
+    await fixture.whenStable();
+
+    const prevented = new KeyboardEvent('keydown', { key: 'k', metaKey: true, cancelable: true });
+    document.dispatchEvent(prevented);
+    expect(prevented.defaultPrevented).toBe(true);
+
+    host.preventDefault.set(false);
+    await fixture.whenStable();
+    const allowed = new KeyboardEvent('keydown', { key: 'k', metaKey: true, cancelable: true });
+    document.dispatchEvent(allowed);
+    expect(allowed.defaultPrevented).toBe(false);
+    expect(host.onTrigger).toHaveBeenCalledTimes(2);
+  });
+
+  it('should ignore a repeated or an already handled shortcut', async () => {
+    host.shortcut.set('meta+k');
+    await fixture.whenStable();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, repeat: true }));
+    const handled = new KeyboardEvent('keydown', { key: 'k', metaKey: true, cancelable: true });
+    handled.preventDefault();
+    document.dispatchEvent(handled);
+
+    expect(host.onTrigger).not.toHaveBeenCalled();
+  });
+
+  it('should not track released keys while disabled', async () => {
+    host.shortcut.set('meta+k,ctrl+k');
+    host.disabled.set(true);
+    await fixture.whenStable();
+
+    document.dispatchEvent(new KeyboardEvent('keyup', { key: 'k', metaKey: true }));
+    await fixture.whenStable();
+
+    expect(button.querySelectorAll('.search-button-key')[0].classList.contains('active')).toBe(false);
+  });
+
   it('should ignore plain typing in editable targets', async () => {
     host.shortcut.set('k');
     await fixture.whenStable();
@@ -163,6 +202,20 @@ describe('SearchButtonComponent', () => {
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', bubbles: true }));
 
     expect(host.onTrigger).not.toHaveBeenCalled();
+
+    input.remove();
+  });
+
+  it('should trigger a modifier shortcut from an editable target', async () => {
+    host.shortcut.set('meta+k');
+    await fixture.whenStable();
+
+    const input = document.createElement('input');
+    document.body.append(input);
+
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }));
+
+    expect(host.onTrigger).toHaveBeenCalledTimes(1);
 
     input.remove();
   });
