@@ -1080,6 +1080,69 @@ describe('DropdownComponent with autoClose false', () => {
   });
 });
 
+@Component({
+  template: `
+    <c-dropdown [autoClose]="autoClose()" [(visible)]="visible">
+      <button cDropdownToggle id="toggle">Toggle</button>
+      <div cDropdownMenu>
+        <p id="inside">Text</p>
+        <button cDropdownItem [autoClose]="false" id="item">One</button>
+      </div>
+    </c-dropdown>
+    <button id="outside">Outside</button>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class AutoCloseClickComponent {
+  readonly autoClose = signal<boolean | 'inside' | 'outside'>(true);
+  readonly visible = signal(false);
+}
+
+describe('DropdownComponent autoClose on click', () => {
+  let fixture: ComponentFixture<AutoCloseClickComponent>;
+
+  const visibleAfterClick = async (id: string) => {
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    fixture.nativeElement.querySelector(`#${id}`).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await fixture.whenStable();
+    return fixture.componentInstance.visible();
+  };
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(AutoCloseClickComponent);
+    await fixture.whenStable();
+  });
+
+  it('should close on a click inside the menu and outside the dropdown with autoClose true', async () => {
+    expect(await visibleAfterClick('inside')).toBe(false);
+    expect(await visibleAfterClick('outside')).toBe(false);
+  });
+
+  it('should close only on a click inside the menu with autoClose inside', async () => {
+    fixture.componentInstance.autoClose.set('inside');
+    expect(await visibleAfterClick('outside')).toBe(true);
+    expect(await visibleAfterClick('inside')).toBe(false);
+  });
+
+  it('should close only on a click outside the dropdown with autoClose outside', async () => {
+    fixture.componentInstance.autoClose.set('outside');
+    expect(await visibleAfterClick('inside')).toBe(true);
+    expect(await visibleAfterClick('item')).toBe(true);
+    expect(await visibleAfterClick('outside')).toBe(false);
+  });
+
+  it('should stay open on a click inside the menu and outside the dropdown with autoClose false', async () => {
+    fixture.componentInstance.autoClose.set(false);
+    expect(await visibleAfterClick('inside')).toBe(true);
+    expect(await visibleAfterClick('outside')).toBe(true);
+  });
+
+  it('should close once on a click on the toggle of an open dropdown', async () => {
+    expect(await visibleAfterClick('toggle')).toBe(false);
+  });
+});
+
 const replayed = (type: string, init: KeyboardEventInit): KeyboardEvent => {
   const event = new KeyboardEvent(type, { bubbles: true, cancelable: true, ...init });
   Object.defineProperty(event, 'eventPhase', { value: 101 });
