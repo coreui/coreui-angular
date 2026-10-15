@@ -621,6 +621,55 @@ describe('ChipSetComponent', () => {
     expect(announce).toHaveBeenCalledWith('a usunięto', { context: set });
   });
 
+  it('moves the tab stop off a chip that gets disabled, to the next chip or to the nearest previous at the end', async () => {
+    host.removable.set(true);
+    const declare = (disabled: string[]) =>
+      host.declared.set(
+        ['a', 'b', 'c', 'd'].map((value) => ({ key: value, value, disabled: disabled.includes(value) }))
+      );
+    declare([]);
+    await fixture.whenStable();
+    chip('b').focus();
+    await fixture.whenStable();
+    expect(stops()).toEqual([chip('b')]);
+
+    declare(['b']);
+    await fixture.whenStable();
+    expect(stops()).toEqual([chip('c')]);
+
+    chip('d').focus();
+    declare(['b', 'd']);
+    await fixture.whenStable();
+    expect(stops()).toEqual([chip('c')]);
+  });
+
+  it('ignores navigation keys on a disabled chip', async () => {
+    host.removable.set(true);
+    host.declared.set([
+      { key: 1, value: 'a' },
+      { key: 2, value: 'b', disabled: true },
+      { key: 3, value: 'c' }
+    ]);
+    await fixture.whenStable();
+    expect(stops()).toEqual([chip('a')]);
+
+    press(chip('b'), 'ArrowRight');
+    await fixture.whenStable();
+    expect(stops()).toEqual([chip('a')]);
+  });
+
+  it('warns once about a selectable chip with neither text nor value', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(vi.fn());
+    host.selectable.set(true);
+    host.declared.set([{ key: 1 }, { key: 2, value: 'b' }, { key: 3, label: 'Label' }]);
+    await fixture.whenStable();
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    host.declared.update((declared) => [...declared, { key: 4, value: 'c' }]);
+    await fixture.whenStable();
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
   it('ignores tabindex on a chip inside a set', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(vi.fn());
     @Component({

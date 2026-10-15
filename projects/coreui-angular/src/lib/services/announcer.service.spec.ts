@@ -119,13 +119,105 @@ describe('AnnouncerService', () => {
     service.announce('');
     expect(regions(document.body)).toBeNull();
   });
+
+  it('drops a page message whose region left the document before it was read', () => {
+    service.announce('Saved');
+    regions(document.body)?.remove();
+    vi.advanceTimersByTime(100);
+    expect(regions(document.body)).toBeNull();
+  });
+
+  it('waits for a region created after the message was queued', () => {
+    service.announce('Saved');
+    vi.advanceTimersByTime(50);
+    const modal = document.createElement('div');
+    modal.setAttribute('aria-modal', 'true');
+    const button = document.createElement('button');
+    modal.append(button);
+    document.body.append(modal);
+    button.focus();
+
+    vi.advanceTimersByTime(50);
+    expect(polite(modal)?.textContent).toBe('');
+    expect(polite(document.body)?.textContent).toBe('');
+    vi.advanceTimersByTime(100);
+    expect(polite(modal)?.textContent).toBe('Saved');
+  });
+
+  it('waits 100 ms before using a region it did not create', () => {
+    const announcer = document.createElement('div');
+    announcer.setAttribute('data-coreui-live-announcer', '');
+    const region = document.createElement('div');
+    region.setAttribute('aria-live', 'polite');
+    announcer.append(region);
+    document.body.prepend(announcer);
+
+    service.announce('Saved');
+    vi.advanceTimersByTime(99);
+    expect(region.textContent).toBe('');
+    vi.advanceTimersByTime(1);
+    expect(region.textContent).toBe('Saved');
+  });
+
+  it('announces inside a modal dialog and removes its region when the dialog closes', () => {
+    const dialog = document.createElement('dialog');
+    dialog.setAttribute('open', '');
+    Object.defineProperty(dialog, 'matches', {
+      value: (selector: string) => selector === ':modal' || Element.prototype.matches.call(dialog, selector)
+    });
+    const button = document.createElement('button');
+    dialog.append(button);
+    document.body.append(dialog);
+    button.focus();
+
+    service.announce('Saved');
+    vi.advanceTimersByTime(100);
+    expect(polite(dialog)?.textContent).toBe('Saved');
+
+    dialog.removeAttribute('open');
+    dialog.dispatchEvent(new Event('close'));
+    expect(regions(dialog)).toBeNull();
+  });
+
+  it('leaves out an open dialog that is not modal', () => {
+    const dialog = document.createElement('dialog');
+    dialog.setAttribute('open', '');
+    const button = document.createElement('button');
+    dialog.append(button);
+    document.body.append(dialog);
+    button.focus();
+
+    service.announce('Saved');
+    vi.advanceTimersByTime(100);
+    expect(polite(document.body)?.textContent).toBe('Saved');
+    expect(regions(dialog)).toBeNull();
+  });
+
+  it('leaves out an open dialog where :modal is not supported', () => {
+    const dialog = document.createElement('dialog');
+    dialog.setAttribute('open', '');
+    Object.defineProperty(dialog, 'matches', {
+      value: (selector: string) => {
+        if (selector === ':modal') {
+          throw new SyntaxError(selector);
+        }
+        return Element.prototype.matches.call(dialog, selector);
+      }
+    });
+    document.body.append(dialog);
+
+    service.announce('Saved', { context: dialog });
+    vi.advanceTimersByTime(100);
+    expect(polite(document.body)?.textContent).toBe('Saved');
+  });
 });
 
 describe('AnnouncerService on the server', () => {
   it('does nothing without a browser', () => {
     TestBed.configureTestingModule({ providers: [{ provide: PLATFORM_ID, useValue: 'server' }] });
     const service = TestBed.inject(AnnouncerService);
-    service.announce('Saved');
+    const cancel = service.announce('Saved');
     expect(document.querySelector('[data-coreui-live-announcer]')).toBeNull();
+    expect(() => cancel()).not.toThrow();
   });
 });

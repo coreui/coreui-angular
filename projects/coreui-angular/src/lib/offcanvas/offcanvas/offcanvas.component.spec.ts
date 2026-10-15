@@ -1,8 +1,11 @@
 /// <reference types="vitest/globals" />
 import { CdkTrapFocus } from '@angular/cdk/a11y';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { ComponentRef, DOCUMENT } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { NEVER, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { OffcanvasComponent } from './offcanvas.component';
 import { OffcanvasService } from '../offcanvas.service';
@@ -522,5 +525,63 @@ describe('OffcanvasComponent', () => {
 
       expect(container.contains(localFixture.nativeElement)).toBe(false);
     });
+  });
+});
+
+describe('OffcanvasComponent responsive', () => {
+  let fixture: ComponentFixture<OffcanvasComponent>;
+  let layout: Subject<boolean>;
+  let queries: string[];
+
+  beforeEach(async () => {
+    layout = new Subject<boolean>();
+    queries = [];
+    document.documentElement.style.setProperty('--cui-breakpoint-lg', '992px');
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: BreakpointObserver,
+          useValue: {
+            observe: (observed: string | string[]) => {
+              const maxWidth = [observed].flat().filter((query) => query.startsWith('(max-width'));
+              queries.push(...maxWidth);
+              return maxWidth.length ? layout.pipe(map((matches) => ({ matches, breakpoints: {} }))) : NEVER;
+            }
+          }
+        }
+      ]
+    });
+    fixture = TestBed.createComponent(OffcanvasComponent);
+    fixture.componentRef.setInput('responsive', 'lg');
+    await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    document.documentElement.style.removeProperty('--cui-breakpoint-lg');
+  });
+
+  it('should close when the viewport grows past its breakpoint', async () => {
+    fixture.componentRef.setInput('visible', true);
+    await fixture.whenStable();
+    expect(queries).toEqual(['(max-width: 991.98px)']);
+
+    layout.next(true);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+
+    layout.next(false);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
+  it('should open and close through the show alias', async () => {
+    fixture.componentInstance.show = true;
+    await fixture.whenStable();
+    expect(fixture.componentInstance.show).toBe(true);
+    expect(fixture.componentInstance.visible()).toBe(true);
+
+    fixture.componentInstance.show = false;
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
   });
 });

@@ -1,7 +1,8 @@
-import { RouterModule } from '@angular/router';
+import { provideRouter, RouterModule } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarNavComponent } from './sidebar-nav.component';
+import { INavData } from './sidebar-nav';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { NavGroupService } from '../../nav';
 // import { SidebarNavGroupComponent } from './sidebar-nav-group.component';
@@ -80,5 +81,72 @@ describe('SidebarNavComponent', () => {
     fixture.componentRef.setInput('dropdownMode', 'none');
     await fixture.whenStable();
     expect(navGroupService.openOnActive()).toBe(false);
+  });
+});
+
+describe('SidebarNavComponent items', () => {
+  let nav: HTMLElement;
+
+  const navItems: INavData[] = [
+    { title: true, name: 'Components', class: 'text-primary' },
+    { divider: true },
+    { name: 'Label', url: '/label', label: { variant: 'info' }, icon: 'cil-star' },
+    {
+      name: 'Base',
+      url: '/base',
+      iconComponent: { content: ['64 64', '<circle cx="32" cy="32" r="16"/>'] },
+      children: [{ name: 'Accordion', url: '/base/accordion' }]
+    },
+    { name: 'Dashboard', url: '/dashboard', icon: 'cil-speedometer', badge: { color: 'info', text: 'NEW' } },
+    { name: 'CoreUI', url: 'https://coreui.io', attributes: { target: '_blank' } },
+    { name: 'Disabled', url: '/disabled', attributes: { disabled: true } },
+    {}
+  ];
+
+  beforeEach(async () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([{ path: '**', children: [] }])] });
+    const fixture = TestBed.createComponent(SidebarNavComponent);
+    fixture.componentRef.setInput('navItems', navItems);
+    await fixture.whenStable();
+    nav = fixture.nativeElement;
+  });
+
+  it('should render an element for each item type and nothing for an empty item', () => {
+    expect([...nav.children].map((child) => child.tagName.toLowerCase())).toEqual([
+      'c-sidebar-nav-title',
+      'c-sidebar-nav-divider',
+      'c-sidebar-nav-label',
+      'c-sidebar-nav-group',
+      'c-sidebar-nav-link',
+      'c-sidebar-nav-link',
+      'c-sidebar-nav-link'
+    ]);
+    expect(nav.querySelector('c-sidebar-nav-title')?.textContent).toBe('Components');
+    expect(nav.querySelector('c-sidebar-nav-title')?.classList.contains('nav-title')).toBe(true);
+    expect(nav.querySelector('c-sidebar-nav-label a')?.textContent?.trim()).toBe('Label');
+    expect(nav.querySelector('c-sidebar-nav-label i')?.classList.contains('text-info')).toBe(true);
+  });
+
+  it('should render a group with its icon and children', () => {
+    const group = nav.querySelector('c-sidebar-nav-group') as HTMLElement;
+    expect(group.querySelector('.nav-group-toggle')?.textContent).toContain('Base');
+    expect(group.querySelector('svg')?.getAttribute('viewBox')).toBe('0 0 64 64');
+    expect(group.querySelector('c-sidebar-nav-link a')?.getAttribute('href')).toBe('/base/accordion');
+  });
+
+  it('should render internal, external and disabled links', () => {
+    const [internal, external, disabled] = [...nav.querySelectorAll(':scope > c-sidebar-nav-link a')] as HTMLElement[];
+
+    expect(internal.getAttribute('href')).toBe('/dashboard');
+    expect(internal.querySelector('.nav-icon .cil-speedometer')).not.toBeNull();
+    const badge = internal.querySelector('.badge') as HTMLElement;
+    expect(badge.textContent).toBe('NEW');
+    expect(badge.classList.contains('bg-info')).toBe(true);
+
+    expect(external.getAttribute('href')).toBe('https://coreui.io');
+    expect(external.getAttribute('target')).toBe('_blank');
+
+    expect(disabled.hasAttribute('href')).toBe(false);
+    expect([...disabled.classList].sort()).toEqual(['btn-link', 'disabled', 'nav-link']);
   });
 });

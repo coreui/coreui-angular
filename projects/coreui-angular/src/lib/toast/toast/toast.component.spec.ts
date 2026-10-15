@@ -64,3 +64,44 @@ describe('ToastComponent', () => {
     expect(component.visibleChange.emit).toHaveBeenCalledWith(false);
   });
 });
+
+describe('ToastComponent timer', () => {
+  let component: ToastComponent;
+  let fixture: ComponentFixture<ToastComponent>;
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(ToastComponent);
+    await fixture.whenStable();
+    component = fixture.componentInstance;
+    vi.useFakeTimers();
+    component.visible = true;
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('should emit the elapsed seconds while visible and stop at the delay', () => {
+    const timer = vi.fn();
+    component.timer.subscribe(timer);
+    component.setTimer();
+
+    vi.advanceTimersByTime(2000);
+    expect(timer).toHaveBeenLastCalledWith(2);
+
+    vi.advanceTimersByTime(10000);
+    const calls = timer.mock.calls.length;
+    vi.advanceTimersByTime(10000);
+    expect(timer.mock.calls.length).toBe(calls);
+  });
+
+  it('should not run the timer with autohide off', () => {
+    fixture.componentRef.setInput('autohide', false);
+    const timer = vi.fn();
+    component.timer.subscribe(timer);
+    component.setTimer();
+
+    vi.advanceTimersByTime(10000);
+    expect(timer).not.toHaveBeenCalled();
+  });
+});
