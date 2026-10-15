@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expect } from 'vitest';
 
 import { AlertComponent } from './alert.component';
-import { ComponentRef } from '@angular/core';
+import { Component, ComponentRef, signal } from '@angular/core';
 
 describe('AlertComponent', () => {
   let component: AlertComponent;
@@ -63,5 +63,61 @@ describe('AlertComponent', () => {
   it('should have attributes', async () => {
     await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('role')).toBe('alert');
+  });
+});
+
+@Component({
+  template: `<c-alert [(visible)]="visible" dismissible fade>Text</c-alert>`,
+  imports: [AlertComponent]
+})
+class FadeAlertComponent {
+  readonly visible = signal(true);
+}
+
+describe('AlertComponent with fade', () => {
+  let fixture: ComponentFixture<FadeAlertComponent>;
+  let alert: HTMLElement;
+
+  const transitionEnd = async (propertyName: string) => {
+    alert.dispatchEvent(new TransitionEvent('transitionend', { propertyName }));
+    await fixture.whenStable();
+  };
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(FadeAlertComponent);
+    await fixture.whenStable();
+    alert = fixture.nativeElement.querySelector('c-alert');
+  });
+
+  it('should hide a dismissed alert after its opacity transition', async () => {
+    alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
+    await fixture.whenStable();
+    expect(alert.classList.contains('show')).toBe(false);
+    expect(alert.hidden).toBe(false);
+
+    await transitionEnd('color');
+    expect(alert.hidden).toBe(false);
+
+    await transitionEnd('opacity');
+    expect(alert.hidden).toBe(true);
+    expect(alert.inert).toBe(true);
+    expect(alert.textContent?.trim()).toBe('');
+    expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
+  it('should show a hidden alert again', async () => {
+    fixture.componentInstance.visible.set(false);
+    await fixture.whenStable();
+    await transitionEnd('opacity');
+    expect(alert.hidden).toBe(true);
+
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(alert.hidden).toBe(false);
+    expect(alert.classList.contains('show')).toBe(true);
+    expect(alert.textContent?.trim()).toBe('Text');
+
+    await transitionEnd('opacity');
+    expect(alert.hidden).toBe(false);
   });
 });
