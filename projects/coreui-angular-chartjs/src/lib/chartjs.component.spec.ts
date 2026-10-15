@@ -46,7 +46,7 @@ describe('ChartjsComponent', () => {
     componentRef.setInput('wrapper', true);
     componentRef.setInput('data', undefined);
     await fixture.whenStable();
-  });
+  }, 30_000);
 
   afterEach(() => {
     // Properly destroy chart to prevent async update errors

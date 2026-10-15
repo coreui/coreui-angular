@@ -12,3 +12,6 @@ if (!globalThis.ResizeObserver) {
     }
   } as any;
 }
+
+// Warm up node-canvas and its fonts outside the timed test hooks
+document.createElement('canvas').getContext('2d')?.measureText('M');
