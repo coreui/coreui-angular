@@ -64,6 +64,29 @@ describe('AlertComponent', () => {
     await fixture.whenStable();
     expect(fixture.nativeElement.getAttribute('role')).toBe('alert');
   });
+
+  it('should not apply the fade class when transition is disabled', async () => {
+    componentRef.setInput('fade', false);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.classList.contains('fade')).toBe(false);
+  });
+});
+
+@Component({
+  template: `<c-alert class="custom-class" color="success">Text</c-alert>`,
+  imports: [AlertComponent]
+})
+class CustomClassAlertComponent {}
+
+describe('AlertComponent with a custom class', () => {
+  it('should apply a custom class name', async () => {
+    const fixture = TestBed.createComponent(CustomClassAlertComponent);
+    await fixture.whenStable();
+    const alert: HTMLElement = fixture.nativeElement.querySelector('c-alert');
+    expect(alert.classList.contains('custom-class')).toBe(true);
+    expect(alert.classList.contains('alert')).toBe(true);
+    expect(alert.classList.contains('alert-success')).toBe(true);
+  });
 });
 
 @Component({
@@ -89,19 +112,27 @@ describe('AlertComponent with fade', () => {
     alert = fixture.nativeElement.querySelector('c-alert');
   });
 
-  it('should hide a dismissed alert after its opacity transition', async () => {
+  it('should close an alert', async () => {
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     await fixture.whenStable();
     expect(alert.classList.contains('show')).toBe(false);
-    expect(alert.hidden).toBe(false);
-
-    await transitionEnd('color');
-    expect(alert.hidden).toBe(false);
 
     await transitionEnd('opacity');
     expect(alert.hidden).toBe(true);
     expect(alert.inert).toBe(true);
     expect(alert.textContent?.trim()).toBe('');
+  });
+
+  it('should emit closed after the transition', async () => {
+    alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+
+    await transitionEnd('color');
+    expect(fixture.componentInstance.visible()).toBe(true);
+    expect(alert.hidden).toBe(false);
+
+    await transitionEnd('opacity');
     expect(fixture.componentInstance.visible()).toBe(false);
   });
 
