@@ -1,4 +1,4 @@
-import { DOCUMENT, inputBinding, signal, twoWayBinding, WritableSignal } from '@angular/core';
+import { Component, DOCUMENT, inputBinding, signal, twoWayBinding, WritableSignal } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { PopoverDirective } from './popover.directive';
@@ -8,12 +8,13 @@ describe('PopoverDirective', () => {
   let visible: WritableSignal<boolean>;
   let fixture: DirectiveFixture<PopoverDirective>;
   let document: Document;
+  let intersect: IntersectionObserverCallback;
 
   beforeEach(() => {
     // Mock IntersectionObserver
     (globalThis as any).IntersectionObserver = class IntersectionObserver {
-      constructor() {
-        //
+      constructor(callback: IntersectionObserverCallback) {
+        intersect = callback;
       }
       observe = vi.fn();
       unobserve = vi.fn();
@@ -154,5 +155,57 @@ describe('PopoverDirective', () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     await vi.runAllTimersAsync();
     expect(visible()).toBe(true);
+  });
+
+  it('should hide the popover when its host leaves the viewport', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+    expect(visible()).toBe(true);
+
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+    expect(visible()).toBe(false);
+  });
+
+  it('should not render a popover without content', async () => {
+    const empty = TestBed.createDirective(PopoverDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cPopover', () => ''), inputBinding('cPopoverVisible', () => true)]
+    });
+    empty.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.popover')).toBeNull();
+    empty.destroy();
+  });
+});
+
+@Component({
+  template: `
+    <button [cPopover]="content" [cPopoverVisible]="true">Open</button>
+    <ng-template #content><b id="templateContent">Template content</b></ng-template>
+  `,
+  imports: [PopoverDirective]
+})
+class TemplatePopoverComponent {}
+
+describe('PopoverDirective with template content', () => {
+  beforeEach(() => {
+    (globalThis as any).IntersectionObserver = class IntersectionObserver {
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+    };
+  });
+
+  it('should render the template in the popover', async () => {
+    const fixture = TestBed.createComponent(TemplatePopoverComponent);
+    await fixture.whenStable();
+    await vi.waitFor(() => expect(document.querySelector('.popover.show #templateContent')).not.toBeNull());
+    expect(document.querySelector('.popover .popover-body')).toBeNull();
+    fixture.destroy();
   });
 });
