@@ -199,6 +199,16 @@ describe('ChipInputComponent keyboard', () => {
     expect(document.activeElement).toBe(field());
   });
 
+  it('ignores a keydown without a key on a chip, as autofill sends it', () => {
+    const onError = vi.fn();
+    window.addEventListener('error', onError);
+    chip('a').focus();
+    chip('a').dispatchEvent(new Event('keydown', { bubbles: true }));
+    window.removeEventListener('error', onError);
+    expect(onError).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(chip('a'));
+  });
+
   it('moves focus to the neighbor after Delete, and to the field after the last chip', async () => {
     chip('b').focus();
     press(chip('b'), 'Delete');

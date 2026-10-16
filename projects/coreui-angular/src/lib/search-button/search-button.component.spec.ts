@@ -111,6 +111,21 @@ describe('SearchButtonComponent', () => {
     expect(host.onTrigger).toHaveBeenCalledTimes(1);
   });
 
+  it('should ignore key events without a key, as autofill sends them', async () => {
+    host.shortcut.set('meta+k,ctrl+k');
+    await fixture.whenStable();
+
+    const onError = vi.fn();
+    window.addEventListener('error', onError);
+    document.dispatchEvent(new Event('keydown'));
+    document.dispatchEvent(new Event('keyup'));
+    window.removeEventListener('error', onError);
+    await fixture.whenStable();
+
+    expect(onError).not.toHaveBeenCalled();
+    expect(host.onTrigger).not.toHaveBeenCalled();
+  });
+
   it('should not emit trigger on a matching shortcut when disabled', async () => {
     host.shortcut.set('meta+k,ctrl+k');
     host.disabled.set(true);

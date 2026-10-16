@@ -98,7 +98,7 @@ export class SearchButtonComponent {
   }
 
   protected onDocumentKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) {
+    if (this.disabled() || !event.key) {
       return;
     }
 
@@ -107,7 +107,7 @@ export class SearchButtonComponent {
   }
 
   protected onDocumentKeyup(event: KeyboardEvent): void {
-    if (this.disabled()) {
+    if (this.disabled() || !event.key) {
       return;
     }
 
