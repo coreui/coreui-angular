@@ -13,8 +13,8 @@ import {
   output
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { fromEvent, Subscription } from 'rxjs';
-import { filter, finalize, withLatestFrom, zipWith } from 'rxjs/operators';
+import { EMPTY, fromEvent, Subscription } from 'rxjs';
+import { filter, finalize, map, switchMap, take } from 'rxjs/operators';
 
 import { IListenersConfig, IntersectionService, ListenersService } from '../../services';
 
@@ -242,17 +242,24 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterContentInit {
       const carouselElement = this.#hostElement.nativeElement;
       const touchStart$ = fromEvent<TouchEvent>(carouselElement, 'touchstart');
       const touchEnd$ = fromEvent<TouchEvent>(carouselElement, 'touchend');
-      const touchMove$ = fromEvent<TouchEvent>(carouselElement, 'touchmove');
       this.swipeSubscription = touchStart$
-        .pipe(zipWith(touchEnd$.pipe(withLatestFrom(touchMove$))), takeUntilDestroyed(this.#destroyRef))
-        .subscribe(([touchstart, [touchend, touchmove]]) => {
-          touchstart.stopPropagation();
-          touchmove.stopPropagation();
+        .pipe(
+          switchMap((touchstart) =>
+            touchstart.touches?.length > 1
+              ? EMPTY
+              : touchEnd$.pipe(
+                  take(1),
+                  map((touchend) => [touchstart, touchend] as const)
+                )
+          ),
+          takeUntilDestroyed(this.#destroyRef)
+        )
+        .subscribe(([touchstart, touchend]) => {
           if (this.#carouselService.animating()) {
             return;
           }
-          const distanceX = touchstart.touches[0]?.clientX - touchmove.touches[0]?.clientX || 0;
-          if (Math.abs(distanceX) > 0.3 * carouselElement.clientWidth && touchstart.timeStamp <= touchmove.timeStamp) {
+          const distanceX = touchstart.touches?.[0]?.clientX - touchend.changedTouches?.[0]?.clientX || 0;
+          if (Math.abs(distanceX) > 0.3 * carouselElement.clientWidth) {
             const nextIndex = this.#carouselService.direction(distanceX > 0 ? 'next' : 'prev');
             this.#carouselService.state = { activeItemIndex: nextIndex };
           }
