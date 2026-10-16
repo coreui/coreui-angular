@@ -67,13 +67,13 @@ describe('TabDirective', () => {
       expect(document.activeElement).toBe(tabs[2]);
     });
 
-    it('should deselect and disable the active tab disabled through the setter', async () => {
+    it('should keep the active tab selected when disabled through the setter', async () => {
       const directive = fixture.debugElement.queryAll(By.directive(TabDirective))[1].injector.get(TabDirective);
       directive.disabled = true;
       await fixture.whenStable();
       expect(directive.disabled).toBe(true);
       expect(tabs[1].hasAttribute('disabled')).toBe(true);
-      expect(tabs[1].getAttribute('aria-selected')).toBe('false');
+      expect(tabs[1].getAttribute('aria-selected')).toBe('true');
     });
   });
 });

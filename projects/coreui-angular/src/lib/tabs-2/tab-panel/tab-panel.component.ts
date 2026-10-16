@@ -74,7 +74,7 @@ export class TabPanelComponent {
   protected readonly show = signal(false);
 
   readonly visible = computed(() => {
-    const visible = this.#tabsService.activeItemKey() === this.itemKey() && !this.#tabsService.activeItem()?.disabled;
+    const visible = this.#tabsService.activeItemKey() === this.itemKey();
     this.visibleChange?.emit({ itemKey: this.itemKey(), visible });
     return visible;
   });
@@ -109,8 +109,7 @@ export class TabPanelComponent {
         'tab-pane': true,
         active: this.visible(),
         fade: this.transition(),
-        show: this.show(),
-        invisible: this.#tabsService.activeItem()?.disabled
+        show: this.show()
       }) as Record<string, boolean>
   );
 

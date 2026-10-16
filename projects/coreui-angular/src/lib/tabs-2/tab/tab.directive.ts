@@ -124,7 +124,7 @@ export class TabDirective implements FocusableOption, OnInit {
   ngOnInit(): void {
     runInInjectionContext(this.#injector, () => {
       effect(() => {
-        const isActive = !this.#disabled() && this.#tabsService.activeItemKey() === this.itemKey();
+        const isActive = this.#tabsService.activeItemKey() === this.itemKey();
         this.isActive.set(isActive);
       });
     });
