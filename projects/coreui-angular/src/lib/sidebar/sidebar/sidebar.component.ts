@@ -38,6 +38,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   readonly #sidebarService = inject(SidebarService);
   readonly #backdropService = inject(SidebarBackdropService);
 
+  #initialized = false;
   #onMobile = false;
   #layoutChangeSubscription!: Subscription;
   #stateToggleSubscription!: Subscription;
@@ -148,6 +149,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
 
   set sidebarState(value: ISidebarAction) {
     const newState = value;
+    const wasOpen = this.state().mobile && this.state().visible;
     if ('toggle' in newState) {
       if (newState.toggle === 'visible') {
         newState.visible = !this.state().visible;
@@ -156,13 +158,15 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
         newState.unfoldable = !this.state().unfoldable;
         this.unfoldable.set(newState.unfoldable);
       }
-    } else {
-      this.#visible.update((visible) => (newState.visible ?? visible) && !this.overlaid());
+    } else if (newState.visible !== undefined) {
+      this.#visible.set(newState.visible && !this.overlaid());
     }
     this.state.update((state) => ({ ...state, ...newState }));
-    this.state().mobile && this.state().visible
-      ? this.#backdropService.setBackdrop(this)
-      : this.#backdropService.clearBackdrop();
+    if (this.state().mobile && this.state().visible) {
+      this.#backdropService.setBackdrop(this);
+    } else if (wasOpen) {
+      this.#backdropService.clearBackdrop();
+    }
   }
 
   get sidebarState(): ISidebarAction {
@@ -209,6 +213,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     this.setInitialState();
     this.layoutChangeSubscribe();
     this.stateToggleSubscribe();
+    this.#initialized = true;
   }
 
   ngOnDestroy(): void {
@@ -219,27 +224,23 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const oldStateMap = new Map(Object.entries(this.state()));
-    const newStateMap = new Map();
-    newStateMap.set('sidebar', this);
-
-    const propList = ['visible', 'unfoldable', 'narrow'];
-
-    for (const propName in changes) {
-      if (propList.includes(propName)) {
-        if (changes[propName] && !changes[propName].firstChange) {
-          const value = booleanAttribute(changes[propName].currentValue);
-          if (oldStateMap.get(propName) !== value) {
-            newStateMap.set(propName, value);
-          }
-        }
+  ngOnChanges(changes: SimpleChanges<SidebarComponent>): void {
+    if (!this.#initialized) {
+      return;
+    }
+    const state = this.state();
+    const newState: ISidebarAction = {};
+    for (const [key, change] of [
+      ['narrow', changes.narrowInput],
+      ['unfoldable', changes.unfoldableInput],
+      ['visible', changes.visibleInput]
+    ] as const) {
+      if (change && state[key] !== change.currentValue) {
+        newState[key] = change.currentValue;
       }
     }
-
-    if (newStateMap.size > 1) {
-      const state = Object.fromEntries(newStateMap.entries());
-      this.#sidebarService.toggle(state);
+    if (Object.keys(newState).length) {
+      this.#sidebarService.toggle({ ...newState, sidebar: this });
     }
   }
 
@@ -258,7 +259,7 @@ export class SidebarComponent implements OnChanges, OnDestroy, OnInit {
   private stateToggleSubscribe(subscribe: boolean = true): void {
     if (subscribe) {
       this.#stateToggleSubscription = this.#sidebarService.sidebarState$.subscribe((state) => {
-        if (this === state.sidebar || this.id() === state.id) {
+        if (state.sidebar ? this === state.sidebar : this.id() === state.id) {
           this.sidebarState = { ...state };
         }
       });
