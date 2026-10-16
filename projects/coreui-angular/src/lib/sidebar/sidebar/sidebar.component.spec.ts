@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SidebarComponent } from './sidebar.component';
-import { SidebarService } from '../sidebar.service';
+import { ISidebarAction, SidebarService } from '../sidebar.service';
 import { SidebarNavComponent } from '../sidebar-nav/sidebar-nav.component';
 
 describe('SidebarComponent', () => {
@@ -43,6 +43,13 @@ describe('SidebarComponent', () => {
     component.sidebarState = { visible: false };
     await fixture.whenStable();
     expect(fixture.nativeElement.inert).toBe(true);
+  });
+
+  it('should apply the first input set after the first render', async () => {
+    fixture.componentRef.setInput('visible', true);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.classList.contains('show')).toBe(true);
+    expect(component.sidebarState.visible).toBe(true);
   });
 
   it('should clear the backdrop when a visible mobile sidebar is destroyed', async () => {
@@ -112,6 +119,13 @@ describe('SidebarComponent state', () => {
     expect(startElement.classList.contains('hide')).toBe(true);
   });
 
+  it('should apply a state with a sidebar reference only to that sidebar', async () => {
+    service.toggle({ toggle: 'visible', sidebar: start, id: 'end' });
+    await fixture.whenStable();
+    expect(startElement.classList.contains('show')).toBe(true);
+    expect(endElement.classList.contains('hide')).toBe(true);
+  });
+
   it('should narrow through the narrow setter unless unfoldable', async () => {
     start.narrow = true;
     await fixture.whenStable();
@@ -127,6 +141,152 @@ describe('SidebarComponent state', () => {
 
 @Component({
   template: `
+    <c-sidebar [(visible)]="visible" [narrow]="narrow()" [overlaid]="overlaid()" [unfoldable]="unfoldable()" />
+  `,
+  imports: [SidebarComponent]
+})
+class BoundSidebarComponent {
+  readonly narrow = signal(false);
+  readonly overlaid = signal(false);
+  readonly unfoldable = signal(false);
+  readonly visible = signal(false);
+}
+
+describe('SidebarComponent inputs', () => {
+  let fixture: ComponentFixture<BoundSidebarComponent>;
+  let host: BoundSidebarComponent;
+  let sidebar: SidebarComponent;
+  let element: HTMLElement;
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(BoundSidebarComponent);
+    await fixture.whenStable();
+    host = fixture.componentInstance;
+    const sidebarRef = fixture.debugElement.query(By.directive(SidebarComponent));
+    sidebar = sidebarRef.componentInstance;
+    element = sidebarRef.nativeElement;
+  });
+
+  it('should send only its initial state to the sidebar service on init', async () => {
+    const actions: ISidebarAction[] = [];
+    TestBed.inject(SidebarService).sidebarState$.subscribe((action) => actions.push(action));
+    actions.length = 0;
+
+    const bound = TestBed.createComponent(BoundSidebarComponent);
+    await bound.whenStable();
+    expect(actions.length).toBe(1);
+  });
+
+  it('should show and hide when the visible input changes', async () => {
+    host.visible.set(true);
+    await fixture.whenStable();
+    expect(element.classList.contains('show')).toBe(true);
+    expect(element.inert).toBeFalsy();
+    expect(sidebar.sidebarState.visible).toBe(true);
+
+    host.visible.set(false);
+    await fixture.whenStable();
+    expect(element.classList.contains('hide')).toBe(true);
+    expect(element.inert).toBe(true);
+    expect(sidebar.sidebarState.visible).toBe(false);
+  });
+
+  it('should apply a narrow input change to the sidebar state', async () => {
+    host.narrow.set(true);
+    await fixture.whenStable();
+    expect(element.classList.contains('sidebar-narrow')).toBe(true);
+    expect(sidebar.sidebarState.narrow).toBe(true);
+  });
+
+  it('should toggle unfoldable off after the unfoldable input turns it on', async () => {
+    host.unfoldable.set(true);
+    await fixture.whenStable();
+    expect(element.classList.contains('sidebar-narrow-unfoldable')).toBe(true);
+
+    TestBed.inject(SidebarService).toggle({ toggle: 'unfoldable', sidebar });
+    await fixture.whenStable();
+    expect(element.classList.contains('sidebar-narrow-unfoldable')).toBe(false);
+  });
+
+  it('should update a two-way visible binding on toggle', async () => {
+    const service = TestBed.inject(SidebarService);
+
+    service.toggle({ toggle: 'visible', sidebar });
+    await fixture.whenStable();
+    expect(host.visible()).toBe(true);
+    expect(element.classList.contains('show')).toBe(true);
+
+    service.toggle({ toggle: 'visible', sidebar });
+    await fixture.whenStable();
+    expect(host.visible()).toBe(false);
+    expect(element.classList.contains('hide')).toBe(true);
+  });
+
+  it('should keep an open overlaid sidebar open when the narrow input changes', async () => {
+    host.overlaid.set(true);
+    await fixture.whenStable();
+    TestBed.inject(SidebarService).toggle({ toggle: 'visible', sidebar });
+    await fixture.whenStable();
+
+    host.narrow.set(true);
+    await fixture.whenStable();
+    expect(element.classList.contains('show')).toBe(true);
+    expect(host.visible()).toBe(true);
+  });
+});
+
+@Component({
+  template: `
+    <c-sidebar id="start" />
+    <c-sidebar visible />
+    <c-sidebar />
+  `,
+  imports: [SidebarComponent]
+})
+class SidebarsWithoutIdComponent {}
+
+describe('SidebarComponent without id', () => {
+  let fixture: ComponentFixture<SidebarsWithoutIdComponent>;
+  let sidebars: SidebarComponent[];
+  let elements: HTMLElement[];
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(SidebarsWithoutIdComponent);
+    await fixture.whenStable();
+    const refs = fixture.debugElement.queryAll(By.directive(SidebarComponent));
+    sidebars = refs.map((ref) => ref.componentInstance);
+    elements = refs.map((ref) => ref.nativeElement);
+  });
+
+  it('should keep its own initial state', () => {
+    expect(elements[1].classList.contains('show')).toBe(true);
+    expect(sidebars[1].sidebarState.sidebar).toBe(sidebars[1]);
+  });
+
+  it('should apply a state addressed to another sidebar only to that sidebar', async () => {
+    TestBed.inject(SidebarService).toggle({ toggle: 'visible', sidebar: sidebars[2] });
+    await fixture.whenStable();
+    expect(elements[2].classList.contains('show')).toBe(true);
+    expect(elements[1].classList.contains('show')).toBe(true);
+    expect(elements[0].classList.contains('hide')).toBe(true);
+    expect(sidebars[1].sidebarState.sidebar).toBe(sidebars[1]);
+
+    TestBed.inject(SidebarService).toggle({ toggle: 'visible', sidebar: sidebars[2] });
+    await fixture.whenStable();
+    expect(elements[2].classList.contains('hide')).toBe(true);
+    expect(elements[1].classList.contains('show')).toBe(true);
+  });
+
+  it('should apply a state without a sidebar reference to the sidebars matching its id', async () => {
+    TestBed.inject(SidebarService).toggle({ visible: true });
+    await fixture.whenStable();
+    expect(elements[2].classList.contains('show')).toBe(true);
+    expect(elements[0].classList.contains('hide')).toBe(true);
+  });
+});
+
+@Component({
+  template: `
     <c-sidebar visible>
       <c-sidebar-nav [navItems]="navItems" />
     </c-sidebar>
@@ -135,6 +295,17 @@ describe('SidebarComponent state', () => {
 })
 class MobileSidebarComponent {
   readonly navItems = [{ name: 'Dashboard', url: '/dashboard' }];
+}
+
+@Component({
+  template: `
+    <c-sidebar id="main" />
+    <c-sidebar id="aside" [unfoldable]="unfoldable()" />
+  `,
+  imports: [SidebarComponent]
+})
+class MobileSidebarPairComponent {
+  readonly unfoldable = signal(false);
 }
 
 describe('SidebarComponent on mobile', () => {
@@ -212,6 +383,19 @@ describe('SidebarComponent on mobile', () => {
 
     await setMobile(false);
     expect(document.querySelector('.sidebar-backdrop')).toBeNull();
+  });
+
+  it('should keep the backdrop of an open sidebar when a closed sidebar changes', async () => {
+    const pair = TestBed.createComponent(MobileSidebarPairComponent);
+    await pair.whenStable();
+    await setMobile(true);
+    TestBed.inject(SidebarService).toggle({ toggle: 'visible', id: 'main' });
+    await pair.whenStable();
+    expect(document.querySelector('.sidebar-backdrop')).not.toBeNull();
+
+    pair.componentInstance.unfoldable.set(true);
+    await pair.whenStable();
+    expect(document.querySelector('.sidebar-backdrop')).not.toBeNull();
   });
 
   it('should hide after a nav link click on mobile only', async () => {
