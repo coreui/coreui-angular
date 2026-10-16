@@ -182,6 +182,7 @@ describe('AlertComponent with fade', () => {
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     fixture.detectChanges();
     await vi.advanceTimersByTimeAsync(10000);
+    fixture.detectChanges();
     expect(alert.hidden).toBe(false);
 
     await vi.advanceTimersByTimeAsync(5);
@@ -223,6 +224,21 @@ describe('AlertComponent with fade', () => {
     expect(alert.classList.contains('show')).toBe(true);
     expect(fixture.componentInstance.visible()).toBe(true);
   });
+
+  it('should not finish a later close with the timer of an earlier one', async () => {
+    vi.useFakeTimers();
+    fixture.componentInstance.visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(100);
+
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    fixture.componentInstance.visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(9910);
+    fixture.detectChanges();
+    expect(alert.hidden).toBe(false);
+  });
 });
 
 @Component({
@@ -258,7 +274,7 @@ describe('AlertComponent without a transition', () => {
     await render();
     alert.style.transitionDuration = '10s';
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
-    await fixture.whenStable();
+    fixture.changeDetectorRef.detectChanges();
     expectHidden();
   });
 

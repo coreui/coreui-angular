@@ -93,7 +93,7 @@ export class AlertComponent {
    */
   readonly visibleChange = output<boolean>();
 
-  protected readonly hide = linkedSignal({
+  protected readonly hide = linkedSignal<{ fade: boolean; visible: boolean }, boolean>({
     source: () => ({ fade: this.fade(), visible: this.visible() }),
     computation: ({ fade, visible }, previous) => !visible && (!fade || this.#isServer || (previous?.value ?? true))
   });
