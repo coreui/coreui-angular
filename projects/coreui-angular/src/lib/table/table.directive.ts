@@ -1,11 +1,14 @@
 import {
+  afterNextRender,
   afterRenderEffect,
+  ApplicationRef,
   booleanAttribute,
   computed,
   Directive,
   ElementRef,
   inject,
   input,
+  OnDestroy,
   Renderer2
 } from '@angular/core';
 import { Breakpoints, Colors } from '../coreui.types';
@@ -18,9 +21,12 @@ import { Breakpoints, Colors } from '../coreui.types';
     '[class]': 'hostClasses()'
   }
 })
-export class TableDirective {
+export class TableDirective implements OnDestroy {
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
+  readonly #appRef = inject(ApplicationRef);
+
+  #wrapper: HTMLDivElement | undefined;
 
   /**
    * Set the vertical alignment.
@@ -70,7 +76,10 @@ export class TableDirective {
    * @returns boolean | Omit<Breakpoints, 'xs'>
    * @values true | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
    */
-  readonly responsive = input<boolean | Omit<Breakpoints, 'xs'>>();
+  readonly responsive = input(undefined, {
+    transform: (value: boolean | Omit<Breakpoints, 'xs'> | undefined) =>
+      value === '' || value === 'true' || value === 'false' ? booleanAttribute(value) : value
+  });
 
   /**
    * Make table more compact by cutting all cell `padding` in half.
@@ -123,16 +132,39 @@ export class TableDirective {
     // Find more at https://angular.dev/errors/NG0500
     write: () => {
       const responsive = this.responsive();
+      const nativeElement: HTMLElement = this.#hostElement.nativeElement;
       if (!!responsive) {
-        const nativeElement: HTMLElement = this.#hostElement.nativeElement;
-        const wrapper = this.#renderer.createElement('div');
+        const wrapper: HTMLDivElement = (this.#wrapper ??= this.#renderer.createElement('div'));
         const className = responsive === true ? 'table-responsive' : `table-responsive-${responsive}`;
-        this.#renderer.addClass(wrapper, className);
-        const parentNode = this.#renderer.parentNode(nativeElement);
-        this.#renderer.appendChild(parentNode, wrapper);
-        this.#renderer.insertBefore(parentNode, wrapper, nativeElement);
-        this.#renderer.appendChild(wrapper, nativeElement);
+        this.#renderer.setAttribute(wrapper, 'class', className);
+        if (nativeElement.parentNode !== wrapper) {
+          const parentNode = this.#renderer.parentNode(nativeElement);
+          this.#renderer.insertBefore(parentNode, wrapper, nativeElement);
+          this.#renderer.appendChild(wrapper, nativeElement);
+        }
+      } else if (this.#wrapper && nativeElement.parentNode === this.#wrapper) {
+        const parentNode = this.#renderer.parentNode(this.#wrapper);
+        this.#renderer.insertBefore(parentNode, nativeElement, this.#wrapper);
+        this.#renderer.removeChild(parentNode, this.#wrapper, false, true);
       }
     }
   });
+
+  ngOnDestroy(): void {
+    const wrapper = this.#wrapper;
+    if (!wrapper || this.#appRef.injector.destroyed) {
+      return;
+    }
+    const host: HTMLElement = this.#hostElement.nativeElement;
+    afterNextRender(
+      {
+        write: () => {
+          if (host.parentNode !== wrapper) {
+            this.#renderer.removeChild(this.#renderer.parentNode(wrapper), wrapper, false, true);
+          }
+        }
+      },
+      { injector: this.#appRef.injector }
+    );
+  }
 }
