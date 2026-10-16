@@ -1,4 +1,5 @@
 import {
+  afterRenderEffect,
   AnimationCallbackEvent,
   booleanAttribute,
   Component,
@@ -31,7 +32,6 @@ import getTransitionDurationFromElement from '../utilities/getTransitionDuration
     '[class]': 'hostClasses()',
     '(animate.leave)': 'handleLeaving($event)',
     '(transitionend)': 'onTransitionEnd($event)',
-    '(transitionstart)': 'onTransitionStart($event)',
     '[hidden]': 'hide()',
     '[inert]': 'hide()'
   },
@@ -96,17 +96,19 @@ export class AlertComponent {
     computation: (visible, previous) => !visible && (previous?.value ?? true)
   });
 
-  readonly #visibleEffect = effect((onCleanup) => {
-    if (this.visible() || this.hide()) {
-      return;
+  readonly #visibleEffect = afterRenderEffect({
+    read: (onCleanup) => {
+      if (this.visible() || this.hide()) {
+        return;
+      }
+      const duration = this.fade() ? getTransitionDurationFromElement(this.#hostElement.nativeElement) : 0;
+      if (!duration) {
+        this.#finishTransition();
+        return;
+      }
+      const timeoutId = setTimeout(() => this.#finishTransition(), duration + 5);
+      onCleanup(() => clearTimeout(timeoutId));
     }
-    const duration = getTransitionDurationFromElement(this.#hostElement.nativeElement);
-    if (!duration) {
-      this.#finishTransition();
-      return;
-    }
-    const timeoutId = setTimeout(() => this.#finishTransition(), duration + 5);
-    onCleanup(() => clearTimeout(timeoutId));
   });
 
   readonly #hideEffect = effect(() => {
@@ -141,14 +143,6 @@ export class AlertComponent {
       'text-white': !!color && variant === 'solid'
     } as Record<string, boolean>;
   });
-
-  protected onTransitionStart($event: TransitionEvent): void {
-    if ($event.propertyName === 'opacity') {
-      if (this.visible()) {
-        this.hide.set(false);
-      }
-    }
-  }
 
   protected onTransitionEnd($event: TransitionEvent): void {
     if ($event.target === this.#hostElement.nativeElement && $event.propertyName === 'opacity') {

@@ -90,7 +90,7 @@ describe('AlertComponent with a custom class', () => {
 });
 
 @Component({
-  template: `<c-alert [(visible)]="visible" dismissible fade style="transition-duration: .15s">Text</c-alert>`,
+  template: `<c-alert [(visible)]="visible" dismissible fade style="transition-duration: 10s">Text</c-alert>`,
   imports: [AlertComponent]
 })
 class FadeAlertComponent {
@@ -181,13 +181,29 @@ describe('AlertComponent with fade', () => {
     vi.useFakeTimers();
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     fixture.detectChanges();
-    await vi.advanceTimersByTimeAsync(150);
+    await vi.advanceTimersByTimeAsync(10000);
     expect(alert.hidden).toBe(false);
 
     await vi.advanceTimersByTimeAsync(5);
     fixture.detectChanges();
     expect(alert.hidden).toBe(true);
     expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
+  it('should read the transition once the show class is gone', async () => {
+    const style = document.createElement('style');
+    style.textContent = 'c-alert.fade:not(.show) { transition-duration: 10s; }';
+    document.head.append(style);
+    const hidingFixture = TestBed.createComponent(DismissibleAlertComponent);
+    hidingFixture.componentInstance.fade.set(true);
+    await hidingFixture.whenStable();
+    const hidingAlert: HTMLElement = hidingFixture.nativeElement.querySelector('c-alert');
+
+    hidingAlert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
+    await hidingFixture.whenStable();
+    style.remove();
+    expect(hidingAlert.hidden).toBe(false);
+    expect(hidingFixture.componentInstance.visible()).toBe(true);
   });
 
   it('should stay open when shown again before the close finishes', async () => {
@@ -237,6 +253,7 @@ describe('AlertComponent without a transition', () => {
 
   it('should hide and emit on close', async () => {
     await render();
+    alert.style.transitionDuration = '10s';
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     await fixture.whenStable();
     expectHidden();
