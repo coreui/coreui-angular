@@ -540,7 +540,7 @@ export class ChipInputComponent implements AfterContentInit {
   }
 
   #isPrintable($event: KeyboardEvent): boolean {
-    return $event.key.length === 1 && !$event.metaKey && (!$event.ctrlKey || $event.altKey);
+    return $event.key?.length === 1 && !$event.metaKey && (!$event.ctrlKey || $event.altKey);
   }
 
   #isRtl(): boolean {
