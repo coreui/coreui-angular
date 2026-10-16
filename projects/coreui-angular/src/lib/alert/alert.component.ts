@@ -11,7 +11,6 @@ import {
   linkedSignal,
   MAX_ANIMATION_TIMEOUT,
   output,
-  signal,
   TemplateRef
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
@@ -19,6 +18,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Colors } from '../coreui.types';
 import { TemplateIdDirective } from '../shared';
 import { ButtonCloseDirective } from '../button';
+import getTransitionDurationFromElement from '../utilities/getTransitionDurationFromElement';
 
 @Component({
   selector: 'c-alert',
@@ -91,13 +91,22 @@ export class AlertComponent {
    */
   readonly visibleChange = output<boolean>();
 
-  protected readonly hide = signal<boolean>(false);
+  protected readonly hide = linkedSignal<boolean, boolean>({
+    source: this.visible,
+    computation: (visible, previous) => !visible && (previous?.value ?? true)
+  });
 
-  readonly #visibleEffect = effect(() => {
-    const visible = this.visible();
-    if (visible) {
-      this.hide.set(false);
+  readonly #visibleEffect = effect((onCleanup) => {
+    if (this.visible() || this.hide()) {
+      return;
     }
+    const duration = getTransitionDurationFromElement(this.#hostElement.nativeElement);
+    if (!duration) {
+      this.#finishTransition();
+      return;
+    }
+    const timeoutId = setTimeout(() => this.#finishTransition(), duration + 5);
+    onCleanup(() => clearTimeout(timeoutId));
   });
 
   readonly #hideEffect = effect(() => {
@@ -142,9 +151,13 @@ export class AlertComponent {
   }
 
   protected onTransitionEnd($event: TransitionEvent): void {
-    if ($event.propertyName === 'opacity') {
-      this.hide.set(!this.visible());
+    if ($event.target === this.#hostElement.nativeElement && $event.propertyName === 'opacity') {
+      this.#finishTransition();
     }
+  }
+
+  #finishTransition(): void {
+    this.hide.set(!this.visible());
   }
 
   #leavingInProgress = false;
