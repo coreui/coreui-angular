@@ -116,9 +116,10 @@ describe('CarouselComponent with items', () => {
 
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const touch = (type: string, clientX?: number) => {
+  const touch = (type: string, clientX: number, touches = type === 'touchend' ? [] : [clientX]) => {
     const event = Object.assign(new Event(type, { bubbles: true }), {
-      touches: clientX === undefined ? [] : [{ clientX }]
+      touches: touches.map((x) => ({ clientX: x })),
+      changedTouches: [{ clientX }]
     });
     carousel.dispatchEvent(event);
   };
@@ -126,7 +127,13 @@ describe('CarouselComponent with items', () => {
   const swipe = async (from: number, to: number) => {
     touch('touchstart', from);
     touch('touchmove', to);
-    touch('touchend');
+    touch('touchend', to);
+    await fixture.whenStable();
+  };
+
+  const tap = async (x: number) => {
+    touch('touchstart', x);
+    touch('touchend', x);
     await fixture.whenStable();
   };
 
@@ -183,6 +190,72 @@ describe('CarouselComponent with items', () => {
     await swipe(300, 100);
     await swipe(100, 300);
     expect(fixture.componentInstance.changes).toEqual([1, 0]);
+  });
+
+  it('should measure each swipe from its own start after a tap', async () => {
+    await render();
+    Object.defineProperty(carousel, 'clientWidth', { configurable: true, value: 400 });
+
+    await tap(50);
+    await swipe(300, 100);
+    await swipe(100, 300);
+    await swipe(100, 300);
+    expect(fixture.componentInstance.changes).toEqual([1, 0, 2]);
+  });
+
+  it('should not repeat a swipe on a later tap', async () => {
+    await render();
+    Object.defineProperty(carousel, 'clientWidth', { configurable: true, value: 400 });
+
+    await tap(50);
+    await swipe(300, 100);
+    const swiped = [...fixture.componentInstance.changes];
+    await tap(200);
+    expect(fixture.componentInstance.changes).toEqual(swiped);
+  });
+
+  it('should ignore a touchend without its own touchstart', async () => {
+    await render();
+    Object.defineProperty(carousel, 'clientWidth', { configurable: true, value: 400 });
+
+    await swipe(300, 100);
+    touch('touchend', 30);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.changes).toEqual([1]);
+
+    await wait(5);
+    await swipe(300, 100);
+    expect(fixture.componentInstance.changes).toEqual([1, 2]);
+  });
+
+  it('should keep swiping after touch events without touch lists', async () => {
+    await render();
+    Object.defineProperty(carousel, 'clientWidth', { configurable: true, value: 400 });
+
+    carousel.dispatchEvent(new Event('touchstart', { bubbles: true }));
+    carousel.dispatchEvent(new Event('touchend', { bubbles: true }));
+    await fixture.whenStable();
+    await swipe(300, 100);
+    expect(fixture.componentInstance.changes).toEqual([1]);
+  });
+
+  it('should ignore a gesture once a second finger touches the carousel', async () => {
+    await render();
+    Object.defineProperty(carousel, 'clientWidth', { configurable: true, value: 400 });
+
+    touch('touchstart', 60);
+    touch('touchstart', 260, [60, 260]);
+    touch('touchend', 260, [60]);
+    touch('touchend', 60);
+    await fixture.whenStable();
+
+    touch('touchstart', 300);
+    touch('touchstart', 300, [300, 300]);
+    touch('touchmove', 100, [100, 100]);
+    touch('touchend', 100, [100]);
+    touch('touchend', 100);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.changes).toEqual([]);
   });
 
   it('should ignore a swipe while an item animates or with touch off', async () => {
