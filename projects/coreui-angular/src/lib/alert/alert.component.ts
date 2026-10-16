@@ -1,4 +1,5 @@
 import {
+  afterRenderEffect,
   AnimationCallbackEvent,
   booleanAttribute,
   Component,
@@ -11,14 +12,15 @@ import {
   linkedSignal,
   MAX_ANIMATION_TIMEOUT,
   output,
-  signal,
+  PLATFORM_ID,
   TemplateRef
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
+import { isPlatformServer, NgTemplateOutlet } from '@angular/common';
 
 import { Colors } from '../coreui.types';
 import { TemplateIdDirective } from '../shared';
 import { ButtonCloseDirective } from '../button';
+import getTransitionDurationFromElement from '../utilities/getTransitionDurationFromElement';
 
 @Component({
   selector: 'c-alert',
@@ -31,7 +33,6 @@ import { ButtonCloseDirective } from '../button';
     '[class]': 'hostClasses()',
     '(animate.leave)': 'handleLeaving($event)',
     '(transitionend)': 'onTransitionEnd($event)',
-    '(transitionstart)': 'onTransitionStart($event)',
     '[hidden]': 'hide()',
     '[inert]': 'hide()'
   },
@@ -40,6 +41,7 @@ import { ButtonCloseDirective } from '../button';
 export class AlertComponent {
   readonly #hostElement = inject(ElementRef);
   readonly #maxAnimationTimeout = inject(MAX_ANIMATION_TIMEOUT);
+  readonly #isServer = isPlatformServer(inject(PLATFORM_ID));
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -91,12 +93,23 @@ export class AlertComponent {
    */
   readonly visibleChange = output<boolean>();
 
-  protected readonly hide = signal<boolean>(false);
+  protected readonly hide = linkedSignal<{ fade: boolean; visible: boolean }, boolean>({
+    source: () => ({ fade: this.fade(), visible: this.visible() }),
+    computation: ({ fade, visible }, previous) => !visible && (!fade || this.#isServer || (previous?.value ?? true))
+  });
 
-  readonly #visibleEffect = effect(() => {
-    const visible = this.visible();
-    if (visible) {
-      this.hide.set(false);
+  readonly #visibleEffect = afterRenderEffect({
+    read: (onCleanup) => {
+      if (this.visible() || this.hide()) {
+        return;
+      }
+      const duration = getTransitionDurationFromElement(this.#hostElement.nativeElement);
+      if (!duration) {
+        this.#finishTransition();
+        return;
+      }
+      const timeoutId = setTimeout(() => this.#finishTransition(), duration + 5);
+      onCleanup(() => clearTimeout(timeoutId));
     }
   });
 
@@ -133,18 +146,14 @@ export class AlertComponent {
     } as Record<string, boolean>;
   });
 
-  protected onTransitionStart($event: TransitionEvent): void {
-    if ($event.propertyName === 'opacity') {
-      if (this.visible()) {
-        this.hide.set(false);
-      }
+  protected onTransitionEnd($event: TransitionEvent): void {
+    if ($event.target === this.#hostElement.nativeElement && $event.propertyName === 'opacity') {
+      this.#finishTransition();
     }
   }
 
-  protected onTransitionEnd($event: TransitionEvent): void {
-    if ($event.propertyName === 'opacity') {
-      this.hide.set(!this.visible());
-    }
+  #finishTransition(): void {
+    this.hide.set(!this.visible());
   }
 
   #leavingInProgress = false;
