@@ -1,6 +1,5 @@
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import {
-  afterEveryRender,
   Component,
   computed,
   contentChildren,
@@ -8,13 +7,11 @@ import {
   effect,
   ElementRef,
   inject,
+  Injector,
   input,
   InputSignal,
-  signal,
   untracked
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { tap } from 'rxjs/operators';
 import { TabDirective } from '../tab/tab.directive';
 import { TabsService } from '../tabs.service';
 import { RtlService } from '../../services';
@@ -32,16 +29,16 @@ import { RtlService } from '../../services';
 export class TabsListComponent {
   readonly #destroyRef = inject(DestroyRef);
   readonly #elementRef = inject(ElementRef);
+  readonly #injector = inject(Injector);
   readonly tabsService = inject(TabsService);
   readonly #rtlService = inject(RtlService);
-  readonly #isRtl = signal(false);
 
   constructor() {
-    afterEveryRender({
-      read: () => {
-        this.#isRtl.set(this.#rtlService.isRTL(this.#elementRef.nativeElement));
-      }
+    this.#focusKeyManager.change.subscribe(() => {
+      this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
+      this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
     });
+    this.#destroyRef.onDestroy(() => this.#focusKeyManager.destroy());
   }
 
   /**
@@ -79,7 +76,11 @@ export class TabsListComponent {
   });
 
   readonly tabs = contentChildren(TabDirective);
-  #focusKeyManager!: FocusKeyManager<TabDirective>;
+  protected readonly tabElements = contentChildren(TabDirective, { read: ElementRef });
+  readonly #focusKeyManager = new FocusKeyManager(this.tabs, this.#injector)
+    .skipPredicate((tab) => tab.disabled === true)
+    .withHomeAndEnd()
+    .withWrap();
 
   readonly #tabsEffect = effect(() => {
     const tabs = this.tabs();
@@ -87,49 +88,31 @@ export class TabsListComponent {
       return;
     }
 
-    const isRtl = this.#isRtl();
-
-    this.#focusKeyManager = new FocusKeyManager(tabs)
-      .skipPredicate((tab) => tab.disabled === true)
-      .withHorizontalOrientation(isRtl ? 'rtl' : 'ltr')
-      .withHomeAndEnd()
-      .withWrap();
-
-    this.#focusKeyManager.change
-      .pipe(
-        tap((value) => {
-          this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
-          this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
-        }),
-        takeUntilDestroyed(this.#destroyRef)
-      )
-      .subscribe();
-
     untracked(() => {
       setTimeout(() => {
-        const activeItem = tabs.find((tab) => tab.isActive()) ?? tabs.find((tab) => !tab.disabled);
-        const activeItemIndex = tabs.findIndex((tab) => tab === activeItem);
-        this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
-        this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
-        this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
+        const activeItem = tabs.find((tab) => tab.isActive()) ?? tabs.find((tab) => !tab.disabled) ?? tabs[0];
+        this.#focusKeyManager.updateActiveItem(activeItem);
+        this.tabsService.activeItemKey.set(activeItem.itemKey());
+        this.tabsService.activeItem.set(activeItem);
       });
     });
   });
 
-  readonly #tabsServiceEffect = effect(() => {
-    const activeItemIndex = this.tabs().findIndex(
-      (tab) => untracked(tab.isActive) && untracked(tab.itemKey) === this.tabsService.activeItemKey()
-    );
-    this.#focusKeyManager?.updateActiveItem(activeItemIndex < 0 ? 0 : activeItemIndex);
-  });
-
   onKeyDown($event: any) {
-    if (['ArrowLeft', 'ArrowRight'].includes($event.key)) {
+    if (['ArrowLeft', 'ArrowRight', 'End', 'Home'].includes($event.key)) {
+      const index = this.tabElements().findIndex((tab) => tab.nativeElement.contains($event.target));
+      if (index < 0) {
+        return;
+      }
+      this.#focusKeyManager.withHorizontalOrientation(
+        this.#rtlService.isRTL(this.#elementRef.nativeElement) ? 'rtl' : 'ltr'
+      );
+      this.#focusKeyManager.updateActiveItem(index);
       this.#focusKeyManager.onKeydown($event);
       return;
     }
     if (['Tab'].includes($event.key)) {
-      this.#focusKeyManager?.tabOut.next();
+      this.#focusKeyManager.tabOut.next();
     }
     return;
   }
