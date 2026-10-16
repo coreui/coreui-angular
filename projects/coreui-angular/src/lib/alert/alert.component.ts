@@ -12,9 +12,10 @@ import {
   linkedSignal,
   MAX_ANIMATION_TIMEOUT,
   output,
+  PLATFORM_ID,
   TemplateRef
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
+import { isPlatformServer, NgTemplateOutlet } from '@angular/common';
 
 import { Colors } from '../coreui.types';
 import { TemplateIdDirective } from '../shared';
@@ -40,6 +41,7 @@ import getTransitionDurationFromElement from '../utilities/getTransitionDuration
 export class AlertComponent {
   readonly #hostElement = inject(ElementRef);
   readonly #maxAnimationTimeout = inject(MAX_ANIMATION_TIMEOUT);
+  readonly #isServer = isPlatformServer(inject(PLATFORM_ID));
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -91,9 +93,9 @@ export class AlertComponent {
    */
   readonly visibleChange = output<boolean>();
 
-  protected readonly hide = linkedSignal<boolean, boolean>({
-    source: this.visible,
-    computation: (visible, previous) => !visible && (previous?.value ?? true)
+  protected readonly hide = linkedSignal({
+    source: () => ({ fade: this.fade(), visible: this.visible() }),
+    computation: ({ fade, visible }, previous) => !visible && (!fade || this.#isServer || (previous?.value ?? true))
   });
 
   readonly #visibleEffect = afterRenderEffect({
@@ -101,7 +103,7 @@ export class AlertComponent {
       if (this.visible() || this.hide()) {
         return;
       }
-      const duration = this.fade() ? getTransitionDurationFromElement(this.#hostElement.nativeElement) : 0;
+      const duration = getTransitionDurationFromElement(this.#hostElement.nativeElement);
       if (!duration) {
         this.#finishTransition();
         return;

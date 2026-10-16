@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expect } from 'vitest';
 
 import { AlertComponent } from './alert.component';
-import { Component, ComponentRef, signal } from '@angular/core';
+import { Component, ComponentRef, PLATFORM_ID, signal } from '@angular/core';
 
 describe('AlertComponent', () => {
   let component: AlertComponent;
@@ -194,16 +194,19 @@ describe('AlertComponent with fade', () => {
     const style = document.createElement('style');
     style.textContent = 'c-alert.fade:not(.show) { transition-duration: 10s; }';
     document.head.append(style);
-    const hidingFixture = TestBed.createComponent(DismissibleAlertComponent);
-    hidingFixture.componentInstance.fade.set(true);
-    await hidingFixture.whenStable();
-    const hidingAlert: HTMLElement = hidingFixture.nativeElement.querySelector('c-alert');
+    try {
+      const hidingFixture = TestBed.createComponent(DismissibleAlertComponent);
+      hidingFixture.componentInstance.fade.set(true);
+      await hidingFixture.whenStable();
+      const hidingAlert: HTMLElement = hidingFixture.nativeElement.querySelector('c-alert');
 
-    hidingAlert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
-    await hidingFixture.whenStable();
-    style.remove();
-    expect(hidingAlert.hidden).toBe(false);
-    expect(hidingFixture.componentInstance.visible()).toBe(true);
+      hidingAlert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
+      await hidingFixture.whenStable();
+      expect(hidingAlert.hidden).toBe(false);
+      expect(hidingFixture.componentInstance.visible()).toBe(true);
+    } finally {
+      style.remove();
+    }
   });
 
   it('should stay open when shown again before the close finishes', async () => {
@@ -287,5 +290,42 @@ describe('AlertComponent without a transition', () => {
     await render();
     expectHidden();
     expect(alert.classList.contains('show')).toBe(false);
+  });
+
+  it('should hide at once when fade is switched off during the close', async () => {
+    fixture.componentInstance.fade.set(true);
+    await render();
+    alert.style.transitionDuration = '10s';
+    alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
+    await fixture.whenStable();
+    expect(alert.hidden).toBe(false);
+
+    fixture.componentInstance.fade.set(false);
+    await fixture.whenStable();
+    expectHidden();
+  });
+});
+
+describe('AlertComponent on the server', () => {
+  const scope = globalThis as { ngServerMode?: boolean };
+
+  beforeEach(() => {
+    scope.ngServerMode = true;
+    TestBed.configureTestingModule({ providers: [{ provide: PLATFORM_ID, useValue: 'server' }] });
+  });
+
+  afterEach(() => {
+    delete scope.ngServerMode;
+  });
+
+  it('should hide a fade alert closed during the render', async () => {
+    const fixture = TestBed.createComponent(DismissibleAlertComponent);
+    fixture.componentInstance.fade.set(true);
+    await fixture.whenStable();
+    fixture.componentInstance.visible.set(false);
+    await fixture.whenStable();
+    const alert: HTMLElement = fixture.nativeElement.querySelector('c-alert');
+    expect(alert.hidden).toBe(true);
+    expect(alert.textContent?.trim()).toBe('');
   });
 });
