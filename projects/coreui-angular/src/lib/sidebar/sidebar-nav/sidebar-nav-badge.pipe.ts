@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { classMap } from './sidebar-nav.utils';
+
 @Pipe({
   name: 'cSidebarNavBadge'
 })
@@ -12,7 +14,7 @@ export class SidebarNavBadgePipe implements PipeTransform {
       'badge-sm': !badge.size,
       [`badge-${badge.size}`]: !!badge.size,
       [`bg-${badge.color}`]: !!badge.color,
-      [`${badge.class}`]: !!badge.class
+      ...classMap(badge.class)
     };
   }
 }

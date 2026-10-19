@@ -1,9 +1,13 @@
-import { Component, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
 import { INavData } from './sidebar-nav';
+import { classMap } from './sidebar-nav.utils';
 
 @Component({
   selector: 'c-sidebar-nav-title',
-  template: ''
+  template: '',
+  host: {
+    '[class]': 'itemClass()'
+  }
 })
 export class SidebarNavTitleComponent {
   readonly #elementRef = inject(ElementRef);
@@ -15,16 +19,19 @@ export class SidebarNavTitleComponent {
    */
   readonly item = input<INavData>();
 
+  readonly itemClass = computed(() => ({
+    'nav-title': true,
+    ...classMap(this.item()?.class)
+  }));
+
   readonly #itemEffect = effect(() => {
     const item = this.item();
+    const nativeElement: HTMLElement = this.#elementRef.nativeElement;
+    for (const child of [...nativeElement.childNodes]) {
+      this.#renderer.removeChild(nativeElement, child);
+    }
     if (item?.name) {
-      const nativeElement: HTMLElement = this.#elementRef.nativeElement;
       const name = this.#renderer.createText(item.name);
-
-      if (item?.class) {
-        const classes = item.class;
-        this.#renderer.addClass(nativeElement, classes);
-      }
 
       if (item?.wrapper) {
         const wrapper = this.#renderer.createElement(item.wrapper.element);

@@ -51,6 +51,25 @@ describe('SidebarNavLabelComponent', () => {
     expect(link.classList.contains('custom-class')).toBe(true);
   });
 
+  it('should set several classes of the item', async () => {
+    fixture.componentRef.setInput('item', {
+      ...item,
+      class: 'first second',
+      icon: 'fa fa-star',
+      label: { class: 'third fourth' }
+    });
+    await fixture.whenStable();
+    const link = fixture.debugElement.query(By.css('a')).nativeElement;
+    expect(link.classList.contains('first')).toBe(true);
+    expect(link.classList.contains('second')).toBe(true);
+    const icon = fixture.debugElement.query(By.css('i')).nativeElement;
+    expect(icon.classList.contains('third')).toBe(true);
+    expect(icon.classList.contains('fourth')).toBe(true);
+    expect(icon.classList.contains('fa')).toBe(true);
+    expect(icon.classList.contains('fa-star')).toBe(true);
+    expect(icon.getAttribute('aria-hidden')).toBe('true');
+  });
+
   it('should display label name', () => {
     const label = fixture.debugElement.query(By.css('a')).nativeElement;
     expect(label.textContent).toBe(item.name);

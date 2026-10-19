@@ -3,7 +3,7 @@
    [class]="itemClass()"
    href="{{labelItem.url}}">
   @if (helper.hasIcon(labelItem)) {
-    <i [class]="labelIconClass()"></i>
+    <i [class]="labelIconClass()" aria-hidden="true"></i>
   }
   <ng-container>{{ labelItem.name }}</ng-container>
   @if (helper.hasBadge(labelItem)) {
