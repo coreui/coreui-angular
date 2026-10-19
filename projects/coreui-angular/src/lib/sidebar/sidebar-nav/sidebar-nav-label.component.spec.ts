@@ -43,8 +43,11 @@ describe('SidebarNavLabelComponent', () => {
   it('should set correct itemClass', async () => {
     const link = fixture.debugElement.query(By.css('a')).nativeElement;
 
+    expect(link.classList.contains('nav-link')).toBe(true);
+    expect(link.classList.contains('nav-label')).toBe(true);
     expect(link.classList.contains('c-nav-label')).toBe(true);
     expect(link.classList.contains('c-active')).toBe(true);
+    expect(link.classList.contains('active')).toBe(false);
     item.class = 'custom-class';
     fixture.componentRef.setInput('item', { ...item });
     await fixture.whenStable();
