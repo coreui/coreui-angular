@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WidgetStatFComponent } from './widget-stat-f.component';
@@ -75,5 +75,26 @@ describe('WidgetStatFComponent content', () => {
 
   it('should leave out the footer without footer text or template', () => {
     expect(widgets[2].querySelector('.card-footer')).toBeNull();
+  });
+});
+
+@Component({
+  template: `
+    <c-widget-stat-f #f="cWidgetStatF" title="F" />
+    <c-widget-stat-f #b="cWidgetStatB" title="B" />
+  `,
+  imports: [WidgetStatFComponent]
+})
+class WidgetStatFExportAsHostComponent {
+  readonly f = viewChild.required<WidgetStatFComponent>('f');
+  readonly b = viewChild.required<WidgetStatFComponent>('b');
+}
+
+describe('WidgetStatFComponent exportAs', () => {
+  it('should export as cWidgetStatF and cWidgetStatB', async () => {
+    const fixture = TestBed.createComponent(WidgetStatFExportAsHostComponent);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.f()).toBeInstanceOf(WidgetStatFComponent);
+    expect(fixture.componentInstance.b()).toBeInstanceOf(WidgetStatFComponent);
   });
 });
