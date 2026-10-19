@@ -102,4 +102,8 @@ describe('SidebarNavHelper', () => {
     expect(service.getIconClass({ icon: 'icon-ban' })).toEqual(expect.objectContaining({ 'nav-icon': true }));
     expect(service.getIconClass({ icon: '' })).toEqual(expect.objectContaining({ 'nav-icon': true }));
   });
+
+  it('should return each class of the icon', () => {
+    expect(service.getIconClass({ icon: 'fa  fa-ban' })).toEqual({ 'nav-icon': true, fa: true, 'fa-ban': true });
+  });
 });

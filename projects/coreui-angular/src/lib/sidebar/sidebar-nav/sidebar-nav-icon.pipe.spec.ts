@@ -11,6 +11,11 @@ describe('SidebarNavIconPipe', () => {
     expect(pipe.transform({ icon: 'cil-list' })).toEqual({ 'nav-icon': true, 'cil-list': true });
   });
 
+  it('should add each class of the item icon', () => {
+    const pipe = new SidebarNavIconPipe();
+    expect(pipe.transform({ icon: 'fa  fa-home' })).toEqual({ 'nav-icon': true, fa: true, 'fa-home': true });
+  });
+
   it('should return the nav-icon class without an item', () => {
     const pipe = new SidebarNavIconPipe();
     const classes = pipe.transform(undefined);

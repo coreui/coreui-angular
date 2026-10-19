@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { INavData } from './sidebar-nav';
+import { classMap } from './sidebar-nav.utils';
 
 @Injectable()
 export abstract class SidebarNavService {
@@ -43,12 +44,9 @@ export class SidebarNavHelper {
   public hasIconComponent = (item: INavData) => Boolean(item?.iconComponent);
 
   public getIconClass(item: INavData): any {
-    const classes = {
-      'nav-icon': true
+    return {
+      'nav-icon': true,
+      ...classMap(item.icon)
     };
-    const icon = item.icon;
-    // @ts-ignore
-    classes[icon] = this.hasIcon(item);
-    return classes;
   }
 }

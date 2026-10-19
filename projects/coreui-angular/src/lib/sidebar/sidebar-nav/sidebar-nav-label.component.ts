@@ -4,6 +4,7 @@ import { HtmlAttributesDirective } from '../../shared';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 import { INavData } from './sidebar-nav';
+import { classMap } from './sidebar-nav.utils';
 
 @Component({
   selector: 'c-sidebar-nav-label',
@@ -20,25 +21,20 @@ export class SidebarNavLabelComponent {
    */
   readonly item = input<INavData>({});
 
-  readonly itemClass = computed(() => {
-    const classes: Record<string, boolean> = {
-      'c-nav-label': true,
-      'c-active': true
-    };
-    const itemClass = this.item().class;
-    if (itemClass) {
-      classes[itemClass] = !!itemClass;
-    }
-    return classes;
-  });
+  readonly itemClass = computed(() => ({
+    'nav-link': true,
+    'nav-label': true,
+    'c-nav-label': true,
+    'c-active': true,
+    ...classMap(this.item().class)
+  }));
 
   readonly labelIconClass = computed(() => {
     const item = this.item();
-    const iconClasses: Record<string, boolean> = this.helper.getIconClass(item);
-    const variant = `text-${item.label?.variant}`;
-    iconClasses[variant] = !!item.label?.variant;
-    const labelClass = item.label?.class ?? '';
-    iconClasses[labelClass] = !!labelClass;
-    return iconClasses;
+    return {
+      ...this.helper.getIconClass(item),
+      [`text-${item.label?.variant}`]: !!item.label?.variant,
+      ...classMap(item.label?.class)
+    };
   });
 }
