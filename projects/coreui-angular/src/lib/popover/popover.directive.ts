@@ -23,7 +23,7 @@ import { debounceTime, filter, finalize } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
 
 import { Triggers } from '../coreui.types';
-import { IListenersConfig, IntersectionService, ListenersService } from '../services';
+import { IListenersConfig, IntersectionService, ListenersService, UIDService } from '../services';
 import { ElementRefDirective } from '../shared';
 import { PopoverComponent } from './popover/popover.component';
 
@@ -42,6 +42,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
   readonly #intersectionService = inject(IntersectionService);
   readonly #destroyRef = inject(DestroyRef);
   readonly #document = inject(DOCUMENT);
+  readonly #uidService = inject(UIDService);
   #timerId1: ReturnType<typeof setTimeout> | undefined;
   #timerId2: ReturnType<typeof setTimeout> | undefined;
 
@@ -204,15 +205,6 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
       });
   }
 
-  private getUID(prefix: string): string {
-    let uid = prefix ?? 'random-id';
-    do {
-      uid = `${prefix}-${Math.floor(Math.random() * 1000000).toString(10)}`;
-    } while (this.#document.getElementById(uid));
-
-    return uid;
-  }
-
   private createTooltipElement(): void {
     if (!this.tooltipRef) {
       this.tooltipRef = this.#viewContainerRef.createComponent<PopoverComponent>(PopoverComponent);
@@ -255,15 +247,10 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
       ...this.popperOptionsComputed()
     });
 
-    if (!this.visible()) {
-      this.removeTooltipElement();
-      return;
-    }
-
     clearTimeout(this.#timerId2);
     clearTimeout(this.#timerId1);
     this.#timerId1 = setTimeout(() => {
-      this.tooltipId = this.getUID('popover');
+      this.tooltipId = this.#uidService.getUID('popover');
       this.tooltipRef?.setInput('id', this.tooltipId);
       this.#renderer.removeClass(this.tooltip, 'd-none');
       this.tooltipRef?.setInput('visible', this.visible());
