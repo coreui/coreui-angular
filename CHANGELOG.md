@@ -2,6 +2,53 @@
 
 ---
 
+#### `5.7.37` for Angular 22.2.3
+
+- fix(alert): hide and emit `visibleChange` when there is no opacity transition
+- fix(carousel): measure each swipe from its own touchstart
+- fix(collapse.directive): emit `visibleChange` and `collapseChange` when `animate` is false
+- fix(dropdown): mirror the menu placement in a right-to-left context
+- fix(dropdown, modal, offcanvas): Escape in an open dropdown leaves the container open
+- fix(shadow-on-scroll.directive): changing `cShadowOnScroll` drops the old shadow class and scroll listener
+- fix(sidebar): apply input changes after first render, scope state actions to their sidebar
+- fix(sidebar-nav): apply multi-class item classes, style the label as a nav link
+- fix(sidebar-nav-helper): `isActive()` handles array urls
+- fix(sidebar-nav-icon.pipe): handle a missing item
+- fix(table): keep one responsive wrapper and remove it on destroy
+- fix(tabs): Home/End, one key manager, navigate and select by key
+- fix: ignore key events without a key
+- refactor(tab-pane): `OnPush`, signal state, host metadata
+- refactor: drop `ngAcceptInputType_` from signal inputs
+- test: run specs zoneless, drop `zone.js`
+- test: use `TestBed.createDirective()` in directive specs
+- test: cover untested paths across components and services
+- ci: bump `actions/setup-node`
+- chore(dependencies): update to Angular 22.2.3
+  - `@angular/aria` to version 22.2.3
+  - `@angular/cdk` to version 22.2.3
+  - `@angular/common` to version 22.2.3
+  - `@angular/compiler` to version 22.2.3
+  - `@angular/core` to version 22.2.3
+  - `@angular/forms` to version 22.2.3
+  - `@angular/localize` to version 22.2.3
+  - `@angular/platform-browser` to version 22.2.3
+  - `@angular/router` to version 22.2.3
+  - `@angular-devkit/schematics` to version 22.2.3
+  - `@angular/build` to version 22.2.3
+  - `@angular/cli` to version 22.2.3
+  - `@angular/compiler-cli` to version 22.2.3
+  - `@angular/language-service` to version 22.2.3
+  - `@vitest/coverage-v8` to version 5.0.5
+  - `@vitest/ui` to version 5.0.5
+  - `angular-eslint` to version 22.6.0
+  - `eslint` to version 10.13.0
+  - `jsdom` to version 30.1.3
+  - `prettier` to version 3.9.10
+  - `typescript-eslint` to version 8.71.2
+  - `vitest` to version 5.0.5
+
+---
+
 #### `5.7.36` for Angular 22.2.2
 
 - feat(chip): add `c-chip` and `c-chip-set`: removable, selectable and filter chips
