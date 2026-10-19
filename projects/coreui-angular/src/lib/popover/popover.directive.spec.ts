@@ -60,6 +60,19 @@ describe('PopoverDirective', () => {
     expect(document.querySelector('.popover.show')).toBeNull();
   });
 
+  it('should describe the host by the popover id', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const popover = document.querySelector('.popover') as HTMLElement;
+    expect(popover.id).toMatch(/^popover-\d+$/);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(popover.id);
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
+  });
+
   it('should set popover on and off', async () => {
     fixture.autoDetectChanges();
     visible.set(false);

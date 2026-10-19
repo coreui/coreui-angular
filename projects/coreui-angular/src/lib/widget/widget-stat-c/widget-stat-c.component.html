@@ -16,14 +16,10 @@
     </div>
   }
   @if (_templates?.['widgetProgressTemplate']) {
-    <ng-container *ngTemplateOutlet="_templates?.['widgetProgressTemplate'] || defaultWidgetProgressTemplate" />
+    <ng-container *ngTemplateOutlet="_templates?.['widgetProgressTemplate']" />
   }
 </c-card-body>
 
 <ng-template #defaultWidgetIconTemplate>
   {{ icon() }}
-</ng-template>
-
-<ng-template #defaultWidgetProgressTemplate>
-  <ng-content />
 </ng-template>

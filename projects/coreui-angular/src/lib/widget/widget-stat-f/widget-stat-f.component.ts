@@ -8,7 +8,7 @@ import { CardBodyComponent, CardComponent, CardFooterComponent } from '../../car
 @Component({
   selector: 'c-widget-stat-f',
   templateUrl: './widget-stat-f.component.html',
-  exportAs: 'cWidgetStatB',
+  exportAs: 'cWidgetStatF, cWidgetStatB',
   imports: [CardBodyComponent, CardFooterComponent, NgTemplateOutlet],
   host: { class: 'card', '[class]': 'hostClasses()' }
 })

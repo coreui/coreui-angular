@@ -60,6 +60,19 @@ describe('TooltipDirective', () => {
     expect(document.querySelector('.tooltip.show')).toBeNull();
   });
 
+  it('should describe the host by the tooltip id', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+    expect(tooltip.id).toMatch(/^tooltip-\d+$/);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
+  });
+
   it('should set popover on and off', async () => {
     fixture.autoDetectChanges();
     visible.set(false);

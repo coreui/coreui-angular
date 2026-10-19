@@ -9,13 +9,13 @@ export class ThemeDirective {
   readonly #renderer = inject(Renderer2);
 
   /**
-   * Sets the `data-coreui-theme` attribute on the host element. Overridden by `dark`.
+   * Sets the `data-coreui-theme` attribute on the host element.
    * @returns 'dark' | 'light'
    */
   readonly colorScheme = input<'dark' | 'light'>();
 
   /**
-   * Applies the dark color scheme, regardless of `colorScheme`.
+   * Applies the dark color scheme. On `cTheme` it takes precedence over `colorScheme`.
    * @returns boolean
    * @default false
    */
