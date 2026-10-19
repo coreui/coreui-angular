@@ -1,7 +1,5 @@
 export { SidebarNavComponent, SidebarNavGroupComponent } from './sidebar-nav.component';
 export { SidebarNavDividerComponent } from './sidebar-nav-divider.component';
-// export { SidebarNavGroupComponent } from './sidebar-nav-group.component';
-// export { SidebarNavGroupToggleDirective } from './sidebar-nav-group.directive';
 export { SidebarNavLinkComponent } from './sidebar-nav-link.component';
 export { SidebarNavLinkContentComponent } from './sidebar-nav-link.component';
 export { SidebarNavTitleComponent } from './sidebar-nav-title.component';

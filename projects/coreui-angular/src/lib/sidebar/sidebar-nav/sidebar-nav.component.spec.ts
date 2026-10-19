@@ -5,7 +5,6 @@ import { SidebarNavComponent } from './sidebar-nav.component';
 import { INavData } from './sidebar-nav';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { NavGroupService } from '../../nav';
-// import { SidebarNavGroupComponent } from './sidebar-nav-group.component';
 
 describe('SidebarNavComponent', () => {
   let component: SidebarNavComponent;
