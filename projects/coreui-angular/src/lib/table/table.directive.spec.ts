@@ -54,6 +54,7 @@ class OutletTestComponent {
 }
 
 @Component({
+  selector: 'c-test-table-ancestor',
   imports: [TableDirective],
   template: `<section>
     @if (show()) {
