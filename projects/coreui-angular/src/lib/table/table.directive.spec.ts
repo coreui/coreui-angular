@@ -4,7 +4,6 @@ import {
   ErrorHandler,
   inject,
   inputBinding,
-  provideZonelessChangeDetection,
   Renderer2,
   RendererFactory2,
   RendererType2,
@@ -350,7 +349,7 @@ describe('TableDirective with a renderer that defers removals to the end of chan
 
 describe('TableDirective in an application being destroyed', () => {
   it('should not throw', async () => {
-    const appRef = await createApplication({ providers: [provideZonelessChangeDetection()] });
+    const appRef = await createApplication();
     const hostElement = document.body.appendChild(document.createElement('div'));
     try {
       const componentRef = createComponent(ToggleTestComponent, { environmentInjector: appRef.injector, hostElement });
