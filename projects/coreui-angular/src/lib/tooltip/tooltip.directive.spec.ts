@@ -3,6 +3,7 @@ import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { TooltipDirective } from './tooltip.directive';
 import { Triggers } from '../coreui.types';
+import { UIDService } from '../services';
 
 describe('TooltipDirective', () => {
   let visible: WritableSignal<boolean>;
@@ -71,6 +72,62 @@ describe('TooltipDirective', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('should not describe the host when hidden before the tooltip shows', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(50);
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(1000);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
+    expect(document.querySelector('.tooltip')).toBeNull();
+  });
+
+  it('should not run the show timer when destroyed before the tooltip shows', async () => {
+    const getUID = vi.spyOn(TestBed.inject(UIDService), 'getUID');
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(50);
+    fixture.destroy();
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(getUID).not.toHaveBeenCalled();
+  });
+
+  it('should leave no pending timers when destroyed while the tooltip hides', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(50);
+    fixture.destroy();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each([
+    ['before', 50],
+    ['after', 1000]
+  ])('should not describe the host when the content empties %s the tooltip shows', async (_, elapsed) => {
+    fixture.destroy();
+    const content = signal('content');
+    fixture = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', content), twoWayBinding('cTooltipVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(elapsed);
+    content.set('');
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(1000);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
+    expect(document.querySelector('.tooltip')).toBeNull();
   });
 
   it('should set popover on and off', async () => {

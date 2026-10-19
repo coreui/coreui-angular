@@ -213,6 +213,9 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
   }
 
   private destroyTooltipElement(): void {
+    clearTimeout(this.#timerId1);
+    clearTimeout(this.#timerId2);
+    this.tooltipId = '';
     this.tooltip?.remove();
     this.tooltipRef?.destroy();
     // @ts-ignore
@@ -225,6 +228,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
   private addTooltipElement(): void {
     if (!this.content()) {
       this.destroyTooltipElement();
+      this.#changeDetectorRef.markForCheck();
       return;
     }
 
@@ -261,6 +265,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
   }
 
   private removeTooltipElement(): void {
+    clearTimeout(this.#timerId1);
     this.tooltipId = '';
     if (!this.tooltipRef) {
       return;
