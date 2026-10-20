@@ -42,6 +42,7 @@ describe('TooltipDirective', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should create an instance', () => {
@@ -81,19 +82,26 @@ describe('TooltipDirective', () => {
     expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
   });
 
-  it('should keep the tooltip id across show cycles', async () => {
-    visible.set(true);
-    fixture.detectChanges();
-    await vi.runAllTimersAsync();
-    const id = fixture.nativeElement.getAttribute('aria-describedby');
-    visible.set(false);
-    fixture.detectChanges();
-    await vi.runAllTimersAsync();
-    visible.set(true);
-    fixture.detectChanges();
-    await vi.runAllTimersAsync();
-    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(id);
-    expect(document.querySelector('.tooltip')?.id).toBe(id);
+  it('should not reuse the id of a tooltip already in the document', async () => {
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.5).mockReturnValueOnce(0.5).mockReturnValue(0.7);
+    const [first, second] = ['first', 'second'].map((content) => {
+      const shown = signal(false);
+      const host = TestBed.createDirective(TooltipDirective, {
+        tagName: 'button',
+        bindings: [inputBinding('cTooltip', () => content), inputBinding('cTooltipVisible', shown)]
+      });
+      host.autoDetectChanges();
+      return { host, shown };
+    });
+    const show = async ({ host, shown }: typeof first) => {
+      shown.set(true);
+      await vi.runAllTimersAsync();
+      return host.nativeElement.getAttribute('aria-describedby') ?? '';
+    };
+    const firstId = await show(first);
+    const secondId = await show(second);
+    expect(secondId).not.toBe(firstId);
+    expect(document.getElementById(secondId)?.textContent).toContain('second');
   });
 
   it('should not describe the host when hidden before the tooltip shows', async () => {

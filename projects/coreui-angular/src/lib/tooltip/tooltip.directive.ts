@@ -1,7 +1,6 @@
 import {
   afterRenderEffect,
   AfterViewInit,
-  ChangeDetectorRef,
   ComponentRef,
   computed,
   DestroyRef,
@@ -15,6 +14,7 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  signal,
   TemplateRef,
   ViewContainerRef
 } from '@angular/core';
@@ -38,12 +38,11 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   readonly #hostElement = inject(ElementRef);
   readonly #viewContainerRef = inject(ViewContainerRef);
   readonly #listenersService = inject(ListenersService);
-  readonly #changeDetectorRef = inject(ChangeDetectorRef);
   readonly #intersectionService = inject(IntersectionService);
   readonly #destroyRef = inject(DestroyRef);
   readonly #document = inject(DOCUMENT);
   readonly #uidService = inject(UIDService);
-  readonly #tooltipId = this.#uidService.getUID('tooltip');
+  readonly #tooltipId = signal<string | undefined>(undefined);
   #timerId1: ReturnType<typeof setTimeout> | undefined;
   #timerId2: ReturnType<typeof setTimeout> | undefined;
 
@@ -134,7 +133,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     onCleanup(() => this.#document.removeEventListener('keydown', this.#handleEscapeKey, useCapture));
   });
 
-  readonly #ariaDescribedBy = computed(() => (this.visible() && this.content() ? this.#tooltipId : null));
+  readonly #ariaDescribedBy = computed(() => (this.visible() && this.content() ? (this.#tooltipId() ?? null) : null));
 
   get ariaDescribedBy(): string | null {
     return this.#ariaDescribedBy();
@@ -208,7 +207,6 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   private createTooltipElement(): void {
     if (!this.tooltipRef) {
       this.tooltipRef = this.#viewContainerRef.createComponent<TooltipComponent>(TooltipComponent);
-      this.tooltipRef.setInput('id', this.#tooltipId);
       // this.viewContainerRef.detach();
     }
   }
@@ -235,6 +233,9 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
       this.createTooltipElement();
     }
 
+    const tooltipId = this.#uidService.getUID('tooltip');
+    this.#tooltipId.set(tooltipId);
+    this.tooltipRef?.setInput('id', tooltipId);
     this.tooltipRef?.setInput('content', this.content() ?? '');
 
     this.tooltip = this.tooltipRef?.location.nativeElement;
@@ -256,7 +257,6 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
       this.#renderer.removeClass(this.tooltip, 'd-none');
       this.tooltipRef?.setInput('visible', this.visible());
       this.popperInstance?.forceUpdate();
-      this.#changeDetectorRef?.markForCheck();
       this.#timerId1 = undefined;
     }, 150);
   }
@@ -274,6 +274,5 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     }, 300);
 
     this.tooltipRef.setInput('visible', false);
-    this.#changeDetectorRef.markForCheck();
   }
 }
