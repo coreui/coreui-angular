@@ -13,11 +13,12 @@ import {
   model,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
-  signal,
   TemplateRef,
   ViewContainerRef
 } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, finalize } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
@@ -41,8 +42,8 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   readonly #intersectionService = inject(IntersectionService);
   readonly #destroyRef = inject(DestroyRef);
   readonly #document = inject(DOCUMENT);
-  readonly #uidService = inject(UIDService);
-  readonly #tooltipId = signal<string | undefined>(undefined);
+  readonly #isServer = isPlatformServer(inject(PLATFORM_ID));
+  readonly #tooltipId = inject(UIDService).getUID('tooltip');
   #timerId1: ReturnType<typeof setTimeout> | undefined;
   #timerId2: ReturnType<typeof setTimeout> | undefined;
 
@@ -133,7 +134,9 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     onCleanup(() => this.#document.removeEventListener('keydown', this.#handleEscapeKey, useCapture));
   });
 
-  readonly #ariaDescribedBy = computed(() => (this.visible() && this.content() ? (this.#tooltipId() ?? null) : null));
+  readonly #ariaDescribedBy = computed(() =>
+    !this.#isServer && this.visible() && this.content() ? this.#tooltipId : null
+  );
 
   get ariaDescribedBy(): string | null {
     return this.#ariaDescribedBy();
@@ -207,6 +210,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   private createTooltipElement(): void {
     if (!this.tooltipRef) {
       this.tooltipRef = this.#viewContainerRef.createComponent<TooltipComponent>(TooltipComponent);
+      this.tooltipRef.setInput('id', this.#tooltipId);
       // this.viewContainerRef.detach();
     }
   }
@@ -233,9 +237,6 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
       this.createTooltipElement();
     }
 
-    const tooltipId = this.#uidService.getUID('tooltip');
-    this.#tooltipId.set(tooltipId);
-    this.tooltipRef?.setInput('id', tooltipId);
     this.tooltipRef?.setInput('content', this.content() ?? '');
 
     this.tooltip = this.tooltipRef?.location.nativeElement;

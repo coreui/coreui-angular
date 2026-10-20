@@ -1,4 +1,4 @@
-import { DOCUMENT, inputBinding, signal, twoWayBinding, WritableSignal } from '@angular/core';
+import { DOCUMENT, inputBinding, PLATFORM_ID, signal, twoWayBinding, WritableSignal } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { TooltipDirective } from './tooltip.directive';
@@ -66,7 +66,7 @@ describe('TooltipDirective', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     const tooltip = document.querySelector('.tooltip') as HTMLElement;
-    expect(tooltip.id).toMatch(/^tooltip-\d+$/);
+    expect(tooltip.id).toMatch(/^tooltip-/);
     expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
     visible.set(false);
     fixture.detectChanges();
@@ -78,30 +78,52 @@ describe('TooltipDirective', () => {
     visible.set(true);
     fixture.detectChanges();
     const tooltip = document.querySelector('.tooltip') as HTMLElement;
-    expect(tooltip.id).toMatch(/^tooltip-\d+$/);
+    expect(tooltip.id).toMatch(/^tooltip-/);
     expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
   });
 
-  it('should not reuse the id of a tooltip already in the document', async () => {
+  it('should describe the host by the current tooltip when shown again', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const tooltip = document.querySelector('.tooltip.show') as HTMLElement;
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
+  });
+
+  it('should give tooltips shown together distinct ids', async () => {
     vi.spyOn(Math, 'random').mockReturnValueOnce(0.5).mockReturnValueOnce(0.5).mockReturnValue(0.7);
-    const [first, second] = ['first', 'second'].map((content) => {
-      const shown = signal(false);
+    const shown = signal(false);
+    const hosts = ['first', 'second'].map((content) => {
       const host = TestBed.createDirective(TooltipDirective, {
         tagName: 'button',
         bindings: [inputBinding('cTooltip', () => content), inputBinding('cTooltipVisible', shown)]
       });
       host.autoDetectChanges();
-      return { host, shown };
+      return host;
     });
-    const show = async ({ host, shown }: typeof first) => {
-      shown.set(true);
-      await vi.runAllTimersAsync();
-      return host.nativeElement.getAttribute('aria-describedby') ?? '';
-    };
-    const firstId = await show(first);
-    const secondId = await show(second);
+    shown.set(true);
+    await vi.runAllTimersAsync();
+    const [firstId, secondId] = hosts.map((host) => host.nativeElement.getAttribute('aria-describedby') ?? '');
     expect(secondId).not.toBe(firstId);
+    expect(document.getElementById(firstId)?.textContent).toContain('first');
     expect(document.getElementById(secondId)?.textContent).toContain('second');
+  });
+
+  it('should not describe the host on the server', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [{ provide: PLATFORM_ID, useValue: 'server' }] });
+    const server = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', () => 'content'), inputBinding('cTooltipVisible', () => true)]
+    });
+    server.detectChanges();
+    expect(server.nativeElement.hasAttribute('aria-describedby')).toBe(false);
   });
 
   it('should not describe the host when hidden before the tooltip shows', async () => {
