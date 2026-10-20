@@ -171,6 +171,45 @@ describe('TooltipDirective', () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  it('should destroy Popper when the tooltip hides', async () => {
+    const resize = (spy: { mock: { calls: unknown[][] } }) =>
+      spy.mock.calls.filter((call) => call[0] === 'resize').length;
+    const add = vi.spyOn(window, 'addEventListener');
+    const remove = vi.spyOn(window, 'removeEventListener');
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(resize(add)).toBe(1);
+    expect(resize(remove)).toBe(0);
+
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(150);
+    expect(resize(remove)).toBe(0);
+    expect(tooltip.hasAttribute('data-popper-placement')).toBe(true);
+
+    await vi.runAllTimersAsync();
+    expect(resize(remove)).toBe(resize(add));
+  });
+
+  it('should keep Popper when the tooltip shows again before the hide finishes', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(100);
+    visible.set(true);
+    fixture.detectChanges();
+
+    const remove = vi.spyOn(window, 'removeEventListener');
+    await vi.runAllTimersAsync();
+
+    expect(remove.mock.calls.some((call) => call[0] === 'resize')).toBe(false);
+    expect(document.querySelector('.tooltip.show')).toBeTruthy();
+  });
+
   it.each([
     ['before', 50],
     ['after', 1000]
@@ -460,6 +499,24 @@ class HintFieldTooltipComponent {}
 })
 class HostBindingDescribedByTooltipComponent {}
 
+@Component({
+  template: `<button
+    [cTooltip]="tip()"
+    [cPopover]="pop()"
+    [cTooltipVisible]="tooltipShown()"
+    [cPopoverVisible]="popoverShown()"
+  >
+    Open
+  </button>`,
+  imports: [TooltipDirective, PopoverDirective]
+})
+class DynamicTooltipAndPopoverComponent {
+  readonly tip = signal('tip');
+  readonly pop = signal('pop');
+  readonly tooltipShown = signal(false);
+  readonly popoverShown = signal(false);
+}
+
 describe("TooltipDirective with the author's aria-describedby", () => {
   beforeEach(() => {
     (globalThis as any).IntersectionObserver = class IntersectionObserver {
@@ -545,6 +602,88 @@ describe("TooltipDirective with the author's aria-describedby", () => {
     const host = fixture.nativeElement.querySelector('c-hint-field') as HTMLElement;
     const tooltip = document.querySelector('.tooltip') as HTMLElement;
     expect(host.getAttribute('aria-describedby')).toBe(`hint ${tooltip.id}`);
+    fixture.destroy();
+  });
+
+  it.each([
+    ['tooltip', 'popover'],
+    ['popover', 'tooltip']
+  ] as const)(
+    'should leave the other one in place when the %s, shown first, hides on a shared trigger',
+    async (first, second) => {
+      const fixture = TestBed.createComponent(TooltipAndPopoverComponent);
+      fixture.autoDetectChanges();
+      await vi.runAllTimersAsync();
+      const shown = {
+        tooltip: fixture.componentInstance.tooltipShown,
+        popover: fixture.componentInstance.popoverShown
+      };
+
+      shown[first].set(true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      shown[second].set(true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      const elements = {
+        tooltip: document.querySelector('.tooltip') as HTMLElement,
+        popover: document.querySelector('.popover') as HTMLElement
+      };
+
+      shown[first].set(false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+
+      expect(elements[first].isConnected).toBe(false);
+      expect(elements[second].isConnected).toBe(true);
+      expect(elements[second].hasAttribute('data-popper-placement')).toBe(true);
+      fixture.destroy();
+    }
+  );
+
+  it('should keep an open popover when the tooltip on its trigger is torn down', async () => {
+    const fixture = TestBed.createComponent(DynamicTooltipAndPopoverComponent);
+    const host = fixture.componentInstance;
+    fixture.autoDetectChanges();
+    host.popoverShown.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const popover = document.querySelector('.popover') as HTMLElement;
+
+    host.tip.set('');
+    host.tooltipShown.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(popover.isConnected).toBe(true);
+
+    host.tip.set('changed');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(popover.isConnected).toBe(true);
+    expect(document.querySelector('.tooltip.show')).toBeTruthy();
+    fixture.destroy();
+  });
+
+  it('should keep an open tooltip when the popover on its trigger is torn down', async () => {
+    const fixture = TestBed.createComponent(DynamicTooltipAndPopoverComponent);
+    const host = fixture.componentInstance;
+    fixture.autoDetectChanges();
+    host.tooltipShown.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+
+    host.pop.set('');
+    host.popoverShown.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(tooltip.isConnected).toBe(true);
+
+    host.pop.set('changed');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(tooltip.isConnected).toBe(true);
+    expect(document.querySelector('.popover.show')).toBeTruthy();
     fixture.destroy();
   });
 });

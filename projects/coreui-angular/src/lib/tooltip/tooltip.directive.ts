@@ -154,7 +154,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   private tooltip!: HTMLDivElement;
   private tooltipRef!: ComponentRef<TooltipComponent>;
-  private popperInstance!: Instance;
+  private popperInstance?: Instance;
 
   private _popperOptions: Partial<Options> = {
     modifiers: [
@@ -233,8 +233,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     // @ts-ignore
     this.tooltipRef = undefined;
     this.popperInstance?.destroy();
-    this.#viewContainerRef?.detach();
-    this.#viewContainerRef?.clear();
+    this.popperInstance = undefined;
   }
 
   private addTooltipElement(): void {
@@ -280,7 +279,12 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
     clearTimeout(this.#timerId2);
     this.#timerId2 = setTimeout(() => {
-      this.#viewContainerRef?.detach();
+      const index = this.#viewContainerRef.indexOf(this.tooltipRef.hostView);
+      if (index >= 0) {
+        this.#viewContainerRef.detach(index);
+      }
+      this.popperInstance?.destroy();
+      this.popperInstance = undefined;
       this.#timerId2 = undefined;
     }, 300);
 
