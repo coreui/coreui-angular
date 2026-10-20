@@ -19,6 +19,7 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
+import { addAriaReferencedId, removeAriaReferencedId } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, finalize } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
@@ -31,8 +32,7 @@ import { TooltipComponent } from './tooltip/tooltip.component';
 @Directive({
   selector: '[cTooltip]',
   exportAs: 'cTooltip',
-  providers: [ListenersService, IntersectionService],
-  host: { '[aria-describedby]': 'ariaDescribedBy' }
+  providers: [ListenersService, IntersectionService]
 })
 export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   readonly #renderer = inject(Renderer2);
@@ -136,6 +136,16 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
     this.#document.addEventListener('keydown', this.#handleEscapeKey, useCapture);
     onCleanup(() => this.#document.removeEventListener('keydown', this.#handleEscapeKey, useCapture));
+  });
+
+  readonly #ariaDescribedByEffect = afterRenderEffect((onCleanup) => {
+    if (!this.#shown()) {
+      return;
+    }
+
+    const host = this.#hostElement.nativeElement;
+    addAriaReferencedId(host, 'aria-describedby', this.#tooltipId);
+    onCleanup(() => removeAriaReferencedId(host, 'aria-describedby', this.#tooltipId));
   });
 
   get ariaDescribedBy(): string | null {

@@ -1,4 +1,13 @@
-import { Component, DOCUMENT, inputBinding, PLATFORM_ID, signal, twoWayBinding, WritableSignal } from '@angular/core';
+import {
+  Component,
+  DOCUMENT,
+  inputBinding,
+  PLATFORM_ID,
+  signal,
+  twoWayBinding,
+  Type,
+  WritableSignal
+} from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { PopoverDirective } from './popover.directive';
@@ -443,6 +452,91 @@ describe('PopoverDirective with template content', () => {
     await vi.runAllTimersAsync();
     expect(document.querySelector('.popover.show #templateContent')).not.toBeNull();
     expect(document.querySelector('.popover .popover-body')).toBeNull();
+    fixture.destroy();
+  });
+});
+
+@Component({
+  template: `<button cPopover="tip" aria-describedby="hint" [cPopoverVisible]="shown()">Open</button>`,
+  imports: [PopoverDirective]
+})
+class StaticDescribedByPopoverComponent {
+  readonly shown = signal(false);
+}
+
+@Component({
+  template: `<button cPopover="tip" [attr.aria-describedby]="'hint'" [cPopoverVisible]="shown()">Open</button>`,
+  imports: [PopoverDirective]
+})
+class BoundDescribedByPopoverComponent {
+  readonly shown = signal(false);
+}
+
+@Component({
+  selector: 'c-hint-field',
+  template: '',
+  host: { '[attr.aria-describedby]': "'hint'" }
+})
+class HintFieldPopoverComponent {}
+
+@Component({
+  template: `<c-hint-field cPopover="tip" [cPopoverVisible]="true" />`,
+  imports: [HintFieldPopoverComponent, PopoverDirective]
+})
+class HostBindingDescribedByPopoverComponent {}
+
+describe("PopoverDirective with the author's aria-describedby", () => {
+  beforeEach(() => {
+    (globalThis as any).IntersectionObserver = class IntersectionObserver {
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+    };
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it.each([
+    ['a static attribute', StaticDescribedByPopoverComponent],
+    ['an attribute binding', BoundDescribedByPopoverComponent]
+  ] as [string, Type<{ shown: WritableSignal<boolean> }>][])(
+    'should keep %s and add only the popover id',
+    async (_, type) => {
+      const fixture = TestBed.createComponent(type);
+      fixture.autoDetectChanges();
+      await vi.runAllTimersAsync();
+      const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+      expect(host.getAttribute('aria-describedby')).toBe('hint');
+
+      fixture.componentInstance.shown.set(true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      const popover = document.querySelector('.popover') as HTMLElement;
+      expect(host.getAttribute('aria-describedby')).toBe(`hint ${popover.id}`);
+
+      fixture.componentInstance.shown.set(false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(host.getAttribute('aria-describedby')).toBe('hint');
+
+      fixture.componentInstance.shown.set(true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      fixture.destroy();
+      expect(host.getAttribute('aria-describedby')).toBe('hint');
+    }
+  );
+
+  it('should add its id after a host binding on the trigger writes aria-describedby', async () => {
+    const fixture = TestBed.createComponent(HostBindingDescribedByPopoverComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    const host = fixture.nativeElement.querySelector('c-hint-field') as HTMLElement;
+    const popover = document.querySelector('.popover') as HTMLElement;
+    expect(host.getAttribute('aria-describedby')).toBe(`hint ${popover.id}`);
     fixture.destroy();
   });
 });
