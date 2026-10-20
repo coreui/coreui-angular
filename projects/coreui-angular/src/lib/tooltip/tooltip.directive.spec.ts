@@ -82,10 +82,11 @@ describe('TooltipDirective', () => {
     expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
   });
 
-  it('should describe the host by the current tooltip when shown again', async () => {
+  it('should describe the host by the same tooltip id when shown again', async () => {
     visible.set(true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
+    const id = fixture.nativeElement.getAttribute('aria-describedby');
     visible.set(false);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
@@ -93,7 +94,8 @@ describe('TooltipDirective', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     const tooltip = document.querySelector('.tooltip.show') as HTMLElement;
-    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
+    expect(tooltip.id).toBe(id);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(id);
   });
 
   it('should give tooltips shown together distinct ids', async () => {

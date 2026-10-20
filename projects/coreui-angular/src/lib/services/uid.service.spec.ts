@@ -1,5 +1,6 @@
-import { APP_ID, DOCUMENT } from '@angular/core';
+import { DOCUMENT } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import { UIDService } from './uid.service';
 
@@ -9,6 +10,10 @@ describe('UIDService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(UIDService);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should be created', () => {
@@ -22,6 +27,7 @@ describe('UIDService', () => {
   });
 
   it('should not return an id twice before it is rendered', () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0.5);
     expect(service.getUID('twice')).not.toBe(service.getUID('twice'));
   });
 
@@ -37,12 +43,14 @@ describe('UIDService', () => {
     element.remove();
   });
 
-  it.each([
-    ['ng', /^scoped-\d+$/],
-    ['shop', /^scoped-shop-\d+$/]
-  ])('should prefix the id with the app id %s only when it is not the default', (appId, format) => {
+  it('should give each application its own infix and count', () => {
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.1).mockReturnValueOnce(0.2);
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({ providers: [{ provide: APP_ID, useValue: appId }] });
-    expect(TestBed.inject(UIDService).getUID('scoped')).toMatch(format);
+    const first = TestBed.inject(UIDService).getUID('app');
+    TestBed.resetTestingModule();
+    const second = TestBed.inject(UIDService).getUID('app');
+    expect(first).toMatch(/^app-[0-9a-z]{5}-1$/);
+    expect(second).toMatch(/^app-[0-9a-z]{5}-1$/);
+    expect(second).not.toBe(first);
   });
 });

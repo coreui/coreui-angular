@@ -82,10 +82,11 @@ describe('PopoverDirective', () => {
     expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(popover.id);
   });
 
-  it('should describe the host by the current popover when shown again', async () => {
+  it('should describe the host by the same popover id when shown again', async () => {
     visible.set(true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
+    const id = fixture.nativeElement.getAttribute('aria-describedby');
     visible.set(false);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
@@ -93,7 +94,8 @@ describe('PopoverDirective', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     const popover = document.querySelector('.popover.show') as HTMLElement;
-    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(popover.id);
+    expect(popover.id).toBe(id);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(id);
   });
 
   it('should give popovers shown together distinct ids', async () => {
