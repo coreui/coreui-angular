@@ -170,6 +170,45 @@ describe('PopoverDirective', () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  it('should destroy Popper when the popover hides', async () => {
+    const resize = (spy: { mock: { calls: unknown[][] } }) =>
+      spy.mock.calls.filter((call) => call[0] === 'resize').length;
+    const add = vi.spyOn(window, 'addEventListener');
+    const remove = vi.spyOn(window, 'removeEventListener');
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(resize(add)).toBe(1);
+    expect(resize(remove)).toBe(0);
+
+    const popover = document.querySelector('.popover') as HTMLElement;
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(150);
+    expect(resize(remove)).toBe(0);
+    expect(popover.hasAttribute('data-popper-placement')).toBe(true);
+
+    await vi.runAllTimersAsync();
+    expect(resize(remove)).toBe(resize(add));
+  });
+
+  it('should keep Popper when the popover shows again before the hide finishes', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(100);
+    visible.set(true);
+    fixture.detectChanges();
+
+    const remove = vi.spyOn(window, 'removeEventListener');
+    await vi.runAllTimersAsync();
+
+    expect(remove.mock.calls.some((call) => call[0] === 'resize')).toBe(false);
+    expect(document.querySelector('.popover.show')).toBeTruthy();
+  });
+
   it.each([
     ['before', 50],
     ['after', 1000]
