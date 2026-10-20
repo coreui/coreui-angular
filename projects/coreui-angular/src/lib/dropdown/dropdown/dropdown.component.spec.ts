@@ -1083,8 +1083,9 @@ describe('DropdownComponent with autoClose false', () => {
 @Component({
   template: `
     <c-dropdown [autoClose]="autoClose()" [(visible)]="visible">
+      <button id="action">Action</button>
       <button cDropdownToggle id="toggle">Toggle</button>
-      <div cDropdownMenu>
+      <div cDropdownMenu id="menu">
         <p id="inside">Text</p>
         <button cDropdownItem [autoClose]="false" id="item">One</button>
       </div>
@@ -1101,13 +1102,22 @@ class AutoCloseClickComponent {
 describe('DropdownComponent autoClose on click', () => {
   let fixture: ComponentFixture<AutoCloseClickComponent>;
 
-  const visibleAfterClick = async (id: string) => {
+  const element = (id: string): HTMLElement => fixture.nativeElement.querySelector(`#${id}`);
+
+  const visibleAfter = async (target: string | HTMLElement, event: Event) => {
     fixture.componentInstance.visible.set(true);
     await fixture.whenStable();
-    fixture.nativeElement.querySelector(`#${id}`).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const node = typeof target === 'string' ? element(target) : target;
+    node.dispatchEvent(event);
     await fixture.whenStable();
     return fixture.componentInstance.visible();
   };
+
+  const visibleAfterClick = (target: string | HTMLElement) =>
+    visibleAfter(target, new MouseEvent('click', { bubbles: true, composed: true }));
+
+  const visibleAfterTab = (target: string | HTMLElement) =>
+    visibleAfter(target, new KeyboardEvent('keyup', { key: 'Tab', bubbles: true, composed: true }));
 
   beforeEach(async () => {
     fixture = TestBed.createComponent(AutoCloseClickComponent);
@@ -1140,6 +1150,65 @@ describe('DropdownComponent autoClose on click', () => {
 
   it('should close once on a click on the toggle of an open dropdown', async () => {
     expect(await visibleAfterClick('toggle')).toBe(false);
+  });
+
+  it('should treat a click in the dropdown outside the menu as a click outside the menu', async () => {
+    fixture.componentInstance.autoClose.set('inside');
+    expect(await visibleAfterClick('action')).toBe(true);
+    fixture.componentInstance.autoClose.set('outside');
+    expect(await visibleAfterClick('action')).toBe(false);
+    fixture.componentInstance.autoClose.set(true);
+    expect(await visibleAfterClick('action')).toBe(false);
+  });
+
+  it('should close on Tab onto an element of the dropdown outside the menu', async () => {
+    expect(await visibleAfterTab('item')).toBe(true);
+    expect(await visibleAfterTab('toggle')).toBe(true);
+    expect(await visibleAfterTab('action')).toBe(false);
+  });
+
+  it('should open on a click on the toggle in a shadow root when change detection runs during the click', async () => {
+    const host = document.createElement('div');
+    document.body.append(host);
+    host.attachShadow({ mode: 'open' }).append(fixture.nativeElement);
+    fixture.nativeElement.addEventListener('click', () => fixture.detectChanges());
+    element('toggle').dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+    host.remove();
+  });
+
+  it('should tell a click inside the menu from a click outside it in a shadow root', async () => {
+    const host = document.createElement('div');
+    document.body.append(host);
+    host.attachShadow({ mode: 'open' }).append(fixture.nativeElement);
+    fixture.componentInstance.autoClose.set('inside');
+    expect(await visibleAfterClick('outside')).toBe(true);
+    expect(await visibleAfterClick('action')).toBe(true);
+    expect(await visibleAfterClick('inside')).toBe(false);
+    fixture.componentInstance.autoClose.set('outside');
+    expect(await visibleAfterClick('inside')).toBe(true);
+    expect(await visibleAfterClick('item')).toBe(true);
+    expect(await visibleAfterClick('action')).toBe(false);
+    expect(await visibleAfterClick('outside')).toBe(false);
+    fixture.componentInstance.autoClose.set(true);
+    expect(await visibleAfterClick('toggle')).toBe(false);
+    host.remove();
+  });
+
+  it('should keep a menu moved out of the dropdown open on a click or Tab inside it with autoClose outside', async () => {
+    fixture.componentInstance.autoClose.set('outside');
+    const menu = element('menu');
+    const inside = element('inside');
+    document.body.append(menu);
+    expect(await visibleAfterClick(inside)).toBe(true);
+    expect(await visibleAfterTab(inside)).toBe(true);
+    const removed = document.createElement('span');
+    menu.append(removed);
+    removed.addEventListener('click', () => removed.remove());
+    expect(await visibleAfterClick(removed)).toBe(true);
+    expect(await visibleAfterClick('outside')).toBe(false);
+    menu.remove();
   });
 });
 
