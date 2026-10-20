@@ -223,6 +223,114 @@ describe('TooltipDirective', () => {
     expect(document.querySelector('.tooltip.show')).toBeNull();
   });
 
+  it('should let Escape through and drop the pending tooltip when there is no content', async () => {
+    fixture.destroy();
+    fixture = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', () => ''), twoWayBinding('cTooltipVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    const reached = vi.fn();
+    document.addEventListener('keydown', reached);
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    fixture.nativeElement.dispatchEvent(escape);
+    document.removeEventListener('keydown', reached);
+
+    expect(escape.defaultPrevented).toBe(false);
+    expect(reached).toHaveBeenCalled();
+    expect(visible()).toBe(false);
+  });
+
+  it('should catch Escape once content arrives while visible', async () => {
+    fixture.destroy();
+    const content = signal('');
+    fixture = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', content), twoWayBinding('cTooltipVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    content.set('content');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.tooltip.show')).toBeTruthy();
+
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    fixture.nativeElement.dispatchEvent(escape);
+
+    expect(escape.defaultPrevented).toBe(true);
+    expect(visible()).toBe(false);
+  });
+
+  it('should let Escape through once the content empties after the tooltip shows', async () => {
+    fixture.destroy();
+    const content = signal('content');
+    fixture = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', content), twoWayBinding('cTooltipVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    content.set('');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    fixture.nativeElement.dispatchEvent(escape);
+
+    expect(escape.defaultPrevented).toBe(false);
+    expect(visible()).toBe(false);
+  });
+  it('should not show the tooltip when content arrives after Escape', async () => {
+    fixture.destroy();
+    const content = signal('');
+    fixture = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', content), twoWayBinding('cTooltipVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    fixture.nativeElement.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })
+    );
+    content.set('content');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    expect(visible()).toBe(false);
+    expect(document.querySelector('.tooltip.show')).toBeNull();
+  });
+
+  it('should remove the tooltip at once when the content empties while visible', async () => {
+    fixture.destroy();
+    const content = signal('content');
+    fixture = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', content), twoWayBinding('cTooltipVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.tooltip')).toBeTruthy();
+
+    content.set('');
+    fixture.detectChanges();
+
+    expect(document.querySelector('.tooltip')).toBeNull();
+  });
+
   it('should not close the tooltip when a non-Escape key is pressed', async () => {
     visible.set(true);
     fixture.detectChanges();
