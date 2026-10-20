@@ -1,9 +1,8 @@
-import { DOCUMENT, inputBinding, signal, twoWayBinding, WritableSignal } from '@angular/core';
+import { DOCUMENT, inputBinding, PLATFORM_ID, signal, twoWayBinding, WritableSignal } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { TooltipDirective } from './tooltip.directive';
 import { Triggers } from '../coreui.types';
-import { UIDService } from '../services';
 
 describe('TooltipDirective', () => {
   let visible: WritableSignal<boolean>;
@@ -43,6 +42,7 @@ describe('TooltipDirective', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should create an instance', () => {
@@ -66,12 +66,66 @@ describe('TooltipDirective', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     const tooltip = document.querySelector('.tooltip') as HTMLElement;
-    expect(tooltip.id).toMatch(/^tooltip-\d+$/);
+    expect(tooltip.id).toMatch(/^tooltip-/);
     expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
     visible.set(false);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('should describe the host as soon as the tooltip is inserted', () => {
+    visible.set(true);
+    fixture.detectChanges();
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+    expect(tooltip.id).toMatch(/^tooltip-/);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
+  });
+
+  it('should describe the host by the same tooltip id when shown again', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const id = fixture.nativeElement.getAttribute('aria-describedby');
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const tooltip = document.querySelector('.tooltip.show') as HTMLElement;
+    expect(tooltip.id).toBe(id);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(id);
+  });
+
+  it('should give tooltips shown together distinct ids', async () => {
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.5).mockReturnValueOnce(0.5).mockReturnValue(0.7);
+    const shown = signal(false);
+    const hosts = ['first', 'second'].map((content) => {
+      const host = TestBed.createDirective(TooltipDirective, {
+        tagName: 'button',
+        bindings: [inputBinding('cTooltip', () => content), inputBinding('cTooltipVisible', shown)]
+      });
+      host.autoDetectChanges();
+      return host;
+    });
+    shown.set(true);
+    await vi.runAllTimersAsync();
+    const [firstId, secondId] = hosts.map((host) => host.nativeElement.getAttribute('aria-describedby') ?? '');
+    expect(secondId).not.toBe(firstId);
+    expect(document.getElementById(firstId)?.textContent).toContain('first');
+    expect(document.getElementById(secondId)?.textContent).toContain('second');
+  });
+
+  it('should not describe the host on the server', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [{ provide: PLATFORM_ID, useValue: 'server' }] });
+    const server = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', () => 'content'), inputBinding('cTooltipVisible', () => true)]
+    });
+    server.detectChanges();
+    expect(server.nativeElement.hasAttribute('aria-describedby')).toBe(false);
   });
 
   it('should not describe the host when hidden before the tooltip shows', async () => {
@@ -87,13 +141,12 @@ describe('TooltipDirective', () => {
   });
 
   it('should not run the show timer when destroyed before the tooltip shows', async () => {
-    const getUID = vi.spyOn(TestBed.inject(UIDService), 'getUID');
     visible.set(true);
     fixture.detectChanges();
     await vi.advanceTimersByTimeAsync(50);
     fixture.destroy();
-    await vi.advanceTimersByTimeAsync(1000);
-    expect(getUID).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('should leave no pending timers when destroyed while the tooltip hides', async () => {

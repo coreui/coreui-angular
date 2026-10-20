@@ -1,9 +1,8 @@
-import { Component, DOCUMENT, inputBinding, signal, twoWayBinding, WritableSignal } from '@angular/core';
+import { Component, DOCUMENT, inputBinding, PLATFORM_ID, signal, twoWayBinding, WritableSignal } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { PopoverDirective } from './popover.directive';
 import { Triggers } from '../coreui.types';
-import { UIDService } from '../services';
 
 describe('PopoverDirective', () => {
   let visible: WritableSignal<boolean>;
@@ -43,6 +42,7 @@ describe('PopoverDirective', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should create an instance', () => {
@@ -66,12 +66,66 @@ describe('PopoverDirective', () => {
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     const popover = document.querySelector('.popover') as HTMLElement;
-    expect(popover.id).toMatch(/^popover-\d+$/);
+    expect(popover.id).toMatch(/^popover-/);
     expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(popover.id);
     visible.set(false);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('should describe the host as soon as the popover is inserted', () => {
+    visible.set(true);
+    fixture.detectChanges();
+    const popover = document.querySelector('.popover') as HTMLElement;
+    expect(popover.id).toMatch(/^popover-/);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(popover.id);
+  });
+
+  it('should describe the host by the same popover id when shown again', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const id = fixture.nativeElement.getAttribute('aria-describedby');
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const popover = document.querySelector('.popover.show') as HTMLElement;
+    expect(popover.id).toBe(id);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(id);
+  });
+
+  it('should give popovers shown together distinct ids', async () => {
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.5).mockReturnValueOnce(0.5).mockReturnValue(0.7);
+    const shown = signal(false);
+    const hosts = ['first', 'second'].map((content) => {
+      const host = TestBed.createDirective(PopoverDirective, {
+        tagName: 'button',
+        bindings: [inputBinding('cPopover', () => content), inputBinding('cPopoverVisible', shown)]
+      });
+      host.autoDetectChanges();
+      return host;
+    });
+    shown.set(true);
+    await vi.runAllTimersAsync();
+    const [firstId, secondId] = hosts.map((host) => host.nativeElement.getAttribute('aria-describedby') ?? '');
+    expect(secondId).not.toBe(firstId);
+    expect(document.getElementById(firstId)?.textContent).toContain('first');
+    expect(document.getElementById(secondId)?.textContent).toContain('second');
+  });
+
+  it('should not describe the host on the server', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [{ provide: PLATFORM_ID, useValue: 'server' }] });
+    const server = TestBed.createDirective(PopoverDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cPopover', () => 'content'), inputBinding('cPopoverVisible', () => true)]
+    });
+    server.detectChanges();
+    expect(server.nativeElement.hasAttribute('aria-describedby')).toBe(false);
   });
 
   it('should not describe the host when hidden before the popover shows', async () => {
@@ -87,13 +141,12 @@ describe('PopoverDirective', () => {
   });
 
   it('should not run the show timer when destroyed before the popover shows', async () => {
-    const getUID = vi.spyOn(TestBed.inject(UIDService), 'getUID');
     visible.set(true);
     fixture.detectChanges();
     await vi.advanceTimersByTimeAsync(50);
     fixture.destroy();
-    await vi.advanceTimersByTimeAsync(1000);
-    expect(getUID).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('should leave no pending timers when destroyed while the popover hides', async () => {
