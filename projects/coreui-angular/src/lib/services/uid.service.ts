@@ -11,8 +11,8 @@ export class UIDService {
   readonly #counters = new Map<string, number>();
 
   /**
-   * Returns an id no other call in this application returns, skipping ids already in the document.
-   * The random infix, drawn once per application, keeps it apart from other applications and page ids.
+   * Returns an id no other call on this service instance returns, skipping ids already in the document.
+   * The random infix, drawn once per instance, keeps it apart from other instances, applications and page ids.
    * @param prefix id prefix
    * @returns `${prefix}-${infix}-${count}`
    */
