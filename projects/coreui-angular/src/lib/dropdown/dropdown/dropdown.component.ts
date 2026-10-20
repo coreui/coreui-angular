@@ -168,8 +168,7 @@ export class DropdownToggleDirective implements AfterViewInit {
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: {
     '[class]': 'hostClasses()',
-    '[style]': 'hostStyle()',
-    '(click)': 'onHostClick($event)'
+    '[style]': 'hostStyle()'
   }
 })
 export class DropdownComponent implements OnDestroy, OnInit {
@@ -327,12 +326,6 @@ export class DropdownComponent implements OnDestroy, OnInit {
     return this.variant() === 'input-group' ? { display: 'contents' } : {};
   });
 
-  private clickedTarget!: HTMLElement;
-
-  onHostClick($event: MouseEvent): void {
-    this.clickedTarget = $event.target as HTMLElement;
-  }
-
   dropdownStateSubscribe(): void {
     this.dropdownService.dropdownState$
       .pipe(
@@ -411,26 +404,18 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   private setListeners(): void {
     this.listeners.push(
-      this.#renderer.listen(this.#document, 'click', (event) => {
-        const target = event.target as HTMLElement;
-        if (this._menuElementRef()?.nativeElement.contains(event.target)) {
-          this.clickedTarget = target;
-        }
-        if (this.#togglerElement()?.contains(event.target)) {
+      this.#renderer.listen(this.#document, 'click', (event: MouseEvent) => {
+        const part = this.#eventPart(event);
+        if (part === 'toggler') {
           return;
         }
         const autoClose = this.autoClose();
-        if (autoClose === true) {
+        if (
+          autoClose === true ||
+          (autoClose === 'inside' && part === 'menu') ||
+          (autoClose === 'outside' && part !== 'menu')
+        ) {
           this.setVisibleState(false);
-          return;
-        }
-        if (this.clickedTarget === target && autoClose === 'inside') {
-          this.setVisibleState(false);
-          return;
-        }
-        if (this.clickedTarget !== target && autoClose === 'outside') {
-          this.setVisibleState(false);
-          return;
         }
       })
     );
@@ -441,14 +426,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
     }
     this.listeners.push(
       this.#renderer.listen(this.#document, 'keyup', (event: KeyboardEvent) => {
-        const path = event.composedPath();
-        const toggler = this.#togglerElement();
-        if (
-          event.key === 'Tab' &&
-          this.autoClose() !== false &&
-          !path.includes(this.#elementRef.nativeElement) &&
-          !(toggler && path.includes(toggler))
-        ) {
+        if (event.key === 'Tab' && this.autoClose() !== false && !this.#eventPart(event)) {
           this.setVisibleState(false);
         }
       })
@@ -488,6 +466,16 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   #togglerElement(): HTMLElement | undefined {
     return (this._toggler() ?? this.toggler)?.elementRef.nativeElement;
+  }
+
+  #eventPart(event: Event): 'menu' | 'toggler' | undefined {
+    const path = event.composedPath();
+    const toggler = this.#togglerElement();
+    if (toggler && path.includes(toggler)) {
+      return 'toggler';
+    }
+    const menu = this._menuElementRef()?.nativeElement;
+    return menu && path.includes(menu) ? 'menu' : undefined;
   }
 
   #focusToggler(): void {
