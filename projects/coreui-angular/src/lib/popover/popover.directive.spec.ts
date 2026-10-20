@@ -222,6 +222,114 @@ describe('PopoverDirective', () => {
     expect(document.querySelector('.popover.show')).toBeNull();
   });
 
+  it('should let Escape through and drop the pending popover when there is no content', async () => {
+    fixture.destroy();
+    fixture = TestBed.createDirective(PopoverDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cPopover', () => ''), twoWayBinding('cPopoverVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    const reached = vi.fn();
+    document.addEventListener('keydown', reached);
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    fixture.nativeElement.dispatchEvent(escape);
+    document.removeEventListener('keydown', reached);
+
+    expect(escape.defaultPrevented).toBe(false);
+    expect(reached).toHaveBeenCalled();
+    expect(visible()).toBe(false);
+  });
+
+  it('should catch Escape once content arrives while visible', async () => {
+    fixture.destroy();
+    const content = signal('');
+    fixture = TestBed.createDirective(PopoverDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cPopover', content), twoWayBinding('cPopoverVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    content.set('content');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.popover.show')).toBeTruthy();
+
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    fixture.nativeElement.dispatchEvent(escape);
+
+    expect(escape.defaultPrevented).toBe(true);
+    expect(visible()).toBe(false);
+  });
+
+  it('should let Escape through once the content empties after the popover shows', async () => {
+    fixture.destroy();
+    const content = signal('content');
+    fixture = TestBed.createDirective(PopoverDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cPopover', content), twoWayBinding('cPopoverVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    content.set('');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    fixture.nativeElement.dispatchEvent(escape);
+
+    expect(escape.defaultPrevented).toBe(false);
+    expect(visible()).toBe(false);
+  });
+  it('should not show the popover when content arrives after Escape', async () => {
+    fixture.destroy();
+    const content = signal('');
+    fixture = TestBed.createDirective(PopoverDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cPopover', content), twoWayBinding('cPopoverVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    fixture.nativeElement.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })
+    );
+    content.set('content');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    expect(visible()).toBe(false);
+    expect(document.querySelector('.popover.show')).toBeNull();
+  });
+
+  it('should remove the popover at once when the content empties while visible', async () => {
+    fixture.destroy();
+    const content = signal('content');
+    fixture = TestBed.createDirective(PopoverDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cPopover', content), twoWayBinding('cPopoverVisible', visible)]
+    });
+    fixture.autoDetectChanges();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.popover')).toBeTruthy();
+
+    content.set('');
+    fixture.detectChanges();
+
+    expect(document.querySelector('.popover')).toBeNull();
+  });
+
   it('should not close the popover when a non-Escape key is pressed', async () => {
     visible.set(true);
     fixture.detectChanges();

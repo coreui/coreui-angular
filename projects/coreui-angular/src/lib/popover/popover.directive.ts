@@ -106,6 +106,8 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
    */
   readonly visible = model(false, { alias: 'cPopoverVisible' });
 
+  readonly #shown = computed(() => !this.#isServer && this.visible() && !!this.content());
+
   readonly #visibleEffect = afterRenderEffect({
     // this fixes RuntimeError: NG0500: During hydration Angular expected <abc> but found <xyz>.
     // Find more at https://angular.dev/errors/NG0500
@@ -118,8 +120,10 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
     if (event.key !== 'Escape') {
       return;
     }
-    event.preventDefault();
-    event.stopPropagation();
+    if (this.#shown()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     this.visible.set(false);
   };
 
@@ -136,12 +140,8 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
     });
   });
 
-  readonly #ariaDescribedBy = computed(() =>
-    !this.#isServer && this.visible() && this.content() ? this.#tooltipId : null
-  );
-
   get ariaDescribedBy(): string | null {
-    return this.#ariaDescribedBy();
+    return this.#shown() ? this.#tooltipId : null;
   }
 
   private tooltip!: HTMLDivElement;
