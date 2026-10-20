@@ -3,7 +3,6 @@ import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { PopoverDirective } from './popover.directive';
 import { Triggers } from '../coreui.types';
-import { UIDService } from '../services';
 
 describe('PopoverDirective', () => {
   let visible: WritableSignal<boolean>;
@@ -74,6 +73,29 @@ describe('PopoverDirective', () => {
     expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
   });
 
+  it('should describe the host as soon as the popover is inserted', () => {
+    visible.set(true);
+    fixture.detectChanges();
+    const popover = document.querySelector('.popover') as HTMLElement;
+    expect(popover.id).toMatch(/^popover-\d+$/);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(popover.id);
+  });
+
+  it('should keep the popover id across show cycles', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const id = fixture.nativeElement.getAttribute('aria-describedby');
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(id);
+    expect(document.querySelector('.popover')?.id).toBe(id);
+  });
+
   it('should not describe the host when hidden before the popover shows', async () => {
     visible.set(true);
     fixture.detectChanges();
@@ -87,13 +109,12 @@ describe('PopoverDirective', () => {
   });
 
   it('should not run the show timer when destroyed before the popover shows', async () => {
-    const getUID = vi.spyOn(TestBed.inject(UIDService), 'getUID');
     visible.set(true);
     fixture.detectChanges();
     await vi.advanceTimersByTimeAsync(50);
     fixture.destroy();
-    await vi.advanceTimersByTimeAsync(1000);
-    expect(getUID).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('should leave no pending timers when destroyed while the popover hides', async () => {

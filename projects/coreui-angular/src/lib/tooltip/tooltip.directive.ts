@@ -43,6 +43,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   readonly #destroyRef = inject(DestroyRef);
   readonly #document = inject(DOCUMENT);
   readonly #uidService = inject(UIDService);
+  readonly #tooltipId = this.#uidService.getUID('tooltip');
   #timerId1: ReturnType<typeof setTimeout> | undefined;
   #timerId2: ReturnType<typeof setTimeout> | undefined;
 
@@ -133,12 +134,13 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     onCleanup(() => this.#document.removeEventListener('keydown', this.#handleEscapeKey, useCapture));
   });
 
+  readonly #ariaDescribedBy = computed(() => (this.visible() && this.content() ? this.#tooltipId : null));
+
   get ariaDescribedBy(): string | null {
-    return this.tooltipId ? this.tooltipId : null;
+    return this.#ariaDescribedBy();
   }
 
   private tooltip!: HTMLDivElement;
-  private tooltipId!: string;
   private tooltipRef!: ComponentRef<TooltipComponent>;
   private popperInstance!: Instance;
 
@@ -206,6 +208,7 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   private createTooltipElement(): void {
     if (!this.tooltipRef) {
       this.tooltipRef = this.#viewContainerRef.createComponent<TooltipComponent>(TooltipComponent);
+      this.tooltipRef.setInput('id', this.#tooltipId);
       // this.viewContainerRef.detach();
     }
   }
@@ -213,7 +216,6 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   private destroyTooltipElement(): void {
     clearTimeout(this.#timerId1);
     clearTimeout(this.#timerId2);
-    this.tooltipId = '';
     this.tooltip?.remove();
     this.tooltipRef?.destroy();
     // @ts-ignore
@@ -226,7 +228,6 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
   private addTooltipElement(): void {
     if (!this.content()) {
       this.destroyTooltipElement();
-      this.#changeDetectorRef.markForCheck();
       return;
     }
 
@@ -252,8 +253,6 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     clearTimeout(this.#timerId2);
     clearTimeout(this.#timerId1);
     this.#timerId1 = setTimeout(() => {
-      this.tooltipId = this.#uidService.getUID('tooltip');
-      this.tooltipRef?.setInput('id', this.tooltipId);
       this.#renderer.removeClass(this.tooltip, 'd-none');
       this.tooltipRef?.setInput('visible', this.visible());
       this.popperInstance?.forceUpdate();
@@ -264,7 +263,6 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
 
   private removeTooltipElement(): void {
     clearTimeout(this.#timerId1);
-    this.tooltipId = '';
     if (!this.tooltipRef) {
       return;
     }
@@ -276,7 +274,6 @@ export class TooltipDirective implements OnDestroy, OnInit, AfterViewInit {
     }, 300);
 
     this.tooltipRef.setInput('visible', false);
-    this.tooltipRef.setInput('id', undefined);
     this.#changeDetectorRef.markForCheck();
   }
 }

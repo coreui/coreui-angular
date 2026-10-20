@@ -3,7 +3,6 @@ import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
 import { TooltipDirective } from './tooltip.directive';
 import { Triggers } from '../coreui.types';
-import { UIDService } from '../services';
 
 describe('TooltipDirective', () => {
   let visible: WritableSignal<boolean>;
@@ -74,6 +73,29 @@ describe('TooltipDirective', () => {
     expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
   });
 
+  it('should describe the host as soon as the tooltip is inserted', () => {
+    visible.set(true);
+    fixture.detectChanges();
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+    expect(tooltip.id).toMatch(/^tooltip-\d+$/);
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(tooltip.id);
+  });
+
+  it('should keep the tooltip id across show cycles', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const id = fixture.nativeElement.getAttribute('aria-describedby');
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.nativeElement.getAttribute('aria-describedby')).toBe(id);
+    expect(document.querySelector('.tooltip')?.id).toBe(id);
+  });
+
   it('should not describe the host when hidden before the tooltip shows', async () => {
     visible.set(true);
     fixture.detectChanges();
@@ -87,13 +109,12 @@ describe('TooltipDirective', () => {
   });
 
   it('should not run the show timer when destroyed before the tooltip shows', async () => {
-    const getUID = vi.spyOn(TestBed.inject(UIDService), 'getUID');
     visible.set(true);
     fixture.detectChanges();
     await vi.advanceTimersByTimeAsync(50);
     fixture.destroy();
-    await vi.advanceTimersByTimeAsync(1000);
-    expect(getUID).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('should leave no pending timers when destroyed while the tooltip hides', async () => {
