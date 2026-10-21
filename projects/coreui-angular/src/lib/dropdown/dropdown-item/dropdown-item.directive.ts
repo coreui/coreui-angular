@@ -106,7 +106,7 @@ export class DropdownItemDirective implements FocusableOption {
 
   private handleInteraction(): void {
     if (this.autoClose()) {
-      this.#dropdownService.toggle({ visible: 'toggle', dropdown: this.dropdown });
+      this.#dropdownService.toggle({ visible: false, dropdown: this.dropdown });
     }
   }
 }

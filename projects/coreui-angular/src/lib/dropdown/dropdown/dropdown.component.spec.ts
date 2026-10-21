@@ -22,6 +22,7 @@ import { By } from '@angular/platform-browser';
 import { provideRouter, RouterLink } from '@angular/router';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
+import { DropdownCloseDirective } from '../dropdown-close/dropdown-close.directive';
 import { ModalComponent } from '../../modal/modal/modal.component';
 import { OffcanvasComponent } from '../../offcanvas/offcanvas/offcanvas.component';
 
@@ -1088,9 +1089,25 @@ describe('DropdownComponent with autoClose false', () => {
       <div cDropdownMenu id="menu">
         <p id="inside">Text</p>
         <button cDropdownItem [autoClose]="false" id="item">One</button>
+        <label cDropdownItem id="pick"><input type="radio" /> Name</label>
+        <input id="search" />
+        <select id="loose-select">
+          <option>One</option>
+        </select>
+        <textarea id="loose-textarea"></textarea>
+        <form id="form">
+          <label for="field" id="label">Email</label>
+          <input id="field" />
+          <select id="select">
+            <option id="option">One</option>
+          </select>
+          <textarea id="textarea"></textarea>
+          <button id="submit" type="button">Sign in</button>
+        </form>
       </div>
     </c-dropdown>
     <button id="outside">Outside</button>
+    <input id="outside-field" />
   `,
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
 })
@@ -1146,6 +1163,80 @@ describe('DropdownComponent autoClose on click', () => {
     fixture.componentInstance.autoClose.set(false);
     expect(await visibleAfterClick('inside')).toBe(true);
     expect(await visibleAfterClick('outside')).toBe(true);
+  });
+
+  it('should stay open on a click on a form field in the menu with autoClose true or inside', async () => {
+    for (const autoClose of [true, 'inside'] as const) {
+      fixture.componentInstance.autoClose.set(autoClose);
+      for (const id of ['search', 'loose-select', 'loose-textarea', 'form', 'field', 'select', 'option', 'textarea']) {
+        expect(await visibleAfterClick(id)).toBe(true);
+      }
+    }
+  });
+
+  it('should stay open on a click on a label or button inside a form in the menu', async () => {
+    expect(await visibleAfterClick('label')).toBe(true);
+    expect(await visibleAfterClick('submit')).toBe(true);
+  });
+
+  it('should close on a click on a label item wrapping its own radio with autoClose true or outside', async () => {
+    for (const autoClose of [true, 'outside'] as const) {
+      fixture.componentInstance.autoClose.set(autoClose);
+      fixture.componentInstance.visible.set(true);
+      await fixture.whenStable();
+      element('pick').click();
+      await fixture.whenStable();
+      expect(fixture.componentInstance.visible()).toBe(false);
+    }
+  });
+
+  it('should close on a click on a label outside a form in the menu with autoClose true', async () => {
+    const check = document.createElement('x-form-check');
+    check.innerHTML = '<label>Remember me</label>';
+    element('menu').append(check);
+    expect(await visibleAfterClick(check.querySelector('label') as HTMLElement)).toBe(false);
+  });
+
+  it('should stay open on a click on a form field in a menu moved out of the dropdown with autoClose true', async () => {
+    const menu = element('menu');
+    const search = element('search');
+    document.body.append(menu);
+    expect(await visibleAfterClick(search)).toBe(true);
+    menu.remove();
+  });
+
+  it('should close on a click on a form field outside the dropdown with autoClose true', async () => {
+    expect(await visibleAfterClick('outside-field')).toBe(false);
+  });
+
+  it('should close on a click in the menu outside its own form when the dropdown sits in a page form', async () => {
+    const form = document.createElement('form');
+    document.body.append(form);
+    form.append(fixture.nativeElement);
+    expect(await visibleAfterClick('label')).toBe(true);
+    expect(await visibleAfterClick('inside')).toBe(false);
+    form.remove();
+  });
+
+  it('should stay open on a click on a form field inside a shadow root in the menu', async () => {
+    const host = document.createElement('x-field');
+    element('inside').append(host);
+    const field = document.createElement('input');
+    host.attachShadow({ mode: 'open' }).append(field);
+    expect(await visibleAfterClick(field)).toBe(true);
+    expect(await visibleAfterClick(host)).toBe(false);
+  });
+
+  it('should stay open on a click on a button inside a shadow root in a form in the menu', async () => {
+    const host = document.createElement('x-button');
+    element('form').append(host);
+    const button = document.createElement('button');
+    host.attachShadow({ mode: 'open' }).append(button);
+    expect(await visibleAfterClick(button)).toBe(true);
+  });
+
+  it('should close on a click on a text node in the menu with autoClose true', async () => {
+    expect(await visibleAfterClick(element('inside').firstChild as HTMLElement)).toBe(false);
   });
 
   it('should close once on a click on the toggle of an open dropdown', async () => {
@@ -1209,6 +1300,55 @@ describe('DropdownComponent autoClose on click', () => {
     expect(await visibleAfterClick(removed)).toBe(true);
     expect(await visibleAfterClick('outside')).toBe(false);
     menu.remove();
+  });
+});
+
+@Component({
+  template: `
+    <c-dropdown [(visible)]="visible">
+      <button cDropdownToggle>Toggle</button>
+      <form cDropdownMenu id="menu" (submit)="$event.preventDefault()">
+        <label for="email" id="label">Email</label>
+        <input id="email" />
+        <button id="submit" type="submit">Sign in</button>
+        <a href="#" id="link">Help</a>
+        <button cDropdownClose id="close" type="submit">Close</button>
+        <button cDropdownItem id="item" type="button">Forgot password?</button>
+      </form>
+    </c-dropdown>
+  `,
+  imports: [
+    DropdownToggleDirective,
+    DropdownComponent,
+    DropdownMenuDirective,
+    DropdownCloseDirective,
+    DropdownItemDirective
+  ]
+})
+class FormMenuComponent {
+  readonly visible = signal(true);
+}
+
+describe('DropdownComponent with a form as the menu', () => {
+  it('should stay open on a click inside the menu with autoClose true', async () => {
+    const fixture = TestBed.createComponent(FormMenuComponent);
+    await fixture.whenStable();
+    for (const id of ['menu', 'label', 'submit', 'link']) {
+      fixture.nativeElement.querySelector(`#${id}`).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await fixture.whenStable();
+      expect(fixture.componentInstance.visible()).toBe(true);
+    }
+  });
+
+  it('should close on a click on cDropdownClose or cDropdownItem in the menu', async () => {
+    const fixture = TestBed.createComponent(FormMenuComponent);
+    for (const id of ['close', 'item']) {
+      fixture.componentInstance.visible.set(true);
+      await fixture.whenStable();
+      fixture.nativeElement.querySelector(`#${id}`).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await fixture.whenStable();
+      expect(fixture.componentInstance.visible()).toBe(false);
+    }
   });
 });
 

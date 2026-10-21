@@ -37,6 +37,7 @@ import { DropdownService } from '../dropdown.service';
 import { clicksOnEnter, isEditableTarget, isReplayedEvent } from '../dropdown.utils';
 
 const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
+const FORM_TAG = /^(form|input|option|select|textarea)$/;
 
 // lightweight injection token
 export abstract class DropdownToken {}
@@ -198,6 +199,9 @@ export class DropdownComponent implements OnDestroy, OnInit {
    * - `false` only on the toggle button or an explicit hide/toggle call and not on the `Esc` key,
    * - `inside` only on a click inside the menu,
    * - `outside` only on a click outside it.
+   *
+   * A click on a form field or inside a form in the menu does not close it; `cDropdownClose` and
+   * `cDropdownItem` close it from there.
    * @returns boolean | 'inside' | 'outside'
    * @default true
    */
@@ -406,7 +410,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
     this.listeners.push(
       this.#renderer.listen(this.#document, 'click', (event: MouseEvent) => {
         const part = this.#eventPart(event);
-        if (part === 'toggler') {
+        if (part === 'toggler' || (part === 'menu' && this.#isFormInteraction(event))) {
           return;
         }
         const autoClose = this.autoClose();
@@ -476,6 +480,13 @@ export class DropdownComponent implements OnDestroy, OnInit {
     }
     const menu = this._menuElementRef()?.nativeElement;
     return menu && path.includes(menu) ? 'menu' : undefined;
+  }
+
+  #isFormInteraction(event: Event): boolean {
+    const path = event.composedPath();
+    return path
+      .slice(0, path.indexOf(this._menuElementRef()?.nativeElement) + 1)
+      .some((node) => node instanceof Element && FORM_TAG.test(node.localName));
   }
 
   #focusToggler(): void {
