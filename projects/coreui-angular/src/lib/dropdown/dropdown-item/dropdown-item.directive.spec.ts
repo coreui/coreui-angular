@@ -110,7 +110,7 @@ class EnterTestComponent {
 }
 
 describe('DropdownItemDirective Enter', () => {
-  it('should toggle on Enter keyup only for items without a native Enter click', async () => {
+  it('should close on Enter keyup only for items without a native Enter click', async () => {
     const fixture = TestBed.createComponent(EnterTestComponent);
     await fixture.whenStable();
     const dropdown = fixture.componentInstance.dropdown();
@@ -136,6 +136,8 @@ describe('DropdownItemDirective Enter', () => {
     dropdown.visible.set(true);
     await fixture.whenStable();
     await keyup('island');
+    expect(dropdown.visible()).toBe(false);
+    await keyup('plain');
     expect(dropdown.visible()).toBe(false);
   });
 });
