@@ -1,5 +1,6 @@
 import {
   afterRenderEffect,
+  AfterViewChecked,
   AfterViewInit,
   ComponentRef,
   computed,
@@ -19,7 +20,7 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
-import { addAriaReferencedId, removeAriaReferencedId } from '@angular/cdk/a11y';
+import { addAriaReferencedId, getAriaReferenceIds, removeAriaReferencedId } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, finalize } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
@@ -34,7 +35,7 @@ import { PopoverComponent } from './popover/popover.component';
   exportAs: 'cPopover',
   providers: [ListenersService, IntersectionService]
 })
-export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
+export class PopoverDirective implements OnDestroy, OnInit, AfterViewChecked, AfterViewInit {
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
   readonly #viewContainerRef = inject(ViewContainerRef);
@@ -140,15 +141,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
     });
   });
 
-  readonly #ariaDescribedByEffect = afterRenderEffect((onCleanup) => {
-    if (!this.#shown()) {
-      return;
-    }
-
-    const host = this.#hostElement.nativeElement;
-    addAriaReferencedId(host, 'aria-describedby', this.#tooltipId);
-    onCleanup(() => removeAriaReferencedId(host, 'aria-describedby', this.#tooltipId));
-  });
+  readonly #ariaDescribedByEffect = afterRenderEffect(() => this.#syncAriaDescribedBy(this.#shown()));
 
   get ariaDescribedBy(): string | null {
     return this.#shown() ? this.#tooltipId : null;
@@ -169,6 +162,10 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
     ]
   };
 
+  ngAfterViewChecked(): void {
+    this.#syncAriaDescribedBy(this.#shown());
+  }
+
   ngAfterViewInit(): void {
     this.intersectionServiceSubscribe();
   }
@@ -176,10 +173,20 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.clearListeners();
     this.destroyTooltipElement();
+    this.#syncAriaDescribedBy(false);
   }
 
   ngOnInit(): void {
     this.setListeners();
+  }
+
+  #syncAriaDescribedBy(shown: boolean): void {
+    const host = this.#hostElement.nativeElement;
+    if (shown) {
+      addAriaReferencedId(host, 'aria-describedby', this.#tooltipId);
+    } else if (getAriaReferenceIds(host, 'aria-describedby').includes(this.#tooltipId)) {
+      removeAriaReferencedId(host, 'aria-describedby', this.#tooltipId);
+    }
   }
 
   private setListeners(): void {

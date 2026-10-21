@@ -1,6 +1,9 @@
 import {
+  ChangeDetectorRef,
   Component,
   DOCUMENT,
+  inject,
+  input,
   inputBinding,
   PLATFORM_ID,
   signal,
@@ -514,15 +517,57 @@ class BoundDescribedByPopoverComponent {
 @Component({
   selector: 'c-hint-field',
   template: '',
-  host: { '[attr.aria-describedby]': "'hint'" }
+  host: { '[attr.aria-describedby]': 'hint()' }
 })
-class HintFieldPopoverComponent {}
+class HintFieldPopoverComponent {
+  readonly hint = input<string | null>('hint');
+}
 
 @Component({
   template: `<c-hint-field cPopover="tip" [cPopoverVisible]="true" />`,
   imports: [HintFieldPopoverComponent, PopoverDirective]
 })
 class HostBindingDescribedByPopoverComponent {}
+
+@Component({
+  template: `<button cPopover="tip" [attr.aria-describedby]="hint()" [cPopoverVisible]="shown()">Open</button>`,
+  imports: [PopoverDirective]
+})
+class ChangingBoundDescribedByPopoverComponent {
+  readonly hint = signal<string | null>('hint');
+  readonly shown = signal(false);
+}
+
+@Component({
+  template: `<c-hint-field cPopover="tip" [hint]="hint()" [cPopoverVisible]="shown()" />`,
+  imports: [HintFieldPopoverComponent, PopoverDirective]
+})
+class ChangingHostBindingDescribedByPopoverComponent {
+  readonly hint = signal<string | null>('hint');
+  readonly shown = signal(false);
+}
+
+@Component({
+  template: `<button cPopover="tip" [attr.aria-describedby]="hint" [cPopoverVisible]="shown()">Open</button>`,
+  imports: [PopoverDirective]
+})
+class DetectChangesDescribedByPopoverComponent {
+  readonly changeDetectorRef = inject(ChangeDetectorRef);
+  readonly shown = signal(false);
+  hint: string | null = 'hint';
+}
+
+@Component({
+  template: `<button cPopover="tip" aria-describedby="hint  extra">Open</button>`,
+  imports: [PopoverDirective]
+})
+class SpacedDescribedByPopoverComponent {}
+
+@Component({
+  template: `<button cPopover="tip" cPopoverTrigger="focus">Open</button>`,
+  imports: [PopoverDirective]
+})
+class FocusPopoverComponent {}
 
 describe("PopoverDirective with the author's aria-describedby", () => {
   beforeEach(() => {
@@ -576,6 +621,103 @@ describe("PopoverDirective with the author's aria-describedby", () => {
     const host = fixture.nativeElement.querySelector('c-hint-field') as HTMLElement;
     const popover = document.querySelector('.popover') as HTMLElement;
     expect(host.getAttribute('aria-describedby')).toBe(`hint ${popover.id}`);
+    fixture.destroy();
+  });
+
+  it.each([
+    ['an attribute binding', ChangingBoundDescribedByPopoverComponent, 'button'],
+    ['a host binding', ChangingHostBindingDescribedByPopoverComponent, 'c-hint-field']
+  ] as [string, Type<{ hint: WritableSignal<string | null>; shown: WritableSignal<boolean> }>, string][])(
+    'should keep its id when %s rewrites aria-describedby while shown',
+    async (_, type, selector) => {
+      const fixture = TestBed.createComponent(type);
+      fixture.autoDetectChanges();
+      await vi.runAllTimersAsync();
+      const host = fixture.nativeElement.querySelector(selector) as HTMLElement;
+
+      fixture.componentInstance.shown.set(true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      const popover = document.querySelector('.popover') as HTMLElement;
+      expect(host.getAttribute('aria-describedby')).toBe(`hint ${popover.id}`);
+
+      fixture.componentInstance.hint.set('error');
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(host.getAttribute('aria-describedby')).toBe(`error ${popover.id}`);
+
+      fixture.componentInstance.hint.set(null);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(host.getAttribute('aria-describedby')).toBe(popover.id);
+
+      fixture.componentInstance.shown.set(false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(host.getAttribute('aria-describedby')).toBeNull();
+      fixture.destroy();
+    }
+  );
+
+  it('should keep its id when a local detectChanges rewrites aria-describedby while shown', async () => {
+    const fixture = TestBed.createComponent(DetectChangesDescribedByPopoverComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    fixture.componentInstance.shown.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const popover = document.querySelector('.popover') as HTMLElement;
+    expect(host.getAttribute('aria-describedby')).toBe(`hint ${popover.id}`);
+
+    fixture.componentInstance.hint = 'error';
+    fixture.componentInstance.changeDetectorRef.detectChanges();
+    expect(host.getAttribute('aria-describedby')).toBe(`error ${popover.id}`);
+    fixture.destroy();
+  });
+
+  it('should drop its id when local detectChanges show and hide it before a tick', async () => {
+    const fixture = TestBed.createComponent(DetectChangesDescribedByPopoverComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const { changeDetectorRef, shown } = fixture.componentInstance;
+
+    shown.set(true);
+    changeDetectorRef.detectChanges();
+    expect(host.getAttribute('aria-describedby')).toMatch(/^hint popover-/);
+    shown.set(false);
+    changeDetectorRef.detectChanges();
+    expect(host.getAttribute('aria-describedby')).toBe('hint');
+    await vi.runAllTimersAsync();
+    expect(host.getAttribute('aria-describedby')).toBe('hint');
+    fixture.destroy();
+  });
+
+  it("should leave the author's value untouched while hidden", async () => {
+    const fixture = TestBed.createComponent(SpacedDescribedByPopoverComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    fixture.detectChanges();
+    const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    expect(host.getAttribute('aria-describedby')).toBe('hint  extra');
+    fixture.destroy();
+  });
+
+  it('should describe the host as soon as a trigger event shows the popover again', async () => {
+    const fixture = TestBed.createComponent(FocusPopoverComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    host.dispatchEvent(new Event('focus'));
+    await vi.runAllTimersAsync();
+    host.dispatchEvent(new Event('blur'));
+    await vi.runAllTimersAsync();
+    host.dispatchEvent(new Event('focus'));
+    await vi.advanceTimersByTimeAsync(20);
+    expect(host.getAttribute('aria-describedby')).toMatch(/^popover-/);
     fixture.destroy();
   });
 });

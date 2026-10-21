@@ -1,6 +1,9 @@
 import {
+  ChangeDetectorRef,
   Component,
   DOCUMENT,
+  inject,
+  input,
   inputBinding,
   PLATFORM_ID,
   signal,
@@ -489,15 +492,57 @@ class TooltipAndPopoverComponent {
 @Component({
   selector: 'c-hint-field',
   template: '',
-  host: { '[attr.aria-describedby]': "'hint'" }
+  host: { '[attr.aria-describedby]': 'hint()' }
 })
-class HintFieldTooltipComponent {}
+class HintFieldTooltipComponent {
+  readonly hint = input<string | null>('hint');
+}
 
 @Component({
   template: `<c-hint-field cTooltip="tip" [cTooltipVisible]="true" />`,
   imports: [HintFieldTooltipComponent, TooltipDirective]
 })
 class HostBindingDescribedByTooltipComponent {}
+
+@Component({
+  template: `<button cTooltip="tip" [attr.aria-describedby]="hint()" [cTooltipVisible]="shown()">Open</button>`,
+  imports: [TooltipDirective]
+})
+class ChangingBoundDescribedByTooltipComponent {
+  readonly hint = signal<string | null>('hint');
+  readonly shown = signal(false);
+}
+
+@Component({
+  template: `<c-hint-field cTooltip="tip" [hint]="hint()" [cTooltipVisible]="shown()" />`,
+  imports: [HintFieldTooltipComponent, TooltipDirective]
+})
+class ChangingHostBindingDescribedByTooltipComponent {
+  readonly hint = signal<string | null>('hint');
+  readonly shown = signal(false);
+}
+
+@Component({
+  template: `<button cTooltip="tip" [attr.aria-describedby]="hint" [cTooltipVisible]="shown()">Open</button>`,
+  imports: [TooltipDirective]
+})
+class DetectChangesDescribedByTooltipComponent {
+  readonly changeDetectorRef = inject(ChangeDetectorRef);
+  readonly shown = signal(false);
+  hint: string | null = 'hint';
+}
+
+@Component({
+  template: `<button cTooltip="tip" aria-describedby="hint  extra">Open</button>`,
+  imports: [TooltipDirective]
+})
+class SpacedDescribedByTooltipComponent {}
+
+@Component({
+  template: `<button cTooltip="tip" cTooltipTrigger="focus">Open</button>`,
+  imports: [TooltipDirective]
+})
+class FocusTooltipComponent {}
 
 @Component({
   template: `<button
@@ -602,6 +647,103 @@ describe("TooltipDirective with the author's aria-describedby", () => {
     const host = fixture.nativeElement.querySelector('c-hint-field') as HTMLElement;
     const tooltip = document.querySelector('.tooltip') as HTMLElement;
     expect(host.getAttribute('aria-describedby')).toBe(`hint ${tooltip.id}`);
+    fixture.destroy();
+  });
+
+  it.each([
+    ['an attribute binding', ChangingBoundDescribedByTooltipComponent, 'button'],
+    ['a host binding', ChangingHostBindingDescribedByTooltipComponent, 'c-hint-field']
+  ] as [string, Type<{ hint: WritableSignal<string | null>; shown: WritableSignal<boolean> }>, string][])(
+    'should keep its id when %s rewrites aria-describedby while shown',
+    async (_, type, selector) => {
+      const fixture = TestBed.createComponent(type);
+      fixture.autoDetectChanges();
+      await vi.runAllTimersAsync();
+      const host = fixture.nativeElement.querySelector(selector) as HTMLElement;
+
+      fixture.componentInstance.shown.set(true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      const tooltip = document.querySelector('.tooltip') as HTMLElement;
+      expect(host.getAttribute('aria-describedby')).toBe(`hint ${tooltip.id}`);
+
+      fixture.componentInstance.hint.set('error');
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(host.getAttribute('aria-describedby')).toBe(`error ${tooltip.id}`);
+
+      fixture.componentInstance.hint.set(null);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(host.getAttribute('aria-describedby')).toBe(tooltip.id);
+
+      fixture.componentInstance.shown.set(false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(host.getAttribute('aria-describedby')).toBeNull();
+      fixture.destroy();
+    }
+  );
+
+  it('should keep its id when a local detectChanges rewrites aria-describedby while shown', async () => {
+    const fixture = TestBed.createComponent(DetectChangesDescribedByTooltipComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    fixture.componentInstance.shown.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+    expect(host.getAttribute('aria-describedby')).toBe(`hint ${tooltip.id}`);
+
+    fixture.componentInstance.hint = 'error';
+    fixture.componentInstance.changeDetectorRef.detectChanges();
+    expect(host.getAttribute('aria-describedby')).toBe(`error ${tooltip.id}`);
+    fixture.destroy();
+  });
+
+  it('should drop its id when local detectChanges show and hide it before a tick', async () => {
+    const fixture = TestBed.createComponent(DetectChangesDescribedByTooltipComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const { changeDetectorRef, shown } = fixture.componentInstance;
+
+    shown.set(true);
+    changeDetectorRef.detectChanges();
+    expect(host.getAttribute('aria-describedby')).toMatch(/^hint tooltip-/);
+    shown.set(false);
+    changeDetectorRef.detectChanges();
+    expect(host.getAttribute('aria-describedby')).toBe('hint');
+    await vi.runAllTimersAsync();
+    expect(host.getAttribute('aria-describedby')).toBe('hint');
+    fixture.destroy();
+  });
+
+  it("should leave the author's value untouched while hidden", async () => {
+    const fixture = TestBed.createComponent(SpacedDescribedByTooltipComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    fixture.detectChanges();
+    const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    expect(host.getAttribute('aria-describedby')).toBe('hint  extra');
+    fixture.destroy();
+  });
+
+  it('should describe the host as soon as a trigger event shows the tooltip again', async () => {
+    const fixture = TestBed.createComponent(FocusTooltipComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    const host = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    host.dispatchEvent(new Event('focus'));
+    await vi.runAllTimersAsync();
+    host.dispatchEvent(new Event('blur'));
+    await vi.runAllTimersAsync();
+    host.dispatchEvent(new Event('focus'));
+    await vi.advanceTimersByTimeAsync(20);
+    expect(host.getAttribute('aria-describedby')).toMatch(/^tooltip-/);
     fixture.destroy();
   });
 
