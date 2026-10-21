@@ -16,8 +16,15 @@ export interface IModalAction {
 export class ModalService {
   readonly #modalState = new Subject<any>();
   readonly modalState$ = this.#modalState.asObservable();
+  readonly #opened = new Subject<{ modal: ModalComponent; focusFallback: (HTMLElement | null)[] }>();
+  /** Emits once a modal has opened through `toggle()`; the other visible modals close on it. */
+  readonly opened$ = this.#opened.asObservable();
 
   toggle(action: IModalAction): void {
     this.#modalState.next({ ...action, focusFallback: [...(action.focusFallback ?? [])] });
+  }
+
+  announceOpened(modal: ModalComponent, focusFallback: (HTMLElement | null)[]): void {
+    this.#opened.next({ modal, focusFallback });
   }
 }

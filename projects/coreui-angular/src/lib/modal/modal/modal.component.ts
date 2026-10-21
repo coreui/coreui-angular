@@ -29,6 +29,7 @@ import { BackdropService } from '../../backdrop/backdrop.service';
 import { ModalContentComponent } from '../modal-content/modal-content.component';
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 import { restoreFocus } from '../../shared/focus.utils';
+import { UIDService } from '../../services/uid.service';
 
 @Component({
   selector: 'c-modal',
@@ -40,7 +41,7 @@ import { restoreFocus } from '../../shared/focus.utils';
     '[class]': 'hostClasses()',
     '[attr.role]': 'visible() ? role() : null',
     '[inert]': 'ariaHidden()',
-    '[attr.id]': 'id',
+    '[attr.id]': 'attrId()',
     '[aria-modal]': 'ariaModal()',
     '[attr.tabindex]': '-1',
     '(mousedown)': 'onMouseDownHandler($event)',
@@ -57,6 +58,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly #destroyRef = inject(DestroyRef);
   readonly #platformId = inject(PLATFORM_ID);
+  readonly #generatedId = inject(UIDService).getUID('modal');
 
   /**
    * Align the modal in the center or top of the screen.
@@ -95,13 +97,13 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly keyboard = input(true, { transform: booleanAttribute });
 
   /**
-   * HTML id attribute, required for programmatic visibility change.
+   * HTML id attribute, used to toggle the modal by id. Without it, the `id` property holds a generated id that is not rendered.
    * @returns string
    */
   readonly attrId = input<string>(undefined, { alias: 'id' });
 
   get id() {
-    return this.attrId();
+    return this.attrId() || this.#generatedId;
   }
 
   /**
@@ -343,27 +345,40 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private stateToggleSubscribe(): void {
     this.#modalService.modalState$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe((action) => {
-      if (this === action.modal || this.id === action.id) {
+      if (!action.modal && !action.id) {
+        this.#closeFor(action.focusFallback);
+      } else if (this === action.modal || this.id === action.id) {
         if ('show' in action) {
           const visible = this.visible();
           const show = action?.show === 'toggle' ? !visible : !!action.show;
           if (show && !visible) {
             this.#trigger = action.trigger ?? null;
             this.#openAction = action;
+            this.visible.set(true);
+            this.#modalService.announceOpened(this, action.focusFallback);
+          } else {
+            this.visible.set(show);
           }
-          this.visible.set(show);
-        }
-      } else {
-        if (this.visible()) {
-          for (const target of this.#focusCandidates()) {
-            if (!action.focusFallback?.includes(target)) {
-              action.focusFallback?.push(target);
-            }
-          }
-          this.visible.set(false);
         }
       }
     });
+    this.#modalService.opened$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe(({ modal, focusFallback }) => {
+      if (modal !== this) {
+        this.#closeFor(focusFallback);
+      }
+    });
+  }
+
+  #closeFor(focusFallback: (HTMLElement | null)[]): void {
+    if (!this.visible()) {
+      return;
+    }
+    for (const target of this.#focusCandidates()) {
+      if (!focusFallback.includes(target)) {
+        focusFallback.push(target);
+      }
+    }
+    this.visible.set(false);
   }
 
   #focusCandidates(): (HTMLElement | null)[] {
