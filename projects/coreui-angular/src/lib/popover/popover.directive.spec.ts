@@ -530,6 +530,7 @@ class HintFieldPopoverComponent {
 class HostBindingDescribedByPopoverComponent {}
 
 @Component({
+  selector: 'c-changing-hint-popover',
   template: `<button cPopover="tip" [attr.aria-describedby]="hint()" [cPopoverVisible]="shown()">Open</button>`,
   imports: [PopoverDirective]
 })
@@ -548,6 +549,7 @@ class ChangingHostBindingDescribedByPopoverComponent {
 }
 
 @Component({
+  selector: 'c-detect-changes-hint-popover',
   template: `<button cPopover="tip" [attr.aria-describedby]="hint" [cPopoverVisible]="shown()">Open</button>`,
   imports: [PopoverDirective]
 })

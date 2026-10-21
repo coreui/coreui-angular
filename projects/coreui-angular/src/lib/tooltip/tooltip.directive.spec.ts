@@ -505,6 +505,7 @@ class HintFieldTooltipComponent {
 class HostBindingDescribedByTooltipComponent {}
 
 @Component({
+  selector: 'c-changing-hint-tooltip',
   template: `<button cTooltip="tip" [attr.aria-describedby]="hint()" [cTooltipVisible]="shown()">Open</button>`,
   imports: [TooltipDirective]
 })
@@ -523,6 +524,7 @@ class ChangingHostBindingDescribedByTooltipComponent {
 }
 
 @Component({
+  selector: 'c-detect-changes-hint-tooltip',
   template: `<button cTooltip="tip" [attr.aria-describedby]="hint" [cTooltipVisible]="shown()">Open</button>`,
   imports: [TooltipDirective]
 })
