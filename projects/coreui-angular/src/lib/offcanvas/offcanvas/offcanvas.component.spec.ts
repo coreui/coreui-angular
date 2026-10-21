@@ -7,6 +7,7 @@ import { By } from '@angular/platform-browser';
 import { NEVER, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { BackdropService } from '../../backdrop/backdrop.service';
 import { OffcanvasComponent } from './offcanvas.component';
 import { OffcanvasService } from '../offcanvas.service';
 
@@ -24,6 +25,7 @@ describe('OffcanvasComponent', () => {
     fixture = TestBed.createComponent(OffcanvasComponent);
     fixture.nativeElement.style.position = 'fixed';
     await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
@@ -49,12 +51,14 @@ describe('OffcanvasComponent', () => {
     componentRef.setInput('visible', true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
-    expect(document.querySelector('.offcanvas-backdrop')).not.toBeNull();
+    const backdrop: HTMLElement = TestBed.inject(BackdropService).activeBackdrop;
+    expect(backdrop.classList).toContain('offcanvas-backdrop');
+    expect(backdrop.isConnected).toBe(true);
 
     fixture.destroy();
     await vi.runAllTimersAsync();
 
-    expect(document.querySelector('.offcanvas-backdrop')).toBeNull();
+    expect(backdrop.isConnected).toBe(false);
   });
 
   it('should have css classes', () => {
@@ -106,8 +110,8 @@ describe('OffcanvasComponent', () => {
     fixture.detectChanges();
     expect(componentRef.instance.visible()).toBe(true);
     expect(componentRef.location.nativeElement.classList).toContain('show');
-    const backdrop = document.querySelector('.offcanvas-backdrop');
-    expect(backdrop).not.toBeNull();
+    const backdrop: HTMLElement = TestBed.inject(BackdropService).activeBackdrop;
+    expect(backdrop.classList).toContain('offcanvas-backdrop');
     await vi.runAllTimersAsync();
     // console.log(backdrop);
     expect(backdrop?.classList.contains('show')).toBe(true);
@@ -175,7 +179,8 @@ describe('OffcanvasComponent', () => {
     componentRef.setInput('visible', true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
-    expect(document.querySelector('.offcanvas-backdrop')).not.toBeNull();
+    const backdrop: HTMLElement = TestBed.inject(BackdropService).activeBackdrop;
+    expect(backdrop.isConnected).toBe(true);
     window.dispatchEvent(new Event('resize'));
     fixture.detectChanges();
     expect(componentRef.instance.visible()).toBe(true);
@@ -185,7 +190,7 @@ describe('OffcanvasComponent', () => {
     expect(componentRef.instance.visible()).toBe(false);
     expect(fixture.nativeElement.getAttribute('role')).toBeNull();
     await vi.runAllTimersAsync();
-    expect(document.querySelector('.offcanvas-backdrop')).toBeNull();
+    expect(backdrop.isConnected).toBe(false);
   });
 
   it('should stay open on resize when it was never positioned as a panel', async () => {
