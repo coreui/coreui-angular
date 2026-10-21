@@ -1,20 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { PopoverComponent } from './popover.component';
 
+@Component({
+  template: '<c-popover />',
+  imports: [PopoverComponent]
+})
+class TestComponent {}
+
 describe('PopoverComponent', () => {
   let component: PopoverComponent;
-  let fixture: ComponentFixture<PopoverComponent>;
+  let element: HTMLElement;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [PopoverComponent]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(PopoverComponent);
+    const fixture = TestBed.createComponent(TestComponent);
     await fixture.whenStable();
 
-    component = fixture.componentInstance;
+    const debugElement = fixture.debugElement.query(By.directive(PopoverComponent));
+    component = debugElement.componentInstance;
+    element = debugElement.nativeElement;
   });
 
   it('should create', () => {
@@ -22,8 +28,8 @@ describe('PopoverComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement.classList.contains('popover')).toBe(true);
-    expect(fixture.nativeElement.classList.contains('fade')).toBe(true);
-    expect(fixture.nativeElement.classList.contains('bs-popover-auto')).toBe(true);
+    expect(element.classList.contains('popover')).toBe(true);
+    expect(element.classList.contains('fade')).toBe(true);
+    expect(element.classList.contains('bs-popover-auto')).toBe(true);
   });
 });
