@@ -1,20 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { TooltipComponent } from './tooltip.component';
 
+@Component({
+  template: '<c-tooltip />',
+  imports: [TooltipComponent]
+})
+class TestComponent {}
+
 describe('TooltipComponent', () => {
   let component: TooltipComponent;
-  let fixture: ComponentFixture<TooltipComponent>;
+  let element: HTMLElement;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TooltipComponent]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TooltipComponent);
+    const fixture = TestBed.createComponent(TestComponent);
     await fixture.whenStable();
 
-    component = fixture.componentInstance;
+    const debugElement = fixture.debugElement.query(By.directive(TooltipComponent));
+    component = debugElement.componentInstance;
+    element = debugElement.nativeElement;
   });
 
   it('should create', () => {
@@ -22,7 +28,7 @@ describe('TooltipComponent', () => {
   });
 
   it('should have css classes', () => {
-    expect(fixture.nativeElement.classList.contains('tooltip')).toBe(true);
-    expect(fixture.nativeElement.classList.contains('fade')).toBe(true);
+    expect(element.classList.contains('tooltip')).toBe(true);
+    expect(element.classList.contains('fade')).toBe(true);
   });
 });
