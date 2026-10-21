@@ -25,6 +25,7 @@ describe('OffcanvasComponent', () => {
     fixture = TestBed.createComponent(OffcanvasComponent);
     fixture.nativeElement.style.position = 'fixed';
     await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
 
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
