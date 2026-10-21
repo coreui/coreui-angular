@@ -201,7 +201,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
    * - `outside` only on a click outside it.
    *
    * A click on a form field or inside a form in the menu does not close it; `cDropdownClose` and
-   * `cDropdownItem` close it from there.
+   * `cDropdownItem` close it from there, but not on a click on a field that takes typing or a choice inside the item.
    * @returns boolean | 'inside' | 'outside'
    * @default true
    */

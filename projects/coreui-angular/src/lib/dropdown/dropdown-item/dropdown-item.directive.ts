@@ -31,7 +31,8 @@ export class DropdownItemDirective implements FocusableOption {
   readonly active = input<boolean>();
 
   /**
-   * Configure dropdown-item close dropdown behavior.
+   * Configure dropdown-item close dropdown behavior. The item does not close the dropdown on a click on a field inside
+   * it that takes typing or a choice (input other than a button, select, textarea, contenteditable).
    * @returns boolean
    * @default true
    */
@@ -94,7 +95,9 @@ export class DropdownItemDirective implements FocusableOption {
   });
 
   onClick($event: MouseEvent): void {
-    this.handleInteraction();
+    if ($event.target === this.elementRef.nativeElement || !isEditableTarget($event.target)) {
+      this.handleInteraction();
+    }
   }
 
   onKeyUp($event: KeyboardEvent): void {
