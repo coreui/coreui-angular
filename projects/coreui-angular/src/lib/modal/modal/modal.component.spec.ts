@@ -38,7 +38,9 @@ describe('ModalComponent', () => {
   });
 
   afterEach(async () => {
-    componentRef.setInput('visible', false);
+    if (!componentRef.hostView.destroyed) {
+      component.visible.set(false);
+    }
     fixture.detectChanges();
     await vi.runAllTimersAsync();
     vi.useRealTimers();
