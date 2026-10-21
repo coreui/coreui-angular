@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 
 import { DropdownItemDirective } from './dropdown-item.directive';
 import { DropdownService } from '../dropdown.service';
-import { DropdownComponent } from '../dropdown/dropdown.component';
+import { DropdownComponent, DropdownToggleDirective } from '../dropdown/dropdown.component';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 
 class MockElementRef extends ElementRef {}
@@ -139,5 +139,80 @@ describe('DropdownItemDirective Enter', () => {
     expect(dropdown.visible()).toBe(false);
     await keyup('plain');
     expect(dropdown.visible()).toBe(false);
+  });
+});
+
+@Component({
+  template: `
+    <c-dropdown [autoClose]="autoClose()" [(visible)]="visible">
+      <button cDropdownToggle>Toggle</button>
+      <div cDropdownMenu>
+        <div cDropdownItem id="fieldItem">
+          <input id="field" />
+          <select id="select">
+            <option id="option">One</option>
+          </select>
+          <textarea id="textarea"></textarea>
+          <div contenteditable="true" id="editable">Note</div>
+          <input type="button" id="innerInputButton" value="Go" />
+          <form><button type="submit" id="formButton" (click)="$event.preventDefault()">Send</button></form>
+          <span id="text">Text</span>
+        </div>
+        <label cDropdownItem id="radioItem"><input type="radio" id="radio" /> Name</label>
+        <input type="button" cDropdownItem id="inputButtonItem" value="Apply" />
+        <input type="checkbox" cDropdownItem id="checkboxItem" />
+      </div>
+    </c-dropdown>
+  `,
+  imports: [DropdownComponent, DropdownMenuDirective, DropdownItemDirective, DropdownToggleDirective]
+})
+class FieldItemTestComponent {
+  readonly autoClose = signal<boolean | 'inside' | 'outside'>(true);
+  readonly visible = signal(true);
+}
+
+describe('DropdownItemDirective click', () => {
+  let fixture: ComponentFixture<FieldItemTestComponent>;
+
+  const visibleAfterClick = async (id: string) => {
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    fixture.nativeElement.querySelector(`#${id}`).click();
+    await fixture.whenStable();
+    return fixture.componentInstance.visible();
+  };
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(FieldItemTestComponent);
+    await fixture.whenStable();
+  });
+
+  it('should stay open on a click on a form field inside the item with any autoClose', async () => {
+    for (const autoClose of [true, false, 'inside', 'outside'] as const) {
+      fixture.componentInstance.autoClose.set(autoClose);
+      for (const id of ['field', 'select', 'option', 'textarea', 'radio']) {
+        expect(await visibleAfterClick(id)).toBe(true);
+      }
+    }
+  });
+
+  it('should not close from the item on a click on a contenteditable inside it', async () => {
+    fixture.componentInstance.autoClose.set('outside');
+    expect(await visibleAfterClick('editable')).toBe(true);
+  });
+
+  it('should close on a click on the item outside its form fields', async () => {
+    fixture.componentInstance.autoClose.set('outside');
+    for (const id of [
+      'fieldItem',
+      'text',
+      'innerInputButton',
+      'formButton',
+      'radioItem',
+      'inputButtonItem',
+      'checkboxItem'
+    ]) {
+      expect(await visibleAfterClick(id)).toBe(false);
+    }
   });
 });
