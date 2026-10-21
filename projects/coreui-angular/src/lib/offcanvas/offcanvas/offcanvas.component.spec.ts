@@ -6,6 +6,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NEVER, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import type { MockInstance } from 'vitest';
 
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { OffcanvasComponent } from './offcanvas.component';
@@ -579,6 +580,45 @@ describe('OffcanvasComponent responsive', () => {
     expect(fixture.componentInstance.visible()).toBe(false);
   });
 
+  it('should watch the new breakpoint when responsive changes while open', async () => {
+    fixture.componentRef.setInput('responsive', true);
+    fixture.componentRef.setInput('visible', true);
+    await fixture.whenStable();
+    expect(queries).toEqual([]);
+
+    fixture.componentRef.setInput('responsive', 'lg');
+    await fixture.whenStable();
+    expect(queries).toEqual(['(max-width: 991.98px)']);
+
+    layout.next(false);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
+  it('should drop the previous breakpoint subscription when it watches again', async () => {
+    fixture.componentRef.setInput('visible', true);
+    await fixture.whenStable();
+    fixture.componentInstance.visible.set(false);
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(queries).toHaveLength(2);
+
+    fixture.componentRef.setInput('visible', false);
+    await fixture.whenStable();
+    expect(layout.observed).toBe(false);
+  });
+
+  it('should stop watching the breakpoint when responsive turns off while open', async () => {
+    fixture.componentRef.setInput('visible', true);
+    await fixture.whenStable();
+    fixture.componentRef.setInput('responsive', true);
+    await fixture.whenStable();
+
+    layout.next(false);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+
   it('should open and close through the show alias', async () => {
     fixture.componentInstance.show = true;
     await fixture.whenStable();
@@ -588,5 +628,160 @@ describe('OffcanvasComponent responsive', () => {
     fixture.componentInstance.show = false;
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
+  });
+});
+
+describe('OffcanvasComponent with inputs changed while open', () => {
+  let fixture: ComponentFixture<OffcanvasComponent>;
+  let setBackdrop: MockInstance<BackdropService['setBackdrop']>;
+
+  const update = async (name: string, value: unknown) => {
+    fixture.componentRef.setInput(name, value);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+  };
+
+  beforeEach(async () => {
+    TestBed.configureTestingModule({
+      providers: [{ provide: BreakpointObserver, useValue: { observe: () => NEVER } }]
+    });
+    fixture = TestBed.createComponent(OffcanvasComponent);
+    fixture.nativeElement.style.position = 'fixed';
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
+    setBackdrop = vi.spyOn(TestBed.inject(BackdropService), 'setBackdrop');
+    vi.useFakeTimers();
+  });
+
+  afterEach(async () => {
+    await update('visible', false);
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it.each([
+    ['scroll', true],
+    ['responsive', 'lg'],
+    ['backdrop', 'static']
+  ])('should keep one backdrop and remove it on close when %s changes while open', async (name, value) => {
+    await update('visible', true);
+    await update(name, value);
+    expect(setBackdrop).toHaveBeenCalledTimes(1);
+
+    await update('visible', false);
+    expect(setBackdrop.mock.results.every(({ value }) => !value.isConnected)).toBe(true);
+  });
+
+  it('should not close on a backdrop click once the backdrop turns static after another input changed while open', async () => {
+    await update('visible', true);
+    await update('scroll', true);
+    await update('backdrop', 'static');
+
+    expect(setBackdrop).toHaveBeenCalledTimes(1);
+    expect(setBackdrop.mock.results[0].value.isConnected).toBe(true);
+    setBackdrop.mock.results[0].value.dispatchEvent(new MouseEvent('click'));
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+
+  it('should not close on a backdrop click once the backdrop turns static after opening with it switched on', async () => {
+    await update('backdrop', false);
+    fixture.componentRef.setInput('visible', true);
+    fixture.componentRef.setInput('backdrop', true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    await update('backdrop', 'static');
+
+    expect(setBackdrop).toHaveBeenCalledTimes(1);
+    expect(setBackdrop.mock.results[0].value.isConnected).toBe(true);
+    setBackdrop.mock.results[0].value.dispatchEvent(new MouseEvent('click'));
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+
+  it('should not close on a backdrop click once the backdrop turns static after closing and reopening in one tick', async () => {
+    await update('visible', true);
+    fixture.componentInstance.visible.set(false);
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    await update('backdrop', 'static');
+
+    expect(setBackdrop).toHaveBeenCalledTimes(1);
+    expect(setBackdrop.mock.results[0].value.isConnected).toBe(true);
+    setBackdrop.mock.results[0].value.dispatchEvent(new MouseEvent('click'));
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.componentInstance.visible()).toBe(true);
+  });
+
+  it('should close on a backdrop click once a static backdrop turns dismissible while open', async () => {
+    await update('backdrop', 'static');
+    await update('visible', true);
+    await update('backdrop', true);
+
+    expect(setBackdrop).toHaveBeenCalledTimes(1);
+    setBackdrop.mock.results[0].value.dispatchEvent(new MouseEvent('click'));
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
+  it('should leave scrolling unlocked when scroll turns off while open', async () => {
+    await update('scroll', true);
+    await update('visible', true);
+    expect(document.body.style.overflow).toBe('');
+
+    await update('scroll', false);
+    expect(document.body.style.overflow).toBe('');
+  });
+
+  it('should take the backdrop off and put it back while open', async () => {
+    await update('visible', true);
+    const first = setBackdrop.mock.results[0].value;
+
+    await update('backdrop', false);
+    expect(first.isConnected).toBe(false);
+
+    await update('backdrop', true);
+    expect(setBackdrop).toHaveBeenCalledTimes(2);
+    const second = setBackdrop.mock.results[1].value;
+    expect(second.isConnected).toBe(true);
+
+    second.dispatchEvent(new MouseEvent('click'));
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(fixture.componentInstance.visible()).toBe(false);
+  });
+
+  it.each([
+    ['scroll', true],
+    ['responsive', 'lg'],
+    ['backdrop', 'static']
+  ])('should keep focus inside the panel when %s changes while open', async (name, value) => {
+    const button = document.createElement('button');
+    fixture.nativeElement.append(button);
+    await update('visible', true);
+    button.focus();
+
+    await update(name, value);
+    expect(document.activeElement).toBe(button);
+    button.remove();
+  });
+
+  it.each([
+    ['scroll', true],
+    ['responsive', 'lg'],
+    ['backdrop', 'static']
+  ])('should emit visibleChange once per opening when %s changes while open', async (name, value) => {
+    const emitted: boolean[] = [];
+    fixture.componentInstance.visibleChange.subscribe((visible) => emitted.push(visible));
+
+    await update('visible', true);
+    await update(name, value);
+    await update('visible', false);
+    expect(emitted).toEqual([true, false]);
   });
 });

@@ -137,7 +137,7 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   readonly #inPlace = signal(false);
 
   /**
-   * Allow body scrolling while offcanvas is visible.
+   * Allow body scrolling while offcanvas is visible. Read when the offcanvas opens.
    * @returns boolean
    * @default false
    */
@@ -185,21 +185,30 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   readonly visibleEffect = effect(() => {
     const visible = this.visible();
-    const wasShown = this.#isShown;
-    this.animateStart(visible);
-    if (visible) {
-      if (!wasShown) {
-        this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
+    untracked(() => {
+      const wasShown = this.#isShown;
+      this.animateStart(visible);
+      if (visible) {
+        if (!wasShown) {
+          this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
+        }
+        this.setFocus();
+      } else {
+        this.#shownAsPanel = false;
+        this.#restoreFocus();
       }
-      this.setBackdrop(this.backdrop());
-      this.setFocus();
-    } else {
-      this.#shownAsPanel = false;
-      this.#restoreFocus();
-      this.setBackdrop(false);
-    }
-    this.layoutChangeSubscribe(visible);
-    this.visibleChange?.emit(visible);
+      this.visibleChange?.emit(visible);
+    });
+  });
+
+  readonly #backdropEffect = effect(() => {
+    const backdrop = this.visible() && this.backdrop();
+    untracked(() => this.setBackdrop(backdrop));
+  });
+
+  readonly #layoutEffect = effect(() => {
+    const breakpoint = this.visible() && this.responsiveBreakpoint;
+    untracked(() => this.layoutChangeSubscribe(breakpoint));
   });
 
   /**
@@ -385,44 +394,40 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   private backdropClickSubscribe(subscribe: boolean = true): void {
+    this.#backdropClickSubscription?.unsubscribe();
     if (subscribe) {
       this.#backdropClickSubscription = this.#backdropService.backdropClick$
         .pipe(takeUntilDestroyed(this.#destroyRef))
         .subscribe((clicked) => {
           this.#offcanvasService.toggle({ show: !clicked, id: this.id() });
         });
-    } else {
-      this.#backdropClickSubscription?.unsubscribe();
     }
   }
 
   protected setBackdrop(setBackdrop: boolean | 'static'): void {
-    this.#activeBackdrop = !!setBackdrop
-      ? this.#backdropService.setBackdrop('offcanvas')
-      : this.#backdropService.clearBackdrop(this.#activeBackdrop);
-    setBackdrop === true ? this.backdropClickSubscribe() : this.backdropClickSubscribe(false);
+    if (!setBackdrop) {
+      this.#activeBackdrop = this.#backdropService.clearBackdrop(this.#activeBackdrop);
+    } else if (!this.#activeBackdrop) {
+      this.#activeBackdrop = this.#backdropService.setBackdrop('offcanvas');
+    }
+    this.backdropClickSubscribe(setBackdrop === true);
   }
 
-  private layoutChangeSubscribe(subscribe: boolean = true): void {
-    if (subscribe) {
-      if (!this.responsiveBreakpoint) {
-        return;
-      }
-
-      const responsiveBreakpoint = `(max-width: ${this.responsiveBreakpoint})`;
-
-      const layoutChanges = this.#breakpointObserver.observe([responsiveBreakpoint]);
-
-      this.#layoutChangeSubscription = layoutChanges
-        .pipe(
-          filter((breakpointState) => !breakpointState.matches),
-          takeUntilDestroyed(this.#destroyRef)
-        )
-        .subscribe((breakpointState: BreakpointState) => {
-          this.visible.set(breakpointState.matches);
-        });
-    } else {
-      this.#layoutChangeSubscription?.unsubscribe();
+  private layoutChangeSubscribe(breakpoint: string | false): void {
+    this.#layoutChangeSubscription?.unsubscribe();
+    if (!breakpoint) {
+      return;
     }
+
+    const layoutChanges = this.#breakpointObserver.observe([`(max-width: ${breakpoint})`]);
+
+    this.#layoutChangeSubscription = layoutChanges
+      .pipe(
+        filter((breakpointState) => !breakpointState.matches),
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe((breakpointState: BreakpointState) => {
+        this.visible.set(breakpointState.matches);
+      });
   }
 }
