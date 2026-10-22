@@ -6,12 +6,24 @@ import { By } from '@angular/platform-browser';
 
 import { ModalComponent } from './modal.component';
 import { ModalService } from '../modal.service';
+import { ModalToggleDirective } from '../modal-dismiss/modal-toggle.directive';
 
 @Component({
   template: '<ng-container #outlet />'
 })
 class TestComponent {
   readonly outlet = viewChild.required('outlet', { read: ViewContainerRef });
+}
+
+@Component({
+  template: `
+    <button [cModalToggle]="modal.id">Open</button>
+    <c-modal #modal [id]="id" />
+  `,
+  imports: [ModalComponent, ModalToggleDirective]
+})
+class OptionalIdHostComponent {
+  id: string | undefined = undefined;
 }
 
 describe('ModalComponent', () => {
@@ -240,6 +252,7 @@ describe('ModalComponent', () => {
   describe('focus return', () => {
     let inside: HTMLButtonElement;
     let input: HTMLInputElement;
+    let other: ComponentRef<ModalComponent> | undefined;
     let service: ModalService;
     let trigger: HTMLButtonElement;
 
@@ -247,6 +260,14 @@ describe('ModalComponent', () => {
       service.toggle({ show, modal: component, trigger: toggleTrigger });
       fixture.detectChanges();
       await vi.runAllTimersAsync();
+    };
+
+    const createOther = async () => {
+      other = fixture.componentInstance.outlet().createComponent(ModalComponent);
+      other.setInput('id', 'other-modal');
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      return other;
     };
 
     beforeEach(() => {
@@ -258,9 +279,16 @@ describe('ModalComponent', () => {
       document.body.append(input, trigger);
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       input.remove();
       trigger.remove();
+      if (other && !other.hostView.destroyed) {
+        other.instance.visible.set(false);
+        fixture.detectChanges();
+        await vi.runAllTimersAsync();
+        other.destroy();
+      }
+      other = undefined;
     });
 
     it('should return focus to the toggle that opened it', async () => {
@@ -359,15 +387,21 @@ describe('ModalComponent', () => {
       expect(element.getAttribute('role')).toBe('dialog');
     });
 
-    it('should hand its focus candidates to the action that closes it for another modal', async () => {
+    it('should hand its focus candidates to the modal that opens instead', async () => {
+      const opened = await createOther();
       await toggle(true, trigger);
-      inside.focus();
-      const received: { focusFallback?: (HTMLElement | null)[] }[] = [];
-      service.modalState$.subscribe((action) => received.push(action));
-      service.toggle({ show: true, id: 'other-modal', trigger: inside });
-      expect(received[0].focusFallback?.includes(trigger)).toBe(true);
+      input.focus();
+
+      service.toggle({ show: true, id: 'other-modal' });
       fixture.detectChanges();
       await vi.runAllTimersAsync();
+      expect(component.visible()).toBe(false);
+
+      input.remove();
+      opened.instance.visible.set(false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(document.activeElement).toBe(trigger);
     });
 
     it('should return focus to a fallback handed over by the action that opened it', async () => {
@@ -403,7 +437,22 @@ describe('ModalComponent', () => {
       stale.remove();
     });
 
+    it('should pass on the fallback it was opened with', async () => {
+      await createOther();
+      service.toggle({ show: true, modal: component, focusFallback: [input] });
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      let received: { focusFallback?: (HTMLElement | null)[] } = {};
+      service.modalState$.subscribe((action) => (received = action));
+
+      service.toggle({ show: true, id: 'other-modal' });
+      expect(received.focusFallback).toContain(input);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    });
+
     it('should hand over each focus candidate once', async () => {
+      await createOther();
       await toggle(true, trigger);
       inside.focus();
       let received: { focusFallback?: (HTMLElement | null)[] } = {};
@@ -420,6 +469,179 @@ describe('ModalComponent', () => {
       const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
       expect(trap.enabled).toBe(true);
       expect(trap.autoCapture).toBe(false);
+    });
+  });
+
+  describe('with another modal', () => {
+    let other: ComponentRef<ModalComponent>;
+    let service: ModalService;
+
+    const settle = async () => {
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    };
+
+    beforeEach(async () => {
+      service = TestBed.inject(ModalService);
+      other = fixture.componentInstance.outlet().createComponent(ModalComponent);
+      await settle();
+    });
+
+    afterEach(async () => {
+      if (!other.hostView.destroyed) {
+        other.instance.visible.set(false);
+        await settle();
+        other.destroy();
+      }
+    });
+
+    it.each([
+      ['set ids', 'first', 'second'],
+      ['generated ids', null, null],
+      ['ids bound to undefined', undefined, undefined]
+    ])('should stay open when another, closed modal is destroyed (%s)', async (_, id, otherId) => {
+      if (id !== null && otherId !== null) {
+        componentRef.setInput('id', id);
+        other.setInput('id', otherId);
+      }
+      component.visible.set(true);
+      await settle();
+
+      other.destroy();
+      await settle();
+      expect(component.visible()).toBe(true);
+    });
+
+    it('should stay open when an action closes another modal', async () => {
+      component.visible.set(true);
+      await settle();
+
+      service.toggle({ show: false, modal: other.instance });
+      await settle();
+      expect(component.visible()).toBe(true);
+    });
+
+    it('should close when another modal opens', async () => {
+      component.visible.set(true);
+      await settle();
+
+      service.toggle({ show: true, modal: other.instance });
+      await settle();
+      expect(component.visible()).toBe(false);
+      expect(other.instance.visible()).toBe(true);
+    });
+
+    it('should close on a toggle without an id', async () => {
+      component.visible.set(true);
+      await settle();
+
+      service.toggle({ show: 'toggle', id: '' });
+      await settle();
+      expect(component.visible()).toBe(false);
+    });
+
+    it('should close on a close action without a target', async () => {
+      component.visible.set(true);
+      await settle();
+
+      service.toggle({ show: false });
+      await settle();
+      expect(component.visible()).toBe(false);
+    });
+
+    it('should stay open when a toggle closes another visible modal', async () => {
+      component.visible.set(true);
+      other.instance.visible.set(true);
+      await settle();
+
+      service.toggle({ show: 'toggle', modal: other.instance });
+      await settle();
+      expect(other.instance.visible()).toBe(false);
+      expect(component.visible()).toBe(true);
+    });
+
+    it('should stay open when an action aims at a modal that does not exist', async () => {
+      component.visible.set(true);
+      await settle();
+
+      service.toggle({ show: true, id: 'missing-modal' });
+      await settle();
+      expect(component.visible()).toBe(true);
+    });
+
+    it('should open a modal without an id through its generated id only', async () => {
+      service.toggle({ show: 'toggle', id: other.instance.id });
+      await settle();
+      expect(other.instance.id).toBeTruthy();
+      expect(other.instance.visible()).toBe(true);
+      expect(component.visible()).toBe(false);
+    });
+
+    it('should render an id the author set', async () => {
+      other.setInput('id', 'set-id');
+      await settle();
+      expect(other.location.nativeElement.id).toBe('set-id');
+    });
+
+    it('should give every modal its own generated id', async () => {
+      expect(component.id).not.toBe(other.instance.id);
+
+      service.toggle({ show: 'toggle', id: component.id });
+      await settle();
+      expect(component.visible()).toBe(true);
+      expect(other.instance.visible()).toBe(false);
+    });
+
+    it('should close when another modal opens through a toggle', async () => {
+      component.visible.set(true);
+      await settle();
+
+      service.toggle({ show: 'toggle', id: other.instance.id });
+      await settle();
+      expect(component.visible()).toBe(false);
+      expect(other.instance.visible()).toBe(true);
+    });
+
+    it('should close every visible modal on an open action without a target', async () => {
+      component.visible.set(true);
+      await settle();
+
+      service.toggle({ show: true });
+      await settle();
+      expect(component.visible()).toBe(false);
+      expect(other.instance.visible()).toBe(false);
+    });
+
+    it('should announce an opening once the modal is visible', async () => {
+      const seen: boolean[] = [];
+      service.opened$.subscribe(({ modal }) => seen.push(modal.visible()));
+
+      service.toggle({ show: true, modal: other.instance });
+      await settle();
+      expect(seen).toEqual([true]);
+    });
+
+    it('should not render a generated id', () => {
+      expect(other.instance.id).toBeTruthy();
+      expect(other.location.nativeElement.hasAttribute('id')).toBe(false);
+    });
+  });
+
+  describe('with an optional id binding', () => {
+    it('should open through cModalToggle bound to its id property', async () => {
+      const fixture = TestBed.createComponent(OptionalIdHostComponent);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      const modal = fixture.debugElement.query(By.directive(ModalComponent)).componentInstance as ModalComponent;
+
+      (fixture.nativeElement.querySelector('button') as HTMLButtonElement).click();
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      expect(modal.visible()).toBe(true);
+
+      modal.visible.set(false);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
     });
   });
 
