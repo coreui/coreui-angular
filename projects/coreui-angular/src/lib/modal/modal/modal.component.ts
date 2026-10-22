@@ -2,6 +2,7 @@ import { A11yModule, CdkTrapFocus } from '@angular/cdk/a11y';
 import { DomPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
+  afterRenderEffect,
   AfterViewInit,
   booleanAttribute,
   Component,
@@ -29,6 +30,7 @@ import { BackdropService } from '../../backdrop/backdrop.service';
 import { ModalContentComponent } from '../modal-content/modal-content.component';
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 import { restoreFocus } from '../../shared/focus.utils';
+import { afterTransitions } from '../../shared/transition.utils';
 import { UIDService } from '../../services/uid.service';
 
 @Component({
@@ -227,29 +229,26 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly focusTrap = viewChild(CdkTrapFocus);
   readonly modalDialogRef = viewChild.required(ModalDialogComponent, { read: ElementRef });
 
-  readonly #modalDialogEffect = effect((OnCleanup) => {
-    const modalDialogElement = this.modalDialogRef().nativeElement;
-
-    const removeEventListeners = () => {
-      modalDialogElement?.removeEventListener('transitionend', this.#handleTransitionEnd);
-    };
-
-    OnCleanup(removeEventListeners);
-
-    modalDialogElement?.addEventListener('transitionend', this.#handleTransitionEnd);
+  readonly #hideEffect = afterRenderEffect({
+    read: (onCleanup) => {
+      if (this.visible() || this.#hidden) {
+        return;
+      }
+      let cancelled = false;
+      onCleanup(() => (cancelled = true));
+      Promise.all([
+        afterTransitions(this.#hostElement.nativeElement),
+        afterTransitions(this.modalDialogRef().nativeElement)
+      ]).then(() => {
+        if (!cancelled && !this.visible()) {
+          this.#completeHide();
+        }
+      });
+    }
   });
 
-  readonly #handleTransitionEnd = (event: TransitionEvent) => {
-    const modalDialogElement = this.modalDialogRef().nativeElement;
-    if (event.target === modalDialogElement && event.propertyName === 'transform') {
-      if (!this.visible()) {
-        this.domPortalCleanup();
-        this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
-      }
-    }
-  };
-
   #activeBackdrop!: any;
+  #hidden = true;
 
   // private inBoundingClientRect!: boolean;
 
@@ -277,17 +276,26 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   animateStart() {
     if (this.visible()) {
-      this.#backdropService.hideScrollbar();
+      this.#hidden = false;
       this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'block');
-    } else {
-      if (!this.transition()) {
-        this.domPortalCleanup();
-        this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
-      }
+    } else if (!this.#hidden && !isPlatformBrowser(this.#platformId)) {
+      this.#completeHide();
     }
     setTimeout(() => {
       this.show = this.visible();
     });
+  }
+
+  #completeHide(): void {
+    this.#hidden = true;
+    this.domPortalCleanup();
+    this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'none');
+    this.#releaseBody();
+  }
+
+  #releaseBody(): void {
+    this.#backdropService.unlockScroll(this);
+    this.#modalService.removeOpenClass(this);
   }
 
   onKeyDownHandler(event: KeyboardEvent): void {
@@ -341,6 +349,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.#afterViewInit.set(false);
     this.setBackdrop(false);
     this.domPortalCleanup();
+    this.#releaseBody();
   }
 
   private stateToggleSubscribe(): void {
@@ -396,18 +405,22 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setBackdrop(setBackdrop: boolean): void {
-    this.#activeBackdrop = setBackdrop
-      ? this.#backdropService.setBackdrop('modal')
-      : this.#backdropService.clearBackdrop(this.#activeBackdrop);
+    if (setBackdrop) {
+      this.#activeBackdrop ??= this.#backdropService.setBackdrop('modal', this.transition());
+    } else {
+      this.#activeBackdrop = this.#backdropService.clearBackdrop(this.#activeBackdrop);
+    }
   }
 
   private setBodyStyles(open: boolean): void {
-    if (open) {
-      if (!!this.backdrop()) {
-        this.#renderer.addClass(this.#document.body, 'modal-open');
-      }
+    if (!open) {
+      return;
+    }
+    this.#backdropService.lockScroll(this);
+    if (this.backdrop() !== false) {
+      this.#modalService.addOpenClass(this);
     } else {
-      this.#renderer.removeClass(this.#document.body, 'modal-open');
+      this.#modalService.removeOpenClass(this);
     }
   }
 

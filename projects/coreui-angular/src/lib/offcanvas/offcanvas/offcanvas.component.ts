@@ -29,6 +29,7 @@ import { filter } from 'rxjs/operators';
 import { BackdropService } from '../../backdrop/backdrop.service';
 import { ThemeDirective } from '../../shared';
 import { restoreFocus } from '../../shared/focus.utils';
+import { afterTransitions } from '../../shared/transition.utils';
 import { OffcanvasService } from '../offcanvas.service';
 
 let nextId = 0;
@@ -42,10 +43,10 @@ let nextId = 0;
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: {
     '[attr.id]': 'id()',
-    '[inert]': 'ariaHidden()',
+    '[inert]': 'hostInert()',
     '[attr.role]': 'visible() ? role() : null',
     '[aria-modal]': 'visible() ? ariaModal() : null',
-    '[attr.tabindex]': 'tabIndex',
+    '[attr.tabindex]': 'ariaHidden() ? null : tabIndex',
     '[class]': 'hostClasses()',
     '(document:keydown)': 'onKeyDownHandler($event)',
     '(window:resize)': 'onResizeHandler()'
@@ -129,15 +130,16 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   #activeBackdrop!: HTMLDivElement;
   #backdropClickSubscription!: Subscription;
   #layoutChangeSubscription!: Subscription;
-  #hideFallbackId?: ReturnType<typeof setTimeout>;
   #focusBeforeShow: HTMLElement | null = null;
+  readonly #hidden = signal(true);
   #isShown = false;
   #shownAsPanel = false;
+  #transitionWait?: object;
   #trigger: HTMLElement | null = null;
   readonly #inPlace = signal(false);
 
   /**
-   * Allow body scrolling while offcanvas is visible. Read when the offcanvas opens.
+   * Allow body scrolling while the offcanvas is open. Changes apply while it is open.
    * @returns boolean
    * @default false
    */
@@ -206,6 +208,21 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
     untracked(() => this.setBackdrop(backdrop));
   });
 
+  readonly #scrollLockEffect = effect(() => {
+    const visible = this.visible();
+    const scroll = this.scroll();
+    untracked(() => {
+      if (!visible) {
+        return;
+      }
+      if (scroll) {
+        this.#backdropService.unlockScroll(this);
+      } else {
+        this.#backdropService.lockScroll(this);
+      }
+    });
+  });
+
   readonly #layoutEffect = effect(() => {
     const breakpoint = this.visible() && this.responsiveBreakpoint;
     untracked(() => this.layoutChangeSubscribe(breakpoint));
@@ -231,6 +248,10 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
 
   readonly ariaHidden = computed(() => {
     return this.visible() || this.#inPlace() ? null : true;
+  });
+
+  protected readonly hostInert = computed(() => {
+    return this.#hidden() ? this.ariaHidden() : null;
   });
 
   get tabIndex(): string | null {
@@ -259,22 +280,31 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
   }
 
   animateStart(visible: boolean = this.visible()): void {
-    const wasShown = this.#isShown;
+    const host = this.#hostElement.nativeElement;
     this.#isShown = visible;
-    this.#clearHideFallback();
     if (visible) {
-      if (!this.scroll()) {
-        this.#backdropService.hideScrollbar();
-      }
-      this.#renderer.removeClass(this.#hostElement.nativeElement, 'hiding');
-      this.#renderer.addClass(this.#hostElement.nativeElement, 'showing');
+      this.#hidden.set(false);
+      this.#renderer.removeClass(host, 'hiding');
+      this.#renderer.addClass(host, 'showing');
     } else {
-      this.#renderer.removeClass(this.#hostElement.nativeElement, 'showing');
-      if (wasShown) {
-        this.#renderer.addClass(this.#hostElement.nativeElement, 'hiding');
-        this.#scheduleHideFallback();
+      this.#renderer.removeClass(host, 'showing');
+      if (this.#hidden()) {
+        return;
       }
+      this.#renderer.addClass(host, 'hiding');
     }
+    const transitionWait = {};
+    this.#transitionWait = transitionWait;
+    afterTransitions(host).then(() => {
+      if (this.#transitionWait !== transitionWait || this.visible() !== visible) {
+        return;
+      }
+      if (visible) {
+        this.#renderer.removeClass(host, 'showing');
+      } else {
+        this.#completeHide();
+      }
+    });
   }
 
   onKeyDownHandler(event: KeyboardEvent): void {
@@ -302,8 +332,6 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       // hotfix to avoid offcanvas flicker on the first render
       this.#renderer.setStyle(this.#hostElement.nativeElement, 'display', 'flex');
     });
-
-    this.#hostElement.nativeElement.addEventListener('transitionend', this.#handleTransitionEnd);
   }
 
   ngOnDestroy(): void {
@@ -311,48 +339,17 @@ export class OffcanvasComponent implements OnInit, OnDestroy {
       this.#restoreFocus();
     }
     this.#offcanvasService.toggle({ show: false, id: this.id() });
-    this.#removeEventListeners();
-    this.#clearHideFallback();
+    this.#transitionWait = undefined;
     this.setBackdrop(false);
+    this.#backdropService.unlockScroll(this);
     this.domPortalCleanup();
   }
-
-  readonly #removeEventListeners = () => {
-    this.#hostElement.nativeElement.removeEventListener('transitionend', this.#handleTransitionEnd);
-  };
-
-  readonly #handleTransitionEnd = (event: TransitionEvent) => {
-    const offcanvasElement = this.#hostElement.nativeElement;
-    if (event.target === offcanvasElement && event.propertyName === 'transform') {
-      if (this.visible()) {
-        this.#renderer.removeClass(offcanvasElement, 'showing');
-      } else {
-        this.#completeHide();
-      }
-    }
-  };
 
   #completeHide(): void {
-    this.#clearHideFallback();
+    this.#hidden.set(true);
     this.#renderer.removeClass(this.#hostElement.nativeElement, 'hiding');
-    this.#renderer.removeStyle(this.#document.body, 'overflow');
-    this.#renderer.removeStyle(this.#document.body, 'paddingRight');
+    this.#backdropService.unlockScroll(this);
     this.domPortalCleanup();
-  }
-
-  // `transitionend` never fires when there is nothing to animate — reduced motion, or a responsive
-  // offcanvas above its breakpoint — which would leave the body scroll-locked and the host parked
-  // in the portal container.
-  #scheduleHideFallback(): void {
-    const style = this.#document.defaultView?.getComputedStyle(this.#hostElement.nativeElement);
-    const duration = Number.parseFloat(style?.transitionDuration ?? '') || 0;
-    const delay = Number.parseFloat(style?.transitionDelay ?? '') || 0;
-    this.#hideFallbackId = setTimeout(() => this.#completeHide(), (duration + delay) * 1000 + 5);
-  }
-
-  #clearHideFallback(): void {
-    clearTimeout(this.#hideFallbackId);
-    this.#hideFallbackId = undefined;
   }
 
   #readPosition(): void {
