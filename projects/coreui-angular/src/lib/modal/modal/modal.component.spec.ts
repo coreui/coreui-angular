@@ -1,12 +1,30 @@
 /// <reference types="vitest/globals" />
 import { CdkTrapFocus } from '@angular/cdk/a11y';
-import { Component, ComponentRef, DOCUMENT, viewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, DOCUMENT, PLATFORM_ID, viewChild, ViewContainerRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+import { BackdropService } from '../../backdrop/backdrop.service';
 import { ModalComponent } from './modal.component';
 import { ModalService } from '../modal.service';
 import { ModalToggleDirective } from '../modal-dismiss/modal-toggle.directive';
+
+const holdTransitions = (...elements: Element[]) =>
+  elements.map((element) => {
+    let end!: () => void;
+    let running = true;
+    const finished = new Promise<void>((resolve) => {
+      end = () => {
+        running = false;
+        resolve();
+      };
+    });
+    Object.defineProperty(element, 'getAnimations', {
+      configurable: true,
+      value: () => (running ? [{ transitionProperty: 'opacity', finished }] : [])
+    });
+    return end;
+  });
 
 @Component({
   template: '<ng-container #outlet />'
@@ -247,6 +265,279 @@ describe('ModalComponent', () => {
     await vi.runAllTimersAsync();
 
     expect(component.visible()).toBe(true);
+  });
+
+  describe('scroll lock and modal-open', () => {
+    let backdropService: BackdropService;
+
+    const settle = async () => {
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    };
+    const locked = () => document.body.style.overflow === 'hidden';
+    const hasOpenClass = () => document.body.classList.contains('modal-open');
+    const dialog = () => element.querySelector('.modal-dialog')!;
+
+    const microtasks = async () => {
+      for (let i = 0; i < 10; i++) {
+        await Promise.resolve();
+      }
+    };
+
+    beforeEach(() => {
+      backdropService = TestBed.inject(BackdropService);
+      expect(locked()).toBe(false);
+      expect(hasOpenClass()).toBe(false);
+    });
+
+    it('should leave the body alone when a closed modal is created and destroyed', async () => {
+      const holder = {} as ModalComponent;
+      TestBed.inject(ModalService).addOpenClass(holder);
+      document.body.style.overflow = 'hidden';
+      const closed = fixture.componentInstance.outlet().createComponent(ModalComponent);
+      await settle();
+      closed.destroy();
+      await settle();
+
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(hasOpenClass()).toBe(true);
+      document.body.style.removeProperty('overflow');
+      TestBed.inject(ModalService).removeOpenClass(holder);
+    });
+
+    it('should leave the inline display of a modal that never opened alone', () => {
+      expect(element.style.display).toBe('');
+    });
+
+    it('should lock scrolling and add modal-open when it opens', async () => {
+      component.visible.set(true);
+      await settle();
+      expect(locked()).toBe(true);
+      expect(hasOpenClass()).toBe(true);
+    });
+
+    it('should add modal-open whenever it shows a backdrop', async () => {
+      componentRef.setInput('backdrop', '');
+      component.visible.set(true);
+      await settle();
+      expect(backdropService.activeBackdrop?.isConnected).toBe(true);
+      expect(hasOpenClass()).toBe(true);
+    });
+
+    it('should lock scrolling without modal-open when the backdrop is off', async () => {
+      componentRef.setInput('backdrop', false);
+      component.visible.set(true);
+      await settle();
+      expect(locked()).toBe(true);
+      expect(hasOpenClass()).toBe(false);
+
+      component.visible.set(false);
+      await settle();
+      expect(locked()).toBe(false);
+    });
+
+    it.each(['dialog', 'host'])(
+      'should release the lock and modal-open only once the host and dialog transitions end (%s first)',
+      async (first) => {
+        component.visible.set(true);
+        await settle();
+        const [hostEnd, dialogEnd] = holdTransitions(element, dialog());
+        const [firstEnd, lastEnd] = first === 'host' ? [hostEnd, dialogEnd] : [dialogEnd, hostEnd];
+
+        component.visible.set(false);
+        await settle();
+        expect(locked()).toBe(true);
+        expect(hasOpenClass()).toBe(true);
+        expect(element.style.display).toBe('block');
+
+        firstEnd();
+        await vi.runAllTimersAsync();
+        expect(locked()).toBe(true);
+        expect(element.style.display).toBe('block');
+
+        lastEnd();
+        await vi.runAllTimersAsync();
+        expect(locked()).toBe(false);
+        expect(hasOpenClass()).toBe(false);
+        expect(element.style.display).toBe('none');
+      }
+    );
+
+    it.each([true, false])(
+      'should hide and release at once when nothing transitions (transition %s)',
+      async (transition) => {
+        componentRef.setInput('transition', transition);
+        component.visible.set(true);
+        await settle();
+
+        component.visible.set(false);
+        fixture.detectChanges();
+        await microtasks();
+        expect(element.style.display).toBe('none');
+        expect(locked()).toBe(false);
+        expect(hasOpenClass()).toBe(false);
+      }
+    );
+
+    it('should release the lock and modal-open when destroyed while open', async () => {
+      component.visible.set(true);
+      await settle();
+
+      componentRef.destroy();
+      await settle();
+      expect(locked()).toBe(false);
+      expect(hasOpenClass()).toBe(false);
+    });
+
+    it('should release the lock and modal-open when closed and destroyed in the same tick', async () => {
+      component.visible.set(true);
+      await settle();
+
+      component.visible.set(false);
+      componentRef.destroy();
+      expect(locked()).toBe(false);
+      expect(hasOpenClass()).toBe(false);
+    });
+
+    it('should not finish a hide that ends after it was destroyed', async () => {
+      component.visible.set(true);
+      await settle();
+      const ends = holdTransitions(element, dialog());
+      component.visible.set(false);
+      await settle();
+
+      componentRef.destroy();
+      ends.forEach((end) => end());
+      await vi.runAllTimersAsync();
+      expect(element.style.display).toBe('block');
+    });
+
+    it('should be inert from close while its hide transitions run', async () => {
+      component.visible.set(true);
+      await settle();
+      const ends = holdTransitions(element, dialog());
+      component.visible.set(false);
+      await settle();
+      expect(element.inert).toBe(true);
+      expect(element.getAttribute('role')).toBeNull();
+      expect(element.getAttribute('aria-modal')).toBeNull();
+      expect(element.style.display).toBe('block');
+      ends.forEach((end) => end());
+    });
+
+    it('should keep the lock and modal-open when reopened while hiding', async () => {
+      component.visible.set(true);
+      await settle();
+      const ends = holdTransitions(element, dialog());
+      component.visible.set(false);
+      await settle();
+
+      component.visible.set(true);
+      await settle();
+      ends.forEach((end) => end());
+      await vi.runAllTimersAsync();
+      expect(locked()).toBe(true);
+      expect(hasOpenClass()).toBe(true);
+      expect(element.style.display).toBe('block');
+    });
+
+    it('should drop modal-open when reopened without a backdrop while hiding', async () => {
+      component.visible.set(true);
+      await settle();
+      const ends = holdTransitions(element, dialog());
+      component.visible.set(false);
+      await settle();
+
+      componentRef.setInput('backdrop', false);
+      component.visible.set(true);
+      await settle();
+      expect(hasOpenClass()).toBe(false);
+      expect(locked()).toBe(true);
+      ends.forEach((end) => end());
+    });
+
+    it('should not finish a hide when reopened before the next render', async () => {
+      component.visible.set(true);
+      await settle();
+      const ends = holdTransitions(element, dialog());
+      component.visible.set(false);
+      await settle();
+
+      component.visible.set(true);
+      ends.forEach((end) => end());
+      for (let i = 0; i < 10; i++) {
+        await Promise.resolve();
+      }
+      expect(locked()).toBe(true);
+      expect(element.style.display).toBe('block');
+    });
+
+    it('should finish only the latest hide after closing, reopening and closing again', async () => {
+      component.visible.set(true);
+      await settle();
+      const [firstHost, firstDialog] = holdTransitions(element, dialog());
+      component.visible.set(false);
+      await settle();
+      component.visible.set(true);
+      await settle();
+      const [secondHost, secondDialog] = holdTransitions(element, dialog());
+      component.visible.set(false);
+      await settle();
+
+      firstHost();
+      firstDialog();
+      await vi.runAllTimersAsync();
+      expect(element.style.display).toBe('block');
+      expect(locked()).toBe(true);
+
+      secondDialog();
+      secondHost();
+      await vi.runAllTimersAsync();
+      expect(element.style.display).toBe('none');
+      expect(locked()).toBe(false);
+    });
+
+    it('should keep one backdrop when closed and reopened in one tick', async () => {
+      component.visible.set(true);
+      await settle();
+      const backdrop = backdropService.activeBackdrop as HTMLElement;
+      const setBackdrop = vi.spyOn(backdropService, 'setBackdrop');
+
+      component.visible.set(false);
+      component.visible.set(true);
+      await settle();
+      expect(setBackdrop).not.toHaveBeenCalled();
+      expect(backdrop.isConnected).toBe(true);
+      expect(locked()).toBe(true);
+    });
+
+    it('should show and remove the backdrop without a fade when transition is off', async () => {
+      componentRef.setInput('transition', false);
+      component.visible.set(true);
+      fixture.detectChanges();
+      const backdrop = backdropService.activeBackdrop as HTMLElement;
+      expect(backdrop.classList.contains('fade')).toBe(false);
+      expect(backdrop.classList.contains('show')).toBe(true);
+
+      component.visible.set(false);
+      await settle();
+      expect(backdrop.isConnected).toBe(false);
+    });
+
+    it('should keep scrolling locked by another owner after it closes', async () => {
+      const offcanvas = {};
+      backdropService.lockScroll(offcanvas);
+      component.visible.set(true);
+      await settle();
+
+      component.visible.set(false);
+      await settle();
+      expect(locked()).toBe(true);
+      expect(hasOpenClass()).toBe(false);
+
+      backdropService.unlockScroll(offcanvas);
+      expect(locked()).toBe(false);
+    });
   });
 
   describe('focus return', () => {
@@ -512,6 +803,55 @@ describe('ModalComponent', () => {
       expect(component.visible()).toBe(true);
     });
 
+    it('should keep scrolling locked and modal-open when another modal opens in its place', async () => {
+      componentRef.setInput('id', 'first');
+      other.setInput('id', 'second');
+      service.toggle({ show: true, id: 'first' });
+      await settle();
+      const backdropService = TestBed.inject(BackdropService);
+      const backdrop = backdropService.activeBackdrop as HTMLElement;
+
+      service.toggle({ show: true, id: 'second' });
+      await settle();
+      expect(component.visible()).toBe(false);
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(document.body.classList.contains('modal-open')).toBe(true);
+      expect(backdropService.activeBackdrop).toBe(backdrop);
+      expect(backdrop.isConnected).toBe(true);
+
+      other.instance.visible.set(false);
+      await settle();
+      expect(document.body.style.overflow).toBe('');
+      expect(document.body.classList.contains('modal-open')).toBe(false);
+    });
+
+    it.each([
+      ['the first', () => componentRef, () => other],
+      ['the second', () => other, () => componentRef]
+    ])('should keep modal-open when a modal without a backdrop closes after %s opened', async (_, open, closing) => {
+      closing().setInput('backdrop', false);
+      open().instance.visible.set(true);
+      closing().instance.visible.set(true);
+      await settle();
+
+      closing().instance.visible.set(false);
+      await settle();
+      expect(document.body.classList.contains('modal-open')).toBe(true);
+      expect(document.body.style.overflow).toBe('hidden');
+    });
+
+    it('should keep modal-open and the lock when a closed modal is created next to an open one', async () => {
+      component.visible.set(true);
+      await settle();
+
+      const created = fixture.componentInstance.outlet().createComponent(ModalComponent);
+      await settle();
+      created.destroy();
+      await settle();
+      expect(document.body.classList.contains('modal-open')).toBe(true);
+      expect(document.body.style.overflow).toBe('hidden');
+    });
+
     it('should stay open when an action closes another modal', async () => {
       component.visible.set(true);
       await settle();
@@ -703,7 +1043,7 @@ describe('ModalComponent', () => {
       expect(element.parentElement).toBe(originalParent);
     });
 
-    it('should restore the modal element to its original position once the close transition ends', async () => {
+    it('should restore the modal element to its original position once the close transitions end', async () => {
       componentRef.setInput('portal', true);
       componentRef.setInput('container', container);
       componentRef.setInput('visible', true);
@@ -711,14 +1051,15 @@ describe('ModalComponent', () => {
       await vi.runAllTimersAsync();
       expect(element.parentElement).toBe(container);
 
+      const [hostEnd, dialogEnd] = holdTransitions(element, element.querySelector('.modal-dialog')!);
       componentRef.setInput('visible', false);
       fixture.detectChanges();
       await vi.runAllTimersAsync();
       expect(element.parentElement).toBe(container);
 
-      const dialogElement = element.querySelector('.modal-dialog') as HTMLElement;
-      dialogElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'transform' }));
-
+      hostEnd();
+      dialogEnd();
+      await vi.runAllTimersAsync();
       expect(element.parentElement).toBe(originalParent);
     });
 
@@ -784,5 +1125,37 @@ describe('ModalComponent', () => {
 
       expect(container.contains(element)).toBe(false);
     });
+  });
+});
+
+describe('ModalComponent on the server', () => {
+  let component: ModalComponent;
+  let fixture: ComponentFixture<TestComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ModalComponent],
+      providers: [{ provide: PLATFORM_ID, useValue: 'server' }]
+    }).compileComponents();
+    fixture = TestBed.createComponent(TestComponent);
+    component = fixture.componentInstance.outlet().createComponent(ModalComponent).instance;
+    await fixture.whenStable();
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+  });
+
+  it('should release the lock and modal-open as it closes, with no render to wait for', () => {
+    component.visible.set(true);
+    fixture.detectChanges();
+    expect(document.body.style.overflow).toBe('hidden');
+
+    component.visible.set(false);
+    fixture.detectChanges();
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.classList.contains('modal-open')).toBe(false);
   });
 });

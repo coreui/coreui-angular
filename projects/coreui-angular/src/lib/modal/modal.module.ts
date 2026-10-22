@@ -8,7 +8,6 @@ import { ModalFooterComponent } from './modal-footer/modal-footer.component';
 import { ModalHeaderComponent } from './modal-header/modal-header.component';
 import { ModalTitleDirective } from './modal-title/modal-title.directive';
 import { ModalComponent } from './modal/modal.component';
-import { ModalService } from './modal.service';
 
 @NgModule({
   exports: [
@@ -30,7 +29,6 @@ import { ModalService } from './modal.service';
     ModalHeaderComponent,
     ModalTitleDirective,
     ModalToggleDirective
-  ],
-  providers: [ModalService]
+  ]
 })
 export class ModalModule {}
