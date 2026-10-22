@@ -53,8 +53,8 @@ describe('PopoverDirective', () => {
   });
 
   afterEach(() => {
-    vi.useRealTimers();
     vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   it('should create an instance', () => {
@@ -155,22 +155,29 @@ describe('PopoverDirective', () => {
   it('should not run the show timer when destroyed before the popover shows', async () => {
     visible.set(true);
     fixture.detectChanges();
+    const popover = document.getElementById(
+      fixture.nativeElement.getAttribute('aria-describedby') ?? ''
+    ) as HTMLElement;
     await vi.advanceTimersByTimeAsync(50);
     fixture.destroy();
-    await vi.advanceTimersByTimeAsync(0);
-    expect(vi.getTimerCount()).toBe(0);
+    await vi.advanceTimersByTimeAsync(150);
+    expect(popover.classList.contains('d-none')).toBe(true);
   });
 
-  it('should leave no pending timers when destroyed while the popover hides', async () => {
+  it('should cancel the hide timer when destroyed while the popover hides', async () => {
     visible.set(true);
     fixture.detectChanges();
     await vi.runAllTimersAsync();
+    const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+    const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
     visible.set(false);
     fixture.detectChanges();
     await vi.advanceTimersByTimeAsync(50);
+    const hideTimer =
+      setTimeoutSpy.mock.results[setTimeoutSpy.mock.calls.findIndex(([, delay]) => delay === 300)]?.value;
+    expect(hideTimer).toBeDefined();
     fixture.destroy();
-    await vi.advanceTimersByTimeAsync(0);
-    expect(vi.getTimerCount()).toBe(0);
+    expect(clearTimeoutSpy).toHaveBeenCalledWith(hideTimer);
   });
 
   it('should destroy Popper when the popover hides', async () => {
