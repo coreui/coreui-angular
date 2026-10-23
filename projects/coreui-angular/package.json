@@ -1,6 +1,6 @@
 {
   "name": "@coreui/angular",
-  "version": "5.7.37",
+  "version": "5.7.38",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2026 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -28,8 +28,8 @@
     "@angular/common": "^22.2.0",
     "@angular/core": "^22.2.0",
     "@angular/router": "^22.2.0",
-    "@coreui/coreui": "^5.9.0",
-    "@coreui/icons-angular": "~5.7.37",
+    "@coreui/coreui": "^5.9.1",
+    "@coreui/icons-angular": "~5.7.38",
     "rxjs": "^7.8.2"
   },
   "repository": {

@@ -2,6 +2,41 @@
 
 ---
 
+#### `5.7.38` for Angular 22.2.3
+
+- fix(backdrop, modal, offcanvas): scroll lock and `modal-open` per owner, backdrop removed after its own fade, hide ends with the transitions
+- fix(dropdown): keep the menu open on a click on a form field or inside a form in a dropdown item
+- fix(dropdown): resolve `autoClose` and Tab close against the menu via `composedPath`
+- fix(modal): destroying or closing one modal leaves the others alone
+- fix(offcanvas): one backdrop and one click subscription when an input changes while open
+- fix(tooltip, popover): cancel the show timer and drop `aria-describedby` on hide, empty content and destroy
+- fix(tooltip, popover): one `aria-describedby` source, unique ids, keep the author's `aria-describedby` on the trigger
+- fix(tooltip, popover): let Escape through when there is no tooltip
+- fix(tooltip, popover): destroy Popper on hide, tear down only the own view
+- fix(uid.service): ids are unique per service instance (random infix per instance plus a per-prefix counter)
+- fix(widget-stat-f): `exportAs: 'cWidgetStatF, cWidgetStatB'`
+- fix(widget-stat-c): drop the unreachable default progress template
+- docs(theme.directive): describe `dark` and `colorScheme` without the other input
+- refactor(tooltip, popover): use `UIDService`, drop unreachable hidden branch
+- refactor(sidebar-nav): remove commented-out `sidebar-nav-group.component.ts` and its references
+- test: tooltip and popover timer specs check the directive's own timers
+- test: no spec reads elements another spec file left in the shared document
+- test: create modal and tabs components inside a test host, close the modal after each test
+- chore(dependencies): update to Angular 22.2.3
+  - `@angular/aria` to version 22.2.4
+  - `@angular/cdk` to version 22.2.4
+  - `@angular-devkit/schematics` to version 22.2.4
+  - `@angular/build` to version 22.2.4
+  - `@angular/cli` to version 22.2.4
+  - `@coreui/coreui` to version 5.9.1
+  - `chart.js` to version 4.6.1
+  - `ng-packagr` to version 22.2.5
+  - `npm` to version 11.19.1
+  - `typescript-eslint` to version 8.72.0
+  - override `vite` to `~8.3.5`
+
+---
+
 #### `5.7.37` for Angular 22.2.3
 
 - fix(alert): hide and emit `visibleChange` when there is no opacity transition
