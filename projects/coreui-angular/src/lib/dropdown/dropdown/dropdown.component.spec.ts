@@ -2,7 +2,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Options, Placement } from '@popperjs/core';
 
-import { DropdownComponent, DropdownToggleDirective } from './dropdown.component';
+import { DropdownComponent, DropdownFocusReturn, DropdownToggleDirective } from './dropdown.component';
 import {
   afterNextRender,
   Component,
@@ -10,6 +10,7 @@ import {
   DOCUMENT,
   ElementRef,
   ErrorHandler,
+  forwardRef,
   inject,
   input,
   Renderer2,
@@ -567,6 +568,15 @@ describe('Dropdown keyboard', () => {
     expect(fixture.componentInstance.visible()).toBe(true);
     expect(document.activeElement).toBe(items[0]);
   });
+
+  it('should not click the toggle again while Enter is held on it', () => {
+    const press = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+    const repeat = new KeyboardEvent('keydown', { key: 'Enter', repeat: true, bubbles: true, cancelable: true });
+    toggle.dispatchEvent(press);
+    toggle.dispatchEvent(repeat);
+    expect(press.defaultPrevented).toBe(false);
+    expect(repeat.defaultPrevented).toBe(true);
+  });
 });
 
 @Component({
@@ -665,6 +675,13 @@ describe('DropdownToggleDirective on anchor', () => {
     go.focus();
     expect(await keydown(go, 'Enter')).toBe(false);
     expect(await keydown(go, ' ')).toBe(false);
+  });
+
+  it('should ignore a repeated Enter on a native control inside an anchor toggle', () => {
+    const go = element('go');
+    const repeat = new KeyboardEvent('keydown', { key: 'Enter', repeat: true, bubbles: true, cancelable: true });
+    go.dispatchEvent(repeat);
+    expect(repeat.defaultPrevented).toBe(true);
   });
 
   it('should not expose aria-disabled from the directive input', () => {
@@ -791,6 +808,18 @@ describe('DropdownToggleDirective on a non-focusable host', () => {
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#field'));
+  });
+
+  it('should not move into a toggle that does not take the focus unless Escape closes the menu', async () => {
+    const fixture = TestBed.createComponent(FieldToggleComponent);
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    const item: HTMLElement = fixture.nativeElement.querySelector('#item');
+    item.focus();
+    item.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(fixture.nativeElement.querySelector('#group').contains(document.activeElement)).toBe(false);
   });
 });
 
@@ -1039,6 +1068,427 @@ describe('DropdownComponent with shadow DOM', () => {
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(false);
     host.remove();
+  });
+
+  it('should return the focus to the toggle when an item closes a dropdown rendered inside a shadow root', async () => {
+    const fixture = TestBed.createComponent(KeyboardTestComponent);
+    const host = document.createElement('div');
+    document.body.append(host);
+    const root = host.attachShadow({ mode: 'open' });
+    root.append(fixture.nativeElement);
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    const toggle: HTMLElement = fixture.nativeElement.querySelector('#toggle');
+    const item: HTMLElement = fixture.nativeElement.querySelector('.dropdown-item');
+    item.focus();
+    item.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(root.activeElement).toBe(toggle);
+    host.remove();
+  });
+});
+
+@Component({
+  template: `
+    <c-dropdown [(visible)]="visible">
+      <button cDropdownToggle id="toggle">Toggle</button>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="item">One</button></li>
+        <li><button cDropdownClose id="close" type="button">Close</button></li>
+      </ul>
+    </c-dropdown>
+    <button id="outside">Outside</button>
+  `,
+  imports: [
+    DropdownToggleDirective,
+    DropdownComponent,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    DropdownCloseDirective
+  ]
+})
+class FocusReturnComponent {
+  readonly visible = signal(false);
+}
+
+describe('DropdownComponent focus return', () => {
+  let fixture: ComponentFixture<FocusReturnComponent>;
+
+  const element = (id: string): HTMLElement => fixture.nativeElement.querySelector(`#${id}`);
+
+  const setVisible = async (visible: boolean) => {
+    fixture.componentInstance.visible.set(visible);
+    await fixture.whenStable();
+  };
+
+  const dispatch = async (target: HTMLElement, event: Event) => {
+    target.dispatchEvent(event);
+    await fixture.whenStable();
+  };
+
+  const click = (target: HTMLElement) => dispatch(target, new MouseEvent('click', { bubbles: true }));
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(FocusReturnComponent);
+    await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should return the focus to the toggle when an item closes the menu', async () => {
+    await setVisible(true);
+    element('item').focus();
+    await click(element('item'));
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(element('toggle'));
+  });
+
+  it('should return the focus to the toggle when cDropdownClose closes the menu', async () => {
+    await setVisible(true);
+    element('close').focus();
+    await click(element('close'));
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(element('toggle'));
+  });
+
+  it('should return the focus to the toggle when a click in the menu leaves it on the body', async () => {
+    element('toggle').focus();
+    await setVisible(true);
+    element('item').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'mouse' }));
+    element('toggle').blur();
+    expect(document.activeElement).toBe(document.body);
+    await click(element('item'));
+    expect(document.activeElement).toBe(element('toggle'));
+  });
+
+  it('should count a press in the menu from a pointer of unknown type', async () => {
+    element('toggle').focus();
+    await setVisible(true);
+    element('item').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: '' }));
+    element('toggle').blur();
+    await click(element('item'));
+    expect(document.activeElement).toBe(element('toggle'));
+  });
+
+  it('should not move the focus when the menu closes before any interaction in it', async () => {
+    element('toggle').focus();
+    await setVisible(true);
+    element('toggle').blur();
+    await setVisible(false);
+    expect(document.activeElement).toBe(document.body);
+  });
+
+  it('should forget the menu interaction when the menu opens again', async () => {
+    await setVisible(true);
+    element('item').focus();
+    element('outside').focus();
+    await setVisible(false);
+    expect(document.activeElement).toBe(element('outside'));
+    await setVisible(true);
+    element('outside').blur();
+    await setVisible(false);
+    expect(document.activeElement).toBe(document.body);
+  });
+
+  it('should leave the focus in a menu that opens again before the render', async () => {
+    await setVisible(true);
+    element('item').focus();
+    const dropdown: DropdownComponent = fixture.debugElement.query(By.directive(DropdownComponent)).componentInstance;
+    let reopened = false;
+    dropdown.visibleChange.subscribe((visible) => {
+      if (!visible && !reopened) {
+        reopened = true;
+        fixture.componentInstance.visible.set(true);
+      }
+    });
+    await setVisible(false);
+    expect(fixture.componentInstance.visible()).toBe(true);
+    expect(document.activeElement).toBe(element('item'));
+  });
+
+  it('should not return the focus when the window does not have it', async () => {
+    await setVisible(true);
+    element('item').focus();
+    vi.spyOn(document, 'hasFocus').mockReturnValue(false);
+    await click(element('item'));
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(element('item'));
+  });
+
+  it('should return the focus after a click outside that leaves it on the body once the menu was used', async () => {
+    await setVisible(true);
+    element('item').focus();
+    element('item').blur();
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'mouse' }));
+    await click(document.body);
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(element('toggle'));
+  });
+
+  it('should leave the focus where a click outside the menu moved it', async () => {
+    await setVisible(true);
+    element('item').focus();
+    element('outside').focus();
+    await click(element('outside'));
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(element('outside'));
+  });
+
+  it('should keep the focus on the next element when Tab leaves the menu', async () => {
+    await setVisible(true);
+    element('item').focus();
+    element('outside').focus();
+    await dispatch(element('outside'), new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(element('outside'));
+  });
+
+  it('should move the focus only after the menu is hidden', async () => {
+    await setVisible(true);
+    const menu: HTMLElement = fixture.nativeElement.querySelector('.dropdown-menu');
+    const toggle = element('toggle');
+    const focus = toggle.focus.bind(toggle);
+    let shownAtFocus: boolean | undefined;
+    vi.spyOn(toggle, 'focus').mockImplementation((options) => {
+      shownAtFocus = menu.classList.contains('show');
+      focus(options);
+    });
+    element('item').focus();
+    await setVisible(false);
+    expect(shownAtFocus).toBe(false);
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it('should return the focus as program focus without scrolling unless Escape closes the menu', async () => {
+    const focusVia = vi.spyOn(TestBed.inject(FocusMonitor), 'focusVia');
+    await setVisible(true);
+    element('item').focus();
+    await click(element('item'));
+    expect(focusVia).toHaveBeenLastCalledWith(element('toggle'), 'program', { preventScroll: true });
+    await setVisible(true);
+    element('item').focus();
+    await dispatch(element('item'), new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    expect(focusVia).toHaveBeenLastCalledWith(element('toggle'), 'program', { preventScroll: false });
+  });
+});
+
+@Component({
+  template: `
+    <c-dropdown [(visible)]="visible">
+      <div cDropdownToggle id="group">
+        <input id="start" />
+        <input id="end" />
+        <div id="indicator" tabindex="0"></div>
+      </div>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="item">One</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective],
+  viewProviders: [{ provide: DropdownFocusReturn, useExisting: forwardRef(() => FocusTargetsComponent) }]
+})
+class FocusTargetsComponent implements DropdownFocusReturn {
+  readonly #elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  readonly visible = signal(false);
+
+  focusReturnTargets() {
+    const host = this.#elementRef.nativeElement;
+    return [host.querySelector<HTMLElement>('#end'), host.querySelector<HTMLElement>('#indicator')];
+  }
+}
+
+describe('DropdownComponent with focus targets from the component', () => {
+  let fixture: ComponentFixture<FocusTargetsComponent>;
+
+  const element = (id: string): HTMLElement => fixture.nativeElement.querySelector(`#${id}`);
+
+  const open = async () => {
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+  };
+
+  const pick = async () => {
+    element('item').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await fixture.whenStable();
+  };
+
+  const touch = () =>
+    element('item').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'touch' }));
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(FocusTargetsComponent);
+    await open();
+  });
+
+  it('should use the targets the component provides, also on Escape', async () => {
+    element('item').focus();
+    await pick();
+    expect(document.activeElement).toBe(element('end'));
+    await open();
+    element('item').focus();
+    element('item').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    await fixture.whenStable();
+    expect(fixture.componentInstance.visible()).toBe(false);
+    expect(document.activeElement).toBe(element('end'));
+  });
+
+  it('should skip a field that opens the on-screen keyboard after a touch in the menu', async () => {
+    touch();
+    element('item').focus();
+    await pick();
+    expect(document.activeElement).toBe(element('indicator'));
+  });
+
+  it('should skip a field that opens the on-screen keyboard after a pen in the menu', async () => {
+    element('item').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'pen' }));
+    element('item').focus();
+    await pick();
+    expect(document.activeElement).toBe(element('indicator'));
+  });
+
+  it('should keep a read-only field after a touch in the menu', async () => {
+    (element('end') as HTMLInputElement).readOnly = true;
+    touch();
+    element('item').focus();
+    await pick();
+    expect(document.activeElement).toBe(element('end'));
+  });
+
+  it('should keep a control that does not open the on-screen keyboard after a touch in the menu', async () => {
+    (element('end') as HTMLInputElement).type = 'checkbox';
+    touch();
+    element('item').focus();
+    await pick();
+    expect(document.activeElement).toBe(element('end'));
+  });
+
+  it('should keep a select after a touch in the menu', async () => {
+    const select = document.createElement('select');
+    select.id = 'end';
+    select.append(new Option('One'));
+    element('end').replaceWith(select);
+    touch();
+    element('item').focus();
+    await pick();
+    expect(document.activeElement).toBe(select);
+  });
+
+  it('should skip a textarea unless it is read-only after a touch in the menu', async () => {
+    const textarea = document.createElement('textarea');
+    textarea.id = 'end';
+    element('end').replaceWith(textarea);
+    touch();
+    element('item').focus();
+    await pick();
+    expect(document.activeElement).toBe(element('indicator'));
+    textarea.readOnly = true;
+    await open();
+    touch();
+    element('item').focus();
+    await pick();
+    expect(document.activeElement).toBe(textarea);
+  });
+
+  it('should skip an editable region after a touch in the menu', async () => {
+    element('indicator').setAttribute('contenteditable', 'true');
+    touch();
+    element('item').focus();
+    await pick();
+    expect(element('group').contains(document.activeElement)).toBe(false);
+  });
+
+  it('should not skip the field when a key follows the touch', async () => {
+    touch();
+    element('item').focus();
+    element('item').dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+    await pick();
+    expect(document.activeElement).toBe(element('end'));
+  });
+});
+
+@Component({
+  selector: 'c-inner-dropdown',
+  template: `
+    <c-dropdown [(visible)]="visible">
+      <button cDropdownToggle id="inner-toggle">Toggle</button>
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="inner-item">One</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class InnerDropdownComponent {
+  readonly visible = signal(false);
+}
+
+@Component({
+  template: `
+    <button id="outer-target">Outer</button>
+    <c-inner-dropdown />
+  `,
+  imports: [InnerDropdownComponent],
+  viewProviders: [{ provide: DropdownFocusReturn, useExisting: forwardRef(() => OuterFocusTargetsComponent) }]
+})
+class OuterFocusTargetsComponent implements DropdownFocusReturn {
+  readonly #elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  readonly inner = viewChild.required(InnerDropdownComponent);
+
+  focusReturnTargets() {
+    return [this.#elementRef.nativeElement.querySelector<HTMLElement>('#outer-target')];
+  }
+}
+
+describe('DropdownComponent inside a component that provides focus targets', () => {
+  it('should not take the focus targets of a component around its own host', async () => {
+    const fixture = TestBed.createComponent(OuterFocusTargetsComponent);
+    fixture.componentInstance.inner().visible.set(true);
+    await fixture.whenStable();
+    const item: HTMLElement = fixture.nativeElement.querySelector('#inner-item');
+    item.focus();
+    item.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#inner-toggle'));
+  });
+});
+
+@Component({
+  template: `
+    <c-dropdown [(visible)]="visible">
+      <input cDropdownToggle id="toggle" />
+      <ul cDropdownMenu>
+        <li><button cDropdownItem id="item">One</button></li>
+      </ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective, DropdownItemDirective]
+})
+class TextFieldToggleComponent {
+  readonly visible = signal(false);
+}
+
+describe('DropdownToggleDirective on a text field', () => {
+  it('should return the focus to the field after a mouse pick and not after a touch in the menu', async () => {
+    const fixture = TestBed.createComponent(TextFieldToggleComponent);
+    const item: HTMLElement = fixture.nativeElement.querySelector('#item');
+    const toggle: HTMLElement = fixture.nativeElement.querySelector('#toggle');
+    const pick = async (pointerType: string) => {
+      fixture.componentInstance.visible.set(true);
+      await fixture.whenStable();
+      item.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType }));
+      item.focus();
+      item.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await fixture.whenStable();
+      expect(fixture.componentInstance.visible()).toBe(false);
+    };
+    await pick('mouse');
+    expect(document.activeElement).toBe(toggle);
+    await pick('touch');
+    expect(document.activeElement).not.toBe(toggle);
   });
 });
 

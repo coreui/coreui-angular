@@ -1,5 +1,6 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
 import {
+  afterNextRender,
   AfterViewInit,
   booleanAttribute,
   ChangeDetectorRef,
@@ -32,15 +33,24 @@ import { createPopper, Instance, Options, Placement } from '@popperjs/core';
 import { DropdownAlignment } from '../../coreui.types';
 import { RtlService } from '../../services';
 import { ThemeDirective } from '../../shared';
+import { restoreFocus } from '../../shared/focus.utils';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from '../dropdown.service';
 import { clicksOnEnter, isEditableTarget, isReplayedEvent } from '../dropdown.utils';
 
 const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
 const FORM_TAG = /^(form|input|option|select|textarea)$/;
+const TEXT_INPUT_TYPE = /^(email|number|password|search|tel|text|url)$/;
 
 // lightweight injection token
 export abstract class DropdownToken {}
+
+/**
+ * Focus targets for every `c-dropdown` in a component's own template; provide it in that component's `viewProviders`.
+ */
+export abstract class DropdownFocusReturn {
+  abstract focusReturnTargets(): readonly (HTMLElement | null | undefined)[];
+}
 
 @Directive({
   selector: '[cDropdownToggle]',
@@ -120,6 +130,10 @@ export class DropdownToggleDirective implements AfterViewInit {
     if (this.disabled() || isReplayedEvent($event) || isEditableTarget($event.target)) {
       return;
     }
+    if ($event.repeat && $event.key === 'Enter') {
+      $event.preventDefault();
+      return;
+    }
     const element: HTMLElement = this.elementRef.nativeElement;
     if (
       $event.target === element &&
@@ -176,6 +190,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
   readonly #destroyRef = inject(DestroyRef);
   readonly #document = inject(DOCUMENT);
   readonly #elementRef = inject(ElementRef);
+  readonly #focusReturn = inject(DropdownFocusReturn, { host: true, optional: true });
   readonly #injector = inject(Injector);
   readonly #renderer = inject(Renderer2);
   readonly #rtlService = inject(RtlService);
@@ -289,10 +304,14 @@ export class DropdownComponent implements OnDestroy, OnInit {
   readonly #visibleEffect = effect(() => {
     const visible = this.visible();
     untracked(() => {
+      const closed = this.activeTrap && !visible;
       this.activeTrap = visible;
       visible ? this.createPopperInstance() : this.destroyPopperInstance();
       this.setVisibleState(visible);
       this.visibleChange?.emit(visible);
+      if (closed) {
+        afterNextRender(() => this.#returnFocus(false), { injector: this.#injector });
+      }
     });
   });
 
@@ -312,6 +331,7 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   private popperInstance!: Instance | undefined;
   private listeners: (() => void)[] = [];
+  #menuInteraction?: string;
 
   readonly hostClasses = computed(() => {
     const direction = this.direction();
@@ -407,6 +427,15 @@ export class DropdownComponent implements OnDestroy, OnInit {
   }
 
   private setListeners(): void {
+    this.#menuInteraction = undefined;
+    const menu = this._menuElementRef()?.nativeElement;
+    if (menu) {
+      this.#ngZone.runOutsideAngular(() => {
+        for (const type of ['focusin', 'keydown', 'pointerdown']) {
+          this.listeners.push(this.#renderer.listen(menu, type, this.#trackMenuInteraction, { capture: true }));
+        }
+      });
+    }
     this.listeners.push(
       this.#renderer.listen(this.#document, 'click', (event: MouseEvent) => {
         const part = this.#eventPart(event);
@@ -442,10 +471,20 @@ export class DropdownComponent implements OnDestroy, OnInit {
       return;
     }
     event.preventDefault();
-    const focusInMenu = this._menuElementRef()?.nativeElement.contains(event.target as Node);
     this.setVisibleState(false);
-    if (focusInMenu) {
-      this.#focusToggler();
+    this.#returnFocus(true);
+  };
+
+  readonly #trackMenuInteraction = (event: Event) => {
+    switch (event.type) {
+      case 'pointerdown':
+        this.#menuInteraction = (event as PointerEvent).pointerType || 'pointer';
+        break;
+      case 'keydown':
+        this.#menuInteraction = 'keyboard';
+        break;
+      default:
+        this.#menuInteraction ??= 'focus';
     }
   };
 
@@ -489,22 +528,40 @@ export class DropdownComponent implements OnDestroy, OnInit {
       .some((node) => node instanceof Element && FORM_TAG.test(node.localName));
   }
 
-  #focusToggler(): void {
-    const toggler = this.#togglerElement();
-    if (!toggler) {
+  #returnFocus(escape: boolean): void {
+    const menu: HTMLElement | undefined = this._menuElementRef()?.nativeElement;
+    if (!menu || !this.#menuInteraction || !menu.ownerDocument.hasFocus()) {
       return;
     }
-    const root = toggler.getRootNode() as Document | ShadowRoot;
-    const candidates = [toggler, ...toggler.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)].filter(
+    restoreFocus(menu, this.#focusTargets(escape), (target) =>
+      this.#injector.get(FocusMonitor).focusVia(target, 'program', { preventScroll: !escape })
+    );
+  }
+
+  #focusTargets(escape: boolean): readonly (HTMLElement | null | undefined)[] {
+    const targets = this.#focusReturn?.focusReturnTargets() ?? this.#togglerTargets(escape);
+    const touch = this.#menuInteraction === 'touch' || this.#menuInteraction === 'pen';
+    return touch ? targets.filter((target) => !target || !this.#opensKeyboard(target)) : targets;
+  }
+
+  #togglerTargets(escape: boolean): HTMLElement[] {
+    const toggler = this.#togglerElement();
+    if (!toggler || !escape) {
+      return toggler ? [toggler] : [];
+    }
+    return [toggler, ...toggler.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)].filter(
       (candidate) => candidate === toggler || (candidate.tabIndex >= 0 && !candidate.closest('[aria-hidden="true"]'))
     );
-    const focusMonitor = this.#injector.get(FocusMonitor);
-    for (const candidate of candidates) {
-      focusMonitor.focusVia(candidate, 'program');
-      if (root.activeElement === candidate) {
-        return;
-      }
+  }
+
+  #opensKeyboard(target: HTMLElement): boolean {
+    if (target instanceof HTMLInputElement) {
+      return TEXT_INPUT_TYPE.test(target.type) && !target.readOnly;
     }
+    if (target instanceof HTMLTextAreaElement) {
+      return !target.readOnly;
+    }
+    return !(target instanceof HTMLSelectElement) && isEditableTarget(target);
   }
 
   private clearListeners(): void {
