@@ -84,4 +84,58 @@ describe('restoreFocus', () => {
     expect(restoreFocus(overlay, [])).toBe(false);
     expect(document.activeElement).toBe(inside);
   });
+
+  it('should focus the candidate with the given function', () => {
+    const focus = vi.fn((target: HTMLElement) => target.focus());
+    inside.focus();
+    expect(restoreFocus(overlay, [first], focus)).toBe(true);
+    expect(focus).toHaveBeenCalledWith(first);
+    expect(document.activeElement).toBe(first);
+  });
+});
+
+describe('restoreFocus in a shadow root', () => {
+  let host: HTMLDivElement;
+  let root: ShadowRoot;
+  let overlay: HTMLDivElement;
+  let inside: HTMLButtonElement;
+  let toggle: HTMLButtonElement;
+  let outside: HTMLButtonElement;
+
+  beforeEach(() => {
+    host = document.createElement('div');
+    root = host.attachShadow({ mode: 'open' });
+    overlay = document.createElement('div');
+    inside = document.createElement('button');
+    overlay.append(inside);
+    toggle = document.createElement('button');
+    root.append(toggle, overlay);
+    outside = document.createElement('button');
+    document.body.append(host, outside);
+  });
+
+  afterEach(() => {
+    host.remove();
+    outside.remove();
+  });
+
+  it('should treat the focus inside a shadow root as held by the overlay', () => {
+    inside.focus();
+    expect(document.activeElement).toBe(host);
+    expect(restoreFocus(overlay, [toggle])).toBe(true);
+    expect(root.activeElement).toBe(toggle);
+  });
+
+  it('should leave the focus that moved elsewhere in the document while the overlay sits in a shadow root', () => {
+    outside.focus();
+    expect(restoreFocus(overlay, [toggle])).toBe(false);
+    expect(document.activeElement).toBe(outside);
+  });
+
+  it('should see a candidate focused inside a shadow root', () => {
+    inside.focus();
+    expect(restoreFocus(overlay, [toggle, outside])).toBe(true);
+    expect(root.activeElement).toBe(toggle);
+    expect(document.activeElement).toBe(host);
+  });
 });
