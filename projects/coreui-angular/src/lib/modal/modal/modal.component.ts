@@ -208,11 +208,13 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     untracked(() => {
       if (visible && afterViewInit) {
         this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
-        setTimeout(() => {
-          if (!this.focusTrap()?.focusTrap.focusInitialElement()) {
-            this.#hostElement.nativeElement.focus();
-          }
-        });
+        if (isPlatformBrowser(this.#platformId)) {
+          setTimeout(() => {
+            if (!this.focusTrap()?.focusTrap.focusInitialElement()) {
+              this.#hostElement.nativeElement.focus();
+            }
+          });
+        }
       } else {
         this.#restoreFocus();
       }

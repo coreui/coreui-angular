@@ -1146,6 +1146,15 @@ describe('ModalComponent on the server', () => {
   afterEach(() => {
     vi.clearAllTimers();
     vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it('should open without moving focus', () => {
+    const focus = vi.spyOn(HTMLElement.prototype, 'focus');
+    component.visible.set(true);
+    fixture.detectChanges();
+    expect(() => vi.runAllTimers()).not.toThrow();
+    expect(focus).not.toHaveBeenCalled();
   });
 
   it('should release the lock and modal-open as it closes, with no render to wait for', () => {
