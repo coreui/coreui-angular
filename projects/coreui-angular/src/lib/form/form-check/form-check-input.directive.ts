@@ -10,6 +10,8 @@ import {
   Renderer2
 } from '@angular/core';
 
+import { bindAriaInvalid } from '../../shared/aria-invalid.utils';
+
 @Directive({
   selector: 'input[cFormCheckInput]',
   host: {
@@ -52,10 +54,13 @@ export class FormCheckInputDirective {
   }
 
   /**
-   * Set component validation state to valid.
+   * Validation state: `true` valid, `false` invalid, which also sets `aria-invalid="true"`, `undefined` none.
+   * Do not bind `aria-invalid` on the same element as well.
    * @default undefined
    */
   readonly valid = input<boolean>();
+
+  readonly #ariaInvalidEffect = bindAriaInvalid(this.valid);
 
   readonly hostClasses = computed(() => {
     const valid = this.valid();

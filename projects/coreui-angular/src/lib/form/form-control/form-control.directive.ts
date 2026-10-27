@@ -1,6 +1,7 @@
 import { booleanAttribute, computed, Directive, ElementRef, inject, input, OnInit } from '@angular/core';
 
 import { InputType } from '../../coreui.types';
+import { bindAriaInvalid } from '../../shared/aria-invalid.utils';
 
 @Directive({
   selector: 'input[cFormControl], textarea[cFormControl]',
@@ -19,7 +20,9 @@ export class FormControlDirective implements OnInit {
   readonly sizing = input<'' | 'sm' | 'lg'>();
 
   /**
-   * Set component validation state to valid.
+   * Validation state: `true` valid, `false` invalid, which also sets `aria-invalid="true"`
+   * (not on button-like, `color` and `hidden` inputs, where `aria-invalid` is left to the page), `undefined` none.
+   * Do not bind `aria-invalid` on the same element as well.
    * @default undefined
    */
   readonly valid = input<boolean>();
@@ -34,6 +37,8 @@ export class FormControlDirective implements OnInit {
    * @default false
    */
   readonly plaintext = input(false, { transform: booleanAttribute });
+
+  readonly #ariaInvalidEffect = bindAriaInvalid(this.valid, this.type);
 
   readonly hostClasses = computed(() => {
     const type = this.type();

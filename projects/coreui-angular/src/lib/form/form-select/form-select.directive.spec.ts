@@ -1,4 +1,4 @@
-import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { Component, inputBinding, signal, WritableSignal } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { FormSelectDirective } from './form-select.directive';
 
@@ -48,4 +48,33 @@ describe('FormSelectDirective', () => {
     expect(classList.contains('is-invalid')).toBe(false);
     expect(classList.contains('is-valid')).toBe(false);
   });
+
+  it('should set aria-invalid while invalid', async () => {
+    valid.set(false);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.getAttribute('aria-invalid')).toBe('true');
+    valid.set(true);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.getAttribute('aria-invalid')).toBeNull();
+  });
+
+  it('should keep aria-invalid set in the template', async () => {
+    const host = TestBed.createComponent(TestAriaInvalidHostComponent);
+    await host.whenStable();
+    const select: HTMLSelectElement = host.nativeElement.querySelector('select');
+    host.componentInstance.valid.set(false);
+    await host.whenStable();
+    expect(select.getAttribute('aria-invalid')).toBe('true');
+    host.componentInstance.valid.set(true);
+    await host.whenStable();
+    expect(select.getAttribute('aria-invalid')).toBe('true');
+  });
 });
+
+@Component({
+  imports: [FormSelectDirective],
+  template: '<select cSelect aria-invalid="true" [valid]="valid()"></select>'
+})
+class TestAriaInvalidHostComponent {
+  readonly valid = signal<boolean | undefined>(undefined);
+}
