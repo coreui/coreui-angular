@@ -1,4 +1,4 @@
-import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { Component, inputBinding, signal, WritableSignal } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { FormControlDirective } from './form-control.directive';
 
@@ -46,6 +46,34 @@ describe('FormControlDirective', () => {
     expect(fixture.nativeElement.classList.contains('form-control-plaintext')).toBe(true);
   });
 
+  it('should set aria-invalid while invalid', async () => {
+    expect(fixture.nativeElement.getAttribute('aria-invalid')).toBeNull();
+    valid.set(false);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.getAttribute('aria-invalid')).toBe('true');
+    type.set('submit');
+    await fixture.whenStable();
+    expect(fixture.nativeElement.getAttribute('aria-invalid')).toBeNull();
+    type.set('text');
+    await fixture.whenStable();
+    expect(fixture.nativeElement.getAttribute('aria-invalid')).toBe('true');
+    valid.set(true);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.getAttribute('aria-invalid')).toBeNull();
+  });
+
+  it('should keep aria-invalid set in the template', async () => {
+    const host = TestBed.createComponent(TestAriaInvalidHostComponent);
+    await host.whenStable();
+    const input: HTMLInputElement = host.nativeElement.querySelector('input');
+    host.componentInstance.valid.set(false);
+    await host.whenStable();
+    expect(input.getAttribute('aria-invalid')).toBe('true');
+    host.componentInstance.valid.set(true);
+    await host.whenStable();
+    expect(input.getAttribute('aria-invalid')).toBe('true');
+  });
+
   it('should render range and color types', async () => {
     type.set('range');
     sizing.set('sm');
@@ -66,3 +94,11 @@ describe('FormControlDirective', () => {
     warn.mockRestore();
   });
 });
+
+@Component({
+  imports: [FormControlDirective],
+  template: '<input cFormControl aria-invalid="true" [valid]="valid()" />'
+})
+class TestAriaInvalidHostComponent {
+  readonly valid = signal<boolean | undefined>(undefined);
+}
