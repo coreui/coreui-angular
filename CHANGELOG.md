@@ -2,6 +2,23 @@
 
 ---
 
+#### `5.7.40` for Angular 22.2.3
+
+- fix(dropdown): return focus to the toggle when the menu closes from inside it
+- fix(form-control, form-select, form-check-input): set `aria-invalid` while invalid
+- fix(modal): skip initial focus on the server
+- chore: require the patched node versions `^22.23.4 || ^24.22.1 || ^26.12.1`
+- chore(dependencies): update
+  - `@angular/aria` to version 22.2.5
+  - `@angular/cdk` to version 22.2.5
+  - `@angular-devkit/schematics` to version 22.2.5
+  - `@angular/build` to version 22.2.5
+  - `@angular/cli` to version 22.2.5
+  - `@types/node` to version 26.6.6
+  - `typescript-eslint` to version 8.72.1
+
+---
+
 #### `5.7.38` for Angular 22.2.3
 
 - fix(backdrop, modal, offcanvas): scroll lock and `modal-open` per owner, backdrop removed after its own fade, hide ends with the transitions
