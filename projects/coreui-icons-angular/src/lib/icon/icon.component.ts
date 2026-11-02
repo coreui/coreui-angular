@@ -22,6 +22,13 @@ export class IconComponent implements IIcon {
 
   readonly content = input<string | string[] | any[]>();
 
+  /**
+   * HTML attributes of the svg. They win over its defaults: `aria-hidden="true"`, `pointer-events="none"`,
+   * `role="img"`, the `width` and `height` inputs and, without `use`, the `viewBox`. A key left out of a new map, or set
+   * to `undefined`, brings the default back; `null` or `'false'` exposes the icon. A class that `c-icon` sets itself
+   * (`icon`, `icon-<size>`, the host's classes) and the map repeats is taken off when the map drops it.
+   * @returns Record<string, any>
+   */
   readonly attributes = input<Record<string, any>>({ role: 'img' });
   readonly customClasses = input<NgCssClass>();
   readonly size = input<IconSize>('');
@@ -53,6 +60,16 @@ export class IconComponent implements IIcon {
   readonly viewBox = computed(() => {
     return this.viewBoxInput() ?? this.scale();
   });
+
+  protected readonly svgAttributes = computed(() => ({
+    'aria-hidden': 'true',
+    'pointer-events': 'none',
+    role: 'img',
+    width: this.width(),
+    height: this.height() || this.width(),
+    viewBox: this.use() ? undefined : this.viewBox() || this.scale(),
+    ...Object.fromEntries(Object.entries(this.attributes() ?? {}).filter(([, value]) => value !== undefined))
+  }));
 
   readonly innerHtml = computed(() => {
     const codeVal = this.code();
