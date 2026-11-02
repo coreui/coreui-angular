@@ -46,6 +46,7 @@ export class ScriptInjectorService {
       return;
     }
     const scriptAttributes: IScriptAttributes = { ...scriptConfig?.attributes, src };
+    // eslint-disable-next-line no-useless-assignment
     this.loadScript(src, (scriptConfig = { ...scriptConfig, attributes: scriptAttributes })).then();
   }
 
