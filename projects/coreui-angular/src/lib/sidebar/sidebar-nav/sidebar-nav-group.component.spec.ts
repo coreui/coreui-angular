@@ -104,6 +104,12 @@ describe('SidebarNavGroupComponent', () => {
     expect(displayOnCollapsing).toBe('block');
   });
 
+  it('should hide the font icon of the toggle from assistive technologies', () => {
+    const icon = fixture.nativeElement.querySelector('.nav-group-toggle .nav-icon');
+    expect(icon.getAttribute('aria-hidden')).toBe('true');
+    expect(icon.querySelector('.icon-list')).toBeTruthy();
+  });
+
   it('should render without an item', () => {
     const emptyFixture = TestBed.createComponent(SidebarNavGroupComponent);
     expect(() => emptyFixture.detectChanges()).not.toThrow();

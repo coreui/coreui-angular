@@ -25,7 +25,7 @@
 <ng-template #iconTemplate let-item>
   <!--  <i *ngIf="item?.icon" [class]="item | cSidebarNavIcon"></i>-->
   @if (item?.icon) {
-    <span class="nav-icon">
+    <span class="nav-icon" aria-hidden="true">
       <span [class]="item.icon ?? ''"></span>
     </span>
   }

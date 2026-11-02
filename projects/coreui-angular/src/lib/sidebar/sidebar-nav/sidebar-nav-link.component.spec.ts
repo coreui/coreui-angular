@@ -57,6 +57,12 @@ describe('SidebarNavLinkComponent', () => {
     expect(icon).toBeTruthy();
   });
 
+  it('should hide the font icon from assistive technologies', () => {
+    const icon = fixture.debugElement.query(By.css('.nav-icon')).nativeElement;
+    expect(icon.getAttribute('aria-hidden')).toBe('true');
+    expect(icon.querySelector('.cil-speedometer')).toBeTruthy();
+  });
+
   it('should have badge with text "NEW"', () => {
     const badge = fixture.debugElement.query(By.css('.badge')).nativeElement;
     expect(badge.textContent).toContain('NEW');

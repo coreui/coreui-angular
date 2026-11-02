@@ -89,7 +89,7 @@ describe('SidebarNavComponent items', () => {
   const navItems: INavData[] = [
     { title: true, name: 'Components', class: 'text-primary small' },
     { divider: true },
-    { name: 'Label', url: '/label', label: { variant: 'info' }, icon: 'cil-star' },
+    { name: 'Label', url: '/label', label: { variant: 'info' }, icon: 'cil-star', class: 'p-3 border' },
     {
       name: 'Base',
       url: '/base',
@@ -134,6 +134,17 @@ describe('SidebarNavComponent items', () => {
     ]);
     expect(nav.querySelector('c-sidebar-nav-label a')?.textContent?.trim()).toBe('Label');
     expect(nav.querySelector('c-sidebar-nav-label i')?.classList.contains('text-info')).toBe(true);
+  });
+
+  it('should put the class of a label item on its host only, like a link', () => {
+    const label = nav.querySelector('c-sidebar-nav-label') as HTMLElement;
+    expect([...label.classList].sort()).toEqual(['border', 'nav-item', 'p-3']);
+    expect([...(label.querySelector('a')?.classList ?? [])].sort()).toEqual([
+      'c-active',
+      'c-nav-label',
+      'nav-label',
+      'nav-link'
+    ]);
   });
 
   it('should render a group with its icon and children', () => {

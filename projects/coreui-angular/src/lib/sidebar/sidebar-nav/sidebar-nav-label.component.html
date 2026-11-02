@@ -1,7 +1,7 @@
 @let labelItem = item();
 <a [cHtmlAttr]="labelItem.attributes"
-   [class]="itemClass()"
-   href="{{labelItem.url}}">
+   class="nav-link nav-label c-nav-label c-active"
+   [attr.href]="labelItem.url?.length ? labelItem.url : null">
   @if (helper.hasIcon(labelItem)) {
     <i [class]="labelIconClass()" aria-hidden="true"></i>
   }

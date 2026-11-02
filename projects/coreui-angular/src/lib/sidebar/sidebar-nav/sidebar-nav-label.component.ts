@@ -21,14 +21,6 @@ export class SidebarNavLabelComponent {
    */
   readonly item = input<INavData>({});
 
-  readonly itemClass = computed(() => ({
-    'nav-link': true,
-    'nav-label': true,
-    'c-nav-label': true,
-    'c-active': true,
-    ...classMap(this.item().class)
-  }));
-
   readonly labelIconClass = computed(() => {
     const item = this.item();
     return {

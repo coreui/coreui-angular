@@ -40,7 +40,7 @@ describe('SidebarNavLabelComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set correct itemClass', async () => {
+  it('should set the label classes on the link, not the item class', async () => {
     const link = fixture.debugElement.query(By.css('a')).nativeElement;
 
     expect(link.classList.contains('nav-link')).toBe(true);
@@ -51,26 +51,40 @@ describe('SidebarNavLabelComponent', () => {
     item.class = 'custom-class';
     fixture.componentRef.setInput('item', { ...item });
     await fixture.whenStable();
-    expect(link.classList.contains('custom-class')).toBe(true);
+    expect(link.classList.contains('custom-class')).toBe(false);
   });
 
-  it('should set several classes of the item', async () => {
+  it('should set several classes of the icon', async () => {
     fixture.componentRef.setInput('item', {
       ...item,
-      class: 'first second',
       icon: 'fa fa-star',
       label: { class: 'third fourth' }
     });
     await fixture.whenStable();
-    const link = fixture.debugElement.query(By.css('a')).nativeElement;
-    expect(link.classList.contains('first')).toBe(true);
-    expect(link.classList.contains('second')).toBe(true);
     const icon = fixture.debugElement.query(By.css('i')).nativeElement;
     expect(icon.classList.contains('third')).toBe(true);
     expect(icon.classList.contains('fourth')).toBe(true);
     expect(icon.classList.contains('fa')).toBe(true);
     expect(icon.classList.contains('fa-star')).toBe(true);
     expect(icon.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('should not render a link without a url', async () => {
+    const link = fixture.debugElement.query(By.css('a')).nativeElement;
+    expect(link.hasAttribute('href')).toBe(false);
+    fixture.componentRef.setInput('item', { ...item, url: '' });
+    await fixture.whenStable();
+    expect(link.hasAttribute('href')).toBe(false);
+    fixture.componentRef.setInput('item', { ...item, url: [] });
+    await fixture.whenStable();
+    expect(link.hasAttribute('href')).toBe(false);
+  });
+
+  it('should link to the url of the item', async () => {
+    fixture.componentRef.setInput('item', { ...item, url: '/label' });
+    await fixture.whenStable();
+    const link = fixture.debugElement.query(By.css('a')).nativeElement;
+    expect(link.getAttribute('href')).toBe('/label');
   });
 
   it('should display label name', () => {
