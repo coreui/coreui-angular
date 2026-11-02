@@ -64,6 +64,7 @@ describe('SidebarNavGroupComponent', () => {
 
   it('should collapse its nav', async () => {
     const nav = fixture.nativeElement.querySelector('c-sidebar-nav');
+    nav.style.transitionDuration = '1s';
     expect(nav.classList.contains('collapse')).toBe(true);
     expect(nav.classList.contains('show')).toBe(false);
 
