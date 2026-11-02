@@ -1,7 +1,9 @@
 import {
+  Binding,
   ChangeDetectorRef,
   Component,
   DOCUMENT,
+  ElementRef,
   inject,
   input,
   inputBinding,
@@ -13,9 +15,11 @@ import {
 } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { expect, vi } from 'vitest';
+import type { Options } from '@popperjs/core';
 import { TooltipDirective } from './tooltip.directive';
 import { PopoverDirective } from '../popover/popover.directive';
 import { Triggers } from '../coreui.types';
+import { ElementRefDirective } from '../shared';
 
 describe('TooltipDirective', () => {
   let visible: WritableSignal<boolean>;
@@ -57,6 +61,35 @@ describe('TooltipDirective', () => {
     vi.restoreAllMocks();
     vi.useRealTimers();
   });
+
+  const resizeCalls = (spy: { mock: { calls: unknown[][] } }) =>
+    spy.mock.calls.filter((call) => call[0] === 'resize').length;
+
+  const createWithContent = (...bindings: Binding[]) => {
+    fixture.destroy();
+    const content = signal('content');
+    fixture = TestBed.createDirective(TooltipDirective, {
+      tagName: 'button',
+      bindings: [inputBinding('cTooltip', content), twoWayBinding('cTooltipVisible', visible), ...bindings]
+    });
+    fixture.autoDetectChanges();
+    return content;
+  };
+
+  const showTooltip = async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    return document.querySelector('.tooltip') as HTMLElement;
+  };
+
+  const hideTooltip = async () => {
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+  };
+
+  const innerText = (tooltip: HTMLElement) => tooltip.querySelector('.tooltip-inner')?.textContent?.trim();
 
   it('should create an instance', () => {
     expect(fixture.directiveInstance).toBeTruthy();
@@ -210,15 +243,51 @@ describe('TooltipDirective', () => {
     visible.set(false);
     fixture.detectChanges();
     await vi.advanceTimersByTimeAsync(100);
+    const add = vi.spyOn(window, 'addEventListener');
+    const remove = vi.spyOn(window, 'removeEventListener');
     visible.set(true);
     fixture.detectChanges();
-
-    const remove = vi.spyOn(window, 'removeEventListener');
     await vi.runAllTimersAsync();
 
-    expect(remove.mock.calls.some((call) => call[0] === 'resize')).toBe(false);
+    expect(resizeCalls(add)).toBe(0);
+    expect(resizeCalls(remove)).toBe(0);
     expect(document.querySelector('.tooltip.show')).toBeTruthy();
   });
+
+  it.each(['visible', 'content'])(
+    'should restart the show delay when the tooltip shows again after hiding inside the show window (%s)',
+    async (path) => {
+      const content = createWithContent();
+      visible.set(true);
+      fixture.detectChanges();
+      await vi.advanceTimersByTimeAsync(50);
+      if (path === 'visible') {
+        visible.set(false);
+      } else {
+        content.set('');
+      }
+      fixture.detectChanges();
+      await vi.advanceTimersByTimeAsync(50);
+      if (path === 'visible') {
+        visible.set(true);
+      } else {
+        content.set('back');
+      }
+      fixture.detectChanges();
+      const tooltip = document.querySelector('.tooltip') as HTMLElement;
+      expect(tooltip.classList.contains('d-none')).toBe(true);
+
+      await vi.advanceTimersByTimeAsync(149);
+      expect(tooltip.classList.contains('d-none')).toBe(true);
+
+      await vi.advanceTimersByTimeAsync(1);
+      fixture.detectChanges();
+      expect(document.querySelectorAll('.tooltip').length).toBe(1);
+      expect(document.querySelector('.tooltip')).toBe(tooltip);
+      expect(tooltip.classList.contains('show')).toBe(true);
+      expect(tooltip.classList.contains('d-none')).toBe(false);
+    }
+  );
 
   it.each([
     ['before', 50],
@@ -371,23 +440,336 @@ describe('TooltipDirective', () => {
     expect(document.querySelector('.tooltip.show')).toBeNull();
   });
 
-  it('should remove the tooltip at once when the content empties while visible', async () => {
-    fixture.destroy();
-    const content = signal('content');
-    fixture = TestBed.createDirective(TooltipDirective, {
-      tagName: 'button',
-      bindings: [inputBinding('cTooltip', content), twoWayBinding('cTooltipVisible', visible)]
-    });
-    fixture.autoDetectChanges();
-    visible.set(true);
-    fixture.detectChanges();
-    await vi.runAllTimersAsync();
-    expect(document.querySelector('.tooltip')).toBeTruthy();
+  it('should hide the tooltip when the content empties while visible', async () => {
+    const content = createWithContent();
+    const tooltip = await showTooltip();
 
     content.set('');
     fixture.detectChanges();
+    expect(tooltip.isConnected).toBe(true);
+    expect(tooltip.classList.contains('show')).toBe(false);
+    expect(fixture.nativeElement.hasAttribute('aria-describedby')).toBe(false);
 
+    await vi.advanceTimersByTimeAsync(300);
     expect(document.querySelector('.tooltip')).toBeNull();
+  });
+
+  it('should keep the same tooltip element when the content changes while shown', async () => {
+    const content = createWithContent();
+    const tooltip = await showTooltip();
+
+    content.set('changed');
+    fixture.detectChanges();
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(tooltip.classList.contains('show')).toBe(true);
+    expect(tooltip.classList.contains('d-none')).toBe(false);
+    expect(innerText(tooltip)).toBe('changed');
+
+    await vi.runAllTimersAsync();
+    expect(document.querySelectorAll('.tooltip').length).toBe(1);
+    expect(tooltip.classList.contains('show')).toBe(true);
+  });
+
+  it('should keep Popper and reposition when the content changes while shown', async () => {
+    const content = createWithContent();
+    const add = vi.spyOn(window, 'addEventListener');
+    const remove = vi.spyOn(window, 'removeEventListener');
+    const tooltip = await showTooltip();
+    const measuredTexts: (string | undefined)[] = [];
+    const getBoundingClientRect = tooltip.getBoundingClientRect.bind(tooltip);
+    vi.spyOn(tooltip, 'getBoundingClientRect').mockImplementation(() => {
+      measuredTexts.push(innerText(tooltip));
+      return getBoundingClientRect();
+    });
+
+    content.set('changed');
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(measuredTexts.length).toBeGreaterThan(0);
+    expect(measuredTexts.every((text) => text === 'changed')).toBe(true);
+    expect(resizeCalls(add)).toBe(1);
+    expect(resizeCalls(remove)).toBe(0);
+  });
+
+  it('should show the new content at the original show time when it changes before the show timer fires', async () => {
+    const content = createWithContent();
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(50);
+
+    content.set('changed');
+    fixture.detectChanges();
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+    await vi.advanceTimersByTimeAsync(99);
+    expect(tooltip.classList.contains('d-none')).toBe(true);
+
+    await vi.advanceTimersByTimeAsync(1);
+    fixture.detectChanges();
+    expect(tooltip.classList.contains('d-none')).toBe(false);
+    expect(tooltip.classList.contains('show')).toBe(true);
+    expect(innerText(tooltip)).toBe('changed');
+  });
+
+  it('should fade back in at once when the content returns while the tooltip hides', async () => {
+    const content = createWithContent();
+    const remove = vi.spyOn(window, 'removeEventListener');
+    const tooltip = await showTooltip();
+
+    content.set('');
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(100);
+    content.set('back');
+    fixture.detectChanges();
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(tooltip.classList.contains('show')).toBe(true);
+
+    await vi.runAllTimersAsync();
+    expect(tooltip.isConnected).toBe(true);
+    expect(document.querySelectorAll('.tooltip').length).toBe(1);
+    expect(resizeCalls(remove)).toBe(0);
+  });
+
+  it('should reposition after the new content renders when it returns while the tooltip hides', async () => {
+    const content = createWithContent();
+    const tooltip = await showTooltip();
+    content.set('');
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(100);
+    const measuredTexts: (string | undefined)[] = [];
+    const getBoundingClientRect = tooltip.getBoundingClientRect.bind(tooltip);
+    vi.spyOn(tooltip, 'getBoundingClientRect').mockImplementation(() => {
+      measuredTexts.push(innerText(tooltip));
+      return getBoundingClientRect();
+    });
+
+    content.set('back');
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(measuredTexts.length).toBeGreaterThan(0);
+    expect(measuredTexts.every((text) => text === 'back')).toBe(true);
+  });
+
+  it('should let the fade finish when the content changes while the tooltip hides', async () => {
+    const content = createWithContent();
+    const tooltip = await showTooltip();
+
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(50);
+    content.set('changed');
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(100);
+    expect(tooltip.isConnected).toBe(true);
+    expect(tooltip.classList.contains('show')).toBe(false);
+
+    await vi.advanceTimersByTimeAsync(200);
+    expect(document.querySelector('.tooltip')).toBeNull();
+  });
+
+  it('should show the new content when the tooltip shows again after it changed while hidden', async () => {
+    const content = createWithContent();
+    const tooltip = await showTooltip();
+    await hideTooltip();
+
+    content.set('changed');
+    fixture.detectChanges();
+    await showTooltip();
+
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(tooltip.classList.contains('show')).toBe(true);
+    expect(innerText(tooltip)).toBe('changed');
+  });
+
+  it('should destroy the tooltip only when the directive is destroyed', async () => {
+    const content = createWithContent();
+    const tooltip = await showTooltip();
+
+    content.set('changed');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+
+    content.set('');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    content.set('back');
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(document.querySelectorAll('.tooltip').length).toBe(1);
+
+    fixture.destroy();
+    expect(document.querySelector('.tooltip')).toBeNull();
+  });
+
+  it('should apply a new placement while shown', async () => {
+    const placement = signal<'top' | 'bottom'>('top');
+    createWithContent(inputBinding('cTooltipPlacement', placement));
+    const tooltip = await showTooltip();
+    expect(tooltip.getAttribute('data-popper-placement')).toBe('top');
+
+    placement.set('bottom');
+    fixture.detectChanges();
+    expect(tooltip.classList.contains('d-none')).toBe(false);
+
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(tooltip.getAttribute('data-popper-placement')).toBe('bottom');
+  });
+
+  it('should move Popper to a new reference element while shown', async () => {
+    const first = document.createElement('span');
+    const second = document.createElement('span');
+    document.body.append(first, second);
+    const reference = signal({ elementRef: new ElementRef(first) } as ElementRefDirective);
+    createWithContent(inputBinding('cTooltipRef', reference));
+    const tooltip = await showTooltip();
+    const measured = vi.spyOn(second, 'getBoundingClientRect');
+
+    const removedNodes: Node[] = [];
+    const observer = new MutationObserver((records) =>
+      records.forEach((record) => removedNodes.push(...record.removedNodes))
+    );
+    observer.observe(document.body, { childList: true });
+    reference.set({ elementRef: new ElementRef(second) } as ElementRefDirective);
+    fixture.detectChanges();
+    const hiddenAtOnce = tooltip.classList.contains('d-none');
+    await vi.runAllTimersAsync();
+    observer.disconnect();
+
+    expect(hiddenAtOnce).toBe(false);
+    expect(removedNodes).not.toContain(tooltip);
+    expect(measured).toHaveBeenCalled();
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(tooltip.classList.contains('show')).toBe(true);
+    expect(tooltip.classList.contains('d-none')).toBe(false);
+    first.remove();
+    second.remove();
+  });
+
+  it('should move Popper to a new reference element when the tooltip shows again inside the hide window', async () => {
+    const first = document.createElement('span');
+    const second = document.createElement('span');
+    document.body.append(first, second);
+    const reference = signal({ elementRef: new ElementRef(first) } as ElementRefDirective);
+    createWithContent(inputBinding('cTooltipRef', reference));
+    const tooltip = await showTooltip();
+    visible.set(false);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(100);
+    const measured = vi.spyOn(second, 'getBoundingClientRect');
+
+    const removedNodes: Node[] = [];
+    const observer = new MutationObserver((records) =>
+      records.forEach((record) => removedNodes.push(...record.removedNodes))
+    );
+    observer.observe(document.body, { childList: true });
+    reference.set({ elementRef: new ElementRef(second) } as ElementRefDirective);
+    visible.set(true);
+    fixture.detectChanges();
+    const hiddenAtOnce = tooltip.classList.contains('d-none');
+    await vi.runAllTimersAsync();
+    observer.disconnect();
+
+    expect(hiddenAtOnce).toBe(false);
+    expect(removedNodes).not.toContain(tooltip);
+    expect(measured).toHaveBeenCalled();
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(tooltip.classList.contains('show')).toBe(true);
+    expect(tooltip.classList.contains('d-none')).toBe(false);
+    first.remove();
+    second.remove();
+  });
+
+  it('should move Popper to a new reference element and reveal at the original time inside the show window', async () => {
+    const first = document.createElement('span');
+    const second = document.createElement('span');
+    document.body.append(first, second);
+    const reference = signal({ elementRef: new ElementRef(first) } as ElementRefDirective);
+    createWithContent(inputBinding('cTooltipRef', reference));
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(50);
+    const measured = vi.spyOn(second, 'getBoundingClientRect');
+
+    reference.set({ elementRef: new ElementRef(second) } as ElementRefDirective);
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(99);
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+    expect(tooltip.classList.contains('d-none')).toBe(true);
+
+    await vi.advanceTimersByTimeAsync(1);
+    fixture.detectChanges();
+    expect(measured).toHaveBeenCalled();
+    expect(tooltip.classList.contains('d-none')).toBe(false);
+    expect(tooltip.classList.contains('show')).toBe(true);
+    first.remove();
+    second.remove();
+  });
+
+  it('should apply popper options changed after the tooltip showed on the next show', async () => {
+    const options = signal<Partial<Options>>({});
+    createWithContent(inputBinding('cTooltipOptions', options));
+    expect((await showTooltip()).style.position).toBe('absolute');
+    await hideTooltip();
+
+    options.set({ strategy: 'fixed' });
+    fixture.detectChanges();
+    expect((await showTooltip()).style.position).toBe('fixed');
+  });
+
+  it('should leave Popper alone when the popper options change while shown', async () => {
+    const options = signal<Partial<Options>>({});
+    createWithContent(inputBinding('cTooltipOptions', options));
+    const tooltip = await showTooltip();
+    const add = vi.spyOn(window, 'addEventListener');
+    const remove = vi.spyOn(window, 'removeEventListener');
+
+    options.set({ strategy: 'fixed' });
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(tooltip.style.position).toBe('absolute');
+    expect(resizeCalls(add)).toBe(0);
+    expect(resizeCalls(remove)).toBe(0);
+  });
+
+  it('should apply a placement from the popper options while shown', async () => {
+    const options = signal<Partial<Options>>({ placement: 'left' });
+    createWithContent(inputBinding('cTooltipOptions', options));
+    const tooltip = await showTooltip();
+    expect(tooltip.getAttribute('data-popper-placement')).toBe('left');
+
+    options.set({ placement: 'right' });
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(tooltip.getAttribute('data-popper-placement')).toBe('right');
+  });
+
+  it('should drop a popper option removed from the options', async () => {
+    const options = signal<Partial<Options>>({ strategy: 'fixed' });
+    createWithContent(inputBinding('cTooltipOptions', options));
+    expect((await showTooltip()).style.position).toBe('fixed');
+    await hideTooltip();
+
+    options.set({});
+    fixture.detectChanges();
+    expect((await showTooltip()).style.position).toBe('absolute');
+  });
+
+  it('should let the placement in the options win over the placement input', async () => {
+    createWithContent(
+      inputBinding('cTooltipPlacement', () => 'bottom'),
+      inputBinding('cTooltipOptions', () => ({ placement: 'left' }) as Partial<Options>)
+    );
+    const tooltip = await showTooltip();
+
+    expect(tooltip.getAttribute('data-popper-placement')).toBe('left');
   });
 
   it('should not close the tooltip when a non-Escape key is pressed', async () => {
@@ -570,6 +952,55 @@ class DynamicTooltipAndPopoverComponent {
   readonly tooltipShown = signal(false);
   readonly popoverShown = signal(false);
 }
+
+@Component({
+  template: `
+    <button [cTooltip]="useTemplate() ? content : 'text'" [cTooltipVisible]="true">Open</button>
+    <ng-template #content><b id="templateContent">Template content</b></ng-template>
+  `,
+  imports: [TooltipDirective]
+})
+class TemplateSwapTooltipComponent {
+  readonly useTemplate = signal(false);
+}
+
+describe('TooltipDirective with template content', () => {
+  beforeEach(() => {
+    (globalThis as any).IntersectionObserver = class IntersectionObserver {
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+    };
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('should swap between text and template content while shown', async () => {
+    const fixture = TestBed.createComponent(TemplateSwapTooltipComponent);
+    fixture.autoDetectChanges();
+    await vi.runAllTimersAsync();
+    const tooltip = document.querySelector('.tooltip') as HTMLElement;
+    const inner = tooltip.querySelector('.tooltip-inner') as HTMLElement;
+    expect(inner.textContent?.trim()).toBe('text');
+
+    fixture.componentInstance.useTemplate.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(document.querySelector('.tooltip')).toBe(tooltip);
+    expect(inner.querySelector('#templateContent')).not.toBeNull();
+    expect(inner.textContent?.trim()).toBe('Template content');
+
+    fixture.componentInstance.useTemplate.set(false);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(inner.querySelector('#templateContent')).toBeNull();
+    expect(inner.textContent?.trim()).toBe('text');
+    fixture.destroy();
+  });
+});
 
 describe("TooltipDirective with the author's aria-describedby", () => {
   beforeEach(() => {
