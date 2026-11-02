@@ -1,4 +1,5 @@
 import { Component, computed, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
+import { setHtmlAttributes } from '../../shared/html-attr.utils';
 import { INavData } from './sidebar-nav';
 import { classMap } from './sidebar-nav.utils';
 
@@ -35,7 +36,7 @@ export class SidebarNavTitleComponent {
 
       if (item?.wrapper) {
         const wrapper = this.#renderer.createElement(item.wrapper.element);
-        this.addAttribs(item.wrapper.attributes, wrapper);
+        setHtmlAttributes(this.#renderer, wrapper, item.wrapper.attributes);
         this.#renderer.appendChild(wrapper, name);
         this.#renderer.appendChild(nativeElement, wrapper);
       } else {
@@ -43,39 +44,4 @@ export class SidebarNavTitleComponent {
       }
     }
   });
-
-  private addAttribs(attribs: { [x: string]: any }, element: HTMLElement): void {
-    if (attribs) {
-      for (const attr in attribs) {
-        if (attr === 'style' && typeof attribs[attr] === 'object') {
-          this.setStyle(attribs[attr], element);
-        } else if (attr === 'class') {
-          this.addClass(attribs[attr], element);
-        } else {
-          this.setAttrib(attr, attribs[attr], element);
-        }
-      }
-    }
-  }
-
-  private setStyle(styles: { [x: string]: any }, el: any): void {
-    for (const style in styles) {
-      if (style) {
-        this.#renderer.setStyle(el, style, styles[style]);
-      }
-    }
-  }
-
-  private addClass(classes: string | string[], el: any): void {
-    const classArray = Array.isArray(classes) ? classes : classes.split(' ');
-    classArray
-      .filter((element) => element.length > 0)
-      .forEach((element) => {
-        this.#renderer.addClass(el, element);
-      });
-  }
-
-  private setAttrib(key: string, value: string, el: any): void {
-    this.#renderer.setAttribute(el, key, value);
-  }
 }

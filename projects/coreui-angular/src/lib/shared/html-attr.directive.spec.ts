@@ -30,4 +30,13 @@ describe('HtmlAttributesDirective', () => {
   it('should render an id attr', () => {
     expect(element.getAttribute('id')).toBe('id-1');
   });
+
+  it('should render each class of a class attr split by tabs and new lines', async () => {
+    const multiline = TestBed.createDirective(HtmlAttributesDirective, {
+      tagName: 'div',
+      bindings: [inputBinding('cHtmlAttr', () => ({ class: 'first\tsecond\nthird' }))]
+    });
+    await multiline.whenStable();
+    expect([...(multiline.nativeElement as HTMLElement).classList]).toEqual(['first', 'second', 'third']);
+  });
 });
