@@ -59,6 +59,17 @@ describe('SidebarNavTitleComponent content', () => {
     expect(wrapper.getAttribute('data-test')).toBe('x');
   });
 
+  it('should render the name in a wrapper with classes split by tabs and new lines', async () => {
+    const title = await render({
+      title: true,
+      name: 'Theme',
+      wrapper: { element: 'span', attributes: { class: 'fw-bold\tsmall\nopacity-75' } }
+    });
+    const wrapper = title.querySelector('span') as HTMLElement;
+    expect(wrapper.textContent).toBe('Theme');
+    expect([...wrapper.classList]).toEqual(['fw-bold', 'small', 'opacity-75']);
+  });
+
   it('should render the name with several classes of the item', async () => {
     const title = await render({ title: true, name: 'Theme', class: 'first  second' });
     expect(title.textContent).toBe('Theme');
