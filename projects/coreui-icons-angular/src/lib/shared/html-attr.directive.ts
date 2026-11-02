@@ -1,4 +1,6 @@
-import { Directive, effect, ElementRef, inject, input, Renderer2 } from '@angular/core';
+import { Directive, effect, ElementRef, HostAttributeToken, inject, input, Renderer2 } from '@angular/core';
+
+import { HtmlAttributeNames, htmlAttributeNames, removeHtmlAttributes, setHtmlAttributes } from './html-attr.utils';
 
 @Directive({
   selector: '[cHtmlAttr]',
@@ -6,49 +8,33 @@ import { Directive, effect, ElementRef, inject, input, Renderer2 } from '@angula
 })
 export class HtmlAttributesDirective {
   /**
-   * A map of HTML attributes (including `class` and `style`) to set on the host element.
+   * A map of HTML attributes (including `class` and `style`) to set on the host element. A key left out of a new map,
+   * or a `null` class or style, takes off what the map before set. The static classes, styles and attributes of the
+   * template are not taken off, though a `style` string replaces the static style; a name that a binding also sets
+   * (`[class]`, `[attr.*]`, `routerLinkActive`) is taken off with it.
    * @returns Record<string, any>
    */
   readonly cHtmlAttr = input<Record<string, any>>();
 
   readonly #renderer = inject(Renderer2);
   readonly #elementRef = inject(ElementRef);
+  readonly #static: HtmlAttributeNames = {
+    ...htmlAttributeNames({
+      class: inject(new HostAttributeToken('class'), { optional: true }),
+      style: inject(new HostAttributeToken('style'), { optional: true })
+    }),
+    attributes: Array.from(this.#elementRef.nativeElement.attributes ?? [], (attribute: Attr) => attribute.name)
+  };
+
+  #written?: HtmlAttributeNames;
 
   constructor() {
     effect(() => {
-      const attribs = this.cHtmlAttr();
-      for (const attr in attribs) {
-        if (attr === 'style' && typeof attribs[attr] === 'object') {
-          this.setStyle(attribs[attr]);
-        } else if (attr === 'class') {
-          this.addClass(attribs[attr]);
-        } else {
-          this.setAttrib(attr, attribs[attr]);
-        }
-      }
+      const attributes = this.cHtmlAttr();
+      const previous = this.#written;
+      this.#written = htmlAttributeNames(attributes);
+      removeHtmlAttributes(this.#renderer, this.#elementRef.nativeElement, previous, this.#written, this.#static);
+      setHtmlAttributes(this.#renderer, this.#elementRef.nativeElement, attributes);
     });
-  }
-
-  private setStyle(styles: Record<string, any>): void {
-    for (const style in styles) {
-      if (style) {
-        this.#renderer.setStyle(this.#elementRef.nativeElement, style, styles[style]);
-      }
-    }
-  }
-
-  private addClass(classes: string | string[]): void {
-    const classArray = Array.isArray(classes) ? classes : classes.split(' ');
-    classArray
-      .filter((element) => element.length > 0)
-      .forEach((element) => {
-        this.#renderer.addClass(this.#elementRef.nativeElement, element);
-      });
-  }
-
-  private setAttrib(key: string, value: string | null): void {
-    value !== null
-      ? this.#renderer.setAttribute(this.#elementRef.nativeElement, key, value)
-      : this.#renderer.removeAttribute(this.#elementRef.nativeElement, key);
   }
 }

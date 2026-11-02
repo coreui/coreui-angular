@@ -250,6 +250,87 @@ describe('IconComponent', () => {
       expect(svg.nativeElement.getAttribute('aria-label')).toBe('Custom Icon');
       expect(svg.nativeElement.getAttribute('data-test')).toBe('icon');
     });
+
+    it('should take off what the attributes before set and keep the defaults', async () => {
+      const testFixture = TestBed.createComponent(IconComponent);
+      testFixture.componentRef.setInput('attributes', { class: 'extra', title: 'List', 'data-test': 'icon' });
+      testFixture.componentRef.setInput('name', 'cilList');
+      await testFixture.whenStable();
+      testFixture.componentRef.setInput('attributes', { 'data-test': 'icon' });
+      await testFixture.whenStable();
+
+      const svg: SVGElement = testFixture.debugElement.query(By.css('svg')).nativeElement;
+      expect(svg.classList.contains('extra')).toBe(false);
+      expect(svg.classList.contains('icon')).toBe(true);
+      expect(svg.hasAttribute('title')).toBe(false);
+      expect(svg.getAttribute('data-test')).toBe('icon');
+      expect(svg.getAttribute('role')).toBe('img');
+      expect(svg.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('should bring the defaults back when the attributes drop an override', async () => {
+      const testFixture = TestBed.createComponent(IconComponent);
+      testFixture.componentRef.setInput('name', 'cilList');
+      testFixture.componentRef.setInput('width', '16');
+      testFixture.componentRef.setInput('attributes', {
+        role: 'presentation',
+        'aria-hidden': 'false',
+        'aria-label': 'List',
+        'pointer-events': 'auto',
+        viewBox: '0 0 24 24',
+        width: '24'
+      });
+      await testFixture.whenStable();
+      const svg: SVGElement = testFixture.debugElement.query(By.css('svg')).nativeElement;
+      expect(svg.getAttribute('role')).toBe('presentation');
+      expect(svg.getAttribute('width')).toBe('24');
+      testFixture.componentRef.setInput('attributes', {});
+      await testFixture.whenStable();
+
+      expect(svg.getAttribute('role')).toBe('img');
+      expect(svg.getAttribute('aria-hidden')).toBe('true');
+      expect(svg.hasAttribute('aria-label')).toBe(false);
+      expect(svg.getAttribute('pointer-events')).toBe('none');
+      expect(svg.getAttribute('viewBox')).toBe(testFixture.componentInstance.scale());
+      expect(svg.getAttribute('width')).toBe('16');
+      expect(svg.getAttribute('height')).toBe('16');
+    });
+
+    it('should keep the defaults for attributes set to undefined', async () => {
+      const testFixture = TestBed.createComponent(IconComponent);
+      testFixture.componentRef.setInput('name', 'cilList');
+      testFixture.componentRef.setInput('width', '16');
+      testFixture.componentRef.setInput('attributes', { 'aria-hidden': undefined, width: undefined });
+      await testFixture.whenStable();
+      testFixture.componentRef.setInput('attributes', { 'aria-hidden': undefined, width: undefined, title: 'A' });
+      await testFixture.whenStable();
+
+      const svg: SVGElement = testFixture.debugElement.query(By.css('svg')).nativeElement;
+      expect(svg.getAttribute('aria-hidden')).toBe('true');
+      expect(svg.getAttribute('width')).toBe('16');
+    });
+
+    it('should take off a class of its own that the attributes repeat and then drop', async () => {
+      const testFixture = TestBed.createComponent(IconComponent);
+      testFixture.componentRef.setInput('name', 'cilList');
+      testFixture.componentRef.setInput('attributes', { class: 'icon' });
+      await testFixture.whenStable();
+      testFixture.componentRef.setInput('attributes', {});
+      await testFixture.whenStable();
+
+      const svg: SVGElement = testFixture.debugElement.query(By.css('svg')).nativeElement;
+      expect(svg.classList.contains('icon')).toBe(false);
+    });
+
+    it('should not set a viewBox on a use icon', async () => {
+      const testFixture = TestBed.createComponent(IconComponent);
+      testFixture.componentRef.setInput('use', '#icon');
+      await testFixture.whenStable();
+
+      const svg: SVGElement = testFixture.debugElement.query(By.css('svg')).nativeElement;
+      expect(svg.hasAttribute('viewBox')).toBe(false);
+      expect(svg.getAttribute('role')).toBe('img');
+    });
   });
 
   describe('width and height inputs', () => {
