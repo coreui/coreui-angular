@@ -16,13 +16,21 @@ import {
   SimpleChanges,
   untracked
 } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  containsTree,
+  IsActiveMatchOptions,
+  NavigationEnd,
+  Router,
+  RouterModule,
+  UrlTree
+} from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { SidebarService } from '../sidebar.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { INavData } from './sidebar-nav';
+import { INavData, INavLinkProps } from './sidebar-nav';
 import { SidebarNavHelper } from './sidebar-nav.service';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
 import { NavGroupService } from '../../nav';
@@ -57,6 +65,7 @@ import { IconDirective } from '@coreui/icons-angular';
 })
 export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   readonly #router = inject(Router);
+  readonly #route = inject(ActivatedRoute, { optional: true });
   readonly #hostElement = inject(ElementRef);
   readonly #sidebarNavGroupService = inject(SidebarNavGroupService);
   public readonly helper = inject(SidebarNavHelper);
@@ -81,6 +90,9 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
    * - `close`: when another group is clicked
    * - `none`: never, the group stays open — it stops reacting to the route altogether,
    *   so a matching route neither opens it on init nor on a later navigation
+   *
+   * A route matches a group when it falls under the `url` of the group (a root `url` only on the root route), or when
+   * a link inside the group is active by its own `routerLinkActiveOptions`; disabled and external links do not count.
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
 
@@ -108,27 +120,39 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   navGroupSubscription!: Subscription;
 
   readonly open = signal<boolean | undefined>(undefined);
-  readonly navItems = signal<INavData[]>([]);
+  readonly navItems = computed(() => [...(this.item()?.children ?? [])]);
   readonly display = signal<string | null>(null);
+  #itemMatched = false;
+
+  readonly #itemEffect = effect(() => {
+    const item = this.item();
+    untracked(() => {
+      if (!item || this.#itemMatched) {
+        return;
+      }
+      this.#itemMatched = true;
+      if (
+        this.#router.lastSuccessfulNavigation() &&
+        this.dropdownMode() !== 'none' &&
+        this.samePath(this.#router.routerState.snapshot.url)
+      ) {
+        this.openGroup(true);
+      }
+    });
+  });
 
   ngOnInit(): void {
-    this.navItems.set([...(this.item()?.children ?? [])]);
-
     this.navSubscription = this.navigationEndObservable.subscribe((event: NavigationEnd) => {
       if (this.dropdownMode() !== 'none') {
-        const samePath = this.samePath(event.url);
+        const samePath = this.samePath(event.urlAfterRedirects);
         this.openGroup(samePath);
       }
     });
 
-    if (this.dropdownMode() !== 'none' && this.samePath(this.#router.routerState.snapshot.url)) {
-      this.openGroup(true);
-    }
-
     this.navGroupSubscription = this.#sidebarNavGroupService.sidebarNavGroupState$.subscribe((next) => {
       if (this.dropdownMode() === 'close' && next.sidebarNavGroup && next.sidebarNavGroup !== this) {
         if (this.samePath(this.#router.routerState.snapshot.url)) {
-          if (this.open()) {
+          if (this.open() !== false) {
             return;
           }
         }
@@ -138,14 +162,58 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   samePath(url: string): boolean {
-    // console.log('item:', this.item.name, this.item.url, 'url:', url);
-    const itemUrl = this.item()?.url ?? [];
-    const itemArray = Array.isArray(itemUrl) ? itemUrl : itemUrl.split('/');
-    const urlArray = url.split('/');
-    return itemArray?.every((value: string, index: number) => {
-      // console.log(value === urlArray[index], 'value:', value, 'index:', index, urlArray[index], url);
-      return value === urlArray[index];
+    return this.#matches(this.item(), this.#router.parseUrl(url));
+  }
+
+  #matches(item: INavData | undefined, route: UrlTree): boolean {
+    const groupTree = item?.url?.length ? this.#urlTree(item.url) : null;
+    if (
+      groupTree &&
+      containsTree(route, groupTree, {
+        paths: groupTree.root.hasChildren() ? 'subset' : 'exact',
+        queryParams: 'ignored',
+        matrixParams: 'ignored',
+        fragment: 'ignored'
+      })
+    ) {
+      return true;
+    }
+    return (item?.children ?? []).some((child) => {
+      const itemType = this.helper.itemType(child);
+      return itemType === 'group'
+        ? this.#matches(child, route)
+        : itemType === 'link' && this.#linkMatches(child, route);
     });
+  }
+
+  #linkMatches(item: INavData, route: UrlTree): boolean {
+    if (item.url == null || this.helper.isDisabledLink(item) || this.helper.isExternalLink(item)) {
+      return false;
+    }
+    const tree = this.#urlTree(item.url, item.linkProps);
+    return !!tree && containsTree(route, tree, this.#activeOptions(item.linkProps?.routerLinkActiveOptions));
+  }
+
+  #activeOptions(options: unknown): Partial<IsActiveMatchOptions> {
+    const match = (options ?? {}) as Partial<IsActiveMatchOptions> & { exact?: boolean };
+    if (match.paths || match.matrixParams || match.queryParams || match.fragment) {
+      return match;
+    }
+    return match.exact ? { paths: 'exact', queryParams: 'exact' } : {};
+  }
+
+  #urlTree(url: string | any[], linkProps?: INavLinkProps): UrlTree | null {
+    try {
+      return this.#router.createUrlTree(Array.isArray(url) ? url : [url], {
+        relativeTo: this.#route,
+        queryParams: linkProps?.queryParams,
+        fragment: linkProps?.fragment,
+        queryParamsHandling: linkProps?.queryParamsHandling,
+        preserveFragment: linkProps?.preserveFragment
+      });
+    } catch {
+      return null;
+    }
   }
 
   openGroup(open: boolean): void {
@@ -215,6 +283,9 @@ export class SidebarNavComponent implements OnChanges {
    * - `close`: when another group is clicked
    * - `none`: never, the group stays open — it stops reacting to the route altogether,
    *   so a matching route neither opens it on init nor on a later navigation
+   *
+   * A route matches a group when it falls under the `url` of the group (a root `url` only on the root route), or when
+   * a link inside the group is active by its own `routerLinkActiveOptions`; disabled and external links do not count.
    */
   readonly dropdownMode = input<'path' | 'none' | 'close'>('path');
   /**

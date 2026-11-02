@@ -1,10 +1,13 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
-import { expect } from 'vitest';
+import { RouterTestingHarness } from '@angular/router/testing';
+import { expect, vi } from 'vitest';
 import { CollapseDirective } from '../../collapse';
 import { SidebarNavGroupComponent } from './sidebar-nav.component';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
+import { INavData } from './sidebar-nav';
 
 function endTransition(element: HTMLElement): void {
   const event = new Event('transitionend');
@@ -115,6 +118,16 @@ describe('SidebarNavGroupComponent', () => {
     expect(() => emptyFixture.detectChanges()).not.toThrow();
     expect(emptyFixture.nativeElement.querySelector('.nav-group-toggle .nav-icon')).toBeTruthy();
   });
+
+  it('should render the children of an item set after the first render', async () => {
+    const lateFixture = TestBed.createComponent(SidebarNavGroupComponent);
+    await lateFixture.whenStable();
+
+    lateFixture.componentRef.setInput('item', item);
+    await lateFixture.whenStable();
+
+    expect(lateFixture.nativeElement.querySelectorAll('c-sidebar-nav c-sidebar-nav-link').length).toBe(2);
+  });
 });
 
 describe('SidebarNavGroupComponent dropdownMode', () => {
@@ -182,5 +195,340 @@ describe('SidebarNavGroupComponent dropdownMode', () => {
     await router.navigate(['/charts']);
     await fixture.whenStable();
     expect(component.open()).toBe(false);
+  });
+});
+
+describe('SidebarNavGroupComponent route matching', () => {
+  let router: Router;
+
+  const children = [{ name: 'Standard Tables', url: '/tables/tables' }];
+
+  async function createGroup(item?: INavData): Promise<ComponentFixture<SidebarNavGroupComponent>> {
+    const fixture = TestBed.createComponent(SidebarNavGroupComponent);
+    if (item) {
+      fixture.componentRef.setInput('item', item);
+    }
+    await fixture.whenStable();
+    return fixture;
+  }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SidebarNavGroupComponent],
+      providers: [
+        provideRouter([
+          { path: 'old-tables', redirectTo: 'tables' },
+          { path: 'tables', children: [{ path: '**', children: [] }] },
+          { path: 'charts', children: [] },
+          { path: 'reports', children: [{ path: '**', children: [] }] },
+          { path: 'http', children: [{ path: '**', children: [] }] },
+          { path: '', children: [] }
+        ]),
+        SidebarNavGroupService
+      ]
+    }).compileComponents();
+
+    router = TestBed.inject(Router);
+  });
+
+  it('should open for a url given as commands', async () => {
+    await router.navigateByUrl('/tables/tables');
+    const fixture = await createGroup({ name: 'Tables', url: ['/tables'], children });
+    expect(fixture.componentInstance.open()).toBe(true);
+  });
+
+  it('should open for a route with matrix or query params', async () => {
+    await router.navigateByUrl('/tables;id=1/tables');
+    const matrix = await createGroup({ name: 'Tables', url: '/tables', children });
+    expect(matrix.componentInstance.open()).toBe(true);
+
+    await router.navigateByUrl('/tables?page=2');
+    const query = await createGroup({ name: 'Tables', url: '/tables', children });
+    expect(query.componentInstance.open()).toBe(true);
+  });
+
+  it('should open after a navigation that redirects into the group', async () => {
+    await router.navigateByUrl('/charts');
+    const fixture = await createGroup({ name: 'Tables', url: '/tables', children });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+
+    await router.navigateByUrl('/old-tables');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(true);
+  });
+
+  it('should not match a route by a segment prefix', async () => {
+    await router.navigateByUrl('/charts');
+    const fixture = await createGroup({ name: 'Charts', url: '/chart', children });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+  });
+
+  it('should match a group by the urls of the items inside it', async () => {
+    await router.navigateByUrl('/tables');
+    const fixture = await createGroup({ name: 'Tables', children });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+
+    await router.navigateByUrl('/tables/tables');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(true);
+
+    await router.navigateByUrl('/charts');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(false);
+
+    const nested = await createGroup({
+      name: 'Pages',
+      url: '#',
+      children: [{ name: 'Tables', children: [{ name: 'Charts', url: ['/charts'] }] }]
+    });
+    expect(nested.componentInstance.open()).toBe(true);
+  });
+
+  it('should match a link inside by its own active options', async () => {
+    await router.navigateByUrl('/tables/tables');
+    const item = {
+      name: 'Tables',
+      children: [{ name: 'Overview', url: '/tables', linkProps: { routerLinkActiveOptions: { exact: true } } }]
+    };
+    const fixture = await createGroup(item);
+    expect(fixture.componentInstance.open()).toBeFalsy();
+
+    await router.navigateByUrl('/tables');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(true);
+  });
+
+  it('should open a matching group created after another one was clicked in close mode', async () => {
+    await router.navigateByUrl('/tables/tables');
+    const other = TestBed.createComponent(SidebarNavGroupComponent);
+    other.componentRef.setInput('dropdownMode', 'close');
+    other.componentRef.setInput('item', {
+      name: 'Charts',
+      url: '/charts',
+      children: [{ name: 'Charts', url: '/charts' }]
+    });
+    await other.whenStable();
+    other.nativeElement.querySelector('.nav-group-toggle').click();
+    await other.whenStable();
+
+    const fixture = TestBed.createComponent(SidebarNavGroupComponent);
+    fixture.componentRef.setInput('dropdownMode', 'close');
+    fixture.componentRef.setInput('item', { name: 'Tables', url: '/tables', children });
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(true);
+    expect(fixture.componentInstance.display()).toBeNull();
+  });
+
+  it('should match a link with an empty url like its router link', async () => {
+    await router.navigateByUrl('/charts');
+    const fixture = await createGroup({ name: 'Home', children: [{ name: 'Home', url: '' }] });
+    expect(fixture.componentInstance.open()).toBe(true);
+
+    const exact = await createGroup({
+      name: 'Home',
+      children: [{ name: 'Home', url: '', linkProps: { routerLinkActiveOptions: { exact: true } } }]
+    });
+    expect(exact.componentInstance.open()).toBeFalsy();
+  });
+
+  it('should resolve the link props of a link like its router link', async () => {
+    await router.navigateByUrl('/tables?x=1');
+    const fixture = await createGroup({
+      name: 'Tables',
+      children: [{ name: 'Filtered', url: '/tables', linkProps: { queryParams: { x: 2 } } }]
+    });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+  });
+
+  it('should treat an empty group url as no url', async () => {
+    await router.navigateByUrl('/');
+    const fixture = await createGroup({ name: 'Pages', url: '', children: [{ name: 'Tables', url: '/tables' }] });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+  });
+
+  it('should finish closing a nested group while its parent is closed', async () => {
+    await router.navigateByUrl('/charts');
+    const fixture = await createGroup({
+      name: 'Pages',
+      children: [{ name: 'Tables', children: [{ name: 'Standard Tables', url: '/tables/tables' }] }]
+    });
+    const [outer, inner] = fixture.nativeElement.querySelectorAll('.nav-group-toggle');
+    outer.click();
+    await fixture.whenStable();
+    inner.click();
+    await fixture.whenStable();
+    outer.click();
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+
+    await router.navigateByUrl('/tables');
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    const nested = fixture.debugElement.query(By.directive(SidebarNavGroupComponent));
+    expect(nested.componentInstance.open()).toBe(false);
+    expect(nested.nativeElement.querySelector('c-sidebar-nav').classList.contains('collapsing')).toBe(false);
+  });
+
+  it('should read the active options of a link like its router link', async () => {
+    await router.navigateByUrl('/tables?x=1&y=2');
+    const partial = await createGroup({
+      name: 'Tables',
+      children: [
+        {
+          name: 'Filtered',
+          url: '/tables',
+          linkProps: { queryParams: { x: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } as any }
+        }
+      ]
+    });
+    expect(partial.componentInstance.open()).toBeFalsy();
+
+    const loose = await createGroup({
+      name: 'Tables',
+      children: [{ name: 'Tables', url: '/tables', linkProps: { routerLinkActiveOptions: true as any } }]
+    });
+    expect(loose.componentInstance.open()).toBe(true);
+  });
+
+  it('should not match disabled or external links inside', async () => {
+    await router.navigateByUrl('/tables');
+    const fixture = await createGroup({
+      name: 'Tables',
+      children: [
+        { name: 'Disabled', url: '/tables', attributes: { disabled: true } },
+        { name: 'External', url: '/tables', href: 'https://coreui.io' }
+      ]
+    });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+
+    await router.navigateByUrl('/http/tables');
+    const external = await createGroup({ name: 'Docs', children: [{ name: 'Docs', url: 'http/tables' }] });
+    expect(external.componentInstance.open()).toBeFalsy();
+  });
+
+  it('should match a root url on the root route only', async () => {
+    await router.navigateByUrl('/charts');
+    const fixture = await createGroup({ name: 'Home', url: '/', children });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+
+    await router.navigateByUrl('/');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(true);
+  });
+
+  it('should match a url the way its link encodes it, without a warning', async () => {
+    const warn = vi.spyOn(console, 'warn');
+    await router.navigateByUrl('/charts');
+    const fixture = await createGroup({ name: 'Reports', children: [{ name: 'Full', url: '/reports/100%' }] });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+
+    await router.navigateByUrl('/reports/100%25');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(true);
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('should not match a # placeholder', async () => {
+    await router.navigateByUrl('/');
+    const fixture = await createGroup({ name: 'Pages', url: '#', children: [{ name: 'Tables', url: '/tables' }] });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+  });
+
+  it('should match the current route after the routes are reset', async () => {
+    await router.navigateByUrl('/tables/tables');
+    router.resetConfig(router.config);
+    const fixture = await createGroup({ name: 'Tables', url: '/tables', children });
+    expect(fixture.componentInstance.open()).toBe(true);
+  });
+
+  it('should keep a group the user closed when the item object is rebuilt', async () => {
+    await router.navigateByUrl('/tables/tables');
+    const item = { name: 'Tables', url: '/tables', children };
+    const fixture = await createGroup(item);
+    expect(fixture.componentInstance.open()).toBe(true);
+
+    fixture.nativeElement.querySelector('.nav-group-toggle').click();
+    await fixture.whenStable();
+    fixture.componentRef.setInput('item', { ...item });
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(false);
+  });
+
+  it('should wait for the first navigation before matching', async () => {
+    const fixture = await createGroup({ name: 'Home', url: '/', children });
+    expect(fixture.componentInstance.open()).toBeFalsy();
+
+    await router.navigateByUrl('/');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.open()).toBe(true);
+  });
+
+  it('should match an item set after the first render against the current route', async () => {
+    await router.navigateByUrl('/charts');
+    const other = await createGroup();
+    other.componentRef.setInput('item', { name: 'Tables', url: '/tables', children });
+    await other.whenStable();
+    expect(other.componentInstance.open()).toBeFalsy();
+
+    await router.navigateByUrl('/tables/tables');
+    const matching = await createGroup();
+    matching.componentRef.setInput('item', { name: 'Tables', url: '/tables', children });
+    await matching.whenStable();
+    expect(matching.componentInstance.open()).toBe(true);
+  });
+});
+
+@Component({
+  template: '<c-sidebar-nav-group [item]="item" />',
+  imports: [SidebarNavGroupComponent]
+})
+class RoutedGroupHostComponent {
+  readonly item: INavData = { name: 'Tables', children: [{ name: 'Standard Tables', url: 'tables' }] };
+}
+
+describe('SidebarNavGroupComponent relative urls', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([
+          { path: 'app', component: RoutedGroupHostComponent, children: [{ path: '**', children: [] }] },
+          { path: 'org/:id', component: RoutedGroupHostComponent, children: [{ path: '**', children: [] }] }
+        ]),
+        SidebarNavGroupService
+      ]
+    });
+  });
+
+  it('should resolve a relative url of an item like its link', async () => {
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl('/app/tables');
+    const group = harness.routeDebugElement?.query(By.directive(SidebarNavGroupComponent));
+    expect(group?.query(By.css('c-sidebar-nav-link a')).nativeElement.getAttribute('href')).toBe('/app/tables');
+    expect(group?.componentInstance.open()).toBe(true);
+
+    await harness.navigateByUrl('/app/charts');
+    expect(group?.componentInstance.open()).toBe(false);
+  });
+
+  it('should resolve a relative url against the current params of the route', async () => {
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl('/org/1/tables');
+    const group = harness.routeDebugElement?.query(By.directive(SidebarNavGroupComponent));
+    expect(group?.componentInstance.open()).toBe(true);
+
+    await harness.navigateByUrl('/org/2/tables');
+    expect(harness.routeDebugElement?.query(By.directive(SidebarNavGroupComponent))).toBe(group);
+    expect(group?.componentInstance.open()).toBe(true);
+  });
+});
+
+describe('SidebarNavGroupComponent without router providers', () => {
+  it('should render a group without links', async () => {
+    TestBed.configureTestingModule({ providers: [SidebarNavGroupService] });
+    const fixture = TestBed.createComponent(SidebarNavGroupComponent);
+    fixture.componentRef.setInput('item', { name: 'Info', children: [{ title: true, name: 'Title' }] });
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('c-sidebar-nav-title')?.textContent).toBe('Title');
   });
 });

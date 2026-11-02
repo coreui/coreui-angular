@@ -63,6 +63,22 @@ describe('SidebarNavLinkComponent', () => {
     expect(icon.querySelector('.cil-speedometer')).toBeTruthy();
   });
 
+  it('should render a disabled link without href', async () => {
+    fixture.componentRef.setInput('item', { name: 'Disabled', url: '/disabled', attributes: { disabled: true } });
+    fixture.componentInstance.ngOnInit();
+    await fixture.whenStable();
+    expect(component.getLinkType()).toBe('disabled');
+    expect(fixture.debugElement.query(By.css('a')).nativeElement.hasAttribute('href')).toBe(false);
+  });
+
+  it('should render an external link with its href', async () => {
+    fixture.componentRef.setInput('item', { name: 'CoreUI', url: '/coreui', href: 'https://coreui.io' });
+    fixture.componentInstance.ngOnInit();
+    await fixture.whenStable();
+    expect(component.getLinkType()).toBe('external');
+    expect(fixture.debugElement.query(By.css('a')).nativeElement.getAttribute('href')).toBe('https://coreui.io');
+  });
+
   it('should have badge with text "NEW"', () => {
     const badge = fixture.debugElement.query(By.css('.badge')).nativeElement;
     expect(badge.textContent).toContain('NEW');

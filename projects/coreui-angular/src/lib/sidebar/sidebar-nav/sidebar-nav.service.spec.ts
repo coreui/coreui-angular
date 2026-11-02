@@ -59,6 +59,13 @@ describe('SidebarNavHelper', () => {
     expect(service.isActive(router, { url: null as unknown as string })).toBeFalsy();
   });
 
+  it('should match query params of the url as a subset of the current route', async () => {
+    await router.navigateByUrl('/home?x=1&y=2');
+    expect(service.isActive(router, { url: '/home?x=1' })).toBe(true);
+    expect(service.isActive(router, { url: '/home?x=2' })).toBe(false);
+    expect(service.isActive(router, { url: '/home;id=1' })).toBe(true);
+  });
+
   it('should match an array url against the current route', async () => {
     await router.navigateByUrl('/home/stats');
     expect(service.isActive(router, { url: ['/home'] })).toBeTruthy();
@@ -81,6 +88,15 @@ describe('SidebarNavHelper', () => {
     subscription.unsubscribe();
     expect(seen).not.toHaveLength(0);
     expect(seen).toEqual(seen.map(() => ({ target: true, previous: false })));
+  });
+
+  it('should tell disabled and external links', () => {
+    expect(service.isDisabledLink({ url: '/a', attributes: { disabled: true } })).toBe(true);
+    expect(service.isDisabledLink({ url: '/a' })).toBe(false);
+    expect(service.isExternalLink({ url: 'https://coreui.io' })).toBe(true);
+    expect(service.isExternalLink({ url: ['http://coreui.io'] })).toBe(true);
+    expect(service.isExternalLink({ url: '/a', href: 'https://coreui.io' })).toBe(true);
+    expect(service.isExternalLink({ url: '/a' })).toBe(false);
   });
 
   it('item hasBadge', () => {

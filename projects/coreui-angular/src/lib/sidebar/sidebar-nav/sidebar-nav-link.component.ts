@@ -52,6 +52,7 @@ export class SidebarNavLinkContentComponent {
 })
 export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   readonly router = inject(Router);
+  readonly #helper = inject(SidebarNavHelper);
 
   /**
    * The nav data item rendered as a sidebar nav link.
@@ -109,13 +110,11 @@ export class SidebarNavLinkComponent implements OnInit, OnDestroy {
   }
 
   public isDisabled(): boolean {
-    return this.item()?.attributes?.['disabled'];
+    return this.#helper.isDisabledLink(this.item() ?? {});
   }
 
   public isExternalLink(): boolean {
-    const item = this.item() ?? {};
-    const linkPath = Array.isArray(item.url) ? item.url[0] : item.url;
-    return !!item.href || linkPath?.substring(0, 4) === 'http';
+    return this.#helper.isExternalLink(this.item() ?? {});
   }
 
   linkClicked(): void {
