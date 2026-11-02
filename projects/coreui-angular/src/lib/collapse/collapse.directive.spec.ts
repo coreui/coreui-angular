@@ -1,4 +1,4 @@
-import { inputBinding, outputBinding, signal, twoWayBinding, WritableSignal } from '@angular/core';
+import { inputBinding, outputBinding, PLATFORM_ID, signal, twoWayBinding, WritableSignal } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { CollapseDirective } from './collapse.directive';
 
@@ -105,11 +105,75 @@ describe('CollapseDirective', () => {
     expect(emitted).toEqual([true]);
   });
 
+  it('should finish a transition that ends without transitionend', async () => {
+    const animatedFixture = TestBed.createDirective(CollapseDirective, { tagName: 'div' });
+    await animatedFixture.whenStable();
+    const element = animatedFixture.nativeElement as HTMLElement;
+    element.style.transitionDuration = '0.05s';
+    animatedFixture.directiveInstance.toggle(true);
+    await animatedFixture.whenStable();
+    expect(element.classList.contains('collapsing')).toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    expect(element.classList.contains('collapsing')).toBe(false);
+    expect(element.classList.contains('show')).toBe(true);
+  });
+
+  it('should wait for the transition duration of the element before the fallback', async () => {
+    const animatedFixture = TestBed.createDirective(CollapseDirective, { tagName: 'div' });
+    await animatedFixture.whenStable();
+    const element = animatedFixture.nativeElement as HTMLElement;
+    element.style.transitionDuration = '1s';
+    animatedFixture.directiveInstance.toggle(true);
+    await animatedFixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(element.classList.contains('collapsing')).toBe(true);
+  });
+
+  it('should run each transition to its end once, whichever ends it', async () => {
+    const changes: string[] = [];
+    const animatedFixture = TestBed.createDirective(CollapseDirective, {
+      tagName: 'div',
+      bindings: [outputBinding<string>('collapseChange', (state) => changes.push(state))]
+    });
+    await animatedFixture.whenStable();
+    const collapse = animatedFixture.directiveInstance;
+    const element = animatedFixture.nativeElement as HTMLElement;
+    element.style.transitionDuration = '0.05s';
+
+    collapse.toggle(true);
+    await animatedFixture.whenStable();
+    collapse.toggle(false);
+    await animatedFixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    expect(element.classList.contains('show')).toBe(false);
+    expect(changes).toEqual(['opening', 'collapsing', 'collapsed']);
+
+    collapse.toggle(true);
+    await animatedFixture.whenStable();
+    element.dispatchEvent(Object.assign(new Event('transitionend'), { propertyName: 'height' }));
+    expect(changes).toEqual(['opening', 'collapsing', 'collapsed', 'opening', 'open']);
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    expect(changes).toEqual(['opening', 'collapsing', 'collapsed', 'opening', 'open']);
+  });
+
+  it('should finish a change at once on the server', async () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [{ provide: PLATFORM_ID, useValue: 'server' }] });
+    const serverFixture = TestBed.createDirective(CollapseDirective, { tagName: 'div' });
+    await serverFixture.whenStable();
+    serverFixture.directiveInstance.toggle(true);
+    await serverFixture.whenStable();
+    const element = serverFixture.nativeElement as HTMLElement;
+    expect(element.classList.contains('collapsing')).toBe(false);
+    expect(element.classList.contains('show')).toBe(true);
+  });
+
   it('should clear an interrupted transition when animation is switched off', async () => {
     const animatedFixture = TestBed.createDirective(CollapseDirective, { tagName: 'div' });
     await animatedFixture.whenStable();
     const collapse = animatedFixture.directiveInstance;
     const element = animatedFixture.nativeElement as HTMLElement;
+    element.style.transitionDuration = '1s';
     collapse.toggle(true);
     await animatedFixture.whenStable();
     collapse.toggle(false);

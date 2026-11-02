@@ -9,9 +9,13 @@ import {
   linkedSignal,
   OnDestroy,
   output,
+  PLATFORM_ID,
   Renderer2,
   untracked
 } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+
+import getTransitionDurationFromElement from '../utilities/getTransitionDurationFromElement';
 
 @Directive({
   selector: '[cCollapse]',
@@ -19,9 +23,11 @@ import {
   host: { '[class]': 'hostClasses()' }
 })
 export class CollapseDirective implements OnDestroy {
+  readonly #isServer = isPlatformServer(inject(PLATFORM_ID));
   readonly #hostElement = inject(ElementRef);
   readonly #renderer = inject(Renderer2);
   #unlistenTransitionEnd?: () => void;
+  #transitionTimeout?: ReturnType<typeof setTimeout>;
   #isFirstChange = true;
 
   /**
@@ -61,7 +67,7 @@ export class CollapseDirective implements OnDestroy {
         this.setInitialState(visible);
         return;
       }
-      if (!this.animate()) {
+      if (!this.animate() || this.#isServer) {
         this.finishTransition(visible, this.#hostElement.nativeElement, this.horizontal() ? 'width' : 'height');
         return;
       }
@@ -100,6 +106,8 @@ export class CollapseDirective implements OnDestroy {
   protected clearPendingCallbacks(): void {
     this.#unlistenTransitionEnd?.();
     this.#unlistenTransitionEnd = undefined;
+    clearTimeout(this.#transitionTimeout);
+    this.#transitionTimeout = undefined;
   }
 
   protected setInitialState(visible: boolean): void {
@@ -167,6 +175,7 @@ export class CollapseDirective implements OnDestroy {
           finish();
         }
       });
+      this.#transitionTimeout = setTimeout(finish, getTransitionDurationFromElement(host) + 5);
     } else {
       finish();
     }
