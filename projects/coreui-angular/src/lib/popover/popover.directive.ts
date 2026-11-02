@@ -17,6 +17,7 @@ import {
   PLATFORM_ID,
   Renderer2,
   TemplateRef,
+  untracked,
   ViewContainerRef
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
@@ -54,28 +55,25 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewChecked, Af
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cPopover' });
 
-  readonly #contentEffect = effect(() => {
-    if (this.content()) {
-      this.destroyTooltipElement();
-    }
-  });
-
   /**
    * Optional popper Options object, takes precedence over cPopoverPlacement prop
    * @returns Partial<Options>
    */
   readonly popperOptions = input<Partial<Options>>({}, { alias: 'cPopoverOptions' });
 
-  readonly #popperOptionsEffect = effect(() => {
-    this._popperOptions = {
-      ...this._popperOptions,
-      placement: this.placement(),
-      ...this.popperOptions()
-    };
-  });
+  readonly popperOptionsComputed = computed<Partial<Options> & Pick<Options, 'placement'>>(() => ({
+    modifiers: [{ name: 'offset', options: { offset: [0, 9] } }],
+    placement: this.placement(),
+    ...this.popperOptions()
+  }));
 
-  readonly popperOptionsComputed = computed(() => {
-    return { placement: this.placement(), ...this._popperOptions };
+  readonly #popperPlacement = computed(() => this.popperOptionsComputed().placement);
+
+  readonly #popperPlacementEffect = afterRenderEffect({
+    write: () => {
+      const placement = this.#popperPlacement();
+      this.popperInstance?.setOptions({ placement });
+    }
   });
 
   /**
@@ -113,7 +111,7 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewChecked, Af
     // this fixes RuntimeError: NG0500: During hydration Angular expected <abc> but found <xyz>.
     // Find more at https://angular.dev/errors/NG0500
     write: () => {
-      this.visible() ? this.addTooltipElement() : this.removeTooltipElement();
+      this.#shown() ? this.addTooltipElement() : this.removeTooltipElement();
     }
   });
 
@@ -150,17 +148,6 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewChecked, Af
   private tooltip!: HTMLDivElement;
   private tooltipRef!: ComponentRef<PopoverComponent>;
   private popperInstance?: Instance;
-
-  private _popperOptions: Partial<Options> = {
-    modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: [0, 9]
-        }
-      }
-    ]
-  };
 
   ngAfterViewChecked(): void {
     this.#syncAriaDescribedBy(this.#shown());
@@ -227,11 +214,8 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewChecked, Af
   }
 
   private createTooltipElement(): void {
-    if (!this.tooltipRef) {
-      this.tooltipRef = this.#viewContainerRef.createComponent<PopoverComponent>(PopoverComponent);
-      this.tooltipRef.setInput('id', this.#tooltipId);
-      // this.viewContainerRef.detach();
-    }
+    this.tooltipRef = this.#viewContainerRef.createComponent<PopoverComponent>(PopoverComponent);
+    this.tooltipRef.setInput('id', this.#tooltipId);
   }
 
   private destroyTooltipElement(): void {
@@ -246,38 +230,52 @@ export class PopoverDirective implements OnDestroy, OnInit, AfterViewChecked, Af
   }
 
   private addTooltipElement(): void {
-    if (!this.content()) {
-      this.destroyTooltipElement();
-      return;
-    }
-
     if (!this.tooltipRef) {
       this.createTooltipElement();
     }
 
     this.tooltipRef?.setInput('content', this.content() ?? '');
 
+    if (this.popperInstance) {
+      if (this.popperInstance.state.elements.reference !== this.referenceRef().nativeElement) {
+        this.popperInstance.destroy();
+        this.#createPopper();
+      }
+      if (this.#timerId2 !== undefined) {
+        clearTimeout(this.#timerId2);
+        this.#timerId2 = undefined;
+        if (this.#timerId1 === undefined) {
+          this.#reveal();
+        } else {
+          this.#timerId1 = setTimeout(() => this.#reveal(), 150);
+        }
+      }
+      this.popperInstance.update();
+      return;
+    }
+
     this.tooltip = this.tooltipRef?.location.nativeElement;
     this.#renderer.addClass(this.tooltip, 'd-none');
     this.#renderer.addClass(this.tooltip, 'fade');
 
-    this.popperInstance?.destroy();
-
     this.#viewContainerRef.insert(this.tooltipRef.hostView);
     this.#renderer.appendChild(this.#document.body, this.tooltip);
 
-    this.popperInstance = createPopper(this.referenceRef().nativeElement, this.tooltip, {
-      ...this.popperOptionsComputed()
-    });
+    this.#createPopper();
+    this.#timerId1 = setTimeout(() => this.#reveal(), 150);
+  }
 
-    clearTimeout(this.#timerId2);
-    clearTimeout(this.#timerId1);
-    this.#timerId1 = setTimeout(() => {
-      this.#renderer.removeClass(this.tooltip, 'd-none');
-      this.tooltipRef?.setInput('visible', this.visible());
-      this.popperInstance?.forceUpdate();
-      this.#timerId1 = undefined;
-    }, 150);
+  #createPopper(): void {
+    this.popperInstance = createPopper(this.referenceRef().nativeElement, this.tooltip, {
+      ...untracked(() => this.popperOptionsComputed())
+    });
+  }
+
+  #reveal(): void {
+    this.#renderer.removeClass(this.tooltip, 'd-none');
+    this.tooltipRef?.setInput('visible', this.visible());
+    this.popperInstance?.update();
+    this.#timerId1 = undefined;
   }
 
   private removeTooltipElement(): void {
