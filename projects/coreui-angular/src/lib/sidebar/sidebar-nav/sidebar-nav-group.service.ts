@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { SidebarNavGroupComponent } from './sidebar-nav.component';
 
@@ -10,7 +10,7 @@ export interface ISidebarAction {
 
 @Injectable()
 export class SidebarNavGroupService {
-  private sidebarNavGroupState = new BehaviorSubject<ISidebarAction>({});
+  private sidebarNavGroupState = new Subject<ISidebarAction>();
   sidebarNavGroupState$ = this.sidebarNavGroupState.asObservable();
 
   toggle(action: ISidebarAction): void {

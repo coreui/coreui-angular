@@ -319,6 +319,38 @@ describe('SidebarNavGroupComponent route matching', () => {
     expect(fixture.componentInstance.display()).toBeNull();
   });
 
+  it('should keep the matching group open and close the others when a group is clicked in close mode', async () => {
+    await router.navigateByUrl('/tables/tables');
+    const createCloseGroup = async (item: INavData) => {
+      const group = TestBed.createComponent(SidebarNavGroupComponent);
+      group.componentRef.setInput('dropdownMode', 'close');
+      group.componentRef.setInput('item', item);
+      await group.whenStable();
+      return group;
+    };
+    const matching = await createCloseGroup({ name: 'Tables', url: '/tables', children });
+    const charts = await createCloseGroup({
+      name: 'Charts',
+      url: '/charts',
+      children: [{ name: 'Charts', url: '/charts' }]
+    });
+    const reports = await createCloseGroup({
+      name: 'Reports',
+      url: '/reports',
+      children: [{ name: 'Full', url: '/reports/full' }]
+    });
+    expect(matching.componentInstance.open()).toBe(true);
+
+    charts.nativeElement.querySelector('.nav-group-toggle').click();
+    await charts.whenStable();
+    reports.nativeElement.querySelector('.nav-group-toggle').click();
+    await reports.whenStable();
+
+    expect(matching.componentInstance.open()).toBe(true);
+    expect(charts.componentInstance.open()).toBe(false);
+    expect(reports.componentInstance.open()).toBe(true);
+  });
+
   it('should stop reacting to other groups once destroyed', async () => {
     await router.navigateByUrl('/');
     const destroyed = TestBed.createComponent(SidebarNavGroupComponent);
@@ -340,6 +372,30 @@ describe('SidebarNavGroupComponent route matching', () => {
     other.nativeElement.querySelector('.nav-group-toggle').click();
     await other.whenStable();
     expect(other.componentInstance.open()).toBe(true);
+    expect(openGroup).not.toHaveBeenCalled();
+  });
+
+  it('should not hand an earlier click to a group created later', async () => {
+    await router.navigateByUrl('/');
+    const clicked = TestBed.createComponent(SidebarNavGroupComponent);
+    clicked.componentRef.setInput('dropdownMode', 'close');
+    clicked.componentRef.setInput('item', { name: 'Tables', url: '/tables', children });
+    await clicked.whenStable();
+    clicked.nativeElement.querySelector('.nav-group-toggle').click();
+    await clicked.whenStable();
+    expect(clicked.componentInstance.open()).toBe(true);
+    clicked.destroy();
+    expect((TestBed.inject(SidebarNavGroupService) as any).sidebarNavGroupState.value).toBeUndefined();
+
+    const later = TestBed.createComponent(SidebarNavGroupComponent);
+    const openGroup = vi.spyOn(later.componentInstance, 'openGroup');
+    later.componentRef.setInput('dropdownMode', 'close');
+    later.componentRef.setInput('item', {
+      name: 'Charts',
+      url: '/charts',
+      children: [{ name: 'Charts', url: '/charts' }]
+    });
+    await later.whenStable();
     expect(openGroup).not.toHaveBeenCalled();
   });
 
