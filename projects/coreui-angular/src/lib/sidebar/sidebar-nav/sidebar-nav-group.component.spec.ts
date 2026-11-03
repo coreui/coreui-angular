@@ -319,6 +319,30 @@ describe('SidebarNavGroupComponent route matching', () => {
     expect(fixture.componentInstance.display()).toBeNull();
   });
 
+  it('should stop reacting to other groups once destroyed', async () => {
+    await router.navigateByUrl('/');
+    const destroyed = TestBed.createComponent(SidebarNavGroupComponent);
+    destroyed.componentRef.setInput('dropdownMode', 'close');
+    destroyed.componentRef.setInput('item', { name: 'Tables', url: '/tables', children });
+    await destroyed.whenStable();
+    const openGroup = vi.spyOn(destroyed.componentInstance, 'openGroup');
+    destroyed.destroy();
+    expect((TestBed.inject(SidebarNavGroupService) as any).sidebarNavGroupState.observed).toBe(false);
+
+    const other = TestBed.createComponent(SidebarNavGroupComponent);
+    other.componentRef.setInput('dropdownMode', 'close');
+    other.componentRef.setInput('item', {
+      name: 'Charts',
+      url: '/charts',
+      children: [{ name: 'Charts', url: '/charts' }]
+    });
+    await other.whenStable();
+    other.nativeElement.querySelector('.nav-group-toggle').click();
+    await other.whenStable();
+    expect(other.componentInstance.open()).toBe(true);
+    expect(openGroup).not.toHaveBeenCalled();
+  });
+
   it('should match a link with an empty url like its router link', async () => {
     await router.navigateByUrl('/charts');
     const fixture = await createGroup({ name: 'Home', children: [{ name: 'Home', url: '' }] });
