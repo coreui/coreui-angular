@@ -175,9 +175,14 @@ export class AnnouncerService {
       if (this.#isModal(node)) {
         return node as HTMLElement;
       }
-      node = node.assignedSlot ?? node.parentElement ?? (node.getRootNode() as ShadowRoot).host ?? null;
+      node = node.assignedSlot ?? node.parentElement ?? this.#getShadowHost(node);
     }
     return null;
+  }
+
+  #getShadowHost(node: Node): Element | null {
+    const root = node.getRootNode();
+    return root.nodeType === Node.DOCUMENT_FRAGMENT_NODE ? ((root as ShadowRoot).host ?? null) : null;
   }
 
   #isModal(element: Element): boolean {

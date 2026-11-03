@@ -115,6 +115,50 @@ describe('AnnouncerService', () => {
     expect(regions(first)).toBeNull();
   });
 
+  it('announces inside the aria-modal around a context in a shadow root', () => {
+    const modal = document.createElement('div');
+    const later = document.createElement('div');
+    modal.setAttribute('aria-modal', 'true');
+    later.setAttribute('aria-modal', 'true');
+    const shadowHost = document.createElement('div');
+    const context = document.createElement('span');
+    shadowHost.attachShadow({ mode: 'open' }).append(context);
+    modal.append(shadowHost);
+    document.body.append(modal, later);
+
+    service.announce('Removed', { context });
+    vi.advanceTimersByTime(100);
+    expect(polite(modal)?.textContent).toBe('Removed');
+    expect(regions(later)).toBeNull();
+  });
+
+  it('announces in the page when the page has a form named host', () => {
+    const form = document.createElement('form');
+    form.name = 'host';
+    Object.defineProperty(form, 'parentElement', {
+      get() {
+        throw new Error('the dialog lookup walked into the form');
+      }
+    });
+    document.body.append(form);
+    onTestFinished(() => form.remove());
+
+    service.announce('Saved');
+    vi.advanceTimersByTime(100);
+    expect(polite(document.body)?.textContent).toBe('Saved');
+  });
+
+  it('announces in the page for a context in a detached link', () => {
+    const link = document.createElement('a');
+    link.href = 'https://example.com';
+    const context = document.createElement('span');
+    link.append(context);
+
+    service.announce('Saved', { context });
+    vi.advanceTimersByTime(100);
+    expect(polite(document.body)?.textContent).toBe('Saved');
+  });
+
   it('does nothing for an empty message', () => {
     service.announce('');
     expect(regions(document.body)).toBeNull();
