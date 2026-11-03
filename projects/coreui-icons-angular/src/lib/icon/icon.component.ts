@@ -1,4 +1,15 @@
-import { Component, computed, effect, ElementRef, inject, input, Renderer2, viewChild } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  PLATFORM_ID,
+  Renderer2,
+  viewChild
+} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { HtmlAttributesDirective } from '../shared/html-attr.directive';
@@ -19,6 +30,7 @@ export class IconComponent implements IIcon {
   readonly #elementRef = inject(ElementRef);
   readonly #sanitizer = inject(DomSanitizer);
   readonly #iconSet = inject(IconSetService);
+  protected readonly isServer = isPlatformServer(inject(PLATFORM_ID));
 
   readonly content = input<string | string[] | any[]>();
 
@@ -45,7 +57,7 @@ export class IconComponent implements IIcon {
     effect(() => {
       const svgElementRef = this.svgElementRef();
       const hostElement: Element = this.#elementRef.nativeElement;
-      if (svgElementRef && hostElement) {
+      if (svgElementRef && hostElement && !this.isServer) {
         const svgElement = svgElementRef.nativeElement;
         hostElement.classList?.forEach((item: string) => {
           this.#renderer.addClass(svgElement, item);

@@ -1,7 +1,9 @@
-import { computed, Directive, inject, input } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { computed, Directive, DOCUMENT, inject, input, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IconSetService } from '../icon-set';
+import { patchSvgInnerHtml } from '../shared/svg-inner-html';
 import { IconSize, IIcon, IPointerEvents, NgCssClass } from './icon.interface';
 import { escapeHtml, transformName } from './icon.utils';
 
@@ -77,6 +79,12 @@ export class IconDirective implements IIcon {
    * Sets the ARIA role of the icon.
    */
   readonly role = input('img');
+
+  constructor() {
+    if (isPlatformServer(inject(PLATFORM_ID))) {
+      patchSvgInnerHtml(inject(DOCUMENT));
+    }
+  }
 
   readonly hostClasses = computed<NgCssClass>(() => {
     const computedSize = this.computedSize();
