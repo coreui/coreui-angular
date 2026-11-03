@@ -1802,11 +1802,12 @@ describe('DropdownComponent with a form as the menu', () => {
   });
 });
 
-const replayed = (type: string, init: KeyboardEventInit): KeyboardEvent => {
-  const event = new KeyboardEvent(type, { bubbles: true, cancelable: true, ...init });
+const replayed = <T extends Event>(event: T): T => {
   Object.defineProperty(event, 'eventPhase', { value: 101 });
+  const originalPreventDefault = event.preventDefault.bind(event);
   Object.defineProperty(event, 'preventDefault', {
     value: () => {
+      originalPreventDefault();
       throw new Error('preventDefault called during event replay');
     }
   });
@@ -1817,6 +1818,8 @@ const replayed = (type: string, init: KeyboardEventInit): KeyboardEvent => {
   });
   return event;
 };
+const replayedKey = (type: string, init: KeyboardEventInit): KeyboardEvent =>
+  replayed(new KeyboardEvent(type, { bubbles: true, cancelable: true, ...init }));
 
 describe('DropdownComponent with replayed events', () => {
   it('should ignore a replayed key on the toggle and in the menu without an error', async () => {
@@ -1826,14 +1829,36 @@ describe('DropdownComponent with replayed events', () => {
     const service = fixture.debugElement.query(By.directive(DropdownComponent)).injector.get(DropdownService);
     const toggleSpy = vi.spyOn(service, 'toggle');
     const toggle: HTMLElement = fixture.nativeElement.querySelector('#toggle');
-    toggle.dispatchEvent(replayed('keydown', { key: 'ArrowDown', keyCode: 40 }));
+    toggle.dispatchEvent(replayedKey('keydown', { key: 'ArrowDown', keyCode: 40 }));
     expect(toggleSpy).not.toHaveBeenCalled();
     fixture.componentInstance.visible.set(true);
     await fixture.whenStable();
     const items: HTMLElement[] = [...fixture.nativeElement.querySelectorAll('.dropdown-item')];
     items[0].focus();
-    items[0].dispatchEvent(replayed('keydown', { key: 'ArrowDown', keyCode: 40 }));
+    items[0].dispatchEvent(replayedKey('keydown', { key: 'ArrowDown', keyCode: 40 }));
     expect(document.activeElement).toBe(items[0]);
     expect(errorSpy).not.toHaveBeenCalled();
+  });
+  it('should ignore a replayed click on the toggle without an error, and handle a live one', async () => {
+    const fixture = TestBed.createComponent(KeyboardTestComponent);
+    await fixture.whenStable();
+    const errorSpy = vi.spyOn(TestBed.inject(ErrorHandler), 'handleError').mockImplementation(() => undefined);
+    const service = fixture.debugElement.query(By.directive(DropdownComponent)).injector.get(DropdownService);
+    const toggleSpy = vi.spyOn(service, 'toggle');
+    const toggle: HTMLElement = fixture.nativeElement.querySelector('#toggle');
+    const outside = document.body.appendChild(document.createElement('input'));
+    try {
+      outside.focus();
+      toggle.dispatchEvent(replayed(new MouseEvent('click', { bubbles: true, cancelable: true })));
+      expect(toggleSpy).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(outside);
+      expect(errorSpy).not.toHaveBeenCalled();
+      const live = new MouseEvent('click', { bubbles: true, cancelable: true });
+      toggle.dispatchEvent(live);
+      expect(live.defaultPrevented).toBe(true);
+      expect(toggleSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      outside.remove();
+    }
   });
 });
