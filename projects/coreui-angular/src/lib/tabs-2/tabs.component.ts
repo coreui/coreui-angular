@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, model } from '@angular/core';
+import { Component, computed, effect, inject, input, model } from '@angular/core';
 import { TabsService } from './tabs.service';
 
 let nextId = 0;
@@ -11,7 +11,7 @@ let nextId = 0;
   styleUrl: './tabs.component.scss',
   providers: [TabsService],
   host: {
-    '[id]': 'id()',
+    '[id]': 'propId()',
     class: 'tabs'
   }
 })
@@ -32,13 +32,15 @@ export class TabsComponent {
 
   /**
    * HTML id attribute.
-   * @returns string
+   * @returns string | null | undefined
    * @default `tabs-{n}`
    */
-  readonly id = input<string>(this.tabsId);
+  readonly id = input<string | null | undefined>(this.tabsId);
+
+  protected readonly propId = computed(() => this.id() ?? this.tabsId);
 
   readonly #activeItemEffect = effect(() => {
-    this.tabsService.id.set(this.id());
+    this.tabsService.id.set(this.propId());
     this.tabsService.activeItemKey.set(this.activeItemKey());
   });
 

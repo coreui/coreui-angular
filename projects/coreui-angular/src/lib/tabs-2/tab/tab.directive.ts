@@ -68,17 +68,17 @@ export class TabDirective implements FocusableOption, OnInit {
 
   /**
    * Element id attribute
-   * @returns string
-   * @default undefined
+   * @returns string | null | undefined
+   * @default `{c-tabs id}-tab-{itemKey}`
    */
-  readonly id: InputSignal<string | undefined> = input<string>();
+  readonly id: InputSignal<string | null | undefined> = input<string | null | undefined>();
 
   /**
    * aria-controls attribute
-   * @returns string
-   * @default undefined
+   * @returns string | null | undefined
+   * @default `{c-tabs id}-panel-{itemKey}`
    */
-  readonly ariaControls: InputSignal<string | undefined> = input<string | undefined>(undefined, {
+  readonly ariaControls: InputSignal<string | null | undefined> = input<string | null | undefined>(undefined, {
     alias: 'aria-controls'
   });
 

@@ -1,7 +1,9 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { TabPanelComponent } from '../tab-panel/tab-panel.component';
 import { TabsComponent } from '../tabs.component';
+import { TabsContentComponent } from '../tabs-content/tabs-content.component';
 import { TabsListComponent } from '../tabs-list/tabs-list.component';
 import { TabsService } from '../tabs.service';
 import { TabDirective } from './tab.directive';
@@ -21,6 +23,24 @@ class MockElementRef extends ElementRef {}
   imports: [TabsComponent, TabsListComponent, TabDirective]
 })
 class TestComponent {}
+
+@Component({
+  template: `
+    <c-tabs activeItemKey="a">
+      <c-tabs-list>
+        <button cTab itemKey="a" [aria-controls]="controls()">A</button>
+      </c-tabs-list>
+      <c-tabs-content>
+        <c-tab-panel itemKey="a" [transition]="false">A</c-tab-panel>
+      </c-tabs-content>
+    </c-tabs>
+    <div id="customPanel">Panel</div>
+  `,
+  imports: [TabsComponent, TabsListComponent, TabDirective, TabsContentComponent, TabPanelComponent]
+})
+class ControlsTestComponent {
+  readonly controls = signal<string | null | undefined>('customPanel');
+}
 
 describe('TabDirective', () => {
   beforeEach(() => {
@@ -75,5 +95,21 @@ describe('TabDirective', () => {
       expect(tabs[1].hasAttribute('disabled')).toBe(true);
       expect(tabs[1].getAttribute('aria-selected')).toBe('true');
     });
+  });
+
+  it('accepts null for aria-controls and falls back to the generated panel id, like undefined', async () => {
+    const fixture = TestBed.createComponent(ControlsTestComponent);
+    await fixture.whenStable();
+    const tab: HTMLButtonElement = fixture.nativeElement.querySelector('button[cTab]');
+    const panel: HTMLElement = fixture.nativeElement.querySelector('c-tab-panel');
+    expect(tab.getAttribute('aria-controls')).toBe('customPanel');
+    fixture.componentInstance.controls.set(null);
+    await fixture.whenStable();
+    expect(tab.getAttribute('aria-controls')).toBe(panel.id);
+    fixture.componentInstance.controls.set('customPanel');
+    await fixture.whenStable();
+    fixture.componentInstance.controls.set(undefined);
+    await fixture.whenStable();
+    expect(tab.getAttribute('aria-controls')).toBe(panel.id);
   });
 });
