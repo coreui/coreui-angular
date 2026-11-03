@@ -4,9 +4,11 @@ import { Options, Placement } from '@popperjs/core';
 
 import { DropdownComponent, DropdownFocusReturn, DropdownToggleDirective } from './dropdown.component';
 import {
+  AfterViewInit,
   afterNextRender,
   Component,
   DebugElement,
+  Directive,
   DOCUMENT,
   ElementRef,
   ErrorHandler,
@@ -64,6 +66,7 @@ class MockElementRef extends ElementRef {}
     >
       <div
         cDropdownToggle
+        role="button"
         [caret]="caret()"
         [split]="split()"
         [disabled]="disabled()"
@@ -206,6 +209,129 @@ describe('DropdownToggleDirective', () => {
   imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective]
 })
 class InitiallyVisibleComponent {}
+
+@Directive({
+  selector: '[cMenuButton]',
+  hostDirectives: [DropdownToggleDirective],
+  host: { '[attr.role]': 'role()' }
+})
+class MenuButtonDirective {
+  readonly role = signal('button');
+}
+
+@Component({
+  template: `
+    @for (id of ids; track id) {
+      <c-dropdown [visible]="visible()">
+        @switch (id) {
+          @case ('button') {
+            <button cDropdownToggle id="button">Toggle</button>
+          }
+          @case ('link') {
+            <a cDropdownToggle href="#" id="link">Toggle</a>
+          }
+          @case ('item-link') {
+            <a cDropdownToggle cDropdownItem href="#" id="item-link">Toggle</a>
+          }
+          @case ('header') {
+            <table>
+              <tr>
+                <th cDropdownToggle id="header">Toggle</th>
+              </tr>
+            </table>
+          }
+          @case ('role-button') {
+            <div cDropdownToggle role="button" tabindex="0" id="role-button">Toggle</div>
+          }
+          @case ('bound-role') {
+            <div cDropdownToggle [attr.role]="'button'" tabindex="0" id="bound-role">Toggle</div>
+          }
+          @case ('host-role') {
+            <div cMenuButton tabindex="0" id="host-role">Toggle</div>
+          }
+          @case ('renderer-role') {
+            <div #rendererRole cDropdownToggle tabindex="0" id="renderer-role">Toggle</div>
+          }
+          @case ('late-role') {
+            <div cDropdownToggle [attr.role]="lateRole()" tabindex="0" id="late-role">Toggle</div>
+          }
+          @case ('div') {
+            <div cDropdownToggle id="div">Toggle</div>
+          }
+          @case ('empty-role') {
+            <div cDropdownToggle role="" id="empty-role">Toggle</div>
+          }
+          @case ('span') {
+            <span cDropdownToggle id="span"><input /></span>
+          }
+        }
+        <ul cDropdownMenu></ul>
+      </c-dropdown>
+    }
+  `,
+  imports: [
+    DropdownToggleDirective,
+    DropdownComponent,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    MenuButtonDirective
+  ]
+})
+class ToggleHostsComponent implements AfterViewInit {
+  readonly ids = [
+    'button',
+    'link',
+    'item-link',
+    'header',
+    'role-button',
+    'bound-role',
+    'host-role',
+    'renderer-role',
+    'late-role',
+    'div',
+    'empty-role',
+    'span'
+  ];
+  readonly visible = signal(false);
+  readonly lateRole = signal<string | null>(null);
+  readonly #renderer = inject(Renderer2);
+  readonly rendererRole = viewChild('rendererRole', { read: ElementRef });
+
+  ngAfterViewInit(): void {
+    this.#renderer.setAttribute(this.rendererRole()?.nativeElement, 'role', 'button');
+  }
+}
+
+describe('DropdownToggleDirective aria-expanded host', () => {
+  it('should leave aria-expanded off a div or span toggle without a role', async () => {
+    const fixture = TestBed.createComponent(ToggleHostsComponent);
+    const states = () =>
+      fixture.componentInstance.ids.map((id) => [
+        id,
+        fixture.nativeElement.querySelector(`#${id}`).getAttribute('aria-expanded')
+      ]);
+    const expected = (open: string, lateRole: string | null) => [
+      ['button', open],
+      ['link', open],
+      ['item-link', open],
+      ['header', open],
+      ['role-button', open],
+      ['bound-role', open],
+      ['host-role', open],
+      ['renderer-role', open],
+      ['late-role', lateRole],
+      ['div', null],
+      ['empty-role', null],
+      ['span', null]
+    ];
+    fixture.detectChanges();
+    expect(states()).toEqual(expected('false', null));
+    fixture.componentInstance.lateRole.set('button');
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(states()).toEqual(expected('true', 'true'));
+  });
+});
 
 describe('DropdownToggleDirective initially visible', () => {
   it('should set aria-expanded on first render', async () => {

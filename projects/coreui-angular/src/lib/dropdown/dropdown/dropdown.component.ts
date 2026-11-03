@@ -40,6 +40,7 @@ import { clicksOnEnter, isEditableTarget, isReplayedEvent } from '../dropdown.ut
 
 const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
 const FORM_TAG = /^(form|input|option|select|textarea)$/;
+const GENERIC_TAG = /^(div|span)$/;
 const TEXT_INPUT_TYPE = /^(email|number|password|search|tel|text|url)$/;
 
 // lightweight injection token
@@ -111,7 +112,8 @@ export class DropdownToggleDirective implements AfterViewInit {
   );
 
   get ariaExpanded() {
-    return this.#ariaExpanded();
+    const element: HTMLElement = this.elementRef.nativeElement;
+    return GENERIC_TAG.test(element.localName) && !element.getAttribute('role') ? null : this.#ariaExpanded();
   }
 
   public onClick($event: MouseEvent): void {
