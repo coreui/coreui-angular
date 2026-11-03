@@ -10,7 +10,6 @@ import {
   inject,
   input,
   linkedSignal,
-  MAX_ANIMATION_TIMEOUT,
   output,
   PLATFORM_ID,
   TemplateRef
@@ -20,7 +19,7 @@ import { isPlatformServer, NgTemplateOutlet } from '@angular/common';
 import { Colors } from '../coreui.types';
 import { TemplateIdDirective } from '../shared';
 import { ButtonCloseDirective } from '../button';
-import getTransitionDurationFromElement from '../utilities/getTransitionDurationFromElement';
+import { afterTransitions } from '../shared/transition.utils';
 
 @Component({
   selector: 'c-alert',
@@ -32,16 +31,14 @@ import getTransitionDurationFromElement from '../utilities/getTransitionDuration
     '[attr.role]': 'role()',
     '[class]': 'hostClasses()',
     '(animate.leave)': 'handleLeaving($event)',
-    '(transitionend)': 'onTransitionEnd($event)',
     '[hidden]': 'hide()',
     '[inert]': 'hide()'
-  },
-  providers: [{ provide: MAX_ANIMATION_TIMEOUT, useValue: 300 }]
+  }
 })
 export class AlertComponent {
   readonly #hostElement = inject(ElementRef);
-  readonly #maxAnimationTimeout = inject(MAX_ANIMATION_TIMEOUT);
   readonly #isServer = isPlatformServer(inject(PLATFORM_ID));
+  readonly #renderedShown: boolean = this.#hostElement.nativeElement.classList.contains('show');
 
   /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
@@ -72,7 +69,7 @@ export class AlertComponent {
   readonly dismissible = input(false, { transform: booleanAttribute });
 
   /**
-   * Adds animation for dismissible alert.
+   * Fades the alert in when shown and out when dismissed.
    * @returns boolean
    * @default false
    */
@@ -98,24 +95,50 @@ export class AlertComponent {
     computation: ({ fade, visible }, previous) => !visible && (!fade || this.#isServer || (previous?.value ?? true))
   });
 
+  protected readonly show = linkedSignal<{ fade: boolean; hide: boolean; visible: boolean }, boolean>({
+    source: () => ({ fade: this.fade(), hide: this.hide(), visible: this.visible() }),
+    computation: ({ fade, visible }, previous) =>
+      visible && !(fade && !this.#isServer && (previous ? previous.source.hide : !this.#renderedShown))
+  });
+
+  readonly #showEffect = afterRenderEffect({
+    earlyRead: () => {
+      if (this.show() || !this.visible()) {
+        return false;
+      }
+      void this.#hostElement.nativeElement.offsetHeight;
+      return true;
+    },
+    write: (entering) => {
+      if (entering()) {
+        this.show.set(true);
+      }
+    }
+  });
+
   readonly #visibleEffect = afterRenderEffect({
     read: (onCleanup) => {
       if (this.visible() || this.hide()) {
         return;
       }
-      const duration = getTransitionDurationFromElement(this.#hostElement.nativeElement);
-      if (!duration) {
-        this.#finishTransition();
-        return;
-      }
-      const timeoutId = setTimeout(() => this.#finishTransition(), duration + 5);
-      onCleanup(() => clearTimeout(timeoutId));
+      let cancelled = false;
+      onCleanup(() => (cancelled = true));
+      afterTransitions(this.#hostElement.nativeElement).then(() => {
+        if (!cancelled) {
+          this.#finishTransition();
+        }
+      });
     }
   });
 
+  #emittedHide?: boolean;
+
   readonly #hideEffect = effect(() => {
     const hide = this.hide();
-    this.visibleChange.emit(!hide);
+    if (this.#emittedHide !== undefined && hide !== this.#emittedHide) {
+      this.visibleChange.emit(!hide);
+    }
+    this.#emittedHide = hide;
   });
 
   protected readonly contentTemplates = contentChildren(TemplateIdDirective, { descendants: true });
@@ -133,24 +156,17 @@ export class AlertComponent {
   protected readonly hostClasses = computed(() => {
     const color = this.color();
     const variant = this.variant();
-    const visible = this.visible();
 
     return {
       alert: true,
       'alert-dismissible': this.dismissible(),
       fade: this.fade(),
-      show: visible,
+      show: this.show(),
       [`alert-${color}`]: !!color && variant !== 'solid',
       [`bg-${color}`]: !!color && variant === 'solid',
       'text-white': !!color && variant === 'solid'
     } as Record<string, boolean>;
   });
-
-  protected onTransitionEnd($event: TransitionEvent): void {
-    if ($event.target === this.#hostElement.nativeElement && $event.propertyName === 'opacity') {
-      this.#finishTransition();
-    }
-  }
 
   #finishTransition(): void {
     this.hide.set(!this.visible());
@@ -162,9 +178,8 @@ export class AlertComponent {
     if (this.#leavingInProgress) return;
     this.#leavingInProgress = true;
 
-    this.#hostElement.nativeElement.classList.remove('show');
-    setTimeout(() => {
-      $event.animationComplete();
-    }, this.#maxAnimationTimeout);
+    const host = this.#hostElement.nativeElement;
+    host.classList.remove('show');
+    afterTransitions(host).then(() => $event.animationComplete());
   }
 }

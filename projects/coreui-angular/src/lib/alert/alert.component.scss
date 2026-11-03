@@ -2,3 +2,7 @@
   display: block;
   //overflow: hidden;
 }
+
+:host[hidden] {
+  display: none !important;
+}
