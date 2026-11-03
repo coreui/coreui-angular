@@ -62,24 +62,24 @@ export class ChipInputComponent implements AfterContentInit {
 
   /**
    * Id of the element that describes the text field, e.g. a hint or a `c-form-feedback`.
-   * @returns string | undefined
+   * @returns string | null | undefined
    * @default undefined
    */
-  readonly ariaDescribedBy = input<string>(undefined, { alias: 'aria-describedby' });
+  readonly ariaDescribedBy = input<string | null | undefined>(undefined, { alias: 'aria-describedby' });
 
   /**
    * Accessible name of the text field when there is no visible label.
-   * @returns string | undefined
+   * @returns string | null | undefined
    * @default undefined
    */
-  readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
+  readonly ariaLabel = input<string | null | undefined>(undefined, { alias: 'aria-label' });
 
   /**
    * Id of the element that names the text field.
-   * @returns string | undefined
+   * @returns string | null | undefined
    * @default undefined
    */
-  readonly ariaLabelledBy = input<string>(undefined, { alias: 'aria-labelledby' });
+  readonly ariaLabelledBy = input<string | null | undefined>(undefined, { alias: 'aria-labelledby' });
 
   /**
    * Label of the remove buttons; each chip appends its value, e.g. `'Remove Angular'`.

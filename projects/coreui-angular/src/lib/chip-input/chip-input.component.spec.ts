@@ -418,10 +418,14 @@ describe('ChipInputComponent with a projected chip', () => {
       [(value)]="plain"
     />
     <c-chip-input maxChips="" [(value)]="unlimited" />
+    <c-chip-input [aria-describedby]="describedBy()" [aria-label]="label()" [aria-labelledby]="labelledBy()" />
     <span id="plainHint">Hint</span>
   `
 })
 class OptionsHostComponent {
+  readonly describedBy = signal<string | null>('plainHint');
+  readonly label = signal<string | null>('Bound tags');
+  readonly labelledBy = signal<string | null>('plainHint');
   readonly plain = signal<string[]>([]);
   readonly selected = signal<string[]>(['a']);
   readonly unlimited = signal<string[]>([]);
@@ -466,6 +470,21 @@ describe('ChipInputComponent options', () => {
     expect(plain.getAttribute('aria-label')).toBeNull();
     expect(plain.getAttribute('aria-labelledby')).toBeNull();
     expect(plain.getAttribute('aria-describedby')).toBeNull();
+  });
+
+  it('accepts null for aria-label, aria-labelledby and aria-describedby and takes them off the text field', async () => {
+    const bound = inputs()[3];
+    const field = bound.querySelector('input')!;
+    expect(field.getAttribute('aria-label')).toBe('Bound tags');
+    expect(field.getAttribute('aria-labelledby')).toBe('plainHint');
+    expect(field.getAttribute('aria-describedby')).toBe('plainHint');
+    fixture.componentInstance.label.set(null);
+    fixture.componentInstance.labelledBy.set(null);
+    fixture.componentInstance.describedBy.set(null);
+    await fixture.whenStable();
+    expect(field.hasAttribute('aria-label')).toBe(false);
+    expect(field.hasAttribute('aria-labelledby')).toBe(false);
+    expect(field.hasAttribute('aria-describedby')).toBe(false);
   });
 
   it('splits on its own separator, and not at all without one', async () => {
