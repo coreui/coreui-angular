@@ -1,8 +1,58 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { expect } from 'vitest';
 
 import { AlertComponent } from './alert.component';
-import { Component, ComponentRef, PLATFORM_ID, signal } from '@angular/core';
+import {
+  AnimationCallbackEvent,
+  ApplicationRef,
+  Component,
+  ComponentRef,
+  createComponent,
+  EnvironmentInjector,
+  PLATFORM_ID,
+  signal
+} from '@angular/core';
+
+const trackReflows = () => {
+  const states: string[] = [];
+  vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(function (this: HTMLElement) {
+    if (this.tagName === 'C-ALERT') {
+      states.push(`${this.hidden ? 'hidden' : 'displayed'}${this.classList.contains('show') ? ' show' : ''}`);
+    }
+    return 0;
+  });
+  return states;
+};
+
+const hostStyles = (host: HTMLElement) => {
+  const attribute = host.getAttributeNames().find((name) => name.startsWith('_nghost-'));
+  const styles = [...document.querySelectorAll('style')].map((style) => style.textContent ?? '');
+  return { attribute, css: styles.find((css) => css.includes(`[${attribute}]`)) ?? '' };
+};
+
+const leave = (fixture: ComponentFixture<unknown>) => {
+  const alert = fixture.debugElement.query(By.directive(AlertComponent));
+  const animationComplete = vi.fn();
+  alert.componentInstance['handleLeaving']({
+    target: alert.nativeElement,
+    animationComplete
+  } as AnimationCallbackEvent);
+  return animationComplete;
+};
+
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
+const holdTransitions = (element: HTMLElement) => {
+  const reads: string[] = [];
+  const ends: (() => void)[] = [];
+  element.getAnimations = () => {
+    reads.push(element.classList.contains('show') ? 'show' : 'without show');
+    const finished = new Promise<void>((resolve) => ends.push(resolve));
+    return [{ transitionProperty: 'opacity', finished } as unknown as Animation];
+  };
+  return { reads, ends };
+};
 
 describe('AlertComponent', () => {
   let component: AlertComponent;
@@ -51,8 +101,6 @@ describe('AlertComponent', () => {
 
     componentRef.setInput('visible', false);
     await fixture.whenStable();
-    fixture.nativeElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'opacity' }));
-    await fixture.whenStable();
     expect(fixture.nativeElement.inert).toBe(true);
 
     componentRef.setInput('visible', true);
@@ -69,6 +117,11 @@ describe('AlertComponent', () => {
     componentRef.setInput('fade', false);
     await fixture.whenStable();
     expect(fixture.nativeElement.classList.contains('fade')).toBe(false);
+  });
+
+  it('should declare a hidden host display none over display utilities', () => {
+    const { attribute, css } = hostStyles(fixture.nativeElement);
+    expect(css).toMatch(new RegExp(String.raw`\[hidden\]\[${attribute}\]\s*\{\s*display:\s*none !important;`));
   });
 });
 
@@ -90,7 +143,7 @@ describe('AlertComponent with a custom class', () => {
 });
 
 @Component({
-  template: `<c-alert [(visible)]="visible" dismissible fade style="transition-duration: 10s">Text</c-alert>`,
+  template: `<c-alert [(visible)]="visible" dismissible fade>Text</c-alert>`,
   imports: [AlertComponent]
 })
 class FadeAlertComponent {
@@ -100,9 +153,11 @@ class FadeAlertComponent {
 describe('AlertComponent with fade', () => {
   let fixture: ComponentFixture<FadeAlertComponent>;
   let alert: HTMLElement;
+  let transitions: ReturnType<typeof holdTransitions>;
 
-  const transitionEnd = async (propertyName: string) => {
-    alert.dispatchEvent(new TransitionEvent('transitionend', { propertyName }));
+  const endTransition = async (index = transitions.ends.length - 1) => {
+    transitions.ends[index]();
+    await flush();
     await fixture.whenStable();
   };
 
@@ -110,18 +165,20 @@ describe('AlertComponent with fade', () => {
     fixture = TestBed.createComponent(FadeAlertComponent);
     await fixture.whenStable();
     alert = fixture.nativeElement.querySelector('c-alert');
+    transitions = holdTransitions(alert);
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should close an alert', async () => {
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     await fixture.whenStable();
     expect(alert.classList.contains('show')).toBe(false);
+    expect(alert.hidden).toBe(false);
 
-    await transitionEnd('opacity');
+    await endTransition();
     expect(alert.hidden).toBe(true);
     expect(alert.inert).toBe(true);
     expect(alert.textContent?.trim()).toBe('');
@@ -132,18 +189,14 @@ describe('AlertComponent with fade', () => {
     await fixture.whenStable();
     expect(fixture.componentInstance.visible()).toBe(true);
 
-    await transitionEnd('color');
-    expect(fixture.componentInstance.visible()).toBe(true);
-    expect(alert.hidden).toBe(false);
-
-    await transitionEnd('opacity');
+    await endTransition();
     expect(fixture.componentInstance.visible()).toBe(false);
   });
 
   it('should show a hidden alert again', async () => {
     fixture.componentInstance.visible.set(false);
     await fixture.whenStable();
-    await transitionEnd('opacity');
+    await endTransition();
     expect(alert.hidden).toBe(true);
 
     fixture.componentInstance.visible.set(true);
@@ -151,10 +204,79 @@ describe('AlertComponent with fade', () => {
     expect(alert.hidden).toBe(false);
     expect(alert.classList.contains('show')).toBe(true);
     expect(alert.textContent?.trim()).toBe('Text');
-
-    await transitionEnd('opacity');
-    expect(alert.hidden).toBe(false);
   });
+
+  it('should fade in when mounted', async () => {
+    const reflows = trackReflows();
+    const mountedFixture = TestBed.createComponent(FadeAlertComponent);
+    await mountedFixture.whenStable();
+    const mountedAlert: HTMLElement = mountedFixture.nativeElement.querySelector('c-alert');
+    expect(reflows).toEqual(['displayed']);
+    expect(mountedAlert.classList.contains('show')).toBe(true);
+  });
+
+  it('should fade in when shown again', async () => {
+    fixture.componentInstance.visible.set(false);
+    await fixture.whenStable();
+    await endTransition();
+
+    const reflows = trackReflows();
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(reflows).toEqual(['displayed']);
+    expect(alert.classList.contains('show')).toBe(true);
+  });
+
+  it('should fade in when shown after starting hidden', async () => {
+    const hiddenFixture = TestBed.createComponent(FadeAlertComponent);
+    hiddenFixture.componentInstance.visible.set(false);
+    await hiddenFixture.whenStable();
+    const hiddenAlert: HTMLElement = hiddenFixture.nativeElement.querySelector('c-alert');
+
+    const reflows = trackReflows();
+    hiddenFixture.componentInstance.visible.set(true);
+    await hiddenFixture.whenStable();
+    expect(reflows).toEqual(['displayed']);
+    expect(hiddenAlert.classList.contains('show')).toBe(true);
+  });
+
+  it('should not fade in when shown again before the close finishes', async () => {
+    fixture.componentInstance.visible.set(false);
+    await fixture.whenStable();
+
+    const reflows = trackReflows();
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(reflows).toEqual([]);
+    expect(alert.classList.contains('show')).toBe(true);
+  });
+
+  for (const [title, rendered, expected] of [
+    ['should not fade in a host rendered with the show class', true, []],
+    ['should fade in a host rendered without the show class', false, ['displayed']]
+  ] as const) {
+    it(title, async () => {
+      const reflows = trackReflows();
+      const host = document.createElement('c-alert');
+      host.classList.toggle('show', rendered);
+      document.body.append(host);
+      const appRef = TestBed.inject(ApplicationRef);
+      const ref = createComponent(AlertComponent, {
+        environmentInjector: TestBed.inject(EnvironmentInjector),
+        hostElement: host
+      });
+      try {
+        ref.setInput('fade', true);
+        appRef.attachView(ref.hostView);
+        await appRef.whenStable();
+        expect(reflows).toEqual(expected);
+        expect(host.classList.contains('show')).toBe(true);
+      } finally {
+        ref.destroy();
+        host.remove();
+      }
+    });
+  }
 
   it('should start hidden without waiting for the transition', async () => {
     const hiddenFixture = TestBed.createComponent(FadeAlertComponent);
@@ -166,78 +288,51 @@ describe('AlertComponent with fade', () => {
     expect(hiddenFixture.componentInstance.visible()).toBe(false);
   });
 
-  it('should ignore a transitionend bubbling from the content', async () => {
-    const button = alert.querySelector<HTMLButtonElement>('button[cButtonClose]');
-    button?.click();
+  it('should read the transition once the show class is gone', async () => {
+    alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     await fixture.whenStable();
-
-    button?.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'opacity', bubbles: true }));
-    await fixture.whenStable();
+    expect(transitions.reads).toEqual(['without show']);
     expect(alert.hidden).toBe(false);
     expect(fixture.componentInstance.visible()).toBe(true);
   });
 
-  it('should finish the close when no transitionend arrives', async () => {
-    vi.useFakeTimers();
-    alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
-    fixture.detectChanges();
-    await vi.advanceTimersByTimeAsync(10000);
-    fixture.detectChanges();
-    expect(alert.hidden).toBe(false);
-
-    await vi.advanceTimersByTimeAsync(5);
-    fixture.detectChanges();
-    expect(alert.hidden).toBe(true);
-    expect(fixture.componentInstance.visible()).toBe(false);
-  });
-
-  it('should read the transition once the show class is gone', async () => {
-    const style = document.createElement('style');
-    style.textContent = 'c-alert.fade:not(.show) { transition-duration: 10s; }';
-    document.head.append(style);
-    try {
-      const hidingFixture = TestBed.createComponent(DismissibleAlertComponent);
-      hidingFixture.componentInstance.fade.set(true);
-      await hidingFixture.whenStable();
-      const hidingAlert: HTMLElement = hidingFixture.nativeElement.querySelector('c-alert');
-
-      hidingAlert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
-      await hidingFixture.whenStable();
-      expect(hidingAlert.hidden).toBe(false);
-      expect(hidingFixture.componentInstance.visible()).toBe(true);
-    } finally {
-      style.remove();
-    }
-  });
-
   it('should stay open when shown again before the close finishes', async () => {
-    vi.useFakeTimers();
     fixture.componentInstance.visible.set(false);
-    fixture.detectChanges();
-    await vi.advanceTimersByTimeAsync(100);
+    await fixture.whenStable();
 
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
-    await vi.advanceTimersByTimeAsync(100);
-    fixture.detectChanges();
+    await fixture.whenStable();
+    await endTransition();
     expect(alert.hidden).toBe(false);
     expect(alert.classList.contains('show')).toBe(true);
     expect(fixture.componentInstance.visible()).toBe(true);
   });
 
-  it('should not finish a later close with the timer of an earlier one', async () => {
-    vi.useFakeTimers();
+  it('should not finish a later close with the transition of an earlier one', async () => {
     fixture.componentInstance.visible.set(false);
-    fixture.detectChanges();
-    await vi.advanceTimersByTimeAsync(100);
-
+    await fixture.whenStable();
     fixture.componentInstance.visible.set(true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     fixture.componentInstance.visible.set(false);
-    fixture.detectChanges();
-    await vi.advanceTimersByTimeAsync(9910);
-    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(transitions.ends.length).toBe(2);
+
+    await endTransition(0);
     expect(alert.hidden).toBe(false);
+
+    await endTransition(1);
+    expect(alert.hidden).toBe(true);
+  });
+
+  it('should complete the leave once the transition started by removing show finishes', async () => {
+    const animationComplete = leave(fixture);
+    await flush();
+    expect(transitions.reads).toEqual(['without show']);
+    expect(animationComplete).not.toHaveBeenCalled();
+
+    transitions.ends[0]();
+    await flush();
+    expect(animationComplete).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -270,18 +365,23 @@ describe('AlertComponent without a transition', () => {
     fixture = TestBed.createComponent(DismissibleAlertComponent);
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should hide and emit on close', async () => {
     await render();
-    alert.style.transitionDuration = '10s';
+    holdTransitions(alert);
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     fixture.changeDetectorRef.detectChanges();
     expectHidden();
   });
 
-  it('should hide a fade alert on close when no transition is computed', async () => {
+  it('should hide a fade alert on close when no transition runs', async () => {
     fixture.componentInstance.fade.set(true);
     await render();
     expect(alert.classList.contains('fade')).toBe(true);
+    alert.getAnimations = () => [];
 
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     await fixture.whenStable();
@@ -311,7 +411,7 @@ describe('AlertComponent without a transition', () => {
   it('should hide at once when fade is switched off during the close', async () => {
     fixture.componentInstance.fade.set(true);
     await render();
-    alert.style.transitionDuration = '10s';
+    holdTransitions(alert);
     alert.querySelector<HTMLButtonElement>('button[cButtonClose]')?.click();
     await fixture.whenStable();
     expect(alert.hidden).toBe(false);
@@ -319,6 +419,89 @@ describe('AlertComponent without a transition', () => {
     fixture.componentInstance.fade.set(false);
     await fixture.whenStable();
     expectHidden();
+  });
+
+  it('should complete the leave at once when no transition runs', async () => {
+    await render();
+    alert.getAnimations = () => [];
+    const animationComplete = leave(fixture);
+    expect(alert.classList.contains('show')).toBe(false);
+    await flush();
+    expect(animationComplete).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not wait to show the alert', async () => {
+    const reflows = trackReflows();
+    await render();
+    expect(reflows).toEqual([]);
+    expect(alert.classList.contains('show')).toBe(true);
+  });
+});
+
+@Component({
+  template: `<c-alert [visible]="visible()" (visibleChange)="changes.push($event)" [fade]="fade()" dismissible
+    >Text</c-alert
+  >`,
+  imports: [AlertComponent]
+})
+class VisibleChangeAlertComponent {
+  readonly fade = signal(false);
+  readonly visible = signal(true);
+  readonly changes: boolean[] = [];
+}
+
+describe('AlertComponent visibleChange', () => {
+  let fixture: ComponentFixture<VisibleChangeAlertComponent>;
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(VisibleChangeAlertComponent);
+  });
+
+  for (const visible of [true, false]) {
+    it(`should not emit on the first render when visible is ${visible}`, async () => {
+      fixture.componentInstance.visible.set(visible);
+      await fixture.whenStable();
+      expect(fixture.componentInstance.changes).toEqual([]);
+    });
+  }
+
+  it('should emit once per change when closed and shown', async () => {
+    await fixture.whenStable();
+    fixture.nativeElement.querySelector('button[cButtonClose]').click();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.changes).toEqual([false]);
+
+    fixture.componentInstance.visible.set(false);
+    await fixture.whenStable();
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.changes).toEqual([false, true]);
+  });
+
+  it('should emit once per change when shown and closed', async () => {
+    fixture.componentInstance.visible.set(false);
+    await fixture.whenStable();
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.changes).toEqual([true]);
+
+    fixture.nativeElement.querySelector('button[cButtonClose]').click();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.changes).toEqual([true, false]);
+  });
+
+  it('should not emit when a close is undone before the next render', async () => {
+    fixture.componentInstance.fade.set(true);
+    await fixture.whenStable();
+    const transitions = holdTransitions(fixture.nativeElement.querySelector('c-alert'));
+    fixture.componentInstance.visible.set(false);
+    await fixture.whenStable();
+    await flush();
+
+    transitions.ends[0]();
+    fixture.componentInstance.visible.set(true);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.changes).toEqual([]);
   });
 });
 
@@ -332,6 +515,13 @@ describe('AlertComponent on the server', () => {
 
   afterEach(() => {
     delete scope.ngServerMode;
+  });
+
+  it('should show a fade alert at once', async () => {
+    const fixture = TestBed.createComponent(DismissibleAlertComponent);
+    fixture.componentInstance.fade.set(true);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('c-alert').classList.contains('show')).toBe(true);
   });
 
   it('should hide a fade alert closed during the render', async () => {
