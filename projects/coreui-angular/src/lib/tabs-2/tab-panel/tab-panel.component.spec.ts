@@ -52,6 +52,42 @@ describe('TabPanelComponent', () => {
 
 @Component({
   template: `
+    <c-tabs activeItemKey="a">
+      <c-tabs-list>
+        <button cTab itemKey="a">A</button>
+      </c-tabs-list>
+      <c-tabs-content>
+        <c-tab-panel itemKey="a" [aria-labelledby]="labelledBy()" [transition]="false">A</c-tab-panel>
+      </c-tabs-content>
+    </c-tabs>
+    <span id="customLabel">Label</span>
+  `,
+  imports: [TabPanelComponent, TabsComponent, TabDirective, TabsContentComponent, TabsListComponent]
+})
+class LabelledByTestComponent {
+  readonly labelledBy = signal<string | null | undefined>('customLabel');
+}
+
+describe('TabPanelComponent aria-labelledby', () => {
+  it('accepts null for aria-labelledby and falls back to the generated tab id, like undefined', async () => {
+    const fixture = TestBed.createComponent(LabelledByTestComponent);
+    await fixture.whenStable();
+    const tab: HTMLButtonElement = fixture.nativeElement.querySelector('button[cTab]');
+    const panel: HTMLElement = fixture.nativeElement.querySelector('c-tab-panel');
+    expect(panel.getAttribute('aria-labelledby')).toBe('customLabel');
+    fixture.componentInstance.labelledBy.set(null);
+    await fixture.whenStable();
+    expect(panel.getAttribute('aria-labelledby')).toBe(tab.id);
+    fixture.componentInstance.labelledBy.set('customLabel');
+    await fixture.whenStable();
+    fixture.componentInstance.labelledBy.set(undefined);
+    await fixture.whenStable();
+    expect(panel.getAttribute('aria-labelledby')).toBe(tab.id);
+  });
+});
+
+@Component({
+  template: `
     <c-tabs [(activeItemKey)]="active">
       <c-tabs-content>
         <c-tab-panel itemKey="a" [transition]="transition()" style="transition-duration: 10s">

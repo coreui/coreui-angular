@@ -23,19 +23,19 @@ export class TabPanelComponent {
 
   /**
    * aria-labelledby attribute
-   * @returns string | undefined
-   * @default undefined
+   * @returns string | null | undefined
+   * @default `{c-tabs id}-tab-{itemKey}`
    */
-  readonly ariaLabelledBy = input<string | undefined>(undefined, {
+  readonly ariaLabelledBy = input<string | null | undefined>(undefined, {
     alias: 'aria-labelledby'
   });
 
   /**
    * Element id attribute
-   * @returns string
-   * @default undefined
+   * @returns string | null | undefined
+   * @default `{c-tabs id}-panel-{itemKey}`
    */
-  readonly id = input<string>();
+  readonly id = input<string | null | undefined>();
 
   /**
    * Item key.
