@@ -115,6 +115,9 @@ export class DropdownToggleDirective implements AfterViewInit {
   }
 
   public onClick($event: MouseEvent): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     $event.preventDefault();
     if (this.disabled()) {
       return;
