@@ -234,6 +234,7 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navSubscription?.unsubscribe();
+    this.navGroupSubscription?.unsubscribe();
   }
 
   onCollapseChange(state: string): void {
