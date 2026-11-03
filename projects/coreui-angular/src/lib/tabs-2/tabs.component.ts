@@ -18,6 +18,10 @@ let nextId = 0;
 export class TabsComponent {
   readonly tabsService = inject(TabsService);
 
+  constructor() {
+    this.tabsService.bindActiveItemKey(this.activeItemKey);
+  }
+
   /**
    * The active item key.
    * @returns number | string
@@ -39,12 +43,7 @@ export class TabsComponent {
 
   protected readonly propId = computed(() => this.id() ?? this.tabsId);
 
-  readonly #activeItemEffect = effect(() => {
+  readonly #idEffect = effect(() => {
     this.tabsService.id.set(this.propId());
-    this.tabsService.activeItemKey.set(this.activeItemKey());
-  });
-
-  readonly #tabsServiceEffect = effect(() => {
-    this.activeItemKey.set(this.tabsService.activeItemKey());
   });
 }

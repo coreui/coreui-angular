@@ -191,7 +191,7 @@ describe('TabPanelComponent with a disabled tab', () => {
 
   it('should keep the selected panel visible when another tab is disabled', async () => {
     await render();
-    tabs[2].focus();
+    tabs[2].click();
     await fixture.whenStable();
     fixture.componentInstance.disabledKeys.set(['a']);
     await fixture.whenStable();
@@ -224,10 +224,13 @@ describe('TabPanelComponent with a disabled tab', () => {
     fixture.componentInstance.active.set(undefined);
     fixture.componentInstance.disabledKeys.set(['a', 'b', 'c']);
     await render();
+    expect(tabs[0].getAttribute('aria-disabled')).toBe('true');
+    expect(tabs[0].getAttribute('tabindex')).toBe('0');
     fixture.componentInstance.disabledKeys.set([]);
     await render();
     expect(fixture.componentInstance.active()).toBe('a');
-    expect(tabs[0].disabled).toBe(false);
+    expect(tabs[0].hasAttribute('aria-disabled')).toBe(false);
+    expect(tabs[0].classList.contains('disabled')).toBe(false);
     expect(tabs[0].getAttribute('tabindex')).toBe('0');
   });
 });

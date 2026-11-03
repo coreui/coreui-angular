@@ -4,22 +4,17 @@ import {
   computed,
   DestroyRef,
   Directive,
-  effect,
   ElementRef,
   inject,
-  Injector,
   input,
   InputSignal,
   linkedSignal,
+  NgZone,
   OnInit,
-  runInInjectionContext,
-  signal,
-  untracked
+  Renderer2,
+  signal
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { fromEvent, merge, takeWhile } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
-import { TabsService } from '../tabs.service';
+import { TABS_LIST, TabsService } from '../tabs.service';
 
 @Directive({
   exportAs: 'cTab',
@@ -30,19 +25,27 @@ import { TabsService } from '../tabs.service';
     role: 'tab',
     '[aria-selected]': 'isActive()',
     '[aria-controls]': 'attrAriaControls()',
-    '[attr.disabled]': 'attrDisabled() || null',
+    '[attr.aria-disabled]': 'attrAriaDisabled()',
+    '[attr.disabled]': 'attrNativeDisabled()',
     '[id]': 'propId()',
-    '[attr.tabindex]': 'isActive() ? 0 : -1'
+    '[attr.tabindex]': 'tabindex()',
+    '(click)': 'onClick()',
+    '(focusin)': 'focused.set(true)',
+    '(focusout)': 'onFocusOut()'
   }
 })
 export class TabDirective implements FocusableOption, OnInit {
-  readonly #injector = inject(Injector);
   readonly #destroyRef = inject(DestroyRef);
   readonly #elementRef = inject(ElementRef);
+  readonly #ngZone = inject(NgZone);
+  readonly #renderer = inject(Renderer2);
   readonly #tabsService = inject(TabsService);
 
+  /** @internal */
+  readonly tabsList = inject(TABS_LIST, { optional: true });
+
   /**
-   * Disabled attribute
+   * Disables the tab. A disabled tab that is selected or has focus stays focusable with `aria-disabled`.
    * @returns boolean
    * @default false
    */
@@ -82,7 +85,21 @@ export class TabDirective implements FocusableOption, OnInit {
     alias: 'aria-controls'
   });
 
-  readonly isActive = signal(false);
+  readonly isActive = linkedSignal(() => this.#tabsService.activeItemKey() === this.itemKey());
+
+  protected readonly focused = signal(false);
+
+  readonly #isTabStop = computed(() =>
+    this.tabsList ? this.tabsList.tabStopKey() === this.itemKey() : this.isActive()
+  );
+
+  protected readonly tabindex = computed(() => (this.#isTabStop() ? 0 : -1));
+
+  protected readonly attrNativeDisabled = computed(
+    () => (this.#disabled() && !this.#isTabStop() && !this.focused()) || null
+  );
+
+  protected readonly attrAriaDisabled = computed(() => (this.#disabled() && !this.attrNativeDisabled()) || null);
 
   readonly hostClasses = computed(() => {
     return {
@@ -98,35 +115,33 @@ export class TabDirective implements FocusableOption, OnInit {
     () => this.ariaControls() ?? `${this.#tabsService.id()}-panel-${this.itemKey()}`
   );
 
-  readonly #disabledSignalEffect = effect(() => {
-    const disabled = this.#disabled();
-    if (!disabled) {
-      const click$ = fromEvent<MouseEvent>(this.#elementRef.nativeElement, 'click');
-      const focusIn$ = fromEvent<FocusEvent>(this.#elementRef.nativeElement, 'focusin');
-
-      merge(focusIn$, click$)
-        .pipe(
-          filter(($event) => !disabled),
-          tap(($event) => {
-            this.#tabsService.activeItemKey.set(untracked(this.itemKey));
-          }),
-          takeWhile(() => !disabled),
-          takeUntilDestroyed(this.#destroyRef)
-        )
-        .subscribe();
-    }
-  });
-
   focus(origin?: FocusOrigin): void {
     this.#elementRef.nativeElement.focus();
   }
 
   ngOnInit(): void {
-    runInInjectionContext(this.#injector, () => {
-      effect(() => {
-        const isActive = this.#tabsService.activeItemKey() === this.itemKey();
-        this.isActive.set(isActive);
-      });
+    const stopDisabledClick = (event: Event) => {
+      if (this.disabled) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    };
+    this.#ngZone.runOutsideAngular(() => {
+      this.#destroyRef.onDestroy(
+        this.#renderer.listen(this.#elementRef.nativeElement, 'click', stopDisabledClick, { capture: true })
+      );
     });
+    this.#destroyRef.onDestroy(this.#tabsService.register(this));
+  }
+
+  protected onFocusOut(): void {
+    const element: HTMLElement = this.#elementRef.nativeElement;
+    this.focused.set((element.getRootNode() as Document | ShadowRoot).activeElement === element);
+  }
+
+  protected onClick(): void {
+    if (!this.disabled) {
+      this.#tabsService.activeItemKey.set(this.itemKey());
+    }
   }
 }

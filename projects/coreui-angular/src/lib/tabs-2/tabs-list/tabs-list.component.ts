@@ -6,20 +6,21 @@ import {
   DestroyRef,
   effect,
   ElementRef,
+  forwardRef,
   inject,
   Injector,
   input,
-  InputSignal,
-  untracked
+  InputSignal
 } from '@angular/core';
 import { TabDirective } from '../tab/tab.directive';
-import { TabsService } from '../tabs.service';
+import { TABS_LIST, TabsService } from '../tabs.service';
 import { RtlService } from '../../services';
 
 @Component({
   exportAs: 'cTabsList',
   selector: 'c-tabs-list',
   template: '<ng-content />',
+  providers: [{ provide: TABS_LIST, useExisting: forwardRef(() => TabsListComponent) }],
   host: {
     '[attr.role]': 'role()',
     '[class]': 'hostClasses()',
@@ -34,10 +35,6 @@ export class TabsListComponent {
   readonly #rtlService = inject(RtlService);
 
   constructor() {
-    this.#focusKeyManager.change.subscribe(() => {
-      this.tabsService.activeItemKey.set(this.#focusKeyManager.activeItem?.itemKey());
-      this.tabsService.activeItem.set(this.#focusKeyManager.activeItem);
-    });
     this.#destroyRef.onDestroy(() => this.#focusKeyManager.destroy());
   }
 
@@ -75,31 +72,49 @@ export class TabsListComponent {
     } as Record<string, boolean>;
   });
 
-  readonly tabs = contentChildren(TabDirective);
-  protected readonly tabElements = contentChildren(TabDirective, { read: ElementRef });
+  readonly tabs = contentChildren(TabDirective, { descendants: true });
+  protected readonly tabElements = contentChildren(TabDirective, { descendants: true, read: ElementRef });
   readonly #focusKeyManager = new FocusKeyManager(this.tabs, this.#injector)
     .skipPredicate((tab) => tab.disabled === true)
     .withHomeAndEnd()
     .withWrap();
 
-  readonly #tabsEffect = effect(() => {
+  readonly #readyTabs = computed(() => {
+    const ready = this.tabsService.tabs();
+    return this.tabs().filter((tab) => ready.includes(tab));
+  });
+
+  /** @internal */
+  readonly tabStopKey = computed(() => {
+    const key = this.tabsService.activeItemKey();
+    if (this.tabsService.tabs().some((tab) => tab.tabsList === this && tab.itemKey() === key)) {
+      return key;
+    }
+    return this.#readyTabs()
+      .find((tab) => !tab.disabled)
+      ?.itemKey();
+  });
+
+  readonly #defaultItemEffect = effect(() => {
     const tabs = this.tabs();
-    if (tabs.length === 0) {
+    if (!tabs.length || this.#readyTabs().length < tabs.length || this.tabsService.activeItemKey() != null) {
       return;
     }
-
-    untracked(() => {
-      setTimeout(() => {
-        const activeItem = tabs.find((tab) => tab.isActive()) ?? tabs.find((tab) => !tab.disabled) ?? tabs[0];
-        this.#focusKeyManager.updateActiveItem(activeItem);
-        this.tabsService.activeItemKey.set(activeItem.itemKey());
-        this.tabsService.activeItem.set(activeItem);
-      });
-    });
+    const otherListSelects = () =>
+      this.tabsService
+        .tabs()
+        .some((item) => item.tabsList && item.tabsList !== this && item.tabsList.tabStopKey() != null);
+    const tab = tabs.find((item) => !item.disabled) ?? (otherListSelects() ? undefined : tabs[0]);
+    if (tab) {
+      this.tabsService.activeItemKey.set(tab.itemKey());
+    }
   });
 
   onKeyDown($event: any) {
     if (['ArrowLeft', 'ArrowRight', 'End', 'Home'].includes($event.key)) {
+      if ($event.defaultPrevented) {
+        return;
+      }
       const index = this.tabElements().findIndex((tab) => tab.nativeElement.contains($event.target));
       if (index < 0) {
         return;
@@ -109,6 +124,10 @@ export class TabsListComponent {
       );
       this.#focusKeyManager.updateActiveItem(index);
       this.#focusKeyManager.onKeydown($event);
+      const tab = this.#focusKeyManager.activeItem;
+      if ($event.defaultPrevented && tab && !tab.disabled) {
+        this.tabsService.activeItemKey.set(tab.itemKey());
+      }
       return;
     }
     if (['Tab'].includes($event.key)) {
