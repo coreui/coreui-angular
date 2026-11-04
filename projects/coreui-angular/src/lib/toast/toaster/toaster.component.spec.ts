@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, MAX_ANIMATION_TIMEOUT, signal, viewChild } from '@angular/core';
+import { Component, ComponentRef, MAX_ANIMATION_TIMEOUT, OnInit, signal, viewChild } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { ToasterComponent } from './toaster.component';
@@ -148,5 +148,35 @@ describe('ToasterComponent declared toasts', () => {
     expect(toast.visible).toBe(true);
     vi.advanceTimersByTime(1);
     expect(toast.visible).toBe(false);
+  });
+});
+
+@Component({
+  template: `<c-toaster />`,
+  imports: [ToasterComponent]
+})
+class ClosingOnInitComponent implements OnInit {
+  readonly toaster = viewChild.required(ToasterComponent);
+  toastRef?: ComponentRef<ToastComponent>;
+
+  ngOnInit(): void {
+    this.toastRef = this.toaster().addToast(ToastComponent, { delay: 0 });
+    this.toastRef.instance.onClose();
+  }
+}
+
+describe('ToasterComponent state subscription', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [{ provide: MAX_ANIMATION_TIMEOUT, useValue: 0 }]
+    });
+  });
+
+  it('should remove a dynamic toast closed before the toaster initialises', async () => {
+    const fixture = TestBed.createComponent(ClosingOnInitComponent);
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
+
+    expect(fixture.componentInstance.toastRef?.hostView.destroyed).toBe(true);
   });
 });

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { TToasterPlacement } from './toaster.component';
 import { type ToastComponent } from '../toast/toast.component';
@@ -14,7 +14,7 @@ export interface IToasterAction {
   providedIn: 'root'
 })
 export class ToasterService {
-  readonly #toasterState = new BehaviorSubject<IToasterAction>({});
+  readonly #toasterState = new Subject<IToasterAction>();
   readonly toasterState$ = this.#toasterState.asObservable();
 
   setState(state: IToasterAction): void {
