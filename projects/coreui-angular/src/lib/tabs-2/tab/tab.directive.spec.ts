@@ -31,7 +31,7 @@ class TestComponent {}
         <button cTab itemKey="a" [aria-controls]="controls()">A</button>
       </c-tabs-list>
       <c-tabs-content>
-        <c-tab-panel itemKey="a" [transition]="false">A</c-tab-panel>
+        <c-tab-panel itemKey="a" id="pairedPanel" [transition]="false">A</c-tab-panel>
       </c-tabs-content>
     </c-tabs>
     <div id="customPanel">Panel</div>
@@ -195,19 +195,18 @@ describe('TabDirective', () => {
     expect(tabs.map((tab) => tab.getAttribute('tabindex'))).toEqual(['-1', '0']);
   });
 
-  it('accepts null for aria-controls and falls back to the generated panel id, like undefined', async () => {
+  it('accepts null for aria-controls and falls back to the paired panel id, like undefined', async () => {
     const fixture = TestBed.createComponent(ControlsTestComponent);
     await fixture.whenStable();
     const tab: HTMLButtonElement = fixture.nativeElement.querySelector('button[cTab]');
-    const panel: HTMLElement = fixture.nativeElement.querySelector('c-tab-panel');
     expect(tab.getAttribute('aria-controls')).toBe('customPanel');
     fixture.componentInstance.controls.set(null);
     await fixture.whenStable();
-    expect(tab.getAttribute('aria-controls')).toBe(panel.id);
+    expect(tab.getAttribute('aria-controls')).toBe('pairedPanel');
     fixture.componentInstance.controls.set('customPanel');
     await fixture.whenStable();
     fixture.componentInstance.controls.set(undefined);
     await fixture.whenStable();
-    expect(tab.getAttribute('aria-controls')).toBe(panel.id);
+    expect(tab.getAttribute('aria-controls')).toBe('pairedPanel');
   });
 });

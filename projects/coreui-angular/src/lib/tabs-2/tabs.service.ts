@@ -1,4 +1,5 @@
 import { Injectable, InjectionToken, linkedSignal, Signal, signal, WritableSignal } from '@angular/core';
+import type { TabPanelComponent } from './tab-panel/tab-panel.component';
 import type { TabDirective } from './tab/tab.directive';
 
 /** @internal */
@@ -9,6 +10,7 @@ export const TABS_LIST = new InjectionToken<{
 @Injectable()
 export class TabsService {
   #activeItemKey: WritableSignal<string | number | undefined> = signal(undefined);
+  readonly #panels = signal<readonly TabPanelComponent[]>([]);
   readonly #tabs = signal<readonly TabDirective[]>([]);
 
   /**
@@ -41,5 +43,34 @@ export class TabsService {
   register(tab: TabDirective): () => void {
     this.#tabs.update((tabs) => [...tabs, tab]);
     return () => this.#tabs.update((tabs) => tabs.filter((item) => item !== tab));
+  }
+
+  /** @internal */
+  registerPanel(panel: TabPanelComponent): () => void {
+    this.#panels.update((panels) => [...panels, panel]);
+    return () => this.#panels.update((panels) => panels.filter((item) => item !== panel));
+  }
+
+  /** @internal */
+  defaultId(part: 'panel' | 'tab', itemKey: string | number): string {
+    return `${this.id()}-${part}-${itemKey}`;
+  }
+
+  /** @internal */
+  panelId(itemKey: string | number): string {
+    return (
+      this.#panels()
+        .find((panel) => panel.itemKey() === itemKey)
+        ?.propId() ?? this.defaultId('panel', itemKey)
+    );
+  }
+
+  /** @internal */
+  tabId(itemKey: string | number): string {
+    return (
+      this.#tabs()
+        .find((tab) => tab.itemKey() === itemKey)
+        ?.propId() ?? this.defaultId('tab', itemKey)
+    );
   }
 }

@@ -1,4 +1,16 @@
-import { Component, computed, effect, ElementRef, inject, input, numberAttribute, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  numberAttribute,
+  OnInit,
+  output,
+  signal
+} from '@angular/core';
 import getTransitionDurationFromElement from '../../utilities/getTransitionDurationFromElement';
 import { TabsService } from '../tabs.service';
 
@@ -17,14 +29,15 @@ export type VisibleChangeEvent = { itemKey: string | number; visible: boolean };
     '(transitionend)': 'onTransitionEnd($event)'
   }
 })
-export class TabPanelComponent {
+export class TabPanelComponent implements OnInit {
+  readonly #destroyRef = inject(DestroyRef);
   readonly #tabsService = inject(TabsService);
   readonly #elementRef = inject(ElementRef);
 
   /**
    * aria-labelledby attribute
    * @returns string | null | undefined
-   * @default `{c-tabs id}-tab-{itemKey}`
+   * @default id of the `cTab` with the same `itemKey`, otherwise `{c-tabs id}-tab-{itemKey}`
    */
   readonly ariaLabelledBy = input<string | null | undefined>(undefined, {
     alias: 'aria-labelledby'
@@ -97,10 +110,11 @@ export class TabPanelComponent {
     }
   });
 
-  protected readonly propId = computed(() => this.id() ?? `${this.#tabsService.id()}-panel-${this.itemKey()}`);
+  /** @internal */
+  readonly propId = computed(() => this.id() ?? this.#tabsService.defaultId('panel', this.itemKey()));
 
   protected readonly attrAriaLabelledBy = computed(
-    () => this.ariaLabelledBy() ?? `${this.#tabsService.id()}-tab-${this.itemKey()}`
+    () => this.ariaLabelledBy() ?? this.#tabsService.tabId(this.itemKey())
   );
 
   protected readonly hostClasses = computed(
@@ -112,6 +126,10 @@ export class TabPanelComponent {
         show: this.show()
       }) as Record<string, boolean>
   );
+
+  ngOnInit(): void {
+    this.#destroyRef.onDestroy(this.#tabsService.registerPanel(this));
+  }
 
   protected onTransitionEnd($event: TransitionEvent): void {
     if ($event.propertyName === 'opacity' && $event.target === this.#elementRef.nativeElement) {
