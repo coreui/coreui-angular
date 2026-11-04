@@ -79,7 +79,7 @@ export class TabDirective implements FocusableOption, OnInit {
   /**
    * aria-controls attribute
    * @returns string | null | undefined
-   * @default `{c-tabs id}-panel-{itemKey}`
+   * @default id of the `c-tab-panel` with the same `itemKey`, otherwise `{c-tabs id}-panel-{itemKey}`
    */
   readonly ariaControls: InputSignal<string | null | undefined> = input<string | null | undefined>(undefined, {
     alias: 'aria-controls'
@@ -109,11 +109,9 @@ export class TabDirective implements FocusableOption, OnInit {
     } as Record<string, boolean>;
   });
 
-  readonly propId = computed(() => this.id() ?? `${this.#tabsService.id()}-tab-${this.itemKey()}`);
+  readonly propId = computed(() => this.id() ?? this.#tabsService.defaultId('tab', this.itemKey()));
 
-  readonly attrAriaControls = computed(
-    () => this.ariaControls() ?? `${this.#tabsService.id()}-panel-${this.itemKey()}`
-  );
+  readonly attrAriaControls = computed(() => this.ariaControls() ?? this.#tabsService.panelId(this.itemKey()));
 
   focus(origin?: FocusOrigin): void {
     this.#elementRef.nativeElement.focus();
