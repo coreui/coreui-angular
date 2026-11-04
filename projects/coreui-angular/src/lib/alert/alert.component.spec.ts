@@ -439,6 +439,7 @@ describe('AlertComponent without a transition', () => {
 });
 
 @Component({
+  selector: 'c-visible-change-alert',
   template: `<c-alert [visible]="visible()" (visibleChange)="changes.push($event)" [fade]="fade()" dismissible
     >Text</c-alert
   >`,

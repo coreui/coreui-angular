@@ -864,6 +864,7 @@ describe('PopoverDirective', () => {
 class TemplatePopoverComponent {}
 
 @Component({
+  selector: 'c-template-swap-popover',
   template: `
     <button [cPopover]="useTemplate() ? content : 'text'" [cPopoverVisible]="true">Open</button>
     <ng-template #content><b id="templateContent">Template content</b></ng-template>
