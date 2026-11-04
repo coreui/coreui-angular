@@ -10,7 +10,6 @@ import {
   input,
   MAX_ANIMATION_TIMEOUT,
   NgModuleRef,
-  OnInit,
   viewChild,
   ViewContainerRef
 } from '@angular/core';
@@ -57,7 +56,7 @@ export type TToasterPlacement =
   },
   providers: [ToasterService]
 })
-export class ToasterComponent implements OnInit {
+export class ToasterComponent {
   readonly #toasterService = inject(ToasterService);
   readonly #destroyRef = inject(DestroyRef);
   readonly #maxAnimationTimeout = inject(MAX_ANIMATION_TIMEOUT);
@@ -109,7 +108,7 @@ export class ToasterComponent implements OnInit {
     } as Record<string, boolean>;
   });
 
-  ngOnInit(): void {
+  constructor() {
     this.stateToasterSubscribe();
   }
 
