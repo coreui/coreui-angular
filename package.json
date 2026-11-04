@@ -1,6 +1,6 @@
 {
   "name": "coreui-angular-dev",
-  "version": "5.7.40",
+  "version": "5.7.41",
   "description": "CoreUI Components Library for Angular",
   "copyright": "Copyright 2026 creativeLabs Łukasz Holeczek",
   "license": "MIT",
@@ -108,10 +108,5 @@
   "engines": {
     "node": "^22.23.4 || ^24.22.1 || ^26.12.1",
     "npm": ">=10"
-  },
-  "overrides": {
-    "@angular/build": {
-      "vite": "~8.3.5"
-    }
   }
 }

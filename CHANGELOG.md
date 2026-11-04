@@ -2,6 +2,49 @@
 
 ---
 
+#### `5.7.41` for Angular 22.2.4
+
+- fix(alert): fade in on show, wait for running transitions, emit `visibleChange` only on change
+- fix(announcer.service): read the shadow host only from a shadow root
+- fix(chip-input): accept `null` for `aria-describedby`, `aria-label` and `aria-labelledby`
+- fix(collapse.directive): finish the transition when no `transitionend` arrives
+- fix(dropdown): ignore a toggle click replayed after hydration
+- fix(dropdown): leave `aria-expanded` off a `div` or `span` toggle without a role
+- fix(html-attr.directive): take off what the previous map set
+- fix(html-attr.directive, sidebar-nav-title): split classes on any ASCII whitespace
+- fix(icons): render `c-icon` and `svg[cIcon]` on the server
+- fix(icons): take off what the previous `cHtmlAttr` map set
+- fix(sidebar-nav, sidebar-nav-label): hide font icons, no label `href` without `url`, label class on the host
+- fix(sidebar-nav-group): render a late item, match the active route with `containsTree`
+- fix(sidebar-nav-group): unsubscribe from the group state on destroy
+- fix(sidebar-nav-group): stop keeping the last opened group in the group service
+- fix(tabs): accept `null` for `id`, `aria-controls` and `aria-labelledby`
+- fix(tabs): one selection key, a Tab stop for a disabled or missing selected tab, default without a timer
+- fix(tabs): `aria-controls` and `aria-labelledby` follow the id of the paired tab and panel
+- fix(toaster.service): stop retaining the last toast
+- fix(tooltip, popover): update content in place, destroy the tooltip only with the directive
+- chore(dependencies): update to Angular 22.2.4
+  - `@angular/aria` to version 22.2.6
+  - `@angular/cdk` to version 22.2.6
+  - `@angular/common` to version 22.2.4
+  - `@angular/compiler` to version 22.2.4
+  - `@angular/compiler-cli` to version 22.2.4
+  - `@angular/core` to version 22.2.4
+  - `@angular/forms` to version 22.2.4
+  - `@angular/language-service` to version 22.2.4
+  - `@angular/localize` to version 22.2.4
+  - `@angular/platform-browser` to version 22.2.4
+  - `@angular/router` to version 22.2.4
+  - `@vitest/coverage-v8` to version 5.1.0
+  - `@vitest/ui` to version 5.1.0
+  - `eslint` to version 10.14.0
+  - `ng-packagr` to version 22.2.6
+  - `tslib` to version 2.9.1
+  - `vitest` to version 5.1.0
+  - drop the `vite` override
+
+---
+
 #### `5.7.40` for Angular 22.2.3
 
 - fix(dropdown): return focus to the toggle when the menu closes from inside it
