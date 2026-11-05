@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Inject, Input, OnInit, Renderer2, DOCUMENT } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, OnInit, Renderer2, DOCUMENT, inject } from '@angular/core';
 
 
 import { asideMenuCssClasses, sidebarCssClasses } from '../classes';
@@ -13,14 +13,15 @@ import { ClassToggler } from '../toggle-classes';
   standalone: true
 })
 export class SidebarToggleDirective implements OnInit {
+  private classToggler = inject(ClassToggler);
+
   @Input('appSidebarToggler') breakpoint: string | boolean = false;
   public bp!: string | boolean;
-  constructor(private classToggler: ClassToggler) { }
   ngOnInit(): void {
     this.bp = this.breakpoint;
   }
   @HostListener('click', ['$event'])
-  toggleOpen($event: any) {
+  toggleOpen($event: Event) {
     $event.preventDefault();
     const cssClass = this.bp ? `sidebar-${this.bp}-show` : sidebarCssClasses[0];
     this.classToggler.toggleClasses(cssClass, sidebarCssClasses);
@@ -32,18 +33,19 @@ export class SidebarToggleDirective implements OnInit {
   standalone: true
 })
 export class SidebarMinimizeDirective {
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-  ) { }
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+
 
   @HostListener('click', ['$event'])
-  toggleOpen($event: any) {
+  toggleOpen($event: Event) {
     $event.preventDefault();
     const body = this.document.body;
-    body.classList.contains('sidebar-minimized') ?
-      this.renderer.removeClass(body, 'sidebar-minimized') :
+    if (body.classList.contains('sidebar-minimized')) {
+      this.renderer.removeClass(body, 'sidebar-minimized');
+    } else {
       this.renderer.addClass(body, 'sidebar-minimized');
+    }
   }
 }
 
@@ -52,18 +54,19 @@ export class SidebarMinimizeDirective {
   standalone: true
 })
 export class MobileSidebarToggleDirective {
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-  ) { }
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+
 
   @HostListener('click', ['$event'])
-  toggleOpen($event: any) {
+  toggleOpen($event: Event) {
     $event.preventDefault();
     const body = this.document.body;
-    body.classList.contains('sidebar-show') ?
-      this.renderer.removeClass(body, 'sidebar-show') :
+    if (body.classList.contains('sidebar-show')) {
+      this.renderer.removeClass(body, 'sidebar-show');
+    } else {
       this.renderer.addClass(body, 'sidebar-show');
+    }
   }
 }
 
@@ -75,20 +78,21 @@ export class MobileSidebarToggleDirective {
   standalone: true
 })
 export class SidebarOffCanvasCloseDirective {
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-  ) { }
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+
 
   @HostListener('click', ['$event'])
-  toggleOpen($event: any) {
+  toggleOpen($event: Event) {
     $event.preventDefault();
 
     const body = this.document.body;
     if (body.classList.contains('sidebar-off-canvas')) {
-      body.classList.contains('sidebar-show') ?
-        this.renderer.removeClass(body, 'sidebar-show') :
+      if (body.classList.contains('sidebar-show')) {
+        this.renderer.removeClass(body, 'sidebar-show');
+      } else {
         this.renderer.addClass(body, 'sidebar-show');
+      }
     }
   }
 }
@@ -98,18 +102,19 @@ export class SidebarOffCanvasCloseDirective {
   standalone: true
 })
 export class BrandMinimizeDirective {
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-  ) { }
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+
 
   @HostListener('click', ['$event'])
-  toggleOpen($event: any) {
+  toggleOpen($event: Event) {
     $event.preventDefault();
     const body = this.document.body;
-    body.classList.contains('brand-minimized') ?
-      this.renderer.removeClass(body, 'brand-minimized') :
+    if (body.classList.contains('brand-minimized')) {
+      this.renderer.removeClass(body, 'brand-minimized');
+    } else {
       this.renderer.addClass(body, 'brand-minimized');
+    }
   }
 }
 
@@ -123,14 +128,15 @@ export class BrandMinimizeDirective {
   standalone: true
 })
 export class AsideToggleDirective implements OnInit {
+  private classToggler = inject(ClassToggler);
+
   @Input('appAsideMenuToggler') breakpoint: string | boolean = false;
   public bp!: string | boolean;
-  constructor(private classToggler: ClassToggler) { }
   ngOnInit(): void {
     this.bp = this.breakpoint;
   }
   @HostListener('click', ['$event'])
-  toggleOpen($event: any) {
+  toggleOpen($event: Event) {
     $event.preventDefault();
     const cssClass = this.bp ? `aside-menu-${this.bp}-show` : asideMenuCssClasses[0];
     this.classToggler.toggleClasses(cssClass, asideMenuCssClasses);
@@ -142,27 +148,26 @@ export class AsideToggleDirective implements OnInit {
   standalone: true
 })
 export class HtmlAttributesDirective implements OnInit {
-  @Input() appHtmlAttr?: { [key: string]: string } = {};
+  private renderer = inject(Renderer2);
+  private el = inject(ElementRef);
 
-  constructor(
-    private renderer: Renderer2,
-    private el: ElementRef
-  ) { }
+  @Input() appHtmlAttr?: Record<string, unknown> = {};
 
   ngOnInit() {
     const attribs = this.appHtmlAttr;
     for (const attr in attribs) {
-      if (attr === 'style' && typeof (attribs[attr]) === 'object') {
-        this.setStyle(attribs[attr]);
+      const value = attribs[attr];
+      if (attr === 'style' && typeof value === 'object') {
+        this.setStyle(value as Record<string, string>);
       } else if (attr === 'class') {
-        this.addClass(attribs[attr]);
+        this.addClass(value as string | string[]);
       } else {
-        this.setAttrib(attr, attribs[attr]);
+        this.setAttrib(attr, value as string | null);
       }
     }
   }
 
-  private setStyle(styles: any) {
+  private setStyle(styles: Record<string, string>) {
     for (const style in styles) {
       if (style) {
         this.renderer.setStyle(this.el.nativeElement, style, styles[style]);
@@ -170,7 +175,7 @@ export class HtmlAttributesDirective implements OnInit {
     }
   }
 
-  private addClass(classes: string | any[]) {
+  private addClass(classes: string | string[]) {
     const classArray = (Array.isArray(classes) ? classes : classes.split(' '));
     classArray.filter((element) => element.length > 0).forEach(element => {
       this.renderer.addClass(this.el.nativeElement, element);
@@ -178,8 +183,10 @@ export class HtmlAttributesDirective implements OnInit {
   }
 
   private setAttrib(key: string, value: string | null) {
-    value !== null ?
-      this.renderer.setAttribute(this.el.nativeElement, key, value) :
+    if (value !== null) {
+      this.renderer.setAttribute(this.el.nativeElement, key, value);
+    } else {
       this.renderer.removeAttribute(this.el.nativeElement, key);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
@@ -29,11 +29,9 @@ import { HtmlAttributesDirective } from '../../shared';
   imports: [NgClass, AppSidebarNavIconPipe, AppSidebarNavBadgePipe]
 })
 export class AppSidebarNavLinkContentComponent {
-  @Input() item: INavData = {};
+  helper = inject(SidebarNavHelper);
 
-  constructor(
-    public helper: SidebarNavHelper
-  ) { }
+  @Input() item: INavData = {};
 }
 
 @Component({
@@ -44,6 +42,8 @@ export class AppSidebarNavLinkContentComponent {
   imports: [NgClass, AppSidebarNavLinkPipe, HtmlAttributesDirective, AppSidebarNavLinkContentComponent, RouterModule]
 })
 export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
+  router = inject(Router);
+
 
   protected _Item!: INavData;
 
@@ -65,9 +65,9 @@ export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
   private navigationEndObservable: Observable<NavigationEnd>;
   private navSubscription!: Subscription;
 
-  constructor(
-    public router: Router,
-  ) {
+  constructor() {
+    const router = this.router;
+
     this.navigationEndObservable = router.events.pipe(
       filter(event => {
         return event instanceof NavigationEnd;
@@ -76,8 +76,7 @@ export class AppSidebarNavLinkComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // @ts-ignore
-    this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url));
+    this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url ?? []));
     this.linkType = this.getLinkType();
     this.href = this.isDisabled() ? '' : (this.item.href || this.url);
     this.linkActive = this.router.url.split(/[?#(;]/)[0] === this.href.split(/[?#(;]/)[0];

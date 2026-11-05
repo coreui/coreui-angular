@@ -1,6 +1,4 @@
-import { CommonModule } from '@angular/common';
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { RouterModule } from '@angular/router';
 
 // App Breadcrumb Component
 import { AppBreadcrumbService } from './app-breadcrumb.service';
@@ -13,7 +11,7 @@ import { CuiBreadcrumbComponent } from './cui-breadcrumb.component';
   exports: [AppBreadcrumbComponent, CuiBreadcrumbComponent],
 })
 export class AppBreadcrumbModule {
-  static forRoot(config?: any): ModuleWithProviders<AppBreadcrumbModule> {
+  static forRoot(_config?: unknown): ModuleWithProviders<AppBreadcrumbModule> {
     return {
       ngModule: AppBreadcrumbModule,
       providers: [

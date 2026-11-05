@@ -1,4 +1,4 @@
-export const sidebarCssClasses: Array<string> = [
+export const sidebarCssClasses: string[] = [
   'sidebar-show',
   'sidebar-sm-show',
   'sidebar-md-show',
@@ -6,7 +6,7 @@ export const sidebarCssClasses: Array<string> = [
   'sidebar-xl-show'
 ];
 
-export const asideMenuCssClasses: Array<string> = [
+export const asideMenuCssClasses: string[] = [
   'aside-menu-show',
   'aside-menu-sm-show',
   'aside-menu-md-show',

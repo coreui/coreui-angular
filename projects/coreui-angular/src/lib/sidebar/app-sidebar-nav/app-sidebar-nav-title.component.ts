@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, inject } from '@angular/core';
 import { INavAttributes, INavData } from '../app-sidebar-nav';
 
 @Component({
@@ -7,12 +7,10 @@ import { INavAttributes, INavData } from '../app-sidebar-nav';
   standalone: true
 })
 export class AppSidebarNavTitleComponent implements OnInit {
-  @Input() item: INavData = {};
+  private el = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2,
-  ) {}
+  @Input() item: INavData = {};
 
   ngOnInit() {
     const nativeElement: HTMLElement = this.el.nativeElement;
@@ -33,34 +31,35 @@ export class AppSidebarNavTitleComponent implements OnInit {
     }
   }
 
-  private addAttribs(attribs: INavAttributes, element: any) {
+  private addAttribs(attribs: INavAttributes, element: HTMLElement) {
     if (attribs) {
       for (const attr in attribs) {
-        if (attr === 'style' && typeof (attribs[attr]) === 'object') {
-          this.setStyle(attribs[attr], element);
+        const value = attribs[attr];
+        if (attr === 'style' && typeof value === 'object') {
+          this.setStyle(value as Record<string, string>, element);
         } else if (attr === 'class') {
-          this.addClass(attribs[attr], element);
+          this.addClass(value as string | string[], element);
         } else {
-          this.setAttrib(attr, attribs[attr], element);
+          this.setAttrib(attr, value as string, element);
         }
       }
     }
   }
 
-  private setStyle(styles: { [x: string]: any; }, el: any) {
+  private setStyle(styles: Record<string, string>, el: HTMLElement) {
     for (const style in styles) {
       this.renderer.setStyle(el, style, styles[style]);
     }
   }
 
-  private addClass(classes: string | string[], el: any) {
+  private addClass(classes: string | string[], el: HTMLElement) {
     const classArray = (Array.isArray(classes) ? classes : classes.split(' '));
     classArray.filter((element) => element.length > 0).forEach(element => {
       this.renderer.addClass(el, element);
     });
   }
 
-  private setAttrib(key: string, value: string, el: any) {
+  private setAttrib(key: string, value: string, el: HTMLElement) {
     this.renderer.setAttribute(el, key, value);
   }
 }

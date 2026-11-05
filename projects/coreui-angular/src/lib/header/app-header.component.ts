@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding, DOCUMENT } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Renderer2, HostBinding, DOCUMENT, inject } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AsideToggleDirective, HtmlAttributesDirective, SidebarToggleDirective } from '../shared';
@@ -10,15 +10,18 @@ import { AsideToggleDirective, HtmlAttributesDirective, SidebarToggleDirective }
   imports: [RouterLink, NgClass, SidebarToggleDirective, HtmlAttributesDirective, AsideToggleDirective]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+
 
   @Input() fixed?: boolean;
 
-  @Input() navbarBrand: any;
-  @Input() navbarBrandFull: any;
-  @Input() navbarBrandMinimized: any;
-  @Input() navbarBrandText: any = { icon: '🅲', text: '🅲 CoreUI' };
+  @Input() navbarBrand?: Record<string, unknown>;
+  @Input() navbarBrandFull?: Record<string, unknown>;
+  @Input() navbarBrandMinimized?: Record<string, unknown>;
+  @Input() navbarBrandText: { icon: string; text: string } = { icon: '🅲', text: '🅲 CoreUI' };
   @Input() navbarBrandHref = ''; // deprecated, use navbarBrandRouterLink instead
-  @Input() navbarBrandRouterLink: any[] | string = '';
+  @Input() navbarBrandRouterLink: unknown[] | string = '';
 
   @Input() sidebarToggler: string | boolean = 'lg';
   @Input() mobileSidebarToggler = true;
@@ -38,11 +41,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   sidebarTogglerMobileClass = 'd-lg-none';
   asideTogglerClass = 'd-none d-md-block';
   asideTogglerMobileClass = 'd-lg-none';
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-  ) { }
 
   ngOnInit(): void {
     this.isFixed(this.fixed);
@@ -67,7 +65,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   setTogglerBreakpointClass(breakpoint = 'md') {
     let togglerClass = 'd-none d-md-block';
     if (this.breakpoints.includes(breakpoint)) {
-      const breakpointIndex = this.breakpoints.indexOf(breakpoint);
       togglerClass = `d-none d-${breakpoint}-block`;
     }
     return togglerClass;

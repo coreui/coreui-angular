@@ -1,17 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { INavData } from '../app-sidebar-nav';
+
 @Pipe({
   name: 'appSidebarNavIcon',
   standalone: true
 })
 export class AppSidebarNavIconPipe implements PipeTransform {
 
-  transform(item: any, args?: any): any {
-    const classes: any = {
+  transform(item: INavData): Record<string, boolean> {
+    const classes: Record<string, boolean> = {
       'nav-icon': true
     };
-    const icon = item.icon;
-    classes[icon] = !!item.icon;
+    if (item.icon) {
+      classes[item.icon] = true;
+    }
     return classes;
   }
 }

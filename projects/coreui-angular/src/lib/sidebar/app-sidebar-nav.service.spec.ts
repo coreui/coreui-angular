@@ -6,7 +6,7 @@ import { SidebarNavHelper } from './app-sidebar-nav.service';
 
 describe('SidebarNavHelper', () => {
   let service: SidebarNavHelper;
-  let router: RouterTestingModule;
+  let router: Router;
   const routes: Routes = [
     { path: 'dashboard', redirectTo: 'home', pathMatch: 'full' },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }

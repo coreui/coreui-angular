@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { INavData } from './app-sidebar-nav';
 
@@ -28,21 +29,19 @@ export class SidebarNavHelper {
     return 'link';
   }
 
-  public isActive(router: any, item: INavData) {
-    return router.isActive(item.url, false);
+  public isActive(router: Router, item: INavData) {
+    return router.isActive(item.url as string, false);
   }
 
   public hasBadge = (item: INavData) => Boolean(item.badge);
   public hasIcon = (item: INavData) => Boolean(item.icon);
 
   public getIconClass(item: INavData) {
-    const classes = {
+    const classes: Record<string, boolean> = {
       'nav-icon': true
     };
-    if (this.hasIcon(item)) {
-      const icon = item.icon;
-      // @ts-ignore
-      classes[icon] = this.hasIcon(item);
+    if (item.icon) {
+      classes[item.icon] = true;
     }
     return classes;
   }

@@ -1,8 +1,7 @@
-import { IsActiveMatchOptions } from '@angular/router';
+import { IsActiveMatchOptions, Params } from '@angular/router';
 
-export interface INavAttributes {
-  [propName: string]: any;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type INavAttributes = Record<string, any>;
 
 export interface INavWrapper {
   attributes: INavAttributes;
@@ -21,20 +20,20 @@ export interface INavLabel {
 }
 
 export interface INavLinkProps {
-  queryParams?: { [k: string]: any };
+  queryParams?: Params;
   fragment?: string;
   queryParamsHandling?: 'merge' | 'preserve' | '';
   preserveFragment?: boolean;
   skipLocationChange?: boolean;
   replaceUrl?: boolean;
-  state?: { [k: string]: any };
+  state?: Record<string, unknown>;
   routerLinkActiveOptions?: { exact: boolean } | IsActiveMatchOptions;
   routerLinkActive?: string | string[];
 }
 
 export interface INavData {
   name?: string;
-  url?: string | any[];
+  url?: string | unknown[];
   href?: string;
   icon?: string;
   badge?: INavBadge;

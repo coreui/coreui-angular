@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding, DOCUMENT } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Renderer2, HostBinding, DOCUMENT, inject } from '@angular/core';
 
 
 import { asideMenuCssClasses } from '../shared';
@@ -9,18 +9,16 @@ import { asideMenuCssClasses } from '../shared';
   standalone: true
 })
 export class AppAsideComponent implements OnInit, OnDestroy {
-  @Input() display: any;
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+
+  @Input() display?: boolean | string;
   @Input() fixed?: boolean;
   @Input() offCanvas?: boolean;
 
   private readonly fixedClass = 'aside-menu-fixed';
 
   @HostBinding('class.aside-menu') asideMenuClass = true;
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-  ) { }
 
   ngOnInit(): void {
     this.isFixed(this.fixed);
@@ -44,7 +42,7 @@ export class AppAsideComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayBreakpoint(display: any = this.display): void {
+  displayBreakpoint(display = this.display): void {
     if (display !== false) {
       const cssClass = this.display ? `aside-menu-${this.display}-show` : asideMenuCssClasses[0];
       this.renderer.addClass(this.document.body, cssClass);

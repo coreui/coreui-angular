@@ -1,4 +1,4 @@
-import { Component, Inject, Input, Renderer2, forwardRef, DOCUMENT } from '@angular/core';
+import { Component, Input, Renderer2, forwardRef, DOCUMENT, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgClass } from '@angular/common';
 
@@ -81,6 +81,11 @@ export abstract class DropdownToken { }
 ]
 })
 export class AppSidebarNavItemsComponent {
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+  router = inject(Router);
+  helper = inject(SidebarNavHelper);
+
 
   protected _items: INavData[] = [];
 
@@ -91,14 +96,6 @@ export class AppSidebarNavItemsComponent {
   get items(): INavData[] {
     return this._items;
   }
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-    public router: Router,
-    public helper: SidebarNavHelper,
-
-  ) { }
 
   public hideMobile() {
     if (this.document.body.classList.contains('sidebar-show')) {
@@ -135,10 +132,8 @@ export class AppSidebarNavItemsComponent {
   imports: [NgClass, HtmlAttributesDirective, AppSidebarNavBadgePipe, AppSidebarNavIconPipe, AppSidebarNavItemsComponent, NavDropdownToggleDirective]
 })
 export class AppSidebarNavDropdownComponent {
-  @Input() item: INavData = {};
+  helper = inject(SidebarNavHelper);
 
-  constructor(
-    public helper: SidebarNavHelper
-  ) { }
+  @Input() item: INavData = {};
 }
 

@@ -1,27 +1,24 @@
-import { Component, Inject, Input, OnDestroy, OnInit, Renderer2, DOCUMENT } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Renderer2, DOCUMENT, inject } from '@angular/core';
 import { NgClass, AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { AppBreadcrumbService } from './app-breadcrumb.service';
+import { AppBreadcrumbService, IBreadcrumb } from './app-breadcrumb.service';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'cui-breadcrumb',
     templateUrl: './cui-breadcrumb.component.html',
     imports: [NgClass, RouterLink, AsyncPipe]
 })
 export class CuiBreadcrumbComponent implements OnInit, OnDestroy {
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+  service = inject(AppBreadcrumbService);
+
   @Input() fixed?: boolean;
 
-  public breadcrumbs?: Observable<any[]>;
+  public breadcrumbs?: Observable<IBreadcrumb[]>;
   private readonly fixedClass = 'breadcrumb-fixed';
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-    public service: AppBreadcrumbService,
-  ) { }
 
   public ngOnInit(): void {
     this.isFixed(this.fixed);

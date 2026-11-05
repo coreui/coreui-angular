@@ -1,7 +1,7 @@
-import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, DOCUMENT } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, DOCUMENT, inject } from '@angular/core';
 import { AsyncPipe, NgClass } from '@angular/common';
 
-import { AppBreadcrumbService } from './app-breadcrumb.service';
+import { AppBreadcrumbService, IBreadcrumb } from './app-breadcrumb.service';
 import { Replace } from '../shared';
 import { Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
     selector: 'app-breadcrumb',
     template: `
     @for (breadcrumb of breadcrumbs | async; track breadcrumb; let last = $last) {
-      @if (breadcrumb.label.title && (breadcrumb.url.slice(-1) == '/' || last)) {
+      @if (breadcrumb.label.title && (breadcrumb.url.slice(-1) === '/' || last)) {
         <li class="breadcrumb-item"
           [ngClass]="{active: last}">
           @if (!last) {
@@ -26,16 +26,14 @@ import { RouterLink } from '@angular/router';
   imports: [NgClass, RouterLink, AsyncPipe]
 })
 export class AppBreadcrumbComponent implements OnInit, OnDestroy {
-  @Input() fixed?: boolean;
-  public breadcrumbs?: Observable<any>;
-  private readonly fixedClass = 'breadcrumb-fixed';
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+  service = inject(AppBreadcrumbService);
+  el = inject(ElementRef);
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-    public service: AppBreadcrumbService,
-    public el: ElementRef
-  ) { }
+  @Input() fixed?: boolean;
+  public breadcrumbs?: Observable<IBreadcrumb[]>;
+  private readonly fixedClass = 'breadcrumb-fixed';
 
   public ngOnInit(): void {
     Replace(this.el);

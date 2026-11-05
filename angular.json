@@ -31,6 +31,16 @@
             "tsConfig": "projects/coreui-angular/tsconfig.spec.json",
             "karmaConfig": "projects/coreui-angular/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/coreui-angular/**/*.ts",
+              "projects/coreui-angular/**/*.html"
+            ],
+            "eslintConfig": "projects/coreui-angular/eslint.config.js"
+          }
         }
       }
     },
@@ -135,6 +145,16 @@
             "production": {
               "devServerTarget": "demo:serve:production,e2e"
             }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/demo/**/*.ts",
+              "projects/demo/**/*.html"
+            ],
+            "eslintConfig": "projects/demo/eslint.config.js"
           }
         }
       }

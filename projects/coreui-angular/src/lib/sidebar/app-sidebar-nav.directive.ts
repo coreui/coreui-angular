@@ -1,20 +1,20 @@
-import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2, inject } from '@angular/core';
 
 @Directive({
   selector: '[appNavDropdown]',
   standalone: true
 })
 export class NavDropdownDirective {
+  private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2
-  ) { }
 
   toggle() {
-    this.elementRef.nativeElement.classList.contains('open') ?
-      this.renderer.removeClass(this.elementRef.nativeElement, 'open') :
+    if (this.elementRef.nativeElement.classList.contains('open')) {
+      this.renderer.removeClass(this.elementRef.nativeElement, 'open');
+    } else {
       this.renderer.addClass(this.elementRef.nativeElement, 'open');
+    }
   }
 }
 
@@ -26,10 +26,11 @@ export class NavDropdownDirective {
   standalone: true,
 })
 export class NavDropdownToggleDirective {
-  constructor(private dropdown: NavDropdownDirective) { }
+  private dropdown = inject(NavDropdownDirective);
+
 
   @HostListener('click', ['$event'])
-  toggleOpen($event: any) {
+  toggleOpen($event: Event) {
     $event.preventDefault();
     this.dropdown.toggle();
   }

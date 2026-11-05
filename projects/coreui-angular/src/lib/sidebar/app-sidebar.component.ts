@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output, Renderer2, DOCUMENT } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output, Renderer2, DOCUMENT, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { sidebarCssClasses } from '../shared';
@@ -11,12 +11,16 @@ import { AppSidebarService } from './app-sidebar.service';
   standalone: true
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
+  private sidebarService = inject(AppSidebarService);
+
 
   private subscriptionEvents!: Subscription;
   private _minimized = false;
 
   @Input() compact?: boolean;
-  @Input() display: any;
+  @Input() display?: boolean | string;
   @Input() fixed?: boolean;
   @Input() offCanvas?: boolean;
 
@@ -42,12 +46,6 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
 
   @HostBinding('class.sidebar') sidebarClass = true;
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-    private sidebarService: AppSidebarService
-  ) { }
-
   ngOnInit(): void {
     this.displayBreakpoint(this.display);
     this.isCompact(this.compact);
@@ -56,7 +54,11 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     this.sidebarService.toggle({ minimize: this.minimized });
     this.subscriptionEvents = this.sidebarService.events$.subscribe(action => {
       if (action.minimize !== undefined) {
-        action.minimize === 'toggle' ? this.toggleMinimized() : this.minimized = !!action.minimize;
+        if (action.minimize === 'toggle') {
+          this.toggleMinimized();
+        } else {
+          this.minimized = !!action.minimize;
+        }
       }
     });
   }
@@ -90,7 +92,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayBreakpoint(display: any = this.display): void {
+  displayBreakpoint(display = this.display): void {
     if (display !== false) {
       const cssClass = display ? `sidebar-${display}-show` : sidebarCssClasses[0];
       this.renderer.addClass(this.document.body, cssClass);

@@ -1,4 +1,4 @@
-@if (mobileSidebarToggler != false) {
+@if (mobileSidebarToggler !== false) {
   <button class="navbar-toggler {{sidebarTogglerMobileClass}}" type="button" appSidebarToggler>
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -8,16 +8,19 @@
     @if (navbarBrand) {
       <img
         [appHtmlAttr]="navbarBrand"
+        [attr.alt]="navbarBrand.alt"
         [ngClass]="'navbar-brand'">
     }
     @if (navbarBrandFull) {
       <img
         [appHtmlAttr]="navbarBrandFull"
+        [attr.alt]="navbarBrandFull.alt"
         [ngClass]="'navbar-brand-full'">
     }
     @if (navbarBrandMinimized) {
       <img
         [appHtmlAttr]="navbarBrandMinimized"
+        [attr.alt]="navbarBrandMinimized.alt"
         [ngClass]="'navbar-brand-minimized'">
     }
   }
@@ -26,18 +29,18 @@
     <div class="navbar-brand-minimized" [innerHTML]="navbarBrandText.icon"></div>
   }
 </a>
-@if (sidebarToggler != false) {
+@if (sidebarToggler !== false) {
   <button class="navbar-toggler {{sidebarTogglerClass}}" type="button" [appSidebarToggler]="sidebarToggler">
     <span class="navbar-toggler-icon"></span>
   </button>
 }
 <ng-content />
-@if (asideMenuToggler != false) {
+@if (asideMenuToggler !== false) {
   <button class="navbar-toggler {{asideTogglerClass}}" type="button" [appAsideMenuToggler]="asideMenuToggler">
     <span class="navbar-toggler-icon"></span>
   </button>
 }
-@if (mobileAsideMenuToggler != false) {
+@if (mobileAsideMenuToggler !== false) {
   <button class="navbar-toggler {{asideTogglerMobileClass}}" type="button" appAsideMenuToggler>
     <span class="navbar-toggler-icon"></span>
   </button>

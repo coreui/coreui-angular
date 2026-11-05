@@ -50,8 +50,11 @@
     "@angular/language-service": "^21.2.26",
     "@coreui/coreui": "^2.1.16",
     "@cypress/schematic": "^5.0.0",
+    "@eslint/js": "^10.0.1",
     "@types/jasmine": "^6.0.0",
+    "angular-eslint": "21.4.0",
     "cypress": "^15.21.1",
+    "eslint": "^10.3.0",
     "jasmine-core": "^6.3.0",
     "jsdom": "^29.1.1",
     "karma": "^6.4.4",
@@ -63,6 +66,7 @@
     "shelljs": "^0.10.0",
     "simple-line-icons": "^2.5.5",
     "typescript": "~5.9.3",
+    "typescript-eslint": "8.72.1",
     "vitest": "^4.1.12"
   },
   "engines": {

@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { INavData } from './app-sidebar-nav';
@@ -13,6 +13,8 @@ import {SidebarNavHelper} from "./app-sidebar-nav.service";
   providers: [SidebarNavHelper]
 })
 export class AppSidebarNavComponent implements OnChanges {
+  router = inject(Router);
+
   @Input() navItems: INavData[] = [];
 
   @HostBinding('class.sidebar-nav') sidebarNavClass = true;
@@ -20,11 +22,7 @@ export class AppSidebarNavComponent implements OnChanges {
 
   public navItemsArray: INavData[] = [];
 
-  constructor(
-    public router: Router,
-  ) { }
-
-  public ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(): void {
     this.navItemsArray = Array.isArray(this.navItems) ? this.navItems.slice() : [];
   }
 }
