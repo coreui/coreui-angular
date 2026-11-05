@@ -113,6 +113,16 @@ describe('AlertComponent', () => {
     expect(fixture.nativeElement.getAttribute('role')).toBe('alert');
   });
 
+  it('should name the default close button', async () => {
+    componentRef.setInput('dismissible', true);
+    await fixture.whenStable();
+    const button = fixture.nativeElement.querySelector('.btn-close');
+    expect(button.getAttribute('aria-label')).toBe('Close');
+    componentRef.setInput('ariaCloseLabel', 'Zamknij');
+    await fixture.whenStable();
+    expect(button.getAttribute('aria-label')).toBe('Zamknij');
+  });
+
   it('should not apply the fade class when transition is disabled', async () => {
     componentRef.setInput('fade', false);
     await fixture.whenStable();

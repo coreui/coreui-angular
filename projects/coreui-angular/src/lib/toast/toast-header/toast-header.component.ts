@@ -19,6 +19,14 @@ export class ToastHeaderComponent {
   readonly toast = signal(this.#toast ?? undefined);
 
   /**
+   * Accessible name of the close button.
+   * @since 5.7.42
+   * @returns string
+   * @default 'Close'
+   */
+  readonly ariaCloseLabel = input('Close');
+
+  /**
    * Add close button to a toast header
    * @returns boolean
    */

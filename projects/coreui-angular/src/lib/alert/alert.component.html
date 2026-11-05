@@ -5,5 +5,5 @@
   <ng-content />
 }
 <ng-template #defaultAlertButtonCloseTemplate>
-  <button (click)="visible.set(false)" aria-label="Close" cButtonClose></button>
+  <button (click)="visible.set(false)" [attr.aria-label]="ariaCloseLabel()" cButtonClose></button>
 </ng-template>

@@ -232,6 +232,55 @@ describe('ModalComponent', () => {
     expect(component.visible()).toBe(false);
   });
 
+  describe('closePrevented', () => {
+    let prevented: ReturnType<typeof vi.fn<() => void>>;
+
+    const open = async (backdrop: boolean | 'static', transition = true) => {
+      prevented = vi.fn<() => void>();
+      component.closePrevented.subscribe(prevented);
+      componentRef.setInput('backdrop', backdrop);
+      componentRef.setInput('transition', transition);
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+    };
+
+    const clickBackdrop = () => {
+      element.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      element.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    };
+
+    for (const transition of [true, false]) {
+      it(`should emit on a click on the static backdrop, transition ${transition}`, async () => {
+        await open('static', transition);
+        clickBackdrop();
+        expect(prevented).toHaveBeenCalledTimes(1);
+        expect(component.visible()).toBe(true);
+      });
+
+      it(`should emit on the escape key with a static backdrop, transition ${transition}`, async () => {
+        await open('static', transition);
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }));
+        expect(prevented).toHaveBeenCalledTimes(1);
+        expect(component.visible()).toBe(true);
+      });
+    }
+
+    it('should not emit when a click on the backdrop closes the modal', async () => {
+      await open(true);
+      clickBackdrop();
+      expect(prevented).not.toHaveBeenCalled();
+      expect(component.visible()).toBe(false);
+    });
+
+    it('should not emit on the escape key when keyboard is disabled', async () => {
+      componentRef.setInput('keyboard', false);
+      await open('static');
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }));
+      expect(prevented).not.toHaveBeenCalled();
+    });
+  });
+
   it('should not close modal when clicking inside modal dialog', async () => {
     componentRef.setInput('visible', true);
     fixture.detectChanges();
@@ -652,6 +701,37 @@ describe('ModalComponent', () => {
       trigger.focus();
       await toggle(true, trigger);
       expect(document.activeElement).toBe(element);
+    });
+
+    it('should neither move focus nor trap it when focus is off', async () => {
+      componentRef.setInput('focus', false);
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      const initial = vi.spyOn(trap.focusTrap, 'focusInitialElement');
+      trigger.focus();
+      await toggle(true, trigger);
+      expect(initial).not.toHaveBeenCalled();
+      expect(trap.enabled).toBe(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should return focus taken into the modal when focus is off', async () => {
+      componentRef.setInput('focus', false);
+      await toggle(true, trigger);
+      inside.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should return focus to the element focused before opening when focus is off', async () => {
+      componentRef.setInput('focus', false);
+      input.focus();
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
     });
 
     it('should move initial focus only after the modal has rendered', async () => {
