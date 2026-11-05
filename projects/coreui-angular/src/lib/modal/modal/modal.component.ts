@@ -85,6 +85,14 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly container = input<Element | (() => Element | null) | null>(this.#document.body);
 
   /**
+   * Moves focus into the modal when shown and keeps it there while open.
+   * @since 5.7.42
+   * @returns boolean
+   * @default true
+   */
+  readonly focus = input(true, { transform: booleanAttribute });
+
+  /**
    * Set modal to cover the entire user viewport.
    * @returns {boolean | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'}
    * @default undefined
@@ -208,7 +216,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     untracked(() => {
       if (visible && afterViewInit) {
         this.#focusBeforeShow = this.#document.activeElement as HTMLElement | null;
-        if (isPlatformBrowser(this.#platformId)) {
+        if (this.focus() && isPlatformBrowser(this.#platformId)) {
           setTimeout(() => {
             if (!this.focusTrap()?.focusTrap.focusInitialElement()) {
               this.#hostElement.nativeElement.focus();

@@ -703,6 +703,37 @@ describe('ModalComponent', () => {
       expect(document.activeElement).toBe(element);
     });
 
+    it('should neither move focus nor trap it when focus is off', async () => {
+      componentRef.setInput('focus', false);
+      const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
+      const initial = vi.spyOn(trap.focusTrap, 'focusInitialElement');
+      trigger.focus();
+      await toggle(true, trigger);
+      expect(initial).not.toHaveBeenCalled();
+      expect(trap.enabled).toBe(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should return focus taken into the modal when focus is off', async () => {
+      componentRef.setInput('focus', false);
+      await toggle(true, trigger);
+      inside.focus();
+      await toggle(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('should return focus to the element focused before opening when focus is off', async () => {
+      componentRef.setInput('focus', false);
+      input.focus();
+      componentRef.setInput('visible', true);
+      fixture.detectChanges();
+      await vi.runAllTimersAsync();
+      inside.focus();
+      componentRef.setInput('visible', false);
+      fixture.detectChanges();
+      expect(document.activeElement).toBe(input);
+    });
+
     it('should move initial focus only after the modal has rendered', async () => {
       const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
       const initial = vi.spyOn(trap.focusTrap, 'focusInitialElement');
