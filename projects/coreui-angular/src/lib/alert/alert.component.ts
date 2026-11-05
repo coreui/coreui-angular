@@ -41,6 +41,14 @@ export class AlertComponent {
   readonly #renderedShown: boolean = this.#hostElement.nativeElement.classList.contains('show');
 
   /**
+   * Accessible name of the default close button.
+   * @since 5.7.42
+   * @returns string
+   * @default 'Close'
+   */
+  readonly ariaCloseLabel = input('Close');
+
+  /**
    * Sets the color context of the component to one of CoreUI’s themed colors.
    * @returns Colors
    * @default 'primary'

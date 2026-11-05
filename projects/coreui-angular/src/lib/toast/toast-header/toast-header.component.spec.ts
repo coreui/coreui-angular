@@ -25,4 +25,12 @@ describe('ToastHeaderComponent', () => {
   it('should have css classes', () => {
     expect(fixture.nativeElement.classList.contains('toast-header')).toBe(true);
   });
+
+  it('should name the close button', async () => {
+    const button = fixture.nativeElement.querySelector('.btn-close');
+    expect(button.getAttribute('aria-label')).toBe('Close');
+    fixture.componentRef.setInput('ariaCloseLabel', 'Zamknij');
+    await fixture.whenStable();
+    expect(button.getAttribute('aria-label')).toBe('Zamknij');
+  });
 });

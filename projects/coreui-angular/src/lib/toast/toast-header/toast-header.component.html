@@ -1,6 +1,12 @@
 <ng-container>
   <ng-content />
   @if (closeButton()) {
-    <button [cToastClose]="toast()" [style]="{outline: 0}" aria-label="close" cButtonClose class="ms-auto"></button>
+    <button
+      [cToastClose]="toast()"
+      [style]="{ outline: 0 }"
+      [attr.aria-label]="ariaCloseLabel()"
+      cButtonClose
+      class="ms-auto"
+    ></button>
   }
 </ng-container>
