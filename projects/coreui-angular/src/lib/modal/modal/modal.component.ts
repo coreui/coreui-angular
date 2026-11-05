@@ -222,6 +222,12 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   });
 
   /**
+   * Event triggered when a modal with `backdrop="static"` stays open after a click on the backdrop, or after the escape key with `keyboard` on.
+   * @since 5.7.42
+   */
+  readonly closePrevented = output<void>();
+
+  /**
    * Event triggered on visible change
    * @returns boolean
    */
@@ -427,6 +433,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setStaticBackdrop(): void {
+    this.closePrevented.emit();
     if (this.transition()) {
       this.#renderer.addClass(this.#hostElement.nativeElement, 'modal-static');
       this.#renderer.setStyle(this.#hostElement.nativeElement, 'overflow-y', 'hidden');
