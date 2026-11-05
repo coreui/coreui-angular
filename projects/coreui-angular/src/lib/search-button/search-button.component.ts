@@ -28,12 +28,30 @@ import {
   imports: [NgTemplateOutlet],
   host: {
     style: 'display: contents',
+    '[attr.aria-label]': 'null',
+    '[attr.aria-labelledby]': 'null',
     '(document:keydown)': 'onDocumentKeydown($event)',
     '(document:keyup)': 'onDocumentKeyup($event)',
     '(window:blur)': 'onWindowBlur()'
   }
 })
 export class SearchButtonComponent {
+  /**
+   * Accessible name of the button, in place of its visible placeholder.
+   * @since 5.7.42
+   * @returns string | null | undefined
+   * @default undefined
+   */
+  readonly ariaLabel = input<string | null | undefined>(undefined, { alias: 'aria-label' });
+
+  /**
+   * Id of the element that names the button.
+   * @since 5.7.42
+   * @returns string | null | undefined
+   * @default undefined
+   */
+  readonly ariaLabelledBy = input<string | null | undefined>(undefined, { alias: 'aria-labelledby' });
+
   /**
    * Toggle the disabled state for the component.
    * @returns boolean

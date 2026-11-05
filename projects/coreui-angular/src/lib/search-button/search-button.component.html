@@ -1,4 +1,11 @@
-<button class="search-button" type="button" [disabled]="disabled()" (click)="onClick()">
+<button
+  class="search-button"
+  type="button"
+  [attr.aria-label]="ariaLabel() ?? null"
+  [attr.aria-labelledby]="ariaLabelledBy() ?? null"
+  [disabled]="disabled()"
+  (click)="onClick()"
+>
   <ng-content select="ng-template" />
   <ng-content>
     <ng-container *ngTemplateOutlet="templates()['icon'] || defaultIconTemplate" />

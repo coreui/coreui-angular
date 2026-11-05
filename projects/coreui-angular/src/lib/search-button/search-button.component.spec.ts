@@ -324,3 +324,47 @@ describe('SearchButtonComponent projected content', () => {
     expect(button.querySelector('.search-button-placeholder')).toBeFalsy();
   });
 });
+
+@Component({
+  template: `
+    <span id="search-name">Search docs</span>
+    <c-search-button aria-label="Open search" />
+    <c-search-button aria-labelledby="search-name" />
+    <c-search-button [aria-label]="label()" />
+  `,
+  imports: [SearchButtonComponent]
+})
+class NamedHostComponent {
+  readonly label = signal<string | null>('Find');
+}
+
+describe('SearchButtonComponent accessible name', () => {
+  let fixture: ComponentFixture<NamedHostComponent>;
+  let hosts: HTMLElement[];
+
+  beforeEach(async () => {
+    fixture = TestBed.configureTestingModule({
+      imports: [NamedHostComponent]
+    }).createComponent(NamedHostComponent);
+    await fixture.whenStable();
+    hosts = [...fixture.nativeElement.querySelectorAll('c-search-button')];
+  });
+
+  it('should move aria-label and aria-labelledby from the host to the button', () => {
+    const [labelled, labelledBy] = hosts;
+    expect(labelled.querySelector('button')?.getAttribute('aria-label')).toBe('Open search');
+    expect(labelledBy.querySelector('button')?.getAttribute('aria-labelledby')).toBe('search-name');
+    for (const host of hosts) {
+      expect(host.hasAttribute('aria-label')).toBe(false);
+      expect(host.hasAttribute('aria-labelledby')).toBe(false);
+    }
+  });
+
+  it('should follow a bound aria-label and drop it when cleared', async () => {
+    const button = hosts[2].querySelector('button');
+    expect(button?.getAttribute('aria-label')).toBe('Find');
+    fixture.componentInstance.label.set(null);
+    await fixture.whenStable();
+    expect(button?.hasAttribute('aria-label')).toBe(false);
+  });
+});
