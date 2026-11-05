@@ -1,5 +1,21 @@
 ### [@coreui/angular](https://coreui.io/) changelog
 
+##### `v2.21.0`
+
+- update to `Angular 21`
+- refactor: `inject()` function, typed APIs, `angular-eslint`
+- chore(dependencies): update
+
+###### potential breaking changes
+
+- peer dependencies: `@angular/*` `^21.2.0`
+- constructors of components and `SidebarNavHelper` take no parameters (`inject()`), subclasses calling `super(...)` need update
+- `AppHeaderComponent`: `navbarBrand`, `navbarBrandFull`, `navbarBrandMinimized` typed `Record<string, unknown>` (was `any`), `navbarBrandText` typed `{ icon: string; text: string }`
+- `AppHeaderComponent`: togglers hidden only for `false`, empty string or `0` no longer hide them
+- `AppAsideComponent`, `AppSidebarComponent`: `display` typed `boolean | string`
+- `navItems`: `url` typed `string | unknown[]`, `linkProps.state` `Record<string, unknown>`, `linkProps.queryParams` `Params`
+- `SidebarNavHelper`: `isActive(router: Router, item)` returns `boolean`, `getIconClass()` returns `Record<string, boolean>`
+
 ##### `v2.20.0`
 
 - update to `Angular 20.2`
