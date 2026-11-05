@@ -2,18 +2,14 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "types": [
-      "@angular/localize"
-    ],
     "paths": {
       "coreui-angular": [
-        "dist/coreui-angular"
+        "./dist/coreui-angular"
       ]
     },
     "outDir": "./dist/out-tsc",
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": false,
@@ -21,14 +17,13 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
+    "skipLibCheck": true,
+    "isolatedModules": true,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "module": "preserve",
     "lib": [
       "ES2022",
       "dom"
@@ -39,9 +34,22 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
+    "typeCheckHostBindings": true,
     "strictTemplates": true
   },
-  "exclude": [
-    "./cypress/**/*.ts",
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/coreui-angular/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/coreui-angular/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo/tsconfig.spec.json"
+    }
   ],
 }

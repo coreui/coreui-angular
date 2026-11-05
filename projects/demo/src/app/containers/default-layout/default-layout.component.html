@@ -9,9 +9,9 @@
   </div>
 </app-header>
 <div class="app-body">
-  <app-sidebar [fixed]="true" [display]="'lg'" [minimized]="minimized" #sidebar (minimizedChange)="toggleMinimize($event)">
-    <app-sidebar-nav [navItems]="navItems"></app-sidebar-nav>
-    <app-sidebar-minimizer></app-sidebar-minimizer>
+  <app-sidebar [fixed]="true" [display]="'lg'" [minimized]="minimized()" #sidebar (minimizedChange)="toggleMinimize($event)">
+    <app-sidebar-nav [navItems]="navItems" />
+    <app-sidebar-minimizer />
   </app-sidebar>
   <!-- Main content -->
   <main class="main">
@@ -20,7 +20,7 @@
       <!-- Breadcrumb Menu-->
     </cui-breadcrumb>
     <div class="container-fluid">
-      <router-outlet></router-outlet>
+      <router-outlet />
     </div>
   </main>
   <app-aside [fixed]="true" [display]="false">

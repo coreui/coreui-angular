@@ -1,4 +1,4 @@
-import { INavData } from '../../projects/coreui-angular/src/public-api';
+import { INavData } from '../../../coreui-angular/src/public-api';
 
 export const navItems: INavData[] = [
   {

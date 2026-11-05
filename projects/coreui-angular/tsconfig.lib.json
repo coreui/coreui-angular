@@ -11,6 +11,9 @@
   "angularCompilerOptions": {
     "flatModuleId": "@coreui/angular"
   },
+  "include": [
+    "src/**/*.ts"
+  ],
   "exclude": [
     "src/test.ts",
     "**/*.spec.ts"

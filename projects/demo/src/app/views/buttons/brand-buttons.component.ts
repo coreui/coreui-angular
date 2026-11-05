@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 
-@Component({
-    templateUrl: 'brand-buttons.component.html',
-    standalone: false
-})
+@Component({ templateUrl: 'brand-buttons.component.html' })
 export class BrandButtonsComponent {
 
   constructor() { }
