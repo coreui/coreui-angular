@@ -2,6 +2,18 @@
 
 ---
 
+#### `5.7.42` for Angular 22.2.4
+
+- feat: close button names, SearchButton name, Modal closePrevented and focus (#347)
+- test(Alert, Popover): own selectors for test hosts, no NG0912 id collision
+- chore(deps): override `minimatch` 11 for npm audit
+- chore(dependencies): update 
+  - `@angular-devkit/schematics` to 22.2.6
+  - `@angular/build` to 22.2.6
+  - `@angular/cli` to 22.2.6
+
+---
+
 #### `5.7.41` for Angular 22.2.4
 
 - fix(alert): fade in on show, wait for running transitions, emit `visibleChange` only on change
