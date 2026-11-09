@@ -516,6 +516,45 @@ describe('DropdownComponent placement', () => {
     await expectPlacements([[undefined, undefined, undefined, 'bottom-start']]);
   });
 
+  it('should not write the placement into the popperOptions object it is given', async () => {
+    const options: Partial<Options> = { strategy: 'fixed' };
+    fixture.componentInstance.popperOptions.set(options);
+    await fixture.whenStable();
+    expect(await placementWhenOpen()).toBe('bottom-start');
+    expect(options).toEqual({ strategy: 'fixed' });
+  });
+
+  it('should drop popperOptions keys the new object no longer has', async () => {
+    const component = fixture.componentInstance;
+    const onFirstUpdate = vi.fn();
+    component.popperOptions.set({ onFirstUpdate, strategy: 'fixed' });
+    await fixture.whenStable();
+    component.popperOptions.set({});
+    await fixture.whenStable();
+    const dropdown = fixture.debugElement.query(By.directive(DropdownComponent)).componentInstance;
+    component.visible.set(true);
+    await fixture.whenStable();
+    expect(dropdown['popperInstance']?.state.options.onFirstUpdate).toBeUndefined();
+    expect(dropdown['popperInstance']?.state.options.strategy).toBe('absolute');
+  });
+
+  it('should keep popperOptions set on the instance and replace them on the next set', async () => {
+    const component = fixture.componentInstance;
+    const dropdown = fixture.debugElement.query(By.directive(DropdownComponent)).componentInstance;
+    const onFirstUpdate = vi.fn();
+    dropdown.popperOptions = { onFirstUpdate, strategy: 'fixed' };
+    component.visible.set(true);
+    await fixture.whenStable();
+    expect(dropdown['popperInstance']?.state.options.strategy).toBe('fixed');
+    component.visible.set(false);
+    await fixture.whenStable();
+    dropdown.popperOptions = {};
+    component.visible.set(true);
+    await fixture.whenStable();
+    expect(dropdown['popperInstance']?.state.options.onFirstUpdate).toBeUndefined();
+    expect(dropdown['popperInstance']?.state.options.strategy).toBe('absolute');
+  });
+
   it('should take the end alignment from the menu', async () => {
     const component = fixture.componentInstance;
     component.menuAlignment.set('end');
