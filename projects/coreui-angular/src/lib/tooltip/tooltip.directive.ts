@@ -31,7 +31,7 @@ export class TooltipDirective extends TooltipDirectiveBase {
   readonly placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'cTooltipPlacement' });
 
   /**
-   * Optional popper Options object, takes precedence over cPopoverPlacement prop
+   * Optional popper Options object, takes precedence over cTooltipPlacement prop
    * @returns Partial<Options>
    */
   readonly popperOptions = input<Partial<Options>>({}, { alias: 'cTooltipOptions' });

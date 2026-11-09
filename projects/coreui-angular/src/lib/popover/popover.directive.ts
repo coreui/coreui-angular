@@ -37,7 +37,7 @@ export class PopoverDirective extends TooltipDirectiveBase {
   readonly popperOptions = input<Partial<Options>>({}, { alias: 'cPopoverOptions' });
 
   /**
-   * ElementRefDirective for positioning the tooltip on reference element
+   * ElementRefDirective for positioning the popover on reference element
    * @returns ElementRefDirective | undefined
    * @default undefined
    * @since 5.7.27

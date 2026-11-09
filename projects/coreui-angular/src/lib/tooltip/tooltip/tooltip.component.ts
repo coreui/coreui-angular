@@ -35,7 +35,7 @@ export class TooltipComponent extends TooltipComponentBase {
   readonly role = input('tooltip');
 
   /**
-   * Toggle the visibility of popover component.
+   * Toggle the visibility of tooltip component.
    * @returns boolean
    */
   readonly visible = input(false, { transform: booleanAttribute });
