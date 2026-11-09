@@ -770,6 +770,12 @@ describe('PopoverDirective', () => {
     expect(popover.getAttribute('data-popper-placement')).toBe('left');
   });
 
+  it('should offset the popover 9px from the reference element', async () => {
+    const popover = await showPopover();
+
+    expect(popover.style.transform).toBe('translate(0px, -9px)');
+  });
+
   it('should not close the popover when a non-Escape key is pressed', async () => {
     visible.set(true);
     fixture.detectChanges();

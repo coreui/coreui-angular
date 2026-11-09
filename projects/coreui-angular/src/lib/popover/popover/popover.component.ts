@@ -1,16 +1,6 @@
-import {
-  booleanAttribute,
-  Component,
-  computed,
-  effect,
-  inject,
-  input,
-  OnDestroy,
-  Renderer2,
-  TemplateRef,
-  viewChild,
-  ViewContainerRef
-} from '@angular/core';
+import { booleanAttribute, Component, input, TemplateRef } from '@angular/core';
+
+import { TooltipComponentBase } from '../../tooltip/tooltip/tooltip-component-base';
 
 @Component({
   selector: 'c-popover',
@@ -22,24 +12,14 @@ import {
     '[attr.id]': 'id()'
   }
 })
-export class PopoverComponent implements OnDestroy {
-  readonly renderer = inject(Renderer2);
+export class PopoverComponent extends TooltipComponentBase {
+  protected readonly prefix = 'popover';
 
   /**
    * Content of popover
    * @returns string | TemplateRef<any>
    */
   readonly content = input<string | TemplateRef<any>>('');
-
-  readonly #contentEffect = effect(() => {
-    this.updateView(this.content());
-  });
-
-  /**
-   * Toggle the visibility of popover component.
-   * @returns boolean
-   */
-  readonly visible = input(false, { transform: booleanAttribute });
 
   /**
    * The `id` HTML attribute of the popover.
@@ -54,46 +34,16 @@ export class PopoverComponent implements OnDestroy {
    */
   readonly role = input('tooltip');
 
-  readonly viewContainerRef = viewChild('popoverTemplate', { read: ViewContainerRef });
-  private textNode!: Text;
+  /**
+   * Toggle the visibility of popover component.
+   * @returns boolean
+   */
+  readonly visible = input(false, { transform: booleanAttribute });
 
-  readonly hostClasses = computed(() => {
-    return {
-      popover: true,
-      fade: true,
-      show: this.visible(),
-      'bs-popover-auto': true
-    } as Record<string, boolean>;
-  });
-
-  ngOnDestroy(): void {
-    this.clear();
-  }
-
-  private clear(): void {
-    this.viewContainerRef()?.clear();
-    if (!!this.textNode) {
-      this.renderer.removeChild(this.textNode.parentNode, this.textNode);
-    }
-  }
-
-  private updateView(content: string | TemplateRef<any>): void {
-    this.clear();
-
-    if (!content) {
-      return;
-    }
-
-    if (content instanceof TemplateRef) {
-      this.viewContainerRef()?.createEmbeddedView(content);
-    } else {
-      const textNodeContent = this.renderer.createText(content);
-      this.textNode = this.renderer.createElement('div');
-      this.renderer.addClass(this.textNode, 'popover-body');
-      this.renderer.appendChild(this.textNode, textNodeContent);
-
-      const element = this.viewContainerRef()?.element.nativeElement;
-      this.renderer.appendChild(element.parentNode, this.textNode);
-    }
+  protected override createTextNode(content: string): Node {
+    const body = this.renderer.createElement('div');
+    this.renderer.addClass(body, 'popover-body');
+    this.renderer.appendChild(body, this.renderer.createText(content));
+    return body;
   }
 }
