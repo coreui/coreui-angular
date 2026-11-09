@@ -1,10 +1,8 @@
 import {
   afterRenderEffect,
   AfterViewChecked,
-  AfterViewInit,
   ComponentRef,
   computed,
-  DestroyRef,
   Directive,
   DOCUMENT,
   effect,
@@ -23,8 +21,7 @@ import {
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { addAriaReferencedId, getAriaReferenceIds, removeAriaReferencedId } from '@angular/cdk/a11y';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { debounceTime, filter, finalize } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 import { createPopper, Instance, Options } from '@popperjs/core';
 
 import { Triggers } from '../coreui.types';
@@ -33,13 +30,12 @@ import { ElementRefDirective } from '../shared';
 import { TooltipComponentBase } from './tooltip/tooltip-component-base';
 
 @Directive()
-export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterViewChecked, AfterViewInit {
+export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterViewChecked {
   readonly #renderer = inject(Renderer2);
   readonly #hostElement = inject(ElementRef);
   readonly #viewContainerRef = inject(ViewContainerRef);
   readonly #listenersService = inject(ListenersService);
   readonly #intersectionService = inject(IntersectionService);
-  readonly #destroyRef = inject(DestroyRef);
   readonly #document = inject(DOCUMENT);
   readonly #isServer = isPlatformServer(inject(PLATFORM_ID));
   #timerId1: ReturnType<typeof setTimeout> | undefined;
@@ -72,6 +68,17 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
   });
 
   readonly referenceRef = computed(() => this.reference()?.elementRef ?? this.#hostElement);
+
+  readonly #intersectionEffect = effect((onCleanup) => {
+    const subscription = this.#intersectionService
+      .observe(this.referenceRef())
+      .pipe(
+        debounceTime(100),
+        filter((isIntersecting) => !isIntersecting)
+      )
+      .subscribe(() => this.visible.set(false));
+    onCleanup(() => subscription.unsubscribe());
+  });
 
   readonly #shown = computed(() => !this.#isServer && this.visible() && !!this.content());
 
@@ -119,10 +126,6 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
     this.#syncAriaDescribedBy(this.#shown());
   }
 
-  ngAfterViewInit(): void {
-    this.intersectionServiceSubscribe();
-  }
-
   ngOnDestroy(): void {
     this.clearListeners();
     this.destroyTooltipElement();
@@ -161,22 +164,6 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
 
   private clearListeners(): void {
     this.#listenersService.clearListeners();
-  }
-
-  private intersectionServiceSubscribe(): void {
-    this.#intersectionService.createIntersectionObserver(this.referenceRef());
-    this.#intersectionService.intersecting$
-      .pipe(
-        filter((next) => next.hostElement === this.referenceRef()),
-        debounceTime(100),
-        finalize(() => {
-          this.#intersectionService.unobserve(this.referenceRef());
-        }),
-        takeUntilDestroyed(this.#destroyRef)
-      )
-      .subscribe((next) => {
-        this.visible.set(next.isIntersecting ? this.visible() : false);
-      });
   }
 
   private createTooltipElement(): void {

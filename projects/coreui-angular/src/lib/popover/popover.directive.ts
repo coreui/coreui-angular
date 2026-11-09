@@ -2,7 +2,7 @@ import { Directive, inject, input, model, TemplateRef } from '@angular/core';
 import { Options } from '@popperjs/core';
 
 import { Triggers } from '../coreui.types';
-import { IntersectionService, ListenersService, UIDService } from '../services';
+import { ListenersService, UIDService } from '../services';
 import { ElementRefDirective } from '../shared';
 import { TooltipDirectiveBase } from '../tooltip/tooltip-directive-base';
 import { PopoverComponent } from './popover/popover.component';
@@ -10,7 +10,7 @@ import { PopoverComponent } from './popover/popover.component';
 @Directive({
   selector: '[cPopover]',
   exportAs: 'cPopover',
-  providers: [ListenersService, IntersectionService]
+  providers: [ListenersService]
 })
 export class PopoverDirective extends TooltipDirectiveBase {
   protected readonly component = PopoverComponent;

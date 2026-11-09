@@ -1,6 +1,6 @@
 import { isPlatformServer } from '@angular/common';
 import { ElementRef, inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 export interface IIntersectionObserverInit {
   root?: Element | null;
@@ -43,6 +43,30 @@ export class IntersectionService implements OnDestroy {
 
     this.hostElementRefs.set(hostElement, new IntersectionObserver(handleIntersect, options));
     this.hostElementRefs.get(hostElement)?.observe(hostElement.nativeElement);
+  }
+
+  /**
+   * Reports whether the element intersects the root: the observer's first report after subscribing, then each
+   * threshold crossing or change of `isIntersecting`, so the same value can repeat. Every subscription has its own observer, disconnected only
+   * on unsubscribe (`unobserve` does not reach it); on the server it reports `true` once.
+   * @param hostElement element to observe
+   * @param observerOptions `root`, `rootMargin` and `threshold`, merged over the defaults
+   * @returns `isIntersecting` of each entry, in the order the observer delivers them
+   */
+  observe(hostElement: ElementRef, observerOptions = this.defaultObserverOptions): Observable<boolean> {
+    if (isPlatformServer(this.platformId)) {
+      return of(true);
+    }
+
+    const options: IIntersectionObserverInit = { ...this.defaultObserverOptions, ...observerOptions };
+
+    return new Observable<boolean>((subscriber) => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => subscriber.next(entry.isIntersecting));
+      }, options);
+      observer.observe(hostElement.nativeElement);
+      return () => observer.disconnect();
+    });
   }
 
   unobserve(elementRef: ElementRef) {
