@@ -1,16 +1,6 @@
-import {
-  booleanAttribute,
-  Component,
-  computed,
-  effect,
-  inject,
-  input,
-  OnDestroy,
-  Renderer2,
-  TemplateRef,
-  viewChild,
-  ViewContainerRef
-} from '@angular/core';
+import { booleanAttribute, Component, input, TemplateRef } from '@angular/core';
+
+import { TooltipComponentBase } from './tooltip-component-base';
 
 @Component({
   selector: 'c-tooltip',
@@ -22,24 +12,14 @@ import {
     '[attr.id]': 'id()'
   }
 })
-export class TooltipComponent implements OnDestroy {
-  readonly renderer = inject(Renderer2);
+export class TooltipComponent extends TooltipComponentBase {
+  protected readonly prefix = 'tooltip';
 
   /**
    * Content of tooltip
    * @returns string | TemplateRef<any>
    */
   readonly content = input<string | TemplateRef<any>>('');
-
-  readonly #contentEffect = effect(() => {
-    this.updateView(this.content());
-  });
-
-  /**
-   * Toggle the visibility of popover component.
-   * @returns boolean
-   */
-  readonly visible = input(false, { transform: booleanAttribute });
 
   /**
    * The `id` HTML attribute of the tooltip.
@@ -54,43 +34,9 @@ export class TooltipComponent implements OnDestroy {
    */
   readonly role = input('tooltip');
 
-  readonly viewContainerRef = viewChild('tooltipTemplate', { read: ViewContainerRef });
-  private textNode!: Text;
-
-  readonly hostClasses = computed(() => {
-    return {
-      tooltip: true,
-      fade: true,
-      show: this.visible(),
-      'bs-tooltip-auto': true
-    } as Record<string, boolean>;
-  });
-
-  ngOnDestroy(): void {
-    this.clear();
-  }
-
-  private clear(): void {
-    this.viewContainerRef()?.clear();
-    if (!!this.textNode) {
-      this.renderer.removeChild(this.textNode.parentNode, this.textNode);
-    }
-  }
-
-  private updateView(content: string | TemplateRef<any>): void {
-    this.clear();
-
-    if (!content) {
-      return;
-    }
-
-    if (content instanceof TemplateRef) {
-      this.viewContainerRef()?.createEmbeddedView(content);
-    } else {
-      this.textNode = this.renderer.createText(content);
-
-      const element = this.viewContainerRef()?.element.nativeElement;
-      this.renderer.appendChild(element.parentNode, this.textNode);
-    }
-  }
+  /**
+   * Toggle the visibility of tooltip component.
+   * @returns boolean
+   */
+  readonly visible = input(false, { transform: booleanAttribute });
 }

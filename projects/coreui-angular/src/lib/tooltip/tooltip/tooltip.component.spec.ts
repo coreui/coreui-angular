@@ -31,4 +31,9 @@ describe('TooltipComponent', () => {
     expect(element.classList.contains('tooltip')).toBe(true);
     expect(element.classList.contains('fade')).toBe(true);
   });
+
+  it('should not have the popover css classes', () => {
+    expect(element.classList.contains('popover')).toBe(false);
+    expect(element.classList.contains('bs-popover-auto')).toBe(false);
+  });
 });

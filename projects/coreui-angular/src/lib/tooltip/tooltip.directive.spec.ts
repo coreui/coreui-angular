@@ -772,6 +772,12 @@ describe('TooltipDirective', () => {
     expect(tooltip.getAttribute('data-popper-placement')).toBe('left');
   });
 
+  it('should offset the tooltip 5px from the reference element', async () => {
+    const tooltip = await showTooltip();
+
+    expect(tooltip.style.transform).toBe('translate(0px, -5px)');
+  });
+
   it('should not close the tooltip when a non-Escape key is pressed', async () => {
     visible.set(true);
     fixture.detectChanges();
