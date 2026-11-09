@@ -26,12 +26,15 @@ describe('TooltipDirective', () => {
   let fixture: DirectiveFixture<TooltipDirective>;
   let document: Document;
   let intersect: IntersectionObserverCallback;
+  let observers: { observe: ReturnType<typeof vi.fn>; disconnect: ReturnType<typeof vi.fn> }[];
 
   beforeEach(() => {
     // Mock IntersectionObserver
+    observers = [];
     (globalThis as any).IntersectionObserver = class IntersectionObserver {
       constructor(callback: IntersectionObserverCallback) {
         intersect = callback;
+        observers.push(this);
       }
       observe = vi.fn();
       unobserve = vi.fn();
@@ -848,6 +851,157 @@ describe('TooltipDirective', () => {
     intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
     await vi.runAllTimersAsync();
     expect(visible()).toBe(false);
+  });
+
+  it('should hide the tooltip 100 ms after its host leaves the viewport', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.advanceTimersByTimeAsync(99);
+    const visibleBefore = visible();
+    await vi.advanceTimersByTimeAsync(1);
+
+    expect(visibleBefore).toBe(true);
+    expect(visible()).toBe(false);
+  });
+
+  it('should hide the tooltip when its host is outside the viewport from the start', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+
+    expect(visible()).toBe(false);
+  });
+
+  it('should keep the tooltip when its host returns to the viewport within 100 ms', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.advanceTimersByTimeAsync(50);
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+
+    expect(visible()).toBe(true);
+  });
+
+  it('should keep the tooltip when its host bounces out and in and ends in the viewport', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.advanceTimersByTimeAsync(50);
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.advanceTimersByTimeAsync(40);
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.advanceTimersByTimeAsync(60);
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+
+    expect(visible()).toBe(true);
+  });
+
+  it('should not hide the tooltip after the directive is destroyed with a hide pending', async () => {
+    visible.set(true);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    const warn = vi.spyOn(console, 'warn');
+    fixture.destroy();
+    await vi.runAllTimersAsync();
+
+    expect(visible()).toBe(true);
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('should hide the tooltip when a new reference element leaves the viewport', async () => {
+    const first = document.createElement('span');
+    const second = document.createElement('span');
+    document.body.append(first, second);
+    const reference = signal({ elementRef: new ElementRef(first) } as ElementRefDirective);
+    createWithContent(inputBinding('cTooltipRef', reference));
+    await showTooltip();
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    const intersectFirst = intersect;
+    const firstObserver = observers.at(-1);
+
+    reference.set({ elementRef: new ElementRef(second) } as ElementRefDirective);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    const secondObserver = observers.at(-1);
+
+    intersectFirst([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+    expect(visible()).toBe(true);
+
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+    expect(visible()).toBe(true);
+
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+    expect(visible()).toBe(false);
+    expect(firstObserver?.observe.mock.lastCall?.[0]).toBe(first);
+    expect(firstObserver?.disconnect).toHaveBeenCalled();
+    expect(secondObserver).not.toBe(firstObserver);
+    expect(secondObserver?.observe.mock.lastCall?.[0]).toBe(second);
+    expect(secondObserver?.disconnect).not.toHaveBeenCalled();
+    first.remove();
+    second.remove();
+  });
+
+  it('should hide the tooltip when the reference changes to an element outside the viewport', async () => {
+    const first = document.createElement('span');
+    const second = document.createElement('span');
+    document.body.append(first, second);
+    const reference = signal({ elementRef: new ElementRef(first) } as ElementRefDirective);
+    createWithContent(inputBinding('cTooltipRef', reference));
+    await showTooltip();
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+
+    reference.set({ elementRef: new ElementRef(second) } as ElementRefDirective);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+    expect(observers.at(-1)?.observe.mock.lastCall?.[0]).toBe(second);
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.runAllTimersAsync();
+
+    expect(visible()).toBe(false);
+    first.remove();
+    second.remove();
+  });
+
+  it('should keep the tooltip when the old reference left the viewport just before the reference changed', async () => {
+    const first = document.createElement('span');
+    const second = document.createElement('span');
+    document.body.append(first, second);
+    const reference = signal({ elementRef: new ElementRef(first) } as ElementRefDirective);
+    createWithContent(inputBinding('cTooltipRef', reference));
+    await showTooltip();
+    intersect([{ isIntersecting: true }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    intersect([{ isIntersecting: false }] as IntersectionObserverEntry[], {} as IntersectionObserver);
+    await vi.advanceTimersByTimeAsync(50);
+
+    reference.set({ elementRef: new ElementRef(second) } as ElementRefDirective);
+    fixture.detectChanges();
+    await vi.runAllTimersAsync();
+
+    expect(visible()).toBe(true);
+    first.remove();
+    second.remove();
   });
 });
 
