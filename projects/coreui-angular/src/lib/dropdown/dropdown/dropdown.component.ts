@@ -22,7 +22,6 @@ import {
   OnInit,
   output,
   Renderer2,
-  signal,
   untracked
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -220,8 +219,9 @@ export class DropdownComponent implements OnDestroy, OnInit {
    * - `inside` only on a click inside the menu,
    * - `outside` only on a click outside it.
    *
-   * A click on a form field or inside a form in the menu does not close it; `cDropdownClose` and
-   * `cDropdownItem` close it from there, but not on a click on a field that takes typing or a choice inside the item.
+   * A click on an `input`, `select` or `textarea` in the menu, or anywhere in a form in the menu or used as the menu,
+   * leaves it open; `cDropdownClose` closes it from there, and so does a `cDropdownItem` unless its `autoClose` is
+   * `false` or the click is on a field that takes typing or a choice inside the item.
    * @returns boolean | 'inside' | 'outside'
    * @default true
    */
@@ -270,24 +270,15 @@ export class DropdownComponent implements OnDestroy, OnInit {
    */
   readonly popperOptionsInput = input<Partial<Options>>({}, { alias: 'popperOptions' });
 
-  readonly #popperOptionsEffect = effect(() => {
-    this.popperOptions = { ...untracked(this.#popperOptions), ...this.popperOptionsInput() };
-  });
+  readonly #popperOptions = linkedSignal(this.popperOptionsInput);
 
   set popperOptions(value: Partial<Options>) {
-    this.#popperOptions.update((popperOptions) => ({ ...popperOptions, ...value }));
+    this.#popperOptions.set(value);
   }
 
   get popperOptions(): Partial<Options> {
-    const placement = this.placement() ?? this.#directionPlacement();
-    this.#popperOptions.update((value) => ({ ...value, placement: placement }));
-    return this.#popperOptions();
+    return { ...this.#popperOptions(), placement: this.placement() ?? this.#directionPlacement() };
   }
-
-  readonly #popperOptions = signal<Partial<Options>>({
-    modifiers: [],
-    strategy: 'absolute'
-  });
 
   /**
    * Set the dropdown variant to a btn-group, dropdown, input-group, and nav-item.
@@ -372,12 +363,6 @@ export class DropdownComponent implements OnDestroy, OnInit {
 
   toggleDropdown(): void {
     this.visible.update((visible) => !visible);
-  }
-
-  onClick(event: any): void {
-    if (!this._toggler()?.elementRef.nativeElement.contains(event.target?.closest('[cDropdownToggle]'))) {
-      this.toggleDropdown();
-    }
   }
 
   readonly #togglerEffect = effect(() => {
