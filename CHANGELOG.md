@@ -2,6 +2,33 @@
 
 ---
 
+#### `5.7.43` for Angular 22.2.6
+
+- fix(dropdown): `popperOptions` replaces the earlier object instead of merging (#348)
+- fix(tooltip, popover): hide when the current reference leaves the viewport (#350)
+- refactor(tooltip, popover): one abstract base for both directives and both components (#349)
+- test(getTransitionDurationFromElement): append styled elements to `document.body` in jsdom tests
+- chore(dependencies): update to Angular 22.2.6
+  - `@angular/aria` to version 22.2.7
+  - `@angular/cdk` to version 22.2.7
+  - `@angular/common` to version 22.2.6
+  - `@angular/compiler` to version 22.2.6
+  - `@angular/compiler-cli` to version 22.2.6
+  - `@angular/core` to version 22.2.6
+  - `@angular/forms` to version 22.2.6
+  - `@angular/language-service` to version 22.2.6
+  - `@angular/localize` to version 22.2.6
+  - `@angular/platform-browser` to version 22.2.6
+  - `@angular/router` to version 22.2.6
+  - `@angular-devkit/schematics` to version 22.2.7
+  - `@angular/build` to version 22.2.7
+  - `@angular/cli` to version 22.2.7
+  - `jsdom` to version 31.0.1, `canvas` replaced with `@napi-rs/canvas` 1.1.1
+  - `prettier` to version 3.10.1
+  - `typescript-eslint` to version 8.72.2
+
+---
+
 #### `5.7.42` for Angular 22.2.4
 
 - feat: close button names, SearchButton name, Modal closePrevented and focus (#347)
