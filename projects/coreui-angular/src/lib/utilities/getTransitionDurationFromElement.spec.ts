@@ -1,9 +1,20 @@
 import getTransitionDurationFromElement from './getTransitionDurationFromElement';
 
 describe('getTransitionDurationFromElement', () => {
+  const elements: HTMLElement[] = [];
+
+  afterEach(() => {
+    for (const element of elements) {
+      element.remove();
+    }
+    elements.length = 0;
+  });
+
   const styled = (transitionDuration: string, transitionDelay = '0s') => {
     const element = document.createElement('div');
     Object.assign(element.style, { transitionDuration, transitionDelay });
+    document.body.appendChild(element);
+    elements.push(element);
     return element;
   };
 
