@@ -1277,6 +1277,20 @@ class FocusReturnComponent {
   readonly visible = signal(false);
 }
 
+@Component({
+  template: `
+    <c-dropdown (visibleChange)="changes.push($event)" [visible]="initial">
+      <button cDropdownToggle>Toggle</button>
+      <ul cDropdownMenu></ul>
+    </c-dropdown>
+  `,
+  imports: [DropdownToggleDirective, DropdownComponent, DropdownMenuDirective]
+})
+class InitialStateComponent {
+  changes: boolean[] = [];
+  initial = false;
+}
+
 describe('DropdownComponent focus return', () => {
   let fixture: ComponentFixture<FocusReturnComponent>;
 
@@ -1372,6 +1386,51 @@ describe('DropdownComponent focus return', () => {
     await setVisible(false);
     expect(fixture.componentInstance.visible()).toBe(true);
     expect(document.activeElement).toBe(element('item'));
+  });
+
+  it.each([false, true])('should emit visibleChange once with the initial state %s', async (initial) => {
+    const initialFixture = TestBed.createComponent(InitialStateComponent);
+    initialFixture.componentInstance.initial = initial;
+    await initialFixture.whenStable();
+
+    expect(initialFixture.componentInstance.changes).toEqual([initial]);
+    initialFixture.destroy();
+  });
+
+  it('should keep the menu shown with one Popper instance when it closes and opens again in one pass', async () => {
+    await setVisible(true);
+    const dropdown: DropdownComponent = fixture.debugElement.query(By.directive(DropdownComponent)).componentInstance;
+    const menu: HTMLElement = fixture.nativeElement.querySelector('.dropdown-menu');
+    const createPopper = vi.spyOn(dropdown, 'createPopperInstance');
+    const destroyPopper = vi.spyOn(dropdown, 'destroyPopperInstance');
+    const emitted: boolean[] = [];
+    dropdown.visibleChange.subscribe((visible) => emitted.push(visible));
+
+    element('item').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    dropdown.visible.set(true);
+    await fixture.whenStable();
+
+    expect(createPopper).not.toHaveBeenCalled();
+    expect(destroyPopper).not.toHaveBeenCalled();
+    expect(emitted).toEqual([]);
+    expect(menu.classList).toContain('show');
+    expect(menu.style.visibility).toBe('');
+  });
+
+  it('should stay closed without a Popper instance when it opens and closes again in one pass', async () => {
+    const dropdown: DropdownComponent = fixture.debugElement.query(By.directive(DropdownComponent)).componentInstance;
+    const menu: HTMLElement = fixture.nativeElement.querySelector('.dropdown-menu');
+    const createPopper = vi.spyOn(dropdown, 'createPopperInstance');
+    const emitted: boolean[] = [];
+    dropdown.visibleChange.subscribe((visible) => emitted.push(visible));
+
+    dropdown.visible.set(true);
+    dropdown.visible.set(false);
+    await fixture.whenStable();
+
+    expect(createPopper).not.toHaveBeenCalled();
+    expect(emitted).toEqual([]);
+    expect(menu.classList).not.toContain('show');
   });
 
   it('should not return the focus when the window does not have it', async () => {

@@ -297,11 +297,17 @@ export class DropdownComponent implements OnDestroy, OnInit {
     computation: (value) => value
   });
 
+  #appliedVisible?: boolean;
+
   readonly #visibleEffect = effect(() => {
     const visible = this.visible();
     untracked(() => {
+      if (visible === this.#appliedVisible) {
+        this.setVisibleState(visible);
+        return;
+      }
       const closed = this.activeTrap && !visible;
-      this.activeTrap = visible;
+      this.#appliedVisible = visible;
       visible ? this.createPopperInstance() : this.destroyPopperInstance();
       this.setVisibleState(visible);
       this.visibleChange?.emit(visible);
@@ -323,7 +329,9 @@ export class DropdownComponent implements OnDestroy, OnInit {
   readonly _menu = contentChild(DropdownMenuDirective);
   readonly _menuElementRef = contentChild(DropdownMenuDirective, { read: ElementRef });
 
-  public activeTrap = false;
+  get activeTrap(): boolean {
+    return this.#appliedVisible === true;
+  }
 
   private popperInstance!: Instance | undefined;
   private listeners: (() => void)[] = [];
