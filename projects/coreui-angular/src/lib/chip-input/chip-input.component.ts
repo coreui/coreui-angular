@@ -14,7 +14,7 @@ import {
   viewChild
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AsyncValidator, NG_ASYNC_VALIDATORS, NG_VALIDATORS, NgModel, Validator } from '@angular/forms';
+import { NgModel } from '@angular/forms';
 import { take } from 'rxjs';
 import { ChipComponent } from '../chip/chip.component';
 import { ChipSetRef } from '../chip/chip-set-ref';
@@ -45,8 +45,6 @@ import { UIDService } from '../services/uid.service';
 export class ChipInputComponent implements AfterContentInit {
   readonly #elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   readonly #ngModel = inject(NgModel, { self: true, optional: true });
-  readonly #asyncValidators = inject<(AsyncValidator | unknown)[]>(NG_ASYNC_VALIDATORS, { self: true, optional: true });
-  readonly #validators = inject<(Validator | unknown)[]>(NG_VALIDATORS, { self: true, optional: true });
   readonly #rtl = inject(RtlService);
   readonly #service = inject(ChipSetService);
 
@@ -305,12 +303,10 @@ export class ChipInputComponent implements AfterContentInit {
       focusFallback: () => this.focus(),
       removeRequested: (value) => this.#removeChip(value)
     });
-    this.#attachValidators();
     this.#ngModel?.control.valueChanges.pipe(take(1), takeUntilDestroyed()).subscribe(() => this.#service.resync());
   }
 
   ngAfterContentInit(): void {
-    this.#watchValidators();
     if (this.projectedChips().length > 0) {
       console.warn('CoreUI [c-chip] placed inside c-chip-input is ignored - chips come from its value');
     }
@@ -445,28 +441,6 @@ export class ChipInputComponent implements AfterContentInit {
     const end = field.selectionEnd ?? start;
     const text = field.value.slice(0, start) + pasted + field.value.slice(end);
     this.#setText(this.#addChips(text.split(separator)).join(separator));
-  }
-
-  #attachValidators(): void {
-    const control = this.#ngModel?.control;
-    const validator = this.#ngModel?.validator;
-    const asyncValidator = this.#ngModel?.asyncValidator;
-    if (validator && control && !control.hasValidator(validator)) {
-      control.addValidators(validator);
-    }
-    if (asyncValidator && control && !control.hasAsyncValidator(asyncValidator)) {
-      control.addAsyncValidators(asyncValidator);
-    }
-  }
-
-  #watchValidators(): void {
-    const control = this.#ngModel?.control;
-    if (!control) {
-      return;
-    }
-    for (const item of [...(this.#validators ?? []), ...(this.#asyncValidators ?? [])]) {
-      (item as Validator | AsyncValidator).registerOnValidatorChange?.(() => control.updateValueAndValidity());
-    }
   }
 
   #leave(): void {
