@@ -2,6 +2,35 @@
 
 ---
 
+#### `5.7.44` for Angular 22.3.0
+
+- fix(Dropdown): keep the menu shown when visible flips back before the effect runs (#351)
+- chore(dependencies): update to Angular 22.3.0
+  - `@angular/aria` to version 22.3.0
+  - `@angular/cdk` to version 22.3.0
+  - `@angular/common` to version 22.3.0
+  - `@angular/compiler` to version 22.3.0
+  - `@angular/core` to version 22.3.0
+  - `@angular/forms` to version 22.3.0
+  - `@angular/localize` to version 22.3.0
+  - `@angular/platform-browser` to version 22.3.0
+  - `@angular/router` to version 22.3.0
+  - `@angular-devkit/schematics` to version 22.3.0
+  - `@angular/build` to version 22.3.0
+  - `@angular/cli` to version 22.3.0
+  - `@angular/compiler-cli` to version 22.3.0
+  - `@angular/language-service` to version 22.3.0
+  - `@vitest/coverage-v8` to version 5.1.1
+  - `@vitest/ui` to version 5.1.1
+  - `angular-eslint` to version 22.8.0
+  - `eslint` to version 10.15.0
+  - `native-copyfiles` to version 2.1.3
+  - `ng-packagr` to version 22.3.0
+  - `typescript-eslint` to version 8.73.0
+  - `vitest` to version 5.1.1
+
+---
+
 #### `5.7.43` for Angular 22.2.6
 
 - fix(dropdown): `popperOptions` replaces the earlier object instead of merging (#348)
