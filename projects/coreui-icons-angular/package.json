@@ -5,6 +5,9 @@
   "copyright": "Copyright 2026 creativeLabs Łukasz Holeczek",
   "license": "MIT",
   "homepage": "https://coreui.io/angular",
+  "exports": {
+    ".": "./src/public-api.ts"
+  },
   "author": {
     "name": "CoreUI",
     "url": "https://coreui.io",
@@ -28,9 +31,6 @@
     "@angular/common": "^22.3.0",
     "@angular/core": "^22.3.0",
     "@angular/platform-browser": "^22.3.0"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
   },
   "sideEffects": false,
   "keywords": [

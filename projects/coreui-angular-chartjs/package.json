@@ -11,6 +11,9 @@
     "github": "https://github.com/coreui",
     "twitter": "https://twitter.com/core_ui"
   },
+  "exports": {
+    ".": "./src/public-api.ts"
+  },
   "contributors": [
     {
       "name": "CoreUI Team",
@@ -30,8 +33,7 @@
     "chart.js": "^4.5.1"
   },
   "dependencies": {
-    "lodash-es": "^4.18.1",
-    "tslib": "^2.3.0"
+    "lodash-es": "^4.18.1"
   },
   "sideEffects": false,
   "keywords": [

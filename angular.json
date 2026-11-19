@@ -16,21 +16,21 @@
         }
       },
       "root": "projects/coreui-angular",
-      "sourceRoot": "projects/coreui-angular/src",
+      "sourceRoot": "projects/coreui-angular",
       "prefix": "c",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular/build:library",
           "options": {
-            "project": "projects/coreui-angular/ng-package.json"
+            "tsConfig": "projects/coreui-angular/tsconfig.lib.json",
+            "outputPath": "dist/coreui-angular",
+            "allowedNonPeerDependencies": ["@popperjs/core"]
           },
           "configurations": {
             "production": {
               "tsConfig": "projects/coreui-angular/tsconfig.lib.prod.json"
             },
-            "development": {
-              "tsConfig": "projects/coreui-angular/tsconfig.lib.json"
-            }
+            "development": {}
           },
           "defaultConfiguration": "production"
         },
@@ -59,20 +59,23 @@
         }
       },
       "root": "projects/coreui-angular-chartjs",
-      "sourceRoot": "projects/coreui-angular-chartjs/src",
+      "sourceRoot": "projects/coreui-angular-chartjs",
       "prefix": "c",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular/build:library",
           "options": {
-            "project": "projects/coreui-angular-chartjs/ng-package.json"
+            "tsConfig": "projects/coreui-angular-chartjs/tsconfig.lib.json",
+            "outputPath": "dist/coreui-angular-chartjs",
+            "assets": ["projects/coreui-angular-chartjs/README.png"],
+            "allowedNonPeerDependencies": ["@coreui/chartjs", "chart.js", "lodash-es"]
           },
           "configurations": {
             "production": {
               "tsConfig": "projects/coreui-angular-chartjs/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/coreui-angular-chartjs/tsconfig.lib.json"
+              "compilationMode": "full"
             }
           },
           "defaultConfiguration": "production"
@@ -106,20 +109,21 @@
         }
       },
       "root": "projects/coreui-icons-angular",
-      "sourceRoot": "projects/coreui-icons-angular/src",
+      "sourceRoot": "projects/coreui-icons-angular",
       "prefix": "c",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular/build:library",
           "options": {
-            "project": "projects/coreui-icons-angular/ng-package.json"
+            "tsConfig": "projects/coreui-icons-angular/tsconfig.lib.json",
+            "outputPath": "dist/coreui-icons-angular"
           },
           "configurations": {
             "production": {
               "tsConfig": "projects/coreui-icons-angular/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/coreui-icons-angular/tsconfig.lib.json"
+              "compilationMode": "full"
             }
           },
           "defaultConfiguration": "production"
