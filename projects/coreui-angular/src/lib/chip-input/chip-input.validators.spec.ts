@@ -5,8 +5,10 @@ import {
   AsyncValidator,
   FormsModule,
   NG_ASYNC_VALIDATORS,
+  NG_VALIDATORS,
   NgModel,
-  ValidationErrors
+  ValidationErrors,
+  Validator
 } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { AnnouncerService } from '../services/announcer.service';
@@ -30,6 +32,7 @@ class TemplateValidatorsHostComponent {
 })
 class TakenValidatorDirective implements AsyncValidator, OnChanges {
   readonly cTaken = input('');
+  calls = 0;
   #onChange?: () => void;
 
   ngOnChanges(): void {
@@ -41,6 +44,7 @@ class TakenValidatorDirective implements AsyncValidator, OnChanges {
   }
 
   validate(control: AbstractControl<string[]>): Promise<ValidationErrors | null> {
+    this.calls++;
     return Promise.resolve(control.value?.includes(this.cTaken()) ? { taken: true } : null);
   }
 }
@@ -66,6 +70,27 @@ class AsyncValidatorHostComponent {
 })
 class FirstRenderHostComponent {
   tags = ['a'];
+}
+
+@Directive({
+  selector: '[cCounted]',
+  providers: [{ provide: NG_VALIDATORS, useExisting: CountedValidatorDirective, multi: true }]
+})
+class CountedValidatorDirective implements Validator {
+  calls = 0;
+
+  validate(): ValidationErrors | null {
+    this.calls++;
+    return null;
+  }
+}
+
+@Component({
+  imports: [FormsModule, ChipInputComponent, CountedValidatorDirective],
+  template: `<c-chip-input cCounted [(ngModel)]="tags" />`
+})
+class CountedValidatorHostComponent {
+  tags = ['a', 'b'];
 }
 
 describe('ChipInputComponent template validators', () => {
@@ -114,6 +139,19 @@ describe('ChipInputComponent template validators', () => {
     expect(fixture.nativeElement.querySelector('form > button').disabled).toBe(true);
   });
 
+  it('runs a validator written next to ngModel once per value change', async () => {
+    const fixture = TestBed.createComponent(CountedValidatorHostComponent);
+    await fixture.whenStable();
+    const validator = fixture.debugElement
+      .query(By.directive(CountedValidatorDirective))
+      .injector.get(CountedValidatorDirective);
+    validator.calls = 0;
+
+    fixture.nativeElement.querySelector('c-chip button.chip-remove').click();
+    await fixture.whenStable();
+    expect(validator.calls).toBe(1);
+  });
+
   it('applies an async validator written next to ngModel and follows its changes', async () => {
     const fixture = TestBed.createComponent(AsyncValidatorHostComponent);
     const model = fixture.debugElement.query(By.directive(NgModel)).injector.get(NgModel);
@@ -125,5 +163,20 @@ describe('ChipInputComponent template validators', () => {
     await fixture.whenStable();
     await new Promise((resolve) => setTimeout(resolve));
     expect(model.control.errors).toBeNull();
+  });
+
+  it('runs an async validator written next to ngModel once per value change', async () => {
+    const fixture = TestBed.createComponent(AsyncValidatorHostComponent);
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
+    const validator = fixture.debugElement
+      .query(By.directive(TakenValidatorDirective))
+      .injector.get(TakenValidatorDirective);
+    validator.calls = 0;
+
+    fixture.nativeElement.querySelector('c-chip button.chip-remove').click();
+    await fixture.whenStable();
+    await new Promise((resolve) => setTimeout(resolve));
+    expect(validator.calls).toBe(1);
   });
 });
