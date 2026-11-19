@@ -5,6 +5,7 @@
 #### `5.7.44` for Angular 22.3.0
 
 - fix(Dropdown): keep the menu shown when visible flips back before the effect runs (#351)
+- fix(ChipInput): run template validators once with `@angular/forms` 22.3; peer dependencies require Angular `^22.3.0`, `@angular/forms` listed again (#352)
 - chore(dependencies): update to Angular 22.3.0
   - `@angular/aria` to version 22.3.0
   - `@angular/cdk` to version 22.3.0
@@ -25,9 +26,9 @@
   - `angular-eslint` to version 22.8.0
   - `eslint` to version 10.15.0
   - `native-copyfiles` to version 2.1.3
-  - `ng-packagr` to version 22.3.0
   - `typescript-eslint` to version 8.73.0
   - `vitest` to version 5.1.1
+- chore(build): switch libraries to `@angular/build:library`; published packages no longer depend on `tslib` (#353)
 
 ---
 
