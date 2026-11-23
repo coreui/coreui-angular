@@ -1,5 +1,6 @@
 import { Directive, ElementRef, inject, input } from '@angular/core';
 
+import { isReplayedEvent } from '../../shared/event.utils';
 import { OffcanvasService } from '../offcanvas.service';
 
 @Directive({
@@ -19,6 +20,9 @@ export class OffcanvasToggleDirective {
   readonly id = input<string>(undefined, { alias: 'cOffcanvasToggle' });
 
   protected toggleOpen($event: MouseEvent): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     $event.preventDefault();
     this.#offcanvasService.toggle({ show: 'toggle', id: this.id(), trigger: this.#elementRef.nativeElement });
   }

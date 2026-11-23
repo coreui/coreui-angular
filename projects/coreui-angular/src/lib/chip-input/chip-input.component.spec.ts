@@ -5,6 +5,7 @@ import { ChipComponent } from '../chip/chip.component';
 import { ChipSetComponent } from '../chip-set/chip-set.component';
 import { AnnouncerService } from '../services/announcer.service';
 import { ChipInputComponent } from './chip-input.component';
+import { replay } from '../../testing/replayed-event';
 
 const KEY_CODES: Record<string, number> = { Enter: 13, Delete: 46, Backspace: 8 };
 
@@ -336,6 +337,15 @@ describe('ChipInputComponent', () => {
       target.dispatchEvent(pressed);
       expect(pressed.defaultPrevented).toBe(false);
     }
+  });
+
+  it('ignores a press on the background or the label replayed after hydration', async () => {
+    host.label.set('Skills:');
+    await fixture.whenStable();
+    for (const target of [element(), element().querySelector('label.chip-input-label')!]) {
+      replay(target, new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    }
+    expect(document.activeElement).not.toBe(field());
   });
 
   it('adds the class from chipClassName to each chip', async () => {

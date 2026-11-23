@@ -3,6 +3,7 @@ import { ComponentFixture, DirectiveFixture, TestBed } from '@angular/core/testi
 import { TabContentRefDirective } from './tab-content-ref.directive';
 import { TabContentComponent } from './tab-content/tab-content.component';
 import { TabPaneComponent } from './tab-pane/tab-pane.component';
+import { replay } from '../../testing/replayed-event';
 
 describe('TabContentRefDirective', () => {
   let disabled: WritableSignal<boolean>;
@@ -78,6 +79,15 @@ describe('TabContentRefDirective with tab panes', () => {
     expect(panes[0].classList.contains('active')).toBe(false);
     expect(tabs[1].getAttribute('aria-selected')).toBe('true');
     expect(tabs[0].getAttribute('aria-selected')).toBe('false');
+  });
+
+  it('should ignore a click replayed after hydration', async () => {
+    replay(tabs[1], new MouseEvent('click', { bubbles: true, cancelable: true }));
+    await settle();
+
+    expect(fixture.componentInstance.activePane()).toBe(0);
+    expect(tabs[0].getAttribute('aria-selected')).toBe('true');
+    expect(tabs[1].getAttribute('aria-selected')).toBe('false');
   });
 
   it('should disable a tab without a pane and keep the active pane on its click', async () => {

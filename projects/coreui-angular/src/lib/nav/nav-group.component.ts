@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 
 import { CollapseDirective } from '../collapse';
+import { isReplayedEvent } from '../shared/event.utils';
 import { NavGroupItemsComponent } from './nav-group-items.component';
 import { NavGroupService } from './nav-group.service';
 
@@ -108,6 +109,9 @@ export class NavGroupComponent {
   });
 
   toggleGroup(event: Event): void {
+    if (isReplayedEvent(event)) {
+      return;
+    }
     event.preventDefault();
     const next = !this.visibleState();
     this.#setVisible(next);

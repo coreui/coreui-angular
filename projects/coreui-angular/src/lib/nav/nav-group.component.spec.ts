@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 
 import { NavGroupComponent } from './nav-group.component';
 import { NavGroupService } from './nav-group.service';
+import { replay } from '../../testing/replayed-event';
 
 @Component({
   template: `
@@ -75,6 +76,20 @@ describe('NavGroupComponent', () => {
 
     fixture.nativeElement.querySelector('.nav-group-toggle').click();
     expect(visibleChange).toHaveBeenCalledWith(true);
+  });
+
+  it('should ignore a toggler click replayed after hydration', async () => {
+    const visibleChange = vi.fn();
+    componentRef.setInput('toggler', 'anchorText');
+    component.visibleChange.subscribe(visibleChange);
+    await fixture.whenStable();
+
+    const toggler: Element = fixture.nativeElement.querySelector('.nav-group-toggle');
+    replay(toggler, new MouseEvent('click', { bubbles: true, cancelable: true }));
+    await fixture.whenStable();
+
+    expect(visibleChange).not.toHaveBeenCalled();
+    expect(fixture.nativeElement.classList.contains('show')).toBe(false);
   });
 
   it('should follow the visible input', async () => {

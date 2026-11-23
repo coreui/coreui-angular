@@ -3,6 +3,7 @@ import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { take } from 'rxjs';
 import { OffcanvasService } from '../offcanvas.service';
 import { OffcanvasToggleDirective } from './offcanvas-toggle.directive';
+import { replay } from '../../../testing/replayed-event';
 
 describe('OffcanvasToggleDirective', () => {
   let fixture: DirectiveFixture<OffcanvasToggleDirective>;
@@ -26,5 +27,11 @@ describe('OffcanvasToggleDirective', () => {
       .subscribe((value) => (action = value));
     fixture.nativeElement.dispatchEvent(new MouseEvent('click'));
     expect(action).toEqual({ show: 'toggle', id: 'OffcanvasEnd', trigger: fixture.nativeElement });
+  });
+
+  it('should ignore a click replayed after hydration', () => {
+    const toggle = vi.spyOn(TestBed.inject(OffcanvasService), 'toggle');
+    replay(fixture.nativeElement, new MouseEvent('click', { bubbles: true, cancelable: true }));
+    expect(toggle).not.toHaveBeenCalled();
   });
 });

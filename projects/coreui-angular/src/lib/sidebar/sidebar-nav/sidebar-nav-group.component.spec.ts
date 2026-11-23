@@ -8,6 +8,7 @@ import { CollapseDirective } from '../../collapse';
 import { SidebarNavGroupComponent } from './sidebar-nav.component';
 import { SidebarNavGroupService } from './sidebar-nav-group.service';
 import { INavData } from './sidebar-nav';
+import { replay } from '../../../testing/replayed-event';
 
 function endTransition(element: HTMLElement): void {
   const event = new Event('transitionend');
@@ -77,6 +78,18 @@ describe('SidebarNavGroupComponent', () => {
     expect(component.open()).toBe(true);
     expect(nav.classList.contains('collapsing')).toBe(true);
     expect(nav.style.display).toBe('block');
+  });
+
+  it('should ignore a toggle click replayed after hydration', async () => {
+    const open = component.open();
+    const toggle = vi.spyOn(TestBed.inject(SidebarNavGroupService), 'toggle');
+
+    const toggler: Element = fixture.nativeElement.querySelector('.nav-group-toggle');
+    replay(toggler, new MouseEvent('click', { bubbles: true, cancelable: true }));
+    await fixture.whenStable();
+
+    expect(component.open()).toBe(open);
+    expect(toggle).not.toHaveBeenCalled();
   });
 
   it('should display its nav before the collapse to closed starts', async () => {

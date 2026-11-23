@@ -1,4 +1,5 @@
 import { Directive, inject, input } from '@angular/core';
+import { isReplayedEvent } from '../shared/event.utils';
 import { ToasterService } from './toaster/toaster.service';
 import type { ToastComponent } from './toast/toast.component';
 
@@ -19,6 +20,9 @@ export class ToastCloseDirective {
   readonly cToastClose = input<ToastComponent>();
 
   toggleOpen($event: MouseEvent): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     $event.preventDefault();
     this.#toasterService.setState({ show: false, toast: this.cToastClose() });
   }
