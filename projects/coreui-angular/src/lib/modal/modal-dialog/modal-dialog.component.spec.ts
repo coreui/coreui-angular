@@ -65,7 +65,7 @@ describe('ModalDialogComponent', () => {
   });
 
   it('should have css classes for size prop', async () => {
-    for (const size of ['sm', 'lg', 'xl']) {
+    for (const size of ['sm', 'lg', 'xl', 'xxl']) {
       componentRef.setInput('size', size);
       await fixture.whenStable();
       expect(fixture.nativeElement.classList.contains(`modal-${size}`)).toBe(true);
@@ -75,6 +75,7 @@ describe('ModalDialogComponent', () => {
     expect(fixture.nativeElement.classList.contains('modal-sm')).toBe(false);
     expect(fixture.nativeElement.classList.contains('modal-lg')).toBe(false);
     expect(fixture.nativeElement.classList.contains('modal-xl')).toBe(false);
+    expect(fixture.nativeElement.classList.contains('modal-xxl')).toBe(false);
     expect(fixture.nativeElement.classList.contains('modal-dialog')).toBe(true);
   });
 });

@@ -125,11 +125,11 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly portal = input(false, { transform: booleanAttribute });
 
   /**
-   * Size the component small, large, or extra large.
-   * @returns {'sm' | 'lg' | 'xl'}
+   * Size the component small, large, extra large, or extra extra large.
+   * @returns {'sm' | 'lg' | 'xl' | 'xxl'}
    * @default undefined
    */
-  readonly size = input<'sm' | 'lg' | 'xl'>();
+  readonly size = input<'sm' | 'lg' | 'xl' | 'xxl'>();
 
   /**
    * Remove animation to create a modal that simply appears rather than fades in to view.
