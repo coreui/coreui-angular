@@ -18,11 +18,12 @@ import {
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
 
+import { isReplayedEvent } from '../../shared/event.utils';
 import { ThemeDirective } from '../../shared/theme.directive';
 import { DropdownItemDirective } from '../dropdown-item/dropdown-item.directive';
 import { BreakpointInfix, DropdownAlignment } from '../../coreui.types';
 import { DropdownService } from '../dropdown.service';
-import { clicksOnSpace, isEditableTarget, isReplayedEvent } from '../dropdown.utils';
+import { clicksOnSpace, isEditableTarget } from '../dropdown.utils';
 
 @Directive({
   selector: '[cDropdownMenu]',

@@ -32,10 +32,11 @@ import { createPopper, Instance, Options, Placement } from '@popperjs/core';
 import { DropdownAlignment } from '../../coreui.types';
 import { RtlService } from '../../services';
 import { ThemeDirective } from '../../shared';
+import { isReplayedEvent } from '../../shared/event.utils';
 import { restoreFocus } from '../../shared/focus.utils';
 import { DropdownMenuDirective } from '../dropdown-menu/dropdown-menu.directive';
 import { DropdownService } from '../dropdown.service';
-import { clicksOnEnter, isEditableTarget, isReplayedEvent } from '../dropdown.utils';
+import { clicksOnEnter, isEditableTarget } from '../dropdown.utils';
 
 const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]';
 const FORM_TAG = /^(form|input|option|select|textarea)$/;
