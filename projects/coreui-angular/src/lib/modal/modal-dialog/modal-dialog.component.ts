@@ -27,11 +27,11 @@ export class ModalDialogComponent {
   readonly scrollable = input(false, { transform: booleanAttribute });
 
   /**
-   * Size the component small, large, or extra large.
+   * Size the component small, large, extra large, or extra extra large.
    * @default undefined
-   * @returns {'sm' | 'lg' | 'xl'}
+   * @returns {'sm' | 'lg' | 'xl' | 'xxl'}
    */
-  readonly size = input<'sm' | 'lg' | 'xl'>();
+  readonly size = input<'sm' | 'lg' | 'xl' | 'xxl'>();
 
   readonly hostClasses = computed(() => {
     const fullscreen = this.fullscreen();
