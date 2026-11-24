@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnnouncerService } from '../services/announcer.service';
 import { ChipInputComponent } from './chip-input.component';
+import { replay } from '../../testing/replayed-event';
 
 const KEY_CODES: Record<string, number> = {
   ArrowLeft: 37,
@@ -13,14 +14,11 @@ const KEY_CODES: Record<string, number> = {
   Home: 36
 };
 
+const keydown = (key: string, init: KeyboardEventInit = {}) =>
+  new KeyboardEvent('keydown', { key, keyCode: KEY_CODES[key], bubbles: true, cancelable: true, ...init });
+
 const press = (target: Element, key: string, init: KeyboardEventInit = {}) => {
-  const event = new KeyboardEvent('keydown', {
-    key,
-    keyCode: KEY_CODES[key],
-    bubbles: true,
-    cancelable: true,
-    ...init
-  });
+  const event = keydown(key, init);
   target.dispatchEvent(event);
   return event;
 };
@@ -275,6 +273,48 @@ describe('ChipInputComponent keyboard', () => {
     element().click();
     expect(document.activeElement).toBe(field());
   });
+
+  for (const dir of ['ltr', 'rtl']) {
+    for (const key of ['ArrowLeft', 'ArrowRight', 'Home', 'End', ' ', 'x']) {
+      it(`ignores ${key === ' ' ? 'Space' : key} replayed after hydration on a chip in ${dir}`, async () => {
+        host.dir.set(dir);
+        host.selectable.set(true);
+        await fixture.whenStable();
+        for (const value of ['b', 'c']) {
+          chip(value).focus();
+          replay(chip(value), keydown(key));
+          await fixture.whenStable();
+          expect(document.activeElement).toBe(chip(value));
+        }
+        expect(host.selected()).toEqual([]);
+        expect(tabindexes()).toEqual(['-1', '-1', '0']);
+      });
+    }
+
+    for (const key of [dir === 'rtl' ? 'ArrowRight' : 'ArrowLeft', 'Backspace', 'Delete']) {
+      it(`ignores ${key} replayed after hydration in the empty field in ${dir}`, async () => {
+        host.dir.set(dir);
+        await fixture.whenStable();
+        field().focus();
+        replay(field(), keydown(key));
+        await fixture.whenStable();
+        expect(document.activeElement).toBe(field());
+      });
+    }
+  }
+
+  for (const key of ['Enter', 'Escape']) {
+    it(`ignores ${key} replayed after hydration in the field`, async () => {
+      field().focus();
+      field().value = 'draft';
+      field().dispatchEvent(new Event('input', { bubbles: true }));
+      replay(field(), keydown(key));
+      await fixture.whenStable();
+      expect(field().value).toBe('draft');
+      expect(document.activeElement).toBe(field());
+      expect(host.value()).toEqual(['a', 'b', 'c']);
+    });
+  }
 });
 
 describe('ChipInputComponent on the server', () => {

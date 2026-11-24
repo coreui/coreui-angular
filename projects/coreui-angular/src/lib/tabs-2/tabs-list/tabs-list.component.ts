@@ -15,6 +15,7 @@ import {
 import { TabDirective } from '../tab/tab.directive';
 import { TABS_LIST, TabsService } from '../tabs.service';
 import { RtlService } from '../../services';
+import { isReplayedEvent } from '../../shared/event.utils';
 
 @Component({
   exportAs: 'cTabsList',
@@ -111,6 +112,9 @@ export class TabsListComponent {
   });
 
   onKeyDown($event: any) {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     if (['ArrowLeft', 'ArrowRight', 'End', 'Home'].includes($event.key)) {
       if ($event.defaultPrevented) {
         return;

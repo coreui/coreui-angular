@@ -36,6 +36,7 @@ import { SidebarNavGroupService } from './sidebar-nav-group.service';
 import { NavGroupService } from '../../nav';
 import { CollapseDirective } from '../../collapse';
 import { HtmlAttributesDirective } from '../../shared';
+import { isReplayedEvent } from '../../shared/event.utils';
 import { SidebarNavIconPipe } from './sidebar-nav-icon.pipe';
 import { SidebarNavBadgePipe } from './sidebar-nav-badge.pipe';
 import { SidebarNavLinkComponent } from './sidebar-nav-link.component';
@@ -225,6 +226,9 @@ export class SidebarNavGroupComponent implements OnInit, OnDestroy {
   }
 
   toggleGroup($event: any): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     $event.preventDefault();
     this.openGroup(!this.open());
     if (this.open()) {

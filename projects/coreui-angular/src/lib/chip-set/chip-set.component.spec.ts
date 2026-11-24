@@ -4,6 +4,7 @@ import { ChipComponent } from '../chip/chip.component';
 import { AnnouncerService } from '../services/announcer.service';
 import { ChipSetComponent } from './chip-set.component';
 import { ChipItem, ChipSelectionMode } from './chip-set.types';
+import { replay } from '../../testing/replayed-event';
 
 const KEY_CODES: Record<string, number> = {
   ArrowLeft: 37,
@@ -15,8 +16,10 @@ const KEY_CODES: Record<string, number> = {
   Home: 36
 };
 
-const press = (target: Element, key: string) =>
-  target.dispatchEvent(new KeyboardEvent('keydown', { key, keyCode: KEY_CODES[key], bubbles: true, cancelable: true }));
+const keydown = (key: string) =>
+  new KeyboardEvent('keydown', { key, keyCode: KEY_CODES[key], bubbles: true, cancelable: true });
+
+const press = (target: Element, key: string) => target.dispatchEvent(keydown(key));
 
 @Component({
   imports: [ChipSetComponent, ChipComponent],
@@ -210,6 +213,22 @@ describe('ChipSetComponent', () => {
     press(chip('b'), 'ArrowLeft');
     expect(document.activeElement).toBe(chip('a'));
   });
+
+  for (const dir of ['ltr', 'rtl']) {
+    for (const key of ['ArrowLeft', 'ArrowRight', 'Home', 'End']) {
+      it(`ChipSet ignores ${key} replayed after hydration in ${dir}`, async () => {
+        host.selectable.set(true);
+        host.dir.set(dir);
+        host.declare('a', 'b', 'c');
+        await fixture.whenStable();
+        chip('b').focus();
+        replay(chip('b'), keydown(key));
+        await fixture.whenStable();
+        expect(document.activeElement).toBe(chip('b'));
+        expect(stops()).toEqual([chip('b')]);
+      });
+    }
+  }
 
   it('ChipSet fires remove so the parent can drop the chip', async () => {
     host.removable.set(true);

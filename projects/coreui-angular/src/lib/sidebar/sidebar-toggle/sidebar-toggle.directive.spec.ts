@@ -6,6 +6,7 @@ import { vi } from 'vitest';
 
 import { SidebarService } from '../sidebar.service';
 import { SidebarToggleDirective } from './sidebar-toggle.directive';
+import { replay } from '../../../testing/replayed-event';
 
 @Component({
   template: `
@@ -86,6 +87,12 @@ describe('SidebarToggleDirective', () => {
     button.dispatchEvent(event);
 
     expect(preventDefaultSpy).toHaveBeenCalled();
+  });
+
+  it('should ignore a click replayed after hydration', () => {
+    const toggleSpy = vi.spyOn(sidebarService, 'toggle');
+    replay(debugElements[0].nativeElement, new MouseEvent('click', { bubbles: true, cancelable: true }));
+    expect(toggleSpy).not.toHaveBeenCalled();
   });
 
   it('should handle multiple clicks', () => {

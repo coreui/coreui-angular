@@ -2,6 +2,7 @@ import { inputBinding } from '@angular/core';
 import { DirectiveFixture, TestBed } from '@angular/core/testing';
 import { ModalService } from '../modal.service';
 import { ModalToggleDirective } from './modal-toggle.directive';
+import { replay } from '../../../testing/replayed-event';
 
 describe('ModalToggleDirective', () => {
   let fixture: DirectiveFixture<ModalToggleDirective>;
@@ -30,6 +31,12 @@ describe('ModalToggleDirective', () => {
     const toggle = vi.spyOn(TestBed.inject(ModalService), 'toggle');
     (fixture.nativeElement as HTMLElement).click();
     expect(toggle).toHaveBeenCalledWith({ show: 'toggle', id: 'liveDemoModal', trigger: fixture.nativeElement });
+  });
+
+  it('should ignore a click replayed after hydration', () => {
+    const toggle = vi.spyOn(TestBed.inject(ModalService), 'toggle');
+    replay(fixture.nativeElement, new MouseEvent('click', { bubbles: true, cancelable: true }));
+    expect(toggle).not.toHaveBeenCalled();
   });
 
   it('should pass an empty id for a bare cModalToggle', async () => {

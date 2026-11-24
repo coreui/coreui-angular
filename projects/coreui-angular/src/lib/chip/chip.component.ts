@@ -18,6 +18,7 @@ import {
 } from '@angular/core';
 import { Colors } from '../coreui.types';
 import { UIDService } from '../services/uid.service';
+import { isReplayedEvent } from '../shared/event.utils';
 import { ChipSetRef } from './chip-set-ref';
 import { ChipVariant } from './chip.types';
 import { getChipText, optionalBooleanAttribute, optionalNumberAttribute } from './chip.utils';
@@ -313,7 +314,7 @@ export class ChipComponent implements FocusableOption, OnInit {
   }
 
   onKeydown($event: KeyboardEvent): void {
-    if (this.isDisabled()) {
+    if (this.isDisabled() || isReplayedEvent($event)) {
       return;
     }
     switch ($event.key) {

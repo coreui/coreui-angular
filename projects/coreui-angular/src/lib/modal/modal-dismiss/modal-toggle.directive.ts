@@ -1,5 +1,6 @@
 import { Directive, ElementRef, inject, input } from '@angular/core';
 
+import { isReplayedEvent } from '../../shared/event.utils';
 import { ModalService } from '../modal.service';
 
 @Directive({
@@ -19,6 +20,9 @@ export class ModalToggleDirective {
   readonly toggle = input<string>(undefined, { alias: 'cModalToggle' });
 
   dismiss($event: Event): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     $event.preventDefault();
     this.#modalService.toggle({ show: 'toggle', id: this.toggle(), trigger: this.#elementRef.nativeElement });
   }

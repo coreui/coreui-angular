@@ -13,6 +13,7 @@ import {
 import { ChipComponent } from '../chip/chip.component';
 import { ChipSetRef } from '../chip/chip-set-ref';
 import { optionalNumberAttribute } from '../chip/chip.utils';
+import { isReplayedEvent } from '../shared/event.utils';
 import { ChipSetService } from './chip-set.service';
 import { ChipItem } from './chip-set.types';
 
@@ -196,6 +197,9 @@ export class ChipSetComponent {
   }
 
   onKeydown($event: KeyboardEvent): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     this.#service.handleKeydown($event);
   }
 

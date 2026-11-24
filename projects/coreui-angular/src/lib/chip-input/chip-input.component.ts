@@ -21,6 +21,7 @@ import { ChipSetRef } from '../chip/chip-set-ref';
 import { ChipSetService } from '../chip-set/chip-set.service';
 import { RtlService } from '../services/rtl.service';
 import { UIDService } from '../services/uid.service';
+import { isReplayedEvent } from '../shared/event.utils';
 
 @Component({
   selector: 'c-chip-input',
@@ -328,6 +329,9 @@ export class ChipInputComponent implements AfterContentInit {
   }
 
   onMousedown($event: MouseEvent): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     const target = $event.target as Element;
     if (target === this.#elementRef.nativeElement || target.closest?.('.chip-input-label')) {
       $event.preventDefault();
@@ -335,7 +339,7 @@ export class ChipInputComponent implements AfterContentInit {
   }
 
   onKeydown($event: KeyboardEvent): void {
-    if ($event.target === this.field().nativeElement) {
+    if ($event.target === this.field().nativeElement || isReplayedEvent($event)) {
       return;
     }
     const intoField = this.#isRtl() ? 'ArrowLeft' : 'ArrowRight';
@@ -391,7 +395,7 @@ export class ChipInputComponent implements AfterContentInit {
   }
 
   onFieldKeydown($event: KeyboardEvent): void {
-    if ($event.isComposing || $event.keyCode === 229) {
+    if ($event.isComposing || $event.keyCode === 229 || isReplayedEvent($event)) {
       return;
     }
     const field = this.field().nativeElement;

@@ -9,6 +9,7 @@ import { TabsComponent } from '../tabs.component';
 import { TabDirective } from '../tab/tab.directive';
 import { TabPanelComponent } from '../tab-panel/tab-panel.component';
 import { TabsContentComponent } from '../tabs-content/tabs-content.component';
+import { replay } from '../../../testing/replayed-event';
 
 describe('TabsListComponent', () => {
   let component: TabsListComponent;
@@ -79,9 +80,13 @@ describe('TabsListComponent keyboard', () => {
   let fixture: ComponentFixture<KeyboardTestComponent>;
   let tabs: HTMLButtonElement[];
 
-  const keydown = async (key: string, target: Element | null = document.activeElement) => {
+  const keyboardEvent = (key: string) => {
     const keyCode = { ArrowDown: 40, ArrowLeft: 37, ArrowRight: 39, End: 35, Home: 36 }[key];
-    const event = new KeyboardEvent('keydown', { key, keyCode, bubbles: true, cancelable: true });
+    return new KeyboardEvent('keydown', { key, keyCode, bubbles: true, cancelable: true });
+  };
+
+  const keydown = async (key: string, target: Element | null = document.activeElement) => {
+    const event = keyboardEvent(key);
     target?.dispatchEvent(event);
     await fixture.whenStable();
     return event;
@@ -156,6 +161,22 @@ describe('TabsListComponent keyboard', () => {
     expect(document.activeElement).toBe(tabs[1]);
     expect(fixture.componentInstance.activeItemKey()).toBe('b');
   });
+
+  for (const dir of ['ltr', 'rtl'] as const) {
+    for (const key of ['ArrowLeft', 'ArrowRight', 'Home', 'End']) {
+      it(`should ignore ${key} replayed after hydration in ${dir}`, async () => {
+        fixture.componentInstance.dir.set(dir);
+        fixture.componentInstance.activeItemKey.set('b');
+        await render();
+        tabs[1].focus();
+        replay(tabs[1], keyboardEvent(key));
+        await fixture.whenStable();
+        expect(document.activeElement).toBe(tabs[1]);
+        expect(fixture.componentInstance.activeItemKey()).toBe('b');
+        expect(tabs.map((tab) => tab.getAttribute('tabindex'))).toEqual(['-1', '0', '-1']);
+      });
+    }
+  }
 
   it('should ignore keys that do not come from a tab', async () => {
     await render();

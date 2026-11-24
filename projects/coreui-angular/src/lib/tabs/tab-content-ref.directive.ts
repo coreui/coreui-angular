@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { isReplayedEvent } from '../shared/event.utils';
 import { TabService } from './tab.service';
 
 @Directive({
@@ -115,6 +116,9 @@ export class TabContentRefDirective implements OnChanges, OnDestroy {
 
   @HostListener('click', ['$event'])
   toggleOpen($event: any): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     $event.preventDefault();
     this.setActiveTabPane();
   }

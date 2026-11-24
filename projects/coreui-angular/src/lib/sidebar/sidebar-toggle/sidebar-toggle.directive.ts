@@ -1,5 +1,6 @@
 import { Directive, inject, input } from '@angular/core';
 
+import { isReplayedEvent } from '../../shared/event.utils';
 import { SidebarService } from '../sidebar.service';
 
 /**
@@ -29,6 +30,9 @@ export class SidebarToggleDirective {
   readonly toggle = input<'visible' | 'unfoldable'>('visible');
 
   toggleOpen($event: any): void {
+    if (isReplayedEvent($event)) {
+      return;
+    }
     $event.preventDefault();
     this.#sidebarService.toggle({ toggle: this.toggle(), id: this.id() });
   }

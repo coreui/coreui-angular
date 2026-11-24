@@ -3,11 +3,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Colors } from '../coreui.types';
 import { ChipComponent } from './chip.component';
 import { ChipSize } from './chip.types';
+import { replay } from '../../testing/replayed-event';
 
 const KEY_CODES: Record<string, number> = { Enter: 13, ' ': 32, Backspace: 8, Delete: 46 };
 
-const press = (target: HTMLElement, key: string) =>
-  target.dispatchEvent(new KeyboardEvent('keydown', { key, keyCode: KEY_CODES[key], bubbles: true, cancelable: true }));
+const keydown = (key: string) =>
+  new KeyboardEvent('keydown', { key, keyCode: KEY_CODES[key], bubbles: true, cancelable: true });
+
+const press = (target: HTMLElement, key: string) => target.dispatchEvent(keydown(key));
 
 @Component({
   imports: [ChipComponent],
@@ -223,6 +226,21 @@ describe('ChipComponent', () => {
     press(chip, 'Backspace');
     press(chip, 'Delete');
     expect(host.removed.length).toBe(2);
+  });
+
+  it('ignores keys replayed after hydration', async () => {
+    host.removable.set(true);
+    await fixture.whenStable();
+    replay(chip, keydown(' '));
+
+    host.selectable.set(true);
+    await fixture.whenStable();
+    for (const key of ['Enter', ' ', 'Spacebar', 'Backspace', 'Delete']) {
+      replay(chip, keydown(key));
+    }
+    await fixture.whenStable();
+    expect(host.changes).toEqual([]);
+    expect(host.removed).toEqual([]);
   });
 
   it('a disabled chip has no remove button, no tab stop and ignores keys', async () => {
