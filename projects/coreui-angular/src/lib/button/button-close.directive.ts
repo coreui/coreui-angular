@@ -7,6 +7,7 @@ import { ButtonDirective } from './button.directive';
   hostDirectives: [{ directive: ThemeDirective, inputs: ['dark'] }],
   host: {
     class: 'btn btn-close',
+    'aria-label': 'Close',
     '[class]': 'hostClasses()',
     '[aria-disabled]': 'ariaDisabled()',
     '[aria-pressed]': 'isActive()',

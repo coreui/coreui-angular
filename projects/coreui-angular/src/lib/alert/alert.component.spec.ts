@@ -3,6 +3,8 @@ import { By } from '@angular/platform-browser';
 import { expect } from 'vitest';
 
 import { AlertComponent } from './alert.component';
+import { ButtonCloseDirective } from '../button';
+import { TemplateIdDirective } from '../shared';
 import {
   AnimationCallbackEvent,
   ApplicationRef,
@@ -149,6 +151,27 @@ describe('AlertComponent with a custom class', () => {
     expect(alert.classList.contains('custom-class')).toBe(true);
     expect(alert.classList.contains('alert')).toBe(true);
     expect(alert.classList.contains('alert-success')).toBe(true);
+  });
+});
+
+@Component({
+  selector: 'c-custom-close-alert',
+  template: `
+    <c-alert dismissible>
+      <ng-template cTemplateId="alertButtonCloseTemplate"><button cButtonClose></button></ng-template>
+    </c-alert>
+  `,
+  imports: [AlertComponent, ButtonCloseDirective, TemplateIdDirective]
+})
+class CustomCloseAlertComponent {}
+
+describe('AlertComponent with a custom close button', () => {
+  it('should name the custom close button', async () => {
+    const fixture = TestBed.createComponent(CustomCloseAlertComponent);
+    await fixture.whenStable();
+    const buttons = fixture.nativeElement.querySelectorAll('.btn-close');
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0].getAttribute('aria-label')).toBe('Close');
   });
 });
 
