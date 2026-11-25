@@ -1,11 +1,11 @@
-import { Directive, inject, input, model, TemplateRef } from '@angular/core';
+import { booleanAttribute, Directive, inject, input, model, TemplateRef } from '@angular/core';
 import { Options } from '@popperjs/core';
 
 import { Triggers } from '../coreui.types';
 import { ListenersService, UIDService } from '../services';
 import { ElementRefDirective } from '../shared';
 import { TooltipComponent } from './tooltip/tooltip.component';
-import { TooltipDirectiveBase } from './tooltip-directive-base';
+import { delayAttribute, TooltipDelay, TooltipDirectiveBase } from './tooltip-directive-base';
 
 @Directive({
   selector: '[cTooltip]',
@@ -18,10 +18,29 @@ export class TooltipDirective extends TooltipDirectiveBase {
   protected readonly tooltipId = inject(UIDService).getUID('tooltip');
 
   /**
+   * Fades the tooltip in and out.
+   * @returns boolean
+   * @default true
+   * @since 5.7.45
+   */
+  readonly animation = input(true, { alias: 'cTooltipAnimation', transform: booleanAttribute });
+
+  /**
    * Content of tooltip
    * @returns string | TemplateRef<any> | undefined
    */
   readonly content = input<string | TemplateRef<any> | undefined>(undefined, { alias: 'cTooltip' });
+
+  /**
+   * Delay in ms: `show` before the tooltip appears, `hide` after its trigger ends. A number sets both.
+   * @returns number | { show?: number; hide?: number }
+   * @default { show: 150, hide: 0 }
+   * @since 5.7.45
+   */
+  readonly delay = input<number | { show?: number; hide?: number }, TooltipDelay | string | null | undefined>(
+    {},
+    { alias: 'cTooltipDelay', transform: delayAttribute }
+  );
 
   /**
    * Describes the placement of your component after Popper.js has applied all the modifiers that may have flipped or altered the originally provided placement property.
