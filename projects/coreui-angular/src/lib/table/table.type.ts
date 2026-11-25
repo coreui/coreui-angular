@@ -52,6 +52,12 @@ export interface ITable {
    * @returns boolean
    */
   striped?: boolean | string;
+  /**
+   * Add zebra-striping to any table column.
+   * @returns boolean
+   * @since 5.7.45
+   */
+  stripedColumns?: boolean | string;
 
   attributes?: Partial<HTMLTableElement>;
 }
