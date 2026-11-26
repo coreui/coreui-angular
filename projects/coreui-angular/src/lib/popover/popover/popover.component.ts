@@ -16,6 +16,14 @@ export class PopoverComponent extends TooltipComponentBase {
   protected readonly prefix = 'popover';
 
   /**
+   * Fades the popover in and out.
+   * @returns boolean
+   * @default true
+   * @since 5.7.45
+   */
+  readonly animation = input(true, { transform: booleanAttribute });
+
+  /**
    * Content of popover
    * @returns string | TemplateRef<any>
    */

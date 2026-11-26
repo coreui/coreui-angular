@@ -18,6 +18,7 @@ export abstract class TooltipComponentBase implements OnDestroy {
 
   protected abstract readonly prefix: string;
 
+  abstract readonly animation: InputSignalWithTransform<boolean, unknown>;
   abstract readonly content: InputSignal<string | TemplateRef<unknown>>;
   abstract readonly visible: InputSignalWithTransform<boolean, unknown>;
 
@@ -31,7 +32,8 @@ export abstract class TooltipComponentBase implements OnDestroy {
   readonly hostClasses = computed(() => {
     return {
       [this.prefix]: true,
-      fade: true,
+      fade: this.animation(),
+      invisible: !this.animation() && !this.visible(),
       show: this.visible(),
       [`bs-${this.prefix}-auto`]: true
     } as Record<string, boolean>;

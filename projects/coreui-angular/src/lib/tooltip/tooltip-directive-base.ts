@@ -9,7 +9,10 @@ import {
   ElementRef,
   inject,
   InputSignal,
+  InputSignalWithTransform,
+  linkedSignal,
   ModelSignal,
+  numberAttribute,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
@@ -29,6 +32,11 @@ import { IListenersConfig, IntersectionService, ListenersService } from '../serv
 import { ElementRefDirective } from '../shared';
 import { TooltipComponentBase } from './tooltip/tooltip-component-base';
 
+export type TooltipDelay = number | { show?: number; hide?: number };
+
+export const delayAttribute = (value: TooltipDelay | string | null | undefined): TooltipDelay =>
+  typeof value === 'object' ? (value ?? {}) : numberAttribute(value);
+
 @Directive()
 export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterViewChecked {
   readonly #renderer = inject(Renderer2);
@@ -40,12 +48,15 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
   readonly #isServer = isPlatformServer(inject(PLATFORM_ID));
   #timerId1: ReturnType<typeof setTimeout> | undefined;
   #timerId2: ReturnType<typeof setTimeout> | undefined;
+  #endingId: ReturnType<typeof setTimeout> | undefined;
 
   protected abstract readonly component: Type<TooltipComponentBase>;
   protected abstract readonly offset: number;
   protected abstract readonly tooltipId: string;
 
+  abstract readonly animation: InputSignalWithTransform<boolean, unknown>;
   abstract readonly content: InputSignal<string | TemplateRef<unknown> | undefined>;
+  abstract readonly delay: InputSignalWithTransform<TooltipDelay, TooltipDelay | string | null | undefined>;
   abstract readonly placement: InputSignal<'top' | 'bottom' | 'left' | 'right'>;
   abstract readonly popperOptions: InputSignal<Partial<Options>>;
   abstract readonly reference: InputSignal<ElementRefDirective | undefined>;
@@ -80,6 +91,14 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
     onCleanup(() => subscription.unsubscribe());
   });
 
+  readonly #delay = computed(() => {
+    const delay = this.delay();
+    const { show, hide } = typeof delay === 'number' ? { show: delay, hide: delay } : delay;
+    return { show: numberAttribute(show, 150), hide: numberAttribute(hide, 0) };
+  });
+
+  readonly #ending = linkedSignal({ source: () => this.visible(), computation: () => false });
+
   readonly #shown = computed(() => !this.#isServer && this.visible() && !!this.content());
 
   readonly #visibleEffect = afterRenderEffect({
@@ -94,7 +113,7 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
     if (event.key !== 'Escape') {
       return;
     }
-    if (this.#shown()) {
+    if (this.#revealed()) {
       event.preventDefault();
       event.stopPropagation();
     }
@@ -128,6 +147,7 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
 
   ngOnDestroy(): void {
     this.clearListeners();
+    clearTimeout(this.#endingId);
     this.destroyTooltipElement();
     this.#syncAriaDescribedBy(false);
   }
@@ -150,16 +170,40 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
       hostElement: this.#hostElement,
       trigger: this.trigger(),
       callbackToggle: () => {
-        this.visible.update((value) => !value);
+        untracked(() => (this.visible() ? this.#end() : this.#start()));
       },
       callbackOff: () => {
-        this.visible.set(false);
+        untracked(() => this.#end());
       },
       callbackOn: () => {
-        this.visible.set(true);
+        this.#start();
       }
     };
     this.#listenersService.setListeners(config);
+  }
+
+  #start(): void {
+    this.#ending.set(false);
+    this.visible.set(true);
+  }
+
+  #end(): void {
+    const { hide } = this.#delay();
+    clearTimeout(this.#endingId);
+    if (hide > 0 && this.#revealed()) {
+      this.#ending.set(true);
+      this.#endingId = setTimeout(() => {
+        if (this.#ending()) {
+          this.visible.set(false);
+        }
+      }, hide);
+      return;
+    }
+    this.visible.set(false);
+  }
+
+  #revealed(): boolean {
+    return this.visible() && !!this.tooltipRef?.instance.visible();
   }
 
   private clearListeners(): void {
@@ -187,6 +231,7 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
       this.createTooltipElement();
     }
 
+    this.tooltipRef?.setInput('animation', this.animation());
     this.tooltipRef?.setInput('content', this.content() ?? '');
 
     if (this.popperInstance) {
@@ -200,7 +245,7 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
         if (this.#timerId1 === undefined) {
           this.#reveal();
         } else {
-          this.#timerId1 = setTimeout(() => this.#reveal(), 150);
+          this.#scheduleReveal();
         }
       }
       this.popperInstance.update();
@@ -209,19 +254,22 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
 
     this.tooltip = this.tooltipRef?.location.nativeElement;
     this.#renderer.addClass(this.tooltip, 'd-none');
-    this.#renderer.addClass(this.tooltip, 'fade');
 
     this.#viewContainerRef.insert(this.tooltipRef.hostView);
     this.#renderer.appendChild(this.#document.body, this.tooltip);
 
     this.#createPopper();
-    this.#timerId1 = setTimeout(() => this.#reveal(), 150);
+    this.#scheduleReveal();
   }
 
   #createPopper(): void {
     this.popperInstance = createPopper(this.referenceRef().nativeElement, this.tooltip, {
       ...untracked(() => this.popperOptionsComputed())
     });
+  }
+
+  #scheduleReveal(): void {
+    this.#timerId1 = setTimeout(() => this.#reveal(), untracked(this.#delay).show);
   }
 
   #reveal(): void {
@@ -237,6 +285,7 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
       return;
     }
 
+    const fadeTime = untracked(this.animation) ? 300 : 0;
     clearTimeout(this.#timerId2);
     this.#timerId2 = setTimeout(() => {
       const index = this.#viewContainerRef.indexOf(this.tooltipRef.hostView);
@@ -246,7 +295,7 @@ export abstract class TooltipDirectiveBase implements OnDestroy, OnInit, AfterVi
       this.popperInstance?.destroy();
       this.popperInstance = undefined;
       this.#timerId2 = undefined;
-    }, 300);
+    }, fadeTime);
 
     this.tooltipRef.setInput('visible', false);
   }

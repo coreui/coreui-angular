@@ -16,6 +16,14 @@ export class TooltipComponent extends TooltipComponentBase {
   protected readonly prefix = 'tooltip';
 
   /**
+   * Fades the tooltip in and out.
+   * @returns boolean
+   * @default true
+   * @since 5.7.45
+   */
+  readonly animation = input(true, { transform: booleanAttribute });
+
+  /**
    * Content of tooltip
    * @returns string | TemplateRef<any>
    */
